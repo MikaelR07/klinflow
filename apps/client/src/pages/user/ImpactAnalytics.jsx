@@ -190,9 +190,9 @@ export default function ImpactAnalytics() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F8F8FF] dark:bg-slate-900 overflow-y-auto pb-24">
+    <div className="fixed inset-0 z-50 bg-[#F8F8FF] dark:bg-slate-900 flex flex-col">
       {/* ── TOP NAV ── */}
-      <div className="sticky top-0 z-40 bg-[#F8F8FF] dark:bg-slate-900 px-4 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="shrink-0 z-40 bg-[#F8F8FF] dark:bg-slate-900 px-4 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800">
         <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center shadow-sm active:scale-90 transition-all">
           <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
@@ -202,7 +202,8 @@ export default function ImpactAnalytics() {
         </div>
       </div>
 
-      <div className="p-2 space-y-4">
+      <div className="flex-1 overflow-y-auto p-2 space-y-4 pb-24">
+        {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
         <div className="relative">
           <div className="relative bg-white dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-6">
             
@@ -394,13 +395,12 @@ export default function ImpactAnalytics() {
              <p className="text-[10px] font-semibold text-indigo-500 mt-2">Active Streak: {stats.activeStreak} Days</p>
           </div>
         </div>
-
       </div>
 
       {/* ── GOAL EDIT MODAL ── */}
       <AnimatePresence>
         {showGoalModal && (
-          <div className="fixed inset-0 z-50 flex items-end justify-center p-4">
+          <div className="fixed inset-0 z-[100] flex items-end justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
