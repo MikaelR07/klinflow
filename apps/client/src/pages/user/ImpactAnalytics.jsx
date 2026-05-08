@@ -360,8 +360,8 @@ export default function ImpactAnalytics() {
               const dayName = new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' });
               
               return (
-                <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full relative">
+                <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-2">
+                  <div className="w-full relative h-full flex items-end">
                     <motion.div 
                       initial={{ height: 0 }}
                       animate={{ height: `${height}%` }}
