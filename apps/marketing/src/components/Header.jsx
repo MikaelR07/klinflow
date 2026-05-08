@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Menu, X, Leaf, ChevronDown, 
+  Menu, X, Leaf, ChevronDown, ChevronRight,
   User, Truck, Building2, Warehouse,
   Sun, Moon, Globe
 } from 'lucide-react';
@@ -137,10 +137,13 @@ export default function Header() {
                 ))}
               </div>
               
-              <div className="grid gap-6 pt-8 border-t border-white/5">
-                <Link to="/system" className="text-2xl font-semibold">System Architecture</Link>
-                <Link to="/marketplace" className="text-2xl font-semibold">B2B Marketplace</Link>
-                <a href={getPortalLink('client')} className="w-full py-4 bg-emerald-500 text-white text-center font-bold uppercase tracking-widest rounded-2xl shadow-xl shadow-emerald-500/20">Launch Platform</a>
+              <div className={`flex flex-col gap-3 pt-8 border-t ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
+                <Link to="/system" className={`px-5 py-3.5 rounded-xl border text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                  System Architecture <ChevronRight className="w-4 h-4 text-emerald-500" />
+                </Link>
+                <Link to="/marketplace" className={`px-5 py-3.5 rounded-xl border text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                  B2B Marketplace <ChevronRight className="w-4 h-4 text-emerald-500" />
+                </Link>
               </div>
             </div>
           </motion.div>
