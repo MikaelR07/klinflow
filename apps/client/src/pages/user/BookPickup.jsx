@@ -334,14 +334,14 @@ export default function BookPickup() {
                     <div className="grid grid-cols-2 gap-4">
                         {categories.map((cat) => {
                           const imageMap = {
-                            'ewaste': '/placeholder-images/material-categories/E-waste.jpg',
-                            'metal': '/placeholder-images/material-categories/metal.jpg',
-                            'organic': '/placeholder-images/material-categories/organic-waste.jpg',
-                            'general': '/placeholder-images/material-categories/general-waste.jpg',
-                            'recyclable': '/placeholder-images/material-categories/plastic.jpg',
-                            'glass': '/placeholder-images/material-categories/glasses.jpg',
-                            'appliances': '/placeholder-images/material-categories/appliances.jpg',
-                            'bulky': '/placeholder-images/material-categories/bulky-item.jpg',
+                            'ewaste': '/placeholder-images/material-categories/optimized/E-waste.webp',
+                            'metal': '/placeholder-images/material-categories/optimized/metal.webp',
+                            'organic': '/placeholder-images/material-categories/optimized/organic-waste.webp',
+                            'general': '/placeholder-images/material-categories/optimized/general-waste.webp',
+                            'recyclable': '/placeholder-images/material-categories/optimized/plastic.webp',
+                            'glass': '/placeholder-images/material-categories/optimized/glasses.webp',
+                            'appliances': '/placeholder-images/material-categories/optimized/appliances.webp',
+                            'bulky': '/placeholder-images/material-categories/optimized/bulky-item.webp',
                           };
                           const bgImage = imageMap[cat.slug || cat.id];
 

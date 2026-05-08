@@ -79,9 +79,9 @@ function SellerLeaderboard() {
   const isEmpty = topSellers.length === 0;
 
   return (
-    <div className="min-h-screen pb-20 overflow-x-hidden bg-slate-50 dark:bg-slate-900 transition-colors -mx-2">
-      {/* Header - Compensated for negative margin */}
-      <div className="px-8 pt-8 flex items-center gap-4 relative z-20 mb-4">
+    <div className="min-h-screen pb-20 overflow-x-hidden bg-slate-50 dark:bg-slate-900 transition-colors">
+      {/* Header */}
+      <div className="pt-0 flex items-center gap-4 relative z-20 mb-4">
         <button onClick={() => navigate(-1)} className="p-3 bg-white dark:bg-slate-900 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
           <ArrowLeft className="w-5 h-5 dark:text-white" />
         </button>
@@ -93,7 +93,7 @@ function SellerLeaderboard() {
 
       <div className="">
         {/* Hero Banner - Theme Adaptive */}
-        <div className="bg-gradient-to-br from-emerald-600 to-teal-700 dark:from-slate-900 dark:to-slate-900 p-8 rounded-[2rem] mx-2 text-white relative overflow-hidden shadow-2xl border border-emerald-500/20 dark:border-white/5 transition-all duration-500">
+        <div className="bg-gradient-to-br from-emerald-600 to-teal-700 dark:from-slate-900 dark:to-slate-900 p-8 rounded-2xl text-white relative overflow-hidden shadow-2xl border border-emerald-500/20 dark:border-white/5 transition-all duration-500">
           <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
           <div className="relative z-10 text-center">
             <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-4" />
@@ -125,7 +125,7 @@ function SellerLeaderboard() {
         ) : (
           <>
             {/* Merchant Podium */}
-            <div className="flex items-end justify-center gap-4 px-8 mt-12 mb-10 h-52">
+            <div className="flex items-end justify-center gap-2 px-1 mt-12 mb-10 h-52">
               <MerchantPodiumSlot
                 user={topSellers[1] || null}
                 height="h-28"
@@ -147,7 +147,7 @@ function SellerLeaderboard() {
             </div>
 
             {/* Explanation Card */}
-            <div className="bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-white/5 p-8 flex items-start gap-4 mb-8">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-white/5 p-5 flex items-start gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
                 <Info className="w-5 h-5 text-emerald-500" />
               </div>
@@ -162,14 +162,14 @@ function SellerLeaderboard() {
 
             {/* Full List - True Edge to Edge */}
             {topSellers.length > 3 && (
-              <div className="flex flex-col pb-24">
-                <div className="flex items-center justify-between mb-4 px-8">
+              <div className="flex flex-col gap-2 pb-24">
+                <div className="flex items-center justify-between mb-2 px-2">
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Merchant Directory</span>
                 </div>
                 {topSellers.slice(3).map((user) => (
                   <div 
                     key={user.id} 
-                    className={`px-8 py-5 border-b flex items-center justify-between transition-all ${
+                    className={`p-5 rounded-2xl border flex items-center justify-between transition-all ${
                       user.isUser
                         ? 'bg-slate-900 dark:bg-slate-900/50 border-emerald-500/30 shadow-2xl relative z-10'
                         : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5'
@@ -288,7 +288,7 @@ export default function Leaderboard() {
     <div className="min-h-screen pb-20 overflow-x-hidden">
 
       {/* Header */}
-      <div className="p-6 pt-8 flex items-center gap-4 relative z-20">
+      <div className="pt-0 flex items-center gap-4 relative z-20">
         <button onClick={() => navigate(-1)} className="p-3 bg-white dark:bg-slate-900 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
           <ArrowLeft className="w-5 h-5 dark:text-white" />
         </button>
@@ -298,9 +298,9 @@ export default function Leaderboard() {
         </div>
       </div>
 
-      <div className="-mt-4">
+      <div className="mt-2">
         {/* Hero Banner */}
-        <div className="bg-gradient-to-br from-primary to-indigo-600 p-8 rounded-[2.5rem] mx-2 text-white relative overflow-hidden shadow-xl shadow-primary/20">
+        <div className="bg-gradient-to-br from-primary to-indigo-600 p-8 rounded-2xl text-white relative overflow-hidden shadow-xl shadow-primary/20">
           <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
           <div className="relative z-10 text-center">
             <Crown className="w-12 h-12 text-amber-400 mx-auto mb-4" />
@@ -332,7 +332,7 @@ export default function Leaderboard() {
         ) : (
           <>
             {/* Podium (Top 3) */}
-            <div className="flex items-end justify-center gap-3 px-6 mt-10 mb-8 h-48">
+            <div className="flex items-end justify-center gap-2 px-1 mt-10 mb-8 h-48">
               <PodiumSlot
                 user={topUsers[1] || null}
                 height="h-24"
@@ -357,7 +357,7 @@ export default function Leaderboard() {
             </div>
 
             {/* Explanation Card */}
-            <div className="bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-white/5 p-6 flex items-start gap-4 mb-8">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-white/5 p-5 flex items-start gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center shrink-0">
                 <Info className="w-5 h-5 text-amber-500" />
               </div>
@@ -372,8 +372,8 @@ export default function Leaderboard() {
 
             {/* Full List (rank 4+) */}
             {topUsers.length > 3 && (
-              <div className="flex flex-col gap-2 px-1.5 pb-20">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 px-6 mb-2">Top Recyclers List</p>
+              <div className="flex flex-col gap-2 pb-20">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 px-2 mb-2">Top Recyclers List</p>
                 {topUsers.slice(3).map((user) => (
                   <div
                     key={user.id}

@@ -33,9 +33,9 @@ export default function RoleSelection() {
         {/* Weaver Card */}
         <button
           onClick={() => handleSelection('weaver')}
-          className="group relative bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 p-8 rounded-[2.5rem] text-left hover:border-primary transition-all active:scale-[0.98] shadow-sm hover:shadow-xl hover:shadow-primary/10 overflow-hidden"
+          className="group relative bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 p-8 rounded-[2.5rem] text-left md:hover:border-primary transition-all active:scale-[0.98] shadow-sm md:hover:shadow-xl md:hover:shadow-primary/10 overflow-hidden"
         >
-          <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all">
+          <div className="absolute top-0 right-0 p-6 opacity-10 md:group-hover:opacity-20 md:group-hover:scale-110 transition-all">
             <Package className="w-24 h-24 text-primary" />
           </div>
           
@@ -56,9 +56,9 @@ export default function RoleSelection() {
         {/* Recycler Card */}
         <button
           onClick={() => handleSelection('recycler')}
-          className="group relative bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 p-8 rounded-[2.5rem] text-left hover:border-secondary transition-all active:scale-[0.98] shadow-sm hover:shadow-xl hover:shadow-secondary/10 overflow-hidden"
+          className="group relative bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 p-8 rounded-[2.5rem] text-left md:hover:border-secondary transition-all active:scale-[0.98] shadow-sm md:hover:shadow-xl md:hover:shadow-secondary/10 overflow-hidden"
         >
-          <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all">
+          <div className="absolute top-0 right-0 p-6 opacity-10 md:group-hover:opacity-20 md:group-hover:scale-110 transition-all">
             <Factory className="w-24 h-24 text-secondary" />
           </div>
           

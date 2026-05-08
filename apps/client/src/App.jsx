@@ -191,6 +191,7 @@ export default function App() {
         <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} />
 
         <Route element={<ProtectedLayout />}>
+          <Route path="/hygenex" element={<HygeneXPage />} />
           <Route element={<MobileLayout />}>
             <Route path="/" element={<UserHome />} />
             <Route path="/withdraw" element={<WithdrawalPage />} />
@@ -199,7 +200,6 @@ export default function App() {
             <Route path="/book-pickup" element={<BookPickup />} />
             <Route path="/my-bookings" element={<MyBookings />} />
             <Route path="/impact-hub" element={<ImpactHub />} />
-            <Route path="/hygenex" element={<HygeneXPage />} />
             <Route path="/my-iot" element={<MyIotPage />} />
             <Route path="/company/:agentId" element={<CompanyProfile />} />
             <Route path="/analytics" element={<ImpactAnalytics />} />
