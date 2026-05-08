@@ -293,7 +293,7 @@ export default function Home() {
           </div>
 
           {/* Abstract System Map Visualization (Placeholder for actual diagram) */}
-          <div className="relative">
+          <div className="relative hidden lg:block">
              <div className="aspect-square rounded-[4rem] bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-white/10 relative flex items-center justify-center overflow-hidden group">
                 <motion.div 
                   animate={{ rotate: 360 }}
