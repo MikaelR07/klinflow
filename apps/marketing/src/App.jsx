@@ -1,37 +1,48 @@
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home.jsx';
-import HowItWorks from './pages/HowItWorks.jsx';
-import ProductClient from './pages/ProductClient.jsx';
-import ProductAgent from './pages/ProductAgent.jsx';
-import ProductFleet from './pages/ProductFleet.jsx';
-import ProductHub from './pages/ProductHub.jsx';
-import Marketplace from './pages/Marketplace.jsx';
-import Ecosystem from './pages/Ecosystem.jsx';
-import EcosystemGallery from './pages/EcosystemGallery.jsx';
-import ForResidents from './pages/ForResidents.jsx';
-import ForAgents from './pages/ForAgents.jsx';
-import ForBusinesses from './pages/ForBusinesses.jsx';
 import { Toaster } from 'sonner';
+
+// Lazy loading all pages to dramatically reduce initial JavaScript bundle size
+const Home = lazy(() => import('./pages/Home.jsx'));
+const HowItWorks = lazy(() => import('./pages/HowItWorks.jsx'));
+const ProductClient = lazy(() => import('./pages/ProductClient.jsx'));
+const ProductAgent = lazy(() => import('./pages/ProductAgent.jsx'));
+const ProductFleet = lazy(() => import('./pages/ProductFleet.jsx'));
+const ProductHub = lazy(() => import('./pages/ProductHub.jsx'));
+const Marketplace = lazy(() => import('./pages/Marketplace.jsx'));
+const Ecosystem = lazy(() => import('./pages/Ecosystem.jsx'));
+const EcosystemGallery = lazy(() => import('./pages/EcosystemGallery.jsx'));
+const ForResidents = lazy(() => import('./pages/ForResidents.jsx'));
+const ForAgents = lazy(() => import('./pages/ForAgents.jsx'));
+const ForBusinesses = lazy(() => import('./pages/ForBusinesses.jsx'));
+
+const Loader = () => (
+  <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center">
+    <div className="w-12 h-12 border-4 border-slate-800 border-t-emerald-500 rounded-full animate-spin"></div>
+  </div>
+);
 
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-slate-900 text-white selection:bg-emerald-500/30">
         <Toaster position="top-right" expand={false} richColors />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/system" element={<HowItWorks />} />
-          <Route path="/products/client" element={<ProductClient />} />
-          <Route path="/products/agent" element={<ProductAgent />} />
-          <Route path="/products/fleet" element={<ProductFleet />} />
-          <Route path="/products/hub" element={<ProductHub />} />
-          <Route path="/marketplace" element={<Marketplace />} />
-          <Route path="/ecosystem" element={<Ecosystem />} />
-          <Route path="/gallery" element={<EcosystemGallery />} />
-          <Route path="/for-residents" element={<ForResidents />} />
-          <Route path="/for-agents" element={<ForAgents />} />
-          <Route path="/for-businesses" element={<ForBusinesses />} />
-        </Routes>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/system" element={<HowItWorks />} />
+            <Route path="/products/client" element={<ProductClient />} />
+            <Route path="/products/agent" element={<ProductAgent />} />
+            <Route path="/products/fleet" element={<ProductFleet />} />
+            <Route path="/products/hub" element={<ProductHub />} />
+            <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/ecosystem" element={<Ecosystem />} />
+            <Route path="/gallery" element={<EcosystemGallery />} />
+            <Route path="/for-residents" element={<ForResidents />} />
+            <Route path="/for-agents" element={<ForAgents />} />
+            <Route path="/for-businesses" element={<ForBusinesses />} />
+          </Routes>
+        </Suspense>
       </div>
     </Router>
   );
