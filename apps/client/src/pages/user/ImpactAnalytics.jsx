@@ -207,9 +207,7 @@ export default function ImpactAnalytics() {
         <div className="relative">
           <div className="relative bg-white dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-6 overflow-hidden">
             
-            {/* Subtle Background Elements */}
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 dark:bg-white/5 rounded-full blur-3xl" />
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/5 dark:bg-indigo-400/10 rounded-full blur-3xl" />
+            {/* Subtle Background Elements Removed for Mobile Performance */}
             
             <div className="relative z-10">
               {/* Masonry-Style Impact Grid */}
