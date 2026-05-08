@@ -62,11 +62,11 @@ export default function RoleSelection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
             onClick={() => navigate(`/register?type=${role.id}`)}
-            className="w-full text-left group relative"
+            className="w-full text-left group relative active:scale-[0.98] transition-transform"
           >
-            <div className={`absolute inset-0 bg-${role.accent}-500/5 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity`} />
+            <div className={`absolute inset-0 ${role.bgColor} rounded-[2.5rem] blur-xl opacity-0 md:group-hover:opacity-100 transition-opacity`} />
             
-            <div className="relative bg-white dark:bg-slate-800/50 backdrop-blur-xl border border-slate-100 dark:border-white/5 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all group-hover:border-emerald-500/30 group-hover:-translate-y-1">
+            <div className="relative bg-white dark:bg-slate-800/50 backdrop-blur-xl border border-slate-100 dark:border-white/5 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all md:group-hover:border-emerald-500/30 md:group-hover:-translate-y-1">
               <div className="flex items-start justify-between mb-6">
                 <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.textColor} border ${role.borderColor}`}>
                   <role.icon className="w-8 h-8" />
@@ -96,7 +96,7 @@ export default function RoleSelection() {
                 ))}
               </div>
 
-              <div className="absolute bottom-8 right-8 w-10 h-10 rounded-full bg-slate-900 dark:bg-emerald-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+              <div className="absolute bottom-8 right-8 w-10 h-10 rounded-full bg-slate-900 dark:bg-emerald-500 text-white flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-all translate-x-4 md:group-hover:translate-x-0 hidden md:flex">
                 <ArrowRight className="w-5 h-5" />
               </div>
             </div>
