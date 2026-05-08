@@ -107,16 +107,26 @@ export default function HygeneXPage() {
 
   const renderMessageText = (text) => {
     if (!text) return '';
-    if (typeof text !== 'string') return text;
-    if (text.trim().startsWith('{')) {
-      try {
-        const parsed = JSON.parse(text);
-        return parsed.text || text;
-      } catch (e) {
-        return text;
+    if (typeof text === 'object') return text.text || JSON.stringify(text);
+    
+    let cleanText = text;
+    if (typeof text === 'string') {
+      cleanText = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+      if (cleanText.startsWith('{')) {
+        try {
+          const parsed = JSON.parse(cleanText);
+          if (parsed && typeof parsed === 'object') {
+            return parsed.text || text;
+          }
+        } catch (e) {
+          // Fallback regex if it's malformed JSON string like {text: "..."}
+          const match = cleanText.match(/"?text"?\s*:\s*"([^"]+)"/);
+          if (match && match[1]) return match[1];
+          return text;
+        }
       }
     }
-    return text;
+    return cleanText;
   };
 
   return (

@@ -123,7 +123,7 @@ INTELLIGENCE RULES:
 - If an agent asks about work, prioritize "pending" bookings near their location.
 - If a business/weaver asks about selling, use the Live Market Trends above to suggest optimal pricing.
 - If an IoT bin is >85%, insist they book a pickup NOW.
-- Keep answers helpful and concise (under 120 words). Be actionable. Use Swahili greetings sparingly.
+- Keep answers helpful and concise (under 500 words). Be actionable. Use Swahili greetings sparingly.
 
 ACTION PROTOCOL:
 If the user wants to book a pickup, include an "action" field in your response JSON.
@@ -141,7 +141,7 @@ Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.`;
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: `${systemContext}\n\nUser: ${userMessage}` }] }],
         generationConfig: { 
-          maxOutputTokens: 800, 
+          maxOutputTokens: 1000, 
           temperature: 0.7,
           response_mime_type: "application/json" 
         }
