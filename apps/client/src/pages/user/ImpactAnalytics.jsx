@@ -203,9 +203,8 @@ export default function ImpactAnalytics() {
       </div>
 
       <div className="p-2 space-y-4">
-        {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
         <div className="relative">
-          <div className="relative bg-white dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-6 overflow-hidden">
+          <div className="relative bg-white dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-6">
             
             {/* Subtle Background Elements Removed for Mobile Performance */}
             
@@ -286,7 +285,7 @@ export default function ImpactAnalytics() {
 
           <div className="grid grid-cols-1 gap-3">
             {/* Weekly Goal */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Weekly Target</p>
@@ -294,12 +293,12 @@ export default function ImpactAnalytics() {
                 </div>
                 <button 
                   onClick={() => { setGoalType('weekly'); setShowGoalModal(true); }}
-                  className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all"
+                  className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center active:bg-primary active:text-white"
                 >
                   <Edit3 className="w-4 h-4" />
                 </button>
               </div>
-              <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: `${weeklyProgress}%` }}
@@ -308,12 +307,12 @@ export default function ImpactAnalytics() {
               </div>
               <div className="flex justify-between mt-2">
                 <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">{Math.round(weeklyProgress)}% Completed</p>
-                {weeklyProgress >= 100 && <span className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest animate-pulse">Goal Reached! 🚀</span>}
+                {weeklyProgress >= 100 && <span className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest">Goal Reached! 🚀</span>}
               </div>
             </div>
 
             {/* Monthly Goal */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Monthly Target</p>
@@ -321,12 +320,12 @@ export default function ImpactAnalytics() {
                 </div>
                 <button 
                   onClick={() => { setGoalType('monthly'); setShowGoalModal(true); }}
-                  className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all"
+                  className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center active:bg-emerald-500 active:text-white"
                 >
                   <Edit3 className="w-4 h-4" />
                 </button>
               </div>
-              <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: `${monthlyProgress}%` }}
@@ -335,7 +334,7 @@ export default function ImpactAnalytics() {
               </div>
               <div className="flex justify-between mt-2">
                 <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">{Math.round(monthlyProgress)}% Completed</p>
-                {monthlyProgress >= 100 && <span className="text-[9px] font-semibold text-amber-500 uppercase tracking-widest animate-pulse">Elite Status! 🏆</span>}
+                {monthlyProgress >= 100 && <span className="text-[9px] font-semibold text-amber-500 uppercase tracking-widest">Elite Status! 🏆</span>}
               </div>
             </div>
           </div>
@@ -361,14 +360,14 @@ export default function ImpactAnalytics() {
               
               return (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full relative group">
+                  <div className="w-full relative">
                     <motion.div 
                       initial={{ height: 0 }}
                       animate={{ height: `${height}%` }}
-                      className={`w-full rounded-t-xl transition-all ${day.weight > 0 ? 'bg-primary shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]' : 'bg-slate-100 dark:bg-slate-800'}`}
+                      className={`w-full rounded-t-xl ${day.weight > 0 ? 'bg-primary shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]' : 'bg-slate-100 dark:bg-slate-800'}`}
                     />
                     {day.weight > 0 && (
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[8px] font-semibold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[8px] font-semibold px-1 py-0.5 rounded opacity-100">
                         {day.weight}kg
                       </div>
                     )}
