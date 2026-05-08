@@ -20,4 +20,6 @@ export * from './lib/storage.js';
 // Re-export constants and mock data for convenience
 export * from '@cleanflow/constants';
 export * from './data/mockData.js';
+export * from './data/wasteDefinitions.js';
 export * from './hooks/usePWA.js';
+export * from './utils/imageUtils.js';

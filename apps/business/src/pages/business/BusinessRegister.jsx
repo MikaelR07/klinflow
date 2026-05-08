@@ -93,7 +93,7 @@ export default function BusinessRegister() {
         </div>
 
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Business Registration</h1>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Business Registration</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 font-medium">Connect your business to the green circular economy.</p>
         </div>
 
@@ -223,7 +223,7 @@ export default function BusinessRegister() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-4 mt-4 bg-primary hover:bg-emerald-600 text-white rounded-xl font-bold text-[15px] shadow-lg shadow-primary/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full py-4 mt-4 bg-primary hover:bg-emerald-600 text-white rounded-xl font-semibold text-[15px] shadow-lg shadow-primary/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Register Business'}
           </button>
@@ -231,7 +231,7 @@ export default function BusinessRegister() {
 
         <p className="text-center mt-6 text-sm text-slate-500 dark:text-slate-400">
           Already have a business account?{' '}
-          <Link to="/business/login" className="text-primary font-bold hover:underline">Log In</Link>
+          <Link to="/business/login" className="text-primary font-semibold hover:underline">Log In</Link>
         </p>
 
       </div>

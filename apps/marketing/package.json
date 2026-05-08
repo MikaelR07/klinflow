@@ -10,20 +10,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@cleanflow/ui": "*",
     "@cleanflow/core": "*",
+    "@cleanflow/ui": "*",
+    "framer-motion": "^11.0.3",
     "lucide-react": "^1.8.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.1",
-    "framer-motion": "^11.0.3",
     "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",
-    "tailwindcss": "^3.4.1",
-    "postcss": "^8.4.38",
     "autoprefixer": "^10.4.19",
-    "vite": "^6.0.0"
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.1",
+    "vite": "^6.0.0",
+    "vite-plugin-pwa": "^1.3.0"
   }
 }

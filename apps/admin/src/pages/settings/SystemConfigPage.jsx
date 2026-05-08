@@ -65,8 +65,8 @@ export default function SystemConfigPage() {
           <ArrowLeft className="w-5 h-5 text-slate-500" />
         </button>
         <div>
-          <h1 className="text-2xl font-black dark:text-white tracking-tight">System Configuration</h1>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Global Fleet & Support Controls</p>
+          <h1 className="text-2xl font-semibold dark:text-white tracking-tight">System Configuration</h1>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Global Fleet & Support Controls</p>
         </div>
       </header>
 
@@ -77,12 +77,12 @@ export default function SystemConfigPage() {
           <div className="card p-8 bg-slate-900 rounded-[2.5rem] text-white shadow-2xl">
              <div className="flex items-center gap-3 mb-4">
                 <Shield className="w-5 h-5 text-primary" />
-                <h3 className="text-sm font-black uppercase tracking-widest">Pricing & Hours Policy</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-widest">Pricing & Hours Policy</h3>
              </div>
              <p className="text-xs text-slate-400 leading-relaxed font-medium">
                Operating hours affect all live apps immediately. Ensure your team is available during the active slots to maintain service quality.
              </p>
-             <button onClick={handleSave} disabled={isLoading} className="w-full mt-8 py-5 bg-primary hover:bg-primary/90 text-white rounded-2xl font-black flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-primary/20">
+             <button onClick={handleSave} disabled={isLoading} className="w-full mt-8 py-5 bg-primary hover:bg-primary/90 text-white rounded-2xl font-semibold flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-primary/20">
                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                SAVE OPERATING HOURS
              </button>
@@ -95,19 +95,19 @@ export default function SystemConfigPage() {
               <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
                 <Clock className="w-5 h-5 text-orange-500" />
               </div>
-              <h2 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wider">Operating Hours</h2>
+              <h2 className="text-sm font-semibold text-slate-800 dark:text-white uppercase tracking-wider">Operating Hours</h2>
            </div>
 
            <div className="space-y-4">
               {!form.hours ? (
                 <div className="py-10 text-center">
                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-slate-300" />
-                   <p className="text-[10px] font-black text-slate-400 mt-2 uppercase tracking-widest">Loading Schedule...</p>
+                   <p className="text-[10px] font-semibold text-slate-400 mt-2 uppercase tracking-widest">Loading Schedule...</p>
                 </div>
               ) : days.map(day => (
                 <div key={day} className={`p-4 rounded-2xl border transition-all ${form.hours[day]?.active ? 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-white/5' : 'bg-white dark:bg-slate-950 border-dashed border-slate-200 opacity-50'}`}>
                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-black uppercase tracking-widest text-slate-900 dark:text-white">{day}</span>
+                      <span className="text-xs font-semibold uppercase tracking-widest text-slate-900 dark:text-white">{day}</span>
                       <button 
                         onClick={() => toggleDay(day)}
                         className={`w-10 h-6 rounded-full relative transition-colors ${form.hours[day]?.active ? 'bg-primary' : 'bg-slate-300'}`}
@@ -119,21 +119,21 @@ export default function SystemConfigPage() {
                    {form.hours[day]?.active && (
                      <div className="flex items-center gap-3">
                         <div className="flex-1">
-                           <p className="text-[8px] font-black text-slate-400 uppercase mb-1">Start Time</p>
+                           <p className="text-[8px] font-semibold text-slate-400 uppercase mb-1">Start Time</p>
                            <input 
                              type="time" 
                              value={form.hours[day]?.start || '08:00'} 
                              onChange={(e) => updateTime(day, 'start', e.target.value)}
-                             className="w-full bg-white dark:bg-slate-900 p-2 rounded-lg text-xs font-bold border border-slate-100 outline-none"
+                             className="w-full bg-white dark:bg-slate-900 p-2 rounded-lg text-xs font-semibold border border-slate-100 outline-none"
                            />
                         </div>
                         <div className="flex-1">
-                           <p className="text-[8px] font-black text-slate-400 uppercase mb-1">End Time</p>
+                           <p className="text-[8px] font-semibold text-slate-400 uppercase mb-1">End Time</p>
                            <input 
                              type="time" 
                              value={form.hours[day]?.end || '18:00'} 
                              onChange={(e) => updateTime(day, 'end', e.target.value)}
-                             className="w-full bg-white dark:bg-slate-900 p-2 rounded-lg text-xs font-bold border border-slate-100 outline-none"
+                             className="w-full bg-white dark:bg-slate-900 p-2 rounded-lg text-xs font-semibold border border-slate-100 outline-none"
                            />
                         </div>
                      </div>

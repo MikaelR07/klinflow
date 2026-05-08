@@ -30,7 +30,8 @@ export const useFeedbackStore = create((set, get) => ({
         text: r.feedback,
         date: r.created_at,
         role: r.profiles?.role || 'public',
-        businessType: r.profiles?.business_type || null
+        businessType: r.profiles?.business_type || null,
+        sourceApp: r.source_app || 'client'
       }));
       set({ feedbackList: mapped });
     }
@@ -47,6 +48,7 @@ export const useFeedbackStore = create((set, get) => ({
       rating: payload.rating,
       category: payload.category,
       feedback: payload.text,
+      source_app: payload.sourceApp || 'client',
     }).select();
 
     if (error) {

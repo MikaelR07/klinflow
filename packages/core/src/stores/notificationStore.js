@@ -46,30 +46,62 @@ export const useNotificationStore = create((set, get) => ({
     }
   },
 
-  subscribeToRealtime: (userId, role) => {
+  subscribeToRealtime: async (userId, role) => {
+    // ── DEV BYPASS ──
+    if (!userId || userId === '00000000-0000-0000-0000-000000000000') return;
+
+    // ── CLEANUP PREVIOUS ──
     const existing = get().subscription;
-    if (existing) existing.unsubscribe();
+    if (existing) {
+      try {
+        await supabase.removeChannel(existing);
+      } catch (e) {
+        console.warn('[NotificationStore] Cleanup failed:', e);
+      }
+      set({ subscription: null });
+    }
 
     const myRole = (role || '').toLowerCase();
-    const sub = supabase
-      .channel('public:notifications')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'notifications' },
-        (payload) => {
-          const n = payload.new;
-          const targetRole = (n.target_role || '').toLowerCase();
-          const targeted = n.target_user === userId || targetRole === myRole || targetRole === 'all';
-          
-          if (targeted) {
-            set((state) => ({
-              notifications: [{ ...n, read: false, is_read: false }, ...state.notifications].slice(0, 50),
-            }));
-            // INSTANT SOUND (Zero Delay)
-            get().playNotificationSound();
-          }
-        })
-      .subscribe();
+    const uniqueId = Math.random().toString(36).substring(7);
+    const channelName = `user-notifs-${userId}-${uniqueId}`; 
+    
+    console.log('[NotificationStore] Opening Channel:', channelName);
 
+    const sub = supabase.channel(channelName)
+      .on('postgres_changes', { 
+        event: 'INSERT', 
+        schema: 'public', 
+        table: 'notifications' 
+      }, (payload) => {
+        const n = payload.new;
+        const targetRole = (n.target_role || '').toLowerCase();
+        const targeted = n.target_user === userId || targetRole === myRole || targetRole === 'all';
+        
+        if (targeted) {
+          set((state) => ({
+            notifications: [{ ...n, read: false, is_read: false }, ...state.notifications].slice(0, 50),
+          }));
+          get().playNotificationSound();
+        }
+      })
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('[NotificationStore] Live alerts active for:', userId);
+        }
+        if (status === 'CHANNEL_ERROR') {
+          console.error('[NotificationStore] Realtime subscription error');
+        }
+      });
+    
     set({ subscription: sub });
+  },
+
+  cleanup: () => {
+    const existing = get().subscription;
+    if (existing) {
+      supabase.removeChannel(existing);
+      set({ subscription: null });
+    }
   },
 
   addNotification: async (title, body, type = NOTIFICATION_TYPES.INFO, targetRole = 'all', targetUser = null) => {
@@ -128,9 +160,72 @@ export const useNotificationStore = create((set, get) => ({
 
   getUnreadCount: () => get().notifications.filter(n => !n.read).length,
 
-  cleanup: () => {
-    const sub = get().subscription;
-    if (sub) sub.unsubscribe();
-    set({ subscription: null });
+
+  // ── WEB PUSH SYSTEM ────────────────────────────────────────────────
+  subscribeToPush: async () => {
+    const { userId } = useAuthStore.getState();
+    if (!userId || !('serviceWorker' in navigator) || !('PushManager' in window)) {
+      console.warn('[Push] Push not supported or user not logged in');
+      return false;
+    }
+
+    try {
+      // 1. Request Permission
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        console.warn('[Push] Permission not granted');
+        return false;
+      }
+
+      // 2. Register Service Worker (Standard for PWAs)
+      const registration = await navigator.serviceWorker.ready;
+
+      // 3. Subscribe to Push Service (Google/Apple/Mozilla)
+      // Replace with your real VAPID Public Key from Admin or Env
+      const vapidPublicKey = 'BPaF7YVf_6D7T9Z-E-qX7_3eXzX_6D7T9Z-E-qX7_3eXz'; 
+      
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: get().urlBase64ToUint8Array(vapidPublicKey)
+      });
+
+      // 4. Save to Database
+      return await get().saveSubscription(userId, subscription);
+
+    } catch (err) {
+      console.error('[Push] Subscription failed:', err);
+      return false;
+    }
   },
+
+  saveSubscription: async (userId, subscription) => {
+    const subJson = subscription.toJSON();
+    
+    const { error } = await supabase
+      .from('push_subscriptions')
+      .upsert({
+        user_id: userId,
+        endpoint: subJson.endpoint,
+        p256dh: subJson.keys.p256dh,
+        auth: subJson.keys.auth,
+        device_type: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+      }, { onConflict: 'endpoint' });
+
+    if (error) {
+      console.error('[Push] Failed to save subscription:', error);
+      return false;
+    }
+    return true;
+  },
+
+  urlBase64ToUint8Array: (base64String) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
 }));

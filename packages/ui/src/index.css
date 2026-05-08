@@ -11,7 +11,7 @@
   }
 
   body {
-    @apply antialiased text-slate-900 dark:text-slate-50 bg-[#F1F5F9] dark:bg-slate-950 transition-colors duration-300;
+    @apply antialiased text-slate-800 dark:text-slate-50 bg-[#F4F4F4] dark:bg-slate-900 transition-colors duration-300;
     /* Native App Feel Optimizations */
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -35,16 +35,16 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-950 dark:text-white;
+    @apply text-slate-800 dark:text-white;
   }
 }
 
 @layer components {
   .card {
     @apply bg-white dark:bg-slate-900 
-           border border-slate-200/40 dark:border-slate-800/80 
-           rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-none
-           hover:shadow-[0_20_40px_rgb(0,0,0,0.12)] dark:hover:shadow-none
+           border border-slate-200/50 dark:border-slate-800/80 
+           rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none
+           hover:shadow-[0_20_40px_rgb(0,0,0,0.08)] dark:hover:shadow-none
            transition-all duration-300;
   }
 
@@ -122,4 +122,22 @@
 
 .animate-fade-in {
   animation: fade-in 0.2s ease-out forwards;
+}
+
+/* ── MARQUEE ANIMATION (STOCKX STYLE) ────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

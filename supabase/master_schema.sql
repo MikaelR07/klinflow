@@ -159,6 +159,8 @@ CREATE TABLE public.bookings (
   estate          TEXT,
   latitude        NUMERIC(10,7),
   longitude       NUMERIC(10,7),
+  h3_index        TEXT,
+  booking_type    TEXT DEFAULT 'any',
   actual_weight_kg NUMERIC(10,2) DEFAULT 0.00,
   distance_km     NUMERIC(10,2),
   logistics_fee   NUMERIC(10,2),

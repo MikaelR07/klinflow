@@ -30,7 +30,7 @@ const SmartBinModal = ({ bin, onClose }) => {
               <Trash2 size={24} />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-gray-900">{bin.name}</h2>
+              <h2 className="text-lg font-semibold text-gray-900">{bin.name}</h2>
               <p className="text-sm text-gray-500">{bin.location}</p>
             </div>
           </div>
@@ -48,7 +48,7 @@ const SmartBinModal = ({ bin, onClose }) => {
               <Info size={18} className="text-gray-400" />
               <span className="text-sm font-medium text-gray-700">Current Status</span>
             </div>
-            <div className={`font-bold text-lg ${getFillColorText(bin.fillLevel)}`}>
+            <div className={`font-semibold text-lg ${getFillColorText(bin.fillLevel)}`}>
               {bin.fillLevel}% Full
             </div>
           </div>
@@ -56,7 +56,7 @@ const SmartBinModal = ({ bin, onClose }) => {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <PieChart size={18} className="text-gray-400" />
-              <h3 className="text-sm font-bold text-gray-700">Waste Breakdown</h3>
+              <h3 className="text-sm font-semibold text-gray-700">Waste Breakdown</h3>
             </div>
             <div className="flex h-4 rounded-full overflow-hidden bg-gray-100">
               <div style={{ width: `${bin.breakdown.organic}%` }} className="bg-green-500" title={`Organic: ${bin.breakdown.organic}%`} />

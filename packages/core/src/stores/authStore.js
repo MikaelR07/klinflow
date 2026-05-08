@@ -70,7 +70,6 @@ export const useAuthStore = create(
       rewardPoints: 0, 
       walletBalance: 0,
       userId: null,
-      clientType: 'resident', // 'resident' | 'seller'
       notificationPrefs: defaultNotifPrefs(),
       profileSubscription: null,
       isInitializing: true,
@@ -95,16 +94,85 @@ export const useAuthStore = create(
                 isAuthenticated: true, 
                 userId: session.user.id, 
                 profile: uiProfile,
-                role: uiProfile.role,
-                clientType: uiProfile.clientType || 'resident'
+                role: uiProfile.role
               });
               get().subscribeToProfileChanges(session.user.id);
             }
+          } else {
+            set({ isAuthenticated: false, token: null, profile: null, userId: null });
           }
+
+          // Listen for session changes (Login/Logout) across tabs
+          supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
+              set({ isAuthenticated: false, token: null, profile: null, userId: null });
+              // Clean up subscriptions
+              if (get().profileSubscription) {
+                supabase.removeChannel(get().profileSubscription);
+                set({ profileSubscription: null });
+              }
+            } else if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
+              // CROSS-TAB SYNC: Force re-fetch of profile to ensure fresh data on load
+              if (true) { // Always fetch fresh profile to prevent stale localStorage data
+                const { data: profileData } = await supabase
+                  .from('profiles')
+                  .select('*')
+                  .eq('id', session.user.id)
+                  .single();
+                
+                if (profileData) {
+                  // ── GLOBAL ROLE GATEKEEPER ──
+                  const appRole = get().appRole;
+                  const userRole = profileData.role;
+
+                  // Define valid role mappings for each app
+                  const isAuthorized = 
+                    (appRole === 'client' && (userRole === 'user' || userRole === 'resident' || userRole === 'seller')) ||
+                    (appRole === 'agent'  && userRole === 'agent') ||
+                    (appRole === 'business' && userRole === 'business') ||
+                    (appRole === 'admin' && (userRole === 'admin' || profileData.agent_account_type === 'company_admin')) ||
+                    !appRole; // If no appRole set, allow all (e.g. for landing pages)
+
+                  if (!isAuthorized) {
+                    console.error(`[AuthGate] Unauthorized Access. User is ${userRole}, App is ${appRole}`);
+                    await supabase.auth.signOut();
+                    set({ isAuthenticated: false, profile: null });
+                    return;
+                  }
+
+                  const uiProfile = get()._mapProfile(profileData);
+                  set({ 
+                    isAuthenticated: true, 
+                    userId: session.user.id, 
+                    profile: uiProfile,
+                    role: uiProfile.role
+                  });
+                  get().subscribeToProfileChanges(session.user.id);
+                }
+              }
+            }
+          });
         } catch (err) {
           console.error('[CleanFlow Auth] Initialization failed:', err);
         } finally {
           set({ isInitializing: false });
+        }
+      },
+      fetchProfile: async () => {
+        const { userId } = get();
+        if (!userId) return;
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+        if (profileData) {
+          const uiProfile = get()._mapProfile(profileData);
+          set({ 
+            profile: uiProfile,
+            rewardPoints: uiProfile.rewardPoints,
+            walletBalance: uiProfile.walletBalance
+          });
         }
       },
 
@@ -113,7 +181,7 @@ export const useAuthStore = create(
         idNumber: profileData.id_number,
         walletBalance: Number(profileData.wallet_balance || 0),
         rewardPoints: Number(profileData.reward_points || 0),
-        subscriptionTier: profileData.subscription_tier,
+        subscriptionTier: profileData.role === ROLES.USER ? profileData.subscription_tier : null,
         isOnline: profileData.is_online,
         isStaff: profileData.is_staff === true, // Strict boolean
         fleetId: profileData.fleet_id,
@@ -121,54 +189,69 @@ export const useAuthStore = create(
         completedClearedAt: profileData.completed_cleared_at,
         cancelledClearedAt: profileData.cancelled_cleared_at,
         isVerified: profileData.is_verified,
-        businessType: profileData.business_type,
-        clientType: profileData.client_type || 'resident',
-        specializations: profileData.specializations || [],
+        businessType: profileData.role === ROLES.BUSINESS ? profileData.business_type : null,
+        specializations: profileData.role === ROLES.BUSINESS ? (profileData.specializations || []) : null,
         nemaLicense: profileData.nema_license,
+        companyName: profileData.company_name,
+        gender: profileData.gender,
         notes: profileData.notes || '',
       }),
 
-      subscribeToProfileChanges: (uid) => {
+      subscribeToProfileChanges: async (uid) => {
         const id = uid || get().userId;
         if (!id) return;
         
-        // Clean up existing subscription if any to avoid the "after subscribe" error
-        if (get().profileSubscription) {
-          supabase.removeChannel(get().profileSubscription);
+        // ── CLEANUP PREVIOUS ──
+        const existing = get().profileSubscription;
+        if (existing) {
+          try {
+            await supabase.removeChannel(existing);
+          } catch (e) {
+            console.warn('[AuthStore] Profile cleanup failed:', e);
+          }
           set({ profileSubscription: null });
         }
 
-        const channel = supabase.channel(`profile-${id}`);
+        const uniqueId = Math.random().toString(36).substring(7);
+        const channelName = `profile-${id}-${uniqueId}`;
         
-        channel.on('postgres_changes', { 
-          event: 'UPDATE', 
-          schema: 'public', 
-          table: 'profiles', 
-          filter: `id=eq.${id}` 
-        }, (payload) => {
-          const updated = payload.new;
-          console.log('[AuthStore] LIVE PROFILE UPDATE RECEIVED:', updated);
-          
-          set({
-            profile: {
-              ...get().profile,
-              ...updated,
-              idNumber: updated.id_number !== undefined ? updated.id_number : get().profile?.idNumber,
-              isStaff: updated.is_staff !== undefined ? (updated.is_staff === true) : get().profile?.isStaff,
-              fleetId: updated.fleet_id !== undefined ? updated.fleet_id : get().profile?.fleetId,
-              notes: updated.notes !== undefined ? updated.notes : get().profile?.notes,
-              walletBalance: Number(updated.wallet_balance !== undefined ? updated.wallet_balance : get().profile?.walletBalance || 0),
-              rewardPoints: Number(updated.reward_points !== undefined ? updated.reward_points : get().profile?.rewardPoints || 0),
-              clientType: updated.client_type || get().profile?.clientType || 'resident',
-              notificationPrefs: updated.notification_prefs || get().notificationPrefs,
-            },
-            rewardPoints: Number(updated.reward_points !== undefined ? updated.reward_points : get().profile?.rewardPoints || 0),
-            walletBalance: Number(updated.wallet_balance !== undefined ? updated.wallet_balance : get().profile?.walletBalance || 0),
-            clientType: updated.client_type || get().clientType
-          });
-        });
+        console.log('[AuthStore] Opening Profile Channel:', channelName);
 
-        channel.subscribe();
+        const channel = supabase.channel(channelName)
+          .on('postgres_changes', { 
+            event: 'UPDATE', 
+            schema: 'public', 
+            table: 'profiles', 
+            filter: `id=eq.${id}` 
+          }, (payload) => {
+            const updated = payload.new;
+            console.log('[AuthStore] LIVE PROFILE UPDATE RECEIVED:', updated);
+            
+            const currentProfile = get().profile;
+            set({
+              profile: {
+                ...currentProfile,
+                ...updated,
+                idNumber: updated.id_number !== undefined ? updated.id_number : currentProfile?.idNumber,
+                isStaff: updated.is_staff !== undefined ? (updated.is_staff === true) : currentProfile?.isStaff,
+                fleetId: updated.fleet_id !== undefined ? updated.fleet_id : currentProfile?.fleetId,
+                notes: updated.notes !== undefined ? updated.notes : currentProfile?.notes,
+                companyName: updated.company_name !== undefined ? updated.company_name : currentProfile?.companyName,
+                gender: updated.gender !== undefined ? updated.gender : currentProfile?.gender,
+                walletBalance: Number(updated.wallet_balance !== undefined ? updated.wallet_balance : currentProfile?.walletBalance || 0),
+                rewardPoints: Number(updated.reward_points !== undefined ? updated.reward_points : currentProfile?.rewardPoints || 0),
+                notificationPrefs: updated.notification_prefs || currentProfile?.notificationPrefs,
+              },
+              rewardPoints: Number(updated.reward_points !== undefined ? updated.reward_points : currentProfile?.rewardPoints || 0),
+              walletBalance: Number(updated.wallet_balance !== undefined ? updated.wallet_balance : currentProfile?.walletBalance || 0)
+            });
+          })
+          .subscribe((status) => {
+             if (status === 'SUBSCRIBED') {
+                console.log('[AuthStore] Profile monitoring active for:', id);
+             }
+          });
+        
         set({ profileSubscription: channel });
       },
 
@@ -183,7 +266,7 @@ export const useAuthStore = create(
       .from('profiles')
       .update({ balance: newBalance })
       .eq('id', userId)
-      .select()
+      .select('*')
       .single();
 
     if (!error && data) {
@@ -203,13 +286,15 @@ export const useAuthStore = create(
       updateProfile: async (newData) => {
         const { userId, profile } = get();
         if (!userId) throw new Error("Not authenticated");
+        
         const dbPayload = { ...newData };
         const VALID_COLUMNS = [
           'name', 'location', 'estate', 'avatar_url', 'id_number', 
-          'vehicle', 'business_type', 'business_name', 'specializations', 
+          'business_type', 'business_name', 'specializations', 
           'nema_license', 'is_verified', 'is_online', 'is_staff', 'notification_prefs', 'notes',
-          'client_type'
+          'subscription_tier'
         ];
+
         const sanitizedPayload = {};
         Object.entries(dbPayload).forEach(([key, value]) => {
           let dbKey = key;
@@ -217,12 +302,57 @@ export const useAuthStore = create(
           if (key === 'isStaff') dbKey = 'is_staff';
           if (key === 'nemaLicense') dbKey = 'nema_license';
           if (key === 'businessType') dbKey = 'business_type';
-          if (key === 'clientType') dbKey = 'client_type';
-          if (VALID_COLUMNS.includes(dbKey)) sanitizedPayload[dbKey] = value;
+          
+          if (VALID_COLUMNS.includes(dbKey)) {
+            // DEEP SYNC: If updating location, ensure we don't send nulls if we have existing coords
+            if (dbKey === 'location' && value) {
+              const currentLoc = profile?.location || {};
+              sanitizedPayload.location = {
+                ...currentLoc,
+                ...value,
+                // Force numeric conversion to ensure DB compatibility
+                latitude: value.latitude !== undefined ? Number(value.latitude) : currentLoc.latitude,
+                longitude: value.longitude !== undefined ? Number(value.longitude) : currentLoc.longitude
+              };
+            } else {
+              sanitizedPayload[dbKey] = value;
+            }
+          }
         });
+
         const { error } = await supabase.from('profiles').update(sanitizedPayload).eq('id', userId);
         if (error) throw new Error(error.message);
-        set({ profile: { ...profile, ...newData } });
+        
+        // Update local state with the same merged logic
+        set({ 
+          profile: { 
+            ...profile, 
+            ...newData,
+            location: sanitizedPayload.location || profile?.location
+          } 
+        });
+      },
+
+      uploadAvatar: async (file) => {
+        const { userId, updateProfile } = get();
+        if (!userId) throw new Error("Not authenticated");
+
+        const fileExt = file.name.split('.').pop();
+        const fileName = `avatar-${Date.now()}.${fileExt}`;
+        const filePath = `${userId}/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(filePath, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(filePath);
+
+        await updateProfile({ avatar_url: publicUrl });
+        return publicUrl;
       },
 
       toggleOnline: async (coords = null) => {
@@ -271,37 +401,65 @@ export const useAuthStore = create(
           
         if (error) throw new Error(error.message);
 
+        // Log the withdrawal in the rewards_ledger for tracking
+        await supabase.from('rewards_ledger').insert({
+          profile_id: userId,
+          transaction_type: 'withdrawal',
+          amount_cashback: -amount,
+          description: `Withdrawal of KSh ${amount}`
+        });
+
         set({ 
           walletBalance: newBalance,
           profile: { ...get().profile, walletBalance: newBalance }
         });
       },
       checkAvailability: async (phone) => {
+        const normalized = normalizePhone(phone);
         const email = phoneToEmail(phone);
-        const { data } = await supabase.from('profiles').select('id').eq('email', email);
+        
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id')
+          .or(`email.eq.${email},phone.eq.${phone},phone.eq.${normalized}`);
+          
+        if (error) {
+          console.error('[AuthStore] Availability check failed:', error);
+          return true; // Assume available on error to not block user, or handle as needed
+        }
+        
         return data?.length === 0;
       },
 
       sendOtp: async (phone) => {
-        // In a real production environment, this would call a serverless function 
-        // to send a real SMS via Africa's Talking. For this stage, we use Supabase OTP.
-        const email = phoneToEmail(phone);
-        const { error } = await supabase.auth.signInWithOtp({ email });
-        if (error) throw error;
-        return true;
+        const { data, error } = await supabase.functions.invoke('send-otp', {
+          body: { phone }
+        });
+
+        if (error || !data?.success) {
+          throw new Error(error?.message || data?.error || 'Failed to send SMS OTP.');
+        }
+        return true; 
       },
 
       verifyOtp: async (phone, token) => {
-        const email = phoneToEmail(phone);
-        const { data, error } = await supabase.auth.verifyOtp({ email, token, type: 'magiclink' });
-        if (error) throw error;
+        const { data, error } = await supabase.functions.invoke('verify-otp', {
+          body: { phone, otp: token }
+        });
+
+        if (error || !data?.success) {
+          throw new Error(error?.message || data?.error || 'Incorrect code. Please try again.');
+        }
+
         return data;
       },
 
       register: async (userData) => {
-        const { name, phone, pin, location, clientType, role, businessType, specializations } = userData;
+        const { name, phone, email: userEmail, pin, location, clientType, role, businessType, specializations, agent_account_type, fleet_invite_code, company_name, gender } = userData;
         const email = phoneToEmail(phone);
         
+        let user = null;
+
         // 1. Sign up the user in Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
           email,
@@ -309,37 +467,89 @@ export const useAuthStore = create(
           options: { data: { full_name: name, phone } }
         });
 
-        if (authError) throw authError;
-        const user = authData.user;
+        if (authError) {
+          console.error('[AuthStore] SignUp Error Details:', {
+            status: authError.status,
+            message: authError.message,
+            full: authError
+          });
+          
+          // AUTO-REPAIR: If user already exists in Auth but registration was incomplete
+          if (authError.status === 422 || authError.message.includes('already registered')) {
+            console.log('[AuthStore] Orphaned account detected. Attempting auto-repair...');
+            const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+              email,
+              password: pin
+            });
+            
+            if (signInError) throw new Error("Account exists with a different passcode. Please use Login or reset your PIN.");
+            user = signInData.user;
+          } else {
+            throw authError;
+          }
+        } else {
+          user = authData.user;
+        }
+
+        if (!user) throw new Error("Authentication failed. Please try again.");
+
+        // 1.5 Resolve Company ID if they are a Fleet Driver
+        let companyId = null;
+        if (agent_account_type === 'fleet_driver' && fleet_invite_code) {
+          const { data: adminData, error: adminError } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('fleet_invite_code', fleet_invite_code.toUpperCase())
+            .single();
+            
+          if (adminError || !adminData) {
+             throw new Error("Invalid Company Invite Code. Please verify with your Admin.");
+          }
+          companyId = adminData.id;
+        }
 
         // 2. Create the profile record
+        const profileInsert = {
+          id: user.id,
+          email: userEmail || email,
+          name,
+          phone,
+          location,
+          estate: location?.estate,
+          role: role || ROLES.USER,
+          wallet_balance: 0,
+          reward_points: 0,
+          is_verified: true,
+          company_name: company_name || null,
+          gender: gender || null
+        };
+
+        if (role === ROLES.AGENT && agent_account_type) {
+           profileInsert.agent_account_type = agent_account_type;
+           if (companyId) profileInsert.company_id = companyId;
+        }
+
+        if (role === ROLES.BUSINESS) {
+          profileInsert.business_type = businessType || null;
+          profileInsert.specializations = specializations || [];
+        } else if (!role || role === ROLES.USER) {
+          profileInsert.subscription_tier = 'free'; // default tier
+        }
+
         const { error: profileError } = await supabase
           .from('profiles')
-          .insert([{
-            id: user.id,
-            email,
-            name,
-            phone,
-            location,
-            estate: location?.estate,
-            role: role || ROLES.USER,
-            business_type: businessType || null,
-            specializations: specializations || [],
-            client_type: clientType || 'resident',
-            wallet_balance: 0,
-            reward_points: 0,
-            is_verified: true
-          }]);
+          .insert([profileInsert]);
 
         if (profileError) throw profileError;
 
         // 3. Update local state
         const profile = { 
-          id: user.id, name, phone, email, location, 
+          id: user.id, name, phone, email: userEmail || email, location, 
           role: role || ROLES.USER, 
-          businessType: businessType || null,
-          specializations: specializations || [],
-          clientType: clientType || 'resident',
+          businessType: role === ROLES.BUSINESS ? (businessType || null) : null,
+          specializations: role === ROLES.BUSINESS ? (specializations || []) : null,
+          clientType: (!role || role === ROLES.USER) ? (clientType || 'resident') : null,
+          subscriptionTier: (!role || role === ROLES.USER) ? 'free' : null,
           walletBalance: 0, rewardPoints: 0 
         };
         
@@ -347,8 +557,7 @@ export const useAuthStore = create(
           isAuthenticated: true, 
           userId: user.id, 
           profile, 
-          role: role || ROLES.USER,
-          clientType: clientType || 'resident'
+          role: role || ROLES.USER
         });
         
         get().subscribeToProfileChanges(user.id);
@@ -356,17 +565,26 @@ export const useAuthStore = create(
       },
       
       login: async (phone, pin, forcedRole) => {
+
         const email = phoneToEmail(phone);
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password: pin });
         if (authError) throw new Error('Invalid credentials.');
         const user = authData.user;
         const { data: profileData, error: profileError } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-        if (profileError || !profileData) throw new Error('Retreival failed.');
+          if (profileError || !profileData) {
+            await supabase.auth.signOut();
+            throw new Error('Access Denied: Profile not found. Please register.');
+          }
+
+          // ── ROLE ENFORCEMENT ──
+          // Prevent residents from logging into agent apps and vice versa
+          if (forcedRole && profileData.role !== forcedRole) {
+            console.warn('[AuthStore] Role Mismatch. Expected:', forcedRole, 'Got:', profileData.role);
+            await supabase.auth.signOut();
+            throw new Error(`Access Denied: This account is registered as a ${profileData.role}. Please use the correct CleanFlow app.`);
+          }
+          
         const uiProfile = get()._mapProfile(profileData);
-        if (forcedRole && uiProfile.role !== forcedRole) {
-          await supabase.auth.signOut();
-          throw new Error('Access Denied.');
-        }
         set({ 
           isAuthenticated: true, 
           token: authData.session?.access_token, 
@@ -375,24 +593,64 @@ export const useAuthStore = create(
           profile: uiProfile, 
           rewardPoints: uiProfile.rewardPoints, 
           walletBalance: uiProfile.walletBalance, 
-          clientType: uiProfile.clientType || 'resident',
           notificationPrefs: uiProfile.notificationPrefs 
         });
         get().subscribeToProfileChanges(user.id);
       },
 
-      toggleClientType: async () => {
-        const { clientType, updateProfile } = get();
-        const nextType = clientType === 'resident' ? 'seller' : 'resident';
-        set({ clientType: nextType });
-        try {
-          await updateProfile({ clientType: nextType });
-        } catch (err) {
-          console.error('[AuthStore] Failed to sync client type:', err);
+
+      getGFPMetrics: () => {
+        const points = get().profile?.rewardPoints || 0;
+        
+        const tiers = [
+          { name: 'Seedling', min: 0, max: 500, icon: '🌱' },
+          { name: 'Sprout', min: 501, max: 2000, icon: '🌿' },
+          { name: 'Oak', min: 2001, max: 5000, icon: '🌳' },
+          { name: 'Forest Keeper', min: 5001, max: Infinity, icon: '🌲' }
+        ];
+
+        const currentTierIdx = tiers.findIndex(t => points <= t.max);
+        const currentTier = tiers[currentTierIdx] || tiers[tiers.length - 1];
+        const nextTier = tiers[currentTierIdx + 1] || null;
+
+        let progress = 0;
+        if (nextTier) {
+          const range = nextTier.min - currentTier.min;
+          const currentProgress = points - currentTier.min;
+          progress = Math.min(100, Math.max(0, (currentProgress / range) * 100));
+        } else {
+          progress = 100;
         }
+
+        return {
+          tier: currentTier.name,
+          icon: currentTier.icon,
+          nextTier: nextTier ? nextTier.name : 'Max Level',
+          progress,
+          points
+        };
       },
 
-      checkAppRole: (currentApp) => { console.log(`[CleanFlow] Role check: ${currentApp}`); },
+      appRole: null,
+      checkAppRole: (currentApp) => { 
+        set({ appRole: currentApp });
+        const { profile, isAuthenticated } = get();
+        if (isAuthenticated && profile) {
+          const userRole = profile.role;
+          const isAuthorized = 
+            (currentApp === 'client' && (userRole === 'user' || userRole === 'resident' || userRole === 'seller')) ||
+            (currentApp === 'agent'  && userRole === 'agent') ||
+            (currentApp === 'business' && userRole === 'business') ||
+            (currentApp === 'admin' && (userRole === 'admin' || profile.agent_account_type === 'company_admin')) ||
+            !currentApp;
+
+          if (!isAuthorized) {
+             supabase.auth.signOut().then(() => {
+               set({ isAuthenticated: false, profile: null });
+             });
+          }
+        }
+      },
     }),
     {
       name: 'cf_auth_session',

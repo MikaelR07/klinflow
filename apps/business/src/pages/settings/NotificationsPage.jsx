@@ -55,14 +55,14 @@ export default function NotificationsPage() {
         <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-bold dark:text-white">Notifications</h1>
+        <h1 className="text-xl font-semibold dark:text-white">Notifications</h1>
       </header>
 
       <div className="space-y-6">
         
         {/* Channels */}
         <div className="card p-5">
-           <h2 className="text-sm font-bold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Delivery Channel</h2>
+           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Delivery Channel</h2>
            <div className="grid grid-cols-2 gap-3">
               <button onClick={() => setPrefs({...prefs, channel: 'push'})} className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${prefs.channel === 'push' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}>
                 <Smartphone className="w-6 h-6" />
@@ -87,7 +87,7 @@ export default function NotificationsPage() {
         <button
           onClick={handleSave}
           disabled={isLoading}
-          className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-70"
+          className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70"
         >
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Apply Preferences
         </button>

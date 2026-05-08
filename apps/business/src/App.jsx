@@ -15,7 +15,14 @@ const MyListings = lazy(() => import('./pages/marketplace/MyListings.jsx'));
 const MyOrders = lazy(() => import('./pages/marketplace/MyOrders.jsx'));
 const WeaverWarehouse = lazy(() => import('./pages/marketplace/WeaverWarehouse.jsx'));
 const SupplyTerminal = lazy(() => import('./pages/marketplace/SupplyTerminal.jsx'));
+const ArrivalDetails = lazy(() => import('./pages/marketplace/ArrivalDetails.jsx'));
 const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage.jsx'));
+const ProcurementTerminal = lazy(() => import('./pages/marketplace/ProcurementTerminal.jsx'));
+const CreateRFQ = lazy(() => import('./pages/marketplace/CreateRFQ.jsx'));
+const RFQDetails = lazy(() => import('./pages/marketplace/RFQDetails.jsx'));
+const ListingDetails = lazy(() => import('./pages/marketplace/ListingDetails.jsx'));
+const AggregatorsPage = lazy(() => import('./pages/marketplace/AggregatorsPage.jsx'));
+const ChatroomPage = lazy(() => import('./pages/marketplace/ChatroomPage.jsx'));
 
 // Settings Pages
 const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu.jsx'));
@@ -32,11 +39,10 @@ import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
 
 const BUSINESS_NAV = [
-  { path: '/', icon: Store, label: 'Market' },
+  { path: '/', icon: Store, label: 'Home' },
   { path: '/sell', icon: PlusCircle, label: 'Sell' },
-  { path: '/warehouse', icon: Package, label: 'Warehouse' },
+  { path: '/warehouse', icon: Package, label: 'Yard' },
   { path: '/orders', icon: ShoppingBag, label: 'Orders' },
-  { path: '/hygenex', icon: Brain, label: 'Advisor' },
   { path: '/settings', icon: MoreHorizontal, label: 'More' },
 ];
 
@@ -94,7 +100,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-dvh bg-slate-100 dark:bg-slate-900 transition-colors duration-200">
+    <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-900 transition-colors duration-200">
 
 
       <Routes>
@@ -109,10 +115,14 @@ export default function App() {
             <Route path="/buy" element={<BuyRecyclables />} />
             <Route path="/sell" element={<SellRecyclables />} />
             <Route path="/listings" element={<MyListings />} />
+            <Route path="/listings/:id" element={<ListingDetails />} />
             <Route path="/orders" element={<MyOrders />} />
             <Route path="/warehouse" element={<WeaverWarehouse />} />
-            <Route path="/arrivals" element={<SupplyTerminal />} />
+
+            <Route path="/procurement" element={<ProcurementTerminal />} />
             <Route path="/hygenex" element={<HygeneXPage />} />
+            <Route path="/aggregators" element={<AggregatorsPage />} />
+            <Route path="/chatroom" element={<ChatroomPage />} />
             
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />
@@ -125,6 +135,13 @@ export default function App() {
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
+          
+          {/* Detail Pages (No Bottom Nav, Full Bleed) */}
+          <Route path="/procurement/create" element={<CreateRFQ />} />
+          <Route path="/procurement/:id" element={<RFQDetails />} />
+          <Route path="/listings/:id" element={<ListingDetails />} />
+          <Route path="/arrivals" element={<SupplyTerminal />} />
+          <Route path="/arrivals/:id" element={<ArrivalDetails />} />
         </Route>
       </Routes>
 

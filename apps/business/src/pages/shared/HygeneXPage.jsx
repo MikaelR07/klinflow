@@ -1,19 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
-import { Brain, Mic, Send, Lightbulb, MapPin, Loader2, StopCircle, ShieldCheck, Activity, User } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import TopTabs from '../../components/TopTabs.jsx';
+import { 
+  Brain, 
+  Mic, 
+  Send, 
+  Lightbulb, 
+  MapPin, 
+  Loader2, 
+  StopCircle, 
+  ShieldCheck, 
+  Activity, 
+  User, 
+  TrendingUp, 
+  Building2, 
+  Package 
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuthStore, ROLES } from '@cleanflow/core';
 import { useHygenexStore } from '@cleanflow/core';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-
-
-// Fix for leaflet marker icon missing locally usually
-import L from 'leaflet';
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
 
 // Custom Voice Hook
 function useVoiceRecognition() {
@@ -30,7 +35,6 @@ function useVoiceRecognition() {
   const startListening = (onResult) => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      // Mock fallback for browsers without speech recognition
       setIsListening(true);
       setTimeout(() => {
         onResult("Predict my waste for next week");
@@ -58,45 +62,26 @@ function useVoiceRecognition() {
   return { isListening, startListening, stopListening };
 }
 
-// Premium Waveform Component
-const Waveform = ({ isListening, isTyping }) => {
-  return (
-    <div className="flex items-center gap-1.5 h-12 px-4">
-      {[...Array(12)].map((_, i) => (
-        <motion.div
-          key={i}
-          animate={isListening || isTyping ? {
-            height: [8, 24, 8, 32, 8],
-            opacity: [0.3, 1, 0.3],
-          } : {
-            height: 4,
-            opacity: 0.1,
-          }}
-          transition={{
-            duration: 0.8,
-            repeat: Infinity,
-            delay: i * 0.1,
-            ease: "easeInOut"
-          }}
-          className="w-1.5 rounded-full bg-emerald-500"
-        />
-      ))}
-    </div>
-  );
-};
-
 export default function HygeneXPage() {
   const { role } = useAuthStore();
-  const { messages, isTyping, metrics, initChat, stopChat, sendMessage } = useHygenexStore();
+  const { messages, isTyping, initChat, stopChat, sendMessage } = useHygenexStore();
   const [inputText, setInputText] = useState("");
   const chatBottomRef = useRef(null);
-  
   const { isListening, startListening, stopListening } = useVoiceRecognition();
+  const location = useLocation();
 
   useEffect(() => {
     initChat();
     return () => stopChat();
   }, [initChat, stopChat]);
+
+  useEffect(() => {
+    if (location.state?.autoStartMic) {
+      setTimeout(() => {
+        if (!isListening) toggleMic();
+      }, 800);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -120,157 +105,197 @@ export default function HygeneXPage() {
     else startListening((text) => setInputText(text));
   };
 
-  return (
-    <div className={`flex flex-col lg:flex-row absolute inset-0 bg-slate-950 text-white ${role === ROLES.ADMIN ? 'lg:static lg:h-[calc(100dvh-56px)]' : 'lg:static lg:h-[calc(100dvh-56px-70px)]'}`}>
-      
-      {/* 1. OVERSIGHT PANEL (LEFT) */}
-      <div className="hidden lg:flex flex-col w-80 border-r border-white/5 bg-slate-900/50 backdrop-blur-xl">
-        <div className="p-8">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-8">AI Neural Metrics</h2>
-          
-          <div className="space-y-6">
-            {[
-              { label: "Estates Monitored", val: metrics.estates, icon: MapPin, color: "emerald" },
-              { label: "Active Verifiers", val: metrics.activeAgents, icon: ShieldCheck, color: "blue" },
-              { label: "Segregation Rate", val: `${metrics.segregationRate}%`, icon: Activity, color: "amber" },
-            ].map((m, i) => (
-              <div key={i} className="group cursor-default">
-                <div className="flex justify-between items-end mb-2">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{m.label}</span>
-                  <span className={`text-xl font-black text-${m.color}-500 group-hover:scale-110 transition-transform`}>{m.val}</span>
-                </div>
-                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: "70%" }}
-                    className={`h-full bg-${m.color}-500`}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+  const renderMessageText = (text) => {
+    if (!text) return '';
+    if (typeof text !== 'string') return text;
+    if (text.trim().startsWith('{')) {
+      try {
+        const parsed = JSON.parse(text);
+        return parsed.text || text;
+      } catch (e) {
+        return text;
+      }
+    }
+    return text;
+  };
 
-        <div className="mt-auto p-8 border-t border-white/5">
-           <div className="flex items-center gap-4 p-4 rounded-3xl bg-white/5 border border-white/5 mb-4">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500">
-                <Brain className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Neural Status</div>
-                <div className="text-xs font-bold text-white">Active & Learning</div>
-              </div>
-           </div>
-        </div>
+  return (
+    <div className={`flex flex-col absolute inset-0 bg-[#F4F4F4] dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300 ${role === ROLES.ADMIN ? 'lg:static lg:h-[calc(100dvh-56px)]' : 'lg:static lg:h-[calc(100dvh-56px-70px)]'}`}>
+      
+      {/* ── HEADER ── */}
+      <div className="relative z-20 bg-[#F4F4F4]/80 dark:bg-slate-900/80 backdrop-blur-2xl border-b border-black/5 dark:border-white/5 pt-2">
+        <TopTabs active="/hygenex" />
       </div>
 
-      {/* 2. CHAT ENGINE (CENTER) */}
-      <div className="flex-1 flex flex-col relative overflow-hidden bg-slate-950">
-        <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-        
-        {/* Header */}
-        <header className="px-8 py-6 border-b border-white/5 flex justify-between items-center z-10">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                <Brain className="w-6 h-6 text-emerald-500" />
-              </div>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-500 border-4 border-slate-950 animate-pulse" />
-            </div>
-            <div>
-              <h1 className="text-lg font-black tracking-tighter text-white">HygeneX <span className="text-emerald-500">v2.0</span></h1>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">CleanFlow Operations Manager</p>
-            </div>
-          </div>
+      {/* ── BACKDROP ── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" 
+          style={{ 
+            backgroundImage: `radial-gradient(#3b82f6 1px, transparent 1px), radial-gradient(#3b82f6 1px, transparent 1px)`,
+            backgroundSize: '40px 40px',
+            backgroundPosition: '0 0, 20px 20px'
+          }} 
+        />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-500/5 dark:bg-blue-500/10 blur-[120px] rounded-full opacity-50" />
+      </div>
 
-          <div className="flex items-center gap-4">
-            <Waveform isListening={isListening} isTyping={isTyping} />
-          </div>
-        </header>
-
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-10 space-y-10">
-          <div className="max-w-3xl mx-auto space-y-10">
-            {messages.map((msg) => {
-              const isAi = msg.role === 'ai';
-              return (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  key={msg.id} 
-                  className={`flex gap-6 ${isAi ? '' : 'flex-row-reverse'}`}
-                >
-                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${
-                    isAi ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-white/5 border-white/10 text-slate-400'
-                  }`}>
-                    {isAi ? <Brain className="w-5 h-5" /> : <User className="w-5 h-5" />}
-                  </div>
-                  
-                  <div className={`relative p-6 rounded-[2rem] text-sm leading-relaxed max-w-[80%] border ${
-                    isAi 
-                      ? 'bg-white/[0.03] border-white/5 text-slate-200 rounded-tl-none' 
-                      : 'bg-emerald-500 border-emerald-400 text-white font-medium rounded-tr-none shadow-xl shadow-emerald-500/20'
-                  }`}>
-                    {msg.text}
-                    <div className={`absolute bottom-2 ${isAi ? 'right-4' : 'left-4'} text-[8px] font-black uppercase opacity-30`}>
-                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+      {/* ── CHAT ENGINE ── */}
+      <div className="flex-1 flex flex-col relative overflow-hidden">
+        <div className="flex-1 overflow-y-auto px-4 py-10 space-y-10 pt-24">
+          <div className="w-full">
             
+            {/* Top Label */}
+            {messages.length <= 1 && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mb-4 pl-1"
+              >
+                <span className="text-[13px] font-bold uppercase tracking-[0.1em] text-slate-400 dark:text-slate-500">
+                  Smart sourcing in <span className="text-blue-600 dark:text-blue-400">AI mode</span>
+                </span>
+              </motion.div>
+            )}
+
+            {/* Hero Message Card (First in List) */}
+            {messages.length <= 1 && (
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="mb-3 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 shadow-sm dark:shadow-none rounded-2xl py-2.5 px-4 w-fit max-w-full"
+              >
+                <h1 className="text-[15px] font-black leading-tight text-slate-900 dark:text-transparent dark:bg-gradient-to-r dark:from-white dark:to-white/60 dark:bg-clip-text whitespace-nowrap overflow-hidden text-ellipsis">
+                  Your Next Reliable Supplier Is Here
+                </h1>
+                <p className="text-[9px] text-slate-400 dark:text-slate-500 font-bold mt-1 uppercase tracking-widest">
+                  Look no further for your custom inquiries
+                </p>
+              </motion.div>
+            )}
+
+            {/* Business Discovery Menu (Vertical List on the Left) */}
+            {messages.length <= 1 && (
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="flex flex-col gap-2 mb-10 max-w-[280px]"
+              >
+                {[
+                  { title: 'Analyze Sellers', desc: 'Verify reputation', icon: ShieldCheck, color: 'text-blue-600 dark:text-blue-400', width: 'w-full' },
+                  { title: 'Product Search', desc: 'Find bulk materials', icon: Package, color: 'text-emerald-600 dark:text-emerald-400', width: 'w-[90%]' },
+                  { title: 'Verified Weavers', desc: 'Search certified', icon: Building2, color: 'text-indigo-600 dark:text-indigo-400', width: 'w-[95%]' },
+                  { title: 'Search Prices', desc: 'Market analysis', icon: TrendingUp, color: 'text-amber-600 dark:text-amber-400', width: 'w-[85%]' }
+                ].map((item, i) => (
+                  <button 
+                    key={i}
+                    onClick={() => sendMessage(item.title)}
+                    className={`flex items-center gap-3 py-1.5 px-3 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 shadow-sm dark:shadow-none rounded-xl text-left hover:bg-black/5 dark:hover:bg-white/10 transition-all group ${item.width}`}
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-black/5 dark:bg-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                      <item.icon className={`w-4 h-4 ${item.color}`} />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-bold uppercase tracking-wider leading-none mb-0.5">{item.title}</div>
+                      <div className="text-[9px] text-slate-500 font-medium leading-none">{item.desc}</div>
+                    </div>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+
+            <div className="space-y-10">
+              {messages.filter(m => !m.text?.includes("Hello! I'm HygeneX")).map((msg, idx) => {
+                const isAi = msg.role === 'ai';
+                return (
+                  <motion.div 
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex gap-3 ${isAi ? '' : 'flex-row-reverse'}`}
+                  >
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
+                      isAi ? 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-slate-200 dark:bg-white/5 border-black/5 dark:border-white/10 text-slate-500 dark:text-slate-400'
+                    }`}>
+                      {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
+                    </div>
+                    
+                    <div className="flex flex-col gap-2 max-w-[85%]">
+                      <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${
+                        isAi 
+                          ? 'bg-white dark:bg-white/5 border-black/5 dark:border-white/10 text-slate-700 dark:text-slate-200 rounded-tl-none shadow-sm dark:shadow-none' 
+                          : 'bg-blue-600 border-blue-500 text-white rounded-tr-none shadow-md'
+                      }`}>
+                        {renderMessageText(msg.text)}
+                      </div>
+                      <div className={`text-[9px] font-semibold uppercase tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
+                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
             {isTyping && (
-              <div className="flex gap-6">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
-                  <Brain className="w-5 h-5" />
+              <div className="flex gap-4 mt-10">
+                <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                  <Brain className="w-4 h-4" />
                 </div>
-                <div className="flex items-center gap-1.5 p-6 bg-white/[0.03] border border-white/5 rounded-[2rem] rounded-tl-none">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div className="flex items-center gap-1.5 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl rounded-tl-none">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             )}
             <div ref={chatBottomRef} className="h-4" />
           </div>
         </div>
+      </div>
 
-        {/* Input Control */}
-        <div className="p-8 border-t border-white/5 bg-slate-900/30 backdrop-blur-3xl">
-          <div className="max-w-3xl mx-auto">
-            <div className="relative group">
-              <textarea
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={isListening ? "I'm listening..." : "Ask HygeneX about the ecosystem..."}
-                className="w-full bg-white/[0.03] border border-white/10 rounded-[2.5rem] py-6 px-16 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/[0.05] transition-all resize-none min-h-[72px]"
-                rows={1}
-              />
-              
+      {/* ── FOOTER COCKPIT ── */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-20 z-30 pointer-events-none">
+        <div className="max-w-3xl mx-auto pointer-events-auto space-y-4">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar px-1">
+            {['Recent Arrivals', 'Price Trends', 'Specializations'].map((chip) => (
               <button 
-                onClick={toggleMic}
-                className={`absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-2xl transition-all ${
-                  isListening ? 'bg-emerald-500 text-white animate-pulse shadow-lg shadow-emerald-500/20' : 'text-slate-500 hover:text-white'
-                }`}
+                key={chip}
+                onClick={() => sendMessage(chip)}
+                className="whitespace-nowrap px-4 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-[10px] font-bold text-blue-400 uppercase tracking-wider transition-all"
               >
-                {isListening ? <StopCircle className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                {chip}
               </button>
+            ))}
+          </div>
 
-              <button 
-                onClick={handleSend}
-                disabled={!inputText.trim()}
-                className={`absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-2xl transition-all ${
-                  inputText.trim() ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' : 'text-slate-700 pointer-events-none'
-                }`}
-              >
-                <Send className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="text-center mt-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">
-              HygeneX Neural Interface • Encrypted & Autonomous
-            </p>
+          <div className="relative group bg-white dark:bg-slate-800/95 backdrop-blur-3xl border border-black/5 dark:border-white/10 rounded-3xl p-1.5 shadow-xl dark:shadow-2xl">
+            <textarea
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={isListening ? "Listening..." : "Command HygeneX..."}
+              className="w-full bg-transparent border-none py-3 pl-12 pr-16 text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-0 resize-none min-h-[50px] max-h-[150px]"
+              rows={1}
+            />
+            
+            <button 
+              onClick={toggleMic}
+              className={`absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all z-20 ${
+                isListening ? 'bg-blue-500 text-white animate-pulse' : 'text-slate-400 dark:text-slate-500 hover:text-blue-500 bg-black/5 dark:bg-white/5'
+              }`}
+            >
+              {isListening ? <StopCircle className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            </button>
+
+            <button 
+              onClick={handleSend}
+              disabled={!inputText.trim()}
+              className={`absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all ${
+                inputText.trim() ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-300 dark:text-slate-700 pointer-events-none'
+              }`}
+            >
+              <Send className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>

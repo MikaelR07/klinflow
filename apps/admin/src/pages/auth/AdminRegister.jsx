@@ -80,7 +80,7 @@ export default function AdminRegister() {
           <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-4">
             <ShieldAlert className="w-8 h-8 text-rose-500" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl font-semibold text-white tracking-tight">
             CleanFlow <span className="text-rose-500">Security</span>
           </h1>
           <p className="text-sm border border-rose-500/30 bg-rose-500/10 text-rose-300 py-1.5 px-3 rounded-full mt-3 font-medium inline-block shadow-lg">
@@ -136,7 +136,7 @@ export default function AdminRegister() {
           </div>
 
           <div className="pt-2">
-            <label className="block text-xs font-bold text-rose-400 mb-1.5 uppercase tracking-wider">Admin Secret Key</label>
+            <label className="block text-xs font-semibold text-rose-400 mb-1.5 uppercase tracking-wider">Admin Secret Key</label>
             <div className="relative">
               <KeyRound className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-rose-500" />
               <input type="password" name="secretKey" value={formData.secretKey} onChange={handleInputChange} placeholder="Required System Key" className="w-full pl-11 pr-4 py-3 bg-slate-900 border border-rose-500/30 rounded-xl text-white focus:ring-2 text-base focus:ring-rose-500 focus:border-rose-500 text-sm placeholder:text-rose-500/30" required />
@@ -146,7 +146,7 @@ export default function AdminRegister() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-4 mt-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-[15px] shadow-lg shadow-rose-900/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full py-4 mt-6 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-semibold text-[15px] shadow-lg shadow-rose-900/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

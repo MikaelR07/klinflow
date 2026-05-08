@@ -42,17 +42,22 @@ export default function NotificationsPage() {
   };
 
   const formatRelativeTime = (dateString) => {
+    if (!dateString) return 'just now';
     try {
       const parsed = new Date(dateString);
       if (isNaN(parsed.getTime())) return 'just now';
+      
       const now = new Date();
-      const diffInSeconds = Math.floor((now - parsed) / 1000);
+      // Use Math.max to handle cases where local clock is slightly behind server clock
+      const diffInSeconds = Math.max(0, Math.floor((now.getTime() - parsed.getTime()) / 1000));
 
-      if (diffInSeconds < 15) return 'just now';
+      if (diffInSeconds < 30) return 'just now';
       if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
       if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
       if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
-      return `${Math.floor(diffInSeconds / 86400)}d ago`;
+      
+      // If more than a day, show the actual date
+      return parsed.toLocaleDateString([], { month: 'short', day: 'numeric' });
     } catch (e) {
       return 'just now';
     }
@@ -95,7 +100,7 @@ export default function NotificationsPage() {
         <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-bold dark:text-white">Notification Hub</h1>
+        <h1 className="text-xl font-semibold dark:text-white">Notification Hub</h1>
       </header>
 
       <div className="space-y-6">
@@ -105,12 +110,12 @@ export default function NotificationsPage() {
             <div className="p-4 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
                <div className="flex items-center gap-2">
                   <BellRing className="w-4 h-4 text-primary" />
-                  <h2 className="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white">Recent Alerts</h2>
+                  <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-900 dark:text-white">Recent Alerts</h2>
                </div>
                <div className="flex items-center gap-2">
                  <button 
                    onClick={clearAll}
-                   className="text-[10px] font-black uppercase text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 px-2 py-1 rounded-md transition-all"
+                   className="text-[10px] font-semibold uppercase text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 px-2 py-1 rounded-md transition-all"
                  >
                    Clear All
                  </button>
@@ -123,7 +128,7 @@ export default function NotificationsPage() {
                    <div className="mt-1">{getIcon(n.type)}</div>
                    <div className="flex-1">
                       <div className="flex items-center justify-between mb-0.5">
-                        <p className="text-sm font-bold dark:text-white">{n.title}</p>
+                        <p className="text-sm font-semibold dark:text-white">{n.title}</p>
                         <div className="flex items-center gap-1">
                           <Clock className="w-3 h-3 text-slate-300" />
                           <span className="text-[10px] text-slate-400 font-medium tabular-nums">
@@ -138,7 +143,7 @@ export default function NotificationsPage() {
               {notifications.length === 0 && (
                 <div className="py-12 px-6 text-center">
                    <BellRing className="w-12 h-12 text-slate-200 mx-auto mb-3 opacity-20" />
-                   <p className="text-xs text-slate-400 font-bold uppercase tracking-tighter">No Active Notifications</p>
+                   <p className="text-xs text-slate-400 font-semibold uppercase tracking-tighter">No Active Notifications</p>
                 </div>
               )}
            </div>
@@ -146,7 +151,7 @@ export default function NotificationsPage() {
 
         {/* Channels */}
         <div className="card p-5">
-           <h2 className="text-sm font-bold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
               <Smartphone className="w-4 h-4 text-slate-400" /> Delivery Preferences
            </h2>
            <div className="grid grid-cols-2 gap-3">
@@ -173,7 +178,7 @@ export default function NotificationsPage() {
         <button
           onClick={handleSave}
           disabled={isLoading}
-          className="w-full py-4 bg-primary text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 shadow-lg shadow-primary/20"
+          className="w-full py-4 bg-primary text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 shadow-lg shadow-primary/20"
         >
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Save Preferences
         </button>

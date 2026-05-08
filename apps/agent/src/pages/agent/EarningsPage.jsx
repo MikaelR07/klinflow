@@ -18,52 +18,48 @@ import {
   ChevronRight,
   MoreVertical,
   Download,
-  AlertCircle
+  AlertCircle,
+  Briefcase,
+  Scale,
+  Zap
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { useAgentStore, useAuthStore, supabase } from '@cleanflow/core';
 import { toast } from 'sonner';
 
-const CLAIM_STATUS = {
-  held_in_escrow: { label: 'In Escrow', color: 'text-indigo-600 bg-indigo-50 border-indigo-100' },
-  funds_released: { label: 'Paid Out', color: 'text-emerald-600 bg-emerald-50 border-emerald-100' },
-  pending:        { label: 'Pending',   color: 'text-amber-600 bg-amber-50 border-amber-100' },
-};
+
 
 export default function EarningsPage() {
   const navigate = useNavigate();
-  const { earnings, coachInsights, currentInsightIndex, nextInsight } = useAgentStore();
+  const { earnings, coachInsights, currentInsightIndex, nextInsight, jobHistory, fetchEarnings } = useAgentStore();
   const { profile, userId, withdrawRewards } = useAuthStore();
   const currentInsight = coachInsights[currentInsightIndex];
-  const [materialSales, setMaterialSales] = useState([]);
-  const [salesLoading, setSalesLoading] = useState(true);
   const [isWithdrawing, setIsWithdrawing] = useState(false);
+  const [isChartReady, setIsChartReady] = useState(false);
+
+  const [goals, setGoals] = useState(() => {
+    const saved = localStorage.getItem(`agent_goals_${profile?.id}`);
+    return saved ? JSON.parse(saved) : { weekly: 500, monthly: 2000 };
+  });
+
+  const handleGoalChange = (type, value) => {
+    const newGoals = { ...goals, [type]: Number(value) || 0 };
+    setGoals(newGoals);
+    localStorage.setItem(`agent_goals_${profile?.id}`, JSON.stringify(newGoals));
+  };
+  useEffect(() => {
+    fetchEarnings();
+    // Wait for the CSS animation to complete before rendering the chart
+    const timer = setTimeout(() => setIsChartReady(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
   
   const lastWeek = earnings?.lastWeek || 0;
   const thisWeek = earnings?.thisWeek || 0;
   const weekChange = lastWeek > 0 
     ? (((thisWeek - lastWeek) / lastWeek) * 100).toFixed(1) 
     : '0.0';
-
-  useEffect(() => {
-    if (!userId) return;
-    setSalesLoading(true);
-    supabase
-      .from('marketplace_orders')
-      .select('*')
-      .eq('seller_id', userId)
-      .eq('order_type', 'agent_claim')
-      .order('created_at', { ascending: false })
-      .then(({ data }) => {
-        setMaterialSales(data || []);
-        setSalesLoading(false);
-      });
-  }, [userId]);
-
-  const totalMaterialEarnings = materialSales
-    .filter(s => s.status === 'funds_released')
-    .reduce((sum, s) => sum + (Number(s.total_price) || 0), 0);
 
   const handleWithdraw = async () => {
     const balance = earnings.today || 0;
@@ -92,8 +88,8 @@ export default function EarningsPage() {
             <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
           </button>
           <div>
-            <h1 className="text-xl font-black tracking-tight text-slate-900 dark:text-white">Financial Hub</h1>
-            <p className="text-[10px] text-primary font-black uppercase tracking-widest">My Earnings</p>
+            <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">My Wallet</h1>
+            <p className="text-[10px] text-emerald-500 font-semibold uppercase tracking-widest">Money & Stats</p>
           </div>
         </div>
         <button className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
@@ -101,149 +97,169 @@ export default function EarningsPage() {
         </button>
       </div>
 
-      {/* ── BALANCE HERO ── */}
+      {/* ── DASHBOARD HERO: PERFORMANCE HUD ── */}
       <div className="relative group">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-indigo-500/20 rounded-[2.5rem] blur opacity-30"></div>
-        <div className="relative bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 p-8 shadow-xl overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-5">
-            <Wallet className="w-32 h-32" />
-          </div>
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/10 via-primary/10 to-blue-600/10 rounded-2xl blur opacity-0 dark:opacity-40 dark:group-hover:opacity-60 transition-opacity"></div>
+        <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-6 dark:shadow-2xl overflow-hidden text-slate-900 dark:text-white transition-colors duration-500">
+          {/* Glassmorphism Accents */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
           
-          <div className="relative z-10 flex flex-col items-center text-center">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Available for M-Pesa Withdrawal</p>
-            <h2 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter mb-6">
-              KSh {earnings.today.toLocaleString()}
-            </h2>
-            
-            <div className="grid grid-cols-2 w-full gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
-              <div>
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Pickups Today</p>
-                <p className="text-lg font-black text-slate-900 dark:text-white">{earnings.completedToday}</p>
-              </div>
-              <div>
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Weekly Change</p>
-                <div className="flex items-center justify-center gap-1">
-                  <ArrowUpRight className={`w-3 h-3 ${Number(weekChange) >= 0 ? 'text-emerald-500' : 'text-red-500'}`} />
-                  <p className={`text-lg font-black ${Number(weekChange) >= 0 ? 'text-emerald-500' : 'text-red-500'}`}>{weekChange}%</p>
-                </div>
-              </div>
-            </div>
-
-            <button 
-              onClick={handleWithdraw}
-              disabled={isWithdrawing}
-              className="mt-8 w-full py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/30 flex items-center justify-center gap-2 active:scale-[0.98] transition-all disabled:opacity-50"
-            >
-              {isWithdrawing ? 'Processing...' : 'Withdraw to M-Pesa'}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── MATERIAL SALES (WEAVER CLAIMS) ── */}
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-6 border border-slate-200 dark:border-slate-800">
-        <div className="flex items-center justify-between mb-8 px-2">
-          <div>
-            <h3 className="font-black text-xs uppercase tracking-widest text-slate-400">Material Sales</h3>
-            <p className="text-lg font-black text-slate-900 dark:text-white">Weaver Payouts</p>
-          </div>
-          <Package className="w-5 h-5 text-indigo-400" />
-        </div>
-
-        {salesLoading ? (
-          <div className="flex flex-col items-center py-10 gap-3">
-            <div className="w-8 h-8 border-4 border-indigo-100 border-t-indigo-500 rounded-full animate-spin" />
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Syncing Orders...</p>
-          </div>
-        ) : materialSales.length === 0 ? (
-          <div className="text-center py-10 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border-2 border-dashed border-slate-100 dark:border-slate-800">
-            <Package className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-relaxed px-10">
-              No material sales yet.<br/>Verify recyclables to attract Weavers.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {materialSales.map(sale => {
-              const statusCfg = CLAIM_STATUS[sale.status] || CLAIM_STATUS.pending;
-              return (
-                <div key={sale.id} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800 group active:scale-[0.98] transition-all">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-lg shadow-sm">
-                      📦
-                    </div>
-                    <div>
-                      <p className="text-sm font-black text-slate-900 dark:text-white">{sale.quantity}kg Claimed</p>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full border ${statusCfg.color}`}>
-                          {statusCfg.label}
-                        </span>
-                        <p className="text-[9px] font-bold text-slate-400">{new Date(sale.created_at).toLocaleDateString()}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-black text-indigo-600">KSh {Number(sale.total_price).toLocaleString()}</p>
-                    <ChevronRight className="w-4 h-4 text-slate-300 ml-auto mt-1" />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* ── KEY PERFORMANCE METRICS ── */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800">
-          <Star className="w-5 h-5 text-amber-400 mb-2 fill-amber-400" />
-          <p className="text-2xl font-black text-slate-900 dark:text-white">{profile?.rating ? profile.rating.toFixed(1) : '5.0'}</p>
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Average Rating</p>
-        </div>
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800">
-          <Truck className="w-5 h-5 text-primary mb-2" />
-          <p className="text-2xl font-black text-slate-900 dark:text-white">{earnings.totalJobs}</p>
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">Total Pickups</p>
-        </div>
-      </div>
-
-      {/* ── AI PERFORMANCE COACH ── */}
-      {currentInsight && (
-        <div className="bg-slate-900 rounded-[2.5rem] p-6 text-white relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <Sparkles className="w-20 h-20" />
-          </div>
           <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 bg-primary rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-3 h-3 text-white" />
+            {/* Top Row: Stock Value Emphasis */}
+            <div className="flex items-end justify-between mb-8 px-2">
+              <div>
+                <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">Stock Value</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-sm font-semibold text-blue-500">KSh</span>
+                  <h2 className="text-4xl font-bold tracking-tighter text-slate-900 dark:text-white">
+                    {Number(earnings.inventoryValue || 0).toLocaleString()}
+                  </h2>
                 </div>
-                <p className="text-[10px] font-black text-white/60 uppercase tracking-widest">Earning Strategy</p>
               </div>
-              <button onClick={nextInsight} className="text-[9px] font-black uppercase text-primary">Next Tip →</button>
+              <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
+                <p className="text-[8px] font-semibold text-blue-500 dark:text-blue-400 uppercase tracking-widest">Live Inventory</p>
+              </div>
             </div>
-            <h3 className="text-xl font-black mb-2 leading-tight">{currentInsight.title}</h3>
-            <p className="text-xs font-medium text-white/60 leading-relaxed">
-              {currentInsight.message || "Scale your verified recyclables to unlock high-value Weaver claims."}
-            </p>
+
+            {/* Metrics Grid: Masonry-style layout */}
+            <div className="grid grid-cols-4 gap-3">
+              {/* 1. Rating (Top Left) */}
+              <div className="col-span-2 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-5 flex items-center justify-between hover:bg-white/10 transition-colors">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Agent Rating</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-2xl font-bold">{profile?.rating || '5.0'}</span>
+                    <div className="flex gap-0.5">
+                      {[1,2,3,4,5].map(i => (
+                        <Star key={i} className={`w-2 h-2 ${i <= Math.round(profile?.rating || 5) ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300 dark:text-slate-600'}`} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-yellow-400/10 flex items-center justify-center">
+                  <Star className="w-5 h-5 text-yellow-500" />
+                </div>
+              </div>
+
+              {/* 2. Resident Pickups (Top Right) */}
+              <div className="col-span-2 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-5 flex items-center justify-between hover:bg-white/10 transition-colors">
+                <div className="flex flex-col">
+                  <span className="text-2xl font-bold text-slate-800 dark:text-white">{earnings.residentPickups || 0}</span>
+                  <span className="text-[9px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total Pickups</span>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center">
+                  <Truck className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                </div>
+              </div>
+
+              {/* 3. Total Weight (Bottom Left) */}
+              <div className="col-span-2 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl p-5 flex items-center justify-between hover:bg-emerald-500/20 transition-colors">
+                <div>
+                  <h4 className="text-3xl font-bold tracking-tighter text-emerald-600 dark:text-emerald-400">{(earnings.totalKg || 0).toFixed(1)}</h4>
+                  <p className="text-[9px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total KGs</p>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center">
+                  <Scale className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
+                </div>
+              </div>
+
+              {/* 4. Marketplace Accepted Bids */}
+              <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-white/10 transition-colors text-center">
+                <span className="text-xl font-bold text-slate-800 dark:text-white">{earnings.marketTrades || 0}</span>
+                <span className="text-[7px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em] mt-1 text-center">Accepted Bids</span>
+              </div>
+
+              {/* 5. Points */}
+              <div className="bg-primary/5 dark:bg-primary/20 border border-primary/10 dark:border-primary/30 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-primary/30 transition-colors text-center">
+                <span className="text-xl font-bold text-primary dark:text-primary-light">{profile?.rewardPoints || 0}</span>
+                <span className="text-[7px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em] mt-1">Points</span>
+              </div>
+            </div>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* ── WEEKLY PERFORMANCE GRAPH (MOVED TO BOTTOM) ── */}
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-6 border border-slate-200 dark:border-slate-800">
+      {/* ── ACQUISITION GOALS ── */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between mb-6 px-2">
+          <div>
+            <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400">Acquisition Targets</h3>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">Goal Tracker (KG)</p>
+          </div>
+          <Target className="w-6 h-6 text-emerald-500 opacity-20" />
+        </div>
+
+        <div className="space-y-6 px-2">
+          {/* Weekly Goal */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Weekly Target</span>
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
+                <span className="text-[10px] font-semibold text-slate-400 uppercase">/</span>
+                <input 
+                  type="number" 
+                  value={goals.weekly} 
+                  onChange={(e) => handleGoalChange('weekly', e.target.value)}
+                  className="w-14 bg-transparent text-xs font-semibold text-slate-400 text-right outline-none border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 focus:text-emerald-500 transition-colors"
+                />
+                <span className="text-[10px] font-semibold text-slate-400 uppercase">KG</span>
+              </div>
+            </div>
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden shadow-inner">
+              <div 
+                className="bg-emerald-500 h-full rounded-full transition-all duration-1000 relative overflow-hidden" 
+                style={{ width: `${Math.min(((earnings.totalKg || 0) / Math.max(goals.weekly, 1)) * 100, 100)}%` }} 
+              >
+                <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]" />
+              </div>
+            </div>
+          </div>
+
+          {/* Monthly Goal */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Monthly Target</span>
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
+                <span className="text-[10px] font-semibold text-slate-400 uppercase">/</span>
+                <input 
+                  type="number" 
+                  value={goals.monthly} 
+                  onChange={(e) => handleGoalChange('monthly', e.target.value)}
+                  className="w-14 bg-transparent text-xs font-semibold text-slate-400 text-right outline-none border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 focus:text-emerald-500 transition-colors"
+                />
+                <span className="text-[10px] font-semibold text-slate-400 uppercase">KG</span>
+              </div>
+            </div>
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden shadow-inner">
+              <div 
+                className="bg-emerald-500 h-full rounded-full transition-all duration-1000 relative overflow-hidden" 
+                style={{ width: `${Math.min(((earnings.totalKg || 0) / Math.max(goals.monthly, 1)) * 100, 100)}%` }} 
+              >
+                <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── WEEKLY PERFORMANCE GRAPH ── */}
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800">
         <div className="flex items-center justify-between mb-8 px-2">
           <div>
-            <h3 className="font-black text-xs uppercase tracking-widest text-slate-400">Weekly Performance</h3>
-            <p className="text-lg font-black text-slate-900 dark:text-white">Service Fees</p>
+            <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400">Collection Volume</h3>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">This Week's Recovery (KG)</p>
           </div>
-          <Calendar className="w-5 h-5 text-slate-200" />
+          <div className="flex items-center gap-1.5 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+             <ArrowUpRight className="w-3 h-3 text-emerald-500" />
+             <span className="text-[10px] font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)} KG Total</span>
+          </div>
         </div>
         
-        <div className="h-[220px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={earnings.weeklyData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+        <div className="w-full overflow-x-auto pb-2 scrollbar-hide">
+          <div style={{ width: '450px', height: '220px' }}>
+            <BarChart width={450} height={220} data={earnings.weeklyData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
               <XAxis 
                 dataKey="day" 
@@ -256,34 +272,35 @@ export default function EarningsPage() {
                 axisLine={false} 
                 tickLine={false} 
                 tick={{ fontSize: 11, fontWeight: 'bold', fill: '#94a3b8' }}
-                tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+                tickFormatter={(v) => `${v}kg`}
               />
               <Tooltip
                 cursor={{ fill: '#f8fafc' }}
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-slate-900 text-white px-3 py-2 rounded-xl text-[10px] font-black shadow-2xl">
-                        KSh {payload[0].value.toLocaleString()}
+                      <div className="bg-slate-900 text-white px-3 py-2 rounded-xl text-[10px] font-semibold shadow-2xl">
+                        {payload[0].value.toFixed(1)} KG Collected
                       </div>
                     );
                   }
                   return null;
                 }}
               />
-              <Bar dataKey="earnings" radius={[8, 8, 8, 8]} barSize={24}>
+              <Bar dataKey="weight" radius={[8, 8, 8, 8]} barSize={24}>
                 {earnings.weeklyData.map((entry, index) => {
-                  // getDay() returns 0-6 (Sun-Sat). Our array is Mon-Sun (0-6).
                   const todayIndex = (new Date().getDay() + 6) % 7; 
                   return (
-                    <Cell key={`cell-${entry.day}`} fill={index === todayIndex ? '#00A651' : '#e2e8f0'} />
+                    <Cell key={`cell-${entry.day}`} fill={index === todayIndex ? '#10b981' : '#e2e8f0'} />
                   );
                 })}
               </Bar>
             </BarChart>
-          </ResponsiveContainer>
+          </div>
         </div>
       </div>
+
+
 
     </div>
   );

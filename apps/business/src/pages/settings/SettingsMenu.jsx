@@ -1,5 +1,5 @@
-import { User, Bell, Shield, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle } from 'lucide-react';
-import { useAuthStore } from '@cleanflow/core';
+import { User, Bell, Shield, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle, Database } from 'lucide-react';
+import { useAuthStore, getBusinessLabel } from '@cleanflow/core';
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggleRow } from '@cleanflow/ui';
 import { toast } from 'sonner';
@@ -18,7 +18,7 @@ export default function SettingsMenu() {
 
   return (
     <div className="space-y-5 animate-fade-in">
-      <h1 className="text-xl font-bold dark:text-white">Settings & Profile</h1>
+      <h1 className="text-xl font-semibold dark:text-white">Settings & Profile</h1>
 
       {/* Profile Card */}
       <button 
@@ -29,8 +29,14 @@ export default function SettingsMenu() {
           {profile?.avatar || '👤'}
         </div>
         <div className="flex-1">
-          <p className="font-bold text-lg dark:text-white group-hover:text-primary transition-colors">{profile?.name || 'User'}</p>
-          <p className="text-sm text-slate-500 font-medium">{profile?.phone}</p>
+          <p className="font-semibold text-lg dark:text-white group-hover:text-primary transition-colors">{profile?.business_name || profile?.name || 'User'}</p>
+          <div className="flex flex-wrap items-center gap-2 mt-1">
+            <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-md text-[9px] font-bold uppercase tracking-widest border border-slate-200 dark:border-slate-700 flex items-center gap-1">
+              <Database className="w-2.5 h-2.5" /> 
+              {getBusinessLabel(profile?.business_type, 'id')}: CF-{profile?.id?.slice(0, 4).toUpperCase()}
+            </span>
+            <span className="text-[10px] text-slate-400 font-medium">| {profile?.phone}</span>
+          </div>
           <p className="text-xs text-slate-400 mt-1">📍 {profile?.estate || 'Kenya'}</p>
         </div>
         <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
@@ -64,7 +70,7 @@ export default function SettingsMenu() {
           toast.success('Logged Out', { description: 'You have been securely signed out.' });
           navigate('/login', { replace: true });
         }}
-        className="w-full flex items-center justify-center gap-2 text-rose-500 font-bold text-[15px] py-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all"
+        className="w-full flex items-center justify-center gap-2 text-rose-500 font-semibold text-[15px] py-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all"
       >
         <LogOut className="w-5 h-5" /> Secure Sign Out
       </button>

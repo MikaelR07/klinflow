@@ -115,6 +115,7 @@ export const useHygenexStore = create((set, get) => ({
 
     // 3. Call Edge Function
     try {
+      console.log('[HygeneX] Calling AI Edge Function...');
       const session = await supabase.auth.getSession();
       const token = session?.data?.session?.access_token;
 
@@ -133,13 +134,29 @@ export const useHygenexStore = create((set, get) => ({
       });
 
       if (!res.ok) {
+        const errorData = await res.text();
+        console.error('[HygeneX] AI Edge Function Error:', errorData);
         throw new Error('AI Response Failed');
       }
 
-      // We don't need to manually add the AI response here because the Realtime listener
-      // will pick up the row inserted by the Edge Function.
-      // But we set a timeout to stop typing if it takes too long.
-      setTimeout(() => set({ isTyping: false }), 5000);
+      const aiMsg = await res.json();
+      console.log('[HygeneX] AI Response Received:', aiMsg);
+
+      // 4. Manual Sync (Deduplicated)
+      // We add it manually so it's instant, but the ID check prevents doubles if Realtime also fires.
+      set((s) => {
+        const exists = s.messages.find(m => m.id === aiMsg.id);
+        if (exists) return { isTyping: false };
+        return {
+          messages: [...s.messages, { 
+            id: aiMsg.id, 
+            role: aiMsg.role, 
+            text: aiMsg.text, 
+            timestamp: aiMsg.created_at 
+          }],
+          isTyping: false
+        };
+      });
 
     } catch (err) {
       console.error('[HygeneX] AI Error:', err);

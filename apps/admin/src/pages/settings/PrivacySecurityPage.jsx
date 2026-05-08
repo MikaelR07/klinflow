@@ -52,7 +52,7 @@ export default function PrivacySecurityPage() {
         <button onClick={() => { authStage === 'pin' ? setAuthStage('view') : navigate('/settings') }} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-bold dark:text-white">Privacy & Security</h1>
+        <h1 className="text-xl font-semibold dark:text-white">Privacy & Security</h1>
       </header>
 
       {authStage === 'view' ? (
@@ -64,7 +64,7 @@ export default function PrivacySecurityPage() {
                      <Lock className="w-5 h-5" />
                    </div>
                    <div>
-                     <div className="text-sm font-bold text-slate-800 dark:text-white">Change Security Password</div>
+                     <div className="text-sm font-semibold text-slate-800 dark:text-white">Change Security Password</div>
                      <div className="text-xs text-slate-500">Update your alphanumeric access code</div>
                    </div>
                 </div>
@@ -73,11 +73,11 @@ export default function PrivacySecurityPage() {
 
           <div className="pt-8">
              <div className="text-center mb-4">
-                <h3 className="text-xs font-black text-rose-500 uppercase tracking-widest">Danger Zone</h3>
+                <h3 className="text-xs font-semibold text-rose-500 uppercase tracking-widest">Danger Zone</h3>
              </div>
              <button 
                onClick={() => setShowDeleteModal(true)} 
-               className="w-full py-4 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors border border-rose-100 dark:border-rose-900/50"
+               className="w-full py-4 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors border border-rose-100 dark:border-rose-900/50"
              >
                 <Trash2 className="w-4 h-4" /> Deactivate Account
              </button>
@@ -98,7 +98,7 @@ export default function PrivacySecurityPage() {
               <input type="password" required minLength={6} value={pins.confirm} onChange={(e) => setPins({...pins, confirm: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50 tracking-widest text-sm" />
            </div>
 
-           <button type="submit" disabled={isLoading} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
+           <button type="submit" disabled={isLoading} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Lock className="w-5 h-5" />} Update Security
            </button>
         </form>
@@ -112,25 +112,25 @@ export default function PrivacySecurityPage() {
               <div className="w-14 h-14 bg-rose-600 rounded-xl flex items-center justify-center">
                 <ShieldAlert className="w-7 h-7 text-white" />
               </div>
-              <h2 className="text-lg font-black uppercase tracking-tighter text-center">Revoke Access?</h2>
+              <h2 className="text-lg font-semibold uppercase tracking-tighter text-center">Revoke Access?</h2>
             </div>
             <div className="p-6 space-y-4">
               <p className="text-xs text-center text-slate-400 leading-relaxed">
-                This will <span className="font-bold text-rose-500">permanently delete</span> your administrative credentials from the server.
+                This will <span className="font-semibold text-rose-500">permanently delete</span> your administrative credentials from the server.
               </p>
               
               <div className="space-y-2">
                 <button 
                   onClick={handleDeactivate}
                   disabled={isLoading}
-                  className="w-full py-3.5 bg-rose-600 hover:bg-rose-700 active:scale-95 transition-all text-white rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2"
+                  className="w-full py-3.5 bg-rose-600 hover:bg-rose-700 active:scale-95 transition-all text-white rounded-xl font-semibold text-xs uppercase tracking-widest flex items-center justify-center gap-2"
                 >
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Confirm Deletion'}
                 </button>
                 <button 
                   onClick={() => setShowDeleteModal(false)}
                   disabled={isLoading}
-                  className="w-full py-3 text-slate-400 rounded-xl font-bold text-xs transition-all hover:bg-slate-700 active:scale-95"
+                  className="w-full py-3 text-slate-400 rounded-xl font-semibold text-xs transition-all hover:bg-slate-700 active:scale-95"
                 >
                   Cancel
                 </button>

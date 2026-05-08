@@ -3,7 +3,8 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { 
   Recycle, User, Phone, Lock, ChevronRight, MapPin, 
   Loader2, ArrowLeft, ShieldCheck, Mail, Sparkles, Star,
-  Fingerprint, Shield, X, ShoppingBag, Home as HomeIcon
+  Fingerprint, Shield, X, ShoppingBag, Home as HomeIcon,
+  Venus, Mars, UserCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore, ROLES } from '@cleanflow/core';
@@ -12,17 +13,16 @@ import LocationSelector from '@cleanflow/ui/components/LocationSelector';
 export default function Register() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const initialType = query.get('type') || 'resident';
-
   const [formData, setFormData] = useState({
     name: '',
+    email: '',
     phone: '',
     otp: '',
     pin: '',
     confirmPin: '',
-    role: ROLES.USER,
+    role: query.get('type') === 'seller' ? 'seller' : ROLES.USER,
     location: null,
-    clientType: initialType
+    gender: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -90,6 +90,7 @@ export default function Register() {
     if (formData.pin.length < 8) return toast.error('Security Risk', { description: 'Passcode must be at least 8 characters.' });
     if (formData.pin !== formData.confirmPin) return toast.error('Match Error', { description: 'Passcodes do not match.' });
     if (!formData.location?.estate) return toast.error('Field Missing', { description: 'Please select your estate location.' });
+    if (!formData.gender) return toast.error('Field Missing', { description: 'Please select your gender.' });
 
     // Send real OTP via Africa's Talking
     setIsLoading(true);
@@ -114,7 +115,11 @@ export default function Register() {
       toast.success('Welcome to CleanFlow!', { description: 'Your account has been verified and activated.' });
       navigate('/', { replace: true });
     } catch (err) {
-      toast.error('Verification Failed', { description: err.message });
+      console.error('Registration Final Error:', err);
+      toast.error('Registration Blocked', { 
+        description: `Error: ${err.message || 'Unknown Failure'}. Please check your Supabase dashboard or contact support if this persists.`,
+        duration: 10000 
+      });
       if (err.message.includes('Incorrect') || err.message.includes('expired')) {
         setFormData(prev => ({ ...prev, otp: '' }));
       } else {
@@ -125,52 +130,39 @@ export default function Register() {
     }
   };
 
-  const personaConfig = {
-    resident: { 
-      label: 'Home Resident', 
-      icon: HomeIcon, 
-      color: 'emerald', 
-      sub: 'Convenience & Community Rewards' 
-    },
-    seller: { 
-      label: 'Professional Seller', 
-      icon: ShoppingBag, 
-      color: 'indigo', 
-      sub: 'High-Margin Inventory & Profits' 
-    }
-  };
 
-  const currentPersona = personaConfig[formData.clientType] || personaConfig.resident;
 
   return (
     <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-950 px-4 py-12 relative transition-colors duration-500 overflow-x-hidden">
       {/* Visual Accents */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-green-400 to-secondary" />
-      <div className={`absolute -top-24 -left-24 w-64 h-64 bg-${currentPersona.color}-500/10 rounded-full blur-3xl opacity-50`} />
+      <div className={`absolute -top-24 -left-24 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl opacity-50`} />
       
       <div className="max-w-md w-full mx-auto relative z-10 animate-fade-in">
         
         {/* Header */}
         <div className="flex flex-col items-center mb-10">
           <div className="w-full flex items-center justify-between mb-6">
-            <Link to="/login" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">
+            <Link to="/login" className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">
               <ArrowLeft className="w-4 h-4" /> Back to Sign In
             </Link>
-
-            <div className={`flex items-center gap-2 px-3 py-1 rounded-full border border-${currentPersona.color}-500/20 bg-${currentPersona.color}-500/10 text-${currentPersona.color}-500 animate-in slide-in-from-right duration-700`}>
-               <currentPersona.icon className="w-3 h-3" />
-               <span className="text-[9px] font-black uppercase tracking-widest">{currentPersona.label} Mode</span>
-            </div>
           </div>
           <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl" alt="Logo" />
         </div>
 
         <div className="mb-10 text-center sm:text-left">
           <div className="flex items-center gap-3 mb-2 justify-center sm:justify-start">
-             <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Join the Ecosystem</h1>
+             <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
+               {formData.role === 'seller' ? 'Seller Enrollment' : 'Join the Ecosystem'}
+             </h1>
+             {formData.role === 'seller' && (
+               <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
+                 <span className="text-[10px] font-semibold text-blue-500 uppercase tracking-widest">Pro Mode</span>
+               </div>
+             )}
           </div>
-          <p className={`text-[10px] text-${currentPersona.color}-500 font-black uppercase tracking-widest flex items-center gap-2 justify-center sm:justify-start`}>
-             <Sparkles className="w-3 h-3" /> {currentPersona.sub}
+          <p className={`text-[10px] ${formData.role === 'seller' ? 'text-blue-500' : 'text-emerald-500'} font-semibold uppercase tracking-widest flex items-center gap-2 justify-center sm:justify-start`}>
+             <Sparkles className="w-3 h-3" /> {formData.role === 'seller' ? 'Trade Waste as a High-Value Asset' : 'Convenience & Community Rewards'}
           </p>
         </div>
 
@@ -183,7 +175,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               </div>
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Personal Identification</h3>
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Personal Identification</h3>
             </div>
 
             <div className="space-y-4">
@@ -201,6 +193,19 @@ export default function Register() {
               </div>
 
               <div className="relative group">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
+                <input 
+                  type="email" 
+                  name="email" 
+                  value={formData.email} 
+                  onChange={handleInputChange} 
+                  placeholder="Email Address" 
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
+                  required 
+                />
+              </div>
+
+              <div className="relative group">
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <input 
                   type="tel" 
@@ -208,7 +213,7 @@ export default function Register() {
                   value={formData.phone} 
                   onChange={handleInputChange} 
                   placeholder="Phone Number (07... / 01...)" 
-                  className={`w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-900 border rounded-2xl text-sm font-black tracking-widest focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all ${
+                  className={`w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-900 border rounded-2xl text-sm font-semibold tracking-widest focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all ${
                     phoneAvailable === false ? 'border-rose-300 ring-rose-100' : 'border-slate-200 dark:border-slate-800'
                   }`} 
                   required 
@@ -220,13 +225,50 @@ export default function Register() {
             </div>
           </div>
 
+
+
+          {/* Section 1.5: Gender Identity */}
+          <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5 animate-slide-up">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+              </div>
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Personal Identification</h3>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { id: 'male', label: 'Male', icon: Mars, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                { id: 'female', label: 'Female', icon: Venus, color: 'text-rose-500', bg: 'bg-rose-500/10' }
+              ].map((g) => (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, gender: g.id }))}
+                  className={`flex items-center justify-center gap-3 p-3 rounded-2xl border-2 transition-all active:scale-95 ${
+                    formData.gender === g.id 
+                      ? 'border-primary bg-primary/5' 
+                      : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900'
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-xl ${g.bg} flex items-center justify-center`}>
+                    <g.icon className={`w-4 h-4 ${g.color}`} />
+                  </div>
+                  <span className={`text-[11px] font-semibold uppercase tracking-widest ${formData.gender === g.id ? 'text-primary' : 'text-slate-400'}`}>
+                    {g.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Section 2: Security */}
           <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
               </div>
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Security Vault</h3>
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Security Vault</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -263,7 +305,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
               </div>
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Operation Sector</h3>
+              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Location Area</h3>
             </div>
 
             <div className="min-h-[140px]">
@@ -277,13 +319,13 @@ export default function Register() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-5 bg-gradient-to-r from-primary to-green-600 text-white rounded-[1.5rem] font-black text-[13px] uppercase tracking-[0.2em] shadow-2xl shadow-primary/30 hover:shadow-primary/40 active:scale-[0.98] transition-all flex justify-center items-center gap-3 disabled:opacity-50 mt-4 group"
+            className="w-full py-5 bg-gradient-to-r from-primary to-green-600 text-white rounded-[1.5rem] font-semibold text-[13px] uppercase tracking-[0.2em] shadow-2xl shadow-primary/30 hover:shadow-primary/40 active:scale-[0.98] transition-all flex justify-center items-center gap-3 disabled:opacity-50 mt-4 group"
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Initiate Protocol <Sparkles className="w-5 h-5 group-hover:animate-spin" /></>}
           </button>
         </form>
 
-        <p className="text-center text-[10px] font-black uppercase tracking-widest text-slate-400 mt-10">
+        <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 mt-10">
           Already part of the network? {' '}
           <Link to="/login" className="text-primary hover:underline underline-offset-4">Authenticate Instead</Link>
         </p>
@@ -306,10 +348,10 @@ export default function Register() {
               </div>
               
               <div>
-                <h3 className="text-2xl font-black text-slate-900 dark:text-white">Verify Phone</h3>
+                <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Verify Phone</h3>
                 <p className="text-sm text-slate-500 font-medium mt-2">
                   Enter the 6-digit code sent to <br />
-                  <span className="text-primary font-black tracking-widest">{formData.phone}</span>
+                  <span className="text-primary font-semibold tracking-widest">{formData.phone}</span>
                 </p>
               </div>
 
@@ -322,10 +364,10 @@ export default function Register() {
                   value={formData.otp} 
                   onChange={(e) => setFormData(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
                   placeholder="000000" 
-                  className="w-full text-center text-4xl font-black tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-950/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200" 
+                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-950/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200" 
                 />
                 <div className="flex flex-col items-center mt-4 space-y-3">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>
+                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>
                   <button 
                     type="button"
                     onClick={async () => {
@@ -336,7 +378,7 @@ export default function Register() {
                         toast.error('Resend Failed', { description: err.message });
                       }
                     }}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary rounded-full text-[9px] font-black uppercase tracking-widest transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary rounded-full text-[9px] font-semibold uppercase tracking-widest transition-all"
                   >
                     Resend Code
                   </button>
@@ -346,7 +388,7 @@ export default function Register() {
               <button
                 onClick={handleFinalSubmit}
                 disabled={isLoading || formData.otp.length < 6}
-                className="w-full py-5 bg-primary text-white rounded-[1.5rem] font-black text-[13px] uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2"
+                className="w-full py-5 bg-primary text-white rounded-[1.5rem] font-semibold text-[13px] uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2"
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Apply Protocol'}
               </button>

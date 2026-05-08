@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useFeedbackStore } from '@cleanflow/core';
-import { Star, MessageSquare, Trash2, CalendarClock, User, Briefcase, Truck, Users, LayoutGrid, AlertTriangle, X } from 'lucide-react';
+import { Star, MessageSquare, Trash2, CalendarClock, User, Briefcase, Truck, Users, LayoutGrid, AlertTriangle, X, UserCheck, Building2, Smartphone } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminFeedbackInbox() {
@@ -15,10 +15,11 @@ export default function AdminFeedbackInbox() {
   }, []);
 
   const hubs = [
-    { id: 'all', label: 'All Reviews', icon: LayoutGrid, desc: 'Everything' },
-    { id: 'marketplace', label: 'Business Partners', icon: Briefcase, desc: 'Marketplace Partners' },
-    { id: 'logistics', label: 'Transport', icon: Truck, desc: 'Drivers & Fleet' },
-    { id: 'community', label: 'Resident Members', icon: Users, desc: 'Community Feedback' },
+    { id: 'all',              label: 'All Feedback',    icon: LayoutGrid,  desc: 'Every submission' },
+    { id: 'client',          label: 'Client App',       icon: Smartphone,  desc: 'Resident members' },
+    { id: 'agent_independent', label: 'Ind. Agents',    icon: UserCheck,   desc: 'Freelance agents' },
+    { id: 'agent_company',   label: 'Company Owners',   icon: Building2,   desc: 'Corporate tenants' },
+    { id: 'issues',          label: 'Issues Only',      icon: AlertTriangle, desc: 'Rating ≤ 2 stars' },
   ];
 
   const getRatingColor = (rating) => {
@@ -29,25 +30,8 @@ export default function AdminFeedbackInbox() {
 
   const filteredFeedback = feedbackList.filter(item => {
     if (activeHub === 'all') return true;
-    
-    // Marketplace Hub Logic
-    if (activeHub === 'marketplace') {
-      return item.role === 'business' || 
-             ['weaver', 'recycler', 'manufacturer'].includes(item.businessType) ||
-             item.name === 'Business Partner';
-    }
-
-    // Transport Hub Logic
-    if (activeHub === 'logistics') {
-      return item.role === 'agent' || item.name === 'Transport Agent';
-    }
-
-    // Community Hub Logic
-    if (activeHub === 'community') {
-      return item.role === 'client';
-    }
-
-    return false; 
+    if (activeHub === 'issues') return item.rating <= 2;
+    return item.sourceApp === activeHub;
   });
 
   const confirmDelete = () => {
@@ -67,13 +51,13 @@ export default function AdminFeedbackInbox() {
       {/* ── HEADER ── */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-black dark:text-white tracking-tighter">Feedback Hub</h1>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Monitor Sentiment & Issue Reports</p>
+          <h1 className="text-3xl font-semibold dark:text-white tracking-tighter">Feedback Hub</h1>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Monitor Sentiment & Issue Reports</p>
         </div>
         {feedbackList.length > 0 && (
           <button 
             onClick={() => setDeleteModal({ isOpen: true, targetId: null, isBulk: true })}
-            className="text-xs font-bold text-rose-500 hover:text-rose-600 flex items-center gap-1 transition-colors bg-white dark:bg-slate-900 px-4 py-2.5 rounded-xl border border-rose-100 dark:border-rose-900 shadow-sm"
+            className="text-xs font-semibold text-rose-500 hover:text-rose-600 flex items-center gap-1 transition-colors bg-white dark:bg-slate-900 px-4 py-2.5 rounded-xl border border-rose-100 dark:border-rose-900 shadow-sm"
           >
             <Trash2 className="w-4 h-4" /> Clear All
           </button>
@@ -93,7 +77,7 @@ export default function AdminFeedbackInbox() {
             }`}
           >
             {activeHub === hub.id && (
-              <div className="absolute top-3 right-3 px-2 py-0.5 bg-primary/20 border border-primary/20 text-primary text-[7px] font-black uppercase tracking-widest rounded-full animate-pulse">
+              <div className="absolute top-3 right-3 px-2 py-0.5 bg-primary/20 border border-primary/20 text-primary text-[7px] font-semibold uppercase tracking-widest rounded-full animate-pulse">
                 Active
               </div>
             )}
@@ -102,8 +86,8 @@ export default function AdminFeedbackInbox() {
             }`}>
               <hub.icon className="w-5 h-5" />
             </div>
-            <h3 className={`text-sm font-black tracking-tight leading-tight ${activeHub === hub.id ? 'text-white' : 'dark:text-white'}`}>{hub.label}</h3>
-            <p className={`text-[8px] font-bold uppercase tracking-widest ${activeHub === hub.id ? 'text-white/40' : 'text-slate-400'}`}>{hub.desc}</p>
+            <h3 className={`text-sm font-semibold tracking-tight leading-tight ${activeHub === hub.id ? 'text-white' : 'dark:text-white'}`}>{hub.label}</h3>
+            <p className={`text-[8px] font-semibold uppercase tracking-widest ${activeHub === hub.id ? 'text-white/40' : 'text-slate-400'}`}>{hub.desc}</p>
           </button>
         ))}
       </div>
@@ -114,8 +98,8 @@ export default function AdminFeedbackInbox() {
           <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-200 dark:text-slate-700 flex items-center justify-center mb-4">
              <MessageSquare className="w-8 h-8" />
           </div>
-          <h3 className="text-xl font-black dark:text-white tracking-tight">No feedback found</h3>
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Try selecting a different hub</p>
+          <h3 className="text-xl font-semibold dark:text-white tracking-tight">No feedback found</h3>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Try selecting a different hub</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -127,30 +111,30 @@ export default function AdminFeedbackInbox() {
                   <div className="flex items-center gap-1.5">
                     <div className={`flex items-center gap-1 px-2 py-1 rounded-lg border ${getRatingColor(item.rating)}`}>
                       <Star className="w-3 h-3 fill-current" />
-                      <span className="text-[10px] font-black">{item.rating}.0</span>
+                      <span className="text-[10px] font-semibold">{item.rating}.0</span>
                     </div>
 
                     {/* SOURCE BADGE */}
-                    <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-wider border transition-all ${
-                      item.role === 'agent' ? 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20' :
-                      item.role === 'business' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-                      item.role === 'client' ? 'bg-slate-100 text-slate-500 border-slate-200 dark:bg-slate-800 dark:border-white/5' :
-                      'bg-slate-50 text-slate-400 border-slate-100 dark:bg-slate-900/50 dark:border-white/5'
-                    }`}>
-                      {item.role === 'agent' ? '🚛 Transport' :
-                       item.role === 'business' ? `🏭 ${item.businessType || 'Partner'}` :
-                       item.role === 'client' ? '🏠 Resident' : '👤 Guest'}
-                    </div>
+                     <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-semibold uppercase tracking-wider border transition-all ${
+                       item.sourceApp === 'agent_independent' ? 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20' :
+                       item.sourceApp === 'agent_company' ? 'bg-purple-500/10 text-purple-500 border-purple-500/20' :
+                       item.sourceApp === 'client' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                       'bg-slate-100 text-slate-400 border-slate-200 dark:bg-slate-800 dark:border-white/5'
+                     }`}>
+                       {item.sourceApp === 'agent_independent' ? '🚴 Ind. Agent' :
+                        item.sourceApp === 'agent_company' ? '🏢 Company' :
+                        item.sourceApp === 'client' ? '🏠 Resident' : '👤 Unknown'}
+                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 text-[9px] uppercase font-bold text-slate-400">
+                  <div className="flex items-center gap-1 text-[9px] uppercase font-semibold text-slate-400">
                      {new Date(item.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="flex-grow space-y-2">
-                  <span className="inline-block px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-widest bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                  <span className="inline-block px-2 py-0.5 rounded-md text-[9px] font-semibold uppercase tracking-widest bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                     {item.category}
                   </span>
                   <p className="text-xs text-slate-700 dark:text-slate-300 italic font-medium leading-normal line-clamp-3">"{item.text}"</p>
@@ -159,11 +143,11 @@ export default function AdminFeedbackInbox() {
                 {/* Footer: User Details */}
                 <div className="mt-4 pt-3 border-t border-slate-50 dark:border-white/5 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                     <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-sm font-bold">
+                     <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-sm font-semibold">
                        {item.name?.charAt(0) || <User className="w-4 h-4" />}
                      </div>
                      <div className="max-w-[120px]">
-                       <p className="text-[10px] font-black dark:text-slate-200 truncate">{item.name || 'Anonymous'}</p>
+                       <p className="text-[10px] font-semibold dark:text-slate-200 truncate">{item.name || 'Anonymous'}</p>
                        <p className="text-[9px] text-slate-400 font-mono tracking-tighter truncate">{item.phone || 'No Phone'}</p>
                      </div>
                   </div>
@@ -190,7 +174,7 @@ export default function AdminFeedbackInbox() {
                     <AlertTriangle className="w-8 h-8" />
                  </div>
                  <div>
-                    <h3 className="text-xl font-black dark:text-white tracking-tight">
+                    <h3 className="text-xl font-semibold dark:text-white tracking-tight">
                        {deleteModal.isBulk ? 'Clear Entire Inbox?' : 'Delete Review?'}
                     </h3>
                     <p className="text-sm text-slate-500 mt-1">
@@ -203,13 +187,13 @@ export default function AdminFeedbackInbox() {
                  <div className="grid grid-cols-2 gap-3 pt-4">
                     <button 
                       onClick={() => setDeleteModal({ isOpen: false, targetId: null, isBulk: false })}
-                      className="py-3.5 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                      className="py-3.5 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                     >
                        Cancel
                     </button>
                     <button 
                       onClick={confirmDelete}
-                      className="py-3.5 px-6 rounded-2xl bg-rose-500 text-white font-bold text-sm hover:bg-rose-600 shadow-lg shadow-rose-500/25 transition-all active:scale-95"
+                      className="py-3.5 px-6 rounded-2xl bg-rose-500 text-white font-semibold text-sm hover:bg-rose-600 shadow-lg shadow-rose-500/25 transition-all active:scale-95"
                     >
                        Yes, Delete
                     </button>

@@ -18,15 +18,19 @@ export default function SettingsMenu() {
 
   return (
     <div className="space-y-5 animate-fade-in">
-      <h1 className="text-xl font-bold dark:text-white">Settings & Profile</h1>
+      <h1 className="text-xl font-semibold dark:text-white">Settings & Profile</h1>
 
       {/* Profile Summary Header (Non-clickable) */}
       <div className="w-full card flex items-center gap-4 p-5 text-left">
-        <div className="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-3xl shadow-sm">
-          {profile?.avatar || '👤'}
+        <div className="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-3xl shadow-sm overflow-hidden border-2 border-white dark:border-slate-800">
+          {profile?.avatar_url ? (
+            <img src={profile.avatar_url} className="w-full h-full object-cover" />
+          ) : (
+            profile?.avatar || '👤'
+          )}
         </div>
         <div className="flex-1">
-          <p className="font-bold text-lg dark:text-white">{profile?.name || 'User'}</p>
+          <p className="font-semibold text-lg dark:text-white">{profile?.name || 'User'}</p>
           <p className="text-sm text-slate-500 font-medium">{profile?.phone}</p>
           <p className="text-xs text-slate-400 mt-1">📍 {profile?.location?.estate || 'Kenya'}</p>
         </div>
@@ -60,7 +64,7 @@ export default function SettingsMenu() {
           toast.success('Logged Out', { description: 'You have been securely signed out.' });
           navigate('/login', { replace: true });
         }}
-        className="w-full flex items-center justify-center gap-2 text-rose-500 font-bold text-[15px] py-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all"
+        className="w-full flex items-center justify-center gap-2 text-rose-500 font-semibold text-[15px] py-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all"
       >
         <LogOut className="w-5 h-5" /> Secure Sign Out
       </button>

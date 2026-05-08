@@ -2,13 +2,14 @@
  * Admin Sidebar — desktop sidebar navigation for admin panel
  */
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileText, MapPin, Users, Settings, Recycle, Brain, MessageSquare, Building2, Network, Coins } from 'lucide-react';
+import { LayoutDashboard, FileText, Users, Settings, Recycle, Brain, MessageSquare, Network, Coins, UserCheck, Building2 } from 'lucide-react';
 
 const links = [
   { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { path: '/users', icon: Users, label: 'User Manager' },
+  { path: '/agent-metrics', icon: UserCheck, label: 'Ind. Agent Metrics' },
+  { path: '/company-metrics', icon: Building2, label: 'Company Metrics' },
   { path: '/hub', icon: Coins, label: 'Market Hub' },
-  { path: '/map', icon: MapPin, label: 'Live Fleet Map' },
   { path: '/b2b', icon: Network, label: 'B2B Logistics' },
   { path: '/reports', icon: FileText, label: 'System Reports' },
   { path: '/reviews', icon: MessageSquare, label: 'Feedback' },

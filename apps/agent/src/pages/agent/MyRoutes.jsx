@@ -1,257 +1,344 @@
 /**
- * Route Optimizer — Smart Pathfinding for CleanFlow Agents
+ * MyRoutes.jsx — CleanFlow Premium Route Optimizer (Uber-Style)
+ * High-performance logistics terminal for agents.
  */
-import { useMemo, useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
+import { useEffect, useState, useMemo, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowLeft, 
   Navigation, 
-  Zap, 
   MapPin, 
   Clock, 
-  TrendingUp, 
-  ChevronRight,
-  Truck,
+  ChevronUp, 
+  ChevronDown, 
+  Navigation2, 
   RotateCcw,
-  Sparkles
+  Zap,
+  Phone,
+  ExternalLink,
+  Truck,
+  PackageCheck,
+  MoreVertical
 } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, Polyline, useMap, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
 import { useNavigate } from 'react-router-dom';
 import { useAgentStore, useAuthStore } from '@cleanflow/core';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import { toast } from 'sonner';
 
-/* Fix for default Leaflet markers */
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+// ── CUSTOM ICONS ──
+const agentIcon = L.divIcon({
+  className: 'custom-div-icon',
+  html: `<div class="w-10 h-10 rounded-2xl bg-blue-600 border-2 border-white shadow-[0_10px_20px_rgba(37,99,235,0.4)] flex items-center justify-center text-white animate-pulse">⚡</div>`,
+  iconSize: [40, 40],
+  iconAnchor: [20, 20]
 });
 
-// Custom Premium Markers
-const agentIcon = new L.DivIcon({
-  className: '',
-  html: '<div style="background:#00A651;width:32px;height:32px;border-radius:50%;border:4px solid white;box-shadow:0 4px 12px rgba(0,166,81,0.4);display:flex;align-items:center;justify-content:center;color:white;font-size:16px;animation: pulse 2s infinite;">📍</div>',
+const createStopIcon = (number, isNext = false) => L.divIcon({
+  className: 'custom-div-icon',
+  html: `
+    <div class="relative flex items-center justify-center">
+      <div class="w-8 h-8 rounded-full ${isNext ? 'bg-emerald-500 scale-125' : 'bg-slate-800'} border-2 border-white shadow-lg flex items-center justify-center text-white text-[10px] font-semibold z-10">
+        ${number}
+      </div>
+      ${isNext ? '<div class="absolute inset-0 w-8 h-8 bg-emerald-500 rounded-full animate-ping opacity-30"></div>' : ''}
+    </div>
+  `,
   iconSize: [32, 32],
-  iconAnchor: [16, 16],
+  iconAnchor: [16, 16]
 });
 
-const jobIcon = new L.DivIcon({
-  className: '',
-  html: '<div style="background:#4F46E5;width:28px;height:28px;border-radius:50%;border:4px solid white;box-shadow:0 4px 12px rgba(79,70,229,0.3);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;">♻️</div>',
-  iconSize: [28, 28],
-  iconAnchor: [14, 14],
-});
-
-// Helper component to recenter map
-function MapRecenter({ coords }) {
+// Helper to recenter map
+function MapRecenter({ center }) {
   const map = useMap();
+  const lastMoved = useRef(0);
+  const hasInitialJumped = useRef(false);
+  
   useEffect(() => {
-    if (coords) map.setView(coords, 14);
-  }, [coords, map]);
+    if (!center) return;
+    const now = Date.now();
+
+    // FORCE INITIAL JUMP: Ensure we land on the profile location as soon as it exists
+    if (!hasInitialJumped.current) {
+      map.setView(center, 15, { animate: false });
+      hasInitialJumped.current = true;
+      return;
+    }
+
+    // SMART RECENTER: Only auto-move if user isn't interacting
+    if (now - lastMoved.current > 5000) {
+      map.panTo(center, { animate: true, duration: 1 });
+      lastMoved.current = now;
+    }
+  }, [center, map]);
+
+  // Disable auto-recenter when user interacts
+  useMapEvents({
+    dragstart: () => { lastMoved.current = Date.now() + 1000000; }, // Disable for a long time
+    zoomstart: () => { lastMoved.current = Date.now() + 1000000; }
+  });
+
   return null;
 }
 
 export default function MyRoutes() {
   const navigate = useNavigate();
-  const { activeJobs, fetchActiveJobs } = useAgentStore();
   const { profile } = useAuthStore();
-  const [currentPos, setCurrentPos] = useState([-1.2921, 36.8219]); // Nairobi Default
-  const [isOptimizing, setIsOptimizing] = useState(false);
-  const [optimizedPath, setOptimizedPath] = useState(null);
+  const { activeJobs, fetchActiveJobs, subscribeToMissionUpdates } = useAgentStore();
+  
+  const initialPos = useMemo(() => {
+    const lat = profile?.location?.latitude;
+    const lng = profile?.location?.longitude;
+    if (lat !== null && lat !== undefined && lng !== null && lng !== undefined) {
+      return [Number(lat), Number(lng)];
+    }
+    return [-1.286389, 36.817223]; // General Kenya center as last resort
+  }, [profile?.location?.latitude, profile?.location?.longitude]);
 
+  const [currentPos, setCurrentPos] = useState(initialPos); 
+  const [roadPath, setRoadPath] = useState([]);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
+  // 1. Initial Sync & Real-time
   useEffect(() => {
     fetchActiveJobs();
+    
+    // Sync currentPos with initialPos when the page first loads or profile updates
+    setCurrentPos(initialPos);
+
+    const channel = subscribeToMissionUpdates(() => {
+      fetchActiveJobs();
+      toast.info("Route Updated", { description: "Mission parameters have changed." });
+    });
+
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => setCurrentPos([pos.coords.latitude, pos.coords.longitude]),
-        (err) => console.warn('Geolocation failed:', err)
+      const watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          // Only update if accuracy is high (< 100m) to prevent snapping to Nairobi
+          if (pos.coords.accuracy < 100) {
+            setCurrentPos([pos.coords.latitude, pos.coords.longitude]);
+          }
+        },
+        null,
+        { enableHighAccuracy: true, maximumAge: 0 }
       );
+      return () => {
+        navigator.geolocation.clearWatch(watchId);
+        channel.unsubscribe();
+      };
     }
-  }, []);
+    return () => channel.unsubscribe();
+  }, [initialPos[0], initialPos[1]]); 
 
-  // Simple optimization: Order jobs by proximity to currentPos
-  const calculateOptimizedRoute = () => {
+  // Sync currentPos when initialPos changes (e.g. settings update)
+  useEffect(() => {
+    setCurrentPos(initialPos);
+  }, [initialPos]);
+
+  const [tripDistance, setTripDistance] = useState(0);
+
+  // 2. Road Optimization (OSRM)
+  const calculateRoute = async () => {
+    if (activeJobs.length === 0) return;
     setIsOptimizing(true);
-    setTimeout(() => {
-      const sortedJobs = [...activeJobs]
-        .filter(j => j.latitude && j.longitude)
-        .sort((a, b) => {
-          const distA = Math.sqrt(Math.pow(a.latitude - currentPos[0], 2) + Math.pow(a.longitude - currentPos[1], 2));
-          const distB = Math.sqrt(Math.pow(b.latitude - currentPos[0], 2) + Math.pow(b.longitude - currentPos[1], 2));
-          return distA - distB;
-        });
-
-      const path = [currentPos, ...sortedJobs.map(j => [j.latitude, j.longitude])];
-      setOptimizedPath(path);
-      setIsOptimizing(false);
-    }, 1500);
+    try {
+      const stops = [
+        { lng: currentPos[1], lat: currentPos[0] },
+        ...activeJobs.filter(j => j.latitude).map(j => ({ lng: j.longitude, lat: j.latitude }))
+      ];
+      
+      const coords = stops.map(s => `${s.lng},${s.lat}`).join(';');
+      const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`);
+      const data = await res.json();
+      
+      if (data.code === 'Ok' && data.routes.length > 0) {
+        const points = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+        setRoadPath(points);
+        setTripDistance(data.routes[0].distance); // Distance in meters
+      }
+    } catch (e) { console.error(e); }
+    finally { setIsOptimizing(false); }
   };
 
-  const totalPay = activeJobs.reduce((sum, j) => sum + (j.pay || 0), 0);
+  useEffect(() => {
+    if (activeJobs.length > 0) calculateRoute();
+  }, [activeJobs.length]);
+
+  const nextStop = activeJobs[0];
+  const totalShiftProfit = activeJobs.reduce((sum, job) => sum + (Number(job.pay) || 0), 0);
+  
+  const distanceLabel = useMemo(() => {
+    if (!tripDistance) return 'Calculating...';
+    if (tripDistance < 1000) return `${Math.round(tripDistance)}m away`;
+    return `${(tripDistance / 1000).toFixed(1)} km away`;
+  }, [tripDistance]);
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10 bg-slate-50 dark:bg-slate-950 min-h-screen p-4 pt-6">
-      
-      {/* ── HEADER ── */}
-      <div className="flex items-center justify-between px-1">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
-            <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-          </button>
-          <div>
-            <h1 className="text-xl font-black tracking-tight text-slate-900 dark:text-white">Route Optimizer</h1>
-            <p className="text-[10px] text-primary font-black uppercase tracking-widest">Smart Dispatcher</p>
-          </div>
+    <div className="fixed inset-0 bg-slate-100 dark:bg-slate-950 z-[100] overflow-hidden flex flex-col">
+      {/* ── TOP HUD (Earnings & Load) ── */}
+      <div className="absolute top-4 left-4 right-4 z-[1000] pointer-events-none flex gap-3">
+        <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-3 rounded-2xl shadow-xl border border-white/20 flex-1 pointer-events-auto flex items-center justify-between">
+           <div className="flex items-center gap-2">
+             <div className="w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-white">
+                <Truck className="w-4 h-4" />
+             </div>
+             <div>
+               <p className="text-[8px] font-semibold text-slate-500 uppercase tracking-widest leading-none mb-0.5">Total Stops</p>
+               <p className="text-base font-semibold dark:text-white">{activeJobs.length}</p>
+             </div>
+           </div>
+           <div className="text-right">
+              <p className="text-[8px] font-semibold text-emerald-500 uppercase tracking-widest leading-none mb-0.5">Stops Left</p>
+              <p className="text-base font-semibold dark:text-white">{activeJobs.length}</p>
+           </div>
         </div>
-        <button 
-          onClick={() => setOptimizedPath(null)}
-          className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800"
-        >
-          <RotateCcw className="w-5 h-5 text-slate-400" />
-        </button>
       </div>
 
-      {/* ── MAP CONTAINER ── */}
-      <div className="relative group">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-[2.5rem] blur opacity-30"></div>
-        <div className="relative rounded-[2.5rem] overflow-hidden border-4 border-white dark:border-slate-900 shadow-2xl h-[45vh]">
-          <MapContainer center={currentPos} zoom={13} className="w-full h-full" zoomControl={false}>
-            <TileLayer
-              attribution='&copy; <a href="https://osm.org">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <MapRecenter coords={currentPos} />
+      {/* ── MAP CANVAS ── */}
+      {(!currentPos || isNaN(currentPos[0]) || isNaN(currentPos[1])) ? (
+        <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900">
+           <div className="w-16 h-16 bg-blue-600/10 rounded-3xl flex items-center justify-center mb-4 animate-pulse">
+              <Navigation2 className="w-8 h-8 text-blue-600" />
+           </div>
+           <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Finding your location...</p>
+        </div>
+      ) : (
+        <div className="flex-1 relative">
+          <MapContainer center={currentPos} zoom={15} zoomControl={false} className="h-full w-full">
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <MapRecenter center={currentPos} />
             
-            {/* Agent Location */}
-            <Marker position={currentPos} icon={agentIcon}>
-              <Popup className="font-bold">You are here</Popup>
-            </Marker>
-
-            {/* Active Job Markers */}
-            {activeJobs.filter(j => j.latitude && j.longitude).map((job) => (
-              <Marker key={job.id} position={[job.latitude, job.longitude]} icon={jobIcon}>
-                <Popup>
-                  <div className="p-1">
-                    <p className="font-black text-xs uppercase text-slate-400 mb-1">{job.material} Pickup</p>
-                    <p className="font-bold text-sm text-slate-900">{job.location}</p>
-                    <p className="text-[10px] font-bold text-primary mt-1">KSh {job.pay?.toLocaleString()}</p>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-
-            {/* The Optimized Path Line */}
-            {optimizedPath && (
-              <Polyline 
-                positions={optimizedPath} 
-                color="#00A651" 
-                weight={4} 
-                opacity={0.6} 
-                dashArray="10, 10"
-                className="animate-pulse"
-              />
-            )}
+            {roadPath.length > 0 && <Polyline positions={roadPath} color="#2563eb" weight={5} opacity={0.7} />}
+            
+            <Marker position={currentPos} icon={agentIcon} />
+            
+            {activeJobs.map((job, idx) => {
+              if (!job.latitude || !job.longitude) return null;
+              return (
+                <Marker 
+                  key={job.id} 
+                  position={[job.latitude, job.longitude]} 
+                  icon={createStopIcon(idx + 1, idx === 0)} 
+                />
+              );
+            })}
           </MapContainer>
-
-          {/* Floating Actions */}
-          {!optimizedPath && activeJobs.length > 0 && (
-            <div className="absolute bottom-6 left-6 right-6 z-[1000]">
-              <button 
-                onClick={calculateOptimizedRoute}
-                disabled={isOptimizing}
-                className="w-full py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/30 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
-              >
-                {isOptimizing ? (
-                  <>Calculating Smart Path... <Loader2 className="w-4 h-4 animate-spin" /></>
-                ) : (
-                  <>Optimize My Trip <Sparkles className="w-4 h-4" /></>
-                )}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ── MISSION SUMMARY ── */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-[2rem] border border-slate-200 dark:border-slate-800">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Payload</p>
-          <div className="flex items-center gap-2">
-            <Truck className="w-5 h-5 text-primary" />
-            <p className="text-xl font-black text-slate-900 dark:text-white">{activeJobs.length} Stops</p>
+  
+          {/* ── FLOATING MAP CONTROLS ── */}
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 z-[1000] flex flex-col gap-3">
+             <button onClick={() => setCurrentPos(initialPos)} className="w-12 h-12 bg-white dark:bg-slate-900 rounded-2xl shadow-xl flex items-center justify-center active:scale-90 transition-all border border-slate-200 dark:border-slate-800">
+               <Navigation2 className="w-5 h-5 text-blue-600" />
+             </button>
+             <button onClick={calculateRoute} className={`w-12 h-12 bg-white dark:bg-slate-900 rounded-2xl shadow-xl flex items-center justify-center active:scale-90 transition-all border border-slate-200 dark:border-slate-800 ${isOptimizing ? 'animate-spin' : ''}`}>
+               <RotateCcw className="w-5 h-5 text-slate-500" />
+             </button>
           </div>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-[2rem] border border-slate-200 dark:border-slate-800">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Trip Value</p>
-          <div className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-emerald-500" />
-            <p className="text-xl font-black text-slate-900 dark:text-white">KSh {totalPay}</p>
-          </div>
-        </div>
-      </div>
+      )}
 
-      {/* ── ACTIVE STOP LIST ── */}
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-6 border border-slate-200 dark:border-slate-800">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-black text-xs uppercase tracking-widest text-slate-400">Optimized Stop Order</h3>
-          <Navigation className="w-4 h-4 text-slate-300" />
-        </div>
-
-        <div className="space-y-6">
-          {activeJobs.length > 0 ? (
-            activeJobs.map((job, i) => (
-              <div key={job.id} className="flex items-start gap-4 relative">
-                {i < activeJobs.length - 1 && (
-                  <div className="absolute left-[19px] top-10 w-[2px] h-10 bg-slate-100 dark:bg-slate-800" />
-                )}
-                <div className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center font-black text-xs text-primary border border-slate-100 dark:border-slate-700 shrink-0">
-                  {i + 1}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-black text-slate-900 dark:text-white">{job.location}</p>
-                    <p className="text-[10px] font-black text-primary">KSh {job.pay}</p>
+      {/* ── MISSION HUD (UBER-STYLE) ── */}
+      <AnimatePresence>
+        {nextStop && (
+          <motion.div 
+            initial={{ y: 200 }} 
+            animate={{ y: 0 }} 
+            className="absolute bottom-6 left-4 right-4 z-[1000]"
+          >
+            <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-[0_25px_50_rgba(0,0,0,0.3)] p-6 border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
+                    <MapPin className="w-7 h-7" />
                   </div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{job.material} Pickup · {job.time}</p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-semibold text-emerald-500 uppercase tracking-widest bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-100 dark:border-emerald-800/50">Next Stop</span>
+                      <span className="text-[10px] font-semibold text-slate-400">· {distanceLabel}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold dark:text-white mt-1">{nextStop.customer || 'Resident'}</h3>
+                    <p className="text-xs text-slate-500 font-semibold">{nextStop.location} · {nextStop.material}</p>
+                  </div>
                 </div>
-                <button 
-                  onClick={() => navigate(`/jobs/navigate/${job.id}`)}
-                  className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl"
-                >
-                  <ChevronRight className="w-4 h-4 text-slate-300" />
+                <button className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400">
+                   <MoreVertical className="w-5 h-5" />
                 </button>
               </div>
-            ))
-          ) : (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Truck className="w-8 h-8 text-slate-300" />
+
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => navigate(`/jobs/navigate/${nextStop.id}`)}
+                  className="flex-1 py-5 bg-blue-600 text-white rounded-[1.5rem] font-semibold text-sm uppercase tracking-widest shadow-xl shadow-blue-500/30 active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                  <Navigation className="w-5 h-5" /> START MISSION
+                </button>
+
+                <button 
+                  onClick={() => window.location.href = `tel:${nextStop.phone}`}
+                  className="w-20 py-5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-[1.5rem] font-semibold text-sm active:scale-95 transition-all flex items-center justify-center"
+                >
+                  <Phone className="w-5 h-5" />
+                </button>
               </div>
-              <p className="text-xs text-slate-400 font-bold uppercase tracking-widest leading-relaxed">
-                No active missions.<br/>Accept some jobs first!
-              </p>
+
+              {/* Drawer Trigger */}
               <button 
-                onClick={() => navigate('/jobs')}
-                className="mt-6 px-6 py-3 bg-primary/10 text-primary rounded-xl font-black text-[10px] uppercase tracking-widest"
+                onClick={() => setIsDrawerOpen(true)}
+                className="w-full mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest"
               >
-                Go to Work Board
+                <ChevronUp className="w-4 h-4" /> View Trip List ({activeJobs.length} Stops)
               </button>
             </div>
-          )}
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── MANIFEST DRAWER ── */}
+      <AnimatePresence>
+        {isDrawerOpen && (
+          <motion.div 
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            className="fixed inset-0 z-[2000] bg-white dark:bg-slate-900 pt-10"
+          >
+            <div className="absolute top-4 left-0 right-0 flex justify-center">
+              <button onClick={() => setIsDrawerOpen(false)} className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full" />
+            </div>
+
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-8">
+                 <h2 className="text-2xl font-semibold dark:text-white">Trip Manifest</h2>
+                 <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-widest">{activeJobs.length} Missions</span>
+              </div>
+
+              <div className="space-y-4">
+                {activeJobs.map((item, idx) => (
+                  <div key={item.id} className="flex items-center gap-4 p-4 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-semibold ${idx === 0 ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                      {idx + 1}
+                    </div>
+                    <div className="flex-1">
+                       <p className="text-sm font-semibold dark:text-white">{item.customer || 'Resident'}</p>
+                       <p className="text-[10px] font-semibold text-slate-500 uppercase">{item.location} · {item.material}</p>
+                    </div>
+                    <div className="text-right">
+                       <p className="text-xs font-semibold text-blue-600">KSh {item.pay}</p>
+                       <p className="text-[10px] font-semibold text-slate-400 italic">~10kg</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button 
+                onClick={() => setIsDrawerOpen(false)}
+                className="w-full mt-10 py-5 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-[1.5rem] font-semibold uppercase tracking-widest text-xs"
+              >
+                Close Manifest
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-
-// Add simple pulse animation
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(0, 166, 81, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(0, 166, 81, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(0, 166, 81, 0); }
-  }
-`;
-document.head.appendChild(style);

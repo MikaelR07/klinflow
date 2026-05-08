@@ -15,10 +15,10 @@ export default function Welcome() {
 
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/20 mb-6 w-fit backdrop-blur-md">
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-[10px] font-black text-slate-200 uppercase tracking-widest">Admin Command Center</span>
+          <span className="text-[10px] font-semibold text-slate-200 uppercase tracking-widest">Admin Command Center</span>
         </div>
 
-        <h1 className="text-5xl font-black text-white leading-[0.95] mb-6 tracking-tighter">
+        <h1 className="text-5xl font-semibold text-white leading-[0.95] mb-6 tracking-tighter">
           CleanFlow <br />
           <span className="text-primary italic">Lead Admin.</span>
         </h1>
@@ -39,7 +39,7 @@ export default function Welcome() {
                 <feat.icon className="w-6 h-6" />
               </div>
               <div>
-                <p className="font-bold text-white text-sm">{feat.title}</p>
+                <p className="font-semibold text-white text-sm">{feat.title}</p>
                 <p className="text-xs text-slate-500 font-medium">{feat.desc}</p>
               </div>
             </div>
@@ -51,12 +51,12 @@ export default function Welcome() {
       <div className="relative z-10 pb-8 space-y-4 max-w-md mx-auto w-full">
         <button
           onClick={() => navigate('/login')}
-          className="w-full py-5 bg-white text-slate-950 rounded-3xl font-black text-base shadow-2xl shadow-white/10 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+          className="w-full py-5 bg-white text-slate-950 rounded-3xl font-semibold text-base shadow-2xl shadow-white/10 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
         >
           Enter Command Center <ArrowRight className="w-5 h-5" />
         </button>
         
-        <p className="text-center text-[10px] text-slate-600 font-black uppercase tracking-[0.2em] pt-4">
+        <p className="text-center text-[10px] text-slate-600 font-semibold uppercase tracking-[0.2em] pt-4">
           Restricted Access • Authorized Personnel Only
         </p>
       </div>

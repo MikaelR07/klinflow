@@ -14,7 +14,8 @@
     "client": "npm run dev --workspace=client",
     "agent": "npm run dev --workspace=agent",
     "business": "npm run dev --workspace=business",
-    "admin": "npm run dev --workspace=admin"
+    "admin": "npm run dev --workspace=admin",
+    "hub": "npm run dev --workspace=@cleanflow/hub"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

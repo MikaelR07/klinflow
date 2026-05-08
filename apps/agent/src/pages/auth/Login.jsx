@@ -46,7 +46,7 @@ export default function Login() {
         {/* Branding */}
         <div className="text-center mb-10">
           <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl mb-4 mx-auto" alt="Agent Logo" />
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
             Clean<span className="text-secondary">Agent</span>
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">
@@ -58,7 +58,7 @@ export default function Login() {
         <div className="glass p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none min-h-[340px] flex flex-col justify-center">
           <form onSubmit={handleLogin} className="space-y-5 animate-slide-up">
             <div className="text-center mb-6">
-              <h2 className="text-lg font-bold text-slate-800 dark:text-white pb-1">Agent Sign In</h2>
+              <h2 className="text-lg font-semibold text-slate-800 dark:text-white pb-1">Agent Sign In</h2>
               <p className="text-xs text-slate-500">Access your jobs and routes</p>
             </div>
 
@@ -105,7 +105,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 bg-secondary hover:bg-blue-700 text-white rounded-xl font-bold text-[15px] shadow-lg shadow-secondary/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+              className="w-full py-4 bg-secondary hover:bg-blue-700 text-white rounded-xl font-semibold text-[15px] shadow-lg shadow-secondary/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
             >
               {isLoading ? (
                 <>
@@ -121,7 +121,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8 font-medium">
           Don't have an account?{' '}
-          <Link to="/register" className="text-secondary font-bold hover:underline">
+          <Link to="/register" className="text-secondary font-semibold hover:underline">
             Register Here
           </Link>
         </p>

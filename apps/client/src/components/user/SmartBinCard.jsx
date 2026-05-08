@@ -23,7 +23,7 @@ const SmartBinCard = ({ bin }) => {
               <Trash2 size={24} />
             </div>
             <div>
-              <h3 className="font-bold text-gray-800">{bin.name}</h3>
+              <h3 className="font-semibold text-gray-800">{bin.name}</h3>
               <div className="flex items-center text-xs text-gray-500 mt-0.5">
                 <MapPin size={12} className="mr-1" />
                 {bin.location}
@@ -41,7 +41,7 @@ const SmartBinCard = ({ bin }) => {
         <div className="mt-4">
           <div className="flex justify-between text-sm mb-1.5">
             <span className="text-gray-600 font-medium">Capacity</span>
-            <span className="font-bold">{bin.fillLevel}%</span>
+            <span className="font-semibold">{bin.fillLevel}%</span>
           </div>
           <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
             <div 

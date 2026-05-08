@@ -47,12 +47,12 @@ export default function ImpactTicker() {
             <current.icon className="w-4 h-4" />
           </div>
           <div className="flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-0.5">Network Live</p>
-            <p className="text-xs font-bold text-white tracking-tight leading-none">{current.msg}</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500 mb-0.5">Network Live</p>
+            <p className="text-xs font-semibold text-white tracking-tight leading-none">{current.msg}</p>
           </div>
           <div className="flex items-center gap-1.5 ml-4">
              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-             <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Live</span>
+             <span className="text-[8px] font-semibold text-emerald-500 uppercase tracking-widest">Live</span>
           </div>
         </motion.div>
       </AnimatePresence>

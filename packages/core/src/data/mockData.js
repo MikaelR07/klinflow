@@ -21,37 +21,34 @@ export const PRICING_CONSTANTS = {
   KG_XP_REWARD: 5,
 };
 
-/* ── Subscription Tiers ─────────────────────────────────────────── */
+/* ── Subscription Tiers (Platform Access Plans) ─────────────────── */
 export const SUBSCRIPTION_TIERS = {
   lite: {
     id: 'lite', 
-    label: 'Basic Plan', 
+    label: 'Basic', 
     impactTag: 'Member',
     price: 0, 
-    serviceFee: 300,
+    platformFee: 0,
     rewardMult: 1,
-    features: ['Pay only when you book', 'Earn normal points', 'Use your own smart bin'], 
-    limit: 0
+    features: ['Access to all verified fleets', 'Pay as you go logistics', 'Earn standard points (1x)'], 
   },
   standard: {
     id: 'standard', 
-    label: 'Family Plan', 
-    impactTag: 'Neighborhood Hero',
-    price: 1200, 
-    serviceFee: 0,
+    label: 'CleanFlow Plus', 
+    impactTag: 'Eco Hero',
+    price: 1000, 
+    platformFee: 0,
     rewardMult: 2,
-    features: ['Up to 4 Free Pickups / mo', 'Sponsor a bin for your estate', 'Earn 2x more points'], 
-    limit: 4
+    features: ['Unlimited Priority Booking', '2x Reward Points Boost', 'Monthly Impact Certificates', 'Priority Platform Support'], 
   },
   premium: {
     id: 'premium', 
-    label: 'Gold Plan', 
-    impactTag: 'Eco Leader',
+    label: 'CleanFlow Elite', 
+    impactTag: 'Climate Leader',
     price: 2500, 
-    serviceFee: 0,
-    rewardMult: 5,
-    features: ['Up to 12 Free Pickups / mo', 'Sponsor 5 bins for your estate', 'Earn 5x more points (Highest)'], 
-    limit: 12
+    platformFee: 0,
+    rewardMult: 3.5,
+    features: ['Link up to 3 properties', '3.5x Elite Points Multiplier', 'Verified Payment Protection', 'Elite Resident Badge'], 
   }
 };
 

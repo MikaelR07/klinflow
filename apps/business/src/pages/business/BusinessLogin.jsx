@@ -51,7 +51,7 @@ export default function BusinessLogin() {
           <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center mx-auto mb-4 shadow-lg shadow-primary/30">
             <Recycle className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
             Clean<span className="text-primary">Flow</span>
             <span className="text-primary-dark ml-2 text-lg">Business</span>
           </h1>
@@ -103,7 +103,7 @@ export default function BusinessLogin() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 bg-primary hover:bg-emerald-600 text-white rounded-xl font-bold text-[15px] shadow-lg shadow-primary/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+              className="w-full py-4 bg-primary hover:bg-emerald-600 text-white rounded-xl font-semibold text-[15px] shadow-lg shadow-primary/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
             >
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Access Marketplace'}
             </button>
@@ -112,7 +112,7 @@ export default function BusinessLogin() {
 
         <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8 font-medium">
           New business partner?{' '}
-          <Link to="/business/register" className="text-primary font-bold hover:underline">
+          <Link to="/business/register" className="text-primary font-semibold hover:underline">
             Register Business
           </Link>
         </p>

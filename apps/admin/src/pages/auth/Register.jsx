@@ -86,7 +86,7 @@ export default function Register() {
         </div>
 
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Admin Provisioning</h1>
+          <h1 className="text-2xl font-semibold text-white tracking-tight">Admin Provisioning</h1>
           <p className="text-sm text-slate-400 mt-1 mb-6 font-medium">Create a new administrator account for CleanCore.</p>
         </div>
 
@@ -137,7 +137,7 @@ export default function Register() {
 
           {/* Security Gate Field */}
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
-            <label className="block text-xs font-black text-rose-500 mb-1.5 uppercase tracking-widest">Admin Access Key</label>
+            <label className="block text-xs font-semibold text-rose-500 mb-1.5 uppercase tracking-widest">Admin Access Key</label>
             <div className="relative">
               <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-rose-500/50" />
               <input 
@@ -150,13 +150,13 @@ export default function Register() {
                 required 
               />
             </div>
-            <p className="text-[10px] text-slate-500 mt-2 font-bold italic tracking-tight">Only authorized personnel can provision administrator accounts.</p>
+            <p className="text-[10px] text-slate-500 mt-2 font-semibold italic tracking-tight">Only authorized personnel can provision administrator accounts.</p>
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-4 mt-4 text-white rounded-xl font-bold text-[15px] shadow-lg transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed ${!isAgent ? 'bg-primary hover:bg-primary-dark shadow-primary/30' : 'bg-secondary hover:bg-blue-700 shadow-secondary/30'}`}
+            className={`w-full py-4 mt-4 text-white rounded-xl font-semibold text-[15px] shadow-lg transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed ${!isAgent ? 'bg-primary hover:bg-primary-dark shadow-primary/30' : 'bg-secondary hover:bg-blue-700 shadow-secondary/30'}`}
           >
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Provision Admin Account'}
           </button>

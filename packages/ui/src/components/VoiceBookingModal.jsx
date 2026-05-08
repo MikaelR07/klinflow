@@ -87,8 +87,8 @@ export default function VoiceBookingModal() {
                 <p className="font-semibold dark:text-white">{wasteLabel}</p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl p-3 border dark:border-slate-700/50 shadow-sm">
-                <span className="text-slate-400 dark:text-slate-500 text-xs font-medium">Bags</span>
-                <p className="font-semibold dark:text-white">{voiceResult.bags}</p>
+                <span className="text-slate-400 dark:text-slate-500 text-xs font-medium">Weight (KG)</span>
+                <p className="font-semibold dark:text-white">{voiceResult.weight}</p>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-xl p-3 border dark:border-slate-700/50 shadow-sm">
                 <span className="text-slate-400 dark:text-slate-500 text-xs font-medium">Estate</span>
@@ -110,8 +110,8 @@ export default function VoiceBookingModal() {
           <div className="mt-4 bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border dark:border-slate-800">
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-tight">Try saying:</p>
             <ul className="text-xs text-slate-400 dark:text-slate-500 space-y-1.5 font-medium italic">
-              <li>"Nataka pickup ya takataka mbili kesho asubuhi South B"</li>
-              <li>"I need a pickup for 3 bags of recyclables in Eastleigh"</li>
+              <li>"Nataka pickup ya takataka kilo kumi kesho asubuhi South B"</li>
+              <li>"I need a pickup for 10kg of recyclables in Eastleigh"</li>
               <li>"Book e-waste collection tomorrow morning"</li>
             </ul>
           </div>

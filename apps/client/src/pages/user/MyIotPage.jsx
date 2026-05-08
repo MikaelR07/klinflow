@@ -81,7 +81,7 @@ export default function MyIotPage() {
           </div>
         </div>
 
-        <h1 className="text-2xl font-black text-slate-800 dark:text-white mb-3">IoT Grid Not Detected</h1>
+        <h1 className="text-2xl font-semibold text-slate-800 dark:text-white mb-3">IoT Grid Not Detected</h1>
         <p className="max-w-xs text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-8">
           Welcome {profile?.name || 'User'}. Your residence is not yet linked to the CleanFlow network.
         </p>
@@ -104,8 +104,8 @@ export default function MyIotPage() {
                 <ShieldAlert className="w-5 h-5 text-slate-500" />
               </div>
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Services</p>
-                <p className="text-sm font-bold dark:text-white">Order Hardware</p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Services</p>
+                <p className="text-sm font-semibold dark:text-white">Order Hardware</p>
               </div>
             </div>
             <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-primary group-hover:translate-x-1 transition-all" />
@@ -121,8 +121,8 @@ export default function MyIotPage() {
     <div className="space-y-6 animate-fade-in pb-12">
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">Smart Dashboard</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-bold uppercase tracking-widest">
+          <h1 className="text-2xl font-semibold text-slate-800 dark:text-white tracking-tight">Smart Dashboard</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-semibold uppercase tracking-widest">
             {profile?.location?.estate || 'Nairobi'} Live Grid
           </p>
         </div>
@@ -145,7 +145,7 @@ export default function MyIotPage() {
 
       {smartBins.length > 0 && (
         <section>
-          <h2 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+          <h2 className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
             Smart Bins
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
           </h2>
@@ -159,7 +159,7 @@ export default function MyIotPage() {
 
       {airQuality.length > 0 && (
         <section>
-          <h2 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+          <h2 className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
             Air Analytics
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
           </h2>
@@ -173,7 +173,7 @@ export default function MyIotPage() {
 
       {wastewater.length > 0 && (
         <section>
-          <h2 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+          <h2 className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
             Wastewater Ops
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
           </h2>

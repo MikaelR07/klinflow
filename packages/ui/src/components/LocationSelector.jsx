@@ -73,8 +73,10 @@ export default function LocationSelector({ value, onChange }) {
   const [accuracy, setAccuracy] = useState(null);
 
   const initialPos = useMemo(() => {
-    return [value?.latitude || -1.2921, value?.longitude || 36.8219]; // Default Nairobi
-  }, []);
+    // Priority: 1. Existing Latitude, 2. Previous Profile Location, 3. Kenya Center (not Nairobi specifically)
+    if (value?.latitude && value?.longitude) return [value.latitude, value.longitude];
+    return [-1.286389, 36.817223]; // General Kenya center as absolute last resort
+  }, [value?.latitude, value?.longitude]);
 
   const debounceTimer = useRef(null);
 
@@ -94,11 +96,17 @@ export default function LocationSelector({ value, onChange }) {
 
     debounceTimer.current = setTimeout(async () => {
       const areaName = await fetchAddress(lat, lon);
+      let h3_index = null;
+      try {
+        const { latLngToCell } = await import('h3-js');
+        h3_index = latLngToCell(lat, lon, 7);
+      } catch (e) {}
       
       onChange({
         estate: areaName || 'Nairobi Sector',
         latitude: lat,
         longitude: lon,
+        h3_index,
         accuracy: acc,
         lastUpdated: new Date().toISOString()
       });
@@ -126,14 +134,14 @@ export default function LocationSelector({ value, onChange }) {
         setIsCapturing(false);
         setShowMap(false);
       },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Operational Sector</label>
+        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Location Area</label>
         {accuracy && (
           <span className="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full uppercase tracking-widest">
             <Target className="w-3 h-3" /> Precision {Math.round(accuracy)}m

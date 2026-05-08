@@ -46,10 +46,10 @@ export default function Login() {
         {/* Branding */}
         <div className="text-center mb-10">
 
-          <h1 className="text-2xl font-bold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-semibold text-white tracking-widest uppercase">
             CLEAN<span className="text-slate-400">CORE</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-2 font-bold tracking-[0.2em] uppercase">
+          <p className="text-xs text-slate-400 mt-2 font-semibold tracking-[0.2em] uppercase">
             Lead Admin Infrastructure
           </p>
         </div>
@@ -58,12 +58,12 @@ export default function Login() {
         <div className="bg-slate-800/50 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl min-h-[340px] flex flex-col justify-center">
           <form onSubmit={handleLogin} className="space-y-5 animate-slide-up">
             <div className="text-center mb-6">
-              <h2 className="text-lg font-bold text-white pb-1">Administrator Sign In</h2>
+              <h2 className="text-lg font-semibold text-white pb-1">Administrator Sign In</h2>
               <p className="text-xs text-slate-400">Restricted Access Area</p>
             </div>
 
             <div>
-              <label className="block text-[10px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider">Admin ID / Phone</label>
+              <label className="block text-[10px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Admin ID / Phone</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <Phone className="h-5 w-5 text-slate-500" />
@@ -81,8 +81,8 @@ export default function Login() {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Security Password</label>
-                <button type="button" onClick={handleForgotPin} className="text-[10px] font-bold text-slate-500 hover:text-white transition-colors uppercase tracking-widest">
+                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Security Password</label>
+                <button type="button" onClick={handleForgotPin} className="text-[10px] font-semibold text-slate-500 hover:text-white transition-colors uppercase tracking-widest">
                   Help?
                 </button>
               </div>
@@ -105,7 +105,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 bg-white text-slate-900 rounded-xl font-black text-sm uppercase tracking-widest shadow-white/10 shadow-lg hover:bg-slate-200 transition-all flex justify-center items-center gap-2 disabled:opacity-50 mt-2"
+              className="w-full py-4 bg-white text-slate-900 rounded-xl font-semibold text-sm uppercase tracking-widest shadow-white/10 shadow-lg hover:bg-slate-200 transition-all flex justify-center items-center gap-2 disabled:opacity-50 mt-2"
             >
               {isLoading ? (
                 <>
@@ -121,7 +121,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8 font-medium">
           Don't have an account?{' '}
-          <Link to="/register" className="text-white font-bold hover:underline">
+          <Link to="/register" className="text-white font-semibold hover:underline">
             Register Here
           </Link>
         </p>

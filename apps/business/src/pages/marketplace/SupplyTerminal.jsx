@@ -10,7 +10,10 @@ import {
   Truck,
   Clock,
   Search,
-  X
+  X,
+  MessageSquareQuote,
+  Loader2,
+  Check
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -21,33 +24,36 @@ import { toast } from 'sonner';
 
 export default function SupplyTerminal() {
   const navigate = useNavigate();
-  const { profile } = useAuthStore();
-  const { listings, fetchListings } = useMarketplaceStore();
+  const { profile, userId } = useAuthStore();
+  const { listings, fetchListings, makeOffer } = useMarketplaceStore();
   const { liveFeed, fetchLiveFeed, claimAsset } = useAssetStore();
   
   const [selectedItem, setSelectedItem] = useState(null);
   const [search, setSearch] = useState('');
 
+  // Offer Modal State
+  const [offerModal, setOfferModal] = useState(null);
+  const [offerPrice, setOfferPrice] = useState('');
+  const [offerQty, setOfferQty] = useState('');
+  const [isOffering, setIsOffering] = useState(false);
+
   // Determine user context
   const isWeaver = profile?.business_type === 'weaver';
   
   useEffect(() => {
-    // Weavers only care about fresh agent arrivals
+    fetchListings();
     if (isWeaver) {
       fetchLiveFeed();
-    } else {
-      // Industrial users only care about weaver bulk sales
-      fetchListings();
     }
     
-    const channel = supabase.channel('terminal-exclusive-sync');
+    const channelName = `terminal-sync-${Date.now()}`;
+    const channel = supabase.channel(channelName);
+    
+    // Always listen for listings if we want real-time merchant posts for weavers
+    channel.on('postgres_changes', { event: '*', schema: 'public', table: 'marketplace_listings' }, () => fetchListings());
     
     if (isWeaver) {
-      // Listen for new assets (Agent pickups)
-      channel.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'assets' }, () => fetchLiveFeed());
-    } else {
-      // Listen for new marketplace listings (Weaver bulk sales)
-      channel.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'marketplace_listings' }, () => fetchListings());
+      channel.on('postgres_changes', { event: '*', schema: 'public', table: 'assets' }, () => fetchLiveFeed());
     }
 
     channel.subscribe();
@@ -55,53 +61,56 @@ export default function SupplyTerminal() {
   }, [isWeaver]);
 
   // SOURCE SELECTION: 
-  // 1. Weavers see "Fresh Pickups" (liveFeed)
-  // 2. Industrial see "Bulk Bales" (listings > 50kg or from weavers)
+  // 1. Weavers see "Fresh Agent Pickups" + "Fresh Merchant Posts"
+  // 2. Industrial see "Bulk Bales" (listings > 50kg)
   const terminalArrivals = isWeaver 
-    ? liveFeed.map(item => ({ 
-        ...item, 
-        sourceType: 'agent', 
-        typeLabel: 'Fresh Pickup',
-        displayTitle: item.material_type 
-      }))
+    ? [
+        ...liveFeed.map(item => ({ 
+          ...item, 
+          sourceType: 'agent', 
+          typeLabel: 'Warehouse Ready',
+          displayTitle: item.material_type 
+        })),
+        ...listings
+          .filter(item => item.sellerId !== userId && item.status === 'active') // Merchant Posts
+          .map(item => ({
+            ...item,
+            sourceType: 'merchant',
+            typeLabel: 'Seller',
+            displayTitle: item.material,
+            weight_kg: item.quantity,
+            pricePerKg: item.pricePerKg,
+            photo_url: item.photo,
+            created_at: item.createdAt
+          }))
+      ]
     : listings
-        .filter(item => item.weight_kg >= 50) // Only "Bulk" for the terminal
+        .filter(item => item.quantity >= 50 && item.status === 'active') // Only "Bulk" for the terminal
         .map(item => ({ 
           ...item, 
           sourceType: 'weaver', 
           typeLabel: 'Bulk Bale',
-          displayTitle: item.material || item.material_type
+          displayTitle: item.material,
+          weight_kg: item.quantity,
+          photo_url: item.photo,
+          created_at: item.createdAt
         }));
 
   const filteredArrivals = terminalArrivals
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     .filter(item => (item.displayTitle || '').toLowerCase().includes(search.toLowerCase()))
-    // DEDUPLICATION: Ensure unique IDs and unique bookings only
     .filter((item, index, self) => 
       index === self.findIndex((t) => (
         t.id === item.id || (t.booking_id && t.booking_id === item.booking_id)
       ))
     );
 
-  const handleAcquire = async (item) => {
-    try {
-      if (item.sourceType === 'agent') {
-        await claimAsset(item.id);
-      } else {
-        // Logic for industrial user buying from weaver
-        const { error } = await supabase.rpc('weaver_claim_asset', {
-          p_listing_id: item.id,
-          p_weaver_id: profile.id
-        });
-        if (error) throw error;
-      }
-      toast.success("Load Acquired!", { description: "Item added to your tracking." });
-      setSelectedItem(null);
-      if (isWeaver) fetchLiveFeed(); else fetchListings();
-    } catch (err) {
-      toast.error("Acquisition Failed", { description: err.message });
-    }
-  };
+  const marketIndices = [
+    { label: 'PET-A', price: '128.50', change: '+3.2%', up: true, trend: [10, 15, 12, 18, 14, 20, 18] },
+    { label: 'HDPE', price: '94.20', change: '-1.5%', up: false, trend: [20, 18, 19, 15, 16, 12, 10] },
+    { label: 'METAL', price: '215.00', change: '+2.8%', up: true, trend: [15, 12, 18, 16, 20, 22, 25] },
+    { label: 'PP', price: '102.00', change: '+0.5%', up: true, trend: [12, 14, 13, 15, 14, 16, 17] },
+  ];
 
   const getMaterialColor = (type) => {
     const t = type?.toLowerCase();
@@ -112,84 +121,135 @@ export default function SupplyTerminal() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 pb-24">
-      {/* ── HEADER ── */}
-      <div className="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-4">
-        <div className="max-w-xl mx-auto flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div className="text-center">
-            <h1 className="text-sm font-black uppercase tracking-[0.2em]">{getBusinessLabel(profile?.business_type, 'terminal')}</h1>
-            <div className="flex items-center justify-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <p className="text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Live Arrivals</p>
+    <div className="min-h-screen bg-[#F4F4F4] dark:bg-slate-900 pb-24">
+
+      <div className="w-full">
+        {/* ── AI MARKET PULSE (ANIMATED STOCK TICKER) ── */}
+        <style>
+          {`
+            @keyframes marquee {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-marquee {
+              display: flex;
+              width: max-content;
+              animation: marquee 20s linear infinite;
+            }
+            .animate-marquee:hover {
+              animation-play-state: paused;
+            }
+          `}
+        </style>
+        <div className="pt-1.5 pb-1 bg-[#F4F4F4] dark:bg-slate-900 overflow-hidden border-b border-slate-100 dark:border-slate-800">
+          <div className="animate-marquee flex gap-1.5 px-3">
+            {[...marketIndices, ...marketIndices].map((m, i) => (
+              <div key={i} className="flex-shrink-0 w-26 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 p-1.5 rounded-lg shadow-sm">
+                <div className="flex items-center justify-between mb-0.5">
+                  <span className="text-[8px] font-black text-slate-900 dark:text-white tracking-tighter uppercase">{m.label}</span>
+                  <span className={`text-[7px] font-black ${m.up ? 'text-emerald-500' : 'text-rose-500'} italic`}>{m.change}</span>
+                </div>
+                <div className="flex items-baseline gap-1 mb-1">
+                  <span className="text-[10px] font-black text-slate-900 dark:text-white">KSh {m.price}</span>
+                  <span className="text-[6px] text-slate-400 font-bold uppercase tracking-widest">/KG</span>
+                </div>
+                {/* Mini Sparkline */}
+                <div className="h-2.5 flex items-end gap-0.5">
+                  {m.trend.map((v, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`flex-1 rounded-t-[0.5px] ${m.up ? 'bg-emerald-500/20' : 'bg-rose-500/20'}`} 
+                      style={{ height: `${(v / 25) * 100}%` }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── SEARCH & NAV TERMINAL (UNIFIED) ── */}
+        <div className="px-3 pt-2 pb-3 bg-[#F4F4F4] dark:bg-slate-900 sticky top-0 z-50 backdrop-blur-md">
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => navigate(-1)} 
+              className="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl active:scale-95 transition-all shadow-sm"
+            >
+              <ArrowLeft className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+            </button>
+            <div className="relative flex-1 group">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+              <input 
+                type="text" 
+                placeholder={`Filter ${isWeaver ? 'pickups' : 'bulk inventory'}...`}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-[13px] font-medium outline-none focus:ring-1 focus:ring-emerald-500/20 text-slate-900 dark:text-white shadow-sm transition-all"
+              />
             </div>
           </div>
-          <div className="w-9" />
-        </div>
-      </div>
-
-      <div className="max-w-xl mx-auto p-4">
-        {/* ── SEARCH ── */}
-        <div className="mb-6">
-          <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input 
-              type="text" 
-              placeholder={`Filter ${isWeaver ? 'pickups' : 'bulk inventory'}...`}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm outline-none"
-            />
-          </div>
         </div>
 
-        {/* ── GRID ── */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* ── VERTICAL LINE-ITEM TERMINAL (ALIBABA HIGH-DENSITY) ── */}
+        <div className="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
           {filteredArrivals.map((item) => (
             <div 
               key={item.id}
-              onClick={() => setSelectedItem(item)}
-              className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm active:scale-95 transition-all"
+              onClick={() => navigate(`/arrivals/${item.id}`)}
+              className="flex items-center gap-4 p-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors relative"
             >
-              <div className={`h-32 relative flex items-center justify-center overflow-hidden`}>
-                {item.photo_url ? (
-                  <img src={item.photo_url} alt="Verified Material" className="w-full h-full object-cover" />
+              {/* Thumbnail Anchor */}
+              <div className="w-20 h-20 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative shrink-0 border border-slate-100 dark:border-slate-800 shadow-sm">
+                {item.photo_url || item.photo ? (
+                  <img src={item.photo_url || item.photo} className="w-full h-full object-cover" alt="Material" />
                 ) : (
-                  <div className={`absolute inset-0 bg-gradient-to-br ${getMaterialColor(item.displayTitle)} opacity-90`} />
-                )}
-                
-                {/* Fallback Icon Overlay */}
-                {!item.photo_url && (
-                  <div className="relative z-10">
-                    {item.sourceType === 'weaver' ? <Building2 className="w-10 h-10 text-white/40" /> : <Truck className="w-10 h-10 text-white/40" />}
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700">
+                    {item.sourceType === 'weaver' ? <Building2 className="w-8 h-8 text-slate-300/50" /> : <Truck className="w-8 h-8 text-slate-300/50" />}
                   </div>
                 )}
-
-                <div className="absolute top-2 left-2 bg-black/20 backdrop-blur-md px-2 py-0.5 rounded-full text-[8px] font-black text-white uppercase tracking-widest border border-white/20 z-10">
-                  {item.typeLabel}
+                <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-black/60 backdrop-blur-md text-[7px] font-black text-white rounded uppercase tracking-widest shadow-lg">
+                  {item.sourceType === 'agent' ? 'Pickup' : 'Seller'}
                 </div>
-                
-                {item.photo_url && (
-                  <div className="absolute top-2 right-2 bg-emerald-500/90 backdrop-blur-md p-1 rounded-lg z-10">
-                    <Activity className="w-3 h-3 text-white" />
-                  </div>
-                )}
               </div>
 
-              <div className="p-3 space-y-1">
-                <h3 className="font-black text-slate-900 dark:text-white text-sm truncate uppercase tracking-tight">
-                  {item.displayTitle}
-                </h3>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-emerald-500">
-                    <Scale className="w-3 h-3" />
-                    <span className="text-xs font-black">{item.weight_kg}kg</span>
+              {/* Telemetry Strip */}
+              <div className="flex-1 min-w-0 py-0.5 flex flex-col justify-between h-20">
+                <div className="flex items-start justify-between">
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase truncate tracking-tight italic leading-none mb-1">
+                      {item.displayTitle}
+                    </h3>
+                    <div className="flex items-center gap-1.5">
+                      <span className={`w-2 h-2 rounded-full bg-gradient-to-br ${getMaterialColor(item.displayTitle)} shadow-sm`} />
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">{item.typeLabel}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1 text-slate-300">
-                    <Clock className="w-3 h-3" />
-                    <span className="text-[9px] font-bold">{new Date(item.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                  <div className="text-right shrink-0 flex flex-col items-end">
+                    <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1 mb-0.5">
+                      <Clock className="w-2.5 h-2.5" />
+                      {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    </p>
+                    <p className="text-sm font-black text-slate-900 dark:text-white italic tracking-tighter leading-none">
+                      {item.weight_kg} <span className="text-[8px] uppercase not-italic opacity-40">KG</span>
+                    </p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1 bg-slate-50 dark:bg-slate-800 px-1 py-0.5 rounded">Grade {item.grade || 'A'}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-800/50 pt-1.5 mt-auto">
+                  <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                    <MapPin className="w-3 h-3 text-slate-300" />
+                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest truncate">
+                      {item.location || 'Logistics Hub'}
+                    </p>
+                  </div>
+                  <div className="text-right pl-2">
+                    <p className="text-[10px] font-black text-emerald-600 uppercase tracking-tighter">
+                      {item.pricePerKg || (item.estimated_value && item.weight_kg ? Math.round(item.estimated_value / item.weight_kg) : null) ? 
+                        `KSh ${item.pricePerKg || Math.round(item.estimated_value / item.weight_kg)}` : 
+                        'Quoting'}
+                      <span className="text-[7px] text-slate-400 ml-0.5">/KG</span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -200,86 +260,10 @@ export default function SupplyTerminal() {
         {filteredArrivals.length === 0 && (
           <div className="py-20 text-center opacity-40">
             <Activity className="w-10 h-10 mx-auto mb-4" />
-            <p className="text-sm font-bold uppercase tracking-widest">No Arrivals Tracked</p>
+            <p className="text-sm font-semibold uppercase tracking-widest">No Arrivals Tracked</p>
           </div>
         )}
       </div>
-
-      {/* ── DETAIL MODAL ── */}
-      {selectedItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] p-6 shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden border border-slate-200 dark:border-slate-800">
-            {/* Material Photo Header */}
-            <div className="h-40 -mx-6 -mt-6 mb-6 relative overflow-hidden">
-               {selectedItem.photo_url ? (
-                 <img src={selectedItem.photo_url} alt="Material Proof" className="w-full h-full object-cover" />
-               ) : (
-                 <div className={`w-full h-full bg-gradient-to-br ${getMaterialColor(selectedItem.displayTitle)} flex items-center justify-center`}>
-                    <Package className="w-12 h-12 text-white/30" />
-                 </div>
-               )}
-               <div className="absolute top-4 right-4">
-                  <button onClick={() => setSelectedItem(null)} className="p-2 bg-white/20 backdrop-blur-md hover:bg-white/40 rounded-full transition-colors border border-white/20">
-                    <X className="w-4 h-4 text-white" />
-                  </button>
-               </div>
-               <div className="absolute bottom-4 left-6">
-                  <span className="bg-emerald-500 text-white text-[8px] font-black uppercase tracking-[0.2em] px-2 py-1 rounded-lg shadow-lg">Verified Arrival</span>
-               </div>
-            </div>
-
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <span className="text-[10px] font-black text-primary uppercase tracking-widest mb-1 block">{selectedItem.typeLabel}</span>
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter uppercase italic leading-none">{selectedItem.displayTitle}</h2>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3 mb-8">
-              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                    <Scale className="w-4 h-4 text-emerald-500" />
-                  </div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Weight</span>
-                </div>
-                <span className="text-lg font-black text-slate-900 dark:text-white">{selectedItem.weight_kg} KG</span>
-              </div>
-
-              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                    <MapPin className="w-4 h-4 text-blue-500" />
-                  </div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Origin</span>
-                </div>
-                <span className="text-xs font-black text-slate-900 dark:text-white uppercase truncate ml-4 text-right">
-                  {selectedItem.location || selectedItem.booking?.estate || 'Central Hub'}
-                </span>
-              </div>
-              
-              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                    <Clock className="w-4 h-4 text-amber-500" />
-                  </div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Arrived</span>
-                </div>
-                <span className="text-xs font-black text-slate-900 dark:text-white">
-                  {new Date(selectedItem.created_at).toLocaleTimeString()}
-                </span>
-              </div>
-            </div>
-
-            <button 
-              onClick={() => handleAcquire(selectedItem)}
-              className="w-full py-4 bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex justify-center items-center gap-2"
-            >
-              Acquire Load <Zap className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

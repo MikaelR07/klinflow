@@ -39,7 +39,7 @@ export default function AdminLogin() {
           <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-4">
             <ShieldAlert className="w-8 h-8 text-rose-500" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl font-semibold text-white tracking-tight">
             CleanFlow <span className="text-rose-500">Security</span>
           </h1>
           <p className="text-sm text-slate-400 mt-2 font-medium">
@@ -89,7 +89,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-[15px] shadow-lg shadow-rose-900/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+              className="w-full py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-semibold text-[15px] shadow-lg shadow-rose-900/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-4"
             >
               {isLoading ? (
                 <>

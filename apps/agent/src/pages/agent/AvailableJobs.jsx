@@ -1,9 +1,14 @@
 /**
- * Available Jobs Page — Job cards with AI recommendations, accept/reject
+ * AvailableJobs.jsx — Job cards with AI recommendations, accept/reject
  */
 import { useEffect, useState } from 'react';
-import { Sparkles, MapPin, Clock, Package, CheckCircle, XCircle, RefreshCw, Loader2, Navigation, Zap } from 'lucide-react';
+import { 
+  Sparkles, MapPin, Clock, Package, CheckCircle, XCircle, 
+  RefreshCw, Loader2, Navigation, Zap, Truck, User, ArrowLeft,
+  ChevronRight, Calendar, Scale
+} from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { useAgentStore, useAuthStore, useServiceStore } from '@cleanflow/core';
 import EmptyState from '@cleanflow/ui/components/EmptyState';
@@ -16,19 +21,19 @@ export default function AvailableJobs() {
   const [weighingJob, setWeighingJob] = useState(null);
   const [weightValue, setWeightValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { 
-    availableJobs, 
-    activeJobs, 
-    acceptJob, 
-    rejectJob, 
-    completeJob,
-    fetchAvailableJobs, 
-    fetchActiveJobs,
-    subscribeToJobs,
-    cleanupJobs,
-    isLoadingJobs,
-    arrivedJobIds
-  } = useAgentStore();
+  const availableJobs = useAgentStore(s => s.availableJobs);
+  const activeJobs = useAgentStore(s => s.activeJobs);
+  const rejectedJobs = useAgentStore(s => s.rejectedJobs);
+  const acceptJob = useAgentStore(s => s.acceptJob);
+  const rejectJob = useAgentStore(s => s.rejectJob);
+  const restoreJob = useAgentStore(s => s.restoreJob);
+  const completeJob = useAgentStore(s => s.completeJob);
+  const fetchAvailableJobs = useAgentStore(s => s.fetchAvailableJobs);
+  const fetchActiveJobs = useAgentStore(s => s.fetchActiveJobs);
+  const subscribeToJobs = useAgentStore(s => s.subscribeToJobs);
+  const cleanupJobs = useAgentStore(s => s.cleanupJobs);
+  const isLoadingJobs = useAgentStore(s => s.isLoadingJobs);
+  const arrivedJobIds = useAgentStore(s => s.arrivedJobIds);
   const { userId, profile } = useAuthStore();
   const { categories, fetchCategories } = useServiceStore();
 
@@ -52,13 +57,12 @@ export default function AvailableJobs() {
       if (success) {
         setActiveTab('active'); // Switch to active tab so user sees the job move
         toast.success(`Job accepted! 🚀`, {
-          description: `${job.location} — KSh ${job.pay.toLocaleString()}`,
+          description: "Mission activated. Your earnings will be credited to your wallet upon completion.",
         });
       } else {
         toast.error("Could not claim job", {
           description: "This mission might have been claimed by another agent or is no longer available."
         });
-        // Refresh to get latest list
         fetchAvailableJobs();
       }
     } catch (err) {
@@ -68,13 +72,17 @@ export default function AvailableJobs() {
   };
 
   const handleReject = async (job) => {
-    await rejectJob(job);
-    toast.info(`Job declined and broadcasted`);
+    await rejectJob(job.id);
+    toast.info(`Job dismissed`, {
+      description: "Mission moved to Rejected tab."
+    });
   };
 
-  const handleComplete = (job) => {
-    setWeighingJob(job);
-    setWeightValue('');
+  const handleRestore = async (job) => {
+    await restoreJob(job.id);
+    toast.success(`Job restored!`, {
+      description: "Mission is back in your Requested pool."
+    });
   };
 
   const submitCompletion = async () => {
@@ -87,7 +95,7 @@ export default function AvailableJobs() {
     try {
       await completeJob(weighingJob.id, parseFloat(weightValue));
       toast.success("Weight Recorded! ⚖️", {
-        description: `Request for KSh ${(100 + parseFloat(weightValue)*20).toLocaleString()} sent to resident.`,
+        description: `Client notified. Your earnings will be sent to your account shortly.`,
       });
       setWeighingJob(null);
       fetchActiveJobs();
@@ -98,173 +106,286 @@ export default function AvailableJobs() {
     }
   };
 
-  const currentJobs = activeTab === 'available' ? availableJobs : activeJobs;
+  const [selectedJob, setSelectedJob] = useState(null);
+
+  const currentJobs = activeTab === 'available' 
+    ? availableJobs 
+    : activeTab === 'active' 
+      ? activeJobs 
+      : rejectedJobs;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Header & Tabs */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold tracking-tight">Job Dispatcher</h1>
-          <button
-            onClick={() => { fetchAvailableJobs(); fetchActiveJobs(); }}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-primary transition-colors"
-          >
-            <RefreshCw className={`w-5 h-5 ${isLoadingJobs ? 'animate-spin' : ''}`} />
-          </button>
-        </div>
+    <div className="min-h-screen pb-32">
+      {/* ── HEADER TERMINAL (UNIFIED) ── */}
+      {!selectedJob && (
+        <div className="px-3 pt-3 pb-1 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex items-center gap-3 mb-3">
+            <button 
+              onClick={() => navigate(-1)} 
+              className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 active:scale-95 transition-all shadow-sm"
+            >
+              <ArrowLeft className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+            </button>
+            <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 rounded-xl px-4 py-2.5 border border-slate-100 dark:border-slate-800 flex items-center gap-2">
+              <RefreshCw className={`w-3.5 h-3.5 text-slate-300 ${isLoadingJobs ? 'animate-spin' : ''}`} />
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Live Missions Radar</p>
+            </div>
+          </div>
 
-        <div className="flex bg-slate-100 dark:bg-slate-900/50 p-1 rounded-2xl">
-          <button
-            onClick={() => setActiveTab('available')}
-            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'available' 
-                ? 'bg-white dark:bg-slate-800 text-primary shadow-sm' 
-                : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-            }`}
-          >
-            Available ({availableJobs.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('active')}
-            className={`flex-1 py-2.5 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'active' 
-                ? 'bg-white dark:bg-slate-800 text-primary shadow-sm' 
-                : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-            }`}
-          >
-            Active Missions ({activeJobs.length})
-          </button>
-        </div>
-      </div>
-
-      {isLoadingJobs ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => <SkeletonCard key={i} />)}
-        </div>
-      ) : currentJobs.length === 0 ? (
-        <EmptyState
-          icon={activeTab === 'available' ? Package : CheckCircle}
-          title={activeTab === 'available' ? "No jobs available" : "No active missions"}
-          subtitle={activeTab === 'available' ? "Check back soon or expand your service area" : "Accept a job to get started"}
-          action={activeTab === 'available' ? "Refresh Jobs" : "Find Jobs"}
-          onAction={activeTab === 'available' ? fetchAvailableJobs : () => setActiveTab('available')}
-        />
-      ) : (
-        <div className="space-y-4">
-          {currentJobs.map((job) => {
-            const waste = categories.find((w) => w.slug === job.material) || 
-                          categories.find((w) => w.id === job.material);
-            return (
-              <div
-                key={job.id}
-                className={`glass p-5 rounded-3xl border transition-all ${
-                  job.isAI && activeTab === 'available' 
-                    ? 'border-emerald-500/30 bg-emerald-500/5' 
-                    : 'border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40'
+          <div className="flex items-center justify-between px-1">
+            {[
+              { id: 'available', label: 'Requested', count: availableJobs.length },
+              { id: 'active', label: 'Accepted', count: activeJobs.length },
+              { id: 'rejected', label: 'Rejected', count: rejectedJobs.length },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative pb-2.5 text-[9px] font-black uppercase tracking-[0.15em] transition-all flex-1 ${
+                  activeTab === tab.id ? 'text-indigo-600' : 'text-slate-400'
                 }`}
               >
-                {/* Priority Badge */}
-                {job.agent_id === userId && activeTab === 'available' && (
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded-lg flex items-center gap-1 uppercase tracking-widest shadow-sm">
-                      <Zap className="w-3 h-3 fill-white" /> Priority Mission
+                <div className="flex items-center justify-center gap-1.5">
+                  <span className="whitespace-nowrap">{tab.label}</span>
+                  {tab.count > 0 && (
+                    <span className={`text-[7px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${
+                      activeTab === tab.id ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
+                    }`}>
+                      {tab.count}
                     </span>
-                    <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">Direct client request</span>
-                  </div>
+                  )}
+                </div>
+                {activeTab === tab.id && (
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full" />
                 )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
-                {/* AI Badge (only for available and not priority) */}
-                {job.isAI && activeTab === 'available' && job.agent_id !== userId && (
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="bg-emerald-500 text-white text-[10px] font-black px-2 py-0.5 rounded-lg flex items-center gap-1 uppercase tracking-widest">
-                      <Sparkles className="w-3 h-3 fill-white" /> HygeneX Choice
+      {/* ── CONTENT AREA ── */}
+      <div className={selectedJob ? "animate-fade-in" : ""}>
+        <AnimatePresence mode="wait">
+          {selectedJob ? (
+            /* ── FOCUSED MISSION DETAIL (Kilimall Style) ── */
+            <motion.div 
+              key="mission-focus"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="-mx-2 -mt-5"
+            >
+               {/* Edge-to-Edge Hero Image */}
+               <div className="relative w-full aspect-[4/3] bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                  <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
+                    {(selectedJob.photos?.length > 0 
+                      ? selectedJob.photos 
+                      : (selectedJob.photo_url || selectedJob.photoUrl || selectedJob.photo) 
+                        ? [selectedJob.photo_url || selectedJob.photoUrl || selectedJob.photo] 
+                        : []
+                    ).map((imgUrl, idx) => (
+                      <div key={idx} className="flex-none w-full h-full snap-start">
+                        <img src={imgUrl} className="w-full h-full object-cover" alt={`Load View ${idx + 1}`} />
+                      </div>
+                    ))}
+                    
+                    {/* Fallback if zero images */}
+                    {(!selectedJob.photos?.length && !selectedJob.photo_url && !selectedJob.photoUrl && !selectedJob.photo) && (
+                      <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
+                        <Package className="w-20 h-20 text-slate-200 dark:text-slate-700" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Floating Back Button */}
+                  <button 
+                    onClick={() => setSelectedJob(null)}
+                    className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all z-10"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    <span className="text-[9px] font-semibold uppercase tracking-widest">Back</span>
+                  </button>
+
+                  {/* Status Badge */}
+                  <div className="absolute top-4 right-4 px-3 py-1.5 bg-emerald-500/80 backdrop-blur-xl text-white rounded-full text-[9px] font-semibold uppercase tracking-[0.2em] z-10">
+                    {activeTab === 'available' ? 'Available' : 'Accepted'}
+                  </div>
+
+               </div>
+
+              {/* Content Sheet (Overlaps Image) */}
+              <div className="relative -mt-6 bg-slate-50 dark:bg-slate-900 rounded-t-[2rem] px-5 pt-6 pb-6 space-y-5">
+                
+                {/* Title & Customer */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <h2 className="text-2xl font-semibold text-slate-800 dark:text-white uppercase tracking-tight leading-tight">
+                      {(categories.find(c => c.slug === selectedJob.material) || categories.find(c => c.id === selectedJob.material))?.label || selectedJob.material}
+                    </h2>
+                    <span className={`text-[9px] font-semibold px-3 py-1 rounded-full uppercase tracking-widest shrink-0 ${
+                      selectedJob.time?.toUpperCase() === 'ASAP' ? 'bg-rose-500 text-white animate-pulse' : 'bg-primary/10 text-primary'
+                    }`}>
+                      {selectedJob.time}
                     </span>
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">{job.aiReason}</span>
                   </div>
-                )}
-
-                {/* Job Info */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-2xl shadow-sm">
-                      {waste?.icon || '🗑️'}
-                    </div>
-                    <div>
-                      <p className="font-bold text-slate-900 dark:text-white">{waste?.label || job.material}</p>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{job.id} · {job.customer || 'Client'}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xl font-black text-primary">KSh {job.pay.toLocaleString()}</p>
-                    <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Your Pay (85%) · Founder Rate</p>
+                  <div className="flex items-center gap-2">
+                    <User className="w-3 h-3 text-slate-400" />
+                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{selectedJob.customerName || selectedJob.customer || 'Client Account'}</p>
+                    <span className="text-[8px] text-slate-300">•</span>
+                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1">
+                      <MapPin className="w-3 h-3" /> {selectedJob.location}
+                    </p>
                   </div>
                 </div>
 
-                {/* Meta */}
-                <div className="grid grid-cols-2 gap-3 mb-5">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-2 rounded-xl">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    <span className="truncate">{job.location}</span>
+                {/* Stats Row */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                    <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Location</p>
+                    <p className="text-xs font-semibold text-slate-700 dark:text-white truncate">{selectedJob.location}</p>
+                    <p className="text-[8px] font-semibold text-slate-300 uppercase">Area</p>
                   </div>
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-2 rounded-xl">
-                    <Clock className="w-4 h-4 text-accent" />
-                    <span>{job.time}</span>
+                  <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                    <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Est. Load</p>
+                    <p className="text-base font-semibold text-slate-700 dark:text-white">{selectedJob.actual_weight_kg || selectedJob.bags || 0}</p>
+                    <p className="text-[8px] font-semibold text-slate-300 uppercase">KG</p>
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex gap-3">
+                {/* Notes */}
+                <div className="bg-white dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                  <h4 className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Client Instructions</h4>
+                  <p className="text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {selectedJob.notes ? (
+                      `"${selectedJob.notes.replace(/Est\. Total: KSh \d+( \| Item: )?/, '').replace(/^ \| /, '') || 'No additional instructions provided'}"`
+                    ) : (
+                      "No special instructions provided for this material pickup."
+                    )}
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-2">
                   {activeTab === 'available' ? (
                     <>
-                      <button
-                        onClick={() => handleReject(job)}
-                        className="flex-1 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition-all active:scale-95"
+                      <button 
+                        onClick={() => { handleReject(selectedJob); setSelectedJob(null); }}
+                        className="flex-1 py-4 bg-white dark:bg-slate-800 text-slate-400 border border-slate-100 dark:border-slate-800 rounded-2xl font-semibold text-[10px] uppercase tracking-widest active:scale-[0.97] transition-all"
                       >
                         Dismiss
                       </button>
-                      <button
-                        onClick={() => handleAccept(job)}
-                        className="flex-[2] py-3 rounded-2xl bg-primary text-white font-black text-xs shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all active:scale-95 flex items-center justify-center gap-2"
+                      <button 
+                        onClick={() => { handleAccept(selectedJob); setSelectedJob(null); }}
+                        className="flex-[2] py-4 bg-primary text-white rounded-2xl font-semibold text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-primary/20 active:scale-[0.97] transition-all flex items-center justify-center gap-2"
                       >
-                        <CheckCircle className="w-4 h-4" /> Accept Job
-                      </button>
-                    </>
+                      <CheckCircle className="w-4 h-4" /> Accept Job
+                    </button>
+                  </>
+                ) : activeTab === 'rejected' ? (
+                    <button 
+                      onClick={() => { handleRestore(selectedJob); setSelectedJob(null); }}
+                      className="w-full py-5 bg-emerald-500 text-white rounded-2xl font-semibold text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                    >
+                      <RefreshCw className="w-5 h-5" /> Restore Mission
+                    </button>
                   ) : (
-                    <>
-                      <button
-                        onClick={() => navigate(`/jobs/navigate/${job.id}`)}
-                        className="flex-1 py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-xs flex items-center justify-center gap-2"
-                      >
-                        <Navigation className="w-4 h-4" /> Go to Map
-                      </button>
-                      <button
-                        disabled={job.paymentStatus === 'authorized' || !arrivedJobIds.includes(job.id)}
-                        onClick={() => handleComplete(job)}
-                        className={`flex-[1.5] py-4 rounded-2xl font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 ${
-                          job.paymentStatus === 'authorized'
-                            ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                            : !arrivedJobIds.includes(job.id)
-                              ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-200 dark:border-slate-700'
-                              : 'bg-emerald-500 text-white shadow-emerald-500/20 animate-pulse-soft'
-                        }`}
-                      >
-                        {job.paymentStatus === 'authorized' ? (
-                          <>Awaiting Payment...</>
-                        ) : !arrivedJobIds.includes(job.id) ? (
-                          <>Arrive at location first</>
-                        ) : (
-                          <><CheckCircle className="w-4 h-4" /> Mark Complete</>
-                        )}
-                      </button>
-                    </>
+                    <button 
+                      onClick={() => { navigate(`/jobs/navigate/${selectedJob.id}`); setSelectedJob(null); }}
+                      className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-semibold text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/30 active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                    >
+                      <Truck className="w-5 h-5" /> Start Navigation
+                    </button>
                   )}
                 </div>
               </div>
-            );
-          })}
-        </div>
-      )}
+            </motion.div>
+          ) : isLoadingJobs ? (
+             <div className="space-y-4">
+                {[1,2,3].map(i => <SkeletonCard key={i} />)}
+             </div>
+          ) : currentJobs.length === 0 ? (
+            <EmptyState 
+              title={
+                activeTab === 'available' ? "No Requested Jobs" : 
+                activeTab === 'active' ? "No Accepted Jobs" : 
+                "No Rejected Jobs"
+              }
+              subtitle={
+                activeTab === 'available' ? "Your queue is clear. New jobs will appear here as they are posted." : 
+                activeTab === 'active' ? "You haven't accepted any jobs yet. Check the requests to start earning." : 
+                "You haven't dismissed any missions yet."
+              }
+              action={activeTab === 'available' ? "Refresh Requests" : activeTab === 'active' ? "Check Requests" : null}
+              onAction={activeTab === 'available' ? fetchAvailableJobs : () => setActiveTab('available')}
+            />
+          ) : (
+            <div className="flex flex-col">
+              {currentJobs.map((job) => {
+                const waste = categories.find((w) => w.slug === job.material) || 
+                              categories.find((w) => w.id === job.material);
+                return (
+                  <motion.div
+                    key={job.id}
+                    onClick={() => setSelectedJob(job)}
+                    whileTap={{ scale: 0.98 }}
+                    className={`group px-3 py-4 border-b transition-all cursor-pointer ${
+                      job.isAI && activeTab === 'available' 
+                        ? 'bg-emerald-500/5 border-emerald-500/10' 
+                        : 'bg-white dark:bg-slate-900/40 hover:bg-white dark:hover:bg-slate-900/60 border-slate-50 dark:border-white/5'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      {/* Material Icon Anchor */}
+                      <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-2xl shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+                        {waste?.icon || '♻️'}
+                      </div>
+
+                      {/* Content Strip */}
+                      <div className="flex-1 min-w-0 flex flex-col justify-between h-12">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <h3 className="text-[13px] font-black text-slate-900 dark:text-white uppercase truncate tracking-tight italic leading-none mb-1.5">
+                              {waste?.label || job.material}
+                            </h3>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest truncate">
+                              {job.customerName || job.customer || 'Client'}
+                            </p>
+                          </div>
+                          <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg font-black text-[8px] uppercase tracking-tighter shrink-0 ${
+                            job.time?.toUpperCase() === 'ASAP' 
+                              ? 'bg-rose-500 text-white animate-pulse' 
+                              : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600'
+                          }`}>
+                            <Clock className={`w-2.5 h-2.5 ${job.time?.toUpperCase() === 'ASAP' ? 'animate-bounce' : ''}`} /> 
+                            {job.time}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-800/50 pt-1.5 mt-auto">
+                          <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                            <MapPin className="w-3 h-3 text-slate-300" />
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest truncate">
+                              {job.location}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2 pl-2">
+                            <div className="flex items-center gap-1 text-[10px] font-black text-emerald-600 italic tracking-tighter">
+                              <Scale className="w-3 h-3 not-italic" />
+                              <span>{job.actual_weight_kg || job.bags || 0} <span className="text-[7px] uppercase not-italic opacity-50">KG</span></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-200 group-hover:text-indigo-400 transition-colors" />
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Weight Entry Modal */}
       {weighingJob && (
@@ -274,33 +395,21 @@ export default function AvailableJobs() {
               <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-3xl flex items-center justify-center mb-6 shadow-inner">
                 <Navigation className="w-8 h-8 text-emerald-600 rotate-45" />
               </div>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">Vehicle Scale Entry</h2>
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 tracking-tight">Vehicle Scale Entry</h2>
               <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mb-8">Enter the final measured weight for this pickup.</p>
               
               <div className="w-full relative mb-8">
                 <input 
-                  type="number"
-                  autoFocus
-                  placeholder="0.0"
-                  value={weightValue}
+                  type="number" autoFocus placeholder="0.0" value={weightValue}
                   onChange={(e) => setWeightValue(e.target.value)}
-                  className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-5 px-6 text-3xl font-black text-center focus:border-primary outline-none transition-all placeholder:opacity-20"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-5 px-6 text-3xl font-semibold text-center focus:border-primary outline-none transition-all placeholder:opacity-20"
                 />
-                <span className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 font-black tracking-widest text-sm pointer-events-none">KG</span>
+                <span className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 font-semibold tracking-widest text-sm pointer-events-none">KG</span>
               </div>
 
               <div className="flex w-full gap-3">
-                <button 
-                  onClick={() => setWeighingJob(null)}
-                  className="flex-1 py-4 text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={submitCompletion}
-                  disabled={isSubmitting}
-                  className="flex-[2] py-4 rounded-2xl bg-emerald-500 text-white font-black text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
-                >
+                <button onClick={() => setWeighingJob(null)} className="flex-1 py-4 text-xs font-semibold text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Cancel</button>
+                <button onClick={submitCompletion} disabled={isSubmitting} className="flex-[2] py-4 rounded-2xl bg-emerald-500 text-white font-semibold text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-2">
                   {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <><CheckCircle className="w-4 h-4" /> Confirm & Complete</>}
                 </button>
               </div>

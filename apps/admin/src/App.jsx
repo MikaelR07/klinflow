@@ -14,12 +14,16 @@ import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
 import AdminReports from './pages/admin/AdminReports.jsx';
-import AdminLiveMap from './pages/admin/AdminLiveMap.jsx';
+
 import AdminFeedbackInbox from './pages/admin/AdminFeedbackInbox.jsx';
 import AdminB2B from './pages/admin/AdminB2B.jsx';
 import MarketHub from './pages/admin/MarketHub.jsx';
 import HygeneXPage from './pages/shared/HygeneXPage.jsx';
 import UserManager from './pages/admin/UserManager.jsx';
+import IndAgentMetrics from './pages/admin/IndAgentMetrics.jsx';
+import CompanyMetrics from './pages/admin/CompanyMetrics.jsx';
+import EnvironmentalReport from './pages/admin/EnvironmentalReport.jsx';
+import FinancialReport from './pages/admin/FinancialReport.jsx';
 
 // Settings Pages
 import SettingsMenu from './pages/settings/SettingsMenu.jsx';
@@ -91,8 +95,12 @@ export default function App() {
             <Route path="/reviews" element={<AdminFeedbackInbox />} />
             <Route path="/b2b" element={<AdminB2B />} />
             <Route path="/hub" element={<MarketHub />} />
+            <Route path="/agent-metrics" element={<IndAgentMetrics />} />
+            <Route path="/company-metrics" element={<CompanyMetrics />} />
+            <Route path="/environmental-report" element={<EnvironmentalReport />} />
+            <Route path="/financial-report" element={<FinancialReport />} />
             <Route path="/hygenex" element={<HygeneXPage />} />
-            <Route path="/map" element={<AdminLiveMap />} />
+
             
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />

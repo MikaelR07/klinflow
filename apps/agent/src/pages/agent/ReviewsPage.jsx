@@ -24,7 +24,7 @@ export default function ReviewsPage() {
           <ArrowLeft className="w-5 h-5 text-slate-700 dark:text-slate-200" />
         </button>
         <div>
-          <h1 className="text-xl font-bold dark:text-white">Reviews & Feedback</h1>
+          <h1 className="text-xl font-semibold dark:text-white">Reviews & Feedback</h1>
           <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">Your Performance History</p>
         </div>
       </div>
@@ -35,9 +35,9 @@ export default function ReviewsPage() {
         <div className="relative z-10 flex items-center justify-between">
           <div>
             <p className="text-sm text-white/80 font-medium">Average Rating</p>
-            <h2 className="text-4xl font-black mt-1 flex items-baseline gap-2">
+            <h2 className="text-4xl font-semibold mt-1 flex items-baseline gap-2">
               {profile?.rating || '5.0'}
-              <span className="text-lg font-bold opacity-60">/ 5.0</span>
+              <span className="text-lg font-semibold opacity-60">/ 5.0</span>
             </h2>
           </div>
           <div className="text-right">
@@ -48,7 +48,7 @@ export default function ReviewsPage() {
 
       {/* Reviews List */}
       <div className="space-y-4">
-        <h3 className="font-bold text-sm dark:text-white px-1">Recent Feedback ({recentReviews.length})</h3>
+        <h3 className="font-semibold text-sm dark:text-white px-1">Recent Feedback ({recentReviews.length})</h3>
 
         {isLoadingReviews ? (
           <div className="flex flex-col items-center justify-center py-20 grayscale opacity-50">
@@ -74,7 +74,7 @@ export default function ReviewsPage() {
                     )}
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm dark:text-white leading-none">{review.customerName}</h4>
+                    <h4 className="font-semibold text-sm dark:text-white leading-none">{review.customerName}</h4>
                     <div className="flex items-center gap-2 mt-1.5">
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
@@ -84,12 +84,12 @@ export default function ReviewsPage() {
                           />
                         ))}
                       </div>
-                      <span className="text-[10px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-tighter">• {review.date}</span>
+                      <span className="text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-tighter">• {review.date}</span>
                     </div>
                   </div>
                 </div>
                 <div className="px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-md">
-                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">id: {review.id.slice(0,8)}</p>
+                   <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest leading-none">id: {review.id.slice(0,8)}</p>
                 </div>
               </div>
 
@@ -105,7 +105,7 @@ export default function ReviewsPage() {
               )}
 
               <div className="flex items-center gap-3 mt-4 pt-4 border-t border-slate-50 dark:border-slate-800">
-                <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
                   <Tag className="w-3 h-3" /> {review.wasteType || 'General Waste'}
                 </div>
               </div>

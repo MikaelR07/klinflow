@@ -17,6 +17,7 @@ build/
 .turbo/
 
 # Environment Variables
+**/.env*
 .env
 .env.auth
 .env.local

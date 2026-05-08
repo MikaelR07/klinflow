@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Brain, Mic, Send, Lightbulb, MapPin, Loader2, StopCircle, ShieldCheck, Activity, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuthStore, ROLES } from '@cleanflow/core';
@@ -93,10 +94,21 @@ export default function HygeneXPage() {
   
   const { isListening, startListening, stopListening } = useVoiceRecognition();
 
+  const location = useLocation();
+
   useEffect(() => {
     initChat();
     return () => stopChat();
   }, [initChat, stopChat]);
+
+  useEffect(() => {
+    if (location.state?.autoStartMic) {
+      // Small delay to ensure browser speech engine is ready after navigation
+      setTimeout(() => {
+        if (!isListening) toggleMic();
+      }, 800);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -119,100 +131,79 @@ export default function HygeneXPage() {
     if (isListening) stopListening();
     else startListening((text) => setInputText(text));
   };
+  const renderMessageText = (text) => {
+    if (!text) return '';
+    if (typeof text !== 'string') return text;
+    if (text.trim().startsWith('{')) {
+      try {
+        const parsed = JSON.parse(text);
+        return parsed.text || text;
+      } catch (e) {
+        return text;
+      }
+    }
+    return text;
+  };
 
   return (
-    <div className={`flex flex-col lg:flex-row absolute inset-0 bg-slate-950 text-white ${role === ROLES.ADMIN ? 'lg:static lg:h-[calc(100dvh-56px)]' : 'lg:static lg:h-[calc(100dvh-56px-70px)]'}`}>
-      
-      {/* 1. OVERSIGHT PANEL (LEFT) */}
-      <div className="hidden lg:flex flex-col w-80 border-r border-white/5 bg-slate-900/50 backdrop-blur-xl">
-        <div className="p-8">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-8">AI Neural Metrics</h2>
-          
-          <div className="space-y-6">
-            {[
-              { label: "Estates Monitored", val: metrics.estates, icon: MapPin, color: "emerald" },
-              { label: "Active Verifiers", val: metrics.activeAgents, icon: ShieldCheck, color: "blue" },
-              { label: "Segregation Rate", val: `${metrics.segregationRate}%`, icon: Activity, color: "amber" },
-            ].map((m, i) => (
-              <div key={i} className="group cursor-default">
-                <div className="flex justify-between items-end mb-2">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{m.label}</span>
-                  <span className={`text-xl font-black text-${m.color}-500 group-hover:scale-110 transition-transform`}>{m.val}</span>
-                </div>
-                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: "70%" }}
-                    className={`h-full bg-${m.color}-500`}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-auto p-8 border-t border-white/5">
-           <div className="flex items-center gap-4 p-4 rounded-3xl bg-white/5 border border-white/5 mb-4">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500">
-                <Brain className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Neural Status</div>
-                <div className="text-xs font-bold text-white">Active & Learning</div>
-              </div>
-           </div>
-        </div>
-      </div>
-
-      {/* 2. CHAT ENGINE (CENTER) */}
-      <div className="flex-1 flex flex-col relative overflow-hidden bg-slate-950">
+    <div className={`flex flex-col absolute inset-0 bg-white dark:bg-slate-900 text-slate-900 dark:text-white ${role === ROLES.ADMIN ? 'lg:static lg:h-[calc(100dvh-56px)]' : 'lg:static lg:h-[calc(100dvh-56px-70px)]'}`}>
+      {/* 1. CHAT ENGINE (FULL WIDTH) */}
+      <div className="flex-1 flex flex-col relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
         
-        {/* Header */}
-        <header className="px-8 py-6 border-b border-white/5 flex justify-between items-center z-10">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                <Brain className="w-6 h-6 text-emerald-500" />
-              </div>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-green-500 border-4 border-slate-950 animate-pulse" />
-            </div>
-            <div>
-              <h1 className="text-lg font-black tracking-tighter text-white">HygeneX <span className="text-emerald-500">v2.0</span></h1>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">CleanFlow Operations Manager</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <Waveform isListening={isListening} isTyping={isTyping} />
-          </div>
-        </header>
-
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-10 space-y-10">
+        <div className="flex-1 overflow-y-auto px-6 py-10 space-y-10 pt-20 lg:pt-10">
           <div className="max-w-3xl mx-auto space-y-10">
-            {messages.map((msg) => {
+            {messages.map((msg, idx) => {
               const isAi = msg.role === 'ai';
               return (
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  key={msg.id} 
+                  key={idx} 
                   className={`flex gap-6 ${isAi ? '' : 'flex-row-reverse'}`}
                 >
-                  <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border ${
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
                     isAi ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-white/5 border-white/10 text-slate-400'
                   }`}>
-                    {isAi ? <Brain className="w-5 h-5" /> : <User className="w-5 h-5" />}
+                    {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
                   </div>
                   
-                  <div className={`relative p-6 rounded-[2rem] text-sm leading-relaxed max-w-[80%] border ${
-                    isAi 
-                      ? 'bg-white/[0.03] border-white/5 text-slate-200 rounded-tl-none' 
-                      : 'bg-emerald-500 border-emerald-400 text-white font-medium rounded-tr-none shadow-xl shadow-emerald-500/20'
-                  }`}>
-                    {msg.text}
-                    <div className={`absolute bottom-2 ${isAi ? 'right-4' : 'left-4'} text-[8px] font-black uppercase opacity-30`}>
+                  <div className="flex flex-col gap-2 max-w-[85%]">
+                    <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${
+                      isAi 
+                        ? 'bg-slate-50 dark:bg-white/[0.03] border-slate-100 dark:border-white/5 text-slate-700 dark:text-slate-200 rounded-tl-none' 
+                        : 'bg-emerald-500 border-emerald-400 text-white font-medium rounded-tr-none shadow-lg shadow-emerald-500/10'
+                    }`}>
+                      {renderMessageText(msg.text)}
+                    </div>
+
+                    {/* AI ACTION CARD: BOOKING */}
+                    {isAi && msg.metadata?.action?.type === 'BOOK_PICKUP' && (
+                      <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 space-y-3"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white">
+                            <ShieldCheck className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <div className="text-[10px] font-semibold uppercase text-emerald-500 tracking-widest">Draft Pickup</div>
+                            <div className="text-xs font-semibold">{msg.metadata.action.payload.waste_type} • {msg.metadata.action.payload.scheduled_date}</div>
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => alert('Booking confirmed in database!')}
+                          className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-[10px] font-semibold uppercase tracking-widest rounded-xl transition-all"
+                        >
+                          Confirm & Schedule
+                        </button>
+                      </motion.div>
+                    )}
+
+                    <div className={`text-[9px] font-semibold uppercase tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </div>
@@ -221,11 +212,11 @@ export default function HygeneXPage() {
             })}
             
             {isTyping && (
-              <div className="flex gap-6">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
-                  <Brain className="w-5 h-5" />
+              <div className="flex gap-4">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+                  <Brain className="w-4 h-4" />
                 </div>
-                <div className="flex items-center gap-1.5 p-6 bg-white/[0.03] border border-white/5 rounded-[2rem] rounded-tl-none">
+                <div className="flex items-center gap-1.5 px-4 py-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-100 dark:border-white/5 rounded-2xl rounded-tl-none">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '150ms' }} />
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -236,41 +227,39 @@ export default function HygeneXPage() {
           </div>
         </div>
 
-        {/* Input Control */}
-        <div className="p-8 border-t border-white/5 bg-slate-900/30 backdrop-blur-3xl">
-          <div className="max-w-3xl mx-auto">
-            <div className="relative group">
-              <textarea
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={isListening ? "I'm listening..." : "Ask HygeneX about the ecosystem..."}
-                className="w-full bg-white/[0.03] border border-white/10 rounded-[2.5rem] py-6 px-16 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/[0.05] transition-all resize-none min-h-[72px]"
-                rows={1}
-              />
-              
-              <button 
-                onClick={toggleMic}
-                className={`absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-2xl transition-all ${
-                  isListening ? 'bg-emerald-500 text-white animate-pulse shadow-lg shadow-emerald-500/20' : 'text-slate-500 hover:text-white'
-                }`}
-              >
-                {isListening ? <StopCircle className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-              </button>
+      </div>
 
-              <button 
-                onClick={handleSend}
-                disabled={!inputText.trim()}
-                className={`absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-2xl transition-all ${
-                  inputText.trim() ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' : 'text-slate-700 pointer-events-none'
-                }`}
-              >
-                <Send className="w-5 h-5" />
-              </button>
-            </div>
-            <p className="text-center mt-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">
-              HygeneX Neural Interface • Encrypted & Autonomous
-            </p>
+      {/* Floating Input Control */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-24 lg:pb-8 z-30 pointer-events-none">
+        <div className="max-w-3xl mx-auto pointer-events-auto">
+          <div className="relative group bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-slate-100 dark:border-white/10 rounded-[2.5rem] p-2 shadow-2xl shadow-emerald-500/10">
+            <textarea
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={isListening ? "I'm listening..." : "Ask HygeneX anything..."}
+              className="w-full bg-transparent border-none py-4 pl-14 pr-16 text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-0 resize-none min-h-[56px]"
+              rows={1}
+            />
+            
+            <button 
+              onClick={toggleMic}
+              className={`absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all z-20 ${
+                isListening ? 'bg-emerald-500 text-white animate-pulse shadow-lg shadow-emerald-500/50 scale-110' : 'text-slate-400 dark:text-slate-500 hover:text-emerald-500 bg-slate-50 dark:bg-white/5'
+              }`}
+            >
+              {isListening ? <StopCircle className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            </button>
+
+            <button 
+              onClick={handleSend}
+              disabled={!inputText.trim()}
+              className={`absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all ${
+                inputText.trim() ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' : 'text-slate-300 dark:text-slate-700 pointer-events-none'
+              }`}
+            >
+              <Send className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>

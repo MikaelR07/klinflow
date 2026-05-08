@@ -2,7 +2,7 @@ import {
   TrendingUp, TrendingDown, Sparkles, FileText, Users, Truck, 
   Leaf, Star, ShieldCheck, Gift, Recycle, Cpu, Network, Clock,
   AlertCircle, ChevronRight, Activity, Wallet, AlertTriangle, Info, Zap,
-  Briefcase, BarChart3
+  Briefcase, BarChart3, Building2, Brain
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
@@ -10,6 +10,8 @@ import {
 } from 'recharts';
 import { useAdminStore, useIotStore } from '@cleanflow/core';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminDashboard() {
   const { 
@@ -19,6 +21,7 @@ export default function AdminDashboard() {
   
   const { smartBins } = useIotStore();
   const [activeHub, setActiveHub] = useState('marketplace');
+  const navigate = useNavigate();
 
   useEffect(() => {
     initAdminLiveFeed();
@@ -78,7 +81,7 @@ export default function AdminDashboard() {
     },
     { 
       hub: 'logistics',
-      label: 'Active Agents', 
+      label: 'Active Ind. Agents', 
       value: stats?.activeAgents || 0, 
       unit: '', 
       icon: Activity,
@@ -86,11 +89,27 @@ export default function AdminDashboard() {
     },
     { 
       hub: 'logistics',
-      label: 'Total Agents', 
+      label: 'Total Ind. Agents', 
       value: stats?.registeredAgents || 0, 
       unit: '', 
       icon: Truck,
       color: 'slate'
+    },
+    { 
+      hub: 'logistics',
+      label: 'Total Companies', 
+      value: stats?.totalCompanies || 0, 
+      unit: '', 
+      icon: Building2,
+      color: 'indigo'
+    },
+    { 
+      hub: 'logistics',
+      label: 'Companies Online', 
+      value: stats?.activeCompanies || 0, 
+      unit: '', 
+      icon: Zap,
+      color: 'emerald'
     },
     { 
       hub: 'marketplace',
@@ -126,11 +145,27 @@ export default function AdminDashboard() {
     },
     { 
       hub: 'logistics',
-      label: 'Waste Recovered', 
+      label: 'Recyclables Recovered', 
       value: stats?.totalWeight || 0, 
       unit: 'KG', 
       icon: Recycle,
       color: 'amber'
+    },
+    { 
+      hub: 'logistics',
+      label: 'Ind. Agents Weight Recovered', 
+      value: stats?.indAgentWeight || 0, 
+      unit: 'KG', 
+      icon: TrendingUp,
+      color: 'emerald'
+    },
+    { 
+      hub: 'logistics',
+      label: 'Company Weight Recovered', 
+      value: stats?.companyWeight || 0, 
+      unit: 'KG', 
+      icon: Building2,
+      color: 'indigo'
     },
     { 
       hub: 'community',
@@ -158,19 +193,19 @@ export default function AdminDashboard() {
       {/* ── COMMAND CENTER HEADER ── */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-           <h1 className="text-3xl font-black dark:text-white tracking-tighter">Executive Dashboard</h1>
-           <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Platform Pulse & Performance</p>
+           <h1 className="text-3xl font-semibold dark:text-white tracking-tighter">Executive Dashboard</h1>
+           <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">Platform Pulse & Performance</p>
         </div>
         <div className="flex items-center gap-3">
            <button 
              onClick={openNemaModal}
-             className="flex items-center gap-2 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm hover:scale-105 active:scale-95 transition-all shadow-lg"
+             className="flex items-center gap-2 px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-semibold text-sm hover:scale-105 active:scale-95 transition-all shadow-lg"
            >
              <Sparkles className="w-4 h-4" /> AI Compliance
            </button>
            <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5">
               <Activity className="w-4 h-4 text-emerald-500" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Live Sync</span>
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Live Sync</span>
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-1" />
            </div>
         </div>
@@ -189,7 +224,7 @@ export default function AdminDashboard() {
             }`}
           >
             {activeHub === hub.id && (
-              <div className="absolute top-6 right-6 px-3 py-1 bg-primary text-white text-[9px] font-black uppercase tracking-widest rounded-full animate-fade-in shadow-lg shadow-primary/20 flex items-center gap-1.5 z-10">
+              <div className="absolute top-6 right-6 px-3 py-1 bg-primary text-white text-[9px] font-semibold uppercase tracking-widest rounded-full animate-fade-in shadow-lg shadow-primary/20 flex items-center gap-1.5 z-10">
                 <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                 Selected View
               </div>
@@ -201,17 +236,17 @@ export default function AdminDashboard() {
               <hub.icon className={`w-7 h-7 ${activeHub === hub.id ? 'text-white' : 'text-slate-400'}`} />
             </div>
             
-            <h3 className={`text-xl font-black tracking-tight mb-1 ${activeHub === hub.id ? 'text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
+            <h3 className={`text-xl font-semibold tracking-tight mb-1 ${activeHub === hub.id ? 'text-slate-900 dark:text-white' : 'text-slate-700 dark:text-slate-300'}`}>
               {hub.label} Hub
             </h3>
-            <p className={`text-xs font-bold uppercase tracking-widest mb-6 ${activeHub === hub.id ? 'text-primary' : 'text-slate-400'}`}>
+            <p className={`text-xs font-semibold uppercase tracking-widest mb-6 ${activeHub === hub.id ? 'text-primary' : 'text-slate-400'}`}>
               {hub.desc}
             </p>
 
             <div className="flex items-end justify-between">
                <div>
-                  <p className={`text-[10px] font-black uppercase tracking-tighter mb-1 text-slate-300`}>Cumulative Peak</p>
-                  <p className="text-2xl font-black font-mono text-slate-900 dark:text-white">
+                  <p className={`text-[10px] font-semibold uppercase tracking-tighter mb-1 text-slate-300`}>Cumulative Peak</p>
+                  <p className="text-2xl font-semibold font-mono text-slate-900 dark:text-white">
                     {hub.mainMetric}
                   </p>
                </div>
@@ -227,7 +262,7 @@ export default function AdminDashboard() {
          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-200 dark:via-white/5 to-transparent" />
          <div className="flex items-center gap-2 px-6 py-2 bg-slate-50 dark:bg-slate-800/50 rounded-full border border-slate-100 dark:border-white/5">
             <BarChart3 className="w-4 h-4 text-primary" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">
+            <h2 className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500">
                {activeHub} Operations Overview
             </h2>
          </div>
@@ -243,11 +278,11 @@ export default function AdminDashboard() {
               <AlertTriangle className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="font-black text-rose-600 dark:text-rose-400 text-sm uppercase tracking-widest leading-none mb-1">Operational Warning</p>
-              <p className="text-xs text-rose-500/80 font-bold">{highAlerts.length} system anomalies require review.</p>
+              <p className="font-semibold text-rose-600 dark:text-rose-400 text-sm uppercase tracking-widest leading-none mb-1">Operational Warning</p>
+              <p className="text-xs text-rose-500/80 font-semibold">{highAlerts.length} system anomalies require review.</p>
             </div>
           </div>
-          <button className="px-4 py-2 bg-rose-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-600 transition-colors">
+          <button className="px-4 py-2 bg-rose-500 text-white rounded-xl font-semibold text-[10px] uppercase tracking-widest hover:bg-rose-600 transition-colors">
             Analyze
           </button>
         </div>
@@ -263,13 +298,13 @@ export default function AdminDashboard() {
               </div>
               <div className="text-emerald-500 flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" />
-                <span className="text-[10px] font-black">Live</span>
+                <span className="text-[10px] font-semibold">Live</span>
               </div>
             </div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{kpi.label}</p>
-            <h4 className="text-2xl font-black dark:text-white font-mono flex items-baseline gap-1">
+            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">{kpi.label}</p>
+            <h4 className="text-2xl font-semibold dark:text-white font-mono flex items-baseline gap-1">
               {(kpi.value || 0).toLocaleString()}
-              <span className="text-xs font-bold text-slate-300">{kpi.unit}</span>
+              <span className="text-xs font-semibold text-slate-300">{kpi.unit}</span>
             </h4>
           </div>
         ))}
@@ -281,13 +316,13 @@ export default function AdminDashboard() {
           <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
             <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-3">
+                  <h3 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-3">
                     Ecosystem Revenue 
                   </h3>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Monthly Snapshot • Subscriptions + Service Fees</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Monthly Snapshot • Subscriptions + Service Fees</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20">
+                  <div className="px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-[10px] font-semibold uppercase tracking-widest shadow-lg shadow-primary/20">
                     Live Ecosystem Flow
                   </div>
                 </div>
@@ -339,7 +374,7 @@ export default function AdminDashboard() {
 
           <div className="grid sm:grid-cols-2 gap-8">
              <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
-                <h3 className="text-sm font-black text-slate-900 dark:text-white mb-6 uppercase tracking-widest">Material Breakdown (Top 5)</h3>
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-6 uppercase tracking-widest">Material Breakdown (Top 5)</h3>
                 <div className="h-[240px]">
                   <ResponsiveContainer key={activeHub} width="100%" height={240}>
                     <PieChart>
@@ -365,19 +400,19 @@ export default function AdminDashboard() {
 
              <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none flex flex-col justify-between">
                 <div>
-                  <h3 className="text-sm font-black text-slate-900 dark:text-white mb-2 uppercase tracking-widest">Fleet Efficiency</h3>
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 uppercase tracking-widest">Fleet Efficiency</h3>
                   <p className="text-xs text-slate-500 font-medium">Real-time throughput analysis</p>
                 </div>
                 
                 <div className="space-y-4">
                   <div className="flex justify-between items-end">
-                    <span className="text-[10px] font-black uppercase text-slate-400">Agent Utilization</span>
-                    <span className="text-lg font-black text-primary">74%</span>
+                    <span className="text-[10px] font-semibold uppercase text-slate-400">Agent Utilization</span>
+                    <span className="text-lg font-semibold text-primary">74%</span>
                   </div>
                   <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div className="h-full w-[74%] bg-gradient-to-r from-primary to-emerald-400 rounded-full" />
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold">
+                  <div className="flex items-center gap-2 text-[10px] text-slate-500 font-semibold">
                     <Clock className="w-3 h-3" /> Avg. Pickup: 24 mins
                   </div>
                 </div>
@@ -393,10 +428,10 @@ export default function AdminDashboard() {
               </div>
 
               <div className="flex items-center justify-between mb-8 relative z-10">
-                <h3 className="font-black uppercase tracking-widest text-[10px] flex items-center gap-2 text-slate-500">
+                <h3 className="font-semibold uppercase tracking-widest text-[10px] flex items-center gap-2 text-slate-500">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" /> Live Updates
                 </h3>
-                <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-md text-[9px] font-black uppercase tracking-widest text-slate-400">
+                <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-md text-[9px] font-semibold uppercase tracking-widest text-slate-400">
                   Live
                 </span>
               </div>
@@ -405,7 +440,7 @@ export default function AdminDashboard() {
                 {systemEvents.length === 0 && (
                   <div className="py-20 text-center opacity-30">
                     <Activity className="w-8 h-8 mx-auto mb-3 animate-pulse text-slate-400" />
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Deep Listening...</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Deep Listening...</p>
                   </div>
                 )}
                 {systemEvents.map(ev => (
@@ -416,8 +451,8 @@ export default function AdminDashboard() {
                       {ev.type === 'info' && <div className="w-2 h-2 rounded-full bg-slate-400" />}
                     </div>
                     <div>
-                      <p className="text-xs font-black text-slate-700 dark:text-slate-200 leading-tight group-hover:text-primary transition-colors">{ev.msg}</p>
-                      <p className="text-[9px] font-black uppercase text-slate-400 mt-1">
+                      <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-tight group-hover:text-primary transition-colors">{ev.msg}</p>
+                      <p className="text-[9px] font-semibold uppercase text-slate-400 mt-1">
                          {new Date(ev.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
@@ -426,13 +461,23 @@ export default function AdminDashboard() {
               </div>
 
               <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 relative z-10">
-                 <button className="w-full py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-primary text-slate-500 hover:text-white dark:text-slate-400 transition-all flex items-center justify-center gap-2">
+                 <button className="w-full py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl font-semibold text-[10px] uppercase tracking-widest hover:bg-primary text-slate-500 hover:text-white dark:text-slate-400 transition-all flex items-center justify-center gap-2">
                     System Hub <ChevronRight className="w-4 h-4" />
                  </button>
               </div>
            </div>
         </div>
       </div>
+      {/* Floating AI Voice Assistant */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => navigate('/hygenex', { state: { autoStartMic: true } })}
+        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-500/50 z-50 border-4 border-white dark:border-slate-800"
+      >
+        <div className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-20" />
+        <Brain className="w-6 h-6 text-white" />
+      </motion.button>
     </div>
   );
 }

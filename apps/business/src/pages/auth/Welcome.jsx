@@ -15,10 +15,10 @@ export default function Welcome() {
 
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 mb-6 w-fit animate-bounce-slow">
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-[10px] font-black text-primary uppercase tracking-widest">Africa's #1 B2B Waste Exchange</span>
+          <span className="text-[10px] font-semibold text-primary uppercase tracking-widest">Africa's #1 B2B Waste Exchange</span>
         </div>
 
-        <h1 className="text-5xl font-black text-slate-900 dark:text-white leading-[0.95] mb-6 tracking-tighter">
+        <h1 className="text-5xl font-semibold text-slate-900 dark:text-white leading-[0.95] mb-6 tracking-tighter">
           The Marketplace for <br />
           <span className="text-primary italic">Verified</span> Recyclables.
         </h1>
@@ -39,7 +39,7 @@ export default function Welcome() {
                 <feat.icon className="w-6 h-6" />
               </div>
               <div>
-                <p className="font-bold text-slate-900 dark:text-white text-sm">{feat.title}</p>
+                <p className="font-semibold text-slate-900 dark:text-white text-sm">{feat.title}</p>
                 <p className="text-xs text-slate-500 dark:text-slate-400">{feat.desc}</p>
               </div>
             </div>
@@ -51,13 +51,13 @@ export default function Welcome() {
       <div className="relative z-10 pb-8 space-y-4">
         <button
           onClick={() => navigate('/roles')}
-          className="w-full py-5 bg-primary text-white rounded-3xl font-black text-base shadow-2xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+          className="w-full py-5 bg-primary text-white rounded-3xl font-semibold text-base shadow-2xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
         >
           Get Started <ArrowRight className="w-5 h-5" />
         </button>
         
         <p className="text-center text-sm text-slate-400 font-medium">
-          Already have a business account? <span onClick={() => navigate('/login')} className="text-primary font-bold cursor-pointer">Log In</span>
+          Already have a business account? <span onClick={() => navigate('/login')} className="text-primary font-semibold cursor-pointer">Log In</span>
         </p>
       </div>
     </div>

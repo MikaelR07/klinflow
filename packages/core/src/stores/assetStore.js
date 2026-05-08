@@ -6,6 +6,9 @@ import { create } from 'zustand';
 import { supabase } from '../lib/supabaseClient.js';
 import { useAuthStore } from './authStore.js';
 import { useNotificationStore, NOTIFICATION_TYPES } from './notificationStore.js';
+import { usePriceStore } from './priceStore.js';
+import { useAgentStore } from './agentStore.js';
+import { toast } from 'sonner';
 
 export const ASSET_GRADES = {
   A: { label: 'Grade A', description: 'Clean, sorted, industrial quality', multiplier: 1.2 },
@@ -14,13 +17,11 @@ export const ASSET_GRADES = {
 };
 
 export const MATERIAL_TYPES = {
-  PET: { name: 'PET Plastic', basePrice: 45 },
-  HDPE: { name: 'HDPE Plastic', basePrice: 55 },
-  PAPER: { name: 'Mixed Paper', basePrice: 20 },
-  CARDBOARD: { name: 'Cardboard', basePrice: 25 },
-  METAL: { name: 'Scrap Metal', basePrice: 80 },
-  EWASTE: { name: 'E-Waste', basePrice: 150 },
-  GLASS: { name: 'Glass', basePrice: 15 },
+  'Plastics': { name: 'Plastics', basePrice: 15 },
+  'Metals': { name: 'Metals', basePrice: 30 },
+  'Paper & Cardboard': { name: 'Paper & Cardboard', basePrice: 5 },
+  'Glass': { name: 'Glass', basePrice: 5 },
+  'E-Waste': { name: 'E-Waste', basePrice: 40 },
 };
 
 export const ASSET_SOURCES = {
@@ -35,6 +36,9 @@ export const useAssetStore = create((set, get) => ({
 
   // ── FETCH ASSETS ───────────────────────────────────────────
   fetchAssets: async () => {
+    const userId = useAuthStore.getState().userId;
+    if (!userId) return;
+
     set({ isLoading: true });
     const { data, error } = await supabase
       .from('assets')
@@ -44,6 +48,7 @@ export const useAssetStore = create((set, get) => ({
         verifier:profiles!verifier_id (name),
         weaver:profiles!weaver_id (name)
       `)
+      .eq('verifier_id', userId)
       .order('created_at', { ascending: false });
 
     if (!error && data) {
@@ -59,8 +64,8 @@ export const useAssetStore = create((set, get) => ({
     const { data, error } = await supabase
       .from('assets')
       .select('*, booking:bookings(estate, waste_type)')
-      .eq('status', 'verified')
-      .limit(10)
+      .eq('status', 'deposited')
+      .limit(20)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -76,7 +81,7 @@ export const useAssetStore = create((set, get) => ({
 
   // ── VERIFY ASSET (CALLED BY AGENT) ──────────────────────────
   verifyAsset: async (bookingId, verificationData) => {
-    const { userId } = useAuthStore.getState();
+    const { userId, profile } = useAuthStore.getState();
     if (!userId) throw new Error('Not authenticated');
 
     console.log('[AssetStore] Starting verification for booking:', bookingId);
@@ -98,10 +103,19 @@ export const useAssetStore = create((set, get) => ({
         return existing;
       }
 
-      // 1. Calculate Value
-      const material = MATERIAL_TYPES[verificationData.materialType] || { basePrice: 10 };
-      const grade = ASSET_GRADES[verificationData.grade] || ASSET_GRADES.B;
-      const estimatedValue = verificationData.weightKg * material.basePrice * grade.multiplier;
+      // 1. Calculate Payout Value (Using new Hierarchical Pricing)
+      const agentStore = useAgentStore.getState();
+      const materialSlug = verificationData.materialType.toLowerCase();
+      const subcategorySlug = verificationData.grade?.toLowerCase();
+      
+      const agentRate = agentStore.getEffectivePrice(materialSlug, subcategorySlug);
+      
+      const materialValue = verificationData.weightKg * agentRate;
+      const netPayout = materialValue; 
+      const clientEarnedCash = materialValue;
+      const clientGFP = Math.floor(verificationData.weightKg * 2);
+
+      const isManual = verificationData.isManual || false;
 
       // 2. Create Asset Record
       console.log('[AssetStore] Inserting into assets table...');
@@ -113,9 +127,10 @@ export const useAssetStore = create((set, get) => ({
           material_type: verificationData.materialType,
           grade: verificationData.grade,
           weight_kg: verificationData.weightKg,
-          estimated_value: estimatedValue,
+          estimated_value: materialValue, // Gross value of material
           purity_score: verificationData.purityScore || 85,
           photo_url: verificationData.photoUrl || null,
+          is_manual: isManual,
           status: 'verified'
         })
         .select()
@@ -126,27 +141,34 @@ export const useAssetStore = create((set, get) => ({
         throw assetError;
       }
 
-      console.log('[AssetStore] Asset created successfully:', asset.id);
-
-      // 3. Update Booking via Secure RPC (Bypass RLS)
-      console.log('[AssetStore] Triggering handover modal via Secure RPC...');
-      const { error: bookingError } = await supabase.rpc('complete_booking_secure', {
+      // 4. Trigger Payout & Complete Booking
+      console.log('[AssetStore] Triggering Payout RPC (Pure Trade)...', { clientEarnedCash, clientGFP, weightKg: verificationData.weightKg });
+      const { error: payoutError } = await supabase.rpc('complete_booking_split_payout', {
         p_booking_uuid: bookingId,
         p_agent_uuid: userId,
+        p_client_uuid: verificationData.ownerId,
         p_weight_kg: verificationData.weightKg,
-        p_final_fee: estimatedValue
+        p_estimated_value: materialValue,
+        p_client_gfp: clientGFP,
+        p_is_manual: isManual
       });
 
-      if (bookingError) {
-        console.error('[AssetStore] Booking UPDATE ERROR:', bookingError);
-        throw bookingError;
+      if (payoutError) {
+        console.error('[AssetStore] Payout RPC Error:', payoutError);
+        throw payoutError;
       }
-      console.log('[AssetStore] Secure Completion SUCCESS');
 
-      // 4. Notify User
+      // (Track points are now natively handled by the complete_booking_split_payout RPC)
+
+      // 5. User Feedback
+      toast.success('Earnings Confirmed! 💰', {
+        description: `KSh ${clientEarnedCash.toLocaleString()} has been sent to the resident's wallet.`
+      });
+
+      // 6. Notify Resident
       await useNotificationStore.getState().addNotification(
-        'Asset Verified! 💎',
-        `Your waste has been graded as ${verificationData.grade} ${verificationData.materialType}. Value: KSh ${estimatedValue.toLocaleString()}.`,
+        'Money Received! 💸',
+        `You just earned KSh ${clientEarnedCash.toLocaleString()} and ${clientGFP} GFP from your recyclables!`,
         NOTIFICATION_TYPES.SUCCESS,
         'user',
         verificationData.ownerId
@@ -155,7 +177,7 @@ export const useAssetStore = create((set, get) => ({
       set(state => ({ assets: [asset, ...state.assets], isLoading: false }));
       return asset;
     } catch (err) {
-      console.error('[AssetStore] Verification CRASH:', err);
+      console.error('[AssetStore] Verification Failure:', err);
       set({ isLoading: false });
       throw err;
     }

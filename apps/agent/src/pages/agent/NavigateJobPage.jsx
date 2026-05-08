@@ -2,12 +2,13 @@
  * Navigate Job Page — Real-time tracking and mission control for agents
  */
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapPin, ArrowLeft, ArrowRight, Phone, Navigation, CheckCircle, User, Zap, Clock } from 'lucide-react';
+import { MapPin, ArrowLeft, ArrowRight, Phone, Navigation, CheckCircle, User, Zap, Clock, Warehouse, Truck } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
-import { useAgentStore, useAuthStore, useNotificationStore, NOTIFICATION_TYPES, useAssetStore } from '@cleanflow/core';
+import { useAgentStore, useAuthStore, useNotificationStore, NOTIFICATION_TYPES, useAssetStore, useServiceStore, supabase } from '@cleanflow/core';
 import { AIScannerModal } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
@@ -40,22 +41,62 @@ export default function NavigateJobPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { profile } = useAuthStore();
-  const { activeJobs, fetchActiveJobs, arrivedJobIds, setJobArrived } = useAgentStore();
+  const { activeJobs, fetchActiveJobs, arrivedJobIds, setJobArrived, fetchAgentConfig } = useAgentStore();
   const { addNotification } = useNotificationStore();
   
   const job = activeJobs.find(j => j.id === id);
+  const { fetchCategories } = useServiceStore();
   const { verifyAsset } = useAssetStore();
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [hasArrived, setHasArrived] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [dragY, setDragY] = useState(0);
 
   useEffect(() => {
-    if (activeJobs.length === 0) fetchActiveJobs();
+    // If the specific job is missing from our local state, force a fresh sync from the server
+    if (!job) {
+      fetchActiveJobs();
+    }
+    
+    fetchAgentConfig(); // Load rates for Smart Invoice
+    fetchCategories(); // Load material names for dropdown
     
     // Sync local arrival state with global store
     if (id && arrivedJobIds.includes(id)) {
       setHasArrived(true);
     }
-  }, [fetchActiveJobs, activeJobs.length, id, arrivedJobIds]);
+  }, [id, !!job, fetchActiveJobs]);
+
+  // Auto-expand when arrived
+  useEffect(() => {
+    if (hasArrived) setIsExpanded(true);
+  }, [hasArrived]);
+
+  // Fallback to default Nairobi coords if missing
+  const agentPos = profile?.location?.latitude ? [profile.location.latitude, profile.location.longitude] : [-1.2921, 36.8219];
+  const clientPos = job?.latitude ? [job.latitude, job.longitude] : [-1.2851, 36.8119];
+
+  const [roadPath, setRoadPath] = useState([]);
+
+  useEffect(() => {
+    const fetchRoute = async () => {
+      if (!agentPos || !clientPos) return;
+      try {
+        const url = `https://router.project-osrm.org/route/v1/driving/${agentPos[1]},${agentPos[0]};${clientPos[1]},${clientPos[0]}?overview=full&geometries=geojson`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.code === 'Ok' && data.routes.length > 0) {
+          const points = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+          setRoadPath(points);
+        } else {
+          setRoadPath([agentPos, clientPos]);
+        }
+      } catch (err) {
+        setRoadPath([agentPos, clientPos]);
+      }
+    };
+    fetchRoute();
+  }, [agentPos[0], clientPos[0]]);
 
   if (!job) {
     return (
@@ -63,19 +104,17 @@ export default function NavigateJobPage() {
         <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
           <Navigation className="w-10 h-10 text-slate-300" />
         </div>
-        <h2 className="text-xl font-bold dark:text-white">Mission Data Loading...</h2>
+        <h2 className="text-xl font-semibold dark:text-white">Mission Data Loading...</h2>
         <p className="text-sm text-slate-400 mt-2 max-w-[200px]">Locating coordinates and mission parameters.</p>
         <button onClick={() => navigate('/jobs')} className="mt-8 btn-primary px-8">Back to Dispatch</button>
       </div>
     );
   }
 
-  // Fallback to default Nairobi coords if missing
-  const agentPos = profile?.location?.latitude ? [profile.location.latitude, profile.location.longitude] : [-1.2921, 36.8219];
-  const clientPos = job.latitude ? [job.latitude, job.longitude] : [-1.2851, 36.8119];
+
 
   return (
-    <div className="h-[calc(100dvh-120px)] flex flex-col -mx-4 -mt-5">
+    <div className="h-[calc(100dvh-120px)] flex flex-col -mx-4 -mt-5 relative overflow-hidden">
       {/* Top Header Overlay */}
       <div className="absolute top-4 left-4 right-4 z-[1000] flex items-center justify-between pointer-events-none">
         <button 
@@ -87,15 +126,15 @@ export default function NavigateJobPage() {
 
         <div className="p-2 px-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-xl shadow-lg pointer-events-auto border border-slate-200 dark:border-slate-800 flex items-center gap-2">
           <div className="flex flex-col text-right">
-            <span className="text-[8px] font-black uppercase text-slate-400 tracking-widest">Target</span>
-            <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase">{job.location}</span>
+            <span className="text-[8px] font-semibold uppercase text-slate-400 tracking-widest">Target</span>
+            <span className="text-[10px] font-semibold text-slate-900 dark:text-white uppercase">{job.location}</span>
           </div>
           <MapPin className="w-3.5 h-3.5 text-primary" />
         </div>
       </div>
 
-      {/* Map View */}
-      <div className="flex-1 w-full bg-slate-100 grayscale-[0.2] contrast-[1.1]">
+      {/* Map View - Full Screen Background */}
+      <div className="absolute inset-0 z-0">
         <MapContainer 
           center={clientPos} 
           zoom={14} 
@@ -106,106 +145,156 @@ export default function NavigateJobPage() {
           
           <MapBounds bounds={[agentPos, clientPos]} />
 
-          {/* Draw a dashed route between agent and client */}
-          <Polyline 
-            positions={[agentPos, clientPos]} 
-            color="#00A651" 
-            weight={4} 
-            dashArray="10, 15" 
-            opacity={0.8}
-            lineCap="round"
-          />
+          <Polyline positions={roadPath.length > 0 ? roadPath : [agentPos, clientPos]} color="#00A651" weight={4} dashArray="10, 15" opacity={0.8} />
           
-          <Marker position={agentPos} icon={agentIcon}>
-            <Popup>You are here</Popup>
-          </Marker>
-
-          <Marker position={clientPos} icon={clientIcon}>
-            <Popup>
-               <div className="text-center font-bold">{job.customerName?.split(' ')[0] || 'Client'}</div>
-            </Popup>
-          </Marker>
+          <Marker position={agentPos} icon={agentIcon} />
+          <Marker position={clientPos} icon={clientIcon} />
         </MapContainer>
       </div>
 
-      {/* Mission Control Panel */}
-      <div className="p-6 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-[1000] rounded-t-[2.5rem] -mt-8 animate-slide-up">
-        <div className="w-12 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full mx-auto mb-6" />
-        
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-primary border border-emerald-100 dark:border-emerald-800">
-               <User className="w-7 h-7" />
-            </div>
-            <div>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Pick-up From</p>
-              <h3 className="text-lg font-black dark:text-white leading-tight">{job.customerName?.split(' ')[0] || 'Client'}</h3>
-              <p className="text-xs text-slate-500 font-bold">{job.location} · {job.material}</p>
-            </div>
+      {/* ── MISSION CONTROL SHEET (Intelligent Bottom Sheet) ── */}
+      <motion.div 
+        initial="peek"
+        animate={isExpanded ? "expanded" : "peek"}
+        variants={{
+          peek: { y: '68%' },
+          expanded: { y: '0%' }
+        }}
+        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
+        dragElastic={0.4}
+        onDragEnd={(e, info) => {
+          // If swiped down hard or past threshold
+          if (info.offset.y > 50) setIsExpanded(false);
+          // If swiped up hard or past threshold
+          if (info.offset.y < -50) setIsExpanded(true);
+        }}
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] rounded-t-[3.5rem] p-6 pb-12 cursor-grab active:cursor-grabbing"
+      >
+        {/* Interaction Handle */}
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full flex flex-col items-center pb-4 group"
+        >
+          <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-1 group-hover:bg-primary transition-colors" />
+          <div className="text-[8px] font-semibold text-slate-300 uppercase tracking-[0.3em] group-hover:text-primary transition-colors">
+            {isExpanded ? 'Slide Down to Map' : 'Slide Up for Details'}
           </div>
-          
-          <button 
-            onClick={() => window.location.href = `tel:${job.phone || '+254700000000'}`}
-            className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 active:scale-95 transition-all border border-slate-200 dark:border-slate-700"
-          >
-            <Phone className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 gap-3 mb-6 font-bold text-xs uppercase tracking-widest">
-           <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-3">
-              <Clock className="w-4 h-4 text-accent" />
-              <div className="flex flex-col">
-                 <span className="text-[8px] text-slate-400">Scheduled Time Slot</span>
-                 <span className="dark:text-white leading-none mt-0.5">{job.time}</span>
+        </button>
+        
+        {/* Main Content */}
+        <div className="max-w-md mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-primary border border-emerald-100 dark:border-emerald-800">
+                 <User className="w-7 h-7" />
               </div>
-           </div>
-        </div>
-
-        {!hasArrived ? (
-          <button 
-            onClick={() => {
-              // Send notification to the user
-              addNotification(
-                "Agent Arrived! 🚚",
-                `${profile.name} has arrived at your location. Please meet them to begin the pickup.`,
-                NOTIFICATION_TYPES.SUCCESS,
-                'client',
-                job.user_id || job.userId
-              );
-              
-              setHasArrived(true);
-              setJobArrived(job.id);
-              toast.success("Welcome to Mission Site!", { description: "Please weigh the waste to complete pickup." });
-            }}
-            className="w-full py-4 bg-primary text-white font-black text-sm rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center gap-3 active:scale-95 transition-all group"
-          >
-            <CheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            I HAVE ARRIVED AT LOCATION
-          </button>
-        ) : (
-          <div className="flex flex-col gap-3">
-            <button 
-              onClick={() => setIsScannerOpen(true)}
-              className="w-full py-4 bg-accent text-white font-black text-sm rounded-2xl shadow-xl shadow-accent/20 flex items-center justify-center gap-3 active:scale-95 transition-all group"
-            >
-              <Zap className="w-5 h-5 animate-pulse" />
-              VERIFY ASSET (AI GRADING)
-            </button>
+              <div>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-1">Mission Target</p>
+                <h3 className="text-lg font-semibold dark:text-white leading-tight">{job.customerName?.split(' ')[0] || job.customer?.split(' ')[0] || 'Resident'}</h3>
+                <p className="text-xs text-slate-500 font-semibold">{job.location} · {job.material}</p>
+              </div>
+            </div>
             
             <button 
-              onClick={() => {
-                toast.dismiss();
-                navigate('/jobs', { state: { tab: 'active' } });
-              }}
-              className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white font-black text-sm rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all"
+              onClick={() => window.location.href = `tel:${job.phone || '+254700000000'}`}
+              className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 active:scale-95 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
             >
-              <ArrowRight className="w-5 h-5 rotate-180" />
-              RETURN TO MISSION LIST
+              <Phone className="w-5 h-5" />
             </button>
           </div>
-        )}
-      </div>
+
+          <div className="grid grid-cols-1 gap-3 mb-6 font-semibold text-xs uppercase tracking-widest">
+             <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-3">
+                <Clock className="w-4 h-4 text-accent" />
+                <div className="flex flex-col">
+                   <span className="text-[8px] text-slate-400">Scheduled Pickup Window</span>
+                   <span className="dark:text-white leading-none mt-0.5">{job.time}</span>
+                </div>
+             </div>
+
+             {job.notes && (
+               <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 p-4 rounded-2xl flex items-start gap-3">
+                  <Truck className="w-4 h-4 text-primary mt-0.5" />
+                  <div className="flex flex-col">
+                     <span className="text-[8px] text-primary">Description</span>
+                     <span className="dark:text-slate-300 normal-case font-semibold mt-1 leading-relaxed italic">
+                       "{job.notes.replace(/Est\. Total: KSh \d+( \| Item: )?/, '').replace(/^ \| /, '')}"
+                     </span>
+                  </div>
+               </div>
+             )}
+          </div>
+
+          {/* Scrollable details if expanded */}
+          <div className="space-y-6">
+            {job.photoUrl && (
+              <div className="space-y-2">
+                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-[0.2em] ml-1">Asset Preview</p>
+                <div className="w-full aspect-video rounded-3xl overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-md bg-slate-50">
+                  <img src={job.photoUrl} className="w-full h-full object-cover" alt="Client's recyclables preview" />
+                </div>
+              </div>
+            )}
+
+            {!hasArrived ? (
+              <div className="space-y-4">
+                <button 
+                  onClick={() => {
+                    addNotification(
+                      "Agent Arrived! 🚚",
+                      `${profile.name} has arrived at your location. Please meet them to begin the pickup.`,
+                      NOTIFICATION_TYPES.SUCCESS,
+                      'client',
+                      job.user_id || job.userId
+                    );
+                    useNotificationStore.getState().playNotificationSound();
+                    setHasArrived(true);
+                    setJobArrived(job.id);
+                    toast.success("Welcome to Mission Site!", { description: "Please weigh the recyclables to complete pickup." });
+                  }}
+                  className="w-full py-5 bg-primary text-white font-semibold text-sm rounded-2xl shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-all group tracking-widest"
+                >
+                  <CheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  I HAVE ARRIVED
+                </button>
+
+                <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100/50 dark:border-blue-800/30 p-4 rounded-2xl flex items-start gap-3">
+                  <Navigation className="w-4 h-4 text-blue-500 mt-0.5" />
+                  <p className="text-[10px] font-semibold text-blue-700/70 dark:text-blue-300/70 leading-relaxed uppercase tracking-tight">
+                    Map is live. Follow the dashed line to reach the client.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3 pt-2 pb-4">
+                <button 
+                  onClick={() => setIsScannerOpen(true)}
+                  className="w-full py-5 bg-blue-600 text-white font-semibold text-sm rounded-2xl shadow-xl shadow-blue-600/30 flex items-center justify-center gap-3 active:scale-95 transition-all group"
+                >
+                  <Zap className="w-5 h-5 animate-pulse fill-white" />
+                  START AI SCAN (RECOMMENDED)
+                </button>
+                <button 
+                  onClick={() => {
+                    setIsScannerOpen(true);
+                    // We need to tell the modal to start in manual mode
+                    // We'll pass a prop or use a timeout to trigger it
+                    setTimeout(() => {
+                      const manualBtn = document.getElementById('manual-override-btn');
+                      if (manualBtn) manualBtn.click();
+                    }, 100);
+                  }}
+                  className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-[10px] uppercase tracking-[0.2em] rounded-2xl active:scale-95 transition-all border border-slate-200 dark:border-slate-800"
+                >
+                  Skip Scan & Use Manual Entry
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </motion.div>
 
       <AIScannerModal 
         isOpen={isScannerOpen}
@@ -213,14 +302,43 @@ export default function NavigateJobPage() {
         booking={job}
         onVerify={async (data) => {
           try {
-            await verifyAsset(job.id, {
-              ...data,
-              ownerId: job.userId || job.user_id
-            });
-            toast.success("Asset Verified!", { description: "Moving to next mission." });
-            navigate('/jobs');
+            const isMarketTrade = !!(job.is_market_trade || job.isMarketTrade || job.booking_type === 'marketplace_pickup');
+            
+            if (isMarketTrade) {
+              if (data.isCounterOffer) {
+                // Submit Counter Offer (pauses trade, alerts seller)
+                const { error } = await supabase.rpc('submit_counter_offer', {
+                  p_booking_id: job.id,
+                  p_new_amount: data.counterOfferAmount
+                });
+                if (error) throw error;
+                toast.success("Counter-Offer Sent!", { description: "Waiting for seller approval." });
+                navigate('/trades');
+                return;
+              } else {
+                // Marketplace logic: Pay seller the agreed amount instantly
+                const { error } = await supabase.rpc('complete_booking_trade_payout', {
+                  p_booking_id: job.id,
+                  p_actual_weight: data.weightKg,
+                  p_payout_amount: job.total_price || job.amount || 0
+                });
+                if (error) throw error;
+                toast.success("Verification Complete!", { description: "Funds transferred to seller." });
+                navigate('/trades');
+                return;
+              }
+            } else {
+              // Standard service logic: Platform pays agent, awards GFP
+              await verifyAsset(job.id, {
+                ...data,
+                ownerId: job.userId || job.user_id
+              });
+              toast.success("Verification Complete!", { description: "Moving to next mission." });
+              navigate('/jobs');
+            }
           } catch (err) {
-            toast.error("Verification failed. Please retry.");
+            toast.error("Verification failed.", { description: err.message || "Please try again." });
+            throw err;
           }
         }}
       />

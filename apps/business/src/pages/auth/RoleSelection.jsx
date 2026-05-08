@@ -19,7 +19,7 @@ export default function RoleSelection() {
       </button>
 
       <div className="mb-10">
-        <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none mb-3">
+        <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight leading-none mb-3">
           How do you want to <br />
           <span className="text-primary italic">use CleanFlow?</span>
         </h2>
@@ -43,12 +43,12 @@ export default function RoleSelection() {
             <Package className="w-7 h-7" />
           </div>
           
-          <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">I am a Weaver</h3>
+          <h3 className="text-2xl font-semibold text-slate-900 dark:text-white mb-2">I am a Weaver</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[80%]">
             I collect, sort, and aggregate verified waste to sell to industrial buyers in bulk.
           </p>
           
-          <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary">
+          <div className="mt-6 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-primary">
             Start Selling <ArrowRight className="w-3 h-3" />
           </div>
         </button>
@@ -66,12 +66,12 @@ export default function RoleSelection() {
             <Factory className="w-7 h-7" />
           </div>
           
-          <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">I am a Buyer</h3>
+          <h3 className="text-2xl font-semibold text-slate-900 dark:text-white mb-2">I am a Buyer</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[80%]">
             I want to source high-quality, verified recyclable materials for my manufacturing plant.
           </p>
           
-          <div className="mt-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-secondary">
+          <div className="mt-6 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-secondary">
             Source Material <ArrowRight className="w-3 h-3" />
           </div>
         </button>
@@ -80,7 +80,7 @@ export default function RoleSelection() {
       {/* Trust Footer */}
       <div className="flex items-center justify-center gap-2 py-6 opacity-40 grayscale">
         <ShieldCheck className="w-4 h-4" />
-        <span className="text-[10px] font-black uppercase tracking-widest">Escrow-Backed Trading Network</span>
+        <span className="text-[10px] font-semibold uppercase tracking-widest">Escrow-Backed Trading Network</span>
       </div>
     </div>
   );

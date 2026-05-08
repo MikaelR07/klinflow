@@ -85,15 +85,15 @@ export default function WeaverWarehouse() {
         
         <div className="relative z-10 flex justify-between items-start">
           <div className="space-y-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Current Yard Assets</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-400">Current Yard Assets</p>
             <div className="flex items-baseline gap-2">
-              <h1 className="text-5xl font-black tracking-tighter">{totalWeight.toLocaleString()}</h1>
-              <span className="text-xl font-bold text-slate-500 uppercase">KG</span>
+              <h1 className="text-5xl font-semibold tracking-tighter">{totalWeight.toLocaleString()}</h1>
+              <span className="text-xl font-semibold text-slate-500 uppercase">KG</span>
             </div>
           </div>
           <div className="text-right">
-             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Market Valuation</p>
-             <p className="text-2xl font-black text-primary">KSh {totalValue.toLocaleString()}</p>
+             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 mb-1">Market Valuation</p>
+             <p className="text-2xl font-semibold text-primary">KSh {totalValue.toLocaleString()}</p>
           </div>
         </div>
 
@@ -102,21 +102,21 @@ export default function WeaverWarehouse() {
            <div className="flex justify-between items-end">
               <div className="flex gap-6">
                  <div>
-                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">{getBusinessLabel(profile?.business_type, 'sourceA')}</p>
-                    <p className="text-sm font-black text-white">{agentWeight.toLocaleString()} <span className="text-[10px] opacity-40">KG</span></p>
+                    <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest mb-1">{getBusinessLabel(profile?.business_type, 'sourceA')}</p>
+                    <p className="text-sm font-semibold text-white">{agentWeight.toLocaleString()} <span className="text-[10px] opacity-40">KG</span></p>
                  </div>
                  <div className="w-px h-8 bg-white/5" />
                  <div>
-                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">{getBusinessLabel(profile?.business_type, 'sourceB')}</p>
-                    <p className="text-sm font-black text-white">
+                    <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest mb-1">{getBusinessLabel(profile?.business_type, 'sourceB')}</p>
+                    <p className="text-sm font-semibold text-white">
                        {isWeaver ? peerWeight.toLocaleString() : (financials?.totalEarnings || 0).toLocaleString()} 
                        <span className="text-[10px] opacity-40 ml-1">{isWeaver ? 'KG' : 'KES'}</span>
                     </p>
                  </div>
               </div>
               <div className="text-right">
-                 <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mb-1">Actual Earnings</p>
-                 <p className="text-lg font-black text-emerald-400">KSh {(financials?.totalEarnings || 0).toLocaleString()}</p>
+                 <p className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest mb-1">Actual Earnings</p>
+                 <p className="text-lg font-semibold text-emerald-400">KSh {(financials?.totalEarnings || 0).toLocaleString()}</p>
               </div>
            </div>
            
@@ -144,7 +144,7 @@ export default function WeaverWarehouse() {
              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Plus className="w-5 h-5" />
              </div>
-             <span className="text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
+             <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 dark:text-slate-300">
                {getBusinessLabel(profile?.business_type, 'actionAdd')}
              </span>
           </div>
@@ -158,7 +158,7 @@ export default function WeaverWarehouse() {
              <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <TrendingUp className="w-5 h-5" />
              </div>
-             <span className="text-[10px] font-black uppercase tracking-widest">Bulk Sell Lot</span>
+             <span className="text-[10px] font-semibold uppercase tracking-widest">Bulk Sell Lot</span>
           </div>
           <ArrowRight className="w-4 h-4 opacity-50" />
         </button>
@@ -167,12 +167,12 @@ export default function WeaverWarehouse() {
       {/* Inventory Tabs/List */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
             <Package className="w-5 h-5 text-primary" /> Current Inventory
           </h3>
           <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-             <span className="px-3 py-1 bg-white dark:bg-slate-900 text-[9px] font-black uppercase rounded-lg shadow-sm">All</span>
-             <span className="px-3 py-1 text-[9px] font-black uppercase text-slate-400">Lots</span>
+             <span className="px-3 py-1 bg-white dark:bg-slate-900 text-[9px] font-semibold uppercase rounded-lg shadow-sm">All</span>
+             <span className="px-3 py-1 text-[9px] font-semibold uppercase text-slate-400">Lots</span>
           </div>
         </div>
 
@@ -180,24 +180,25 @@ export default function WeaverWarehouse() {
           {myAssets.length > 0 ? myAssets.map((asset) => (
             <div 
               key={asset.id}
-              className="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center justify-between group"
+              onClick={() => navigate(`/arrivals/${asset.id}`)}
+              className="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center justify-between group active:scale-[0.98] transition-all cursor-pointer"
             >
               <div className="flex items-center gap-4">
                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl ${asset.source === ASSET_SOURCES.SELF ? 'bg-slate-100 dark:bg-slate-800' : 'bg-primary/10'}`}>
                     {MATERIAL_TYPES[asset.material_type?.toUpperCase()]?.icon || '📦'}
                  </div>
                  <div>
-                    <h4 className="font-black text-slate-900 dark:text-white text-sm">
+                    <h4 className="font-semibold text-slate-900 dark:text-white text-sm">
                        {asset.weight_kg}kg {asset.material_type}
-                       {asset.source === ASSET_SOURCES.SELF && <span className="ml-2 text-[8px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded">Self-Declared</span>}
+                       {asset.source === ASSET_SOURCES.SELF && <span className="ml-2 text-[8px] font-semibold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded">Self-Declared</span>}
                     </h4>
                     <div className="flex items-center gap-2 mt-0.5">
                        {asset.source !== ASSET_SOURCES.SELF ? (
-                         <div className="flex items-center gap-1 text-[9px] font-black text-emerald-500 uppercase">
+                         <div className="flex items-center gap-1 text-[9px] font-semibold text-emerald-500 uppercase">
                             <ShieldCheck className="w-3 h-3" /> Agent Verified
                          </div>
                        ) : (
-                         <div className="flex items-center gap-1 text-[9px] font-black text-slate-400 uppercase">
+                         <div className="flex items-center gap-1 text-[9px] font-semibold text-slate-400 uppercase">
                             <Info className="w-3 h-3" /> Pending Verification
                          </div>
                        )}
@@ -205,15 +206,15 @@ export default function WeaverWarehouse() {
                  </div>
               </div>
               <div className="text-right">
-                 <p className="text-xs font-black text-slate-900 dark:text-white font-mono">KES {asset.estimated_value?.toLocaleString()}</p>
-                 <p className="text-[9px] font-bold text-slate-400 uppercase mt-1">Grade {asset.grade || 'B'}</p>
+                 <p className="text-xs font-semibold text-slate-900 dark:text-white font-mono">KES {asset.estimated_value?.toLocaleString()}</p>
+                 <p className="text-[9px] font-semibold text-slate-400 uppercase mt-1">Grade {asset.grade || 'B'}</p>
               </div>
             </div>
           )) : (
             <div className="py-20 text-center bg-slate-50 dark:bg-slate-950/50 rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-slate-800">
                <Package className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-               <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Your warehouse is empty.</p>
-               <button onClick={() => navigate('/')} className="text-primary text-[10px] font-black uppercase tracking-widest mt-4">Claim Assets Now <ArrowRight className="w-3 h-3 inline ml-1" /></button>
+               <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest">Your warehouse is empty.</p>
+               <button onClick={() => navigate('/')} className="text-primary text-[10px] font-semibold uppercase tracking-widest mt-4">Claim Assets Now <ArrowRight className="w-3 h-3 inline ml-1" /></button>
             </div>
           )}
         </div>
@@ -225,7 +226,7 @@ export default function WeaverWarehouse() {
            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowAddModal(false)} />
            <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl p-8 animate-slide-up">
               <div className="flex items-center justify-between mb-8">
-                 <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">Add Side Collection</h3>
+                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white tracking-tighter">Add Side Collection</h3>
                  <button onClick={() => setShowAddModal(false)} className="p-2 text-slate-400 hover:text-slate-600 transition-colors">
                     <X className="w-5 h-5" />
                  </button>
@@ -241,11 +242,11 @@ export default function WeaverWarehouse() {
               <form onSubmit={handleAddSideCollection} className="space-y-6">
                  <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Material Type</label>
+                       <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Material Type</label>
                        <select 
                          value={newSideAsset.materialType}
                          onChange={(e) => setNewSideAsset({...newSideAsset, materialType: e.target.value})}
-                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-black outline-none focus:border-primary transition-all appearance-none"
+                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-semibold outline-none focus:border-primary transition-all appearance-none"
                        >
                           <option value="PET">PET Plastic</option>
                           <option value="HDPE">HDPE Plastic</option>
@@ -255,12 +256,12 @@ export default function WeaverWarehouse() {
                        </select>
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Weight (KG)</label>
+                       <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Weight (KG)</label>
                        <input 
                          type="number"
                          value={newSideAsset.weightKg}
                          onChange={(e) => setNewSideAsset({...newSideAsset, weightKg: Number(e.target.value)})}
-                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-black outline-none focus:border-primary transition-all"
+                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-semibold outline-none focus:border-primary transition-all"
                        />
                     </div>
                  </div>
@@ -268,7 +269,7 @@ export default function WeaverWarehouse() {
                  <button 
                    type="submit"
                    disabled={isLoading}
-                   className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-slate-200 dark:shadow-none"
+                   className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-semibold text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-slate-200 dark:shadow-none"
                  >
                     {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><CheckCircle2 className="w-5 h-5" /> Add to Warehouse</>}
                  </button>

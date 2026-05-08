@@ -57,12 +57,12 @@ export default function IotLinkModal({ show, onClose }) {
 
           {step === 'input' && (
             <div className="animate-in slide-in-from-bottom-2 duration-300">
-              <h2 className="text-xl font-bold mb-2">Link New Device</h2>
+              <h2 className="text-xl font-semibold mb-2">Link New Device</h2>
               <p className="text-sm text-slate-500 mb-6">Enter the serial number found on your CleanFlow hardware or its packaging.</p>
 
               <form onSubmit={handleLink} className="space-y-4">
                 <div>
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+                  <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
                     Device Serial Number
                   </label>
                   <div className="relative">
@@ -77,7 +77,7 @@ export default function IotLinkModal({ show, onClose }) {
                     <Cpu className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300" />
                   </div>
                   {errorMsg && (
-                    <div className="mt-3 flex items-center gap-2 text-rose-500 text-xs font-bold animate-in fade-in slide-in-from-top-1">
+                    <div className="mt-3 flex items-center gap-2 text-rose-500 text-xs font-semibold animate-in fade-in slide-in-from-top-1">
                       <AlertCircle className="w-3.5 h-3.5" />
                       {errorMsg}
                     </div>
@@ -86,7 +86,7 @@ export default function IotLinkModal({ show, onClose }) {
 
                 <button
                   disabled={!serial || isLinking}
-                  className="w-full btn-primary py-4 rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+                  className="w-full btn-primary py-4 rounded-2xl font-semibold uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
                 >
                   {isLinking ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Claim Device'}
                 </button>
@@ -103,7 +103,7 @@ export default function IotLinkModal({ show, onClose }) {
                   <Activity className="w-8 h-8 text-primary animate-pulse" />
                 </div>
               </div>
-              <h3 className="text-lg font-bold">Verifying Device...</h3>
+              <h3 className="text-lg font-semibold">Verifying Device...</h3>
               <p className="text-sm text-slate-500">Contacting the CleanFlow Smart Grid</p>
             </div>
           )}
@@ -113,7 +113,7 @@ export default function IotLinkModal({ show, onClose }) {
               <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
                 <CheckCircle2 className="w-10 h-10 text-emerald-500" />
               </div>
-              <h3 className="text-xl font-black">Handshake Complete!</h3>
+              <h3 className="text-xl font-semibold">Handshake Complete!</h3>
               <p className="text-sm text-slate-500">Your device is now online and monitoring.</p>
             </div>
           )}

@@ -46,10 +46,10 @@ export default function Login() {
         {/* Branding */}
         <div className="text-center mb-10">
           <img src="/logo.png" className="w-56 h-auto mx-auto mb-8 shadow-2xl rounded-3xl" alt="Business Logo" />
-          <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
+          <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
             Clean<span className="text-indigo-600 italic">Business</span>
           </h1>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 mt-2 font-black">
+          <p className="text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 mt-2 font-semibold">
             Kenya's B2B Recycling Marketplace
           </p>
         </div>
@@ -58,14 +58,14 @@ export default function Login() {
         <div className="glass p-8 sm:p-10 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none">
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="text-center mb-6">
-              <h2 className="text-xl font-black text-slate-800 dark:text-white pb-1 tracking-tight">Business Portal</h2>
+              <h2 className="text-xl font-semibold text-slate-800 dark:text-white pb-1 tracking-tight">Business Portal</h2>
               <div className="w-8 h-1 bg-indigo-600 mx-auto rounded-full mt-1" />
             </div>
 
             <div className="space-y-4">
               {/* Phone */}
               <div>
-                <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">Business Phone</label>
+                <label className="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">Business Phone</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
@@ -76,7 +76,7 @@ export default function Login() {
                     placeholder="07XX XXX XXX / 01XX..."
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-black tracking-widest focus:ring-4 text-base focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none"
+                    className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-semibold tracking-widest focus:ring-4 text-base focus:ring-indigo-500/10 focus:border-indigo-500 transition-all outline-none"
                     required
                   />
                 </div>
@@ -85,11 +85,11 @@ export default function Login() {
               {/* Passcode */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Security Passcode</label>
+                  <label className="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Security Passcode</label>
                   <button
                     type="button"
                     onClick={() => toast.info('Recovery initiated', { description: 'Reset link sent to your registered phone.' })}
-                    className="text-[10px] font-black text-indigo-600 hover:text-indigo-700 transition-colors uppercase tracking-widest"
+                    className="text-[10px] font-semibold text-indigo-600 hover:text-indigo-700 transition-colors uppercase tracking-widest"
                   >
                     Recovery?
                   </button>
@@ -114,7 +114,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 mt-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-2xl font-black text-[13px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group active:scale-[0.98]"
+              className="w-full py-4 mt-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-2xl font-semibold text-[13px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group active:scale-[0.98]"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -127,7 +127,7 @@ export default function Login() {
           </form>
         </div>
 
-        <p className="text-center text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-10">
+        <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-10">
           New to the marketplace?{' '}
           <Link to="/register" className="text-indigo-600 hover:underline underline-offset-4">Register Now</Link>
         </p>

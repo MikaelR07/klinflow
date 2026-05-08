@@ -32,7 +32,7 @@ export default function SupportPage() {
         <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-bold dark:text-white">Contact Support</h1>
+        <h1 className="text-xl font-semibold dark:text-white">Contact Support</h1>
       </header>
 
       <div className="space-y-6">
@@ -44,7 +44,7 @@ export default function SupportPage() {
                <PhoneCall className="w-6 h-6" />
              </div>
              <div>
-               <div className="text-sm font-bold text-slate-800 dark:text-white">Call Us</div>
+               <div className="text-sm font-semibold text-slate-800 dark:text-white">Call Us</div>
                <div className="text-xs text-slate-500 mt-0.5">Toll Free</div>
              </div>
            </a>
@@ -54,7 +54,7 @@ export default function SupportPage() {
                <MessageCircle className="w-6 h-6" />
              </div>
              <div>
-               <div className="text-sm font-bold text-slate-800 dark:text-white">WhatsApp</div>
+               <div className="text-sm font-semibold text-slate-800 dark:text-white">WhatsApp</div>
                <div className="text-xs text-slate-500 mt-0.5">24/7 Chat</div>
              </div>
            </a>
@@ -62,7 +62,7 @@ export default function SupportPage() {
 
         {/* Support Message Form */}
         <form onSubmit={handleSubmit} className="card p-5 space-y-4">
-           <h2 className="text-sm font-bold text-slate-800 dark:text-white mb-2">Send us a message</h2>
+           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-2">Send us a message</h2>
            
            <div>
              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Subject</label>
@@ -74,7 +74,7 @@ export default function SupportPage() {
              <textarea required rows={4} value={form.message} onChange={(e) => setForm({...form, message: e.target.value})} placeholder="Please describe your issue..." className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm resize-none" />
            </div>
 
-           <button type="submit" disabled={isLoading} className="w-full py-4 bg-slate-900 dark:bg-primary text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
+           <button type="submit" disabled={isLoading} className="w-full py-4 bg-slate-900 dark:bg-primary text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-4 h-4 ml-1" />} Send Request
            </button>
         </form>

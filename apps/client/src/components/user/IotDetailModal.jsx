@@ -58,7 +58,7 @@ export default function IotDetailModal({ show, onClose, item, type }) {
           
           {/* AI Insight Section */}
           <div className="bg-primary/5 dark:bg-primary/10 rounded-2xl p-4 mb-6 border border-primary/10 dark:border-primary/20">
-            <div className="flex items-center gap-2 text-primary dark:text-primary-light font-bold text-sm mb-2 uppercase tracking-tight">
+            <div className="flex items-center gap-2 text-primary dark:text-primary-light font-semibold text-sm mb-2 uppercase tracking-tight">
               <Activity className="w-4 h-4" /> AI Insight
             </div>
             <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
@@ -91,15 +91,15 @@ export default function IotDetailModal({ show, onClose, item, type }) {
                 <div className="flex gap-2">
                   <div className="flex-1 bg-green-50 rounded-xl p-3 text-center">
                     <p className="text-[10px] text-green-600 font-medium uppercase tracking-wider mb-1">Organic</p>
-                    <p className="text-xl font-bold text-green-700">{item.breakdown.organic}%</p>
+                    <p className="text-xl font-semibold text-green-700">{item.breakdown.organic}%</p>
                   </div>
                   <div className="flex-1 bg-blue-50 rounded-xl p-3 text-center">
                     <p className="text-[10px] text-blue-600 font-medium uppercase tracking-wider mb-1">Recyclable</p>
-                    <p className="text-xl font-bold text-blue-700">{item.breakdown.recyclable}%</p>
+                    <p className="text-xl font-semibold text-blue-700">{item.breakdown.recyclable}%</p>
                   </div>
                   <div className="flex-1 bg-slate-50 rounded-xl p-3 text-center">
                     <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider mb-1">Other</p>
-                    <p className="text-xl font-bold text-slate-700">{item.breakdown.other}%</p>
+                    <p className="text-xl font-semibold text-slate-700">{item.breakdown.other}%</p>
                   </div>
                 </div>
               </div>
@@ -111,11 +111,11 @@ export default function IotDetailModal({ show, onClose, item, type }) {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-500">Current AQI</p>
-                  <p className="text-4xl font-black text-slate-800">{item.aqi}</p>
+                  <p className="text-4xl font-semibold text-slate-800">{item.aqi}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium text-slate-500">Odour Level</p>
-                  <p className="text-lg font-bold text-blue-600">{item.odourLevel}</p>
+                  <p className="text-lg font-semibold text-blue-600">{item.odourLevel}</p>
                 </div>
               </div>
               
@@ -150,7 +150,7 @@ export default function IotDetailModal({ show, onClose, item, type }) {
             <div className="space-y-6">
                <div className="flex flex-col items-center justify-center py-6">
                 <div className="w-32 h-32 rounded-full border-8 border-emerald-100 flex items-center justify-center mb-4">
-                  <div className="text-3xl font-bold text-emerald-600">{item.efficiency}%</div>
+                  <div className="text-3xl font-semibold text-emerald-600">{item.efficiency}%</div>
                 </div>
                 <p className="text-slate-600 font-medium">Treatment Efficiency</p>
                </div>

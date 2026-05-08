@@ -16,7 +16,6 @@ export default function ProfilePage() {
     phone: profile?.phone || '',
     location: profile?.location || null,
     idNumber: profile?.idNumber || '',
-    vehicle: profile?.vehicle || '',
     businessType: profile?.businessType || '',
     specializations: profile?.specializations || [],
     nemaLicense: profile?.nemaLicense || '',
@@ -43,14 +42,14 @@ export default function ProfilePage() {
         <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-bold dark:text-white">My Profile</h1>
+        <h1 className="text-xl font-semibold dark:text-white">My Profile</h1>
       </header>
 
       <form onSubmit={handleSave} className="space-y-6">
         
         {/* Basic Details */}
         <div className="card p-5 space-y-4">
-          <h2 className="text-sm font-bold text-slate-800 dark:text-white mb-2 pb-2 border-b border-slate-100 dark:border-slate-800">Basic Information</h2>
+          <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-2 pb-2 border-b border-slate-100 dark:border-slate-800">Basic Information</h2>
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Full Name</label>
             <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
@@ -76,14 +75,10 @@ export default function ProfilePage() {
         {/* Agent Details */}
         {isAgent && (
           <div className="card p-5 space-y-4 bg-secondary/5 border-secondary/20">
-             <h2 className="text-sm font-bold text-secondary mb-2 pb-2 border-b border-secondary/20">Agent Logistics</h2>
+             <h2 className="text-sm font-semibold text-secondary mb-2 pb-2 border-b border-secondary/20">Agent Logistics</h2>
              <div>
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Verified ID Number</label>
               <input type="text" value={formData.idNumber} disabled className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-500 text-sm cursor-not-allowed opacity-70" />
-            </div>
-             <div>
-              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Vehicle Details</label>
-              <input type="text" value={formData.vehicle} onChange={(e) => setFormData({...formData, vehicle: e.target.value})} placeholder="KAA 123A" className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-secondary/50 text-sm" />
             </div>
           </div>
         )}
@@ -91,13 +86,13 @@ export default function ProfilePage() {
         {/* Business Verification */}
         <div className="card p-5 space-y-4 border-primary/20 bg-primary/5">
           <div className="flex justify-between items-center mb-2 pb-2 border-b border-primary/10">
-            <h2 className="text-sm font-bold text-primary">Business Verification (B2B)</h2>
+            <h2 className="text-sm font-semibold text-primary">Business Verification (B2B)</h2>
             {profile?.isVerified ? (
-              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600 text-[10px] font-black uppercase">Verified ✓</span>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600 text-[10px] font-semibold uppercase">Verified ✓</span>
             ) : formData.nemaLicense ? (
-              <span className="px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-[10px] font-black uppercase animate-pulse">Pending Review</span>
+              <span className="px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-[10px] font-semibold uppercase animate-pulse">Pending Review</span>
             ) : (
-              <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-400 text-[10px] font-black uppercase">Not Submitted</span>
+              <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-400 text-[10px] font-semibold uppercase">Not Submitted</span>
             )}
           </div>
           
@@ -150,7 +145,7 @@ export default function ProfilePage() {
                 {getBusinessLabel(formData.businessType, 'role')} Focus Areas (Smart Match)
               </label>
               <div className="flex flex-wrap gap-2">
-                {['PET', 'HDPE', 'Metal', 'Paper', 'Glass', 'E-Waste'].map(spec => (
+                {['Plastics', 'Metals', 'Paper & Cardboard', 'Glass', 'E-Waste'].map(spec => (
                   <button
                     key={spec}
                     type="button"
@@ -161,7 +156,7 @@ export default function ProfilePage() {
                         : [...current, spec];
                       setFormData(prev => ({ ...prev, specializations: next }));
                     }}
-                    className={`px-3 py-1.5 rounded-full text-[10px] font-bold border transition-all ${
+                    className={`px-3 py-1.5 rounded-full text-[10px] font-semibold border transition-all ${
                       formData.specializations?.includes(spec)
                         ? 'bg-primary border-primary text-white'
                         : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500'
@@ -181,7 +176,7 @@ export default function ProfilePage() {
         <button
           type="submit"
           disabled={isLoading || (formData.nemaLicense && (!formData.nemaLicense.startsWith('NEMA/') || formData.nemaLicense.length < 10))}
-          className="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Save Changes
         </button>

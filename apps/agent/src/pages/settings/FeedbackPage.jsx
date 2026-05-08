@@ -27,11 +27,12 @@ export default function FeedbackPage() {
     try {
       await submitFeedback({
         userId: profile?.id,
-        name: profile?.name || 'Transport Agent',
+        name: profile?.name || 'Agent',
         phone: profile?.phone,
         rating,
         category,
-        text: feedback
+        text: feedback,
+        sourceApp: profile?.agent_account_type === 'company_admin' ? 'agent_company' : 'agent_independent'
       });
       toast.success('Thank You!', { description: 'Your feedback helps us improve CleanFlow.' });
       navigate('/settings');
@@ -48,14 +49,14 @@ export default function FeedbackPage() {
         <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-bold dark:text-white">Give Feedback</h1>
+        <h1 className="text-xl font-semibold dark:text-white">Give Feedback</h1>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         
         {/* Rating Selector */}
         <div className="card p-6 text-center">
-           <h2 className="text-sm font-bold text-slate-800 dark:text-white mb-4">Rate Your Experience</h2>
+           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4">Rate Your Experience</h2>
            <div className="flex justify-center gap-2">
              {[1, 2, 3, 4, 5].map((star) => (
                <button
@@ -105,7 +106,7 @@ export default function FeedbackPage() {
              />
            </div>
 
-           <button type="submit" disabled={isLoading} className="w-full py-4 bg-primary text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
+           <button type="submit" disabled={isLoading} className="w-full py-4 bg-primary text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-4 h-4 ml-1" />} Submit Feedback
            </button>
         </div>

@@ -62,14 +62,14 @@ export default function FeedbackPage() {
         <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-bold dark:text-white">Give Feedback</h1>
+        <h1 className="text-xl font-semibold dark:text-white">Give Feedback</h1>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         
         {/* Rating Selector */}
         <div className="card p-6 text-center">
-           <h2 className="text-sm font-bold text-slate-800 dark:text-white mb-4">Rate Your Experience</h2>
+           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4">Rate Your Experience</h2>
            <div className="flex justify-center gap-2">
              {[1, 2, 3, 4, 5].map((star) => (
                <button
@@ -121,7 +121,7 @@ export default function FeedbackPage() {
 
 
 
-           <button type="submit" disabled={isLoading} className="w-full py-4 bg-primary text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
+           <button type="submit" disabled={isLoading} className="w-full py-4 bg-primary text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-4 h-4 ml-1" />} Submit Feedback
            </button>
         </div>
@@ -135,7 +135,7 @@ export default function FeedbackPage() {
              <div className="w-16 h-16 bg-rose-50 dark:bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-2">
                <MessageCircle className="w-8 h-8" />
              </div>
-             <h3 className="font-bold text-lg dark:text-white">We're so sorry!</h3>
+             <h3 className="font-semibold text-lg dark:text-white">We're so sorry!</h3>
              <p className="text-sm text-slate-500 leading-relaxed">
                Your feedback has been recorded. Would you like to chat with support on WhatsApp right now to resolve this reporting issue?
              </p>
@@ -144,13 +144,13 @@ export default function FeedbackPage() {
                  href={`https://wa.me/${whatsappNumber}?text=Hi, I am experiencing an issue with CleanFlow.`}
                  target="_blank" rel="noreferrer"
                  onClick={() => navigate('/settings')}
-                 className="w-full py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-bold text-sm block"
+                 className="w-full py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-semibold text-sm block"
                >
                  Chat on WhatsApp
                </a>
                <button 
                  onClick={() => navigate('/settings')}
-                 className="w-full py-3 text-slate-500 dark:text-slate-400 font-bold text-sm"
+                 className="w-full py-3 text-slate-500 dark:text-slate-400 font-semibold text-sm"
                >
                  No, Thanks
                </button>

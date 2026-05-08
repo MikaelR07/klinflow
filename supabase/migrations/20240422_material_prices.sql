@@ -7,15 +7,15 @@ CREATE TABLE IF NOT EXISTS public.material_prices (
 );
 
 -- Seed with default values
-INSERT INTO public.material_prices (material_name, price_per_kg)
-VALUES 
-    ('Plastic (PET)', 12.00),
-    ('Plastic (HDPE)', 15.00),
-    ('Metal / Scrap', 25.00),
-    ('Paper / Cardboard', 8.00),
+INSERT INTO material_prices (material_name, price_per_kg)
+VALUES
+    ('Plastics', 15.00),
+    ('Metals', 30.00),
+    ('Paper & Cardboard', 5.00),
     ('Glass', 5.00),
-    ('Electronics (E-Waste)', 45.00)
-ON CONFLICT (material_name) DO UPDATE SET price_per_kg = EXCLUDED.price_per_kg;
+    ('E-Waste', 40.00)
+ON CONFLICT (material_name) 
+DO UPDATE SET price_per_kg = EXCLUDED.price_per_kg;
 
 -- RLS Policies
 ALTER TABLE public.material_prices ENABLE ROW LEVEL SECURITY;
