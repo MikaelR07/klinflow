@@ -12,7 +12,7 @@ import {
   AlertCircle,
   ChevronDown
 } from 'lucide-react';
-import { useAuthStore, supabase } from '@cleanflow/core';
+import { useAuthStore, supabase, compressImage } from '@cleanflow/core';
 import { toast } from 'sonner';
 
 const CATEGORIES = [
@@ -56,15 +56,16 @@ export default function AgentSellStock() {
     try {
       let finalImageUrl = '';
 
-      // 1. Upload Image if exists
+      // 1. Upload Image if exists (with compression)
       if (formData.image) {
-        const fileExt = formData.image.name.split('.').pop();
+        const compressed = await compressImage(formData.image, { maxWidth: 1024, quality: 0.7 });
+        const fileExt = compressed.name.split('.').pop();
         const fileName = `${Math.random()}.${fileExt}`;
         const filePath = `listings/${profile.id}/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('marketplace')
-          .upload(filePath, formData.image);
+          .upload(filePath, compressed);
 
         if (uploadError) throw uploadError;
 

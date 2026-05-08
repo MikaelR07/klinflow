@@ -8,7 +8,7 @@ import {
   Tag, AlertCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useMarketplaceStore, useAuthStore } from '@cleanflow/core';
+import { useMarketplaceStore, useAuthStore, getThumbnailUrl } from '@cleanflow/core';
 import { EmptyState, LoadingScreen } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
@@ -239,7 +239,7 @@ export default function MarketplaceInventory() {
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
                       {listing.photo ? (
-                        <img src={listing.photo} className="w-full h-full object-cover" />
+                        <img src={getThumbnailUrl(listing.photo, { width: 200 })} loading="lazy" className="w-full h-full object-cover" />
                       ) : (
                         <Package className="w-6 h-6 text-slate-300" />
                       )}

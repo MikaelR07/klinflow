@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, useAgentStore } from '@cleanflow/core';
+import { useAuthStore, useAgentStore, getThumbnailUrl } from '@cleanflow/core';
 import { Wallet, Truck, Star, Briefcase, ChevronRight, Copy, CheckCircle2, Users, Power, Loader2, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -200,7 +200,8 @@ export default function CompanyAdminDashboard() {
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold border-2 shadow-sm overflow-hidden bg-emerald-100 text-emerald-700 border-emerald-500`}>
                     {driver.avatar_url ? (
                       <img 
-                        src={driver.avatar_url} 
+                        src={getThumbnailUrl(driver.avatar_url, { width: 200 })} 
+                        loading="lazy"
                         alt={driver.name} 
                         className="w-full h-full object-cover"
                       />

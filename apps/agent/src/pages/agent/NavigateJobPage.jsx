@@ -8,7 +8,7 @@ import { MapPin, ArrowLeft, ArrowRight, Phone, Navigation, CheckCircle, User, Za
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
-import { useAgentStore, useAuthStore, useNotificationStore, NOTIFICATION_TYPES, useAssetStore, useServiceStore, supabase } from '@cleanflow/core';
+import { useAgentStore, useAuthStore, useNotificationStore, NOTIFICATION_TYPES, useAssetStore, useServiceStore, supabase, getThumbnailUrl } from '@cleanflow/core';
 import { AIScannerModal } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
@@ -233,7 +233,7 @@ export default function NavigateJobPage() {
               <div className="space-y-2">
                 <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-[0.2em] ml-1">Asset Preview</p>
                 <div className="w-full aspect-video rounded-3xl overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-md bg-slate-50">
-                  <img src={job.photoUrl} className="w-full h-full object-cover" alt="Client's recyclables preview" />
+                  <img src={getThumbnailUrl(job.photoUrl, { width: 400 })} loading="lazy" className="w-full h-full object-cover" alt="Client's recyclables preview" />
                 </div>
               </div>
             )}

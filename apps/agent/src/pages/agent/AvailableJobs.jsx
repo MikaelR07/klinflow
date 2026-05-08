@@ -10,7 +10,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
-import { useAgentStore, useAuthStore, useServiceStore } from '@cleanflow/core';
+import { useAgentStore, useAuthStore, useServiceStore, getThumbnailUrl } from '@cleanflow/core';
 import EmptyState from '@cleanflow/ui/components/EmptyState';
 import { SkeletonCard } from '@cleanflow/ui/components/Skeletons';
 
@@ -186,7 +186,7 @@ export default function AvailableJobs() {
                         : []
                     ).map((imgUrl, idx) => (
                       <div key={idx} className="flex-none w-full h-full snap-start">
-                        <img src={imgUrl} className="w-full h-full object-cover" alt={`Load View ${idx + 1}`} />
+                        <img src={getThumbnailUrl(imgUrl, { width: 400 })} loading="lazy" className="w-full h-full object-cover" alt={`Load View ${idx + 1}`} />
                       </div>
                     ))}
                     

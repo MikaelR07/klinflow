@@ -4,7 +4,7 @@
 import { useEffect } from 'react';
 import { Star, MessageSquare, ArrowLeft, User, Calendar, Tag, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAgentStore, useAuthStore } from '@cleanflow/core';
+import { useAgentStore, useAuthStore, getThumbnailUrl } from '@cleanflow/core';
 import EmptyState from '@cleanflow/ui/components/EmptyState';
 
 export default function ReviewsPage() {
@@ -68,7 +68,7 @@ export default function ReviewsPage() {
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700">
                     {review.customerAvatar ? (
-                      <img src={review.customerAvatar} alt={review.customerName} className="w-full h-full object-cover" />
+                      <img src={getThumbnailUrl(review.customerAvatar, { width: 200 })} loading="lazy" alt={review.customerName} className="w-full h-full object-cover" />
                     ) : (
                       <User className="w-5 h-5 text-slate-400" />
                     )}

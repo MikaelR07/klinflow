@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Upload, Loader2, Tag, Scale, Coins, Info, MapPin, Package } from 'lucide-react';
-import { useMarketplaceStore, useAuthStore, uploadFile } from '@cleanflow/core';
+import { useMarketplaceStore, useAuthStore, uploadFile, compressImage } from '@cleanflow/core';
 import { toast } from 'sonner';
 
 export default function SellRecyclables() {
@@ -37,9 +37,10 @@ export default function SellRecyclables() {
     let finalPhoto = formData.photo;
     
     if (photoFile) {
-      toast.info("Uploading listing photo...");
+      toast.info("Compressing and uploading listing photo...");
       try {
-        finalPhoto = await uploadFile('marketplace', photoFile, profile.id);
+        const compressed = await compressImage(photoFile, { maxWidth: 1024, quality: 0.7 });
+        finalPhoto = await uploadFile('marketplace', compressed, profile.id);
       } catch (err) {
         toast.error("Upload failed");
         return;

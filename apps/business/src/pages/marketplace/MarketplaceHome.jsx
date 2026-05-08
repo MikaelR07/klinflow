@@ -36,7 +36,7 @@ import {
 } from 'lucide-react';
 import { 
   useAuthStore, useAssetStore, useMarketplaceStore, 
-  usePriceStore, getBusinessLabel 
+  usePriceStore, getBusinessLabel, getThumbnailUrl 
 } from '@cleanflow/core';
 import { toast } from 'sonner';
 import { AssetBadge, TopUpModal } from '@cleanflow/ui';
@@ -323,7 +323,7 @@ export default function MarketplaceHome() {
                 {/* Photo Background Backdrop */}
                 {item.photo_url && (
                   <div className="absolute inset-0">
-                    <img src={item.photo_url} className="w-full h-full object-cover" />
+                    <img src={getThumbnailUrl(item.photo_url, { width: 200 })} loading="lazy" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                   </div>
                 )}
@@ -426,7 +426,7 @@ export default function MarketplaceHome() {
               >
                 <div className="aspect-square bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
                   {listing.photo ? (
-                    <img src={listing.photo} alt={listing.material} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={getThumbnailUrl(listing.photo, { width: 400 })} loading="lazy" alt={listing.material} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-10 h-10 text-slate-200" />

@@ -5,6 +5,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from '@cleanflow/supabase';
 import { ROLES } from '@cleanflow/constants';
+import { compressImage } from '../utils/imageUtils.js';
 import { useNotificationStore, NOTIFICATION_TYPES } from './notificationStore.js';
 
 // ── Normalize phone for email mapping ─────────────────
@@ -337,13 +338,14 @@ export const useAuthStore = create(
         const { userId, updateProfile } = get();
         if (!userId) throw new Error("Not authenticated");
 
-        const fileExt = file.name.split('.').pop();
+        const compressed = await compressImage(file, { maxWidth: 512, quality: 0.8 });
+        const fileExt = compressed.name.split('.').pop();
         const fileName = `avatar-${Date.now()}.${fileExt}`;
         const filePath = `${userId}/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from('avatars')
-          .upload(filePath, file);
+          .upload(filePath, compressed);
 
         if (uploadError) throw uploadError;
 

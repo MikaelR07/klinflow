@@ -9,7 +9,7 @@ import {
   ArrowLeft, Clock, Package
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useMarketplaceStore, useAuthStore, supabase } from '@cleanflow/core';
+import { useMarketplaceStore, useAuthStore, supabase, getThumbnailUrl } from '@cleanflow/core';
 import { toast } from 'sonner';
 
 export default function Sourcing() {
@@ -143,7 +143,7 @@ export default function Sourcing() {
                    {(selectedListing.photos?.length > 0 ? selectedListing.photos : [selectedListing.photo]).map((imgUrl, idx) => (
                      <div key={idx} className="flex-none w-full h-full snap-start">
                        {imgUrl ? (
-                         <img src={imgUrl} className="w-full h-full object-cover" alt={`${selectedListing.material} - View ${idx + 1}`} />
+                         <img src={getThumbnailUrl(imgUrl, { width: 800 })} className="w-full h-full object-cover" alt={`${selectedListing.material} - View ${idx + 1}`} />
                        ) : (
                          <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
                             <Package className="w-20 h-20 text-slate-200 dark:text-slate-700" />
@@ -302,7 +302,7 @@ export default function Sourcing() {
                     <div className="flex gap-4">
                       <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-3xl border border-slate-100 dark:border-slate-800">
                         {listing.photo ? (
-                          <img src={listing.photo} alt={listing.material} className="w-full h-full object-cover" />
+                          <img src={getThumbnailUrl(listing.photo, { width: 200 })} loading="lazy" alt={listing.material} className="w-full h-full object-cover" />
                         ) : (
                           <Package className="w-6 h-6 text-slate-200" />
                         )}

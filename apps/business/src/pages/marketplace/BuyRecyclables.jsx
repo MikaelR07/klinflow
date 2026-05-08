@@ -4,7 +4,7 @@ import {
   Filter, Search, ArrowLeft, MapPin, Tag, 
   ShoppingCart, Loader2, X, Package, BadgeCheck, MessageSquareQuote
 } from 'lucide-react';
-import { useMarketplaceStore, useAuthStore } from '@cleanflow/core';
+import { useMarketplaceStore, useAuthStore, getThumbnailUrl } from '@cleanflow/core';
 import { toast } from 'sonner';
 
 export default function BuyRecyclables() {
@@ -146,7 +146,7 @@ export default function BuyRecyclables() {
           filteredListings.map((item) => (
             <div key={item.id} className="bg-white dark:bg-slate-900 rounded-[0.45rem] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl hover:border-primary/30 transition-all group">
               <div className="relative aspect-[16/9] overflow-hidden bg-slate-100 dark:bg-slate-800">
-                <img src={item.photo} alt={item.material} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <img src={getThumbnailUrl(item.photo, { width: 600 })} loading="lazy" alt={item.material} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute top-4 right-4 flex flex-col gap-2">
                   <span className="bg-white/90 dark:bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-full text-[10px] font-black text-primary shadow-lg border border-primary/20 uppercase tracking-widest">
                     {item.aiMatchScore}% Match

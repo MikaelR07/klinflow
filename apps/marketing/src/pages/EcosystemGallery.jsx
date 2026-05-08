@@ -12,55 +12,55 @@ import Layout from '../layouts/Layout';
 
 const allScreenshots = [
   { 
-    src: '/placeholder-images/grid-images/route-optimizer.png', 
+    src: '/placeholder-images/grid-images/route-optimizer.webp', 
     title: 'Tactical Navigation',
     category: 'Logistics',
     desc: 'Agent HUD with AI-optimized multi-stop routing and real-time pickup telemetry.' 
   },
   { 
-    src: '/placeholder-images/grid-images/visualproof.png', 
+    src: '/placeholder-images/grid-images/visualproof.webp', 
     title: 'HygeneX Vision Scan',
     category: 'Intelligence',
     desc: 'AI-powered material grading and purity verification for instant asset valuation.' 
   },
   { 
-    src: '/placeholder-images/grid-images/book-pickup.png', 
+    src: '/placeholder-images/grid-images/book-pickup.webp', 
     title: 'Mission Request',
     category: 'Consumer',
     desc: 'Streamlined waste categorization and collection scheduling for residents.' 
   },
   { 
-    src: '/placeholder-images/grid-images/arrival-detail.png', 
+    src: '/placeholder-images/grid-images/arrival-detail.webp', 
     title: 'Agent Verification',
     category: 'Logistics',
     desc: 'On-site terminal for weight verification and material grade confirmation.' 
   },
   { 
-    src: '/placeholder-images/grid-images/post-info.png', 
+    src: '/placeholder-images/grid-images/post-info.webp', 
     title: 'B2B Trade Listing',
     category: 'Marketplace',
     desc: 'Advanced data entry for bulk material sales including grade and moisture parameters.' 
   },
   { 
-    src: '/placeholder-images/grid-images/offer-review.png', 
+    src: '/placeholder-images/grid-images/offer-review.webp', 
     title: 'Escrow Negotiation',
     category: 'Financial',
     desc: 'Transparent bidding and fund release system for large-scale material trades.' 
   },
   { 
-    src: '/placeholder-images/grid-images/post-summary.png', 
+    src: '/placeholder-images/grid-images/post-summary.webp', 
     title: 'Mission Settlement',
     category: 'Financial',
     desc: 'Digital receipts and automated wallet payouts upon successful collection.' 
   },
   { 
-    src: '/placeholder-images/grid-images/impact-analysis.png', 
+    src: '/placeholder-images/grid-images/impact-analysis.webp', 
     title: 'Sustainomics Analytics',
     category: 'Intelligence',
     desc: 'Deep-dive environmental impact metrics and historical trade performance.' 
   },
   { 
-    src: '/placeholder-images/grid-images/collection-method.png', 
+    src: '/placeholder-images/grid-images/collection-method.webp', 
     title: 'Logistics Strategy',
     category: 'Logistics',
     desc: 'Dynamic selection between agent pickup and self-service hub drop-offs.' 
@@ -115,6 +115,7 @@ export default function EcosystemGallery() {
                   <img 
                     src={shot.src} 
                     alt={shot.title} 
+                    loading="lazy"
                     className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105" 
                   />
                   

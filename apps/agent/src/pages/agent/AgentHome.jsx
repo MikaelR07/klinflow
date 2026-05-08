@@ -28,7 +28,7 @@ import {
   Handshake
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, useAgentStore, useNotificationStore, useAssetStore, supabase } from '@cleanflow/core';
+import { useAuthStore, useAgentStore, useNotificationStore, useAssetStore, supabase, getThumbnailUrl } from '@cleanflow/core';
 import { AIInsightCard, PushNotificationModal } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
@@ -229,7 +229,7 @@ export default function AgentHome() {
           <button onClick={() => navigate('/settings/profile')} className="shrink-0">
             <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
               {profile?.avatar_url ? (
-                <img src={profile.avatar_url} className="w-full h-full object-cover" />
+                <img src={getThumbnailUrl(profile.avatar_url, { width: 200 })} className="w-full h-full object-cover" />
               ) : (
                 profile?.avatar || '👤'
               )}

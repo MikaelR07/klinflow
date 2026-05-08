@@ -44,7 +44,7 @@ export default function ProductHub() {
 
             <div className="lg:col-span-3 relative order-1 lg:order-2">
               <div className="rounded-2xl overflow-hidden border border-white/5 shadow-2xl relative bg-slate-900">
-                <img src="/placeholder-images/grid-images/Hub-home.png" alt="Hub Terminal: Intake Command" className="w-full h-auto" />
+                <img src="/placeholder-images/grid-images/Hub-home.webp" alt="Hub Terminal: Intake Command" loading="lazy" className="w-full h-auto" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
               </div>
               

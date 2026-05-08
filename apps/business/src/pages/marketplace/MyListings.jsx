@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Eye, Gavel, CheckCircle2, XCircle, Clock, Package, Loader2, MoreVertical } from 'lucide-react';
-import { useMarketplaceStore } from '@cleanflow/core';
+import { useMarketplaceStore, getThumbnailUrl } from '@cleanflow/core';
 
 export default function MyListings() {
   const { myListings, myOrders, updateListingStatus, fetchMyActivity, isLoading } = useMarketplaceStore();
@@ -54,7 +54,7 @@ export default function MyListings() {
           filteredListings.map((item) => (
             <div key={item.id} className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm relative group transition-all hover:border-primary/20">
               <div className="flex gap-4">
-                <img src={item.photo} alt={item.material} className="w-20 h-20 rounded-2xl object-cover bg-slate-100 dark:bg-slate-800" />
+                <img src={getThumbnailUrl(item.photo, { width: 200 })} loading="lazy" alt={item.material} className="w-20 h-20 rounded-2xl object-cover bg-slate-100 dark:bg-slate-800" />
                 <div className="flex-1">
                   <div className="flex justify-between items-start">
                     <h3 className="font-semibold text-slate-900 dark:text-white">{item.material} Batch</h3>

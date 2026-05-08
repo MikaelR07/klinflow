@@ -18,7 +18,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { 
   useAuthStore, useAssetStore, useMarketplaceStore, 
-  getBusinessLabel, supabase 
+  getBusinessLabel, supabase, getThumbnailUrl 
 } from '@cleanflow/core';
 import { toast } from 'sonner';
 
@@ -201,7 +201,7 @@ export default function SupplyTerminal() {
               {/* Thumbnail Anchor */}
               <div className="w-20 h-20 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative shrink-0 border border-slate-100 dark:border-slate-800 shadow-sm">
                 {item.photo_url || item.photo ? (
-                  <img src={item.photo_url || item.photo} className="w-full h-full object-cover" alt="Material" />
+                  <img src={getThumbnailUrl(item.photo_url || item.photo, { width: 200 })} loading="lazy" className="w-full h-full object-cover" alt="Material" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700">
                     {item.sourceType === 'weaver' ? <Building2 className="w-8 h-8 text-slate-300/50" /> : <Truck className="w-8 h-8 text-slate-300/50" />}

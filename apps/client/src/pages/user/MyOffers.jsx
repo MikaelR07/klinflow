@@ -10,7 +10,7 @@ import {
   Package, MapPin, Tag, User, ChevronRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useMarketplaceStore, useAuthStore, useBookingStore, supabase } from '@cleanflow/core';
+import { useMarketplaceStore, useAuthStore, useBookingStore, supabase, getThumbnailUrl } from '@cleanflow/core';
 import { toast } from 'sonner';
 
 export default function MyOffers() {
@@ -214,7 +214,7 @@ export default function MyOffers() {
               {/* Edge-to-Edge Hero Image */}
               <div className="w-full aspect-[4/3] bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
                 {selectedOffer.photo ? (
-                  <img src={selectedOffer.photo} className="w-full h-full object-cover" />
+                  <img src={getThumbnailUrl(selectedOffer.photo, { width: 800 })} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
                     <Package className="w-20 h-20 text-slate-200 dark:text-slate-700" />
@@ -341,7 +341,7 @@ export default function MyOffers() {
                     <div className="flex items-center gap-4">
                       <div className="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
                         {offer.photo ? (
-                          <img src={offer.photo} className="w-full h-full object-cover" />
+                          <img src={getThumbnailUrl(offer.photo, { width: 200 })} loading="lazy" className="w-full h-full object-cover" />
                         ) : (
                           <span className="text-xl">{offer.emoji || '♻️'}</span>
                         )}

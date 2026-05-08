@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, Save, Camera } from 'lucide-react';
-import { useAuthStore, ROLES } from '@cleanflow/core';
+import { useAuthStore, ROLES, getThumbnailUrl } from '@cleanflow/core';
 import { toast } from 'sonner';
 import LocationSelector from '@cleanflow/ui/components/LocationSelector';
 
@@ -63,7 +63,7 @@ export default function ProfilePage() {
         <div className="relative group">
           <div className="w-24 h-24 rounded-full border-4 border-white dark:border-slate-800 shadow-xl overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl">
             {profile?.avatar_url ? (
-              <img src={profile.avatar_url} className="w-full h-full object-cover" />
+              <img src={getThumbnailUrl(profile.avatar_url, { width: 200 })} className="w-full h-full object-cover" />
             ) : (
               profile?.avatar || '👤'
             )}

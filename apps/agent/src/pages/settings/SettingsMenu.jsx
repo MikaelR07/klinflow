@@ -1,5 +1,5 @@
 import { User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle, Truck, BadgeCheck, Clock, DollarSign } from 'lucide-react';
-import { useAuthStore } from '@cleanflow/core';
+import { useAuthStore, getThumbnailUrl } from '@cleanflow/core';
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggleRow } from '@cleanflow/ui';
 import { toast } from 'sonner';
@@ -33,7 +33,7 @@ export default function SettingsMenu() {
       >
         <div className="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-3xl shadow-sm overflow-hidden border-2 border-white dark:border-slate-800">
           {profile?.avatar_url ? (
-            <img src={profile.avatar_url} className="w-full h-full object-cover" />
+            <img src={getThumbnailUrl(profile.avatar_url, { width: 200 })} className="w-full h-full object-cover" />
           ) : (
             profile?.avatar || '👤'
           )}
