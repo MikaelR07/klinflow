@@ -205,7 +205,7 @@ export default function ImpactAnalytics() {
       <div className="flex-1 overflow-y-auto p-2 space-y-4 pb-24">
         {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
         <div className="relative">
-          <div className="relative bg-white dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-6">
+          <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6">
             
             {/* Subtle Background Elements Removed for Mobile Performance */}
             
@@ -214,8 +214,8 @@ export default function ImpactAnalytics() {
               <div className="grid grid-cols-4 gap-2.5">
                 
                 {/* 1. Primary: Lifetime Revenue (Large) */}
-                <div className="col-span-2 row-span-2 bg-slate-50 dark:bg-white/10 rounded-2xl p-5 border border-slate-100 dark:border-white/10 flex flex-col justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-white/10 flex items-center justify-center">
+                <div className="col-span-2 row-span-2 bg-slate-50 dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center">
                     <TrendingUp className="w-4 h-4 text-indigo-600 dark:text-indigo-200" />
                   </div>
                   <div>
@@ -228,21 +228,21 @@ export default function ImpactAnalytics() {
                 </div>
 
                 {/* 2. Recyclables Recovered */}
-                <div className="bg-slate-50 dark:bg-white/10 rounded-2xl p-3 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center">
+                <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-3 border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center">
                   <Scale className="w-4 h-4 text-emerald-600 dark:text-emerald-300 mb-1" />
                   <span className="text-lg font-bold text-slate-900 dark:text-white leading-none">{stats.totalWeight}</span>
                   <span className="text-[7px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">KG Recycled</span>
                 </div>
 
                 {/* 3. Global Rank */}
-                <div className="bg-slate-50 dark:bg-white/10 rounded-2xl p-3 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center">
+                <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-3 border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center">
                   <Trophy className="w-4 h-4 text-amber-600 dark:text-amber-300 fill-amber-600/10 dark:fill-amber-300/20 mb-1" />
                   <span className="text-lg font-bold text-slate-900 dark:text-white leading-none">#{stats.globalRank || '—'}</span>
                   <span className="text-[7px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Rank</span>
                 </div>
 
                 {/* 4. Withdrawn (Horizontal) */}
-                <div className="col-span-2 bg-slate-50 dark:bg-white/10 rounded-2xl p-3 border border-slate-100 dark:border-white/10 flex items-center gap-3">
+                <div className="col-span-2 bg-slate-50 dark:bg-slate-900 rounded-2xl p-3 border border-slate-100 dark:border-slate-700 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-400/20 flex items-center justify-center">
                     <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-200" />
                   </div>
@@ -253,7 +253,7 @@ export default function ImpactAnalytics() {
                 </div>
 
                 {/* 5. Metrics Strip (Bottom Row) */}
-                <div className="col-span-4 bg-slate-100/50 dark:bg-white/5 rounded-2xl p-3 border border-slate-200 dark:border-white/5 flex items-center justify-between">
+                <div className="col-span-4 bg-slate-100/50 dark:bg-slate-900 rounded-2xl p-3 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
                   <div className="flex items-center gap-4 px-2">
                     <div className="text-center">
                       <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{stats.totalPickups}</p>
@@ -265,7 +265,7 @@ export default function ImpactAnalytics() {
                       <p className="text-[7px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">GFP</p>
                     </div>
                   </div>
-                  <div className="text-right px-4 border-l border-slate-200 dark:border-white/10">
+                  <div className="text-right px-4 border-l border-slate-200 dark:border-slate-700">
                      <p className="text-[7px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mb-1">Most Recycled</p>
                      <p className="text-xs font-bold text-slate-900 dark:text-white capitalize truncate max-w-[100px]">{stats.topMaterial}</p>
                   </div>
