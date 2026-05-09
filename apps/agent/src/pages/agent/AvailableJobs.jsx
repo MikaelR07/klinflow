@@ -130,7 +130,7 @@ export default function AvailableJobs() {
             </button>
             <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 rounded-xl px-4 py-2.5 border border-slate-100 dark:border-slate-800 flex items-center gap-2">
               <RefreshCw className={`w-3.5 h-3.5 text-slate-300 ${isLoadingJobs ? 'animate-spin' : ''}`} />
-              <p className="text-xs font-black text-slate-400 uppercase tracking-widest italic">Live Missions Radar</p>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Live Missions Radar</p>
             </div>
           </div>
 
@@ -150,7 +150,7 @@ export default function AvailableJobs() {
                 <div className="flex items-center justify-center gap-1.5">
                   <span className="whitespace-nowrap">{tab.label}</span>
                   {tab.count > 0 && (
-                    <span className={`text-[7px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${
+                    <span className={`text-[8px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${
                       activeTab === tab.id ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
                     }`}>
                       {tab.count}
@@ -347,10 +347,10 @@ export default function AvailableJobs() {
                       <div className="flex-1 min-w-0 flex flex-col justify-between h-12">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
-                            <h3 className="text-[13px] font-black text-slate-900 dark:text-white uppercase truncate tracking-tight italic leading-none mb-1.5">
+                            <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase truncate tracking-tight italic leading-none mb-1.5">
                               {waste?.label || job.material}
                             </h3>
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest truncate">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">
                               {job.customerName || job.customer || 'Client'}
                             </p>
                           </div>
@@ -367,7 +367,7 @@ export default function AvailableJobs() {
                         <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-800/50 pt-1.5 mt-auto">
                           <div className="flex items-center gap-1.5 flex-1 min-w-0">
                             <MapPin className="w-3 h-3 text-slate-300" />
-                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest truncate">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">
                               {job.location}
                             </p>
                           </div>

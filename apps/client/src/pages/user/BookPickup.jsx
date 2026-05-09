@@ -454,7 +454,6 @@ export default function BookPickup() {
                             type="file" 
                             accept="image/*" 
                             className="hidden" 
-                            capture="environment"
                             onChange={(e) => setPhoto(e.target.files[0])} 
                           />
                         </label>

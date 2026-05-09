@@ -373,7 +373,6 @@ export default function PostTrade() {
                     type="file" 
                     id="photo-upload" 
                     accept="image/*" 
-                    capture="environment"
                     multiple
                     className="hidden" 
                     onChange={(e) => {
