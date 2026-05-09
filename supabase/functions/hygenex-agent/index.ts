@@ -181,21 +181,32 @@ Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.`;
       }
     }
 
-    // 4. Store AI response
-    const { data: aiMsg, error: saveError } = await supabase
+    // 4. Store AI response (Background)
+    const aiMsgId = crypto.randomUUID();
+    const createdAt = new Date().toISOString();
+    
+    // We don't await this to return to user faster
+    supabase
       .from('hygenex_messages')
       .insert({ 
+        id: aiMsgId,
         user_id: userId, 
         role: 'ai', 
         text: aiResponse,
-        metadata: parsed.action ? { action: parsed.action } : null 
+        metadata: parsed.action ? { action: parsed.action } : null,
+        created_at: createdAt
       })
-      .select()
-      .single();
+      .then(({ error }) => {
+        if (error) console.error('[AI Error] Background save failed:', error);
+      });
 
-    if (saveError) console.error('[AI Error] Failed to save AI response:', saveError);
-
-    return new Response(JSON.stringify(aiMsg || { role: 'ai', text: aiResponse, created_at: new Date().toISOString() }), {
+    return new Response(JSON.stringify({ 
+      id: aiMsgId, 
+      role: 'ai', 
+      text: aiResponse, 
+      created_at: createdAt,
+      metadata: parsed.action ? { action: parsed.action } : null 
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 

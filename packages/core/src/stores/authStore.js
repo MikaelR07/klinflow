@@ -288,11 +288,37 @@ export const useAuthStore = create(
   },
 
   logout: async () => {
-        const { profileSubscription } = get();
-        if (profileSubscription) supabase.removeChannel(profileSubscription);
-        await supabase.auth.signOut();
-        set({ isAuthenticated: false, token: null, role: ROLES.USER, profile: null, userId: null, profileSubscription: null });
-      },
+    const { profileSubscription } = get();
+    
+    // 1. Instantly cleanup realtime
+    if (profileSubscription) {
+      try {
+        await supabase.removeChannel(profileSubscription);
+      } catch (e) {
+        console.warn('[AuthStore] Channel cleanup failed during logout', e);
+      }
+    }
+
+    try {
+      // 2. Clear server session (don't block for too long)
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error('[AuthStore] Supabase signOut error:', err);
+    } finally {
+      // 3. ALWAYS clear local state regardless of server response
+      set({ 
+        isAuthenticated: false, 
+        token: null, 
+        role: ROLES.USER, 
+        profile: null, 
+        userId: null, 
+        profileSubscription: null 
+      });
+      
+      // 4. Force clear localStorage just in case middleware fails
+      localStorage.removeItem('cf_auth_session');
+    }
+  },
 
       updateProfile: async (newData) => {
         const { userId, profile } = get();

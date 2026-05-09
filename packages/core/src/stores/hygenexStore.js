@@ -109,22 +109,9 @@ export const useHygenexStore = create((set, get) => ({
     const userMsg = { id: tempId, role: 'user', text, timestamp: new Date().toISOString() };
     set((s) => ({ messages: [...s.messages, userMsg], isTyping: true }));
 
-    // 2. Persist user message
-    const { error: insertError } = await supabase.from('hygenex_messages').insert({
-      user_id: userId,
-      role: 'user',
-      text
-    });
-
-    if (insertError) {
-      console.error('[HygeneX] Message save failed:', insertError);
-      set({ isTyping: false });
-      return;
-    }
-
-    // 3. Call Edge Function
-    try {
-      console.log('[HygeneX] Calling AI Edge Function...');
+    // 2. Parallelize: Save user message + Call AI Edge Function
+    const sendMessagePromise = (async () => {
+      const { userId } = useAuthStore.getState();
       const session = await supabase.auth.getSession();
       const token = session?.data?.session?.access_token;
 
@@ -148,7 +135,17 @@ export const useHygenexStore = create((set, get) => ({
         throw new Error('AI Response Failed');
       }
 
-      const aiMsg = await res.json();
+      return res.json();
+    })();
+
+    const persistUserMsgPromise = supabase.from('hygenex_messages').insert({
+      user_id: userId,
+      role: 'user',
+      text
+    });
+
+    try {
+      const [aiMsg] = await Promise.all([sendMessagePromise, persistUserMsgPromise]);
       console.log('[HygeneX] AI Response Received:', aiMsg);
 
       // 4. Manual Sync (Deduplicated)

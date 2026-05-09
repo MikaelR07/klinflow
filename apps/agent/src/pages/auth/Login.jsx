@@ -45,7 +45,7 @@ export default function Login() {
         
         {/* Branding */}
         <div className="text-center mb-10">
-          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl mb-4 mx-auto" alt="Agent Logo" fetchpriority="high" loading="eager" />
+          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl mb-4 mx-auto" alt="Agent Logo" fetchPriority="high" loading="eager" />
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
             Clean<span className="text-secondary">Agent</span>
           </h1>

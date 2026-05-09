@@ -14,7 +14,7 @@ const MerchantPodiumSlot = memo(({ user, height, bgClass, isFirst }) => (
           className="w-full h-full object-cover" 
           alt={user.name}
           loading={isFirst ? "eager" : "lazy"}
-          fetchpriority={isFirst ? "high" : "auto"}
+          fetchPriority={isFirst ? "high" : "auto"}
         />
       ) : (
         <span className="text-xl">{user ? '👤' : '—'}</span>
@@ -43,7 +43,7 @@ const PodiumSlot = memo(({ user, height, bgClass, medalClass, isFirst }) => (
           className="w-full h-full object-cover" 
           alt={user.name}
           loading={isFirst ? "eager" : "lazy"}
-          fetchpriority={isFirst ? "high" : "auto"}
+          fetchPriority={isFirst ? "high" : "auto"}
         />
       ) : (
         <span className="text-lg">{user ? '👤' : '—'}</span>

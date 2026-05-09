@@ -96,9 +96,15 @@ export default function SettingsMenu() {
       {/* Logout */}
       <button 
         onClick={async () => {
-          await logout();
-          toast.success('You have been logged out');
-          navigate('/login', { replace: true });
+          const tid = toast.loading('Securing your session and signing out...');
+          try {
+            await logout();
+            toast.success('You have been logged out', { id: tid });
+          } catch (err) {
+            toast.error('Logout completed with local cleanup', { id: tid });
+          } finally {
+            navigate('/login', { replace: true });
+          }
         }}
         className="w-full flex items-center justify-center gap-2 text-rose-500 font-semibold text-[15px] py-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all"
       >
