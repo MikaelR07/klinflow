@@ -170,7 +170,7 @@ export default function MyOffers() {
           <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mb-4">
             {[
               { id: 'pending', label: 'Bids', count: pendingOffers.length },
-              { id: 'progress', label: 'In-Progress', count: inProgressOffers.length },
+              { id: 'progress', label: 'On-going', count: inProgressOffers.length },
               { id: 'counter', label: 'Counters', count: counterOffers.length },
               { id: 'accepted', label: 'Confirmed', count: completedOffers.length },
             ].map(tab => (
@@ -209,10 +209,10 @@ export default function MyOffers() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="-mx-2 -mt-5"
+              className="-mx-4 -mt-7"
             >
               {/* Edge-to-Edge Hero Image */}
-              <div className="w-full aspect-[4/3] bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
+              <div className="w-full aspect-[3/2] bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
                 {selectedOffer.photo ? (
                   <img src={getThumbnailUrl(selectedOffer.photo, { width: 800 })} className="w-full h-full object-cover" />
                 ) : (
@@ -224,57 +224,79 @@ export default function MyOffers() {
                 {/* Floating Back Button */}
                 <button 
                   onClick={() => setSelectedOfferId(null)}
-                  className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all z-10"
+                  className="absolute top-8 left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
                 >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span className="text-xs font-semibold uppercase tracking-widest">Back</span>
+                  <ArrowLeft className="w-5 h-5" />
                 </button>
-
-                {/* Status Badge */}
-                <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/40 backdrop-blur-xl text-white rounded-full text-xs font-semibold uppercase tracking-[0.2em] z-10">
-                  Offer Review
-                </div>
-
               </div>
 
-              {/* Content Sheet (Overlaps Image) */}
-              <div className="relative -mt-6 bg-slate-50 dark:bg-slate-900 rounded-t-[2rem] px-5 pt-6 pb-6 space-y-5">
+              {/* Content Sheet */}
+              <div className="bg-slate-50 dark:bg-slate-900 px-4 pt-5 pb-2 space-y-4">
                 
-                {/* Title & Buyer */}
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <h2 className="text-2xl font-semibold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{selectedOffer.material}</h2>
-                    <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1 rounded-full uppercase tracking-widest shrink-0">
-                      KSh {selectedOffer.offered_price}/kg
-                    </span>
+                {/* Title & Info */}
+                <div className="space-y-4">
+                  {/* Unified Material & Asking Price Card */}
+                  <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight">{selectedOffer.material}</h2>
+                      <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-700/50 px-2 py-1 rounded-lg border border-slate-100 dark:border-slate-700">
+                        <MapPin className="w-3.5 h-3.5 text-indigo-500" />
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest italic">{selectedOffer.listing?.location || 'Nairobi Hub'}</span>
+                      </div>
+                    </div>
+                    <div className="h-px bg-slate-100 dark:bg-slate-700" />
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Your Asking Price</p>
+                        <p className="text-sm font-black text-slate-900 dark:text-white">KSh {selectedOffer.listing?.price_per_kg || 'N/A'}<span className="text-[10px] font-bold text-slate-400 ml-1">/KG</span></p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <User className="w-3 h-3 text-slate-400" />
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{selectedOffer.buyerName}</p>
-                    <span className="text-xs text-slate-300">•</span>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1">
-                      <MapPin className="w-3 h-3" /> {selectedOffer.listing?.location || 'Nairobi'}
-                    </p>
+
+                  {/* Unified Offer Details Card */}
+                  <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-4 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Agent Name</p>
+                        <p className="text-sm font-black text-slate-900 dark:text-white tracking-tight uppercase">{selectedOffer.buyerName}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/60 uppercase tracking-widest mb-0.5">Agent Bid</p>
+                        <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-none">
+                          KSh {selectedOffer.offered_price} <span className="text-[10px] font-bold opacity-70">/KG</span>
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="h-px bg-slate-100 dark:bg-slate-700" />
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
+                          <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Requested Weight</p>
+                          <p className="text-sm font-black text-slate-900 dark:text-white tracking-tight uppercase">{selectedOffer.quantity} KG</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Available Stock</p>
+                        <p className="text-sm font-bold text-slate-600 dark:text-slate-400">{selectedOffer.listing?.quantity || 0} KG</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Stats Row */}
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Qty Requested</p>
-                    <p className="text-base font-semibold text-slate-700 dark:text-white">{selectedOffer.quantity}</p>
-                    <p className="text-xs font-semibold text-slate-300 uppercase">KG</p>
-                  </div>
-                  <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Your Ask</p>
-                    <p className="text-base font-semibold text-slate-700 dark:text-white">KSh {selectedOffer.listing?.price_per_kg || 'N/A'}</p>
-                    <p className="text-xs font-semibold text-slate-300 uppercase">Per KG</p>
-                  </div>
-                  <div className="bg-slate-900 dark:bg-slate-800 p-4 rounded-2xl border border-slate-800 text-center shadow-lg">
-                    <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-1">Payout</p>
-                    <p className="text-base font-semibold text-white">KSh {(selectedOffer.offered_price * selectedOffer.quantity).toLocaleString()}</p>
-                    <p className="text-xs font-semibold text-emerald-400/50 uppercase">Total</p>
-                  </div>
+                {/* Expected Value Card (Dynamic Branding) */}
+                <div className="bg-emerald-600 dark:bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20 shadow-xl shadow-emerald-500/10 flex flex-col justify-center text-center">
+                  <p className="text-[10px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest mb-1">Expected Value</p>
+                  <p className="text-xl font-black text-white dark:text-emerald-400 leading-none">
+                    KSh {(parseFloat(selectedOffer.listing?.price_per_kg || 0) * parseFloat(selectedOffer.listing?.quantity || 0)).toLocaleString()}
+                  </p>
+                  <p className="text-[10px] text-emerald-200 dark:text-emerald-500/60 font-bold uppercase mt-1.5">
+                    {selectedOffer.listing?.price_per_kg} × {selectedOffer.listing?.quantity}kg Total Stock
+                  </p>
                 </div>
 
                 {/* Listing Details */}
@@ -301,6 +323,14 @@ export default function MyOffers() {
                           </span>
                         );
                       })()}
+                    </div>
+                    <div className="h-px bg-slate-100 dark:bg-slate-700" />
+                    <div className="flex items-center justify-between pt-1">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest">Your Pay</span>
+                        <span className="text-[10px] font-semibold text-slate-400">KSh {selectedOffer.offered_price || selectedOffer.price} × {selectedOffer.quantity}kg</span>
+                      </div>
+                      <span className="text-sm font-black text-emerald-600">KSh {(parseFloat(selectedOffer.offered_price || selectedOffer.price || 0) * parseFloat(selectedOffer.quantity || 0)).toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
