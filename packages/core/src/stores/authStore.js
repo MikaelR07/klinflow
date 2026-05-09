@@ -87,7 +87,7 @@ export const useAuthStore = create(
               .from('profiles')
               .select('*')
               .eq('id', session.user.id)
-              .single();
+              .maybeSingle();
             
             if (profileData) {
               const uiProfile = get()._mapProfile(profileData);
@@ -119,7 +119,7 @@ export const useAuthStore = create(
                   .from('profiles')
                   .select('*')
                   .eq('id', session.user.id)
-                  .single();
+                  .maybeSingle();
                 
                 if (profileData) {
                   // ── GLOBAL ROLE GATEKEEPER ──
@@ -166,7 +166,7 @@ export const useAuthStore = create(
           .from('profiles')
           .select('*')
           .eq('id', userId)
-          .single();
+          .maybeSingle();
         if (profileData) {
           const uiProfile = get()._mapProfile(profileData);
           set({ 
@@ -572,7 +572,7 @@ export const useAuthStore = create(
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password: pin });
         if (authError) throw new Error('Invalid credentials.');
         const user = authData.user;
-        const { data: profileData, error: profileError } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+        const { data: profileData, error: profileError } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
           if (profileError || !profileData) {
             await supabase.auth.signOut();
             throw new Error('Access Denied: Profile not found. Please register.');

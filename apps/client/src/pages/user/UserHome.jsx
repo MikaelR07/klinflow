@@ -134,7 +134,6 @@ export default function UserHome() {
   }
 
   return (
-  return (
     <div className="px-4 space-y-4 animate-fade-in pb-10">
 
       {/* ── PUSH ENROLLMENT MODAL ── */}
