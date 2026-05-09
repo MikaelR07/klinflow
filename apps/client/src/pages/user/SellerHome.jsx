@@ -229,7 +229,7 @@ export default function SellerHome() {
 
       {/* ── REVENUE HERO CARD ── */}
       <div className="relative group">
-        <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl p-6 shadow-none border border-slate-100 dark:border-white/5">
+        <div className="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-none border border-slate-100 dark:border-white/5">
           <div className="relative z-10 flex flex-col gap-5">
             <div className="flex flex-wrap sm:flex-nowrap items-end justify-between w-full gap-4">
               <div className="flex-1 min-w-0">
@@ -373,7 +373,7 @@ export default function SellerHome() {
 
       {/* ── REFER & EARN (GROWTH ENGINE) ── */}
       <div className="bg-gradient-to-br from-indigo-600 to-primary rounded-2xl p-6 text-white relative overflow-hidden shadow-xl shadow-indigo-500/20">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10" />
         <div className="relative z-10 flex items-center gap-5">
            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center shrink-0 border border-white/20">
               <Users className="w-9 h-9 text-white" />
