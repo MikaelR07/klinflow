@@ -116,7 +116,7 @@ export default function MyBookings() {
   };
 
   return (
-    <div className="space-y-4 animate-fade-in pb-20">
+    <div className="space-y-4 animate-fade-in pb-20 px-2">
       <div className="relative flex items-center justify-between min-h-[40px]">
         <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 z-10">
           <ArrowLeft className="w-5 h-5 dark:text-white" />

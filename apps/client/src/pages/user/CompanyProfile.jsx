@@ -59,7 +59,7 @@ export default function CompanyProfile() {
       </div>
 
       {/* Hero */}
-      <div className="mx-4 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white relative overflow-hidden shadow-2xl">
+      <div className="mx-0 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white relative overflow-hidden shadow-2xl">
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl" />
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-4">
@@ -96,7 +96,7 @@ export default function CompanyProfile() {
         </div>
       </div>
 
-      <div className="mx-4 mt-4 space-y-4">
+      <div className="mx-0 mt-4 space-y-4">
         {/* Location */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 flex items-center gap-4">
           <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">

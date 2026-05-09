@@ -313,7 +313,7 @@ export default function BookPickup() {
     <div className="bg-slate-50 dark:bg-slate-900 px-2">
       
       {/* ── HEADER ── */}
-      <div className="p-2 pt-2 px-2 flex items-center justify-between">
+      <div className="p-2 pt-2 px-1 flex items-center justify-between">
          <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100"><ArrowLeft className="w-5 h-5 dark:text-white" /></button>
          <div className="flex flex-col items-end">
             <h1 className="text-xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-none">Step {step} of 3</h1>
@@ -327,7 +327,7 @@ export default function BookPickup() {
         <AnimatePresence mode="wait">
           
           {step === 1 && (
-            <motion.div key="p1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 px-2">
+            <motion.div key="p1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 px-0">
                <div className="space-y-4">
                   <h2 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">What are we picking up?</h2>
                   {!wasteType ? (

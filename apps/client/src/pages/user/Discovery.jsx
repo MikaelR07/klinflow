@@ -108,7 +108,7 @@ export default function DiscoveryHub() {
         </div>
       </div>
 
-      <div className="w-full p-4 space-y-6">
+      <div className="w-full p-0 py-6 space-y-6">
         
         {/* ── EXPANDABLE FILTERS ── */}
         <AnimatePresence>

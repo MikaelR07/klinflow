@@ -51,9 +51,9 @@ export default function WithdrawalPage() {
   };
 
   return (
-    <div className="animate-fade-in pb-10">
+    <div className="animate-fade-in pb-10 px-2">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 rounded-3xl mb-6 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-2 px-1 rounded-3xl mb-6 shadow-sm">
         <div className="max-w-md mx-auto flex items-center gap-4">
           <button onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors">
             <ArrowLeft className="w-5 h-5 text-slate-500" />
@@ -62,7 +62,7 @@ export default function WithdrawalPage() {
         </div>
       </div>
 
-      <div className="max-w-md mx-auto p-5 space-y-6">
+      <div className="max-w-md mx-auto p-2 py-6 space-y-6">
         
         {/* Step Indicator */}
         <div className="flex items-center justify-between px-4 mb-4">
