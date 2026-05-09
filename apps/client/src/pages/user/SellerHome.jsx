@@ -39,6 +39,43 @@ import { SkeletonCard } from '@cleanflow/ui';
 import { PushNotificationModal } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
+// ── OPTIMIZED CREDIT METER COMPONENT ──────────────────────────────
+const CreditRateMeter = ({ score = 0 }) => {
+  // Map 0-100 score to -90 to 90 degrees
+  const rotation = (score / 100) * 180 - 90;
+  
+  return (
+    <div className="relative w-40 h-22 sm:w-52 sm:h-32 flex flex-col items-center justify-end overflow-visible">
+      <svg className="w-full h-full overflow-visible" viewBox="0 0 100 55">
+        {/* Exact segments from Trust Score Page */}
+        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="0" />
+        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f97316" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-21.5" />
+        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#eab308" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-43" />
+        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#4ade80" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-64.5" />
+        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-86" />
+        
+        {/* Inner track decoration */}
+        <path d="M 18 50 A 32 32 0 0 1 82 50" stroke="currentColor" className="text-slate-900 dark:text-white" strokeOpacity="0.1" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
+        
+        {/* Active Needle */}
+        <g 
+          className="transition-transform duration-1000 ease-out origin-[50px_50px]"
+          style={{ transform: `rotate(${rotation}deg)` }}
+        >
+          <line
+            x1="50" y1="50" x2="50" y2="22"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            className="text-slate-900 dark:text-white"
+          />
+          <circle cx="50" cy="50" r="4" fill="currentColor" className="text-slate-900 dark:text-white" />
+        </g>
+      </svg>
+    </div>
+  );
+};
+
 // ── SMART NAMING GUARD (REGEX + DICTIONARY) ───────────────────────
 const formatMaterial = (text) => {
   if (!text) return 'Recyclable Load';
@@ -232,27 +269,32 @@ export default function SellerHome() {
         <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-[#0a0f1e] rounded-2xl p-6 shadow-none border border-slate-100 dark:border-white/5 overflow-hidden">
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
           <div className="flex flex-col gap-5">
-            <div className="flex flex-wrap sm:flex-nowrap items-end justify-between w-full gap-4">
-              <div className="flex-1 min-w-0">
+            <div className="grid grid-cols-2 w-full gap-0">
+              <div className="flex-1 min-w-0 border-r border-slate-100 dark:border-white/20 pr-4">
                 <div className="flex items-center gap-1.5 mb-3">
                   <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span className="text-[10px] font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest truncate">Seller Wallet</span>
                 </div>
                 
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-tight truncate">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-tight mb-4">
                   KSh {(profile?.balance || profile?.walletBalance || 0).toLocaleString()}
                 </h2>
+
+                <button 
+                  onClick={() => navigate('/withdraw')}
+                  className="bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+                >
+                  Withdraw
+                </button>
               </div>
-              
-              <button 
-                onClick={() => navigate('/withdraw')}
-                className="bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl text-[10px] sm:text-xs font-semibold uppercase tracking-widest shadow-xl active:scale-95 transition-all mb-0.5 sm:mb-1 shrink-0"
-              >
-                Withdraw
-              </button>
+
+              {/* Credit Meter Column */}
+              <div className="flex flex-col items-center justify-center gap-1 pl-4">
+                <CreditRateMeter score={score} />
+                <p className="text-[8px] font-bold text-slate-400 dark:text-white/30 uppercase tracking-widest">Credit Rate</p>
+              </div>
             </div>
 
-            {/* Stats row */}
             {/* Stats row */}
             <div className="pt-5 border-t border-slate-100 dark:border-white/10">
               <div className="flex items-center justify-between sm:justify-start sm:gap-16 px-1">
@@ -265,13 +307,19 @@ export default function SellerHome() {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-1 px-4 sm:px-0 border-x border-slate-100 dark:border-white/10 sm:border-none">
+                {/* Independent Divider */}
+                <div className="w-px h-8 bg-slate-100 dark:bg-white/10" />
+
+                <div className="flex flex-col items-center gap-1">
                   <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">{totalSoldKg}kg</p>
                   <div className="flex items-center gap-1.5">
                     <Scale className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                     <p className="text-[9px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">Sold KG</p>
                   </div>
                 </div>
+
+                {/* Independent Divider */}
+                <div className="w-px h-8 bg-slate-100 dark:bg-white/10" />
 
                 <div className="flex flex-col items-center gap-1">
                   <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
