@@ -282,7 +282,7 @@ export default function SellerHome() {
 
                 <button 
                   onClick={() => navigate('/withdraw')}
-                  className="bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+                  className="bg-emerald-500 hover:bg-emerald-400 text-white px-7 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
                 >
                   Withdraw
                 </button>
