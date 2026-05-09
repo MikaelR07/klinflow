@@ -6,7 +6,7 @@ import {
   Sparkles, Filter, ChevronRight, Scale, Info, Package
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase, MATERIAL_LABELS, WASTE_CATEGORIES } from '@cleanflow/core';
+import { supabase, MATERIAL_LABELS, WASTE_CATEGORIES, getThumbnailUrl } from '@cleanflow/core';
 
 const SCALE_DEFS = [
   { id: 'all', label: 'Any Scale', icon: Truck, description: 'Show all partners' },
@@ -203,7 +203,7 @@ export default function DiscoveryHub() {
                         isCompany ? 'bg-indigo-50 dark:bg-indigo-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30'
                       }`}>
                         {partner.avatar_url ? (
-                          <img src={partner.avatar_url} className="w-full h-full object-cover" loading="lazy" />
+                          <img src={getThumbnailUrl(partner.avatar_url, { width: 150 })} className="w-full h-full object-cover" loading="lazy" />
                         ) : (
                           isCompany ? '🏢' : '🚛'
                         )}

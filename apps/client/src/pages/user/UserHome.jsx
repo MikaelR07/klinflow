@@ -10,7 +10,7 @@ import {
   Users, ShieldCheck, X, Sparkles, Search, Brain
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useBookingStore, useAuthStore, useNotificationStore, supabase } from '@cleanflow/core';
+import { useBookingStore, useAuthStore, useNotificationStore, supabase, getThumbnailUrl } from '@cleanflow/core';
 
 import { toast } from 'sonner';
 import { PushNotificationModal } from '@cleanflow/ui';
@@ -165,7 +165,7 @@ export default function UserHome() {
           <button onClick={() => navigate('/settings/profile')} className="shrink-0">
             <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
               {profile?.avatar_url ? (
-                <img src={profile.avatar_url} className="w-full h-full object-cover" loading="lazy" />
+                <img src={getThumbnailUrl(profile.avatar_url, { width: 100 })} className="w-full h-full object-cover" loading="lazy" />
               ) : (
                 profile?.avatar || '👤'
               )}
