@@ -255,8 +255,8 @@ export default function HygeneXPage() {
         {/* Input Control */}
       </div>
 
-      <div className="shrink-0 w-full z-30 bg-slate-100 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 rounded-t-[1.5rem] shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] pb-6 lg:pb-8 pt-2">
-        <div className="w-full max-w-4xl mx-auto">
+      <div className="shrink-0 w-full z-30 px-4 pb-8 lg:pb-10 pt-4 bg-transparent">
+        <div className="w-full max-w-4xl mx-auto bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] shadow-2xl overflow-hidden">
           <div className="relative flex items-end">
             <textarea
               value={inputText}

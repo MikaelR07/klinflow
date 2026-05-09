@@ -2,7 +2,7 @@
  * My Bookings Page — list of user's bookings with status badges
  */
 import { useState, useEffect } from 'react';
-import { Package, Clock, CheckCircle2, Truck, Star, XCircle, CalendarClock, Zap, ChevronDown } from 'lucide-react';
+import { Package, Clock, CheckCircle2, Truck, Star, XCircle, CalendarClock, Zap, ChevronDown, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useBookingStore, useServiceStore } from '@cleanflow/core';
 
@@ -117,10 +117,17 @@ export default function MyBookings() {
 
   return (
     <div className="space-y-4 animate-fade-in pb-20">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold dark:text-white">My Bookings</h1>
-        <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
-          <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">All Pickups: {bookings.length}</p>
+      <div className="relative flex items-center justify-between min-h-[40px]">
+        <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 z-10">
+          <ArrowLeft className="w-5 h-5 dark:text-white" />
+        </button>
+        
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none">My Bookings</h1>
+        </div>
+        
+        <div className="z-10 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 bg-white dark:bg-slate-900 shadow-sm">
+          <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">Total: {bookings.length}</p>
         </div>
       </div>
 

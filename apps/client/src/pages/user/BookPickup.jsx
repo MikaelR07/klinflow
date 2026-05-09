@@ -314,7 +314,7 @@ export default function BookPickup() {
       
       {/* ── HEADER ── */}
       <div className="p-2 pt-2 px-2 flex items-center justify-between">
-         <button onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100"><ArrowLeft className="w-5 h-5 dark:text-white" /></button>
+         <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100"><ArrowLeft className="w-5 h-5 dark:text-white" /></button>
          <div className="flex flex-col items-end">
             <h1 className="text-xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-none">Step {step} of 3</h1>
             <div className="flex gap-1 mt-1.5">
