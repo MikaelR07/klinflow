@@ -56,7 +56,7 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="min-h-screen bg-[#F2F3F4] dark:bg-slate-900 pb-24 overscroll-none">
+    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none -mx-4 -mt-5 pt-5">
       
       {/* ── HEADER (Hidden when focused) ── */}
       {!selectedId && (
@@ -111,7 +111,7 @@ export default function MarketplaceInventory() {
           <div className="animate-fade-in -mx-2 -mt-7">
             
             {/* Edge-to-Edge Hero Image */}
-            <div className="w-full aspect-[4/3] bg-slate-200 dark:bg-slate-800 overflow-hidden relative shadow-lg">
+            <div className="w-full aspect-video bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
               
               {/* Overlaid Back Button */}
               <button 
@@ -150,7 +150,7 @@ export default function MarketplaceInventory() {
             </div>
 
             {/* Content Sheet (Overlaps Image) */}
-            <div className="relative -mt-8 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-3xl px-4 pt-8 pb-12 space-y-6 min-h-[60vh]">
+            <div className="relative -mt-8 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-3xl px-4 pt-8 pb-4 space-y-6">
               
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -199,16 +199,16 @@ export default function MarketplaceInventory() {
 
 
               {/* Management Controls */}
-              <div className="pt-4 space-y-3">
+              <div className="pt-2 space-y-2">
                 <button 
                   onClick={() => handleDelete(selectedListing.id)}
-                  className="w-full py-5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3"
+                  className="w-full py-3.5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3"
                 >
                   <Trash2 className="w-4 h-4" /> Withdraw Listing
                 </button>
                 <button 
                   onClick={() => setSelectedId(null)}
-                  className="w-full py-5 bg-white dark:bg-slate-800 text-slate-400 rounded-[1.5rem] font-black text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all"
+                  className="w-full py-3.5 bg-white dark:bg-slate-800 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all"
                 >
                   Return to Inventory
                 </button>

@@ -310,7 +310,7 @@ export default function BookPickup() {
   const center = [customLocation.latitude || -1.2635, customLocation.longitude || 36.8048];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-32">
+    <div className="bg-slate-50 dark:bg-slate-900">
       
       {/* ── HEADER ── */}
       <div className="p-2 pt-2 px-2 flex items-center justify-between">

@@ -35,7 +35,7 @@ export default function CompanyProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="flex items-center justify-center bg-slate-50 dark:bg-slate-900">
         <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
       </div>
     );
@@ -49,7 +49,7 @@ export default function CompanyProfile() {
   const isFleetAdmin = company?.role === 'admin';
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-32">
+    <div className="bg-slate-50 dark:bg-slate-900">
       {/* Header */}
       <div className="p-4 pt-6 flex items-center gap-3">
         <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 dark:border-slate-700">

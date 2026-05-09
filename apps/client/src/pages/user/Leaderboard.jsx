@@ -70,7 +70,7 @@ function SellerLeaderboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="flex items-center justify-center bg-slate-50 dark:bg-slate-900">
         <div className="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
       </div>
     );
@@ -79,7 +79,7 @@ function SellerLeaderboard() {
   const isEmpty = topSellers.length === 0;
 
   return (
-    <div className="min-h-screen pb-20 overflow-x-hidden bg-slate-50 dark:bg-slate-900 transition-colors">
+    <div className="overflow-x-hidden bg-slate-50 dark:bg-slate-900 transition-colors">
       {/* Header */}
       <div className="pt-0 flex items-center gap-4 relative z-20 mb-4">
         <button onClick={() => navigate(-1)} className="p-3 bg-white dark:bg-slate-900 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
@@ -276,7 +276,7 @@ export default function Leaderboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
       </div>
     );
@@ -285,7 +285,7 @@ export default function Leaderboard() {
   const isEmpty = topUsers.length === 0;
 
   return (
-    <div className="min-h-screen pb-20 overflow-x-hidden">
+    <div className="overflow-x-hidden">
 
       {/* Header */}
       <div className="pt-0 flex items-center gap-4 relative z-20">
