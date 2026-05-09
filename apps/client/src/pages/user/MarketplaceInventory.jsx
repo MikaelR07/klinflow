@@ -44,7 +44,11 @@ export default function MarketplaceInventory() {
   const selectedListing = myListings.find(l => l.id === selectedId);
 
   const filteredListings = myListings.filter(l => {
-    const matchesSearch = l.material.toLowerCase().includes(searchQuery.toLowerCase());
+    const q = searchQuery.toLowerCase().trim();
+    const matchesSearch = !q || 
+      l.material.toLowerCase().includes(q) ||
+      String(l.quantity).includes(q) ||
+      String(l.pricePerKg).includes(q);
     const matchesTab = activeTab === 'active' ? l.status === 'active' : l.status !== 'active';
     return matchesSearch && matchesTab;
   });
@@ -57,22 +61,16 @@ export default function MarketplaceInventory() {
       {/* ── HEADER (Hidden when focused) ── */}
       {!selectedId && (
         <header className="px-4 pt-1 pb-4">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-center relative mb-3">
             <button 
               onClick={() => navigate(-1)}
-              className="p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
+              className="absolute left-0 p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
             >
               <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
             </button>
             <div className="bg-white dark:bg-slate-800/50 py-1.5 px-4 rounded-xl border border-slate-100 dark:border-slate-800">
               <h1 className="text-[10px] font-bold text-slate-900 dark:text-white tracking-widest uppercase">Manage your listings</h1>
             </div>
-            <button 
-              onClick={() => navigate('/post-trade')}
-              className="p-2.5 bg-emerald-500 text-white rounded-xl active:scale-95 transition-all"
-            >
-              <Plus className="w-5 h-5" />
-            </button>
           </div>
 
           <div className="flex gap-2">
