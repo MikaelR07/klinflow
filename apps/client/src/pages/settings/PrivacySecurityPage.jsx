@@ -48,7 +48,7 @@ export default function PrivacySecurityPage() {
   };
 
   return (
-    <div className="animate-slide-up pb-20">
+    <div className="animate-slide-up pb-20 px-2">
       <header className="flex items-center gap-3 mb-6">
         <button onClick={() => { authStage === 'pin' ? setAuthStage('view') : navigate('/settings') }} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />

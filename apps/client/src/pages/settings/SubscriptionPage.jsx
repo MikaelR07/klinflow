@@ -16,7 +16,7 @@ export default function SubscriptionPage() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10">
+    <div className="space-y-6 animate-fade-in pb-10 px-2">
       {/* Header */}
       <div className="flex items-center gap-4 mb-2">
         <button 

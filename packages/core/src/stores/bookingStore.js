@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 /**
  * bookingStore.js — CleanFlow KE Pickup Logistics (Supabase)
  */
@@ -68,12 +69,21 @@ export const useBookingStore = create((set, get) => ({
         { event: 'UPDATE', schema: 'public', table: 'bookings', filter: `user_id=eq.${userId}` }, 
         (payload) => {
           const updated = payload.new;
+          const old = payload.old;
           console.log('[BookingStore] REAL-TIME UPDATE RECEIVED:', updated.id, updated.status);
           
-          if (updated.status === 'picked_up') {
+          if (updated.status === 'confirmed' && old?.status !== 'confirmed') {
+            toast.success('Pickup Confirmed! ✅', { description: 'An agent is on the way.' });
+          } else if (updated.status === 'arrived' && old?.status !== 'arrived') {
+            toast.success('Agent Arrived! 🚛', { description: 'Please prepare your waste for pickup.' });
+          } else if (updated.status === 'picked_up' && old?.status !== 'picked_up') {
+            toast.success('Waste Picked Up! ⚖️', { description: 'Verifying weight...' });
             set({ activeVerificationBooking: updated });
             useNotificationStore.getState().playNotificationSound();
+          } else if (updated.status === 'cancelled' && old?.status !== 'cancelled') {
+            toast.error('Booking Cancelled', { description: 'The pickup request has been removed.' });
           }
+          
           get().fetchBookings();
         }
       )

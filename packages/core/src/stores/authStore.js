@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 /**
  * authStore.js — CleanFlow KE Supabase Authentication & Profile State
  */
@@ -229,6 +230,15 @@ export const useAuthStore = create(
             console.log('[AuthStore] LIVE PROFILE UPDATE RECEIVED:', updated);
             
             const currentProfile = get().profile;
+            const newBalance = Number(updated.wallet_balance !== undefined ? updated.wallet_balance : currentProfile?.walletBalance || 0);
+            const oldBalance = currentProfile?.walletBalance || 0;
+            
+            if (newBalance > oldBalance) {
+              toast.success('Money Received! 💰', { 
+                description: `KSh ${newBalance - oldBalance} has been added to your wallet.` 
+              });
+            }
+
             set({
               profile: {
                 ...currentProfile,
@@ -239,12 +249,12 @@ export const useAuthStore = create(
                 notes: updated.notes !== undefined ? updated.notes : currentProfile?.notes,
                 companyName: updated.company_name !== undefined ? updated.company_name : currentProfile?.companyName,
                 gender: updated.gender !== undefined ? updated.gender : currentProfile?.gender,
-                walletBalance: Number(updated.wallet_balance !== undefined ? updated.wallet_balance : currentProfile?.walletBalance || 0),
+                walletBalance: newBalance,
                 rewardPoints: Number(updated.reward_points !== undefined ? updated.reward_points : currentProfile?.rewardPoints || 0),
                 notificationPrefs: updated.notification_prefs || currentProfile?.notificationPrefs,
               },
               rewardPoints: Number(updated.reward_points !== undefined ? updated.reward_points : currentProfile?.rewardPoints || 0),
-              walletBalance: Number(updated.wallet_balance !== undefined ? updated.wallet_balance : currentProfile?.walletBalance || 0)
+              walletBalance: newBalance
             });
           })
           .subscribe((status) => {

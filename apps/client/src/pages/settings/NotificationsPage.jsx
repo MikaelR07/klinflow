@@ -95,7 +95,7 @@ export default function NotificationsPage() {
   );
 
   return (
-    <div className="animate-slide-up pb-24">
+    <div className="animate-slide-up pb-24 px-2">
       <header className="flex items-center gap-3 mb-6">
         <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
@@ -168,20 +168,26 @@ export default function NotificationsPage() {
 
         {/* Triggers */}
         <div className="card p-5 divide-y divide-slate-100 dark:divide-slate-800">
-          <ToggleSwitch label="Pickup Reminders" description="Get notified before your scheduled waste pickup." checked={prefs.pickupReminders} onChange={() => handleToggle('pickupReminders')} />
+          {(role === ROLES.USER || role === 'resident') && (
+            <>
+              <ToggleSwitch label="Pickup Reminders" description="Get notified before your scheduled waste pickup." checked={prefs.pickupReminders} onChange={() => handleToggle('pickupReminders')} />
+              <ToggleSwitch label="Reward Alerts" description="Get notified when you earn green points." checked={prefs.rewardAlerts} onChange={() => handleToggle('rewardAlerts')} />
+              <ToggleSwitch label="Emergency & Odour" description="Real-time alerts for local hazards or bad air quality." checked={prefs.emergencyAlerts} onChange={() => handleToggle('emergencyAlerts')} />
+            </>
+          )}
           <ToggleSwitch label="HygeneX Insights" description="Weekly AI tips on sorting and reducing waste." checked={prefs.aiInsights} onChange={() => handleToggle('aiInsights')} />
-          {!isAgent && <ToggleSwitch label="Reward Alerts" description="Get notified when you earn green points." checked={prefs.rewardAlerts} onChange={() => handleToggle('rewardAlerts')} />}
-          <ToggleSwitch label="Emergency & Odour" description="Real-time alerts for local hazards or bad air quality." checked={prefs.emergencyAlerts} onChange={() => handleToggle('emergencyAlerts')} />
           {isAgent && <ToggleSwitch label="New Job Assignments" description="Instant notifications when dispatch assigns a route." checked={prefs.agentJobAlerts} onChange={() => handleToggle('agentJobAlerts')} />}
         </div>
 
-        <button
-          onClick={handleSave}
-          disabled={isLoading}
-          className="w-full py-4 bg-primary text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 shadow-lg shadow-primary/20"
-        >
-          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Save Preferences
-        </button>
+        <div className="flex justify-center">
+          <button
+            onClick={handleSave}
+            disabled={isLoading}
+            className="px-12 py-3.5 bg-primary text-white rounded-2xl text-[12px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-70 shadow-lg shadow-primary/20"
+          >
+            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save Preferences
+          </button>
+        </div>
 
       </div>
     </div>

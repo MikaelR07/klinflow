@@ -26,7 +26,7 @@ export default function Login() {
     try {
       // Allow any role to log in from the client app (Residents and Sellers)
       await login(phone, pin, null);
-      toast.success('Access Granted', { description: 'Welcome back to the CleanFlow platform.' });
+      toast.success('Welcome back');
       navigate('/', { replace: true });
     } catch (err) {
       toast.error('Access Denied', { description: err.message });
@@ -37,7 +37,7 @@ export default function Login() {
 
   const handleForgotPin = (e) => {
     e.preventDefault();
-    toast.info('Security Recovery', { description: 'Reset link dispatched to verified phone.' });
+    toast.info('Reset link sent to verified phone.');
   };
 
   return (

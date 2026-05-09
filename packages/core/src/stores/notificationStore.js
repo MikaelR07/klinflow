@@ -4,6 +4,7 @@
 import { create } from 'zustand';
 import { supabase } from '../lib/supabaseClient.js';
 import { useAuthStore } from './authStore.js';
+import { toast } from 'sonner';
 
 export const NOTIFICATION_TYPES = {
   SUCCESS: 'success',
@@ -82,6 +83,7 @@ export const useNotificationStore = create((set, get) => ({
             notifications: [{ ...n, read: false, is_read: false }, ...state.notifications].slice(0, 50),
           }));
           get().playNotificationSound();
+          toast(n.title, { description: n.body });
         }
       })
       .subscribe((status) => {
@@ -181,9 +183,12 @@ export const useNotificationStore = create((set, get) => ({
       const registration = await navigator.serviceWorker.ready;
 
       // 3. Subscribe to Push Service (Google/Apple/Mozilla)
-      // Replace with your real VAPID Public Key from Admin or Env
-      const vapidPublicKey = 'BPaF7YVf_6D7T9Z-E-qX7_3eXzX_6D7T9Z-E-qX7_3eXz'; 
+      const vapidPublicKey = import.meta.env.VITE_VAPID_PUBLIC_KEY; 
       
+      if (!vapidPublicKey) {
+        console.warn('[Push] No VAPID public key found in environment variables');
+        return false;
+      }
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: get().urlBase64ToUint8Array(vapidPublicKey)
