@@ -251,36 +251,36 @@ export default function SellerHome() {
               </button>
             </div>
 
-            {/* Stats row temporarily disabled by user */}
-            <div className="h-[76px] w-full" />
-            
-            {/*
+            {/* Stats row */}
             <div className="pt-5 border-t border-slate-100 dark:border-white/10">
-              <div className="grid grid-cols-3 gap-2.5">
-              <div className="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.06] rounded-xl py-2 px-1 text-center">
-                <div className="flex items-center justify-center gap-1 mb-0.5">
-                  <Handshake className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+              <div className="flex items-center justify-between sm:justify-start sm:gap-16 px-1">
+                
+                <div className="flex flex-col items-start gap-1">
+                  <div className="flex items-center gap-1.5">
+                    <Handshake className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <p className="text-[9px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">Deals</p>
+                  </div>
+                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">{totalDeals}</p>
                 </div>
-                <p className="text-lg font-semibold text-slate-900 dark:text-white leading-none">{totalDeals}</p>
-                <p className="text-[8px] font-semibold text-slate-400 dark:text-white/30 uppercase tracking-widest mt-0.5">Deals</p>
-              </div>
-              <div className="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.06] rounded-xl py-2 px-1 text-center">
-                <div className="flex items-center justify-center gap-1 mb-0.5">
-                  <Scale className="w-3 h-3 text-teal-600 dark:text-teal-400" />
+
+                <div className="flex flex-col items-start gap-1 px-4 sm:px-0 border-x border-slate-100 dark:border-white/10 sm:border-none">
+                  <div className="flex items-center gap-1.5">
+                    <Scale className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+                    <p className="text-[9px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">Sold KG</p>
+                  </div>
+                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">{totalSoldKg}kg</p>
                 </div>
-                <p className="text-lg font-semibold text-slate-900 dark:text-white leading-none">{totalSoldKg}kg</p>
-                <p className="text-[8px] font-semibold text-slate-400 dark:text-white/30 uppercase tracking-widest mt-0.5">Sold KG</p>
-              </div>
-              <div className="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.06] rounded-xl py-2 px-1 text-center">
-                <div className="flex items-center justify-center gap-1 mb-0.5">
-                  <ShieldCheck className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+
+                <div className="flex flex-col items-start gap-1">
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                    <p className="text-[9px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">In Escrow</p>
+                  </div>
+                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
                 </div>
-                <p className="text-lg font-semibold text-slate-900 dark:text-white leading-none">KSh {inEscrowAmount.toLocaleString()}</p>
-                <p className="text-[8px] font-semibold text-slate-400 dark:text-white/30 uppercase tracking-widest mt-0.5">In Escrow</p>
+
               </div>
             </div>
-            </div>
-            */}
           </div>
         </div>
       </div>
