@@ -230,7 +230,7 @@ export default function SellerHome() {
       {/* ── REVENUE HERO CARD ── */}
       <div className="relative group">
         <div className="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-none border border-slate-100 dark:border-white/5">
-          <div className="relative z-10 flex flex-col gap-5">
+          <div className="flex flex-col gap-5">
             <div className="flex flex-wrap sm:flex-nowrap items-end justify-between w-full gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 mb-3">
@@ -302,7 +302,7 @@ export default function SellerHome() {
         >
           <div className="relative">
             {myListings.filter(l => l.status === 'active').length > 0 && (
-              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center z-10 shadow-sm">
+              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
                 <span className="text-[8px] font-semibold text-white">{myListings.filter(l => l.status === 'active').length}</span>
               </div>
             )}
@@ -321,7 +321,7 @@ export default function SellerHome() {
         >
           <div className="relative">
             {receivedOffers.filter(o => o.status === 'pending').length > 0 && (
-              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center z-10 shadow-sm">
+              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
                 <span className="text-[8px] font-semibold text-white">{receivedOffers.filter(o => o.status === 'pending').length}</span>
               </div>
             )}
@@ -342,7 +342,7 @@ export default function SellerHome() {
       >
         <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[4rem] rounded-tr-2xl" />
         
-        <div className="flex items-center justify-between relative z-10">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <div className="w-11 h-11 bg-emerald-50 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0 shadow-sm border border-emerald-100 dark:border-emerald-500/30">
               <ShieldCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
@@ -374,7 +374,7 @@ export default function SellerHome() {
       {/* ── REFER & EARN (GROWTH ENGINE) ── */}
       <div className="bg-gradient-to-br from-indigo-600 to-primary rounded-2xl p-6 text-white relative overflow-hidden shadow-xl shadow-indigo-500/20">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10" />
-        <div className="relative z-10 flex items-center gap-5">
+        <div className="flex items-center gap-5">
            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center shrink-0 border border-white/20">
               <Users className="w-9 h-9 text-white" />
            </div>
