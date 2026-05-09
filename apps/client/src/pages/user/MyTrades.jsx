@@ -105,12 +105,9 @@ export default function MyTrades() {
 
   return (
     <div className="space-y-6 animate-fade-in pb-20">
-      <div className="flex items-center justify-between px-1">
+      <div className="flex items-center justify-center px-1">
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">Trade History</h1>
-        </div>
-        <div className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl border border-emerald-100 dark:border-emerald-500/20">
-          <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">Total Trades: {bookings.length}</p>
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight text-center">Trade History</h1>
         </div>
       </div>
 
