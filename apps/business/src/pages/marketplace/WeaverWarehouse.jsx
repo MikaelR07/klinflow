@@ -13,9 +13,17 @@ import { AssetBadge } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
 export default function WeaverWarehouse() {
-  const { assets, fetchAssets, addSideCollection, isLoading } = useAssetStore();
-  const { getFinancialSummary, myOrders, fetchMyActivity } = useMarketplaceStore();
-  const { userId, profile } = useAuthStore();
+  const assets = useAssetStore(s => s.assets);
+  const fetchAssets = useAssetStore(s => s.fetchAssets);
+  const addSideCollection = useAssetStore(s => s.addSideCollection);
+  const isLoading = useAssetStore(s => s.isLoading);
+
+  const getFinancialSummary = useMarketplaceStore(s => s.getFinancialSummary);
+  const myOrders = useMarketplaceStore(s => s.myOrders);
+  const fetchMyActivity = useMarketplaceStore(s => s.fetchMyActivity);
+
+  const userId = useAuthStore(s => s.userId);
+  const profile = useAuthStore(s => s.profile);
   const navigate = useNavigate();
   const [showAddModal, setShowAddModal] = useState(false);
   const [financials, setFinancials] = useState(null);

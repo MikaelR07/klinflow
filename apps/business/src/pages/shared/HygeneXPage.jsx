@@ -17,8 +17,7 @@ import {
   Package 
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useAuthStore, ROLES } from '@cleanflow/core';
-import { useHygenexStore } from '@cleanflow/core';
+import { useAuthStore, useHygenexStore, ROLES } from '@cleanflow/core';
 
 // Custom Voice Hook
 function useVoiceRecognition() {
@@ -63,8 +62,13 @@ function useVoiceRecognition() {
 }
 
 export default function HygeneXPage() {
-  const { role } = useAuthStore();
-  const { messages, isTyping, initChat, stopChat, sendMessage } = useHygenexStore();
+  const role = useAuthStore(s => s.role);
+  const messages = useHygenexStore(s => s.messages);
+  const isTyping = useHygenexStore(s => s.isTyping);
+  const initChat = useHygenexStore(s => s.initChat);
+  const stopChat = useHygenexStore(s => s.stopChat);
+  const sendMessage = useHygenexStore(s => s.sendMessage);
+
   const [inputText, setInputText] = useState("");
   const chatBottomRef = useRef(null);
   const { isListening, startListening, stopListening } = useVoiceRecognition();

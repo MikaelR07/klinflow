@@ -45,7 +45,7 @@ export default function Login() {
 
         {/* Branding */}
         <div className="text-center mb-10">
-          <img src="/logo.png" className="w-56 h-auto mx-auto mb-8 shadow-2xl rounded-3xl" alt="Business Logo" />
+          <img src="/logo.png" className="w-56 h-auto mx-auto mb-8 shadow-2xl rounded-3xl" alt="Business Logo" fetchpriority="high" loading="eager" />
           <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
             Clean<span className="text-indigo-600 italic">Business</span>
           </h1>

@@ -24,9 +24,14 @@ import { toast } from 'sonner';
 
 export default function SupplyTerminal() {
   const navigate = useNavigate();
-  const { profile, userId } = useAuthStore();
-  const { listings, fetchListings, makeOffer } = useMarketplaceStore();
-  const { liveFeed, fetchLiveFeed, claimAsset } = useAssetStore();
+  const profile = useAuthStore(s => s.profile);
+  const userId = useAuthStore(s => s.userId);
+  const listings = useMarketplaceStore(s => s.listings);
+  const fetchListings = useMarketplaceStore(s => s.fetchListings);
+  const makeOffer = useMarketplaceStore(s => s.makeOffer);
+  const liveFeed = useAssetStore(s => s.liveFeed);
+  const fetchLiveFeed = useAssetStore(s => s.fetchLiveFeed);
+  const claimAsset = useAssetStore(s => s.claimAsset);
   
   const [selectedItem, setSelectedItem] = useState(null);
   const [search, setSearch] = useState('');

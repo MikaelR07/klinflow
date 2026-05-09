@@ -44,10 +44,23 @@ import TopTabs from '../../components/TopTabs.jsx';
 
 export default function MarketplaceHome() {
   const [searchQuery, setSearchQuery] = useState('');
-  const { categories, listings, fetchListings, isLoading } = useMarketplaceStore();
-  const { liveFeed, fetchLiveFeed, claimAsset } = useAssetStore();
-  const { role, profile, topUpBalance } = useAuthStore();
-  const { getPriceForMaterial, fetchPrices } = usePriceStore();
+  
+  const categories = useMarketplaceStore(s => s.categories);
+  const listings = useMarketplaceStore(s => s.listings);
+  const fetchListings = useMarketplaceStore(s => s.fetchListings);
+  const isLoading = useMarketplaceStore(s => s.isLoading);
+
+  const liveFeed = useAssetStore(s => s.liveFeed);
+  const fetchLiveFeed = useAssetStore(s => s.fetchLiveFeed);
+  const claimAsset = useAssetStore(s => s.claimAsset);
+
+  const role = useAuthStore(s => s.role);
+  const profile = useAuthStore(s => s.profile);
+  const topUpBalance = useAuthStore(s => s.topUpBalance);
+
+  const getPriceForMaterial = usePriceStore(s => s.getPriceForMaterial);
+  const fetchPrices = usePriceStore(s => s.fetchPrices);
+
   const navigate = useNavigate();
   const [isToppingUp, setIsToppingUp] = useState(false);
   const [showReplenishModal, setShowReplenishModal] = useState(false);

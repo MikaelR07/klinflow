@@ -8,8 +8,12 @@ import { useMarketplaceStore, useAuthStore, getThumbnailUrl } from '@cleanflow/c
 import { toast } from 'sonner';
 
 export default function BuyRecyclables() {
-  const { listings, fetchListings, placeOrder, makeOffer, isLoading } = useMarketplaceStore();
-  const { userId } = useAuthStore();
+  const listings = useMarketplaceStore(s => s.listings);
+  const fetchListings = useMarketplaceStore(s => s.fetchListings);
+  const placeOrder = useMarketplaceStore(s => s.placeOrder);
+  const makeOffer = useMarketplaceStore(s => s.makeOffer);
+  const isLoading = useMarketplaceStore(s => s.isLoading);
+  const userId = useAuthStore(s => s.userId);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMaterial, setSelectedMaterial] = useState('All');
   const [showFilters, setShowFilters] = useState(false);

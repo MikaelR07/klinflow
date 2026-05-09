@@ -5,8 +5,9 @@ import { useMarketplaceStore, useAuthStore, uploadFile, compressImage } from '@c
 import { toast } from 'sonner';
 
 export default function SellRecyclables() {
-  const { postListing, isLoading } = useMarketplaceStore();
-  const { profile } = useAuthStore();
+  const postListing = useMarketplaceStore(s => s.postListing);
+  const isLoading = useMarketplaceStore(s => s.isLoading);
+  const profile = useAuthStore(s => s.profile);
   const navigate = useNavigate();
   const location = useLocation();
 

@@ -4,7 +4,11 @@ import { ArrowLeft, Eye, Gavel, CheckCircle2, XCircle, Clock, Package, Loader2, 
 import { useMarketplaceStore, getThumbnailUrl } from '@cleanflow/core';
 
 export default function MyListings() {
-  const { myListings, myOrders, updateListingStatus, fetchMyActivity, isLoading } = useMarketplaceStore();
+  const myListings = useMarketplaceStore(s => s.myListings);
+  const myOrders = useMarketplaceStore(s => s.myOrders);
+  const updateListingStatus = useMarketplaceStore(s => s.updateListingStatus);
+  const fetchMyActivity = useMarketplaceStore(s => s.fetchMyActivity);
+  const isLoading = useMarketplaceStore(s => s.isLoading);
   const [activeTab, setActiveTab] = useState('active');
   const navigate = useNavigate();
 

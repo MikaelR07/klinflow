@@ -6,7 +6,9 @@ import { toast } from 'sonner';
 import LocationSelector from '@cleanflow/ui/components/LocationSelector';
 
 export default function ProfilePage() {
-  const { profile, role, updateProfile } = useAuthStore();
+  const profile = useAuthStore(s => s.profile);
+  const role = useAuthStore(s => s.role);
+  const updateProfile = useAuthStore(s => s.updateProfile);
   const navigate = useNavigate();
   const isAgent = role === ROLES.AGENT;
 

@@ -5,7 +5,8 @@ import { ThemeToggleRow } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
 export default function SettingsMenu() {
-  const { profile, logout } = useAuthStore();
+  const profile = useAuthStore(s => s.profile);
+  const logout = useAuthStore(s => s.logout);
   const navigate = useNavigate();
 
   const menuItems = [

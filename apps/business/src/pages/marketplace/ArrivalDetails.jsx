@@ -31,9 +31,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function ArrivalDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { profile, userId } = useAuthStore();
-  const { listings, fetchListings, makeOffer } = useMarketplaceStore();
-  const { liveFeed, fetchLiveFeed, claimAsset } = useAssetStore();
+  const profile = useAuthStore(s => s.profile);
+  const userId = useAuthStore(s => s.userId);
+  const listings = useMarketplaceStore(s => s.listings);
+  const fetchListings = useMarketplaceStore(s => s.fetchListings);
+  const makeOffer = useMarketplaceStore(s => s.makeOffer);
+  const liveFeed = useAssetStore(s => s.liveFeed);
+  const fetchLiveFeed = useAssetStore(s => s.fetchLiveFeed);
+  const claimAsset = useAssetStore(s => s.claimAsset);
 
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);

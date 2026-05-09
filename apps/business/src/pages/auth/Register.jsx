@@ -145,7 +145,7 @@ export default function Register() {
               <ArrowLeft className="w-4 h-4" /> Back to Sign In
             </Link>
           </div>
-          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl" alt="Business Logo" />
+          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl" alt="Business Logo" fetchpriority="high" loading="eager" />
         </div>
 
         <div className="mb-10">

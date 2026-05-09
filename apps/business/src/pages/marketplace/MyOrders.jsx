@@ -13,10 +13,13 @@ const STATUS_CONFIG = {
 };
 
 export default function MyOrders() {
-  const { 
-    myOrders, fetchMyActivity, cancelOrder, 
-    requestTransport, releaseEscrow, disputeOrder, isLoading 
-  } = useMarketplaceStore();
+  const myOrders = useMarketplaceStore(s => s.myOrders);
+  const fetchMyActivity = useMarketplaceStore(s => s.fetchMyActivity);
+  const cancelOrder = useMarketplaceStore(s => s.cancelOrder);
+  const requestTransport = useMarketplaceStore(s => s.requestTransport);
+  const releaseEscrow = useMarketplaceStore(s => s.releaseEscrow);
+  const disputeOrder = useMarketplaceStore(s => s.disputeOrder);
+  const isLoading = useMarketplaceStore(s => s.isLoading);
   const [activeTab, setActiveTab] = useState('pending');
   const navigate = useNavigate();
 

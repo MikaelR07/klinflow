@@ -15,8 +15,11 @@ import { toast } from 'sonner';
 export default function ListingDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { profile, userId } = useAuthStore();
-  const { listings, fetchListings, makeOffer } = useMarketplaceStore();
+  const profile = useAuthStore(s => s.profile);
+  const userId = useAuthStore(s => s.userId);
+  const listings = useMarketplaceStore(s => s.listings);
+  const fetchListings = useMarketplaceStore(s => s.fetchListings);
+  const makeOffer = useMarketplaceStore(s => s.makeOffer);
 
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
