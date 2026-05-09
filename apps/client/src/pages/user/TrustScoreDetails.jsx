@@ -7,7 +7,7 @@ import {
   ShieldCheck, Star, TrendingUp, ShieldAlert, 
   ArrowLeft, Info, Zap, CheckCircle2, Award,
   Users, BarChart3, Heart, Scale, AlertTriangle, PackageCheck, Wallet, Sparkles,
-  Clock
+  Clock, Handshake, Calendar
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore, useMarketplaceStore, useBookingStore } from '@cleanflow/core';
@@ -16,7 +16,7 @@ export default function TrustScoreDetails() {
   const navigate = useNavigate();
   const { profile, fetchProfile, subscribeToProfileChanges } = useAuthStore();
   const { bookings, fetchBookings } = useBookingStore();
-  const { receivedOffers, fetchReceivedOffers, isLoading } = useMarketplaceStore();
+  const { receivedOffers, fetchReceivedOffers, isLoading, getCalculatedScore } = useMarketplaceStore();
   
   useEffect(() => {
     fetchReceivedOffers();
@@ -80,19 +80,11 @@ export default function TrustScoreDetails() {
         return Math.round(totalMs / acceptedOffers.length / 60000); // Return in minutes
       })()
     };
-  }, [bookings, profile]);
+  }, [bookings, profile, receivedOffers]);
 
-  // ── PROFESSIONAL CREDIT SCORING ALGORITHM (Loan-Ready) ──────────
-  const calculatedScore = useMemo(() => {
-    let baseScore = 300; 
-    const fr = parseFloat(stats.fulfillmentRate) / 100;
-    const reliabilityPoints = Math.round(fr * 350);
-    const volumeBonus = Math.min((stats.lifetimeEarnings / 100000) * 150, 150);
-    const tenureBonus = Math.min((stats.daysTraded / 180) * 50, 50);
-    return Math.min(baseScore + reliabilityPoints + Math.round(volumeBonus) + Math.round(tenureBonus), 850);
-  }, [stats]);
-
-  const score = calculatedScore;
+  const rawScore = getCalculatedScore(receivedOffers, profile);
+  // Convert 300-850 range to 0-100%
+  const score = Math.round(((rawScore - 300) / 550) * 100);
   
   const milestones = [
     { label: 'Verified Pro', status: profile?.is_verified ? 'Completed' : 'Pending', icon: ShieldCheck, desc: 'Complete identity verification to unlock higher loan limits.' },
@@ -103,7 +95,7 @@ export default function TrustScoreDetails() {
   return (
     <div className="pb-20 space-y-6 animate-fade-in">
       {/* ── HEADER ── */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 px-1">
          <button 
            onClick={() => navigate(-1)} 
            className="p-3 bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
@@ -139,46 +131,69 @@ export default function TrustScoreDetails() {
             </div>
           </div>
           
-          {/* Metrics Grid */}
-          <div className="relative z-10 grid grid-cols-2 gap-3 pt-6 border-t border-slate-100 dark:border-slate-700/50">
-             <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-700/40 rounded-2xl p-4">
-               <p className="text-[8px] font-semibold uppercase tracking-widest text-slate-400">Available Balance</p>
-               <p className="text-sm font-semibold text-slate-900 dark:text-white">KSh {profile?.walletBalance?.toLocaleString() || '0'}</p>
+          {/* Metrics Bento Grid */}
+          <div className="relative z-10 grid grid-cols-4 gap-3 pt-6 border-t border-slate-100 dark:border-slate-700/50">
+             {/* Large Card: Available Balance */}
+             <div className="col-span-2 flex flex-col justify-between bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 dark:border-emerald-500/20 rounded-2xl p-4">
+               <div className="flex items-center gap-2 mb-2">
+                 <Wallet className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                 <p className="text-[8px] font-bold uppercase tracking-widest text-emerald-600/70 dark:text-emerald-400/70">Available Balance</p>
+               </div>
+               <p className="text-base font-bold text-slate-900 dark:text-white leading-none">KSh {profile?.walletBalance?.toLocaleString() || '0'}</p>
              </div>
              
-             <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-700/40 rounded-2xl p-4">
-                <p className="text-[8px] font-semibold uppercase tracking-widest text-slate-400">In Escrow</p>
-                <p className="text-sm font-semibold text-amber-600 dark:text-amber-400">KSh {stats.pendingBalance.toLocaleString()}</p>
+             {/* Large Card: In Escrow */}
+             <div className="col-span-2 flex flex-col justify-between bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/10 dark:border-amber-500/20 rounded-2xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                  <p className="text-[8px] font-bold uppercase tracking-widest text-amber-600/70 dark:text-amber-400/70">In Escrow</p>
+                </div>
+                <p className="text-base font-bold text-amber-600 dark:text-amber-400 leading-none">KSh {stats.pendingBalance.toLocaleString()}</p>
              </div>
 
-             <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-700/40 rounded-2xl p-4">
-               <p className="text-[8px] font-semibold uppercase tracking-widest text-slate-400">Trades Completed</p>
-               <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{stats.tradesCompleted} Successful</p>
+             {/* Small Card: Trades */}
+             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3 text-center">
+               <Handshake className="w-3.5 h-3.5 text-slate-400" />
+               <div className="space-y-0.5">
+                 <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{stats.tradesCompleted}</p>
+                 <p className="text-[7px] font-bold uppercase tracking-tighter text-slate-400">Trades</p>
+               </div>
              </div>
 
-             <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-700/40 rounded-2xl p-4">
-               <p className="text-[8px] font-semibold uppercase tracking-widest text-slate-400">Fulfillment Rate</p>
-               <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{stats.fulfillmentRate}%</p>
+             {/* Small Card: Rate */}
+             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3 text-center">
+               <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+               <div className="space-y-0.5">
+                 <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 leading-none">{stats.fulfillmentRate}%</p>
+                 <p className="text-[7px] font-bold uppercase tracking-tighter text-slate-400">Rate</p>
+               </div>
              </div>
 
-             <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-700/40 rounded-2xl p-4">
-               <p className="text-[8px] font-semibold uppercase tracking-widest text-slate-400">Days Traded</p>
-               <p className="text-sm font-semibold text-slate-900 dark:text-white">{stats.daysTraded} Days</p>
+             {/* Small Card: Days */}
+             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3 text-center">
+               <Calendar className="w-3.5 h-3.5 text-slate-400" />
+               <div className="space-y-0.5">
+                 <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{stats.daysTraded}</p>
+                 <p className="text-[7px] font-bold uppercase tracking-tighter text-slate-400">Days</p>
+               </div>
              </div>
              
-             <div className="flex flex-col gap-1.5 bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-700/40 rounded-2xl p-4">
-               <p className="text-[8px] font-semibold uppercase tracking-widest text-slate-400">Avg. Response</p>
-               <div className="flex items-center gap-1.5">
-                  <p className="text-sm font-semibold text-primary">{stats.avgResponseTime || '15'} mins</p>
-                  <Clock className="w-3 h-3 text-primary" />
+             {/* Small Card: Time */}
+             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3 text-center">
+               <Zap className="w-3.5 h-3.5 text-primary" />
+               <div className="space-y-0.5">
+                 <p className="text-sm font-bold text-primary leading-none">{stats.avgResponseTime || '15'}m</p>
+                 <p className="text-[7px] font-bold uppercase tracking-tighter text-slate-400">Time</p>
                </div>
              </div>
           </div>
 
           {/* Integrated Trust Score Gauge & Loan Action */}
           <div className="relative z-10 mt-8 pt-8 border-t border-slate-100 dark:border-slate-700/50">
-             <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[9px] font-semibold uppercase tracking-widest mb-8">
-               <ShieldCheck className="w-2.5 h-2.5" /> Your Credit Score
+             <div className="flex justify-center mb-8">
+               <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                 <ShieldCheck className="w-3 h-3" /> Your Credit Score
+               </div>
              </div>
 
              <div className="flex items-center gap-6 w-full">
@@ -193,8 +208,17 @@ export default function TrustScoreDetails() {
                      
                      <path d="M 18 50 A 32 32 0 0 1 82 50" stroke="currentColor" className="text-slate-900 dark:text-white" strokeOpacity="0.1" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
                      
-                     <g transform={`rotate(${((Math.min(Math.max((score), 300), 850) - 300) / 550) * 180 - 90}, 50, 50)`} className="transition-transform duration-1000 ease-out">
-                       <line x1="50" y1="50" x2="50" y2="22" stroke="currentColor" className="text-slate-900 dark:text-white" strokeWidth="2.5" strokeLinecap="round" className="drop-shadow-md" />
+                     <g 
+                       className="transition-transform duration-1000 ease-out origin-[50px_50px]" 
+                       style={{ transform: `rotate(${(score / 100) * 180 - 90}deg)` }}
+                     >
+                       <line 
+                         x1="50" y1="50" x2="50" y2="22" 
+                         stroke="currentColor" 
+                         strokeWidth="2.5" 
+                         strokeLinecap="round" 
+                         className="text-slate-900 dark:text-white" 
+                       />
                      </g>
                      <circle cx="50" cy="50" r="4" fill="currentColor" className="text-slate-900 dark:text-white" />
                    </svg>
@@ -203,7 +227,7 @@ export default function TrustScoreDetails() {
                 {/* Info & Action Right */}
                 <div className="flex-1 space-y-4">
                    <div>
-                      <span className="text-4xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-none">{score}</span>
+                      <span className="text-4xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-none">{score}%</span>
                       <div className="mt-1">
                          <p className="text-xs font-semibold text-slate-900 dark:text-white uppercase tracking-tight">Exceptional!</p>
                          <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 italic">Reach your goals</p>

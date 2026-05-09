@@ -148,7 +148,9 @@ export default function SellerHome() {
     };
   }, [profile?.id, role]);
 
-  const score = getCalculatedScore(receivedOrders, profile);
+  const rawScore = getCalculatedScore(receivedOrders, profile);
+  // Convert 300-850 range to 0-100%
+  const score = Math.round(((rawScore - 300) / 550) * 100);
 
   useEffect(() => {
     // Show prompt if user hasn't allowed/denied notifications yet
@@ -282,7 +284,7 @@ export default function SellerHome() {
 
                 <button 
                   onClick={() => navigate('/withdraw')}
-                  className="bg-emerald-500 hover:bg-emerald-400 text-white px-7 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+                  className="bg-emerald-500 hover:bg-emerald-400 text-white px-7 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all"
                 >
                   Withdraw
                 </button>
@@ -339,7 +341,7 @@ export default function SellerHome() {
       <div className="grid grid-cols-3 gap-2">
         <button
           onClick={() => navigate('/post-trade')}
-          className="bg-emerald-600 rounded-2xl p-3 flex flex-col items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all group relative"
+          className="bg-emerald-600 rounded-2xl p-3 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
         >
           <div className="absolute top-0 right-0 w-10 h-10 bg-white/10 rounded-bl-2xl rounded-tr-2xl" />
           <div className="w-10 h-10 bg-white/20 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
@@ -426,7 +428,7 @@ export default function SellerHome() {
       </div>
 
       {/* ── REFER & EARN (GROWTH ENGINE) ── */}
-      <div className="bg-gradient-to-br from-indigo-600 to-primary rounded-2xl p-6 text-white relative overflow-hidden shadow-xl shadow-indigo-500/20">
+      <div className="bg-gradient-to-br from-indigo-600 to-primary rounded-2xl p-6 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10" />
         <div className="flex items-center gap-5">
            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center shrink-0 border border-white/20">
@@ -435,7 +437,7 @@ export default function SellerHome() {
            <div>
               <h3 className="text-sm font-semibold uppercase tracking-widest mb-1">Refer a Merchant</h3>
               <p className="text-xs font-medium text-indigo-100 leading-tight mb-3">Earn 5% from your friend's first 3 trades. Grow the hustle together!</p>
-              <button className="px-4 py-2 bg-white text-indigo-600 rounded-xl text-[9px] font-semibold uppercase tracking-widest shadow-lg active:scale-95 transition-all">
+              <button className="px-4 py-2 bg-white text-indigo-600 rounded-xl text-[9px] font-semibold uppercase tracking-widest active:scale-95 transition-all">
                 Share Referral Link
               </button>
            </div>
