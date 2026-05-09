@@ -153,23 +153,23 @@ export default function MyOffers() {
       {/* ── DASHBOARD AREA ── */}
       {!selectedOfferId && (
         <div className="pt-0 pb-2">
-          <div className="bg-white dark:bg-slate-800 mx-4 px-5 py-4 border border-slate-100 dark:border-slate-700 mb-6 relative overflow-hidden rounded-2xl">
+          <div className="bg-white dark:bg-slate-800 px-5 py-2.5 border border-slate-100 dark:border-slate-700 mb-4 relative overflow-hidden rounded-2xl">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-0.5">Potential Earnings</p>
-                <h2 className="text-xl font-semibold tracking-tight text-emerald-600 dark:text-emerald-400 leading-none">
+                <p className="flex items-center gap-1.5 mb-1 text-[10px] font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest truncate">
+                  <TrendingUp className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  Potential Earnings
+                </p>
+                <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-tight">
                   KSh {pendingOffers.reduce((sum, o) => sum + (o.offered_price * o.quantity), 0).toLocaleString()}
                 </h2>
-              </div>
-              <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-100 dark:border-emerald-500/20">
-                <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-5 mb-6 border-b border-slate-100 dark:border-slate-800">
+          <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mb-4">
             {[
-              { id: 'pending', label: 'New Bids', count: pendingOffers.length },
+              { id: 'pending', label: 'Bids', count: pendingOffers.length },
               { id: 'progress', label: 'In-Progress', count: inProgressOffers.length },
               { id: 'counter', label: 'Counters', count: counterOffers.length },
               { id: 'accepted', label: 'Confirmed', count: completedOffers.length },
@@ -177,20 +177,21 @@ export default function MyOffers() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative pb-3 text-xs font-semibold uppercase tracking-[0.12em] transition-all flex-1 ${
-                  activeTab === tab.id ? 'text-emerald-600' : 'text-slate-400'
+                className={`flex-1 py-3 text-[11px] font-semibold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-1 ${
+                  activeTab === tab.id
+                    ? 'bg-emerald-600 shadow-lg shadow-emerald-500/20 text-white'
+                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                 }`}
               >
-                <div className="flex items-center justify-center gap-1.5">
-                  <span className="whitespace-nowrap">{tab.label}</span>
-                  {tab.count > 0 && (
-                    <span className="bg-emerald-500 text-white text-[7px] px-1.5 py-0.5 rounded-full shrink-0">
-                      {tab.count}
-                    </span>
-                  )}
-                </div>
-                {activeTab === tab.id && (
-                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full" />
+                {tab.label}
+                {tab.count > 0 && (
+                  <span className={`ml-1 px-1.5 py-0.5 text-[8px] font-semibold rounded-full transition-all ${
+                    activeTab === tab.id
+                      ? 'bg-white/20 text-white'
+                      : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                  }`}>
+                    {tab.count}
+                  </span>
                 )}
               </button>
             ))}
@@ -322,7 +323,7 @@ export default function MyOffers() {
               </div>
             </motion.div>
           ) : activeTab === 'pending' ? (
-            <motion.div key="pending-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-1.5">
+            <motion.div key="pending-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-3">
               {pendingOffers.length === 0 ? (
                 <div className="py-20 text-center">
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-3xl flex items-center justify-center mx-auto mb-4 text-slate-300">
@@ -335,7 +336,7 @@ export default function MyOffers() {
                   <motion.div 
                     key={offer.id}
                     onClick={() => setSelectedOfferId(offer.id)}
-                    className="bg-white dark:bg-slate-900 border-b border-slate-50 dark:border-slate-800/50 p-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
+                    className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
@@ -360,7 +361,7 @@ export default function MyOffers() {
               )}
             </motion.div>
           ) : activeTab === 'progress' ? (
-            <motion.div key="progress-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-2">
+            <motion.div key="progress-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-3">
               {inProgressOffers.length === 0 ? (
                 <div className="py-20 text-center">
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-300">
@@ -372,7 +373,7 @@ export default function MyOffers() {
                 inProgressOffers.map((offer) => {
                   const isExpanded = expandedTradeId === offer.id;
                   return (
-                    <div key={offer.id} className="bg-white dark:bg-slate-900 border-b border-slate-50 dark:border-slate-800/50 transition-all relative">
+                    <div key={offer.id} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl transition-all relative overflow-hidden">
                       {/* Orange indicator line */}
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500" />
                       
@@ -442,7 +443,7 @@ export default function MyOffers() {
               )}
             </motion.div>
           ) : activeTab === 'counter' ? (
-            <motion.div key="counter-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-2">
+            <motion.div key="counter-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-3">
               {counterOffers.length === 0 ? (
                 <div className="py-20 text-center">
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-300">
@@ -454,7 +455,7 @@ export default function MyOffers() {
                 counterOffers.map((b) => {
                   const isExpanded = expandedTradeId === b.id;
                   return (
-                    <div key={b.id} className="bg-white dark:bg-slate-900 border-b border-slate-50 dark:border-slate-800/50 transition-all relative">
+                    <div key={b.id} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl transition-all relative overflow-hidden">
                       {/* Amber indicator line */}
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500" />
                       
@@ -533,7 +534,7 @@ export default function MyOffers() {
               )}
             </motion.div>
           ) : (
-            <motion.div key="accepted-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-2">
+            <motion.div key="accepted-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-3">
               {completedOffers.length === 0 ? (
                 <div className="py-20 text-center">
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-300">
@@ -545,7 +546,7 @@ export default function MyOffers() {
                 completedOffers.map((offer) => {
                   const isExpanded = expandedTradeId === offer.id;
                   return (
-                    <div key={offer.id} className="bg-white dark:bg-slate-900 border-b border-slate-50 dark:border-slate-800/50 transition-all relative">
+                    <div key={offer.id} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl transition-all relative overflow-hidden">
                       {/* Green indicator line */}
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
 
