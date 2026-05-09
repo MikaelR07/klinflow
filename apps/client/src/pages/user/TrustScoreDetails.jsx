@@ -107,7 +107,7 @@ export default function TrustScoreDetails() {
 
       <div className="space-y-6">
         {/* ── MASTER DASHBOARD CARD ── */}
-        <div className="bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-800 rounded-2xl p-8 text-slate-900 dark:text-white shadow-none dark:shadow-xl dark:shadow-slate-900/10 border border-slate-100 dark:border-white/5 relative overflow-hidden transition-all">
+        <div className="bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:to-slate-800 rounded-2xl p-4 text-slate-900 dark:text-white shadow-none dark:shadow-xl dark:shadow-slate-900/10 border border-slate-100 dark:border-white/5 relative overflow-hidden transition-all">
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl" />
           
           {/* Top Row: Lifetime & Weight */}
