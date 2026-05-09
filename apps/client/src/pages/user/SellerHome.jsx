@@ -231,64 +231,24 @@ export default function SellerHome() {
       <div className="relative group">
         <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl p-6 shadow-none border border-slate-100 dark:border-white/5">
           <div className="relative z-10 space-y-5">
-            <div className="flex items-center justify-between gap-2">
-              {/* Left Side: Balance and Actions */}
-              <div className="space-y-4 w-[45%] shrink-0">
-                <div className="flex items-center gap-1.5 w-fit -mt-2">
-                  <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest underline underline-offset-4 decoration-emerald-500/40 dark:decoration-emerald-400/40">Seller Wallet</span>
+            <div className="flex flex-wrap sm:flex-nowrap items-end justify-between w-full gap-4">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span className="text-[10px] font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest truncate">Seller Wallet</span>
                 </div>
                 
-                <div className="space-y-4">
-                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">
-                    KSh {(profile?.balance || profile?.walletBalance || 0).toLocaleString()}
-                  </h2>
-                  <button 
-                    onClick={() => navigate('/withdraw')}
-                    className="w-fit px-5 py-3 sm:px-6 sm:py-3.5 mt-6 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl text-[9px] sm:text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
-                  >
-                    <Wallet className="w-3.5 h-3.5 text-emerald-100" /> Withdraw
-                  </button>
-                </div>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-tight truncate">
+                  KSh {(profile?.balance || profile?.walletBalance || 0).toLocaleString()}
+                </h2>
               </div>
-
-              {/* Vertical Line */}
-              <div className="w-[1px] h-32 bg-slate-100 dark:bg-white/10 shrink-0 mx-2 sm:mx-4" />
-
-              {/* Right Side: Credit Meter */}
-              <div 
-                onClick={() => navigate('/trust-score')}
-                className="flex-1 w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[360px] flex flex-col items-center justify-center cursor-pointer group transform-gpu"
+              
+              <button 
+                onClick={() => navigate('/withdraw')}
+                className="bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl text-[10px] sm:text-xs font-semibold uppercase tracking-widest shadow-xl active:scale-95 transition-all mb-0.5 sm:mb-1 shrink-0"
               >
-                 <div className="relative w-full aspect-[2/1.1]">
-                   <svg className="absolute inset-0 w-full h-full overflow-hidden transform-gpu" viewBox="0 0 100 55">
-                     {/* 5 Segments */}
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="0" />
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f97316" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-21.5" />
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#eab308" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-43" />
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#4ade80" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-64.5" />
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-86" />
-                     
-                     {/* Inner dashed line */}
-                     <path d="M 18 50 A 32 32 0 0 1 82 50" stroke="currentColor" className="text-slate-900 dark:text-white" strokeOpacity="0.1" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
-                     
-                     {/* Needle */}
-                     <g transform={`rotate(${((Math.min(Math.max((score), 300), 850) - 300) / 550) * 180 - 90}, 50, 50)`} className="transition-transform duration-1000 ease-out will-change-transform">
-                       <line x1="50" y1="50" x2="50" y2="25" stroke="currentColor" className="text-slate-900 dark:text-white" strokeWidth="2.5" strokeLinecap="round" />
-                     </g>
-                     <circle cx="50" cy="50" r="3.5" fill="currentColor" className="text-slate-900 dark:text-white" />
-                   </svg>
-                 </div>
-                 
-                 {/* Labels */}
-                 <div className="flex items-center justify-between w-full px-1 mt-1.5">
-                   <span className="text-[10px] font-semibold text-slate-400 dark:text-white/50">300</span>
-                   <span className="text-[10px] font-semibold text-slate-400 dark:text-white/50">850</span>
-                 </div>
-                 <p className="text-[9px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest mt-1">Credit Rate</p>
-              </div>
-
-
+                Withdraw
+              </button>
             </div>
 
             {/* Stats row */}
