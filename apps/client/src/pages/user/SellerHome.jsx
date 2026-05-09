@@ -234,7 +234,7 @@ export default function SellerHome() {
           <div className="relative z-10 space-y-5">
             <div className="flex items-center justify-between gap-2">
               {/* Left Side: Balance and Actions */}
-              <div className="space-y-4 flex-1">
+              <div className="space-y-4 w-[45%] shrink-0">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10 w-fit">
                   <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span className="text-[10px] font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest">Seller Wallet</span>
@@ -259,7 +259,7 @@ export default function SellerHome() {
               {/* Right Side: Credit Meter */}
               <div 
                 onClick={() => navigate('/trust-score')}
-                className="flex-1 w-full max-w-[200px] sm:max-w-[260px] lg:max-w-[300px] flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-transform group"
+                className="flex-1 w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[360px] flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-transform group"
               >
                  <div className="relative w-full aspect-[2/1.1]">
                    <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 55">
