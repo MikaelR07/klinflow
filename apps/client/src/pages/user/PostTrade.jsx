@@ -266,6 +266,18 @@ export default function PostTrade() {
                   <div className="grid grid-cols-2 gap-4">
                     {categories.map((cat) => {
                       const isSelected = wasteType?.id === cat.id;
+                      const imageMap = {
+                        'ewaste': '/placeholder-images/material-categories/optimized/E-waste.webp',
+                        'metal': '/placeholder-images/material-categories/optimized/metal.webp',
+                        'organic': '/placeholder-images/material-categories/optimized/organic-waste.webp',
+                        'general': '/placeholder-images/material-categories/optimized/general-waste.webp',
+                        'recyclable': '/placeholder-images/material-categories/optimized/plastic.webp',
+                        'glass': '/placeholder-images/material-categories/optimized/glasses.webp',
+                        'appliances': '/placeholder-images/material-categories/optimized/appliances.webp',
+                        'bulky': '/placeholder-images/material-categories/optimized/bulky-item.webp',
+                      };
+                      const bgImage = imageMap[cat.slug || cat.id];
+
                       return (
                         <button 
                           key={cat.id}
@@ -279,14 +291,28 @@ export default function PostTrade() {
                               slug: cat.id
                             });
                           }}
-                          className={`p-6 rounded-2xl border-2 transition-all flex flex-col items-center gap-4 group relative shadow-sm ${
-                            isSelected ? 'border-emerald-500 bg-emerald-50/10 dark:bg-emerald-900/10' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900'
+                          className={`relative h-32 rounded-2xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all shadow-md group overflow-hidden border-2 ${
+                            isSelected 
+                              ? 'border-emerald-500 ring-2 ring-emerald-500/20' 
+                              : 'border-slate-100 dark:border-slate-800 hover:border-emerald-500/40'
                           }`}
+                          style={bgImage ? {
+                            backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8)), url(${bgImage})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          } : {}}
                         >
-                          <div className={`w-14 h-14 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-800 shrink-0 group-hover:scale-110 transition-transform text-2xl`}>
+                          {!bgImage && <div className={`absolute inset-0 ${isSelected ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : 'bg-slate-100 dark:bg-slate-800'}`} />}
+                          {!bgImage && <div className="absolute top-0 right-0 w-12 h-12 bg-emerald-500/5 rounded-bl-3xl -mr-4 -mt-4 group-hover:bg-emerald-500/10 transition-colors z-0" />}
+                          
+                          <div className={`relative z-10 w-10 h-10 rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform ${
+                            bgImage ? 'bg-white/10 backdrop-blur-md' : (isSelected ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600' : 'bg-slate-50 dark:bg-slate-900/50')
+                          }`}>
                             {cat.icon || '📦'}
                           </div>
-                          <span className={`text-sm font-semibold ${isSelected ? 'text-emerald-600' : 'text-slate-900 dark:text-white'}`}>
+                          <span className={`relative z-10 text-[10px] font-black uppercase tracking-widest text-center leading-none italic ${
+                            bgImage ? 'text-white' : (isSelected ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white')
+                          }`}>
                             {cat.label}
                           </span>
                         </button>

@@ -259,7 +259,7 @@ export default function SellerHome() {
               {/* Right Side: Credit Meter */}
               <div 
                 onClick={() => navigate('/trust-score')}
-                className="flex-1 w-full max-w-[160px] sm:max-w-[220px] flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-transform group"
+                className="flex-1 w-full max-w-[200px] sm:max-w-[260px] lg:max-w-[300px] flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-transform group"
               >
                  <div className="relative w-full aspect-[2/1.1]">
                    <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 55">
