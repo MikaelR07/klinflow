@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { 
   Package, Search, Plus, ArrowLeft,
   Trash2, MapPin, Scale, ChevronRight,
-  Tag, AlertCircle
+  Tag, AlertCircle, Clock
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore, useAuthStore, getThumbnailUrl } from '@cleanflow/core';
@@ -261,8 +261,8 @@ export default function MarketplaceInventory() {
                           <span>{listing.quantity} KG</span>
                         </div>
                         <div className="flex items-center gap-1 text-[10px] font-semibold text-slate-400">
-                          <MapPin className="w-3.5 h-3.5" />
-                          <span className="truncate max-w-[100px]">{listing.location || 'Nairobi'}</span>
+                          <Clock className="w-3.5 h-3.5" />
+                          <span>{new Date(listing.createdAt || listing.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                       </div>
                     </div>
@@ -281,16 +281,16 @@ export default function MarketplaceInventory() {
       {/* Helper Card (Only in list view) */}
       {!selectedId && filteredListings.length > 0 && (activeTab === 'active') && (
         <div className="px-4 mt-6">
-          <div className="bg-slate-800 dark:bg-slate-900/50 rounded-3xl p-4 text-white relative overflow-hidden border border-white/5">
-            <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/5 rounded-full blur-xl" />
-            <div className="flex items-center gap-3 relative z-10">
-              <div className="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center shrink-0">
-                <AlertCircle className="w-5 h-5 text-emerald-400" />
+          <div className="bg-emerald-50 dark:bg-emerald-500/5 rounded-2xl p-4 relative overflow-hidden border border-emerald-100 dark:border-emerald-500/20">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl" />
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-10 h-10 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
+                <AlertCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="flex-1">
-                <h4 className="text-[9px] font-semibold uppercase tracking-widest text-emerald-400 leading-none mb-1">Market Strategy</h4>
-                <p className="text-[10px] text-slate-300 leading-tight font-medium">
-                  Adding clear photos increases your chance of an agent bid by <span className="text-white font-semibold">40%</span>.
+                <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 leading-none mb-1.5">Market Strategy</h4>
+                <p className="text-xs text-emerald-800/80 dark:text-emerald-100/60 leading-snug font-medium">
+                  Adding clear photos increases your chance of an agent bid by <span className="text-emerald-900 dark:text-white font-bold italic">40%</span>.
                 </p>
               </div>
             </div>
