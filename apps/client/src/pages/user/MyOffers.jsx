@@ -153,17 +153,16 @@ export default function MyOffers() {
       {/* ── DASHBOARD AREA ── */}
       {!selectedOfferId && (
         <div className="pt-0 pb-2">
-          <div className="bg-slate-900 dark:bg-slate-950 px-5 py-4 text-white shadow-xl mb-6 relative overflow-hidden rounded-b-3xl">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-3xl -mr-12 -mt-12" />
+          <div className="bg-white dark:bg-slate-800 mx-4 px-5 py-4 border border-slate-100 dark:border-slate-700 mb-6 relative overflow-hidden rounded-2xl">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-[8px] font-semibold uppercase tracking-[0.2em] text-white/30 mb-0.5">Potential Earnings</p>
-                <h2 className="text-xl font-semibold tracking-tight text-emerald-400 leading-none">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-0.5">Potential Earnings</p>
+                <h2 className="text-xl font-semibold tracking-tight text-emerald-600 dark:text-emerald-400 leading-none">
                   KSh {pendingOffers.reduce((sum, o) => sum + (o.offered_price * o.quantity), 0).toLocaleString()}
                 </h2>
               </div>
-              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-emerald-400" />
+              <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-100 dark:border-emerald-500/20">
+                <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
             </div>
           </div>
@@ -178,7 +177,7 @@ export default function MyOffers() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative pb-3 text-[9px] font-semibold uppercase tracking-[0.12em] transition-all flex-1 ${
+                className={`relative pb-3 text-[10px] font-semibold uppercase tracking-[0.12em] transition-all flex-1 ${
                   activeTab === tab.id ? 'text-emerald-600' : 'text-slate-400'
                 }`}
               >

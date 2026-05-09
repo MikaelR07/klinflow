@@ -30,7 +30,7 @@ export default function BottomNav({ items }) {
                     </span>
                   )}
                 </div>
-                <span className="text-[10px] leading-tight">{item.label}</span>
+                <span className="text-[11px] leading-tight">{item.label}</span>
               </>
             )}
           </NavLink>
