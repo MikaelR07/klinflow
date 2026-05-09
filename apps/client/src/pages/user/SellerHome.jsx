@@ -302,7 +302,7 @@ export default function SellerHome() {
         >
           <div className="relative">
             {myListings.filter(l => l.status === 'active').length > 0 && (
-              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center animate-bounce z-10 shadow-sm">
+              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center z-10 shadow-sm">
                 <span className="text-[8px] font-semibold text-white">{myListings.filter(l => l.status === 'active').length}</span>
               </div>
             )}
@@ -321,7 +321,7 @@ export default function SellerHome() {
         >
           <div className="relative">
             {receivedOffers.filter(o => o.status === 'pending').length > 0 && (
-              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center animate-bounce z-10 shadow-sm">
+              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center z-10 shadow-sm">
                 <span className="text-[8px] font-semibold text-white">{receivedOffers.filter(o => o.status === 'pending').length}</span>
               </div>
             )}
