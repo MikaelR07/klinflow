@@ -38,22 +38,31 @@ export const useHygenexStore = create((set, get) => ({
       supabase.removeChannel(oldChannel);
     }
 
-    // 2. Fetch History
-    const { data: history, error } = await supabase
-      .from('hygenex_messages')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: true })
-      .limit(50);
+    // 2. Handle Privacy Setting & History
+    const saveHistory = localStorage.getItem('saveAiChatHistory') === 'true';
 
-    if (!error && history) {
-      const mapped = history.map((row) => ({
-        id: row.id,
-        role: row.role,
-        text: row.text,
-        timestamp: row.created_at,
-      }));
-      set({ messages: [WELCOME_MESSAGE, ...mapped] });
+    if (!saveHistory) {
+      // Wipe DB history for a clean session slate if privacy is enabled (default)
+      await supabase.from('hygenex_messages').delete().eq('user_id', userId);
+      set({ messages: [WELCOME_MESSAGE] });
+    } else {
+      // Fetch History if user opted in
+      const { data: history, error } = await supabase
+        .from('hygenex_messages')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true })
+        .limit(50);
+
+      if (!error && history) {
+        const mapped = history.map((row) => ({
+          id: row.id,
+          role: row.role,
+          text: row.text,
+          timestamp: row.created_at,
+        }));
+        set({ messages: [WELCOME_MESSAGE, ...mapped] });
+      }
     }
 
     // 3. Create a TRULY fresh channel with a unique name

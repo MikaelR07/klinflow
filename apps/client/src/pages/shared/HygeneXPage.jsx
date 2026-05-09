@@ -189,7 +189,9 @@ export default function HygeneXPage() {
                   className={`flex gap-6 ${isAi ? '' : 'flex-row-reverse'}`}
                 >
                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
-                    isAi ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-white/5 border-white/10 text-slate-400'
+                    isAi 
+                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' 
+                      : 'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                   }`}>
                     {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
                   </div>
@@ -197,8 +199,8 @@ export default function HygeneXPage() {
                   <div className="flex flex-col gap-2 max-w-[85%]">
                     <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${
                       isAi 
-                        ? 'bg-slate-50 dark:bg-white/[0.03] border-slate-100 dark:border-white/5 text-slate-700 dark:text-slate-200 rounded-tl-none' 
-                        : 'bg-emerald-500 border-emerald-400 text-white font-medium rounded-tr-none shadow-lg shadow-emerald-500/10'
+                        ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-none shadow-sm' 
+                        : 'bg-primary border-primary text-white font-medium rounded-tr-none shadow-lg shadow-primary/20'
                     }`}>
                       {renderMessageText(msg.text)}
                     </div>

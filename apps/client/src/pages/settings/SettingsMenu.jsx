@@ -1,4 +1,5 @@
-import { User, Bell, Shield, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { User, Bell, Shield, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle, Brain } from 'lucide-react';
 import { useAuthStore } from '@cleanflow/core';
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggleRow } from '@cleanflow/ui';
@@ -7,6 +8,21 @@ import { toast } from 'sonner';
 export default function SettingsMenu() {
   const { profile, logout } = useAuthStore();
   const navigate = useNavigate();
+
+  const [saveChatHistory, setSaveChatHistory] = useState(false);
+
+  useEffect(() => {
+    setSaveChatHistory(localStorage.getItem('saveAiChatHistory') === 'true');
+  }, []);
+
+  const handleToggleHistory = () => {
+    const newVal = !saveChatHistory;
+    setSaveChatHistory(newVal);
+    localStorage.setItem('saveAiChatHistory', newVal.toString());
+    toast.success(`Chat History ${newVal ? 'Enabled' : 'Disabled'}`, {
+      description: newVal ? 'HygeneX will remember your past conversations.' : 'Your chats will clear automatically when you leave.'
+    });
+  };
 
   const menuItems = [
     { icon: User, label: 'My Profile', subtitle: 'Edit your information', path: '/settings/profile' },
@@ -54,6 +70,26 @@ export default function SettingsMenu() {
             <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary" />
           </button>
         ))}
+        
+        {/* AI Privacy Toggle */}
+        <div className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center shadow-sm">
+              <Brain className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+            </div>
+            <div className="text-left">
+              <p className="text-sm font-semibold dark:text-slate-200">Save AI Chat History</p>
+              <p className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 max-w-[150px] sm:max-w-none truncate">Keep HygeneX chats permanently</p>
+            </div>
+          </div>
+          <button 
+            onClick={handleToggleHistory}
+            className={`w-12 h-6 rounded-full p-1 transition-colors ${saveChatHistory ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'}`}
+          >
+            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${saveChatHistory ? 'translate-x-6' : 'translate-x-0'}`} />
+          </button>
+        </div>
+
         <ThemeToggleRow />
       </div>
 
