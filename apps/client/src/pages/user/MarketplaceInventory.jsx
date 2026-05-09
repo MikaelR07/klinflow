@@ -56,11 +56,11 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none -mx-4 -mt-5 pt-5">
+    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none -mt-5 pt-5 relative">
       
       {/* ── HEADER (Hidden when focused) ── */}
       {!selectedId && (
-        <header className="px-4 pt-1 pb-4">
+        <header className="px-5 pt-1 pb-4">
           <div className="flex items-center justify-center relative mb-3">
             <button 
               onClick={() => navigate(-1)}
@@ -108,7 +108,7 @@ export default function MarketplaceInventory() {
       <main className="mt-0">
         {selectedId && selectedListing ? (
           /* ── FOCUSED DETAIL VIEW (AGENT SOURCING STYLE) ── */
-          <div className="animate-fade-in -mx-2 -mt-7">
+          <div className="animate-fade-in -mt-7">
             
             {/* Edge-to-Edge Hero Image */}
             <div className="w-full aspect-video bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
@@ -150,7 +150,7 @@ export default function MarketplaceInventory() {
             </div>
 
             {/* Content Sheet (Overlaps Image) */}
-            <div className="relative -mt-8 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-3xl px-4 pt-8 pb-4 space-y-6">
+            <div className="relative -mt-8 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-3xl px-5 pt-8 pb-4 space-y-6">
               
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
@@ -231,7 +231,7 @@ export default function MarketplaceInventory() {
                 <div 
                   key={listing.id}
                   onClick={() => setSelectedId(listing.id)}
-                  className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/50 p-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
+                  className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/50 px-5 py-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
@@ -278,7 +278,7 @@ export default function MarketplaceInventory() {
 
       {/* Helper Card (Only in list view) */}
       {!selectedId && filteredListings.length > 0 && (activeTab === 'active') && (
-        <div className="px-4 mt-6">
+        <div className="px-5 mt-6">
           <div className="bg-emerald-50 dark:bg-emerald-500/5 rounded-2xl p-4 relative overflow-hidden border border-emerald-100 dark:border-emerald-500/20">
             <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl" />
             <div className="flex items-center gap-4 relative z-10">
