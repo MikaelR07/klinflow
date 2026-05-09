@@ -77,8 +77,9 @@ export const useAuthStore = create(
       isInitializing: true,
 
       initializeAuth: async () => {
-        // Prevent concurrent initialization calls which cause Supabase lock timeouts
-        if (!get().isInitializing && get().isAuthenticated) return;
+        // Prevent concurrent initialization calls which cause Supabase lock timeouts (5000ms errors)
+        if (get().isInitializing) return;
+        if (get().isAuthenticated) return;
         
         set({ isInitializing: true });
         try {
