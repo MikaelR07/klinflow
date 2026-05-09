@@ -224,7 +224,7 @@ export default function SellerHome() {
     .slice(0, 3);
 
   return (
-    <div className="space-y-6 pb-10">
+    <div className="px-5 space-y-6 pb-10">
       
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
