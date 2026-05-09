@@ -185,7 +185,7 @@ export default function SellerHome() {
     .slice(0, 3);
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10">
+    <div className="px-4 md:px-6 space-y-6 animate-fade-in pb-10">
       
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -234,7 +234,7 @@ export default function SellerHome() {
           <div className="relative z-10 space-y-5">
             <div className="flex items-center justify-between gap-2">
               {/* Left Side: Balance and Actions */}
-              <div className="space-y-4 shrink-0">
+              <div className="space-y-4 flex-1">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10 w-fit">
                   <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span className="text-[10px] font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest">Seller Wallet</span>
@@ -254,7 +254,7 @@ export default function SellerHome() {
               </div>
 
               {/* Vertical Line */}
-              <div className="w-[1px] h-32 bg-slate-100 dark:bg-white/10 shrink-0" />
+              <div className="w-[1px] h-32 bg-slate-100 dark:bg-white/10 shrink-0 mx-2 sm:mx-4" />
 
               {/* Right Side: Credit Meter */}
               <div 
@@ -292,21 +292,21 @@ export default function SellerHome() {
 
             {/* Stats row */}
             <div className="grid grid-cols-3 gap-2.5">
-              <div className="bg-slate-50 dark:bg-white/[0.04] backdrop-blur-sm border border-slate-100 dark:border-white/[0.06] rounded-2xl p-3 text-center">
+              <div className="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.06] rounded-2xl p-3 text-center">
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <Handshake className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <p className="text-lg font-semibold text-slate-900 dark:text-white leading-none">{totalDeals}</p>
                 <p className="text-[8px] font-semibold text-slate-400 dark:text-white/30 uppercase tracking-widest mt-1">Deals</p>
               </div>
-              <div className="bg-slate-50 dark:bg-white/[0.04] backdrop-blur-sm border border-slate-100 dark:border-white/[0.06] rounded-2xl p-3 text-center">
+              <div className="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.06] rounded-2xl p-3 text-center">
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <Scale className="w-3 h-3 text-teal-600 dark:text-teal-400" />
                 </div>
                 <p className="text-lg font-semibold text-slate-900 dark:text-white leading-none">{totalSoldKg}kg</p>
                 <p className="text-[8px] font-semibold text-slate-400 dark:text-white/30 uppercase tracking-widest mt-1">Sold KG</p>
               </div>
-              <div className="bg-slate-50 dark:bg-white/[0.04] backdrop-blur-sm border border-slate-100 dark:border-white/[0.06] rounded-2xl p-3 text-center">
+              <div className="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.06] rounded-2xl p-3 text-center">
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <ShieldCheck className="w-3 h-3 text-amber-600 dark:text-amber-400" />
                 </div>
@@ -322,9 +322,9 @@ export default function SellerHome() {
       <div className="grid grid-cols-3 gap-2">
         <button
           onClick={() => navigate('/post-trade')}
-          className="bg-emerald-600 rounded-2xl p-3 flex flex-col items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all group relative overflow-hidden"
+          className="bg-emerald-600 rounded-2xl p-3 flex flex-col items-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all group relative"
         >
-          <div className="absolute top-0 right-0 w-12 h-12 bg-white/10 rounded-full -mr-6 -mt-6" />
+          <div className="absolute top-0 right-0 w-10 h-10 bg-white/10 rounded-bl-2xl rounded-tr-2xl" />
           <div className="w-10 h-10 bg-white/20 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
             <Plus className="w-5 h-5" />
           </div>
@@ -375,9 +375,9 @@ export default function SellerHome() {
       {/* ── FINANCIAL TRUST SCORE ── */}
       <div 
         onClick={() => navigate('/trust-score')}
-        className="bg-gradient-to-r from-emerald-500/5 to-transparent border border-emerald-500/20 rounded-2xl p-4 flex flex-col gap-3 group transition-all active:scale-[0.98] cursor-pointer relative overflow-hidden"
+        className="bg-gradient-to-r from-emerald-500/5 to-transparent border border-emerald-500/20 rounded-2xl p-4 flex flex-col gap-3 group transition-all active:scale-[0.98] cursor-pointer relative"
       >
-        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl" />
+        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[4rem] rounded-tr-2xl" />
         
         <div className="flex items-center justify-between relative z-10">
           <div className="flex items-center gap-3.5">
