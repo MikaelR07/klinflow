@@ -74,7 +74,7 @@ export const useAuthStore = create(
       userId: null,
       notificationPrefs: defaultNotifPrefs(),
       profileSubscription: null,
-      isInitializing: true,
+      isInitializing: false,
 
       initializeAuth: async () => {
         // Prevent concurrent initialization calls which cause Supabase lock timeouts (5000ms errors)
