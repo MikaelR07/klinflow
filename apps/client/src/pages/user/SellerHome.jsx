@@ -251,7 +251,10 @@ export default function SellerHome() {
               </button>
             </div>
 
-            {/* Stats row */}
+            {/* Stats row temporarily disabled by user */}
+            <div className="h-[76px] w-full" />
+            
+            {/*
             <div className="pt-5 border-t border-slate-100 dark:border-white/10">
               <div className="grid grid-cols-3 gap-2.5">
               <div className="bg-slate-50 dark:bg-white/[0.04] border border-slate-100 dark:border-white/[0.06] rounded-xl py-2 px-1 text-center">
@@ -277,6 +280,7 @@ export default function SellerHome() {
               </div>
             </div>
             </div>
+            */}
           </div>
         </div>
       </div>
