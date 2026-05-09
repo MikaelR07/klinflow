@@ -185,7 +185,7 @@ export default function MyOffers() {
               >
                 {tab.label}
                 {tab.count > 0 && (
-                  <span className={`ml-1 px-1.5 py-0.5 text-[8px] font-semibold rounded-full transition-all ${
+                  <span className={`px-1.5 py-0.5 text-[8px] font-semibold rounded-full transition-all ${
                     activeTab === tab.id
                       ? 'bg-white/20 text-white'
                       : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'

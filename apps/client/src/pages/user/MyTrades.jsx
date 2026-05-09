@@ -8,6 +8,7 @@ import {
   Info, ShieldCheck, MapPin, ChevronDown
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useBookingStore, WASTE_TYPES, supabase } from '@cleanflow/core';
 import { EmptyState, AssetJourney, AssetBadge } from '@cleanflow/ui';
 import { toast } from 'sonner';
@@ -66,11 +67,43 @@ const formatMaterial = (val) => {
   return val.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 };
 
+const TIME_SLOTS = [
+  { id: 'morning', label: '09:00 AM', value: '09:00 AM' },
+  { id: 'noon', label: '12:00 PM', value: '12:00 PM' },
+  { id: 'afternoon', label: '04:00 PM', value: '04:00 PM' },
+];
+
+const to12h = (time24) => {
+  if (!time24 || typeof time24 !== 'string' || !time24.includes(':')) return time24;
+  const [hours, minutes] = time24.split(':');
+  const h = parseInt(hours);
+  if (isNaN(h)) return time24;
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h % 12 || 12;
+  return `${h12.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+};
+
+const to24h = (time12) => {
+  if (!time12 || typeof time12 !== 'string') return '';
+  const match = time12.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if (!match) return '';
+  let h = parseInt(match[1]);
+  const m = match[2];
+  const ampm = match[3].toUpperCase();
+  if (ampm === 'PM' && h < 12) h += 12;
+  if (ampm === 'AM' && h === 12) h = 0;
+  return `${h.toString().padStart(2, '0')}:${m}`;
+};
+
 export default function MyTrades() {
   const navigate = useNavigate();
-  const { bookings, fetchBookings, cancelBooking, clearBookingHistory } = useBookingStore();
+  const { bookings, fetchBookings, cancelBooking, clearBookingHistory, rescheduleBooking } = useBookingStore();
   const [activeTab, setActiveTab] = useState('Active');
   const [expandedId, setExpandedId] = useState(null);
+  const [reschedulingTrade, setReschedulingTrade] = useState(null);
+  const [newDate, setNewDate] = useState(new Date().toLocaleDateString('en-CA'));
+  const [newTime, setNewTime] = useState('09:00');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchBookings();
@@ -89,6 +122,36 @@ export default function MyTrades() {
     toast.success('Trade Cancelled', { 
       description: `Trade ${id} has been moved to history.` 
     });
+  };
+
+  const handleRescheduleSubmit = async () => {
+    if (!reschedulingTrade) return;
+    setIsSubmitting(true);
+    try {
+      const result = await rescheduleBooking(reschedulingTrade.id, newDate, newTime, {
+        wasteType: reschedulingTrade.waste_type,
+        weight: reschedulingTrade.actual_weight_kg || reschedulingTrade.bags,
+        estate: reschedulingTrade.estate,
+        latitude: reschedulingTrade.latitude,
+        longitude: reschedulingTrade.longitude,
+        notes: reschedulingTrade.notes,
+        agentId: reschedulingTrade.agent_id,
+        photoUrl: reschedulingTrade.photo_url
+      });
+      
+      if (result.success) {
+        toast.success('Trade Rescheduled! 📅', { 
+          description: `Your pickup is now set for ${newDate} at ${newTime}.` 
+        });
+        setReschedulingTrade(null);
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (err) {
+      toast.error('Reschedule failed', { description: err.message });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleClearHistory = async (type) => {
@@ -254,7 +317,15 @@ export default function MyTrades() {
                       ) : activeTab === 'Active' && (
                         <div className="grid grid-cols-2 gap-2 pt-1">
                           <button 
-                            onClick={(e) => { e.stopPropagation(); toast.info("Reschedule Request Sent", { description: "We'll notify the weaver." }); }}
+                            onClick={(e) => { 
+                              e.stopPropagation(); 
+                              setReschedulingTrade(b);
+                              setNewDate(b.preferred_date || new Date().toLocaleDateString('en-CA'));
+                              // If it's a non-numeric time string like 'Any Time' or 'ASAP', clear it to show placeholder
+                              const currentTime = b.time_slot || '';
+                              const isValidTime = /^([01]\d|2[0-3]):?([0-5]\d)$/.test(currentTime);
+                              setNewTime(isValidTime ? currentTime : '');
+                            }}
                             className="h-10 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl flex items-center justify-center gap-2 text-slate-900 dark:text-white text-xs font-semibold uppercase tracking-widest transition-all active:scale-95 border border-slate-100 dark:border-slate-700"
                           >
                             <CalendarClock className="w-3.5 h-3.5 text-indigo-500" /> Reschedule
@@ -263,8 +334,8 @@ export default function MyTrades() {
                             onClick={(e) => { e.stopPropagation(); handleCancel(b.id); }}
                             className="h-10 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-xl flex items-center justify-center gap-2 text-rose-600 text-xs font-semibold uppercase tracking-widest transition-all active:scale-95 border border-rose-100 dark:border-rose-900/10"
                           >
-                            <XCircle className="w-3.5 h-3.5" /> Withdraw
-                          </button>
+                             <XCircle className="w-3.5 h-3.5" /> Cancel
+                           </button>
                         </div>
                       )}
 
@@ -285,6 +356,126 @@ export default function MyTrades() {
           </div>
         )}
       </div>
+
+      {/* ── RESCHEDULE MODAL ── */}
+      <AnimatePresence>
+        {reschedulingTrade && (
+          <div className="fixed inset-0 z-[100] flex items-end justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }} 
+              onClick={() => setReschedulingTrade(null)} 
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" 
+            />
+            <motion.div 
+              initial={{ y: "100%" }} 
+              animate={{ y: 0 }} 
+              exit={{ y: "100%" }} 
+              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-t-[2.5rem] rounded-b-2xl p-8 pb-10 shadow-2xl"
+            >
+              <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-6" />
+              
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center">
+                    <CalendarClock className="w-7 h-7 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Reschedule Trade</h3>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">CF-{reschedulingTrade.id?.slice(0, 8).toUpperCase()}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Quick Select Slot</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {TIME_SLOTS.map(slot => (
+                        <button
+                          key={slot.id}
+                          onClick={() => setNewTime(slot.value)}
+                          className={`py-3 px-1 rounded-xl text-[11px] font-bold uppercase tracking-tight transition-all border ${
+                            newTime === slot.value
+                              ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                              : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500'
+                          }`}
+                        >
+                          {slot.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">New Date</label>
+                      <input 
+                        type="text" 
+                        value={newDate} 
+                        placeholder="YYYY-MM-DD"
+                        onFocus={(e) => (e.target.type = 'date')}
+                        onBlur={(e) => !e.target.value && (e.target.type = 'text')}
+                        onChange={(e) => setNewDate(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none border border-slate-100 dark:border-slate-700" 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Custom Time</label>
+                      <input 
+                        type="text" 
+                        value={newTime} 
+                        placeholder="02:30 PM"
+                        onFocus={(e) => {
+                          const val24 = to24h(newTime);
+                          e.target.type = 'time';
+                          if (val24) e.target.value = val24;
+                        }}
+                        onBlur={(e) => {
+                          const val12 = to12h(e.target.value);
+                          e.target.type = 'text';
+                          if (val12) setNewTime(val12);
+                        }}
+                        onChange={(e) => {
+                          if (e.target.type === 'time') {
+                             setNewTime(to12h(e.target.value));
+                          } else {
+                             setNewTime(e.target.value);
+                          }
+                        }}
+                        className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none border border-slate-100 dark:border-slate-700" 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 dark:bg-amber-900/10 p-4 rounded-2xl border border-amber-100 dark:border-amber-900/20 flex gap-3">
+                  <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <p className="text-[11px] font-medium text-amber-800/70 dark:text-amber-400 leading-relaxed">
+                    Rescheduling will reset the trade status to **Pending Approval** so the agent can confirm they are available for the new slot.
+                  </p>
+                </div>
+
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => setReschedulingTrade(null)}
+                    className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs uppercase tracking-widest rounded-2xl active:scale-95 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    disabled={isSubmitting}
+                    onClick={handleRescheduleSubmit}
+                    className="flex-[2] py-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-widest rounded-2xl shadow-xl shadow-indigo-600/20 active:scale-95 transition-all disabled:opacity-50"
+                  >
+                    {isSubmitting ? 'Updating...' : 'Confirm New Time'}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
