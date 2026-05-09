@@ -189,7 +189,7 @@ export default function TrustScoreDetails() {
           </div>
 
           {/* Integrated Trust Score Gauge & Loan Action */}
-          <div className="relative z-10 mt-8 pt-8 border-t border-slate-100 dark:border-slate-700/50">
+          <div className="relative z-10 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700/50">
              <div className="flex justify-center mb-8">
                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
                  <ShieldCheck className="w-3 h-3" /> Your Credit Score
