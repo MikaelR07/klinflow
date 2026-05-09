@@ -230,15 +230,11 @@ export default function SellerHome() {
       {/* ── REVENUE HERO CARD ── */}
       <div className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-2xl blur-xl opacity-50 dark:opacity-50 opacity-20 group-hover:opacity-70 transition duration-500" />
-        <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl p-6 overflow-hidden shadow-none dark:shadow-2xl border border-slate-100 dark:border-white/5">
-          {/* Decorative orbs */}
-          <div className="absolute -top-16 -right-16 w-48 h-48 bg-emerald-500/15 rounded-full blur-3xl" />
-          <div className="absolute -bottom-12 -left-12 w-36 h-36 bg-teal-400/10 rounded-full blur-3xl" />
-          
+        <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl p-6 shadow-none dark:shadow-2xl border border-slate-100 dark:border-white/5">
           <div className="relative z-10 space-y-5">
             <div className="flex items-center justify-between gap-2">
               {/* Left Side: Balance and Actions */}
-              <div className="space-y-4 flex-1">
+              <div className="space-y-4 shrink-0">
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-full border border-slate-200 dark:border-white/10 w-fit">
                   <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span className="text-[10px] font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest">Seller Wallet</span>
@@ -263,7 +259,7 @@ export default function SellerHome() {
               {/* Right Side: Credit Meter */}
               <div 
                 onClick={() => navigate('/trust-score')}
-                className="w-[190px] sm:w-[220px] flex-shrink-0 flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-transform group pr-2"
+                className="flex-1 w-full max-w-[160px] sm:max-w-[220px] flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-transform group"
               >
                  <div className="relative w-full aspect-[2/1.1]">
                    <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 55">
