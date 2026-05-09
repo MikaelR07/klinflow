@@ -69,7 +69,7 @@ export default function MarketplaceInventory() {
               <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
             </button>
             <div className="bg-white dark:bg-slate-800/50 py-1.5 px-4 rounded-xl border border-slate-100 dark:border-slate-800">
-              <h1 className="text-[10px] font-bold text-slate-900 dark:text-white tracking-widest uppercase">Manage your listings</h1>
+              <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-widest uppercase">Manage your listings</h1>
             </div>
           </div>
 
@@ -211,7 +211,7 @@ export default function MarketplaceInventory() {
           </div>
         ) : (
           /* ── MAIN LIST VIEW ── */
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             {filteredListings.length === 0 ? (
               <div className="py-20 px-4 text-center">
                 <EmptyState 
@@ -225,10 +225,10 @@ export default function MarketplaceInventory() {
                 <div 
                   key={listing.id}
                   onClick={() => setSelectedId(listing.id)}
-                  className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/50 p-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
+                  className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors shadow-sm"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
+                    <div className="w-20 h-20 rounded-2xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
                       {listing.photo ? (
                         <img src={getThumbnailUrl(listing.photo, { width: 200 })} loading="lazy" className="w-full h-full object-cover" />
                       ) : (
@@ -239,20 +239,20 @@ export default function MarketplaceInventory() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                          <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Live</span>
+                          <span className={`w-1.5 h-1.5 rounded-full ${listing.status === 'active' ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]' : 'bg-slate-300 dark:bg-slate-600'}`} />
+                          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{listing.status === 'active' ? 'Live' : 'Closed'}</span>
                         </div>
-                        <span className="text-[10px] font-semibold text-emerald-600">KSh {listing.pricePerKg}/kg</span>
+                        <span className="text-sm font-bold text-emerald-600">KSh {listing.pricePerKg}/kg</span>
                       </div>
                       
-                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
                       
                       <div className="flex items-center gap-4 mt-2">
-                        <div className="flex items-center gap-1 text-[10px] font-semibold text-slate-400">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
                           <Scale className="w-3.5 h-3.5" />
                           <span>{listing.quantity} KG</span>
                         </div>
-                        <div className="flex items-center gap-1 text-[10px] font-semibold text-slate-400">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
                           <Clock className="w-3.5 h-3.5" />
                           <span>{new Date(listing.createdAt || listing.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
