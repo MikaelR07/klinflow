@@ -450,13 +450,15 @@ export default function MyOffers() {
                                 </div>
                               </div>
                               
-                              <div className="bg-slate-900 dark:bg-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-lg">
+                              <div className="bg-emerald-600 dark:bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20 shadow-xl shadow-emerald-500/10 flex items-center justify-between">
                                 <div>
-                                  <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-0.5">Expected Payout</p>
-                                  <p className="text-lg font-bold text-white leading-none">KSh {(offer.offered_price * offer.quantity).toLocaleString()}</p>
+                                  <p className="text-[10px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest mb-1">Expected Payout</p>
+                                  <p className="text-xl font-black text-white dark:text-emerald-400 leading-none">
+                                    KSh {(offer.offered_price * offer.quantity).toLocaleString()}
+                                  </p>
                                 </div>
-                                <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
-                                  <TrendingUp className="w-5 h-5 text-emerald-400" />
+                                <div className="w-12 h-12 bg-white/20 dark:bg-emerald-500/20 rounded-2xl flex items-center justify-center">
+                                  <TrendingUp className="w-6 h-6 text-white dark:text-emerald-400" />
                                 </div>
                               </div>
 
