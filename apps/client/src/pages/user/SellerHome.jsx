@@ -229,7 +229,7 @@ export default function SellerHome() {
 
       {/* ── REVENUE HERO CARD ── */}
       <div className="relative group">
-        <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl p-6 shadow-none dark:shadow-2xl border border-slate-100 dark:border-white/5">
+        <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl p-6 shadow-none border border-slate-100 dark:border-white/5">
           <div className="relative z-10 space-y-5">
             <div className="flex items-center justify-between gap-2">
               {/* Left Side: Balance and Actions */}
@@ -274,7 +274,7 @@ export default function SellerHome() {
                      
                      {/* Needle */}
                      <g transform={`rotate(${((Math.min(Math.max((score), 300), 850) - 300) / 550) * 180 - 90}, 50, 50)`} className="transition-transform duration-1000 ease-out">
-                       <line x1="50" y1="50" x2="50" y2="25" stroke="currentColor" className="text-slate-900 dark:text-white drop-shadow-md" strokeWidth="2.5" strokeLinecap="round" />
+                       <line x1="50" y1="50" x2="50" y2="25" stroke="currentColor" className="text-slate-900 dark:text-white" strokeWidth="2.5" strokeLinecap="round" />
                      </g>
                      <circle cx="50" cy="50" r="3.5" fill="currentColor" className="text-slate-900 dark:text-white" />
                    </svg>
