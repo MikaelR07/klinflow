@@ -34,8 +34,10 @@ export default function AvailableJobs() {
   const cleanupJobs = useAgentStore(s => s.cleanupJobs);
   const isLoadingJobs = useAgentStore(s => s.isLoadingJobs);
   const arrivedJobIds = useAgentStore(s => s.arrivedJobIds);
-  const { userId, profile } = useAuthStore();
-  const { categories, fetchCategories } = useServiceStore();
+  const userId = useAuthStore(s => s.userId);
+  const profile = useAuthStore(s => s.profile);
+  const categories = useServiceStore(s => s.categories);
+  const fetchCategories = useServiceStore(s => s.fetchCategories);
 
   useEffect(() => {
     fetchAvailableJobs();

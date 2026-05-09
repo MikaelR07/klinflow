@@ -128,7 +128,7 @@ export default function Register() {
       <div className="min-h-dvh flex flex-col justify-center bg-slate-900 px-4 py-8 animate-in fade-in">
         <div className="max-w-md w-full mx-auto relative z-10 glass p-8 rounded-3xl border border-slate-700 shadow-2xl">
           <div className="text-center mb-8">
-            <img src="/logo.png" className="w-56 h-auto mx-auto mb-8 shadow-2xl rounded-3xl" alt="Logo" />
+            <img src="/logo.png" className="w-56 h-auto mx-auto mb-8 shadow-2xl rounded-3xl" alt="Logo" fetchpriority="high" loading="eager" />
             <h2 className="text-2xl font-semibold text-white tracking-widest uppercase">Identity Verification</h2>
             <p className="text-sm text-slate-400 mt-2">Enter the secure PIN sent to <br/><span className="text-white font-semibold">{formData.phone}</span></p>
           </div>
@@ -187,7 +187,7 @@ export default function Register() {
             </Link>
             <div className="w-9" /> {/* Spacer */}
           </div>
-          <img src="/logo.png" className="w-56 h-auto mx-auto mb-8 shadow-2xl rounded-3xl" alt="Logo" />
+          <img src="/logo.png" className="w-56 h-auto mx-auto mb-8 shadow-2xl rounded-3xl" alt="Logo" fetchpriority="high" loading="eager" />
         </div>
 
         <div>

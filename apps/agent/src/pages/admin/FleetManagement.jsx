@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore, useAgentStore } from '@cleanflow/core';
+import { useAuthStore, useAgentStore, getThumbnailUrl } from '@cleanflow/core';
 import { Users, Search, Filter, Mail, Phone, MoreVertical, ShieldCheck, UserMinus, UserPlus, Copy, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function FleetManagement() {
-  const { profile } = useAuthStore();
-  const { fleetDrivers, fetchFleetDrivers, isLoadingFleet } = useAgentStore();
+  const profile = useAuthStore(s => s.profile);
+  const fleetDrivers = useAgentStore(s => s.fleetDrivers);
+  const fetchFleetDrivers = useAgentStore(s => s.fetchFleetDrivers);
+  const isLoadingFleet = useAgentStore(s => s.isLoadingFleet);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all'); // all, online, offline
 
@@ -128,10 +130,14 @@ export default function FleetManagement() {
                   <tr key={agent.id} className="hover:bg-primary/5 transition-colors group">
                     <td className="p-6">
                        <div className="flex items-center gap-4">
-                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-semibold border-2 ${
+                          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-semibold border-2 overflow-hidden shadow-sm ${
                             agent.is_online ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-slate-50 border-slate-100 text-slate-400'
                           }`}>
-                            {agent.name.charAt(0).toUpperCase()}
+                            {agent.avatar_url ? (
+                              <img src={getThumbnailUrl(agent.avatar_url, { width: 150 })} className="w-full h-full object-cover" />
+                            ) : (
+                              agent.name.charAt(0).toUpperCase()
+                            )}
                           </div>
                           <div>
                              <p className="text-sm font-semibold text-slate-900 dark:text-white leading-none">{agent.name}</p>

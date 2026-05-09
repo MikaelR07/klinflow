@@ -6,8 +6,16 @@ import { toast } from 'sonner';
 
 export default function CompanyAdminDashboard() {
   const navigate = useNavigate();
-  const { profile, toggleOnline, fetchProfile, subscribeToProfileChanges } = useAuthStore();
-  const { earnings, fetchEarnings, fleetDrivers, fetchFleetDrivers, isLoadingFleet } = useAgentStore();
+  const profile = useAuthStore(s => s.profile);
+  const toggleOnline = useAuthStore(s => s.toggleOnline);
+  const fetchProfile = useAuthStore(s => s.fetchProfile);
+  const subscribeToProfileChanges = useAuthStore(s => s.subscribeToProfileChanges);
+
+  const earnings = useAgentStore(s => s.earnings);
+  const fetchEarnings = useAgentStore(s => s.fetchEarnings);
+  const fleetDrivers = useAgentStore(s => s.fleetDrivers);
+  const fetchFleetDrivers = useAgentStore(s => s.fetchFleetDrivers);
+  const isLoadingFleet = useAgentStore(s => s.isLoadingFleet);
   const [isToggling, setIsToggling] = useState(false);
 
   useEffect(() => {

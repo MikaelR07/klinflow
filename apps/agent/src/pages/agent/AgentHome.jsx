@@ -33,14 +33,28 @@ import { AIInsightCard, PushNotificationModal } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
 export default function AgentHome() {
-  const { profile, toggleOnline, withdrawRewards, subscribeToProfileChanges, fetchProfile } = useAuthStore();
-  const { 
-    earnings, coachInsights, currentInsightIndex, nextInsight, 
-    availableJobs, fetchAvailableJobs, fetchEarnings, broadcastLocation,
-    jobHistory, subscribeToJobs, cleanupJobs, clearJobHistory
-  } = useAgentStore();
-  const { assets, fetchAssets } = useAssetStore();
-  const { getUnreadCount } = useNotificationStore();
+  const profile = useAuthStore(s => s.profile);
+  const toggleOnline = useAuthStore(s => s.toggleOnline);
+  const withdrawRewards = useAuthStore(s => s.withdrawRewards);
+  const subscribeToProfileChanges = useAuthStore(s => s.subscribeToProfileChanges);
+  const fetchProfile = useAuthStore(s => s.fetchProfile);
+
+  const earnings = useAgentStore(s => s.earnings);
+  const coachInsights = useAgentStore(s => s.coachInsights);
+  const currentInsightIndex = useAgentStore(s => s.currentInsightIndex);
+  const nextInsight = useAgentStore(s => s.nextInsight);
+  const availableJobs = useAgentStore(s => s.availableJobs);
+  const fetchAvailableJobs = useAgentStore(s => s.fetchAvailableJobs);
+  const fetchEarnings = useAgentStore(s => s.fetchEarnings);
+  const broadcastLocation = useAgentStore(s => s.broadcastLocation);
+  const jobHistory = useAgentStore(s => s.jobHistory);
+  const subscribeToJobs = useAgentStore(s => s.subscribeToJobs);
+  const cleanupJobs = useAgentStore(s => s.cleanupJobs);
+  const clearJobHistory = useAgentStore(s => s.clearJobHistory);
+
+  const fetchAssets = useAssetStore(s => s.fetchAssets);
+  const getUnreadCount = useNotificationStore(s => s.getUnreadCount);
+  const subscribeToPush = useNotificationStore(s => s.subscribeToPush);
   const [isToggling, setIsToggling] = useState(false);
   const [isWithdrawing, setIsWithdrawing] = useState(false);
   const [acceptedTradesCount, setAcceptedTradesCount] = useState(0);
@@ -50,7 +64,7 @@ export default function AgentHome() {
   const currentInsight = coachInsights[currentInsightIndex];
 
   const [showPushPrompt, setShowPushPrompt] = useState(false);
-  const { subscribeToPush } = useNotificationStore();
+
 
   useEffect(() => {
     // Show prompt if user hasn't allowed/denied notifications yet
