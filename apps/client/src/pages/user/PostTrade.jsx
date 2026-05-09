@@ -235,7 +235,7 @@ export default function PostTrade() {
     <div className="min-h-screen bg-[#F2F3F4] dark:bg-slate-900 pb-10 overscroll-none">
       
       {/* ── NAVIGATION HEADER ── */}
-      <div className="px-6 pt-2 pb-2 flex items-center justify-between">
+      <div className="px-4 pt-2 pb-2 flex items-center justify-between">
          <button 
            onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} 
            className="p-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
@@ -250,7 +250,7 @@ export default function PostTrade() {
          </div>
       </div>
 
-      <div className="px-6">
+      <div className="px-4">
         <AnimatePresence mode="wait">
           
           {/* ── STEP 1: MATERIAL & WEIGHT ── */}
