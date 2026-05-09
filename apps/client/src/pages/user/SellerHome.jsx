@@ -229,7 +229,8 @@ export default function SellerHome() {
 
       {/* ── REVENUE HERO CARD ── */}
       <div className="relative group">
-        <div className="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-none border border-slate-100 dark:border-white/5">
+        <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-[#0a0f1e] rounded-2xl p-6 shadow-none border border-slate-100 dark:border-white/5 overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
           <div className="flex flex-col gap-5">
             <div className="flex flex-wrap sm:flex-nowrap items-end justify-between w-full gap-4">
               <div className="flex-1 min-w-0">
@@ -253,30 +254,33 @@ export default function SellerHome() {
 
             {/* Stats row */}
             <div className="pt-5 border-t border-slate-100 dark:border-white/10">
-              <div className="flex items-center justify-between sm:justify-start sm:gap-16 px-1">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 
-                <div className="flex flex-col items-start gap-1">
-                  <div className="flex items-center gap-1.5">
-                    <Handshake className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                    <p className="text-[9px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">Deals</p>
+                {/* Safe Box 1 */}
+                <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 rounded-xl py-2 px-1 text-center overflow-hidden">
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <Handshake className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   </div>
-                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">{totalDeals}</p>
+                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none w-full truncate">{totalDeals}</p>
+                  <p className="text-[8px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest mt-1">Deals</p>
                 </div>
 
-                <div className="flex flex-col items-start gap-1 px-4 sm:px-0 border-x border-slate-100 dark:border-white/10 sm:border-none">
-                  <div className="flex items-center gap-1.5">
-                    <Scale className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-                    <p className="text-[9px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">Sold KG</p>
+                {/* Safe Box 2 */}
+                <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 rounded-xl py-2 px-1 text-center overflow-hidden">
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <Scale className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
                   </div>
-                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">{totalSoldKg}kg</p>
+                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none w-full truncate">{totalSoldKg}kg</p>
+                  <p className="text-[8px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest mt-1">Sold KG</p>
                 </div>
 
-                <div className="flex flex-col items-start gap-1">
-                  <div className="flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                    <p className="text-[9px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">In Escrow</p>
+                {/* Safe Box 3 */}
+                <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 rounded-xl py-2 px-1 text-center overflow-hidden">
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
                   </div>
-                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
+                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none w-full truncate">KSh {inEscrowAmount.toLocaleString()}</p>
+                  <p className="text-[8px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest mt-1">In Escrow</p>
                 </div>
 
               </div>
