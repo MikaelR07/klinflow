@@ -134,7 +134,7 @@ export default function UserHome() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10">
+    <div className="space-y-4 animate-fade-in pb-10">
 
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -171,9 +171,9 @@ export default function UserHome() {
       {/* Wallet Hero */}
       <div className="relative group">
         <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/30 to-teal-500/30 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000" />
-        <div className="relative bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl p-6 shadow-2xl overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-400/10 rounded-full blur-3xl" />
+        <div className="relative bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl p-6 overflow-hidden">
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full" />
+          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-400/10 rounded-full" />
           
           {/* Decorative Trees (Relocated to Top Right) */}
           <div className="absolute top-6 right-6 flex -space-x-2 z-20">
@@ -377,9 +377,9 @@ export default function UserHome() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => navigate('/hygenex', { state: { autoStartMic: true } })}
-        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-500/50 z-50 border-4 border-white dark:border-slate-800"
+        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 border-4 border-white dark:border-slate-800"
       >
-        <div className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-20" />
+        <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
         <Brain className="w-6 h-6 text-white" />
       </motion.button>
 

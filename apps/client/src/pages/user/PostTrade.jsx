@@ -232,13 +232,13 @@ export default function PostTrade() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F2F3F4] dark:bg-slate-900 pb-32">
+    <div className="min-h-screen bg-[#F2F3F4] dark:bg-slate-900 pb-10 overscroll-none">
       
       {/* ── NAVIGATION HEADER ── */}
-      <div className="px-6 pt-8 pb-4 flex items-center justify-between">
+      <div className="px-6 pt-2 pb-2 flex items-center justify-between">
          <button 
            onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} 
-           className="p-3 bg-white dark:bg-slate-800 shadow-md rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
+           className="p-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
          >
            <ArrowLeft className="w-5 h-5 text-slate-900 dark:text-white" />
          </button>
@@ -255,7 +255,7 @@ export default function PostTrade() {
           
           {/* ── STEP 1: MATERIAL & WEIGHT ── */}
           {step === 1 && (
-            <motion.div key="p1" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-8">
+            <motion.div key="p1" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
                <div className="space-y-1">
                   <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">New Trade</h2>
                   <p className="text-sm font-medium text-slate-500 leading-tight">What asset are you looking to trade today?</p>
@@ -291,13 +291,13 @@ export default function PostTrade() {
                               slug: cat.id
                             });
                           }}
-                          className={`relative h-32 rounded-2xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all shadow-md group overflow-hidden border-2 ${
+                          className={`relative h-32 rounded-2xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all group overflow-hidden border-2 ${
                             isSelected 
                               ? 'border-emerald-500 ring-2 ring-emerald-500/20' 
                               : 'border-slate-100 dark:border-slate-800 hover:border-emerald-500/40'
                           }`}
                           style={bgImage ? {
-                            backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8)), url(${bgImage})`,
+                            backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.6)), url(${bgImage})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center'
                           } : {}}
@@ -354,7 +354,7 @@ export default function PostTrade() {
 
           {/* ── STEP 2: VALUATION & PROOF ── */}
           {step === 2 && (
-            <motion.div key="p2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
+            <motion.div key="p2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
                <div className="space-y-1">
                   <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Valuation</h2>
                   <p className="text-sm font-medium text-slate-500 leading-tight">Provide proof and set your asking price.</p>
@@ -417,7 +417,7 @@ export default function PostTrade() {
                       {photos.length < 4 && (
                         <button 
                           onClick={() => document.getElementById('photo-upload').click()}
-                          className="h-32 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900 shadow-sm"
+                          className="h-32 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900"
                         >
                           <div className="w-8 h-8 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
                             <Camera className="w-4 h-4" />
@@ -489,8 +489,8 @@ export default function PostTrade() {
                </div>
 
                {/* ESTIMATED VALUE CARD */}
-               <div className="bg-slate-900 dark:bg-slate-950 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl" />
+               <div className="bg-slate-900 dark:bg-slate-950 rounded-2xl p-6 relative overflow-hidden">
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full" />
                   <div className="relative z-10 flex items-center justify-between">
                      <div>
                         <p className="text-[10px] font-semibold text-emerald-400 uppercase tracking-widest mb-1">Your Est. Revenue</p>
@@ -509,7 +509,7 @@ export default function PostTrade() {
 
           {/* ── STEP 3: COLLECTION METHOD ── */}
           {step === 3 && (
-            <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+            <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
                 <div className="space-y-1">
                   <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Collection Method</h2>
                   <p className="text-sm font-medium text-slate-500 leading-tight">How would you like to get your materials to us?</p>
@@ -534,7 +534,7 @@ export default function PostTrade() {
                   <button 
                     onClick={() => setPickupMode('dropoff')}
                     className={`p-5 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${
-                      pickupMode === 'dropoff' ? 'border-emerald-500 bg-emerald-50/10 shadow-lg shadow-emerald-500/5' : 'border-slate-200 bg-white'
+                      pickupMode === 'dropoff' ? 'border-emerald-500 bg-emerald-50/10' : 'border-slate-200 bg-white'
                     }`}
                   >
                     <div className={`w-12 h-12 rounded-3xl flex items-center justify-center ${pickupMode === 'dropoff' ? 'bg-emerald-500 text-white' : 'bg-slate-50 text-slate-400'}`}>
@@ -749,7 +749,7 @@ export default function PostTrade() {
 
           {/* ── STEP 4: POST SUMMARY ── */}
           {step === 4 && (
-            <motion.div key="p4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+            <motion.div key="p4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
                 <div className="space-y-1">
                   <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Post Summary</h2>
                   <p className="text-sm font-medium text-slate-500 leading-tight">Review your trade details before confirming.</p>
@@ -804,7 +804,7 @@ export default function PostTrade() {
                 </div>
 
                 {/* ── FINANCIAL BREAKDOWN ── */}
-                <div className="bg-slate-900 dark:bg-slate-950 rounded-2xl p-8 space-y-6 shadow-2xl">
+                <div className="bg-slate-900 dark:bg-slate-950 rounded-2xl p-8 space-y-6">
                    <div className="space-y-4">
                       <div className="flex justify-between items-center text-white/50">
                          <span className="text-xs font-semibold uppercase tracking-widest">Gross Value</span>
@@ -838,7 +838,7 @@ export default function PostTrade() {
                 (step === 3 && pickupMode === 'dropoff' && !selectedHub)
               }
               onClick={() => setStep(step + 1)}
-              className="w-full p-5 bg-emerald-700 text-white rounded-2xl font-semibold text-sm shadow-xl shadow-emerald-900/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30"
+              className="w-full p-5 bg-emerald-700 text-white rounded-2xl font-semibold text-sm active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30"
             >
               <span>CONTINUE</span>
               <ChevronRight className="w-5 h-5" />
