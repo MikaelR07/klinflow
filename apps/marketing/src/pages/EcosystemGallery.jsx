@@ -12,55 +12,55 @@ import Layout from '../layouts/Layout';
 
 const allScreenshots = [
   { 
-    src: '/placeholder-images/grid-images/route-optimizer.webp', 
+    src: '/grid/route-optimizer.png', 
     title: 'Tactical Navigation',
     category: 'Logistics',
     desc: 'Agent HUD with AI-optimized multi-stop routing and real-time pickup telemetry.' 
   },
   { 
-    src: '/placeholder-images/grid-images/visualproof.webp', 
+    src: '/grid/visualproof.png', 
     title: 'HygeneX Vision Scan',
     category: 'Intelligence',
     desc: 'AI-powered material grading and purity verification for instant asset valuation.' 
   },
   { 
-    src: '/placeholder-images/grid-images/book-pickup.webp', 
+    src: '/grid/book-pickup.png', 
     title: 'Mission Request',
     category: 'Consumer',
     desc: 'Streamlined waste categorization and collection scheduling for residents.' 
   },
   { 
-    src: '/placeholder-images/grid-images/arrival-detail.webp', 
+    src: '/grid/arrival-detail.png', 
     title: 'Agent Verification',
     category: 'Logistics',
     desc: 'On-site terminal for weight verification and material grade confirmation.' 
   },
   { 
-    src: '/placeholder-images/grid-images/post-info.webp', 
+    src: '/grid/post-info.png', 
     title: 'B2B Trade Listing',
     category: 'Marketplace',
     desc: 'Advanced data entry for bulk material sales including grade and moisture parameters.' 
   },
   { 
-    src: '/placeholder-images/grid-images/offer-review.webp', 
+    src: '/grid/offer-review.png', 
     title: 'Escrow Negotiation',
     category: 'Financial',
     desc: 'Transparent bidding and fund release system for large-scale material trades.' 
   },
   { 
-    src: '/placeholder-images/grid-images/post-summary.webp', 
+    src: '/grid/post-summary.png', 
     title: 'Mission Settlement',
     category: 'Financial',
     desc: 'Digital receipts and automated wallet payouts upon successful collection.' 
   },
   { 
-    src: '/placeholder-images/grid-images/impact-analysis.webp', 
+    src: '/grid/impact-analysis.png', 
     title: 'Sustainomics Analytics',
     category: 'Intelligence',
     desc: 'Deep-dive environmental impact metrics and historical trade performance.' 
   },
   { 
-    src: '/placeholder-images/grid-images/collection-method.webp', 
+    src: '/grid/collection-method.png', 
     title: 'Logistics Strategy',
     category: 'Logistics',
     desc: 'Dynamic selection between agent pickup and self-service hub drop-offs.' 

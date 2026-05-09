@@ -25,7 +25,7 @@ const appCards = [
   { 
     title: 'Client Dashboard', 
     desc: 'Household waste management & B2B seller listings.', 
-    img: '/placeholder-images/grid-images/seller-home.webp',
+    img: '/grid/seller-home.png',
     path: '/products/client',
     icon: User,
     color: 'emerald'
@@ -33,7 +33,7 @@ const appCards = [
   { 
     title: 'Agent Terminal', 
     desc: 'Mission control for independent agents and fleet drivers.', 
-    img: '/placeholder-images/grid-images/agent-home.webp',
+    img: '/grid/agent-home.png',
     path: '/products/agent',
     icon: Truck,
     color: 'blue'
@@ -41,7 +41,7 @@ const appCards = [
   { 
     title: 'Fleet Admin', 
     desc: 'B2B management for recycling centers and fleet companies.', 
-    img: '/placeholder-images/grid-images/business-home.webp',
+    img: '/grid/business-home.png',
     path: '/products/fleet',
     icon: Building2,
     color: 'indigo'
@@ -49,7 +49,7 @@ const appCards = [
   { 
     title: 'Hub Command', 
     desc: 'Industrial-grade intake and material processing system.', 
-    img: '/placeholder-images/grid-images/Hub-home.webp',
+    img: '/grid/Hub-home.png',
     path: '/products/hub',
     icon: Warehouse,
     color: 'rose'
@@ -61,15 +61,15 @@ export default function Home() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const screenshots = [
-    { src: '/placeholder-images/grid-images/agent-home.webp', alt: 'Agent Terminal - Tactical Mission Control' },
-    { src: '/placeholder-images/grid-images/seller-home.webp', alt: 'Merchant Dashboard - Marketplace Trade Hub' },
-    { src: '/placeholder-images/grid-images/book-pickup.webp', alt: 'Resident Terminal - Mission Request Interface' },
-    { src: '/placeholder-images/grid-images/business-home.webp', alt: 'B2B Business Portal - Bulk Material Sourcing' },
-    { src: '/placeholder-images/grid-images/Resident-home.webp', alt: 'Resident Dashboard - Household Waste Management' },
-    { src: '/placeholder-images/grid-images/Hub-home.webp', alt: 'Hub Command Center - Industrial Intake' },
-    { src: '/placeholder-images/grid-images/admin-dashboard.webp', alt: 'System Administration - Global Network Stats' },
-    { src: '/placeholder-images/grid-images/company-owner-home.webp', alt: 'Fleet Admin - Logistics Company Management' },
-    { src: '/placeholder-images/grid-images/agent-dashboard.webp', alt: 'Agent Analytics - Performance & Earnings Tracking' },
+    { src: '/grid/agent-home.png', alt: 'Agent Terminal - Tactical Mission Control' },
+    { src: '/grid/seller-home.png', alt: 'Merchant Dashboard - Marketplace Trade Hub' },
+    { src: '/grid/book-pickup.png', alt: 'Resident Terminal - Mission Request Interface' },
+    { src: '/grid/business-home.png', alt: 'B2B Business Portal - Bulk Material Sourcing' },
+    { src: '/grid/Resident-home.png', alt: 'Resident Dashboard - Household Waste Management' },
+    { src: '/grid/Hub-home.png', alt: 'Hub Command Center - Industrial Intake' },
+    { src: '/grid/admin-dashboard.png', alt: 'System Administration - Global Network Stats' },
+    { src: '/grid/company-owner-home.png', alt: 'Fleet Admin - Logistics Company Management' },
+    { src: '/grid/agent-dashboard.png', alt: 'Agent Analytics - Performance & Earnings Tracking' },
   ];
 
   return (
