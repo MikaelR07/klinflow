@@ -52,22 +52,24 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="min-h-screen bg-[#F4F4F4] dark:bg-slate-950 pb-24">
+    <div className="min-h-screen bg-[#F2F3F4] dark:bg-slate-900 pb-24 overscroll-none">
       
       {/* ── HEADER (Hidden when focused) ── */}
       {!selectedId && (
-        <header className="px-4 pt-4 pb-4">
-          <div className="flex items-center justify-between mb-5">
+        <header className="px-4 pt-1 pb-4">
+          <div className="flex items-center justify-between mb-3">
             <button 
               onClick={() => navigate(-1)}
-              className="p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all shadow-sm"
+              className="p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
             >
               <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
             </button>
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight uppercase">My Inventory</h1>
+            <div className="bg-white dark:bg-slate-800/50 py-1.5 px-4 rounded-xl border border-slate-100 dark:border-slate-800">
+              <h1 className="text-[10px] font-bold text-slate-900 dark:text-white tracking-widest uppercase">Manage your listings</h1>
+            </div>
             <button 
               onClick={() => navigate('/post-trade')}
-              className="p-2.5 bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+              className="p-2.5 bg-emerald-500 text-white rounded-xl active:scale-95 transition-all"
             >
               <Plus className="w-5 h-5" />
             </button>
@@ -105,7 +107,7 @@ export default function MarketplaceInventory() {
         </header>
       )}
 
-      <main className="mt-2">
+      <main className="mt-0">
         {selectedId && selectedListing ? (
           /* ── FOCUSED DETAIL VIEW (AGENT SOURCING STYLE) ── */
           <div className="animate-fade-in -mx-2 -mt-7">
@@ -126,7 +128,7 @@ export default function MarketplaceInventory() {
                 {(selectedListing.photos?.length > 0 ? selectedListing.photos : [selectedListing.photo]).map((imgUrl, idx) => (
                   <div key={idx} className="flex-none w-full h-full snap-start">
                     {imgUrl ? (
-                      <img src={imgUrl} className="w-full h-full object-cover" alt={`${selectedListing.material} - View ${idx + 1}`} />
+                      <img src={getThumbnailUrl(imgUrl, { width: 800 })} loading="lazy" className="w-full h-full object-cover" alt={`${selectedListing.material} - View ${idx + 1}`} />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
                          <Package className="w-20 h-20 text-slate-200" />
@@ -150,62 +152,59 @@ export default function MarketplaceInventory() {
             </div>
 
             {/* Content Sheet (Overlaps Image) */}
-            <div className="relative -mt-8 bg-[#F4F4F4] dark:bg-slate-950 rounded-t-3xl px-6 pt-8 pb-12 space-y-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] dark:shadow-none min-h-[60vh]">
+            <div className="relative -mt-8 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-3xl px-4 pt-8 pb-12 space-y-6 min-h-[60vh]">
               
-              {/* Title & Stats */}
-              <div className="space-y-1">
-                <h2 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight italic">{selectedListing.material}</h2>
-                <div className="flex items-center gap-2">
-                   <div className={`w-2 h-2 rounded-full ${selectedListing.status === 'active' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
-                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Listing {selectedListing.status}</p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="bg-white dark:bg-slate-800/50 py-1.5 px-3 rounded-xl border border-slate-100 dark:border-slate-800 w-fit">
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">{selectedListing.material}</h2>
+                    </div>
+                    <div className="bg-white dark:bg-slate-800/50 py-1.5 px-3 rounded-xl border border-slate-100 dark:border-slate-800 w-fit flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-indigo-500" />
+                      <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-widest italic">{selectedListing.location || 'Nairobi Hub'}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 px-1">
+                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+                       Posted {new Date(selectedListing.created_at || selectedListing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                     </p>
+                  </div>
                 </div>
-              </div>
 
               {/* Stats Row - Three Column Industrial */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-white dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 text-center shadow-sm">
+              <div className="grid grid-cols-3 gap-1.5">
+                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
                   <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Asking Rate</p>
-                  <p className="text-base font-black text-emerald-600 italic">KSh {selectedListing.pricePerKg}</p>
+                  <p className="text-sm font-black text-emerald-600 italic">KSh {selectedListing.pricePerKg}</p>
                   <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">/ KG</p>
                 </div>
-                <div className="bg-white dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 text-center shadow-sm">
+                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
                   <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Inventory</p>
-                  <p className="text-base font-black text-slate-900 dark:text-white italic">{selectedListing.quantity}</p>
+                  <p className="text-sm font-black text-slate-900 dark:text-white italic">{selectedListing.quantity}</p>
                   <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">KG LOAD</p>
                 </div>
-                <div className="bg-white dark:bg-slate-800/50 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 text-center shadow-sm">
+                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
                   <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Est. Value</p>
-                  <p className="text-base font-black text-slate-900 dark:text-white italic">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
+                  <p className="text-sm font-black text-slate-900 dark:text-white italic">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
                   <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">Net Total</p>
                 </div>
               </div>
 
               {/* Description */}
-              <div className="bg-white dark:bg-slate-800/50 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-3">
-                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Listing Intelligence</h4>
+              <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2">
+                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Description</h4>
                 <p className="text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
-                  {selectedListing.description || "No detailed description provided for this listing. High-quality descriptions improve buyer confidence by 30%."}
+                  {selectedListing.description || "No description provided"}
                 </p>
               </div>
 
-              {/* Location */}
-              <div className="flex items-center justify-between p-5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-sm">
-                <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center text-slate-400 shadow-inner">
-                    <MapPin className="w-5 h-5 text-indigo-500" />
-                  </div>
-                  <div>
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Warehouse Location</p>
-                    <p className="text-xs font-black text-slate-800 dark:text-white uppercase italic">{selectedListing.location || 'Nairobi Hub'}</p>
-                  </div>
-                </div>
-              </div>
+
 
               {/* Management Controls */}
               <div className="pt-4 space-y-3">
                 <button 
                   onClick={() => handleDelete(selectedListing.id)}
-                  className="w-full py-5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-xl shadow-rose-500/5"
+                  className="w-full py-5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3"
                 >
                   <Trash2 className="w-4 h-4" /> Withdraw Listing
                 </button>
@@ -282,7 +281,7 @@ export default function MarketplaceInventory() {
       {/* Helper Card (Only in list view) */}
       {!selectedId && filteredListings.length > 0 && (activeTab === 'active') && (
         <div className="px-4 mt-6">
-          <div className="bg-slate-800 dark:bg-slate-900/50 rounded-3xl p-4 text-white shadow-lg relative overflow-hidden border border-white/5">
+          <div className="bg-slate-800 dark:bg-slate-900/50 rounded-3xl p-4 text-white relative overflow-hidden border border-white/5">
             <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-500/5 rounded-full blur-xl" />
             <div className="flex items-center gap-3 relative z-10">
               <div className="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center shrink-0">
