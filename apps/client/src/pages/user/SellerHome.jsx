@@ -258,10 +258,10 @@ export default function SellerHome() {
               {/* Right Side: Credit Meter */}
               <div 
                 onClick={() => navigate('/trust-score')}
-                className="flex-1 w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[360px] flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-transform group"
+                className="flex-1 w-full max-w-[240px] sm:max-w-[320px] lg:max-w-[360px] flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-transform group transform-gpu"
               >
                  <div className="relative w-full aspect-[2/1.1]">
-                   <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 55">
+                   <svg className="absolute inset-0 w-full h-full overflow-hidden transform-gpu" viewBox="0 0 100 55">
                      {/* 5 Segments */}
                      <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="0" />
                      <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f97316" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-21.5" />
@@ -273,7 +273,7 @@ export default function SellerHome() {
                      <path d="M 18 50 A 32 32 0 0 1 82 50" stroke="currentColor" className="text-slate-900 dark:text-white" strokeOpacity="0.1" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
                      
                      {/* Needle */}
-                     <g transform={`rotate(${((Math.min(Math.max((score), 300), 850) - 300) / 550) * 180 - 90}, 50, 50)`} className="transition-transform duration-1000 ease-out">
+                     <g transform={`rotate(${((Math.min(Math.max((score), 300), 850) - 300) / 550) * 180 - 90}, 50, 50)`} className="transition-transform duration-1000 ease-out will-change-transform">
                        <line x1="50" y1="50" x2="50" y2="25" stroke="currentColor" className="text-slate-900 dark:text-white" strokeWidth="2.5" strokeLinecap="round" />
                      </g>
                      <circle cx="50" cy="50" r="3.5" fill="currentColor" className="text-slate-900 dark:text-white" />
