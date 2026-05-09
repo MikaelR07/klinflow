@@ -104,7 +104,7 @@ export default function MyIotPage() {
                 <ShieldAlert className="w-5 h-5 text-slate-500" />
               </div>
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Services</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Services</p>
                 <p className="text-sm font-semibold dark:text-white">Order Hardware</p>
               </div>
             </div>
@@ -145,7 +145,7 @@ export default function MyIotPage() {
 
       {smartBins.length > 0 && (
         <section>
-          <h2 className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
             Smart Bins
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
           </h2>
@@ -159,7 +159,7 @@ export default function MyIotPage() {
 
       {airQuality.length > 0 && (
         <section>
-          <h2 className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
             Air Analytics
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
           </h2>
@@ -173,7 +173,7 @@ export default function MyIotPage() {
 
       {wastewater.length > 0 && (
         <section>
-          <h2 className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+          <h2 className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
             Wastewater Ops
             <div className="h-px bg-slate-100 dark:bg-slate-800 flex-1"></div>
           </h2>

@@ -202,16 +202,16 @@ export default function HubDashboard({ onNavigate }) {
             <div>
                <div className="flex items-center gap-2">
                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white leading-none">{visit.agentName}</h3>
-                 <span className="text-[8px] font-semibold bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded-md uppercase tracking-widest">Received</span>
+                 <span className="text-xs font-semibold bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded-md uppercase tracking-widest">Received</span>
                </div>
-               <p className="text-[10px] font-semibold text-slate-400 mt-1 uppercase tracking-widest">{visit.time} · {visit.date}</p>
+               <p className="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-widest">{visit.time} · {visit.date}</p>
             </div>
           </div>
           
           <div className="flex items-center gap-6">
              <div className="text-right">
-                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest leading-none mb-1">Total Payload</p>
-                <p className="text-lg font-semibold text-primary leading-none">{visit.totalWeight.toFixed(1)} <span className="text-[10px]">KG</span></p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-1">Total Payload</p>
+                <p className="text-lg font-semibold text-primary leading-none">{visit.totalWeight.toFixed(1)} <span className="text-xs">KG</span></p>
              </div>
              <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                 <ChevronDown className="w-5 h-5 text-slate-300" />
@@ -229,8 +229,8 @@ export default function HubDashboard({ onNavigate }) {
             >
               <div className="bg-slate-50/50 dark:bg-white/5 rounded-2xl p-4 space-y-3">
                  <div className="flex justify-between items-center px-1">
-                    <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-[0.2em]">Cargo Breakdown</span>
-                    <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-[0.2em]">{visit.materials.length} Items</span>
+                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">Cargo Breakdown</span>
+                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">{visit.materials.length} Items</span>
                  </div>
                  
                  <div className="space-y-2">
@@ -242,7 +242,7 @@ export default function HubDashboard({ onNavigate }) {
                            </div>
                            <div>
                               <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">{m.type}</p>
-                              <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Grade {m.grade || 'A'}</p>
+                              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Grade {m.grade || 'A'}</p>
                            </div>
                         </div>
                         <p className="text-xs font-semibold text-slate-900 dark:text-white">{m.weight.toFixed(1)} KG</p>
@@ -251,8 +251,8 @@ export default function HubDashboard({ onNavigate }) {
                  </div>
                  
                  <div className="pt-3 flex justify-between items-center border-t border-slate-100 dark:border-white/10 mt-4">
-                    <span className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest">Audit ID: #{visit.id.slice(-6).toUpperCase()}</span>
-                    <button className="text-[9px] font-semibold text-primary uppercase tracking-widest hover:underline">View Waybill</button>
+                    <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Audit ID: #{visit.id.slice(-6).toUpperCase()}</span>
+                    <button className="text-xs font-semibold text-primary uppercase tracking-widest hover:underline">View Waybill</button>
                  </div>
               </div>
             </motion.div>
@@ -286,13 +286,13 @@ export default function HubDashboard({ onNavigate }) {
         <div className="flex items-center gap-3">
            <button 
              onClick={fetchDashboardData}
-             className="px-4 py-2 bg-slate-100 dark:bg-white/5 text-slate-500 rounded-2xl text-[10px] font-semibold uppercase tracking-widest hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2"
+             className="px-4 py-2 bg-slate-100 dark:bg-white/5 text-slate-500 rounded-2xl text-xs font-semibold uppercase tracking-widest hover:text-slate-900 dark:hover:text-white transition-all flex items-center gap-2"
            >
              {isLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Sync Data'}
            </button>
            <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Hub Online</span>
+              <span className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">Hub Online</span>
            </div>
         </div>
       </div>
@@ -321,14 +321,14 @@ export default function HubDashboard({ onNavigate }) {
                   </div>
                   <div>
                      <h3 className="text-sm font-semibold leading-none">Incoming Fleet</h3>
-                     <p className="text-[10px] font-semibold text-emerald-100 mt-1 uppercase tracking-widest">
+                     <p className="text-xs font-semibold text-emerald-100 mt-1 uppercase tracking-widest">
                        {alert.agent} · {alert.weight}
                      </p>
                   </div>
                </div>
                <button 
                  onClick={() => onNavigate?.('checkin')}
-                 className="px-5 py-2.5 bg-white text-emerald-600 rounded-xl text-[10px] font-semibold uppercase tracking-widest shadow-lg active:scale-95 transition-all whitespace-nowrap"
+                 className="px-5 py-2.5 bg-white text-emerald-600 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-lg active:scale-95 transition-all whitespace-nowrap"
                >
                  Prepare Gate
                </button>
@@ -343,7 +343,7 @@ export default function HubDashboard({ onNavigate }) {
           <div key={i} className="glass p-5 rounded-[2.5rem] relative overflow-hidden group hover:scale-[1.02] transition-all duration-300">
              <div className="absolute -top-6 -right-6 w-20 h-20 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
              <stat.icon className={`w-8 h-8 ${stat.color} mb-4`} />
-             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{stat.label}</p>
+             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{stat.label}</p>
              <h3 className="text-2xl font-semibold text-slate-900 dark:text-white mt-1">
                {isLoading ? <Loader2 className="w-6 h-6 animate-spin text-slate-300" /> : stat.value}
              </h3>
@@ -392,7 +392,7 @@ export default function HubDashboard({ onNavigate }) {
                     </div>
                     <div className="text-left">
                        <p className="font-semibold text-sm">Gate Check-In</p>
-                       <p className="text-[10px] opacity-70">Verify Agent Secure PIN</p>
+                       <p className="text-xs opacity-70">Verify Agent Secure PIN</p>
                     </div>
                  </div>
                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -405,7 +405,7 @@ export default function HubDashboard({ onNavigate }) {
                     </div>
                     <div className="text-left">
                        <p className="font-semibold text-sm">B2B Outbound</p>
-                       <p className="text-[10px] opacity-70">Log shipment to factory</p>
+                       <p className="text-xs opacity-70">Log shipment to factory</p>
                     </div>
                  </div>
                  <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -414,8 +414,8 @@ export default function HubDashboard({ onNavigate }) {
               <div className="p-5 bg-amber-500/5 border border-amber-500/10 rounded-[2rem] flex items-start gap-4">
                  <AlertCircle className="w-5 h-5 text-amber-500 mt-1 shrink-0" />
                  <div>
-                    <p className="text-[10px] font-semibold text-amber-600 uppercase tracking-widest">Storage Monitoring</p>
-                    <p className="text-[10px] text-amber-700/70 mt-1">
+                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest">Storage Monitoring</p>
+                    <p className="text-xs text-amber-700/70 mt-1">
                       Current physical inventory is at {inventoryWeight.toFixed(1)} KG. Manage processing soon.
                     </p>
                  </div>

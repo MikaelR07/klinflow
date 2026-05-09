@@ -117,7 +117,7 @@ export default function ManualAudits() {
                       </div>
                       <div>
                          <h3 className="text-xl font-semibold text-slate-900 dark:text-white leading-none">{audit.name}</h3>
-                         <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mt-2 flex items-center gap-2">
+                         <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest mt-2 flex items-center gap-2">
                            <Truck className="w-3 h-3 text-primary" /> Incoming Cargo Audit Required
                          </p>
                       </div>
@@ -128,15 +128,15 @@ export default function ManualAudits() {
                       {audit.manualAssets.map((asset) => (
                         <div key={asset.id} className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 flex items-center justify-between">
                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center text-[10px] font-semibold">
+                              <div className="w-8 h-8 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center text-xs font-semibold">
                                  {asset.material_type.slice(0, 2)}
                               </div>
                               <div>
                                  <p className="text-[11px] font-semibold text-slate-900 dark:text-white leading-none">{asset.material_type}</p>
-                                 <p className="text-[9px] text-slate-500 font-semibold uppercase mt-1">{asset.weight_kg} KG</p>
+                                 <p className="text-xs text-slate-500 font-semibold uppercase mt-1">{asset.weight_kg} KG</p>
                               </div>
                            </div>
-                           <span className="text-[8px] font-semibold px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-md uppercase tracking-tighter">Needs Audit</span>
+                           <span className="text-xs font-semibold px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-md uppercase tracking-tighter">Needs Audit</span>
                         </div>
                       ))}
                    </div>
@@ -144,7 +144,7 @@ export default function ManualAudits() {
 
                 <div className="flex flex-col items-end gap-6 min-w-[200px]">
                    <div className="text-right">
-                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest leading-none mb-1">Locked Payment</p>
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-1">Locked Payment</p>
                       <p className="text-2xl font-semibold text-primary">KSh {audit.heldBalance.toLocaleString()}</p>
                    </div>
                    
@@ -152,7 +152,7 @@ export default function ManualAudits() {
                      onClick={() => {
                         window.alert(`Instruct the driver to pull over for physical audit of ${audit.weight}kg cargo.`);
                      }}
-                     className="w-full px-6 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-semibold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 group/btn active:scale-95 transition-all shadow-xl"
+                     className="w-full px-6 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-semibold text-xs uppercase tracking-widest flex items-center justify-center gap-2 group/btn active:scale-95 transition-all shadow-xl"
                    >
                       READY INSPECTION
                       <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

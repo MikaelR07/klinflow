@@ -164,7 +164,7 @@ export default function Inventory() {
             <div className="flex items-center justify-between">
                <div>
                   <h1 className="text-3xl font-semibold text-slate-800 dark:text-white tracking-tight">Audit Terminal</h1>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-1">Industrial Inventory Management</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Industrial Inventory Management</p>
                </div>
                <button onClick={fetchInventory} className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center border border-slate-100 dark:border-white/5 active:scale-90 transition-all">
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <RefreshCw className="w-4 h-4 text-slate-400" />}
@@ -175,13 +175,13 @@ export default function Inventory() {
                <div className="bg-emerald-600 rounded-[2rem] p-5 text-white shadow-xl shadow-emerald-600/20 relative overflow-hidden">
                   <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/10 rounded-full blur-2xl" />
                   <Package className="w-5 h-5 mb-4 opacity-60" />
-                  <p className="text-[9px] font-semibold uppercase tracking-widest opacity-60 mb-1">Stock Weight</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest opacity-60 mb-1">Stock Weight</p>
                   <h3 className="text-2xl font-semibold">{totalHubWeight.toFixed(1)} <span className="text-xs">KG</span></h3>
                </div>
                <div className="bg-slate-900 dark:bg-slate-900 rounded-[2rem] p-5 text-white shadow-xl relative overflow-hidden border border-white/5">
                   <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
                   <CircleDollarSign className="w-5 h-5 mb-4 text-primary" />
-                  <p className="text-[9px] font-semibold uppercase tracking-widest opacity-60 mb-1">Total Asset Value</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest opacity-60 mb-1">Total Asset Value</p>
                   <h3 className="text-2xl font-semibold text-primary">KSh {totalHubValue.toLocaleString()}</h3>
                </div>
             </div>
@@ -191,7 +191,7 @@ export default function Inventory() {
                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
                   <button 
                     onClick={() => { setViewLevel('category'); setSelectedCategory(null); setSelectedSub(null); }}
-                    className="px-4 py-2 rounded-xl text-[10px] font-semibold bg-primary text-white shadow-lg uppercase tracking-widest transition-all whitespace-nowrap"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-primary text-white shadow-lg uppercase tracking-widest transition-all whitespace-nowrap"
                   >
                     Overview
                   </button>
@@ -227,16 +227,16 @@ export default function Inventory() {
                           <Package className="w-6 h-6" />
                        </div>
                        <h3 className="text-sm font-semibold text-slate-800 dark:text-white leading-tight mb-1">{cat.label}</h3>
-                       <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">{cat.count} Batches</p>
+                       <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{cat.count} Batches</p>
                     </div>
 
                     <div className="mt-6 pt-4 border-t border-slate-100 dark:border-white/5 space-y-2">
                        <div className="flex justify-between items-center">
-                          <span className="text-[9px] font-semibold text-slate-400 uppercase">Weight</span>
+                          <span className="text-xs font-semibold text-slate-400 uppercase">Weight</span>
                           <span className="text-xs font-semibold text-slate-800 dark:text-white">{cat.weight.toFixed(1)}kg</span>
                        </div>
                        <div className="flex justify-between items-center">
-                          <span className="text-[9px] font-semibold text-slate-400 uppercase">Value</span>
+                          <span className="text-xs font-semibold text-slate-400 uppercase">Value</span>
                           <span className="text-xs font-semibold text-emerald-600">KSh {cat.value.toLocaleString()}</span>
                        </div>
                     </div>
@@ -260,7 +260,7 @@ export default function Inventory() {
                   </button>
                   <div className="text-right">
                      <h2 className="text-xl font-semibold text-slate-800 dark:text-white leading-none">{selectedCategory?.label}</h2>
-                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-1">Select Grade to Audit</p>
+                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Select Grade to Audit</p>
                   </div>
                </div>
                
@@ -280,12 +280,12 @@ export default function Inventory() {
                        
                        <div>
                           <h4 className="text-sm font-semibold text-slate-800 dark:text-white leading-tight mb-1">{sub.label}</h4>
-                          <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Grade {sub.id}</p>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Grade {sub.id}</p>
                        </div>
 
                        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/5">
                           <p className="text-sm font-semibold text-slate-800 dark:text-white">{sub.weight.toFixed(1)} KG</p>
-                          <p className="text-[10px] font-semibold text-emerald-600">KSh {sub.value.toLocaleString()}</p>
+                          <p className="text-xs font-semibold text-emerald-600">KSh {sub.value.toLocaleString()}</p>
                        </div>
                     </div>
                   ))}
@@ -308,7 +308,7 @@ export default function Inventory() {
                   </button>
                   <div className="text-right">
                      <h2 className="text-xl font-semibold text-slate-800 dark:text-white leading-none">{selectedSub?.label}</h2>
-                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-1">Transaction History</p>
+                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Transaction History</p>
                   </div>
                </div>
 
@@ -323,7 +323,7 @@ export default function Inventory() {
                              <p className="text-sm font-semibold text-slate-800 dark:text-white leading-none mb-1">{asset.profiles?.name || 'Agent'}</p>
                              <div className="flex items-center gap-2">
                                 <Calendar className="w-3 h-3 text-slate-400" />
-                                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">{new Date(asset.created_at).toLocaleDateString()}</p>
+                                <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">{new Date(asset.created_at).toLocaleDateString()}</p>
                              </div>
                           </div>
                        </div>
@@ -331,7 +331,7 @@ export default function Inventory() {
                           <p className="text-base font-semibold text-slate-800 dark:text-white">{asset.weight_kg} KG</p>
                           <div className="flex items-center justify-end gap-1 mt-0.5">
                              <ShieldCheck className="w-3 h-3 text-emerald-500" />
-                             <p className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest">Audited</p>
+                             <p className="text-xs font-semibold text-emerald-500 uppercase tracking-widest">Audited</p>
                           </div>
                        </div>
                     </div>

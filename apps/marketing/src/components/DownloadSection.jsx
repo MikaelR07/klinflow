@@ -36,7 +36,7 @@ export default function DownloadSection({ isDarkMode }) {
     <section className={`py-40 px-6 relative overflow-hidden ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-[10px] mb-6">
+          <div className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-xs mb-6">
             <CheckCircle2 className="w-4 h-4" /> Native Access
           </div>
           <h2 className={`text-4xl md:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
@@ -67,7 +67,7 @@ export default function DownloadSection({ isDarkMode }) {
               </div>
               
               <div className="mb-4">
-                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-1 block">{app.type}</span>
+                <span className="text-xs font-black text-emerald-500 uppercase tracking-widest mb-1 block">{app.type}</span>
                 <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{app.name}</h3>
               </div>
 
@@ -78,19 +78,19 @@ export default function DownloadSection({ isDarkMode }) {
               <div className="pt-8 border-t border-slate-100 dark:border-white/5">
                 {app.badges ? (
                   <div className="flex flex-col gap-4">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Available for {app.platform}</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Available for {app.platform}</p>
                     <div className="flex flex-wrap gap-3">
                       <button className="flex items-center gap-3 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-xl hover:scale-105 transition-all shadow-lg group">
                         <Apple className="w-5 h-5" />
                         <div className="text-left">
-                          <p className="text-[8px] font-bold uppercase leading-none opacity-60">App Store</p>
+                          <p className="text-xs font-bold uppercase leading-none opacity-60">App Store</p>
                           <p className="text-xs font-black tracking-tight leading-tight">Download</p>
                         </div>
                       </button>
                       <button className="flex items-center gap-3 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-xl hover:scale-105 transition-all shadow-lg group">
                         <PlayCircle className="w-5 h-5" />
                         <div className="text-left">
-                          <p className="text-[8px] font-bold uppercase leading-none opacity-60">Play Store</p>
+                          <p className="text-xs font-bold uppercase leading-none opacity-60">Play Store</p>
                           <p className="text-xs font-black tracking-tight leading-tight">Get it on</p>
                         </div>
                       </button>
@@ -98,7 +98,7 @@ export default function DownloadSection({ isDarkMode }) {
                   </div>
                 ) : (
                   <div className="flex flex-col gap-4">
-                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Optimized for {app.platform}</p>
+                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Optimized for {app.platform}</p>
                      <button className={`flex items-center justify-between px-6 py-4 rounded-xl border font-bold text-sm transition-all active:scale-95 group ${
                        isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'
                      }`}>

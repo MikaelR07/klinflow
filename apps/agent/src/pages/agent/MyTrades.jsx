@@ -107,14 +107,14 @@ export default function MyTrades() {
            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
            <div className="relative z-10 flex items-center justify-between">
               <div className="pl-2">
-                 <p className="text-[8px] font-semibold text-white/40 uppercase tracking-widest mb-0.5">Total Pledged</p>
+                 <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-0.5">Total Pledged</p>
                  <h2 className="text-xl font-semibold tracking-tighter text-emerald-400">
                    KSh {activeTrades.reduce((acc, t) => acc + (parseFloat(t.total_price || t.totalPrice) || 0), 0).toLocaleString()}
                  </h2>
               </div>
               <div className="w-px h-8 bg-white/10 mx-4" />
               <div className="flex-1 text-right pr-2">
-                 <p className="text-[8px] font-semibold text-white/40 uppercase tracking-widest mb-0.5">Live Bids</p>
+                 <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-0.5">Live Bids</p>
                  <h2 className="text-xl font-semibold tracking-tighter text-white">{activeTrades.length}</h2>
               </div>
            </div>
@@ -158,7 +158,7 @@ export default function MyTrades() {
                         <h4 className="text-xs font-semibold text-slate-900 dark:text-white leading-none uppercase tracking-tight truncate">
                           {trade.listing?.material || trade.waste_type || 'Recyclables'}
                         </h4>
-                        <p className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest mt-1 flex items-center gap-1">
+                        <p className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mt-1 flex items-center gap-1">
                           <MapPin className="w-2.5 h-2.5" /> {trade.estate || 'Nairobi'}
                         </p>
                       </div>
@@ -176,13 +176,13 @@ export default function MyTrades() {
                       <div className="px-4 pb-4 pt-0 space-y-3 border-t border-slate-100 dark:border-slate-800">
                         <div className="grid grid-cols-2 gap-2 pt-3">
                           <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800/50">
-                            <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
+                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
                             <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                               <Scale className="w-3 h-3" /> {trade.bags} KG
                             </p>
                           </div>
                           <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800/50">
-                            <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Status</p>
                             <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 uppercase tracking-tighter">
                               <Clock className="w-3 h-3" /> {trade.status.replace('_', ' ')}
                             </p>
@@ -195,7 +195,7 @@ export default function MyTrades() {
                             className="w-full py-3.5 bg-primary text-white rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20 active:scale-95 transition-all group"
                           >
                             <Navigation className="w-4 h-4 group-hover:animate-pulse" />
-                            <span className="text-[10px] font-semibold uppercase tracking-widest">
+                            <span className="text-xs font-semibold uppercase tracking-widest">
                               Route to Seller
                             </span>
                           </button>

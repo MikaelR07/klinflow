@@ -97,21 +97,21 @@ export default function Sourcing() {
             <div className="px-4 py-3.5 bg-white dark:bg-slate-900 flex items-center justify-between border-b border-slate-50 dark:border-slate-800/50">
                <div className="flex items-center gap-6">
                  <div>
-                    <p className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Active Bids</p>
+                    <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Active Bids</p>
                     <h2 className="text-base font-black tracking-tighter text-emerald-600 leading-none">{sentOffers.length}</h2>
                  </div>
                  <div className="w-px h-6 bg-slate-100 dark:bg-slate-800 shrink-0" />
                  <div>
-                    <p className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Potential Vol.</p>
+                    <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Potential Vol.</p>
                     <h2 className="text-base font-black tracking-tighter text-slate-900 dark:text-white leading-none italic">
-                       {sentOffers.reduce((acc, o) => acc + (parseFloat(o.quantity) || 0), 0).toLocaleString()} <span className="text-[9px] text-slate-400 not-italic font-bold opacity-50">KG</span>
+                       {sentOffers.reduce((acc, o) => acc + (parseFloat(o.quantity) || 0), 0).toLocaleString()} <span className="text-xs text-slate-400 not-italic font-bold opacity-50">KG</span>
                     </h2>
                  </div>
                </div>
                <div className="flex flex-col items-end">
                  <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-500/10 rounded-lg">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[8px] font-black text-emerald-600 uppercase tracking-widest">Live Radar</span>
+                    <span className="text-xs font-black text-emerald-600 uppercase tracking-widest">Live Radar</span>
                  </div>
                </div>
             </div>
@@ -159,11 +159,11 @@ export default function Sourcing() {
                    className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all z-10"
                  >
                    <ArrowLeft className="w-4 h-4" />
-                   <span className="text-[9px] font-semibold uppercase tracking-widest">Back</span>
+                   <span className="text-xs font-semibold uppercase tracking-widest">Back</span>
                  </button>
 
                  {/* Grade Badge */}
-                 <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/40 backdrop-blur-xl text-white rounded-full text-[9px] font-semibold uppercase tracking-[0.2em] z-10">
+                 <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/40 backdrop-blur-xl text-white rounded-full text-xs font-semibold uppercase tracking-[0.2em] z-10">
                    Grade {selectedListing.grade || 'A'}
                  </div>
 
@@ -188,9 +188,9 @@ export default function Sourcing() {
                      <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center">
                        <Check className="w-3 h-3 text-emerald-600" />
                      </div>
-                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{selectedListing.sellerName || 'Verified Merchant'}</p>
-                     <span className="text-[8px] text-slate-300">•</span>
-                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1">
+                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{selectedListing.sellerName || 'Verified Merchant'}</p>
+                     <span className="text-xs text-slate-300">•</span>
+                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1">
                        <MapPin className="w-3 h-3" /> {selectedListing.location}
                      </p>
                    </div>
@@ -199,25 +199,25 @@ export default function Sourcing() {
                  {/* Stats Row */}
                  <div className="grid grid-cols-3 gap-3">
                    <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                     <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Ask Price</p>
+                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Ask Price</p>
                      <p className="text-base font-semibold text-emerald-600">KSh {selectedListing.pricePerKg}</p>
-                     <p className="text-[8px] font-semibold text-slate-300 uppercase">Per KG</p>
+                     <p className="text-xs font-semibold text-slate-300 uppercase">Per KG</p>
                    </div>
                    <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                     <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Load</p>
+                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Load</p>
                      <p className="text-base font-semibold text-slate-700 dark:text-white">{selectedListing.quantity}</p>
-                     <p className="text-[8px] font-semibold text-slate-300 uppercase">KG Available</p>
+                     <p className="text-xs font-semibold text-slate-300 uppercase">KG Available</p>
                    </div>
                    <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                     <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Total Value</p>
+                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Total Value</p>
                      <p className="text-base font-semibold text-slate-700 dark:text-white">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
-                     <p className="text-[8px] font-semibold text-slate-300 uppercase">Est.</p>
+                     <p className="text-xs font-semibold text-slate-300 uppercase">Est.</p>
                    </div>
                  </div>
 
                  {/* Merchant Notes */}
                  <div className="bg-white dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
-                   <h4 className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Merchant's Notes</h4>
+                   <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Merchant's Notes</h4>
                    <p className="text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
                      {selectedListing.description || "The seller has not provided additional notes for this material."}
                    </p>
@@ -234,7 +234,7 @@ export default function Sourcing() {
 
                    <div className="grid grid-cols-2 gap-3">
                      <div>
-                       <label className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">Offer Price</label>
+                       <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">Offer Price</label>
                        <div className="relative">
                           <input 
                             type="number" 
@@ -242,11 +242,11 @@ export default function Sourcing() {
                             onChange={(e) => setOfferPrice(e.target.value)}
                             className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 h-12 rounded-2xl px-4 text-sm font-semibold focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
                           />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-semibold text-slate-400">/KG</span>
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400">/KG</span>
                        </div>
                      </div>
                      <div>
-                       <label className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">Quantity</label>
+                       <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">Quantity</label>
                        <div className="relative">
                           <input 
                             type="number" 
@@ -255,13 +255,13 @@ export default function Sourcing() {
                             onChange={(e) => setOfferQty(e.target.value)}
                             className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 h-12 rounded-2xl px-4 text-sm font-semibold focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
                           />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-semibold text-slate-400">KG</span>
+                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400">KG</span>
                        </div>
                      </div>
                    </div>
 
                    <div className="flex items-center justify-between px-1">
-                     <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Estimated Total</span>
+                     <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Estimated Total</span>
                      <span className="text-sm font-semibold text-emerald-600">KSh {(parseFloat(offerPrice || 0) * parseFloat(offerQty || 0)).toLocaleString()}</span>
                    </div>
                    
@@ -319,14 +319,14 @@ export default function Sourcing() {
                               </span>
                             )}
                           </div>
-                          <span className="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">KSh {listing.pricePerKg}/kg</span>
+                          <span className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">KSh {listing.pricePerKg}/kg</span>
                         </div>
                         <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 uppercase tracking-tight truncate">{listing.material}</h3>
                         <div className="flex items-center gap-4">
-                          <p className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 uppercase truncate max-w-[100px]">
+                          <p className="text-xs font-semibold text-slate-400 flex items-center gap-1 uppercase truncate max-w-[100px]">
                             <MapPin className="w-3 h-3" /> {listing.location}
                           </p>
-                          <p className="text-[10px] font-semibold text-slate-400 flex items-center gap-1 uppercase">
+                          <p className="text-xs font-semibold text-slate-400 flex items-center gap-1 uppercase">
                             <Scale className="w-3 h-3" /> {listing.quantity} KG
                           </p>
                         </div>

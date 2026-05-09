@@ -93,7 +93,7 @@ export default function BuyRecyclables() {
         </button>
         <div>
           <h1 className="text-xl font-bold text-slate-900 dark:text-white">B2B Market</h1>
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{filteredListings.length} active listings</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{filteredListings.length} active listings</p>
         </div>
       </div>
 
@@ -120,13 +120,13 @@ export default function BuyRecyclables() {
       {/* Material Filter Pills */}
       {showFilters && (
         <div className="p-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[0.45rem] shadow-sm animate-in slide-in-from-top-4 duration-300">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Filter by Category</p>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Filter by Category</p>
           <div className="flex flex-wrap gap-2">
             {['All', 'Plastic', 'Paper', 'Metal', 'Glass', 'Organic', 'E-Waste'].map(mat => (
               <button
                 key={mat}
                 onClick={() => setSelectedMaterial(mat)}
-                className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${selectedMaterial === mat ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${selectedMaterial === mat ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}`}
               >
                 {mat}
               </button>
@@ -148,18 +148,18 @@ export default function BuyRecyclables() {
               <div className="relative aspect-[16/9] overflow-hidden bg-slate-100 dark:bg-slate-800">
                 <img src={getThumbnailUrl(item.photo, { width: 600 })} loading="lazy" alt={item.material} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute top-4 right-4 flex flex-col gap-2">
-                  <span className="bg-white/90 dark:bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-full text-[10px] font-black text-primary shadow-lg border border-primary/20 uppercase tracking-widest">
+                  <span className="bg-white/90 dark:bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-full text-xs font-black text-primary shadow-lg border border-primary/20 uppercase tracking-widest">
                     {item.aiMatchScore}% Match
                   </span>
                   <button 
                     onClick={() => setDetailModal(item)}
-                    className="bg-slate-900/80 backdrop-blur text-white px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest flex items-center gap-1.5 hover:bg-slate-900 transition-colors"
+                    className="bg-slate-900/80 backdrop-blur text-white px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 hover:bg-slate-900 transition-colors"
                   >
                     <BadgeCheck className="w-3.5 h-3.5 text-blue-400" /> View Passport
                   </button>
                 </div>
                 <div className="absolute bottom-4 left-4">
-                  <span className="bg-slate-900/60 backdrop-blur text-white text-[9px] font-bold px-3 py-1.5 rounded-xl flex items-center gap-2 uppercase tracking-widest">
+                  <span className="bg-slate-900/60 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-2 uppercase tracking-widest">
                     <Tag className="w-3.5 h-3.5 text-primary" /> {item.material}
                   </span>
                 </div>
@@ -169,7 +169,7 @@ export default function BuyRecyclables() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="font-bold text-slate-900 dark:text-white text-lg leading-tight">{item.material} Industrial Lot</h3>
-                    <div className="flex items-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">
+                    <div className="flex items-center gap-2 text-xs text-slate-400 font-bold uppercase tracking-widest mt-2">
                       <MapPin className="w-3.5 h-3.5 text-primary" /> {item.location} 
                       <span className="opacity-30">•</span>
                       <span className="flex items-center gap-1 text-slate-500">
@@ -180,34 +180,34 @@ export default function BuyRecyclables() {
                   </div>
                   <div className="text-right">
                     <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400 block leading-none font-mono">KES {item.pricePerKg}</span>
-                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">per {item.unit}</span>
+                    <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">per {item.unit}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 mb-4">
                   {item.grade && (
                     <div className="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center gap-2">
-                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none pt-0.5">Grade</span>
-                      <span className="text-[10px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest leading-none pt-0.5">{item.grade}</span>
+                      <span className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none pt-0.5">Grade</span>
+                      <span className="text-xs font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest leading-none pt-0.5">{item.grade}</span>
                     </div>
                   )}
                   <div className="px-3 py-1 bg-emerald-500/10 rounded-lg flex items-center gap-2 border border-emerald-500/10">
-                    <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-none pt-0.5">Verified</span>
+                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-none pt-0.5">Verified</span>
                     <BadgeCheck className="w-3 h-3 text-emerald-500" />
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4 py-4 border-y border-slate-50 dark:border-slate-800/50 my-4 text-center">
                   <div className="flex-1 border-r border-slate-50 dark:border-slate-800/50">
-                    <div className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mb-1">Available</div>
+                    <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Available</div>
                     <div className="text-sm font-bold text-slate-800 dark:text-white">{item.quantity} {item.unit}</div>
                   </div>
                   <div className="flex-1 border-r border-slate-50 dark:border-slate-800/50">
-                    <div className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mb-1">Min. MOQ</div>
+                    <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Min. MOQ</div>
                     <div className="text-sm font-bold text-slate-800 dark:text-white">{item.moq} {item.unit}</div>
                   </div>
                   <div className="flex-1">
-                    <div className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mb-1">Lot Value</div>
+                    <div className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Lot Value</div>
                     <div className="text-sm font-bold text-slate-800 dark:text-white">KES {(item.quantity * item.pricePerKg).toLocaleString()}</div>
                   </div>
                 </div>
@@ -263,7 +263,7 @@ export default function BuyRecyclables() {
                 <BadgeCheck className="w-6 h-6 text-blue-500" />
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">Material Passport</h3>
               </div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Official Industrial Certification</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Official Industrial Certification</p>
             </div>
 
             <div className="space-y-8">
@@ -272,17 +272,17 @@ export default function BuyRecyclables() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">HygeneX Authenticated</span>
+                    <span className="text-xs font-black text-slate-500 uppercase tracking-widest">HygeneX Authenticated</span>
                   </div>
                   <span className="text-xs font-mono font-bold text-indigo-600">ID: BALE-{detailModal.id?.slice(0,6).toUpperCase()}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Purity Score</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Purity Score</p>
                     <p className="text-2xl font-black text-slate-900 dark:text-white">98.4%</p>
                   </div>
                   <div>
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Moisture Level</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Moisture Level</p>
                     <p className="text-2xl font-black text-slate-900 dark:text-white">0.2%</p>
                   </div>
                 </div>
@@ -305,16 +305,16 @@ export default function BuyRecyclables() {
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <p className="text-xs font-bold text-slate-900 dark:text-white">{step.label}</p>
-                          <span className="text-[9px] font-bold text-slate-400 uppercase">{step.date}</span>
+                          <span className="text-xs font-bold text-slate-400 uppercase">{step.date}</span>
                         </div>
-                        <p className="text-[10px] text-slate-500 mt-0.5">{step.desc}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{step.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <button className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold uppercase tracking-[0.2em] text-[10px] active:scale-95 transition-all">
+              <button className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold uppercase tracking-[0.2em] text-xs active:scale-95 transition-all">
                 Download PDF Certificate
               </button>
             </div>
@@ -329,7 +329,7 @@ export default function BuyRecyclables() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h3 className="font-bold text-slate-900 dark:text-white text-xl tracking-tight">Secure Checkout</h3>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Escrow Protected Transaction</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Escrow Protected Transaction</p>
               </div>
               <button onClick={() => setOrderModal(null)} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
                 <X className="w-5 h-5" />
@@ -339,8 +339,8 @@ export default function BuyRecyclables() {
             <div className="space-y-6">
               <div>
                 <div className="flex justify-between items-end mb-2">
-                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Order Quantity</label>
-                  <span className="text-[9px] font-bold text-indigo-500 uppercase">Max: {orderModal.quantity} {orderModal.unit}</span>
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Order Quantity</label>
+                  <span className="text-xs font-bold text-indigo-500 uppercase">Max: {orderModal.quantity} {orderModal.unit}</span>
                 </div>
                 <div className="relative">
                   <input
@@ -359,7 +359,7 @@ export default function BuyRecyclables() {
 
               {orderQty && Number(orderQty) > 0 && (
                 <div className="flex justify-between items-center p-5 bg-indigo-50 dark:bg-indigo-500/5 border border-indigo-100 dark:border-indigo-500/20 rounded-[2rem] animate-in zoom-in-95 duration-200">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Settle</span>
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Settle</span>
                   <span className="text-xl font-black text-indigo-600 dark:text-indigo-400 font-mono">KES {(Number(orderQty) * orderModal.pricePerKg).toLocaleString()}</span>
                 </div>
               )}
@@ -371,7 +371,7 @@ export default function BuyRecyclables() {
               >
                 {isOrdering ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Initiate Escrow <ShoppingCart className="w-4 h-4" /></>}
               </button>
-              <p className="text-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">Funds held securely until delivery verified</p>
+              <p className="text-center text-xs text-slate-400 font-bold uppercase tracking-widest">Funds held securely until delivery verified</p>
             </div>
           </div>
         </div>
@@ -393,7 +393,7 @@ export default function BuyRecyclables() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
                   Asking: KES {offerModal.pricePerKg}/kg
                 </label>
                 <div className="relative">
@@ -410,7 +410,7 @@ export default function BuyRecyclables() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
                   Quantity (max {offerModal.quantity} {offerModal.unit})
                 </label>
                 <input

@@ -85,7 +85,7 @@ export default function NotificationsPage() {
               </div>
               <button 
                 onClick={clearAll}
-                className="text-[10px] font-semibold uppercase text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 px-2 py-1 rounded-md transition-all"
+                className="text-xs font-semibold uppercase text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 px-2 py-1 rounded-md transition-all"
               >
                 Clear All
               </button>
@@ -98,7 +98,7 @@ export default function NotificationsPage() {
                    <div className="flex-1">
                       <div className="flex items-center justify-between mb-0.5">
                         <p className="text-sm font-semibold dark:text-white">{n.title}</p>
-                        <span className="text-[10px] text-slate-400 font-medium">Just now</span>
+                        <span className="text-xs text-slate-400 font-medium">Just now</span>
                       </div>
                       <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{n.body}</p>
                    </div>

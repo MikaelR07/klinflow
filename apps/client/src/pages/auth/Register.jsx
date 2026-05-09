@@ -143,7 +143,7 @@ export default function Register() {
         {/* Header */}
         <div className="flex flex-col items-center mb-10">
           <div className="w-full flex items-center justify-between mb-6">
-            <Link to="/login" className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">
+            <Link to="/login" className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">
               <ArrowLeft className="w-4 h-4" /> Back to Sign In
             </Link>
           </div>
@@ -157,11 +157,11 @@ export default function Register() {
              </h1>
              {formData.role === 'seller' && (
                <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
-                 <span className="text-[10px] font-semibold text-blue-500 uppercase tracking-widest">Pro Mode</span>
+                 <span className="text-xs font-semibold text-blue-500 uppercase tracking-widest">Pro Mode</span>
                </div>
              )}
           </div>
-          <p className={`text-[10px] ${formData.role === 'seller' ? 'text-blue-500' : 'text-emerald-500'} font-semibold uppercase tracking-widest flex items-center gap-2 justify-center sm:justify-start`}>
+          <p className={`text-xs ${formData.role === 'seller' ? 'text-blue-500' : 'text-emerald-500'} font-semibold uppercase tracking-widest flex items-center gap-2 justify-center sm:justify-start`}>
              <Sparkles className="w-3 h-3" /> {formData.role === 'seller' ? 'Trade Waste as a High-Value Asset' : 'Convenience & Community Rewards'}
           </p>
         </div>
@@ -175,7 +175,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
               </div>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Personal Identification</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Personal Identification</h3>
             </div>
 
             <div className="space-y-4">
@@ -233,7 +233,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
               </div>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Personal Identification</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Personal Identification</h3>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
@@ -268,7 +268,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
               </div>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Security Vault</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Security Vault</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -305,7 +305,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
               </div>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Location Area</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Location Area</h3>
             </div>
 
             <div className="min-h-[140px]">
@@ -325,7 +325,7 @@ export default function Register() {
           </button>
         </form>
 
-        <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 mt-10">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-400 mt-10">
           Already part of the network? {' '}
           <Link to="/login" className="text-primary hover:underline underline-offset-4">Authenticate Instead</Link>
         </p>
@@ -367,7 +367,7 @@ export default function Register() {
                   className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-950/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200" 
                 />
                 <div className="flex flex-col items-center mt-4 space-y-3">
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>
                   <button 
                     type="button"
                     onClick={async () => {
@@ -378,7 +378,7 @@ export default function Register() {
                         toast.error('Resend Failed', { description: err.message });
                       }
                     }}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary rounded-full text-[9px] font-semibold uppercase tracking-widest transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary rounded-full text-xs font-semibold uppercase tracking-widest transition-all"
                   >
                     Resend Code
                   </button>

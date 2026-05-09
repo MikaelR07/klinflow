@@ -22,7 +22,7 @@ export default function ProductHub() {
         <div className="max-w-[1400px] mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-5 gap-12 lg:gap-24 items-center">
             <div className="lg:col-span-2 order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 text-rose-500 font-bold uppercase tracking-widest text-[10px] mb-6">
+              <div className="inline-flex items-center gap-2 text-rose-500 font-bold uppercase tracking-widest text-xs mb-6">
                 <Warehouse className="w-4 h-4" /> Platform Four: Hub Logistics Command
               </div>
               <h1 className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
@@ -59,7 +59,7 @@ export default function ProductHub() {
                     <Activity className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Live Throughput</p>
+                    <p className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Live Throughput</p>
                     <p className="text-xl font-bold text-rose-600">84.2 Tons / Day</p>
                   </div>
                 </div>
@@ -67,7 +67,7 @@ export default function ProductHub() {
                   <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div className="h-full w-[84%] bg-rose-600 shadow-[0_0_12px_rgba(225,29,72,0.4)]" />
                   </div>
-                  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest text-left">Facility Capacity: 84%</p>
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-widest text-left">Facility Capacity: 84%</p>
                 </div>
               </motion.div>
             </div>
@@ -126,7 +126,7 @@ export default function ProductHub() {
                          className="aspect-square rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center justify-center gap-2"
                       >
                          <Box className="w-6 h-6 text-rose-500/50" />
-                         <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Lot #{1020 + i}</span>
+                         <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Lot #{1020 + i}</span>
                       </motion.div>
                    ))}
                 </div>

@@ -103,7 +103,7 @@ export default function SellRecyclables() {
             {/* B2B Grade & Units */}
             <div className="grid grid-cols-2 gap-4">
                <div>
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Material Grade</label>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Material Grade</label>
                 <select 
                   name="grade" 
                   value={formData.grade} 
@@ -119,14 +119,14 @@ export default function SellRecyclables() {
                 </select>
               </div>
               <div>
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Listing Unit</label>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Listing Unit</label>
                 <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
                   {['KG', 'Tons'].map(u => (
                     <button
                       key={u}
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, unit: u }))}
-                      className={`flex-1 py-2 text-[10px] font-semibold rounded-lg transition-all ${formData.unit === u ? 'bg-white dark:bg-slate-700 text-primary shadow-sm' : 'text-slate-500'}`}
+                      className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all ${formData.unit === u ? 'bg-white dark:bg-slate-700 text-primary shadow-sm' : 'text-slate-500'}`}
                     >
                       {u}
                     </button>
@@ -138,7 +138,7 @@ export default function SellRecyclables() {
             <div className="grid grid-cols-2 gap-4">
               {/* Quantity */}
               <div>
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Total Quantity ({formData.unit})</label>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Total Quantity ({formData.unit})</label>
                 <div className="relative">
                   <Scale className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <input 
@@ -154,7 +154,7 @@ export default function SellRecyclables() {
               </div>
               {/* MOQ */}
               <div>
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Min. Order (MOQ)</label>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Min. Order (MOQ)</label>
                 <div className="relative">
                   <Package className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <input 
@@ -172,7 +172,7 @@ export default function SellRecyclables() {
 
             {/* Price */}
             <div>
-              <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Price / {formData.unit} (KES)</label>
+              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Price / {formData.unit} (KES)</label>
               <div className="relative">
                 <Coins className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                 <input 
@@ -241,28 +241,28 @@ export default function SellRecyclables() {
             <div className="aspect-video bg-slate-100 dark:bg-slate-800 relative">
               <img src={formData.photo} alt="Preview" className="w-full h-full object-cover" />
               <div className="absolute top-3 right-3">
-                <span className="bg-white/90 dark:bg-slate-950/90 text-[10px] font-semibold text-primary px-2 py-1 rounded-full border border-primary/20">
+                <span className="bg-white/90 dark:bg-slate-950/90 text-xs font-semibold text-primary px-2 py-1 rounded-full border border-primary/20">
                    AI MATCH SCORE: 95%
                 </span>
               </div>
             </div>
             <div className="p-4">
               <h3 className="font-semibold text-slate-900 dark:text-white">{formData.material || 'Material Name'} Batch</h3>
-              <p className="text-[10px] text-slate-500 flex items-center gap-1 mb-2">
+              <p className="text-xs text-slate-500 flex items-center gap-1 mb-2">
                 <MapPin className="w-3 h-3 text-primary" /> {profile.location?.estate || 'Your Location'}
               </p>
                 <div className="flex justify-between items-end">
                   <div className="text-right">
-                    <div className="text-[9px] text-slate-400 font-semibold uppercase tracking-tighter">Grade</div>
+                    <div className="text-xs text-slate-400 font-semibold uppercase tracking-tighter">Grade</div>
                     <div className="text-xs font-semibold text-slate-700 dark:text-white uppercase">{formData.grade || 'Mix'}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-semibold text-primary leading-none">KES {formData.pricePerKg || '0'}</div>
-                    <div className="text-[10px] text-slate-400 font-semibold uppercase tracking-tighter">per {formData.unit}</div>
+                    <div className="text-xs text-slate-400 font-semibold uppercase tracking-tighter">per {formData.unit}</div>
                   </div>
                 </div>
 
-                <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[10px] font-semibold uppercase text-slate-500">
+                <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs font-semibold uppercase text-slate-500">
                   <span>{formData.quantity || '0'} {formData.unit} Available</span>
                   <span>MOQ: {formData.moq || '1'} {formData.unit}</span>
                 </div>

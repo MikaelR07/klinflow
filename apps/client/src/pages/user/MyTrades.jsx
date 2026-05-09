@@ -25,7 +25,7 @@ const statusConfig = {
 const TABS = ['Active', 'Settled', 'Cancelled'];
 
 const TradeCounter = ({ count, active }) => (
-  <span className={`ml-1.5 px-2 py-0.5 text-[9px] font-semibold rounded-full transition-all ${
+  <span className={`ml-1.5 px-2 py-0.5 text-xs font-semibold rounded-full transition-all ${
     active 
       ? 'bg-emerald-600 text-white scale-110 shadow-sm shadow-emerald-500/30' 
       : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
@@ -110,7 +110,7 @@ export default function MyTrades() {
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">Trade History</h1>
         </div>
         <div className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl border border-emerald-100 dark:border-emerald-500/20">
-          <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Total Trades: {bookings.length}</p>
+          <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">Total Trades: {bookings.length}</p>
         </div>
       </div>
 
@@ -160,7 +160,7 @@ export default function MyTrades() {
               <div className="flex justify-end mb-2 px-1">
                 <button 
                   onClick={() => handleClearHistory(activeTab === 'Settled' ? 'completed' : 'cancelled')}
-                  className="text-[9px] font-semibold text-rose-600 uppercase tracking-widest hover:underline px-4 py-2 bg-rose-50 dark:bg-rose-500/10 rounded-xl flex items-center gap-2 border border-rose-100 dark:border-rose-900/30"
+                  className="text-xs font-semibold text-rose-600 uppercase tracking-widest hover:underline px-4 py-2 bg-rose-50 dark:bg-rose-500/10 rounded-xl flex items-center gap-2 border border-rose-100 dark:border-rose-900/30"
                 >
                   Clear History
                 </button>
@@ -200,14 +200,14 @@ export default function MyTrades() {
                           {status.label}
                         </div>
                       </div>
-                      <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mt-1">
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">
                         {b.actual_weight_kg || b.actualWeightKg || b.bags || b.weightKg || b.quantity || 0}kg
                       </p>
                     </div>
                     <div className="text-right shrink-0 mr-1">
                       {b.status === 'counter_offer_pending' ? (
                         <>
-                          <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest line-through">
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest line-through">
                             KSh {(b.total_price || b.totalPrice || b.amount || 0).toLocaleString()}
                           </p>
                           <p className="text-sm font-semibold text-amber-500 tracking-tighter leading-none font-mono mt-0.5 animate-pulse">
@@ -233,20 +233,20 @@ export default function MyTrades() {
                             {isPickup ? <Truck className="w-4 h-4" /> : <Home className="w-4 h-4" />}
                           </div>
                           <div>
-                            <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Logistics</p>
-                            <p className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 uppercase">{isPickup ? 'Agent Dispatch' : 'Self Drop-off'}</p>
+                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Logistics</p>
+                            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">{isPickup ? 'Agent Dispatch' : 'Self Drop-off'}</p>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Listing ID</p>
-                          <p className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 font-mono">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Listing ID</p>
+                          <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 font-mono">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
                         </div>
                       </div>
 
                       {/* Time */}
                       <div className="flex items-center justify-between py-2 px-1">
-                        <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Schedule</span>
-                        <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300">{b.time_slot || b.time || 'ASAP'}</span>
+                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Schedule</span>
+                        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{b.time_slot || b.time || 'ASAP'}</span>
                       </div>
 
                       {/* Action Hub */}
@@ -258,13 +258,13 @@ export default function MyTrades() {
                         <div className="grid grid-cols-2 gap-2 pt-1">
                           <button 
                             onClick={(e) => { e.stopPropagation(); toast.info("Reschedule Request Sent", { description: "We'll notify the weaver." }); }}
-                            className="h-10 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl flex items-center justify-center gap-2 text-slate-900 dark:text-white text-[9px] font-semibold uppercase tracking-widest transition-all active:scale-95 border border-slate-100 dark:border-slate-700"
+                            className="h-10 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl flex items-center justify-center gap-2 text-slate-900 dark:text-white text-xs font-semibold uppercase tracking-widest transition-all active:scale-95 border border-slate-100 dark:border-slate-700"
                           >
                             <CalendarClock className="w-3.5 h-3.5 text-indigo-500" /> Reschedule
                           </button>
                           <button 
                             onClick={(e) => { e.stopPropagation(); handleCancel(b.id); }}
-                            className="h-10 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-xl flex items-center justify-center gap-2 text-rose-600 text-[9px] font-semibold uppercase tracking-widest transition-all active:scale-95 border border-rose-100 dark:border-rose-900/10"
+                            className="h-10 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-xl flex items-center justify-center gap-2 text-rose-600 text-xs font-semibold uppercase tracking-widest transition-all active:scale-95 border border-rose-100 dark:border-rose-900/10"
                           >
                             <XCircle className="w-3.5 h-3.5" /> Withdraw
                           </button>
@@ -275,9 +275,9 @@ export default function MyTrades() {
                         <div className="flex items-center justify-between pt-1">
                            <div className="flex items-center gap-2 text-emerald-500">
                               <CheckCircle2 className="w-3.5 h-3.5 fill-emerald-500/10" />
-                              <span className="text-[9px] font-semibold uppercase tracking-[0.2em]">Asset Settled</span>
+                              <span className="text-xs font-semibold uppercase tracking-[0.2em]">Asset Settled</span>
                            </div>
-                           <button className="text-[9px] font-semibold text-indigo-600 uppercase tracking-widest underline underline-offset-4">View Receipt</button>
+                           <button className="text-xs font-semibold text-indigo-600 uppercase tracking-widest underline underline-offset-4">View Receipt</button>
                         </div>
                       )}
                     </div>

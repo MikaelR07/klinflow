@@ -27,7 +27,7 @@ export default function AssetBadge({ grade = 'B', showLabel = true, className = 
   const Icon = style.icon;
 
   return (
-    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-black uppercase tracking-wider ${style.color} ${className}`}>
+    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-black uppercase tracking-wider ${style.color} ${className}`}>
       <Icon className="w-3 h-3" />
       {showLabel && <span>{style.label}</span>}
     </div>

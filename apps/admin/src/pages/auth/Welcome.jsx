@@ -15,7 +15,7 @@ export default function Welcome() {
 
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full border border-white/20 mb-6 w-fit backdrop-blur-md">
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-[10px] font-semibold text-slate-200 uppercase tracking-widest">Admin Command Center</span>
+          <span className="text-xs font-semibold text-slate-200 uppercase tracking-widest">Admin Command Center</span>
         </div>
 
         <h1 className="text-5xl font-semibold text-white leading-[0.95] mb-6 tracking-tighter">
@@ -56,7 +56,7 @@ export default function Welcome() {
           Enter Command Center <ArrowRight className="w-5 h-5" />
         </button>
         
-        <p className="text-center text-[10px] text-slate-600 font-semibold uppercase tracking-[0.2em] pt-4">
+        <p className="text-center text-xs text-slate-600 font-semibold uppercase tracking-[0.2em] pt-4">
           Restricted Access • Authorized Personnel Only
         </p>
       </div>

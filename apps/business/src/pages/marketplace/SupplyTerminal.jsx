@@ -146,11 +146,11 @@ export default function SupplyTerminal() {
             {[...marketIndices, ...marketIndices].map((m, i) => (
               <div key={i} className="flex-shrink-0 w-26 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 p-1.5 rounded-lg shadow-sm">
                 <div className="flex items-center justify-between mb-0.5">
-                  <span className="text-[8px] font-black text-slate-900 dark:text-white tracking-tighter uppercase">{m.label}</span>
+                  <span className="text-xs font-black text-slate-900 dark:text-white tracking-tighter uppercase">{m.label}</span>
                   <span className={`text-[7px] font-black ${m.up ? 'text-emerald-500' : 'text-rose-500'} italic`}>{m.change}</span>
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-[10px] font-black text-slate-900 dark:text-white">KSh {m.price}</span>
+                  <span className="text-xs font-black text-slate-900 dark:text-white">KSh {m.price}</span>
                   <span className="text-[6px] text-slate-400 font-bold uppercase tracking-widest">/KG</span>
                 </div>
                 {/* Mini Sparkline */}
@@ -221,30 +221,30 @@ export default function SupplyTerminal() {
                     </h3>
                     <div className="flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full bg-gradient-to-br ${getMaterialColor(item.displayTitle)} shadow-sm`} />
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">{item.typeLabel}</p>
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest truncate">{item.typeLabel}</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0 flex flex-col items-end">
-                    <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1 mb-0.5">
+                    <p className="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1 mb-0.5">
                       <Clock className="w-2.5 h-2.5" />
                       {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                     </p>
                     <p className="text-sm font-black text-slate-900 dark:text-white italic tracking-tighter leading-none">
-                      {item.weight_kg} <span className="text-[8px] uppercase not-italic opacity-40">KG</span>
+                      {item.weight_kg} <span className="text-xs uppercase not-italic opacity-40">KG</span>
                     </p>
-                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1 bg-slate-50 dark:bg-slate-800 px-1 py-0.5 rounded">Grade {item.grade || 'A'}</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1 bg-slate-50 dark:bg-slate-800 px-1 py-0.5 rounded">Grade {item.grade || 'A'}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-800/50 pt-1.5 mt-auto">
                   <div className="flex items-center gap-1.5 flex-1 min-w-0">
                     <MapPin className="w-3 h-3 text-slate-300" />
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest truncate">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest truncate">
                       {item.location || 'Logistics Hub'}
                     </p>
                   </div>
                   <div className="text-right pl-2">
-                    <p className="text-[10px] font-black text-emerald-600 uppercase tracking-tighter">
+                    <p className="text-xs font-black text-emerald-600 uppercase tracking-tighter">
                       {item.pricePerKg || (item.estimated_value && item.weight_kg ? Math.round(item.estimated_value / item.weight_kg) : null) ? 
                         `KSh ${item.pricePerKg || Math.round(item.estimated_value / item.weight_kg)}` : 
                         'Quoting'}

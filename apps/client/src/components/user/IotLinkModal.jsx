@@ -62,7 +62,7 @@ export default function IotLinkModal({ show, onClose }) {
 
               <form onSubmit={handleLink} className="space-y-4">
                 <div>
-                  <label className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-slate-400 ml-1 mb-1.5 block">
                     Device Serial Number
                   </label>
                   <div className="relative">

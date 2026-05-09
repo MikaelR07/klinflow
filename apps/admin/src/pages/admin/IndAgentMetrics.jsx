@@ -158,7 +158,7 @@ export default function IndAgentMetrics() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <UserCheck className="w-6 h-6 text-emerald-400" />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-emerald-400">PaaS Intelligence</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.4em] text-emerald-400">PaaS Intelligence</span>
             </div>
             <h1 className="text-4xl font-semibold tracking-tight">Ind. Agent Analytics</h1>
             <p className="text-slate-400 text-sm mt-2 max-w-md">
@@ -167,11 +167,11 @@ export default function IndAgentMetrics() {
           </div>
           <div className="grid grid-cols-2 gap-4 shrink-0">
             <div className="bg-white/5 p-5 rounded-3xl border border-white/10 text-center">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Total Agents</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Total Agents</p>
               <p className="text-3xl font-semibold">{agents.length}</p>
             </div>
             <div className="bg-white/5 p-5 rounded-3xl border border-white/10 text-center">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Online Now</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Online Now</p>
               <p className="text-3xl font-semibold text-emerald-400">{agents.filter(a => a.is_online).length}</p>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function IndAgentMetrics() {
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
               <kpi.icon className="w-5 h-5" />
             </div>
-            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{kpi.label}</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{kpi.label}</p>
             <p className="text-2xl font-semibold text-slate-900 dark:text-white leading-none">{kpi.value}</p>
           </div>
         ))}
@@ -205,7 +205,7 @@ export default function IndAgentMetrics() {
             <BarChart3 className="w-5 h-5 text-emerald-500" />
             <div>
               <h3 className="text-base font-semibold dark:text-white">Category Coverage</h3>
-              <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest">% of agents declaring each material</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest">% of agents declaring each material</p>
             </div>
           </div>
           <div className="space-y-3">
@@ -216,7 +216,7 @@ export default function IndAgentMetrics() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold dark:text-white">{cat.name}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-semibold text-slate-400">{cat.count} agents</span>
+                    <span className="text-xs font-semibold text-slate-400">{cat.count} agents</span>
                     <span className="text-xs font-semibold text-emerald-500">{cat.pct}%</span>
                   </div>
                 </div>
@@ -245,7 +245,7 @@ export default function IndAgentMetrics() {
             <Zap className="w-5 h-5 text-amber-500" />
             <div>
               <h3 className="text-base font-semibold dark:text-white">Pricing Intelligence</h3>
-              <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest">Agent market rates per material (KSh/KG)</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest">Agent market rates per material (KSh/KG)</p>
             </div>
           </div>
           {pricingIntel.length === 0 ? (
@@ -254,7 +254,7 @@ export default function IndAgentMetrics() {
             <div className="space-y-1">
               <div className="grid grid-cols-4 gap-2 pb-2 border-b border-slate-100 dark:border-white/5">
                 {['Material', 'Min', 'Avg', 'Max'].map(h => (
-                  <p key={h} className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{h}</p>
+                  <p key={h} className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{h}</p>
                 ))}
               </div>
               {pricingIntel.map((row, i) => (
@@ -277,7 +277,7 @@ export default function IndAgentMetrics() {
             <Award className="w-5 h-5 text-amber-500" />
             <h2 className="text-xl font-semibold dark:text-white tracking-tight">Agent Leaderboard</h2>
             <div className="h-px w-16 bg-slate-200 dark:bg-slate-800" />
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{agents.length} Agents</span>
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{agents.length} Agents</span>
           </div>
           {/* Sort Controls */}
           <div className="flex gap-2">
@@ -289,7 +289,7 @@ export default function IndAgentMetrics() {
               <button
                 key={s.key}
                 onClick={() => setSortBy(s.key)}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${
                   sortBy === s.key ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white dark:bg-slate-900 text-slate-400 border border-slate-100 dark:border-slate-800'
                 }`}
               >
@@ -304,13 +304,13 @@ export default function IndAgentMetrics() {
             <thead>
               <tr className="border-b border-slate-50 dark:border-white/5">
                 {['Rank', 'Agent', 'Status', 'Materials', 'Weight (KG)', 'Revenue (KSh)', 'Jobs', 'Success Rate', 'Capacity'].map(h => (
-                  <th key={h} className="px-6 py-5 text-[10px] font-semibold text-slate-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                  <th key={h} className="px-6 py-5 text-xs font-semibold text-slate-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50 dark:divide-white/5">
               {sortedAgents.length === 0 ? (
-                <tr><td colSpan="9" className="p-10 text-center text-slate-400 font-semibold uppercase text-[10px] tracking-widest italic">No agent data available for this criteria.</td></tr>
+                <tr><td colSpan="9" className="p-10 text-center text-slate-400 font-semibold uppercase text-xs tracking-widest italic">No agent data available for this criteria.</td></tr>
               ) : sortedAgents.map((agent, idx) => {
                 const stats = bookingStats[agent.id] || { total: 0, completed: 0, cancelled: 0, weight: 0, revenue: 0 };
                 const config = agentConfigs[agent.id];
@@ -329,16 +329,16 @@ export default function IndAgentMetrics() {
                       className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer"
                     >
                       <td className="px-6 py-4">
-                        <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-semibold ${
+                        <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-semibold ${
                           idx === 0 ? 'bg-amber-500 text-white' : idx === 1 ? 'bg-slate-300 text-slate-700' : idx === 2 ? 'bg-orange-400 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                         }`}>{idx + 1}</span>
                       </td>
                       <td className="px-6 py-4">
                         <p className="text-sm font-semibold dark:text-white whitespace-nowrap">{agent.name}</p>
-                        <p className="text-[10px] font-semibold text-slate-400 font-mono">{agent.phone}</p>
+                        <p className="text-xs font-semibold text-slate-400 font-mono">{agent.phone}</p>
                       </td>
                       <td className="px-6 py-4">
-                        <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-xl text-[9px] font-semibold uppercase ${
+                        <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-xl text-xs font-semibold uppercase ${
                           agent.is_online ? 'bg-emerald-500/10 text-emerald-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
                         }`}>
                           <div className={`w-1.5 h-1.5 rounded-full ${agent.is_online ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
@@ -347,10 +347,10 @@ export default function IndAgentMetrics() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-1">
-                          {uniqueMats.length === 0 ? <span className="text-[10px] text-slate-300 italic">None set</span> : uniqueMats.map((m, i) => (
-                            <span key={i} className="px-2 py-0.5 bg-primary/10 text-primary rounded-lg text-[9px] font-semibold uppercase">{MATERIAL_LABELS[m] || m}</span>
+                          {uniqueMats.length === 0 ? <span className="text-xs text-slate-300 italic">None set</span> : uniqueMats.map((m, i) => (
+                            <span key={i} className="px-2 py-0.5 bg-primary/10 text-primary rounded-lg text-xs font-semibold uppercase">{MATERIAL_LABELS[m] || m}</span>
                           ))}
-                          {materials.length > 3 && <span className="text-[9px] text-slate-400">+{materials.length - 3}</span>}
+                          {materials.length > 3 && <span className="text-xs text-slate-400">+{materials.length - 3}</span>}
                         </div>
                       </td>
                       <td className="px-6 py-4">
@@ -371,7 +371,7 @@ export default function IndAgentMetrics() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-[10px] font-semibold text-slate-500 whitespace-nowrap">
+                        <div className="text-xs font-semibold text-slate-500 whitespace-nowrap">
                           <span className="text-indigo-500 font-semibold">{agent.service_profile?.min_weight ?? '?'}</span>
                           <span className="text-slate-400"> – </span>
                           <span className="font-semibold dark:text-white">{agent.service_profile?.max_weight ?? '?'}</span>
@@ -385,7 +385,7 @@ export default function IndAgentMetrics() {
                       <tr key={`${agent.id}-exp`} className="bg-slate-50/70 dark:bg-slate-800/40">
                         <td colSpan="9" className="px-8 py-5">
                           <div className="space-y-3">
-                            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Custom Service Catalog</p>
+                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Custom Service Catalog</p>
                             {(agent.service_profile?.custom_services || []).length === 0 ? (
                               <p className="text-xs text-slate-400 italic">No custom categories defined yet.</p>
                             ) : (
@@ -398,7 +398,7 @@ export default function IndAgentMetrics() {
                                     </div>
                                     <div className="space-y-1">
                                       {(svc.subcategories || []).map((sub, j) => (
-                                        <div key={j} className="flex items-center justify-between text-[10px]">
+                                        <div key={j} className="flex items-center justify-between text-xs">
                                           <span className="text-slate-500">{sub.name}</span>
                                           <span className="font-semibold text-emerald-500">KSh {sub.rate_per_kg}/KG</span>
                                         </div>

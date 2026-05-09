@@ -57,7 +57,7 @@ export default function CreateRFQ() {
           <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-800 active:scale-95 transition-all">
             <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
           </button>
-          <h1 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Broadcast Request</h1>
+          <h1 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Broadcast Request</h1>
           <div className="w-10" />
         </div>
 
@@ -72,7 +72,7 @@ export default function CreateRFQ() {
           {/* Core Details */}
           <div className="space-y-4">
             <div className="relative">
-              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Material Category</label>
+              <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Material Category</label>
               <div className="relative">
                 <Package className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
                 <input 
@@ -87,7 +87,7 @@ export default function CreateRFQ() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="relative">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Target Volume (KG)</label>
+                <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Target Volume (KG)</label>
                 <div className="relative">
                   <Scale className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-500" />
                   <input 
@@ -100,7 +100,7 @@ export default function CreateRFQ() {
                 </div>
               </div>
               <div className="relative">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Target Price /KG</label>
+                <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Target Price /KG</label>
                 <div className="relative">
                   <TrendingUp className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
                   <input 
@@ -117,7 +117,7 @@ export default function CreateRFQ() {
 
           {/* Material Visualization Upload */}
           <div className="space-y-4 pt-6 border-t border-slate-50 dark:border-slate-800">
-            <h3 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
+            <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
               <Package className="w-4 h-4 text-blue-500" /> Material Visualization
             </h3>
             
@@ -132,7 +132,7 @@ export default function CreateRFQ() {
                 <div className="relative h-48 rounded-2xl overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-inner bg-slate-50 dark:bg-slate-800">
                   <img src={image} alt="Preview" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p className="text-[10px] font-black text-white uppercase tracking-widest">Change Image</p>
+                    <p className="text-xs font-black text-white uppercase tracking-widest">Change Image</p>
                   </div>
                 </div>
               ) : (
@@ -141,8 +141,8 @@ export default function CreateRFQ() {
                     <Plus className="w-6 h-6" />
                   </div>
                   <div className="text-center">
-                    <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Upload Material Photo</p>
-                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">High-quality images increase bid rates</p>
+                    <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest">Upload Material Photo</p>
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">High-quality images increase bid rates</p>
                   </div>
                 </div>
               )}
@@ -151,12 +151,12 @@ export default function CreateRFQ() {
 
           {/* Logistics */}
           <div className="space-y-4 pt-6 border-t border-slate-50 dark:border-slate-800">
-            <h3 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
+            <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
               <MapPin className="w-4 h-4 text-rose-500" /> Logistics & Timeline
             </h3>
             
             <div className="relative">
-              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Loading Location</label>
+              <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Loading Location</label>
               <input 
                 type="text"
                 placeholder="e.g. Mombasa Port, KE"
@@ -167,7 +167,7 @@ export default function CreateRFQ() {
             </div>
 
             <div className="relative">
-              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Closing Date</label>
+              <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Closing Date</label>
               <div className="relative">
                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
                 <input 
@@ -182,7 +182,7 @@ export default function CreateRFQ() {
 
           {/* Brief */}
           <div className="space-y-2 pt-6 border-t border-slate-50 dark:border-slate-800">
-            <label className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
+            <label className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
               <FileText className="w-4 h-4 text-blue-500" /> Technical Brief
             </label>
             <textarea 
@@ -197,7 +197,7 @@ export default function CreateRFQ() {
           {/* Trusted Badge */}
           <div className="bg-blue-600/5 border border-blue-600/10 p-4 rounded-xl flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0" />
-            <p className="text-[10px] font-bold text-blue-600/80 leading-relaxed uppercase tracking-wider">
+            <p className="text-xs font-bold text-blue-600/80 leading-relaxed uppercase tracking-wider">
               CleanFlow Verified Broadcast: All sourcing requests are screened for industrial legitimacy. Suppliers are notified instantly upon publication.
             </p>
           </div>

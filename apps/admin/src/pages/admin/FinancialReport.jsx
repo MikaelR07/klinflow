@@ -107,10 +107,10 @@ export default function FinancialReport() {
               </div>
               <h1 className="text-3xl font-semibold tracking-tight">Platform Financial Summary</h1>
             </div>
-            <p className="text-slate-500 font-semibold uppercase text-[10px] tracking-[0.4em]">CleanFlow PaaS Operations · Internal Statement</p>
+            <p className="text-slate-500 font-semibold uppercase text-xs tracking-[0.4em]">CleanFlow PaaS Operations · Internal Statement</p>
           </div>
           <div className="text-right space-y-1">
-            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Financial Year</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Financial Year</p>
             <p className="text-sm font-semibold dark:text-white">{new Date().getFullYear()}</p>
             <p className="text-xs text-slate-500 uppercase tracking-tighter">Currency: KES (KSh)</p>
           </div>
@@ -119,26 +119,26 @@ export default function FinancialReport() {
         {/* SUMMARY TILES */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="p-8 bg-slate-50 dark:bg-slate-900/50 rounded-[2.5rem] border border-slate-100 dark:border-slate-800/50">
-             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Gross Transaction Value</p>
+             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Gross Transaction Value</p>
              <h2 className="text-4xl font-semibold text-slate-900 dark:text-white leading-none">KSh {stats.totalGross.toLocaleString()}</h2>
              <div className="flex items-center gap-1 mt-4 text-emerald-500">
                <ArrowUpRight className="w-4 h-4" />
-               <span className="text-[10px] font-semibold">LIFETIME REVENUE</span>
+               <span className="text-xs font-semibold">LIFETIME REVENUE</span>
              </div>
           </div>
 
           <div className="p-8 bg-primary/5 rounded-[2.5rem] border border-primary/20">
-             <p className="text-[10px] font-semibold text-primary uppercase tracking-widest mb-2">Platform Commissions</p>
+             <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Platform Commissions</p>
              <h2 className="text-4xl font-semibold text-primary leading-none">KSh {stats.totalCommission.toLocaleString()}</h2>
-             <p className="text-[10px] text-slate-500 font-semibold mt-4 uppercase tracking-tighter">Avg. Take Rate: {commissionRate * 100}%</p>
+             <p className="text-xs text-slate-500 font-semibold mt-4 uppercase tracking-tighter">Avg. Take Rate: {commissionRate * 100}%</p>
           </div>
 
           <div className="p-8 bg-slate-900 rounded-[2.5rem] text-white">
-             <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2">Total Agent Payouts</p>
+             <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Total Agent Payouts</p>
              <h2 className="text-4xl font-semibold leading-none">KSh {stats.totalPayouts.toLocaleString()}</h2>
              <div className="flex items-center gap-1 mt-4 text-slate-500">
                <UserCheck className="w-4 h-4" />
-               <span className="text-[10px] font-semibold uppercase">Economic Value Shared</span>
+               <span className="text-xs font-semibold uppercase">Economic Value Shared</span>
              </div>
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function FinancialReport() {
                    <div key={i} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-[11px] font-semibold dark:text-white">{m.name}</span>
-                        <span className="text-[10px] font-semibold text-slate-400">KSh {m.value.toLocaleString()}</span>
+                        <span className="text-xs font-semibold text-slate-400">KSh {m.value.toLocaleString()}</span>
                       </div>
                       <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div className="h-full bg-slate-900 dark:bg-white transition-all duration-1000" style={{ width: `${m.pct}%` }} />
@@ -178,7 +178,7 @@ export default function FinancialReport() {
                            <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-t-lg relative" style={{ height: `${height}%` }}>
                               <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-100 transition-opacity rounded-t-lg" />
                            </div>
-                           <span className="text-[8px] font-semibold text-slate-400 uppercase">{t.month}</span>
+                           <span className="text-xs font-semibold text-slate-400 uppercase">{t.month}</span>
                         </div>
                       )
                     })}
@@ -189,7 +189,7 @@ export default function FinancialReport() {
 
         {/* FINANCIAL DISCLOSURE */}
         <div className="mt-20 pt-8 border-t-2 border-slate-100 dark:border-white/5 space-y-4">
-           <div className="flex justify-between items-end text-[9px] text-slate-400 font-semibold uppercase tracking-widest">
+           <div className="flex justify-between items-end text-xs text-slate-400 font-semibold uppercase tracking-widest">
               <div className="max-w-sm leading-relaxed">
                  This report is an internal accounting of platform fees and does not include 
                  subscription revenue or third-party logistics costs. Calculated using a flat {commissionRate * 100}% take-rate.

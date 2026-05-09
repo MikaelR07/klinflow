@@ -79,7 +79,7 @@ export default function DiscoveryHub() {
             </button>
             <div>
               <h1 className="text-xl font-semibold dark:text-white tracking-tight leading-none mb-1">Find a Partner</h1>
-              <p className="text-[9px] font-semibold text-primary uppercase tracking-[0.2em]">Verified Logistics</p>
+              <p className="text-xs font-semibold text-primary uppercase tracking-[0.2em]">Verified Logistics</p>
             </div>
           </div>
 
@@ -122,7 +122,7 @@ export default function DiscoveryHub() {
               {/* Material Filter */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between px-1">
-                  <h3 className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                  <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                     <Filter className="w-3 h-3" /> Material
                   </h3>
                 </div>
@@ -131,7 +131,7 @@ export default function DiscoveryHub() {
                     <button
                       key={m}
                       onClick={() => setActiveMaterial(m)}
-                      className={`px-4 py-2 rounded-xl text-[9px] font-semibold uppercase tracking-widest whitespace-nowrap transition-all border ${
+                      className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest whitespace-nowrap transition-all border ${
                         activeMaterial === m 
                         ? 'bg-primary border-primary text-white' 
                         : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-100 dark:border-slate-800'
@@ -145,7 +145,7 @@ export default function DiscoveryHub() {
 
               {/* Service Scale (Weight) Filter */}
               <div className="space-y-2">
-                <h3 className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest px-1">Scale</h3>
+                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest px-1">Scale</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {SCALE_DEFS.map(s => (
                     <button
@@ -157,10 +157,10 @@ export default function DiscoveryHub() {
                         : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800'
                       }`}
                     >
-                      <p className={`text-[10px] font-semibold uppercase tracking-tight mb-0.5 ${activeScale === s.id ? 'text-primary' : 'dark:text-white'}`}>
+                      <p className={`text-xs font-semibold uppercase tracking-tight mb-0.5 ${activeScale === s.id ? 'text-primary' : 'dark:text-white'}`}>
                         {s.label}
                       </p>
-                      <p className="text-[8px] font-medium text-slate-400 leading-tight">
+                      <p className="text-xs font-medium text-slate-400 leading-tight">
                         {s.description}
                       </p>
                     </button>
@@ -222,15 +222,15 @@ export default function DiscoveryHub() {
                           <div className="flex items-center gap-2">
                              <div className="flex items-center gap-0.5 text-amber-500">
                                <Star className="w-2.5 h-2.5 fill-current" />
-                               <span className="text-[9px] font-semibold">{partner.rating > 0 ? partner.rating.toFixed(1) : 'New'}</span>
+                               <span className="text-xs font-semibold">{partner.rating > 0 ? partner.rating.toFixed(1) : 'New'}</span>
                              </div>
-                              <span className="text-[8px] text-slate-300">•</span>
-                              <div className="flex items-center gap-1 text-[9px] font-semibold text-slate-500">
+                              <span className="text-xs text-slate-300">•</span>
+                              <div className="flex items-center gap-1 text-xs font-semibold text-slate-500">
                                 <Package className="w-2.5 h-2.5" />
                                 <span>{Number(partner.total_pickups || 0)} Pickups</span>
                               </div>
-                              <span className="text-[8px] text-slate-300">•</span>
-                              <span className={`text-[8px] font-semibold uppercase tracking-widest ${
+                              <span className="text-xs text-slate-300">•</span>
+                              <span className={`text-xs font-semibold uppercase tracking-widest ${
                                  scale === 'bulk' || scale === 'industrial' ? 'text-indigo-500' : 'text-emerald-500'
                               }`}>
                                  {scale}
@@ -238,7 +238,7 @@ export default function DiscoveryHub() {
                           </div>
                         </div>
                         <div className="text-right shrink-0 ml-2">
-                          <p className="text-[8px] font-semibold text-slate-400 uppercase leading-none mb-0.5">Fee</p>
+                          <p className="text-xs font-semibold text-slate-400 uppercase leading-none mb-0.5">Fee</p>
                           <p className="text-xs font-semibold text-primary">KSh {logisticsFee}</p>
                         </div>
                       </div>
@@ -248,7 +248,7 @@ export default function DiscoveryHub() {
                           .filter(m => !!MATERIAL_LABELS[m])
                           .slice(0, 4)
                           .map(m => (
-                            <span key={m} className="px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-[8px] font-semibold text-slate-500 dark:text-slate-400 border border-slate-100/50 dark:border-white/5">
+                            <span key={m} className="px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 border border-slate-100/50 dark:border-white/5">
                               {MATERIAL_LABELS[m]}
                             </span>
                           ))}
@@ -284,7 +284,7 @@ export default function DiscoveryHub() {
           </div>
           <div>
             <h4 className="text-xs font-semibold text-blue-900 dark:text-blue-400 uppercase tracking-widest mb-1">Choosing the right scale</h4>
-            <p className="text-[10px] font-medium text-blue-800/60 dark:text-blue-300/60 leading-relaxed">
+            <p className="text-xs font-medium text-blue-800/60 dark:text-blue-300/60 leading-relaxed">
               Standard agents use motorbikes for fast, small pickups. Bulk partners use trucks for estate-wide or industrial recycling.
             </p>
           </div>

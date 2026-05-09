@@ -222,7 +222,7 @@ export default function AgentConfigurationPage() {
         </button>
         <div>
           <h1 className="text-xl font-semibold dark:text-white leading-tight">Service Profile</h1>
-          <p className="text-[10px] font-semibold text-primary uppercase tracking-widest">Agent Configuration</p>
+          <p className="text-xs font-semibold text-primary uppercase tracking-widest">Agent Configuration</p>
         </div>
       </div>
 
@@ -248,7 +248,7 @@ export default function AgentConfigurationPage() {
                   </div>
                   <div>
                      <h3 className="text-sm font-semibold dark:text-white uppercase tracking-widest">Hub Mode</h3>
-                     <p className="text-[9px] text-slate-400 font-semibold uppercase tracking-tight">Accept Self Drop-offs</p>
+                     <p className="text-xs text-slate-400 font-semibold uppercase tracking-tight">Accept Self Drop-offs</p>
                   </div>
                 </div>
                 <button 
@@ -262,7 +262,7 @@ export default function AgentConfigurationPage() {
              {hubData.active && (
                <div className="space-y-4 animate-in fade-in slide-in-from-top-2">
                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest ml-1">Hub Physical Address</label>
+                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Hub Physical Address</label>
                     <input 
                       type="text"
                       placeholder="e.g. Langata Rd, Opp T-Mall"
@@ -272,7 +272,7 @@ export default function AgentConfigurationPage() {
                     />
                  </div>
                  <div className="p-4 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-2xl">
-                    <p className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 leading-tight">
+                    <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 leading-tight">
                       By enabling Hub Mode, your location will appear on the marketplace as a verified drop-off point for sellers.
                     </p>
                  </div>
@@ -289,12 +289,12 @@ export default function AgentConfigurationPage() {
              </div>
              <div>
                 <h3 className="text-sm font-semibold dark:text-white uppercase tracking-widest">Base Logistics Fee</h3>
-                <p className="text-[9px] text-slate-400 font-semibold uppercase tracking-tight">Your standard pickup charge</p>
+                <p className="text-xs text-slate-400 font-semibold uppercase tracking-tight">Your standard pickup charge</p>
              </div>
            </div>
 
            <div className="space-y-1.5">
-              <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Base Fee (KSh)</label>
+              <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Base Fee (KSh)</label>
               <input 
                 type="text"
                 inputMode="decimal"
@@ -306,7 +306,7 @@ export default function AgentConfigurationPage() {
                 }}
                 className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-semibold text-sm outline-none focus:border-amber-500"
               />
-              <p className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest mt-2 flex items-center gap-1.5">
+              <p className="text-xs font-semibold text-emerald-500 uppercase tracking-widest mt-2 flex items-center gap-1.5">
                 💡 Hint: Setting a 0 base fee attracts significantly more clients!
               </p>
            </div>
@@ -320,13 +320,13 @@ export default function AgentConfigurationPage() {
              </div>
              <div>
                 <h3 className="text-sm font-semibold dark:text-white uppercase tracking-widest">Operational Capacity</h3>
-                <p className="text-[9px] text-slate-400 font-semibold uppercase tracking-tight">Set your weight boundaries</p>
+                <p className="text-xs text-slate-400 font-semibold uppercase tracking-tight">Set your weight boundaries</p>
              </div>
            </div>
 
            <div className="grid grid-cols-2 gap-4">
              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Min Weight (KG)</label>
+                <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Min Weight (KG)</label>
                 <input 
                   type="number"
                   disabled={isFleetDriver}
@@ -336,7 +336,7 @@ export default function AgentConfigurationPage() {
                 />
              </div>
              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Max Load (KG)</label>
+                <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Max Load (KG)</label>
                 <input 
                   type="number"
                   disabled={isFleetDriver}
@@ -348,7 +348,7 @@ export default function AgentConfigurationPage() {
            </div>
            <div className="flex items-start gap-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700">
              <Info className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-             <p className="text-[9px] text-slate-500 leading-relaxed italic">
+             <p className="text-xs text-slate-500 leading-relaxed italic">
                These limits prevent you from being assigned jobs that are too small to be profitable or too heavy for your vehicle.
              </p>
            </div>
@@ -379,7 +379,7 @@ export default function AgentConfigurationPage() {
                    <div className="text-2xl mb-2">
                       {cat.icon || '📦'}
                     </div>
-                   <div className={`text-[10px] font-semibold uppercase tracking-widest ${isSelected ? 'text-primary' : 'text-slate-500'}`}>
+                   <div className={`text-xs font-semibold uppercase tracking-widest ${isSelected ? 'text-primary' : 'text-slate-500'}`}>
                      {cat.label}
                    </div>
                  </button>
@@ -391,11 +391,11 @@ export default function AgentConfigurationPage() {
            {!isFleetDriver && (
              <div className="space-y-3 pt-2">
                <div className="flex items-center justify-between">
-                 <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Your Custom Categories</p>
+                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Your Custom Categories</p>
                  <button
                    type="button"
                    onClick={() => setShowAddCategory(true)}
-                   className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-xl text-[9px] font-semibold uppercase tracking-widest"
+                   className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-xl text-xs font-semibold uppercase tracking-widest"
                  >
                    <Plus className="w-3 h-3" /> Add Category
                  </button>
@@ -419,8 +419,8 @@ export default function AgentConfigurationPage() {
                      />
                    </div>
                    <div className="flex gap-2">
-                     <button type="button" onClick={handleAddCustomCategory} className="flex-1 py-2.5 bg-primary text-white rounded-xl text-[10px] font-semibold uppercase tracking-widest">Add</button>
-                     <button type="button" onClick={() => setShowAddCategory(false)} className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-[10px] font-semibold uppercase tracking-widest text-slate-500"><X className="w-4 h-4" /></button>
+                     <button type="button" onClick={handleAddCustomCategory} className="flex-1 py-2.5 bg-primary text-white rounded-xl text-xs font-semibold uppercase tracking-widest">Add</button>
+                     <button type="button" onClick={() => setShowAddCategory(false)} className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold uppercase tracking-widest text-slate-500"><X className="w-4 h-4" /></button>
                    </div>
                  </div>
                )}
@@ -429,7 +429,7 @@ export default function AgentConfigurationPage() {
                {formData.custom_services.length === 0 && !showAddCategory && (
                  <div className="p-4 text-center bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
                    <Tag className="w-5 h-5 mx-auto mb-2 text-slate-300" />
-                   <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">No custom categories yet</p>
+                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">No custom categories yet</p>
                  </div>
                )}
                <div className="space-y-2">
@@ -439,7 +439,7 @@ export default function AgentConfigurationPage() {
                        <span className="text-lg">{svc.icon}</span>
                        <div>
                          <p className="text-xs font-semibold dark:text-white">{svc.category}</p>
-                         <p className="text-[9px] text-slate-400">{svc.subcategories?.length || 0} sub-items</p>
+                         <p className="text-xs text-slate-400">{svc.subcategories?.length || 0} sub-items</p>
                        </div>
                      </div>
                      <button type="button" onClick={() => handleDeleteCustomCategory(i)} className="p-1.5 text-rose-400 hover:text-rose-600">
@@ -460,13 +460,13 @@ export default function AgentConfigurationPage() {
               </div>
               <div>
                  <h3 className="text-sm font-semibold dark:text-white uppercase tracking-widest">Market Rates</h3>
-                 <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-tight">Set your per-KG purchase prices</p>
+                 <p className="text-xs text-slate-400 font-semibold uppercase tracking-tight">Set your per-KG purchase prices</p>
               </div>
            </div>
 
            {formData.accepted_materials.length === 0 ? (
              <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
-               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">No materials selected yet</p>
+               <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">No materials selected yet</p>
              </div>
            ) : (
              <div className="space-y-4">
@@ -483,7 +483,7 @@ export default function AgentConfigurationPage() {
                             <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 uppercase tracking-widest">{category.label}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-semibold text-slate-400 uppercase">KSh</span>
+                            <span className="text-xs font-semibold text-slate-400 uppercase">KSh</span>
                             <input 
                               type="number"
                               disabled={isFleetDriver}
@@ -491,7 +491,7 @@ export default function AgentConfigurationPage() {
                               onChange={(e) => updateRate(slug, e.target.value)}
                               className="w-16 p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-center font-semibold text-primary outline-none"
                             />
-                            <span className="text-[10px] font-semibold text-slate-400 uppercase">/kg</span>
+                            <span className="text-xs font-semibold text-slate-400 uppercase">/kg</span>
                           </div>
                         </div>
 
@@ -500,7 +500,7 @@ export default function AgentConfigurationPage() {
                           onClick={() => setExpandedCategory(isExpanded ? null : slug)}
                           className="flex items-center justify-between px-4 py-2 bg-slate-100/50 dark:bg-white/5 border-t border-slate-200 dark:border-white/5 group"
                         >
-                          <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                          <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                             <Settings2 className="w-3 h-3" /> 
                             {isExpanded ? 'Hide Grades' : 'Adjust Material Grades'}
                           </span>
@@ -511,7 +511,7 @@ export default function AgentConfigurationPage() {
                           <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-white/5 space-y-4 animate-slide-down">
                             <div className="flex items-center gap-2 mb-2">
                                <Info className="w-3 h-3 text-primary" />
-                               <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-tight">Setting a grade price overrides the default {category.label} rate.</p>
+                               <p className="text-xs font-semibold text-slate-400 uppercase tracking-tight">Setting a grade price overrides the default {category.label} rate.</p>
                             </div>
                             {category.subcategories.map(sub => {
                               const subSlug = `${slug}_${sub.id}`;
@@ -519,7 +519,7 @@ export default function AgentConfigurationPage() {
                                 <div key={sub.id} className="flex items-center justify-between pl-4 border-l-2 border-primary/20">
                                    <div>
                                       <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">{sub.label}</p>
-                                      <p className="text-[8px] font-semibold text-slate-400 uppercase">{sub.description}</p>
+                                      <p className="text-xs font-semibold text-slate-400 uppercase">{sub.description}</p>
                                    </div>
                                    <div className="flex items-center gap-2">
                                       <input 
@@ -552,7 +552,7 @@ export default function AgentConfigurationPage() {
                   <Tag className="w-4 h-4 text-primary" />
                   <h4 className="text-xs font-semibold dark:text-white uppercase tracking-widest">Custom Category Rates</h4>
                 </div>
-                <p className="text-[9px] text-slate-400">Add sub-items and per-KG rates for your custom categories.</p>
+                <p className="text-xs text-slate-400">Add sub-items and per-KG rates for your custom categories.</p>
                 {formData.custom_services.map((svc, catIndex) => {
                   const isExpanded = expandedCustomCat === catIndex;
                   const subInput = newSubItem[catIndex] || { name: '', rate_per_kg: '' };
@@ -562,7 +562,7 @@ export default function AgentConfigurationPage() {
                         <div className="flex items-center gap-2">
                           <span className="text-lg">{svc.icon}</span>
                           <span className="text-xs font-semibold dark:text-white uppercase tracking-widest">{svc.category}</span>
-                          <span className="text-[9px] text-slate-400">({svc.subcategories?.length || 0} items)</span>
+                          <span className="text-xs text-slate-400">({svc.subcategories?.length || 0} items)</span>
                         </div>
                         {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                       </button>
@@ -572,7 +572,7 @@ export default function AgentConfigurationPage() {
                             <div key={subIndex} className="flex items-center justify-between pl-3 border-l-2 border-primary/30">
                               <div>
                                 <p className="text-xs font-semibold dark:text-white">{sub.name}</p>
-                                <p className="text-[9px] text-emerald-500 font-semibold">KSh {sub.rate_per_kg}/KG</p>
+                                <p className="text-xs text-emerald-500 font-semibold">KSh {sub.rate_per_kg}/KG</p>
                               </div>
                               <button type="button" onClick={() => handleDeleteSubItem(catIndex, subIndex)} className="p-1.5 text-rose-400 hover:text-rose-600">
                                 <Trash2 className="w-3 h-3" />
@@ -603,7 +603,7 @@ export default function AgentConfigurationPage() {
               {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
               {isSaving ? 'Deploy New Rates' : 'Deploy New Rates'}
             </button>
-            <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest text-center mt-4 px-8">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest text-center mt-4 px-8">
               Changes are pushed instantly to all residents in your service area.
             </p>
           </div>

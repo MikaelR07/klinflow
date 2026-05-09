@@ -147,7 +147,7 @@ export default function CompanyMetrics() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <Building2 className="w-6 h-6 text-indigo-400" />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-indigo-400">PaaS Intelligence</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.4em] text-indigo-400">PaaS Intelligence</span>
             </div>
             <h1 className="text-4xl font-semibold tracking-tight">Company Analytics</h1>
             <p className="text-slate-400 text-sm mt-2 max-w-md">
@@ -156,11 +156,11 @@ export default function CompanyMetrics() {
           </div>
           <div className="grid grid-cols-2 gap-4 shrink-0">
             <div className="bg-white/5 p-5 rounded-3xl border border-white/10 text-center">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Companies</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Companies</p>
               <p className="text-3xl font-semibold">{companies.length}</p>
             </div>
             <div className="bg-white/5 p-5 rounded-3xl border border-white/10 text-center">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Total Fleet</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Total Fleet</p>
               <p className="text-3xl font-semibold text-indigo-400">{totalFleetSize}</p>
             </div>
           </div>
@@ -179,9 +179,9 @@ export default function CompanyMetrics() {
             <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
               <kpi.icon className="w-5 h-5" />
             </div>
-            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{kpi.label}</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{kpi.label}</p>
             <p className="text-2xl font-semibold text-slate-900 dark:text-white leading-none">{kpi.value}</p>
-            <p className="text-[9px] text-slate-400 uppercase tracking-widest">{kpi.sub}</p>
+            <p className="text-xs text-slate-400 uppercase tracking-widest">{kpi.sub}</p>
           </div>
         ))}
       </div>
@@ -195,7 +195,7 @@ export default function CompanyMetrics() {
             <BarChart3 className="w-5 h-5 text-indigo-500" />
             <div>
               <h3 className="text-base font-semibold dark:text-white">Category Coverage</h3>
-              <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest">% of companies covering each material</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest">% of companies covering each material</p>
             </div>
           </div>
           <div className="space-y-3">
@@ -206,7 +206,7 @@ export default function CompanyMetrics() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold dark:text-white">{cat.name}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-semibold text-slate-400">{cat.count} companies</span>
+                    <span className="text-xs font-semibold text-slate-400">{cat.count} companies</span>
                     <span className="text-xs font-semibold text-indigo-500">{cat.pct}%</span>
                   </div>
                 </div>
@@ -227,7 +227,7 @@ export default function CompanyMetrics() {
             <Zap className="w-5 h-5 text-amber-500" />
             <div>
               <h3 className="text-base font-semibold dark:text-white">Fleet Efficiency</h3>
-              <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest">Completed jobs per driver (top 6)</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest">Completed jobs per driver (top 6)</p>
             </div>
           </div>
           <div className="space-y-3">
@@ -259,7 +259,7 @@ export default function CompanyMetrics() {
             <Award className="w-5 h-5 text-amber-500" />
             <h2 className="text-xl font-semibold dark:text-white tracking-tight">Company Leaderboard</h2>
             <div className="h-px w-16 bg-slate-200 dark:bg-slate-800" />
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{companies.length} Tenants</span>
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{companies.length} Tenants</span>
           </div>
           <div className="flex gap-2">
             {[
@@ -271,7 +271,7 @@ export default function CompanyMetrics() {
               <button
                 key={s.key}
                 onClick={() => setSortBy(s.key)}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${
                   sortBy === s.key ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white dark:bg-slate-900 text-slate-400 border border-slate-100 dark:border-slate-800'
                 }`}
               >
@@ -286,7 +286,7 @@ export default function CompanyMetrics() {
             <thead>
               <tr className="border-b border-slate-50 dark:border-white/5">
                 {['Rank', 'Company', 'Status', 'Fleet', 'Weight (KG)', 'Revenue (KSh)', 'Jobs', 'Success Rate', 'Capacity', 'Verified'].map(h => (
-                  <th key={h} className="px-6 py-5 text-[10px] font-semibold text-slate-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
+                  <th key={h} className="px-6 py-5 text-xs font-semibold text-slate-400 uppercase tracking-widest whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -306,7 +306,7 @@ export default function CompanyMetrics() {
                       className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer"
                     >
                       <td className="px-6 py-4">
-                        <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-[10px] font-semibold ${
+                        <span className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-semibold ${
                           idx === 0 ? 'bg-amber-500 text-white' : idx === 1 ? 'bg-slate-300 text-slate-700' : idx === 2 ? 'bg-orange-400 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                         }`}>{idx + 1}</span>
                       </td>
@@ -315,10 +315,10 @@ export default function CompanyMetrics() {
                           {company.company_name || company.name}
                           {company.is_verified && <BadgeCheck className="w-4 h-4 text-indigo-500 shrink-0" />}
                         </p>
-                        <p className="text-[10px] font-semibold text-slate-400 font-mono">{company.phone}</p>
+                        <p className="text-xs font-semibold text-slate-400 font-mono">{company.phone}</p>
                       </td>
                       <td className="px-6 py-4">
-                        <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-xl text-[9px] font-semibold uppercase ${
+                        <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-xl text-xs font-semibold uppercase ${
                           company.is_online ? 'bg-emerald-500/10 text-emerald-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
                         }`}>
                           <div className={`w-1.5 h-1.5 rounded-full ${company.is_online ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
@@ -326,7 +326,7 @@ export default function CompanyMetrics() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="px-3 py-1.5 bg-indigo-500/10 text-indigo-500 rounded-xl text-[10px] font-semibold">{drivers} drivers</span>
+                        <span className="px-3 py-1.5 bg-indigo-500/10 text-indigo-500 rounded-xl text-xs font-semibold">{drivers} drivers</span>
                       </td>
                       <td className="px-6 py-4">
                         <span className="text-sm font-semibold text-emerald-600">{stats.weight.toFixed(1)}</span>
@@ -346,7 +346,7 @@ export default function CompanyMetrics() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-[10px] font-semibold text-slate-500 whitespace-nowrap">
+                        <div className="text-xs font-semibold text-slate-500 whitespace-nowrap">
                           <span className="text-indigo-500 font-semibold">{company.service_profile?.min_weight ?? '?'}</span>
                           <span className="text-slate-400"> – </span>
                           <span className="font-semibold dark:text-white">{company.service_profile?.max_weight ?? '?'}</span>
@@ -355,9 +355,9 @@ export default function CompanyMetrics() {
                       </td>
                       <td className="px-6 py-4">
                         {company.is_verified ? (
-                          <span className="px-2 py-1 bg-emerald-500/10 text-emerald-600 rounded-xl text-[9px] font-semibold uppercase">Verified</span>
+                          <span className="px-2 py-1 bg-emerald-500/10 text-emerald-600 rounded-xl text-xs font-semibold uppercase">Verified</span>
                         ) : (
-                          <span className="px-2 py-1 bg-orange-500/10 text-orange-500 rounded-xl text-[9px] font-semibold uppercase">Pending</span>
+                          <span className="px-2 py-1 bg-orange-500/10 text-orange-500 rounded-xl text-xs font-semibold uppercase">Pending</span>
                         )}
                       </td>
                     </tr>
@@ -368,19 +368,19 @@ export default function CompanyMetrics() {
                         <td colSpan="10" className="px-8 py-5">
                           <div className="grid grid-cols-2 gap-6">
                             <div className="space-y-2">
-                              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Declared Service Categories</p>
+                              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Declared Service Categories</p>
                               <div className="flex flex-wrap gap-2">
                                 {(company.service_profile?.categories || []).length === 0 ? (
                                   <p className="text-xs text-slate-400 italic">No categories declared.</p>
                                 ) : company.service_profile.categories.map((cat, i) => (
-                                  <span key={i} className="px-3 py-1.5 bg-indigo-500/10 text-indigo-600 rounded-xl text-[10px] font-semibold uppercase">
+                                  <span key={i} className="px-3 py-1.5 bg-indigo-500/10 text-indigo-600 rounded-xl text-xs font-semibold uppercase">
                                     {MATERIAL_LABELS[cat.name] || cat.name}
                                   </span>
                                 ))}
                               </div>
                             </div>
                             <div className="space-y-2">
-                              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Fleet Efficiency</p>
+                              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Fleet Efficiency</p>
                               <p className="text-2xl font-semibold text-amber-500">
                                 {drivers > 0 ? (stats.completed / drivers).toFixed(1) : '0'}
                                 <span className="text-sm font-semibold text-slate-400 ml-1">jobs/driver</span>

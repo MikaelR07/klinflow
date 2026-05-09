@@ -22,7 +22,7 @@ export default function ProductAgent() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 md:gap-24 items-center">
             <div className="order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 text-blue-500 font-bold uppercase tracking-widest text-[10px] mb-6">
+              <div className="inline-flex items-center gap-2 text-blue-500 font-bold uppercase tracking-widest text-xs mb-6">
                 <Truck className="w-4 h-4" /> Platform Two: Agent Mission Control
               </div>
               <h1 className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
@@ -58,14 +58,14 @@ export default function ProductAgent() {
                     <Navigation className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Next Mission</p>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Next Mission</p>
                     <p className="text-sm font-bold text-blue-600">Kilimani Sector</p>
                   </div>
                 </div>
                 <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div className="h-full w-[70%] bg-blue-600" />
                 </div>
-                <p className="text-[9px] text-slate-400 font-medium mt-2">700m to high-yield collection point.</p>
+                <p className="text-xs text-slate-400 font-medium mt-2">700m to high-yield collection point.</p>
               </motion.div>
             </div>
           </div>
@@ -119,11 +119,11 @@ export default function ProductAgent() {
                <div className="relative z-10 space-y-12">
                   <div className="grid grid-cols-2 gap-8">
                      <div>
-                        <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2">Efficiency Rating</p>
+                        <p className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-2">Efficiency Rating</p>
                         <p className="text-4xl font-bold text-white">98.4%</p>
                      </div>
                      <div>
-                        <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mb-2">Avg. Payout Time</p>
+                        <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">Avg. Payout Time</p>
                         <p className="text-4xl font-bold text-white">Instant</p>
                      </div>
                   </div>

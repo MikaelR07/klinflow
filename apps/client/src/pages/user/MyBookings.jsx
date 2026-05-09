@@ -37,13 +37,13 @@ function BookingAmountDisplay({ b }) {
     <div className="flex flex-col items-end gap-1">
       {!agentPaidClient && (
         <div className="flex items-center gap-1.5">
-          <span className="text-[9px] font-semibold text-rose-500 uppercase tracking-widest">You Paid</span>
+          <span className="text-xs font-semibold text-rose-500 uppercase tracking-widest">You Paid</span>
           <span className="text-base font-semibold text-rose-600 dark:text-rose-400 font-mono">KSh {paid.toLocaleString()}</span>
         </div>
       )}
       {earned > 0 ? (
         <div className="flex items-center gap-1.5">
-          <span className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest">
+          <span className="text-xs font-semibold text-emerald-500 uppercase tracking-widest">
             {agentPaidClient ? 'Agent Paid You' : 'You Earned'}
           </span>
           <span className="text-base font-semibold text-emerald-600 dark:text-emerald-400 font-mono">KSh {earned.toLocaleString()}</span>
@@ -57,7 +57,7 @@ function BookingAmountDisplay({ b }) {
 const TABS = ['Upcoming', 'Completed', 'Cancelled'];
 
 const BookingCounter = ({ count, active }) => (
-  <span className={`ml-1.5 px-1.5 py-0.5 text-[10px] font-semibold rounded-full transition-all ${
+  <span className={`ml-1.5 px-1.5 py-0.5 text-xs font-semibold rounded-full transition-all ${
     active 
       ? 'bg-primary text-white scale-110 shadow-sm shadow-primary/30' 
       : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
@@ -127,7 +127,7 @@ export default function MyBookings() {
         </div>
         
         <div className="z-10 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 bg-white dark:bg-slate-900 shadow-sm">
-          <p className="text-[10px] font-semibold text-primary uppercase tracking-wider">Total: {bookings.length}</p>
+          <p className="text-xs font-semibold text-primary uppercase tracking-wider">Total: {bookings.length}</p>
         </div>
       </div>
 
@@ -174,7 +174,7 @@ export default function MyBookings() {
             <div className="flex justify-end mb-2">
               <button 
                 onClick={() => handleClearHistory(activeTab.toLowerCase())}
-                className="text-[10px] font-semibold text-rose-600 uppercase tracking-widest hover:underline px-4 py-2 bg-rose-50 dark:bg-rose-500/10 rounded-lg flex items-center gap-2"
+                className="text-xs font-semibold text-rose-600 uppercase tracking-widest hover:underline px-4 py-2 bg-rose-50 dark:bg-rose-500/10 rounded-lg flex items-center gap-2"
               >
                 Clear {activeTab} History
               </button>
@@ -212,15 +212,15 @@ export default function MyBookings() {
                         </div>
                         <div className="flex items-center gap-2 mt-1">
                           <div className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200/50 dark:border-slate-700/50">
-                            <p className="text-[8px] font-semibold text-slate-500 uppercase tracking-widest">ID: <span className="text-primary font-mono">{b.id.slice(0, 8).toUpperCase()}</span></p>
+                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">ID: <span className="text-primary font-mono">{b.id.slice(0, 8).toUpperCase()}</span></p>
                           </div>
                           <span className="text-slate-300 dark:text-slate-700">•</span>
-                          <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{displayDate}</p>
+                          <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{displayDate}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                      <span className={`text-[9px] font-semibold uppercase tracking-[0.1em] px-3 py-1 rounded-full shadow-sm ${status.color}`}>
+                      <span className={`text-xs font-semibold uppercase tracking-[0.1em] px-3 py-1 rounded-full shadow-sm ${status.color}`}>
                         {status.label}
                       </span>
                       <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
@@ -229,7 +229,7 @@ export default function MyBookings() {
                   
                   {/* Always Visible Base Info */}
                   <div className="flex items-center justify-between text-sm mt-1">
-                    <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-[10px] font-semibold">
+                    <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs font-semibold">
                       <span className="flex items-center gap-1">📍 {b.estate}</span>
                       {b.status === 'completed' && b.actualWeightKg > 0 && (
                         <div className="flex items-center gap-1 text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800 shadow-sm">
@@ -249,7 +249,7 @@ export default function MyBookings() {
                     <div className="flex flex-col gap-3">
                       {b.phone && (
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">M-Pesa Number</span>
+                          <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">M-Pesa Number</span>
                           <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 px-2 py-1 rounded border border-slate-100 dark:border-slate-700">
                             {b.phone}
                           </span>
@@ -258,13 +258,13 @@ export default function MyBookings() {
                       
                       {b.agentName && (
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Collector</span>
+                          <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Collector</span>
                           <div className="flex items-center gap-2">
                             <span className="text-[11px] font-semibold text-slate-800 dark:text-slate-200">{b.agentName}</span>
                             {b.agentRating && (
                               <div className="flex items-center gap-1 px-1.5 py-0.5 bg-yellow-400/10 rounded">
                                 <Star className="w-2.5 h-2.5 text-yellow-500 fill-yellow-500" />
-                                <span className="font-semibold text-[9px] text-yellow-600 dark:text-yellow-500">{b.agentRating}</span>
+                                <span className="font-semibold text-xs text-yellow-600 dark:text-yellow-500">{b.agentRating}</span>
                               </div>
                             )}
                           </div>
@@ -282,13 +282,13 @@ export default function MyBookings() {
                       <div className="flex gap-3 mt-4">
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleCancel(b.id); }}
-                          className="flex-1 py-2.5 text-[10px] font-semibold text-red-600 uppercase tracking-widest bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                          className="flex-1 py-2.5 text-xs font-semibold text-red-600 uppercase tracking-widest bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 rounded-xl transition-colors flex items-center justify-center gap-1.5"
                         >
                           <XCircle className="w-3.5 h-3.5" /> Cancel
                         </button>
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleReschedule(b.id); }}
-                          className="flex-1 py-2.5 text-[10px] font-semibold text-blue-600 uppercase tracking-widest bg-blue-50 hover:bg-blue-100 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                          className="flex-1 py-2.5 text-xs font-semibold text-blue-600 uppercase tracking-widest bg-blue-50 hover:bg-blue-100 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 rounded-xl transition-colors flex items-center justify-center gap-1.5"
                         >
                           <CalendarClock className="w-3.5 h-3.5" /> Reschedule
                         </button>

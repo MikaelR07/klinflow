@@ -103,7 +103,7 @@ export default function RoleSelection() {
                 {role.benefits.map((benefit, bIdx) => (
                   <div key={bIdx} className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full border border-slate-100 dark:border-white/5">
                     <ShieldCheck className={`w-3 h-3 ${role.textColor}`} />
-                    <span className="text-[10px] font-semibold text-slate-600 dark:text-slate-400">{benefit}</span>
+                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">{benefit}</span>
                   </div>
                 ))}
               </div>

@@ -24,7 +24,7 @@ import {
 
 const userIcon = L.divIcon({
   className: 'custom-user-icon',
-  html: `<div class="w-6 h-6 rounded-full bg-slate-900 border-2 border-white shadow-lg flex items-center justify-center"><span class="text-[9px]">🏠</span></div>`,
+  html: `<div class="w-6 h-6 rounded-full bg-slate-900 border-2 border-white shadow-lg flex items-center justify-center"><span class="text-xs">🏠</span></div>`,
   iconSize: [24, 24],
   iconAnchor: [12, 12]
 });
@@ -369,7 +369,7 @@ export default function BookPickup() {
                               <div className={`w-10 h-10 ${bgImage ? 'bg-white/10 backdrop-blur-md' : 'bg-slate-50 dark:bg-slate-900/50'} rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform`}>
                                 {cat.icon || '📦'}
                               </div>
-                              <span className={`text-[10px] font-black uppercase tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                              <span className={`text-xs font-black uppercase tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                                 {cat.label}
                               </span>
                             </button>
@@ -381,16 +381,16 @@ export default function BookPickup() {
                        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-xl text-white">{wasteType.icon}</div>
                        <div className="flex-1">
                           <h3 className="text-xs font-semibold dark:text-white leading-none">{wasteType.label}</h3>
-                          <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mt-1">Ready for pickup</p>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Ready for pickup</p>
                        </div>
-                       <button onClick={() => { setWasteType(null); setSelectedSubItem(null); }} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-[8px] font-semibold text-primary uppercase tracking-widest">Change</button>
+                       <button onClick={() => { setWasteType(null); setSelectedSubItem(null); }} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-semibold text-primary uppercase tracking-widest">Change</button>
                     </div>
                   )}
                </div>
 
                {wasteType && (
                  <div className="space-y-3">
-                    <h2 className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 ml-2">Estimated Quantity</h2>
+                    <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 ml-2">Estimated Quantity</h2>
                     <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4">
                        <input 
                          type="range" 
@@ -417,7 +417,7 @@ export default function BookPickup() {
                               className="w-full bg-transparent text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter text-center outline-none appearance-none"
                               style={{ MozAppearance: 'textfield' }} // Hide Firefox spinners
                             />
-                            <p className="text-[10px] font-semibold uppercase tracking-widest text-primary mt-0.5">KG</p>
+                            <p className="text-xs font-semibold uppercase tracking-widest text-primary mt-0.5">KG</p>
                          </div>
                          <button onClick={() => setQuantity((quantity || 0) + 1)} className="w-10 h-10 rounded-[14px] bg-primary flex items-center justify-center text-xl font-semibold text-white shadow-md active:scale-95 transition-transform shrink-0">+</button>
                        </div>
@@ -449,7 +449,7 @@ export default function BookPickup() {
                           <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
                             <Camera className="w-6 h-6 text-primary" />
                           </div>
-                          <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest italic">Snap Photo</p>
+                          <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest italic">Snap Photo</p>
                           <input 
                             type="file" 
                             accept="image/*" 
@@ -463,7 +463,7 @@ export default function BookPickup() {
 
                     {/* Item Description (Always Visible for Mission Context) */}
                     <div className="space-y-2">
-                      <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest ml-1">Special Instructions</p>
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Special Instructions</p>
                       <textarea 
                         placeholder="e.g. 'Leave at the back gate'..." 
                         value={customDescription}
@@ -486,7 +486,7 @@ export default function BookPickup() {
                         </h2>
                         {selectedCompanyId && (
                           <div className="flex items-center gap-2 mt-1">
-                            <button onClick={() => setSelectedCompanyId(null)} className="text-[9px] font-semibold text-primary uppercase bg-primary/10 px-2 py-0.5 rounded-lg border border-primary/20">Clear Selection ✕</button>
+                            <button onClick={() => setSelectedCompanyId(null)} className="text-xs font-semibold text-primary uppercase bg-primary/10 px-2 py-0.5 rounded-lg border border-primary/20">Clear Selection ✕</button>
                           </div>
                         )}
                       </div>
@@ -499,8 +499,8 @@ export default function BookPickup() {
                         <Zap className="w-4 h-4 text-primary" />
                       </div>
                       <div>
-                        <h4 className="text-[10px] font-semibold uppercase tracking-widest text-primary mb-0.5">Collectors Nearby</h4>
-                        <p className="text-[10px] font-semibold text-slate-600 dark:text-slate-300 leading-tight">
+                        <h4 className="text-xs font-semibold uppercase tracking-widest text-primary mb-0.5">Collectors Nearby</h4>
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">
                           {filteredAgents.length} {filteredAgents.length === 1 ? 'collector' : 'collectors'} found in your area. ETA: ~{Math.max(4, 12 - filteredAgents.length * 2)} mins.
                         </p>
                       </div>
@@ -540,10 +540,10 @@ export default function BookPickup() {
                                >
                                  <Popup maxWidth={160} className="compact-popup">
                                    <div className="p-0.5 text-center leading-tight">
-                                     <h4 className="text-[10px] font-semibold text-slate-900 truncate">
+                                     <h4 className="text-xs font-semibold text-slate-900 truncate">
                                        {isCompany ? (agent.company_name || 'Fleet Hub') : agent.name || 'Agent'}
                                      </h4>
-                                     <div className="flex items-center justify-center gap-0.5 text-[8px] font-semibold text-emerald-500 uppercase mt-0.5">
+                                     <div className="flex items-center justify-center gap-0.5 text-xs font-semibold text-emerald-500 uppercase mt-0.5">
                                        <Star className="w-2 h-2 fill-emerald-500" />
                                        <span>{agent.rating?.toFixed(1) || '4.9'}</span>
                                      </div>
@@ -564,7 +564,7 @@ export default function BookPickup() {
                                 {selectedCompanyId && !selectedAgent ? '🏢' : '🚛'}
                              </div>
                              <div>
-                                <p className="text-[9px] font-semibold text-primary uppercase tracking-widest leading-none">
+                                <p className="text-xs font-semibold text-primary uppercase tracking-widest leading-none">
                                    {selectedCompanyId && !selectedAgent ? 'Fleet Hub Selected' : 'Targeting Agent'}
                                 </p>
                                 <h4 className="text-sm font-semibold text-slate-900 dark:text-white mt-1">
@@ -588,7 +588,7 @@ export default function BookPickup() {
 
                   {/* Preferred Agent Search */}
                   <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm mt-4">
-                     <h2 className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-4">Search by Name or Invite Code (Optional)</h2>
+                     <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">Search by Name or Invite Code (Optional)</h2>
                      <input 
                        type="text" 
                        placeholder="e.g. CleanFlow Hub, Agent John..." 
@@ -653,7 +653,7 @@ export default function BookPickup() {
                         </div>
                         <div className="flex-1">
                           <p className={`text-sm font-semibold leading-tight ${isManualTime ? 'text-white' : 'text-slate-900 dark:text-white'}`}>Schedule Later</p>
-                          <p className={`text-[10px] font-semibold mt-0.5 ${isManualTime ? 'text-white/50' : 'text-slate-400'}`}>Pick a date & time</p>
+                          <p className={`text-xs font-semibold mt-0.5 ${isManualTime ? 'text-white/50' : 'text-slate-400'}`}>Pick a date & time</p>
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isManualTime ? 'border-white bg-white' : 'border-slate-200'}`}>
                           {isManualTime && <div className="w-3 h-3 rounded-full bg-slate-900" />}
@@ -665,18 +665,18 @@ export default function BookPickup() {
                       <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center mx-auto text-orange-500"><AlertCircle className="w-6 h-6" /></div>
                       <h3 className="text-sm font-semibold text-orange-900 dark:text-orange-200 uppercase tracking-widest">No Agents Online</h3>
                       <p className="text-[11px] font-semibold text-orange-700/70 dark:text-orange-400/70 leading-relaxed">All agents are currently offline. You can schedule a pickup for later!</p>
-                      <button onClick={() => setIsManualTime(true)} className="px-6 py-3 bg-orange-500 text-white rounded-xl text-[10px] font-semibold uppercase tracking-widest shadow-lg shadow-orange-500/20">Schedule a Pickup</button>
+                      <button onClick={() => setIsManualTime(true)} className="px-6 py-3 bg-orange-500 text-white rounded-xl text-xs font-semibold uppercase tracking-widest shadow-lg shadow-orange-500/20">Schedule a Pickup</button>
                    </div>
                   )}
 
                {isManualTime && (
                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-800 p-6 rounded-[2.5rem] border border-slate-100 dark:border-white/5 grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                       <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest ml-1">Date</span>
+                       <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Date</span>
                        <input type="date" value={customDate} onChange={(e) => setCustomDate(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
                     </div>
                     <div className="space-y-1">
-                       <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest ml-1">Time</span>
+                       <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Time</span>
                        <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
                     </div>
                  </motion.div>
@@ -688,13 +688,13 @@ export default function BookPickup() {
             <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 pb-6">
                <h2 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight px-2">Marketplace Summary</h2>
                <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-0">
-                  <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-4">Pickup Breakdown</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Pickup Breakdown</p>
                   
                   {/* Material Info */}
                   <div className="flex justify-between items-center py-3 border-b border-slate-50 dark:border-white/5">
                     <div className="flex flex-col">
                       <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Recyclable Material</span>
-                      <span className="text-[10px] text-slate-400">{selected?.label || 'Waste'}</span>
+                      <span className="text-xs text-slate-400">{selected?.label || 'Waste'}</span>
                     </div>
                     <span className="text-sm font-semibold text-primary uppercase tracking-widest font-mono">{quantity} KG</span>
                   </div>
@@ -703,17 +703,17 @@ export default function BookPickup() {
                   <div className="flex justify-between items-center py-3 border-b border-slate-50 dark:border-white/5">
                     <div className="flex flex-col">
                       <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Payment Status</span>
-                      <span className="text-[10px] text-slate-400">Via CleanFlow Wallet</span>
+                      <span className="text-xs text-slate-400">Via CleanFlow Wallet</span>
                     </div>
-                    <span className="text-[10px] font-semibold text-orange-500 uppercase tracking-widest">Verified Weight</span>
+                    <span className="text-xs font-semibold text-orange-500 uppercase tracking-widest">Verified Weight</span>
                   </div>
 
                   {/* Estimated Reward Display */}
                   <div className="bg-primary/5 p-4 rounded-2xl border border-primary/10 space-y-2 mb-4 mt-4">
                     <div className="flex justify-between items-center">
                       <div className="flex flex-col">
-                        <span className="text-[10px] font-semibold text-primary uppercase tracking-widest leading-none">Environmental XP</span>
-                        <span className="text-[9px] text-slate-400 mt-1">Tier Multiplier: {xpMultiplier}x</span>
+                        <span className="text-xs font-semibold text-primary uppercase tracking-widest leading-none">Environmental XP</span>
+                        <span className="text-xs text-slate-400 mt-1">Tier Multiplier: {xpMultiplier}x</span>
                       </div>
                       <div className="text-right">
                          <span className="text-sm font-semibold text-primary font-mono">{estimatedGFP} GFP</span>
@@ -724,7 +724,7 @@ export default function BookPickup() {
                   {/* Note */}
                   <div className="pt-4 flex gap-2">
                     <InfoIcon className="w-3 h-3 text-slate-400 shrink-0" />
-                    <p className="text-[9px] font-medium text-slate-400 leading-tight italic">
+                    <p className="text-xs font-medium text-slate-400 leading-tight italic">
                       Final KSh payout will be determined by the agent using digital scales upon arrival.
                     </p>
                   </div>
@@ -733,9 +733,9 @@ export default function BookPickup() {
                 <div className="p-8 rounded-3xl text-center relative overflow-hidden shadow-2xl transition-all bg-slate-900 dark:bg-slate-800 text-white mt-6">
                   <div className="absolute top-0 right-0 p-4 opacity-5"><Scale className="w-24 h-24" /></div>
                   <div className="relative z-10">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary mb-4">Direct Verification</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary mb-4">Direct Verification</p>
                     <h3 className="text-3xl font-semibold tracking-tighter mt-1 italic">Weight Verified Payout</h3>
-                    <p className="text-[9px] font-semibold text-slate-400 mt-4 leading-relaxed">
+                    <p className="text-xs font-semibold text-slate-400 mt-4 leading-relaxed">
                       You will be paid instantly to your wallet based on the <span className="text-white">KSh {activeRate}/kg</span> {selectedAgent || selectedCompanyId ? 'rate offered by your selected partner' : 'standard market rate'}.
                     </p>
                   </div>

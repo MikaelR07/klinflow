@@ -25,7 +25,7 @@ export default function AdminSidebar() {
         <div className="flex flex-col gap-4">
           <img src="/logo.png" alt="Admin Logo" className="w-16 h-16 rounded-2xl shadow-lg ring-1 ring-black/5" />
           <div>
-            <p className="text-[10px] font-black text-indigo-500 uppercase tracking-widest leading-none mb-1">Command</p>
+            <p className="text-xs font-black text-indigo-500 uppercase tracking-widest leading-none mb-1">Command</p>
             <h1 className="text-sm font-black text-slate-900 dark:text-white tracking-tight uppercase">Network Oracle</h1>
           </div>
         </div>

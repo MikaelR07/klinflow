@@ -32,12 +32,12 @@ export default function IotCard({ item, type, onClick }) {
     >
       {/* AI Recommended Badge */}
       {isBin && item.aiRecommended && (
-        <div className="absolute top-0 right-0 bg-primary text-white px-3 py-1.5 text-[9px] font-semibold uppercase tracking-widest rounded-bl-xl flex items-center gap-1.5 shadow-lg shadow-primary/20 transition-transform group-hover:scale-105">
+        <div className="absolute top-0 right-0 bg-primary text-white px-3 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-bl-xl flex items-center gap-1.5 shadow-lg shadow-primary/20 transition-transform group-hover:scale-105">
           <Zap className="w-2.5 h-2.5 fill-white" /> AI Optimal
         </div>
       )}
       {(isAir && item.aqi > 100) && (
-        <div className="absolute top-0 right-0 bg-rose-500 text-white px-3 py-1.5 text-[9px] font-semibold uppercase tracking-widest rounded-bl-xl flex items-center gap-1.5 shadow-lg shadow-rose-500/20 animate-pulse">
+        <div className="absolute top-0 right-0 bg-rose-500 text-white px-3 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-bl-xl flex items-center gap-1.5 shadow-lg shadow-rose-500/20 animate-pulse">
           Alert Active
         </div>
       )}
@@ -52,7 +52,7 @@ export default function IotCard({ item, type, onClick }) {
           <h3 className="font-semibold text-slate-800 dark:text-white truncate leading-tight transition-colors group-hover:text-primary">
             {isBin ? item.name : isAir ? (item.name || "Station Alpha") : (item.name || "Flow Meter")}
           </h3>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-400 mt-1">
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-400 mt-1">
             {isBin ? (item.location || 'Linked Node') : isAir ? `Odour: ${item.odourLevel}` : (item.status || 'Monitoring')}
           </p>
         </div>
@@ -61,7 +61,7 @@ export default function IotCard({ item, type, onClick }) {
       <div className="space-y-4">
         {isBin && (
           <div>
-            <div className="flex justify-between items-end text-[10px] font-semibold uppercase tracking-widest mb-2 font-medium">
+            <div className="flex justify-between items-end text-xs font-semibold uppercase tracking-widest mb-2 font-medium">
               <span className="text-slate-400">Capacity Load</span>
               <span className={item.fillLevel > 85 ? "text-rose-500" : "text-slate-600 dark:text-slate-300"}>{item.fillLevel}%</span>
             </div>
@@ -81,10 +81,10 @@ export default function IotCard({ item, type, onClick }) {
         {isAir && (
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Live AQI Index</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Live AQI Index</p>
               <div className="flex items-baseline gap-1">
                 <span className={`text-3xl font-semibold ${statusStyle.split(' ')[0]}`}>{item.aqi}</span>
-                <span className="text-[10px] font-semibold text-slate-400">PM2.5</span>
+                <span className="text-xs font-semibold text-slate-400">PM2.5</span>
               </div>
             </div>
             <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-lg group-hover:bg-primary/10 transition-colors">
@@ -96,13 +96,13 @@ export default function IotCard({ item, type, onClick }) {
         {isWater && (
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Efficiency Ratio</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Efficiency Ratio</p>
               <div className="flex items-baseline gap-1">
                 <span className="text-3xl font-semibold text-blue-500">{item.efficiency}%</span>
-                <span className="text-[10px] font-semibold text-slate-400">Purity</span>
+                <span className="text-xs font-semibold text-slate-400">Purity</span>
               </div>
             </div>
-            <div className="text-[9px] font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-full uppercase tracking-widest border border-blue-100 dark:border-blue-800">
+            <div className="text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-full uppercase tracking-widest border border-blue-100 dark:border-blue-800">
                Live
             </div>
           </div>

@@ -114,7 +114,7 @@ export default function AgentSellStock() {
           </button>
           <div>
             <h1 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tight italic">Sell Stock Terminal</h1>
-            <p className="text-[9px] font-bold text-indigo-500 uppercase tracking-[0.2em]">Direct-to-Weaver Trade</p>
+            <p className="text-xs font-bold text-indigo-500 uppercase tracking-[0.2em]">Direct-to-Weaver Trade</p>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function AgentSellStock() {
                 </div>
                 <div className="text-center">
                   <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest">Upload Material Photo</p>
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">High Quality Required</p>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">High Quality Required</p>
                 </div>
               </div>
             )}
@@ -145,12 +145,12 @@ export default function AgentSellStock() {
         <div className="space-y-4 bg-white dark:bg-slate-800 p-6 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2 mb-2">
             <Package className="w-4 h-4 text-indigo-500" />
-            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Material Classification</h2>
+            <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Material Classification</h2>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Category</label>
+              <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Category</label>
               <div className="relative">
                 <select 
                   value={formData.category}
@@ -165,7 +165,7 @@ export default function AgentSellStock() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Subcategory (Grade)</label>
+              <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Subcategory (Grade)</label>
               <div className="relative">
                 <select 
                   disabled={!formData.category}
@@ -189,7 +189,7 @@ export default function AgentSellStock() {
           <div className="bg-white dark:bg-slate-800 p-6 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2 mb-4">
               <Tag className="w-4 h-4 text-emerald-500" />
-              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Pricing</h2>
+              <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Pricing</h2>
             </div>
             <div className="space-y-1">
               <input 
@@ -199,14 +199,14 @@ export default function AgentSellStock() {
                 onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
                 className="w-full bg-transparent text-2xl font-black text-slate-900 dark:text-white tracking-tighter placeholder:text-slate-200 focus:outline-none"
               />
-              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">KSh per KG</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">KSh per KG</p>
             </div>
           </div>
 
           <div className="bg-white dark:bg-slate-800 p-6 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2 mb-4">
               <Scale className="w-4 h-4 text-blue-500" />
-              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Volume</h2>
+              <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Volume</h2>
             </div>
             <div className="space-y-1">
               <input 
@@ -216,7 +216,7 @@ export default function AgentSellStock() {
                 onChange={(e) => setFormData(prev => ({ ...prev, weight: e.target.value }))}
                 className="w-full bg-transparent text-2xl font-black text-slate-900 dark:text-white tracking-tighter placeholder:text-slate-200 focus:outline-none"
               />
-              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Total KG</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Total KG</p>
             </div>
           </div>
         </div>
@@ -225,12 +225,12 @@ export default function AgentSellStock() {
         <div className="space-y-4 bg-white dark:bg-slate-800 p-6 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2 mb-2">
             <FileText className="w-4 h-4 text-slate-400" />
-            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Technical Specs</h2>
+            <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Technical Specs</h2>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Minimum Order (KG)</label>
+              <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Minimum Order (KG)</label>
               <input 
                 type="number"
                 placeholder="e.g. 100"
@@ -241,7 +241,7 @@ export default function AgentSellStock() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Description / Notes</label>
+              <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Description / Notes</label>
               <textarea 
                 placeholder="e.g. Pre-sorted color-free PET-A. Cleaned and baled."
                 rows={3}

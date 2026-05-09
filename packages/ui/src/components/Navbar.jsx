@@ -14,7 +14,7 @@ export default function Navbar({ onShowNotifications, canInstall, onInstall }) {
           <img src="/logo.png" alt="CleanFlow Logo" className="w-12 h-12 rounded-xl object-cover shadow-sm" />
           <span className="font-black text-lg tracking-tighter text-slate-900 dark:text-white flex items-center">
             Clean<span className="text-primary">Flow</span>
-            <span className="text-[10px] bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md ml-1.5 font-black text-slate-500 uppercase tracking-widest">v2</span>
+            <span className="text-xs bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md ml-1.5 font-black text-slate-500 uppercase tracking-widest">v2</span>
           </span>
         </div>
 

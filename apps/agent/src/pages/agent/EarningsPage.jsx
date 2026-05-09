@@ -89,7 +89,7 @@ export default function EarningsPage() {
           </button>
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">My Wallet</h1>
-            <p className="text-[10px] text-emerald-500 font-semibold uppercase tracking-widest">Money & Stats</p>
+            <p className="text-xs text-emerald-500 font-semibold uppercase tracking-widest">Money & Stats</p>
           </div>
         </div>
         <button className="p-2 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
@@ -108,7 +108,7 @@ export default function EarningsPage() {
             {/* Top Row: Stock Value Emphasis */}
             <div className="flex items-end justify-between mb-8 px-2">
               <div>
-                <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">Stock Value</p>
+                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">Stock Value</p>
                 <div className="flex items-baseline gap-1">
                   <span className="text-sm font-semibold text-blue-500">KSh</span>
                   <h2 className="text-4xl font-bold tracking-tighter text-slate-900 dark:text-white">
@@ -117,7 +117,7 @@ export default function EarningsPage() {
                 </div>
               </div>
               <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
-                <p className="text-[8px] font-semibold text-blue-500 dark:text-blue-400 uppercase tracking-widest">Live Inventory</p>
+                <p className="text-xs font-semibold text-blue-500 dark:text-blue-400 uppercase tracking-widest">Live Inventory</p>
               </div>
             </div>
 
@@ -126,7 +126,7 @@ export default function EarningsPage() {
               {/* 1. Rating (Top Left) */}
               <div className="col-span-2 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-5 flex items-center justify-between hover:bg-white/10 transition-colors">
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Agent Rating</span>
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Agent Rating</span>
                   <div className="flex items-center gap-1.5">
                     <span className="text-2xl font-bold">{profile?.rating || '5.0'}</span>
                     <div className="flex gap-0.5">
@@ -145,7 +145,7 @@ export default function EarningsPage() {
               <div className="col-span-2 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-5 flex items-center justify-between hover:bg-white/10 transition-colors">
                 <div className="flex flex-col">
                   <span className="text-2xl font-bold text-slate-800 dark:text-white">{earnings.residentPickups || 0}</span>
-                  <span className="text-[9px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total Pickups</span>
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total Pickups</span>
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center">
                   <Truck className="w-5 h-5 text-blue-500 dark:text-blue-400" />
@@ -156,7 +156,7 @@ export default function EarningsPage() {
               <div className="col-span-2 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl p-5 flex items-center justify-between hover:bg-emerald-500/20 transition-colors">
                 <div>
                   <h4 className="text-3xl font-bold tracking-tighter text-emerald-600 dark:text-emerald-400">{(earnings.totalKg || 0).toFixed(1)}</h4>
-                  <p className="text-[9px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total KGs</p>
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total KGs</p>
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center">
                   <Scale className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
@@ -196,14 +196,14 @@ export default function EarningsPage() {
               <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Weekly Target</span>
               <div className="flex items-center gap-1">
                 <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
-                <span className="text-[10px] font-semibold text-slate-400 uppercase">/</span>
+                <span className="text-xs font-semibold text-slate-400 uppercase">/</span>
                 <input 
                   type="number" 
                   value={goals.weekly} 
                   onChange={(e) => handleGoalChange('weekly', e.target.value)}
                   className="w-14 bg-transparent text-xs font-semibold text-slate-400 text-right outline-none border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 focus:text-emerald-500 transition-colors"
                 />
-                <span className="text-[10px] font-semibold text-slate-400 uppercase">KG</span>
+                <span className="text-xs font-semibold text-slate-400 uppercase">KG</span>
               </div>
             </div>
             <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden shadow-inner">
@@ -222,14 +222,14 @@ export default function EarningsPage() {
               <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Monthly Target</span>
               <div className="flex items-center gap-1">
                 <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
-                <span className="text-[10px] font-semibold text-slate-400 uppercase">/</span>
+                <span className="text-xs font-semibold text-slate-400 uppercase">/</span>
                 <input 
                   type="number" 
                   value={goals.monthly} 
                   onChange={(e) => handleGoalChange('monthly', e.target.value)}
                   className="w-14 bg-transparent text-xs font-semibold text-slate-400 text-right outline-none border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 focus:text-emerald-500 transition-colors"
                 />
-                <span className="text-[10px] font-semibold text-slate-400 uppercase">KG</span>
+                <span className="text-xs font-semibold text-slate-400 uppercase">KG</span>
               </div>
             </div>
             <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden shadow-inner">
@@ -253,7 +253,7 @@ export default function EarningsPage() {
           </div>
           <div className="flex items-center gap-1.5 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
              <ArrowUpRight className="w-3 h-3 text-emerald-500" />
-             <span className="text-[10px] font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)} KG Total</span>
+             <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)} KG Total</span>
           </div>
         </div>
         
@@ -279,7 +279,7 @@ export default function EarningsPage() {
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-slate-900 text-white px-3 py-2 rounded-xl text-[10px] font-semibold shadow-2xl">
+                      <div className="bg-slate-900 text-white px-3 py-2 rounded-xl text-xs font-semibold shadow-2xl">
                         {payload[0].value.toFixed(1)} KG Collected
                       </div>
                     );

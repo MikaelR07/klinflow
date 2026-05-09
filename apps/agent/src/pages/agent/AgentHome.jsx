@@ -238,7 +238,7 @@ export default function AgentHome() {
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile.name.split(' ')[0]}! 👋</h1>
             <div className="flex items-center gap-2 mt-1.5">
-              <div className="flex items-center gap-1.5 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
+              <div className="flex items-center gap-1.5 text-xs text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
                 <MapPin className="w-3 h-3" /> {profile.location?.estate || profile.estate || 'Nairobi Sector'}
               </div>
             </div>
@@ -251,7 +251,7 @@ export default function AgentHome() {
         >
           <Bell className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-red-600 text-white text-[9px] font-semibold rounded-full flex items-center justify-center ring-2 ring-[#F8F8FF] dark:ring-slate-950 shadow-md animate-in zoom-in">
+            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-red-600 text-white text-xs font-semibold rounded-full flex items-center justify-center ring-2 ring-[#F8F8FF] dark:ring-slate-950 shadow-md animate-in zoom-in">
               {unreadCount}
             </span>
           )}
@@ -268,7 +268,7 @@ export default function AgentHome() {
               {isToggling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Power className="w-4 h-4" />}
             </div>
             <div className="text-left">
-              <p className="text-[9px] font-bold uppercase tracking-widest leading-none mb-1 opacity-80 text-primary">System Status</p>
+              <p className="text-xs font-bold uppercase tracking-widest leading-none mb-1 opacity-80 text-primary">System Status</p>
               <p className="text-xs font-bold text-slate-900 dark:text-white">
                 {profile.isOnline ? 'Active Radar' : 'Offline'}
               </p>
@@ -295,7 +295,7 @@ export default function AgentHome() {
               {isToggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-5 h-5" />}
             </div>
             <div className="text-left">
-              <p className="text-[9px] font-bold uppercase tracking-widest leading-none mb-1 text-emerald-400">Company Control</p>
+              <p className="text-xs font-bold uppercase tracking-widest leading-none mb-1 text-emerald-400">Company Control</p>
               <p className="text-base font-bold tracking-tight">{profile.isOnline ? 'Online' : 'Offline'}</p>
             </div>
           </div>
@@ -331,7 +331,7 @@ export default function AgentHome() {
           </div>
           <div className="text-center">
             <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5">Missions</p>
-            <p className="text-[10px] font-black text-slate-900 dark:text-white leading-tight uppercase italic">Open Jobs</p>
+            <p className="text-xs font-black text-slate-900 dark:text-white leading-tight uppercase italic">Open Jobs</p>
           </div>
         </button>
         
@@ -351,7 +351,7 @@ export default function AgentHome() {
           </div>
           <div className="text-center">
             <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5">Market</p>
-            <p className="text-[10px] font-black text-slate-900 dark:text-white leading-tight uppercase italic">Accepted Bids</p>
+            <p className="text-xs font-black text-slate-900 dark:text-white leading-tight uppercase italic">Accepted Bids</p>
           </div>
         </button>
 
@@ -364,7 +364,7 @@ export default function AgentHome() {
           </div>
           <div className="text-center">
             <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5">Analytics</p>
-            <p className="text-[10px] font-black text-slate-900 dark:text-white leading-tight uppercase italic">Stats</p>
+            <p className="text-xs font-black text-slate-900 dark:text-white leading-tight uppercase italic">Stats</p>
           </div>
         </button>
       </div>
@@ -391,7 +391,7 @@ export default function AgentHome() {
                   <Package className="w-4 h-4 text-indigo-600 dark:text-indigo-200" />
                 </div>
                 <div>
-                  <p className="text-[9px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mb-1">
+                  <p className="text-xs font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mb-1">
                     {profile?.agent_account_type === 'company_admin' ? 'Fleet Value' : 'Stock Value'}
                   </p>
                   <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-0.5">
@@ -424,7 +424,7 @@ export default function AgentHome() {
                 </div>
                 <div>
                   <p className="text-base font-bold text-slate-900 dark:text-white leading-none">{earnings.completedToday || 0}</p>
-                  <p className="text-[8px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-0.5">Pickups Today</p>
+                  <p className="text-xs font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-0.5">Pickups Today</p>
                 </div>
               </div>
 
@@ -435,14 +435,14 @@ export default function AgentHome() {
                     <Handshake className="w-4 h-4 text-emerald-600 dark:text-emerald-300" />
                   </div>
                   <div>
-                    <p className="text-[8px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest leading-none mb-1">
+                    <p className="text-xs font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest leading-none mb-1">
                       Marketplace Performance
                     </p>
                     <p className="text-xs font-semibold text-slate-900 dark:text-white">{acceptedTradesCount || 0} Accepted Bids</p>
                   </div>
                 </div>
                 <div className="text-right px-3 border-l border-slate-200 dark:border-white/10">
-                  <p className="text-[8px] font-semibold text-slate-400 dark:text-indigo-200 uppercase tracking-widest leading-none mb-1">
+                  <p className="text-xs font-semibold text-slate-400 dark:text-indigo-200 uppercase tracking-widest leading-none mb-1">
                     Lifetime
                   </p>
                   <p className="text-xs font-semibold text-slate-900 dark:text-white">{earnings.totalJobs || 0} Total</p>
@@ -463,9 +463,9 @@ export default function AgentHome() {
           <Navigation className="w-5 h-5 text-white" />
         </div>
         <div className="text-left flex-1 min-w-0">
-          <p className="text-[9px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-0.5 italic">Route Optimizer</p>
+          <p className="text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-0.5 italic">Route Optimizer</p>
           <p className="text-[13px] font-black text-slate-900 dark:text-white leading-tight uppercase italic">Smart Logistics Terminal</p>
-          <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Live Multi-Stop Tracking</p>
+          <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-0.5">Live Multi-Stop Tracking</p>
         </div>
         <ChevronRight className="w-4 h-4 text-slate-300" />
       </button>
@@ -478,8 +478,8 @@ export default function AgentHome() {
           </div>
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-4">
-              <span className="bg-white/20 px-2 py-0.5 rounded-lg text-[9px] font-semibold uppercase tracking-widest">Agent Insights</span>
-              <p className="text-[10px] font-semibold text-white/80 uppercase tracking-widest">Earning Optimizer</p>
+              <span className="bg-white/20 px-2 py-0.5 rounded-lg text-xs font-semibold uppercase tracking-widest">Agent Insights</span>
+              <p className="text-xs font-semibold text-white/80 uppercase tracking-widest">Earning Optimizer</p>
             </div>
             <h3 className="text-xl font-semibold mb-1">{currentInsight.title}</h3>
             <p className="text-xs font-medium text-white/80 leading-relaxed mb-6">
@@ -510,7 +510,7 @@ export default function AgentHome() {
           {jobHistory.length > 0 && (
             <button
               onClick={clearJobHistory}
-              className="text-[9px] font-semibold text-rose-500 uppercase tracking-widest px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-colors active:scale-95"
+              className="text-xs font-semibold text-rose-500 uppercase tracking-widest px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-500/20 transition-colors active:scale-95"
             >
               Clear
             </button>
@@ -542,11 +542,11 @@ export default function AgentHome() {
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize">{item.location || 'Local'} Pickup</p>
-                    <p className="text-[10px] font-semibold text-slate-400">{item.date}</p>
+                    <p className="text-xs font-semibold text-slate-400">{item.date}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className={`text-[9px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full ${pillColor}`}>
+                  <span className={`text-xs font-semibold uppercase tracking-widest px-2.5 py-1 rounded-full ${pillColor}`}>
                     {statusLabel}
                   </span>
                 </div>

@@ -78,7 +78,7 @@ export default function ProfilePage() {
             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} disabled={uploading} />
           </label>
         </div>
-        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-3">Professional Photo</p>
+        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-3">Professional Photo</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
@@ -91,7 +91,7 @@ export default function ProfilePage() {
             <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Phone Number <span className="lowercase text-[10px] text-slate-400">(Read-only)</span></label>
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Phone Number <span className="lowercase text-xs text-slate-400">(Read-only)</span></label>
             <input type="tel" value={formData.phone} disabled className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-500 dark:text-slate-500 text-sm cursor-not-allowed opacity-70" />
           </div>
           <div>

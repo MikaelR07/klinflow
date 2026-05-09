@@ -46,7 +46,7 @@ export default function NetworkOracle() {
             <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">Network Oracle</h1>
             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-indigo-500/10 rounded-full border border-indigo-500/20">
               <Network className="w-3.5 h-3.5 text-indigo-500" />
-              <span className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Sustainomics Engine</span>
+              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Sustainomics Engine</span>
             </div>
           </div>
           <p className="text-sm text-slate-500 font-medium">Control market liquidity and monitor network health.</p>
@@ -74,9 +74,9 @@ export default function NetworkOracle() {
               </div>
               <Activity className="w-4 h-4 text-slate-200 dark:text-slate-700 animate-pulse" />
             </div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">{kpi.label}</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">{kpi.label}</p>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-white leading-none">{kpi.value}</h2>
-            <p className="text-[10px] font-semibold text-slate-500 mt-2">{kpi.sub}</p>
+            <p className="text-xs font-semibold text-slate-500 mt-2">{kpi.sub}</p>
           </div>
         ))}
       </div>
@@ -127,9 +127,9 @@ export default function NetworkOracle() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
                       <TrendingUp className="w-3 h-3 text-emerald-500" />
-                      <span className="text-[10px] font-semibold text-emerald-600 uppercase">STABLE</span>
+                      <span className="text-xs font-semibold text-emerald-600 uppercase">STABLE</span>
                     </div>
-                    <span className="text-[10px] font-semibold text-slate-400">Database Active</span>
+                    <span className="text-xs font-semibold text-slate-400">Database Active</span>
                   </div>
                 </div>
               ))}
@@ -152,7 +152,7 @@ export default function NetworkOracle() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Live Asset Verification Flow</h3>
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Throughput in the last 24 hours</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Throughput in the last 24 hours</p>
               </div>
               <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 p-1 rounded-xl">
                 <button 
@@ -214,12 +214,12 @@ export default function NetworkOracle() {
               <table className="w-full text-left">
                 <thead className="bg-slate-50 dark:bg-slate-800/50">
                   <tr>
-                    <th className="px-8 py-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Asset ID</th>
-                    <th className="px-8 py-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Type</th>
-                    <th className="px-8 py-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Weight</th>
-                    <th className="px-8 py-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Status</th>
-                    <th className="px-8 py-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Market Value</th>
-                    <th className="px-8 py-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400"></th>
+                    <th className="px-8 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400">Asset ID</th>
+                    <th className="px-8 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400">Type</th>
+                    <th className="px-8 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400">Weight</th>
+                    <th className="px-8 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400">Status</th>
+                    <th className="px-8 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400">Market Value</th>
+                    <th className="px-8 py-4 text-xs font-semibold uppercase tracking-widest text-slate-400"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -238,7 +238,7 @@ export default function NetworkOracle() {
                       </td>
                       <td className="px-8 py-4 text-xs font-semibold text-slate-700 dark:text-slate-300">{a.weight} KG</td>
                       <td className="px-8 py-4">
-                        <span className={`px-2 py-1 rounded-full text-[9px] font-semibold uppercase tracking-widest ${
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-widest ${
                           a.status === 'matched' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-amber-500/10 text-amber-600'
                         }`}>
                           {a.status}

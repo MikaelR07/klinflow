@@ -49,7 +49,7 @@ const SmartBinCard = ({ bin }) => {
               style={{ width: `${bin.fillLevel}%` }}
             />
           </div>
-          <p className="text-[10px] text-gray-400 mt-2 text-right font-medium">
+          <p className="text-xs text-gray-400 mt-2 text-right font-medium">
             Updated {new Date(bin.lastUpdated).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
           </p>
         </div>

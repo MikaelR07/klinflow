@@ -131,7 +131,7 @@ export default function MarketHub() {
           <div className="space-y-4 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-3">
                <Coins className="w-6 h-6 text-primary" />
-               <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-primary">Service Marketplace</span>
+               <span className="text-xs font-semibold uppercase tracking-[0.4em] text-primary">Service Marketplace</span>
             </div>
             <h1 className="text-5xl font-semibold tracking-tight">Market Hub</h1>
             <p className="text-slate-400 text-sm max-w-md leading-relaxed">
@@ -141,11 +141,11 @@ export default function MarketHub() {
           
           <div className="grid grid-cols-2 gap-4">
              <div className="bg-white/5 p-6 rounded-3xl border border-white/10 text-center backdrop-blur-md">
-                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Active Materials</p>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Active Materials</p>
                 <p className="text-3xl font-semibold text-white">{prices.length}</p>
              </div>
              <div className="bg-white/5 p-6 rounded-3xl border border-white/10 text-center backdrop-blur-md">
-                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Network Capacity</p>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Network Capacity</p>
                 <p className="text-3xl font-semibold text-primary">Dynamic</p>
              </div>
           </div>
@@ -188,12 +188,12 @@ export default function MarketHub() {
                            setEditFeeValue((fee.value ?? 0).toString());
                          }
                        }}
-                       className="text-[10px] font-semibold text-amber-600 uppercase tracking-widest hover:underline"
+                       className="text-xs font-semibold text-amber-600 uppercase tracking-widest hover:underline"
                      >
                        {editingFeeKey === fee.key ? 'Save Change' : 'Edit Fee'}
                      </button>
                   </div>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">{fee.label}</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">{fee.label}</p>
                   <div className="flex items-baseline gap-2">
                      {editingFeeKey === fee.key ? (
                        <input 
@@ -227,19 +227,19 @@ export default function MarketHub() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
            <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Avg. Min Weight</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Avg. Min Weight</p>
               <h3 className="text-3xl font-semibold text-slate-900 dark:text-white">{(stats?.avgMinWeight || 0).toFixed(1)}<span className="text-sm font-semibold text-slate-400 ml-1">KG</span></h3>
            </div>
            <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Avg. Max Capacity</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Avg. Max Capacity</p>
               <h3 className="text-3xl font-semibold text-slate-900 dark:text-white">{Math.round(stats?.avgMaxCapacity || 0)}<span className="text-sm font-semibold text-slate-400 ml-1">KG</span></h3>
            </div>
            <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Most Popular Cat.</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Most Popular Cat.</p>
               <h3 className="text-xl font-semibold text-indigo-500">Plastics</h3>
            </div>
            <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm border-indigo-500/20">
-              <p className="text-[10px] font-semibold text-indigo-500 uppercase tracking-widest mb-2">Matching Success</p>
+              <p className="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-2">Matching Success</p>
               <h3 className="text-3xl font-semibold text-indigo-600">94%</h3>
            </div>
         </div>
@@ -255,7 +255,7 @@ export default function MarketHub() {
           </div>
           <button 
             onClick={() => setShowAddCategory(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-semibold uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-500/20"
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-500/20"
           >
             <Plus className="w-4 h-4" /> Define Category
           </button>
@@ -310,7 +310,7 @@ export default function MarketHub() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate">{cat.label}</h4>
-                  <p className="text-[10px] text-slate-400 font-medium truncate">{cat.description}</p>
+                  <p className="text-xs text-slate-400 font-medium truncate">{cat.description}</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
                   <button 
@@ -342,7 +342,7 @@ export default function MarketHub() {
           </div>
           <button 
             onClick={() => setShowAddMaterial(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-[10px] font-semibold uppercase tracking-widest hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/20"
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold uppercase tracking-widest hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/20"
           >
             <Plus className="w-4 h-4" /> Add Material
           </button>
@@ -360,7 +360,7 @@ export default function MarketHub() {
                 </div>
                 <div className="flex items-center gap-1 text-emerald-500">
                   <TrendingUp className="w-3 h-3" />
-                  <span className="text-[10px] font-semibold tracking-tighter uppercase">STABLE</span>
+                  <span className="text-xs font-semibold tracking-tighter uppercase">STABLE</span>
                 </div>
               </div>
 
@@ -383,7 +383,7 @@ export default function MarketHub() {
                       <p className="text-2xl font-semibold text-slate-900 dark:text-white">
                         KSh {item.price_per_kg.toLocaleString()}
                       </p>
-                      <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-tighter">SUGGESTED / KG</p>
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">SUGGESTED / KG</p>
                   </div>
                 )}
 

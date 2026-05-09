@@ -141,9 +141,9 @@ export default function LocationSelector({ value, onChange }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Location Area</label>
+        <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Location Area</label>
         {accuracy && (
-          <span className="flex items-center gap-1.5 text-[9px] font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full uppercase tracking-widest">
+          <span className="flex items-center gap-1.5 text-xs font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full uppercase tracking-widest">
             <Target className="w-3 h-3" /> Precision {Math.round(accuracy)}m
           </span>
         )}
@@ -191,8 +191,8 @@ export default function LocationSelector({ value, onChange }) {
             <div className="absolute top-4 left-4 right-4 z-[1000] flex justify-center pointer-events-none">
               <div className="glass px-4 py-2 rounded-full border border-white/20 shadow-lg flex items-center gap-3 pointer-events-auto">
                 <div className="flex flex-col">
-                  <span className="text-[8px] font-black text-primary uppercase tracking-widest leading-none">Sector</span>
-                  <span className="text-[10px] font-bold text-slate-800 dark:text-white truncate max-w-[120px] leading-tight mt-0.5">
+                  <span className="text-xs font-black text-primary uppercase tracking-widest leading-none">Sector</span>
+                  <span className="text-xs font-bold text-slate-800 dark:text-white truncate max-w-[120px] leading-tight mt-0.5">
                     {value?.estate || 'Detecting...'}
                   </span>
                 </div>
@@ -213,7 +213,7 @@ export default function LocationSelector({ value, onChange }) {
             )}
           </div>
 
-          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
+          <p className="text-xs text-slate-400 font-bold uppercase tracking-widest text-center">
             <Move className="w-3 h-3 inline mr-1 mb-0.5" /> Drag the pin to your exact pickup gate
           </p>
         </div>

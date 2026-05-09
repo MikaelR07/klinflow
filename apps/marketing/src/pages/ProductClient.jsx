@@ -22,7 +22,7 @@ export default function ProductClient() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 md:gap-24 items-center">
             <div className="order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-[10px] mb-6">
+              <div className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-xs mb-6">
                 <User className="w-4 h-4" /> Platform One: Resident & Seller Portal
               </div>
               <h1 className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
@@ -58,11 +58,11 @@ export default function ProductClient() {
                     <Wallet className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Instant Payout</p>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Instant Payout</p>
                     <p className="text-lg font-bold text-emerald-500">KSh 4,250</p>
                   </div>
                 </div>
-                <p className="text-[10px] text-slate-400 font-medium">Payout triggered for 45kg HDPE Grade A collection.</p>
+                <p className="text-xs text-slate-400 font-medium">Payout triggered for 45kg HDPE Grade A collection.</p>
               </motion.div>
             </div>
           </div>
@@ -122,7 +122,7 @@ export default function ProductClient() {
                         <div className={`w-3 h-3 rounded-full bg-${item.color}-500 ${item.status === 'In Progress' ? 'animate-pulse' : ''}`} />
                         <span className="font-bold text-white text-sm uppercase tracking-widest">{item.label}</span>
                       </div>
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{item.status}</span>
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">{item.status}</span>
                     </div>
                   ))}
                 </div>

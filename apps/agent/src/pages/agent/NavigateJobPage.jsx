@@ -126,8 +126,8 @@ export default function NavigateJobPage() {
 
         <div className="p-2 px-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-xl shadow-lg pointer-events-auto border border-slate-200 dark:border-slate-800 flex items-center gap-2">
           <div className="flex flex-col text-right">
-            <span className="text-[8px] font-semibold uppercase text-slate-400 tracking-widest">Target</span>
-            <span className="text-[10px] font-semibold text-slate-900 dark:text-white uppercase">{job.location}</span>
+            <span className="text-xs font-semibold uppercase text-slate-400 tracking-widest">Target</span>
+            <span className="text-xs font-semibold text-slate-900 dark:text-white uppercase">{job.location}</span>
           </div>
           <MapPin className="w-3.5 h-3.5 text-primary" />
         </div>
@@ -178,7 +178,7 @@ export default function NavigateJobPage() {
           className="w-full flex flex-col items-center pb-4 group"
         >
           <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-1 group-hover:bg-primary transition-colors" />
-          <div className="text-[8px] font-semibold text-slate-300 uppercase tracking-[0.3em] group-hover:text-primary transition-colors">
+          <div className="text-xs font-semibold text-slate-300 uppercase tracking-[0.3em] group-hover:text-primary transition-colors">
             {isExpanded ? 'Slide Down to Map' : 'Slide Up for Details'}
           </div>
         </button>
@@ -209,7 +209,7 @@ export default function NavigateJobPage() {
              <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-3">
                 <Clock className="w-4 h-4 text-accent" />
                 <div className="flex flex-col">
-                   <span className="text-[8px] text-slate-400">Scheduled Pickup Window</span>
+                   <span className="text-xs text-slate-400">Scheduled Pickup Window</span>
                    <span className="dark:text-white leading-none mt-0.5">{job.time}</span>
                 </div>
              </div>
@@ -218,7 +218,7 @@ export default function NavigateJobPage() {
                <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 p-4 rounded-2xl flex items-start gap-3">
                   <Truck className="w-4 h-4 text-primary mt-0.5" />
                   <div className="flex flex-col">
-                     <span className="text-[8px] text-primary">Description</span>
+                     <span className="text-xs text-primary">Description</span>
                      <span className="dark:text-slate-300 normal-case font-semibold mt-1 leading-relaxed italic">
                        "{job.notes.replace(/Est\. Total: KSh \d+( \| Item: )?/, '').replace(/^ \| /, '')}"
                      </span>
@@ -231,7 +231,7 @@ export default function NavigateJobPage() {
           <div className="space-y-6">
             {job.photoUrl && (
               <div className="space-y-2">
-                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-[0.2em] ml-1">Asset Preview</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em] ml-1">Asset Preview</p>
                 <div className="w-full aspect-video rounded-3xl overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-md bg-slate-50">
                   <img src={getThumbnailUrl(job.photoUrl, { width: 400 })} loading="lazy" className="w-full h-full object-cover" alt="Client's recyclables preview" />
                 </div>
@@ -262,7 +262,7 @@ export default function NavigateJobPage() {
 
                 <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100/50 dark:border-blue-800/30 p-4 rounded-2xl flex items-start gap-3">
                   <Navigation className="w-4 h-4 text-blue-500 mt-0.5" />
-                  <p className="text-[10px] font-semibold text-blue-700/70 dark:text-blue-300/70 leading-relaxed uppercase tracking-tight">
+                  <p className="text-xs font-semibold text-blue-700/70 dark:text-blue-300/70 leading-relaxed uppercase tracking-tight">
                     Map is live. Follow the dashed line to reach the client.
                   </p>
                 </div>
@@ -286,7 +286,7 @@ export default function NavigateJobPage() {
                       if (manualBtn) manualBtn.click();
                     }, 100);
                   }}
-                  className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-[10px] uppercase tracking-[0.2em] rounded-2xl active:scale-95 transition-all border border-slate-200 dark:border-slate-800"
+                  className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs uppercase tracking-[0.2em] rounded-2xl active:scale-95 transition-all border border-slate-200 dark:border-slate-800"
                 >
                   Skip Scan & Use Manual Entry
                 </button>

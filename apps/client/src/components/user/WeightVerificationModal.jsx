@@ -60,7 +60,7 @@ export default function WeightVerificationModal() {
             <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
               <ShieldCheck className="w-4 h-4 text-primary" />
             </div>
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Digital Weight Verification</span>
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Digital Weight Verification</span>
           </div>
           {step === 'verify' && (
              <button onClick={clearActiveVerification} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
@@ -90,12 +90,12 @@ export default function WeightVerificationModal() {
 
               <div className="bg-slate-50 dark:bg-slate-800/40 rounded-3xl p-5 border border-slate-100 dark:border-white/5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Earnings Earned</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Earnings Earned</span>
                   <span className="text-base font-semibold text-slate-900 dark:text-white font-mono">KSh {(activeVerificationBooking.total_price || 0).toLocaleString()}</span>
                 </div>
                 <div className="h-px bg-slate-200/50 dark:bg-white/5" />
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-semibold text-primary uppercase tracking-widest">Impact Reward</span>
+                  <span className="text-xs font-semibold text-primary uppercase tracking-widest">Impact Reward</span>
                   <span className={`text-2xl font-semibold font-mono ${role === 'seller' ? 'text-slate-300 dark:text-slate-600' : 'text-primary'}`}>
                     {role === 'seller' ? 'NONE' : `${(activeVerificationBooking.actual_weight_kg || 0) * 2} GFP`}
                   </span>
@@ -112,7 +112,7 @@ export default function WeightVerificationModal() {
                 )}
               </button>
               
-              <p className="text-[9px] text-slate-400 font-semibold uppercase tracking-widest opacity-60">Verified weight ensures fair payout</p>
+              <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest opacity-60">Verified weight ensures fair payout</p>
             </div>
           )}
 

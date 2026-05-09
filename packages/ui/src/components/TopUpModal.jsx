@@ -35,7 +35,7 @@ export default function TopUpModal({ isOpen, onClose, onConfirm, title = "Top Up
               </div>
               <div>
                 <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-none mb-1">{title}</h3>
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Current: KSh {balance.toLocaleString()}</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Current: KSh {balance.toLocaleString()}</p>
               </div>
             </div>
             <button 
@@ -65,7 +65,7 @@ export default function TopUpModal({ isOpen, onClose, onConfirm, title = "Top Up
               <button
                 key={val}
                 onClick={() => setAmount(val.toString())}
-                className={`py-3 rounded-2xl text-[10px] font-black tracking-widest transition-all border-2 ${
+                className={`py-3 rounded-2xl text-xs font-black tracking-widest transition-all border-2 ${
                   amount === val.toString()
                     ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
                     : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-500 hover:border-emerald-500/30'
@@ -83,12 +83,12 @@ export default function TopUpModal({ isOpen, onClose, onConfirm, title = "Top Up
                 <CreditCard className="w-5 h-5 text-slate-400" />
               </div>
               <div>
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Payment Method</p>
+                <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Payment Method</p>
                 <p className="text-xs font-bold dark:text-white">M-Pesa Express</p>
               </div>
             </div>
             <div className="px-3 py-1 bg-emerald-500/10 rounded-full">
-              <span className="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Active</span>
+              <span className="text-xs font-black text-emerald-500 uppercase tracking-widest">Active</span>
             </div>
           </div>
 
@@ -104,7 +104,7 @@ export default function TopUpModal({ isOpen, onClose, onConfirm, title = "Top Up
 
           <div className="mt-8 flex items-center justify-center gap-2 mb-4">
             <Sparkles className="w-3 h-3 text-emerald-500 animate-pulse" />
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Secured by CleanFlow Escrow</p>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest italic">Secured by CleanFlow Escrow</p>
           </div>
         </div>
       </div>

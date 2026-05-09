@@ -117,10 +117,10 @@ export default function IncomingDrops() {
                    <div>
                       <h3 className="text-lg font-semibold text-slate-900 dark:text-white leading-none">{drop.agent}</h3>
                       <div className="flex items-center gap-3 mt-2">
-                         <span className="text-[10px] font-semibold px-2 py-1 bg-primary/10 text-primary rounded-lg uppercase tracking-widest max-w-[150px] truncate">
+                         <span className="text-xs font-semibold px-2 py-1 bg-primary/10 text-primary rounded-lg uppercase tracking-widest max-w-[150px] truncate">
                            {drop.material}
                          </span>
-                         <span className="flex items-center gap-1 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+                         <span className="flex items-center gap-1 text-xs font-semibold text-slate-400 uppercase tracking-widest">
                            <Scale className="w-3 h-3" /> {drop.weight}
                          </span>
                       </div>
@@ -130,12 +130,12 @@ export default function IncomingDrops() {
                 {/* ETA & Status */}
                 <div className="flex items-center gap-8">
                    <div className="text-right hidden sm:block">
-                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Status</p>
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Status</p>
                       <p className="text-sm font-semibold text-primary mt-1">{drop.status}</p>
                    </div>
                    
                    <div className="flex items-center gap-3">
-                      <button className="px-6 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-semibold text-[10px] uppercase tracking-widest flex items-center gap-2 group/btn active:scale-95 transition-all">
+                      <button className="px-6 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-semibold text-xs uppercase tracking-widest flex items-center gap-2 group/btn active:scale-95 transition-all">
                          View Details
                          <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                       </button>
@@ -149,7 +149,7 @@ export default function IncomingDrops() {
         {!isLoading && incoming.length === 0 && (
           <div className="p-20 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-[3rem] text-center">
              <Clock className="w-12 h-12 text-slate-200 dark:text-white/5 mx-auto mb-4" />
-             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em]">No Incoming Agents Tracked</p>
+             <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">No Incoming Agents Tracked</p>
           </div>
         )}
       </div>

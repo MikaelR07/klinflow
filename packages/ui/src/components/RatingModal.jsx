@@ -80,7 +80,7 @@ export default function RatingModal({ isOpen, onClose, onSubmit, onSkip, agentNa
                 className="w-full h-24 pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all resize-none dark:text-white"
               />
             </div>
-            <p className="text-[10px] text-slate-400 mt-2 text-right italic font-medium">Your feedback helps improve our community.</p>
+            <p className="text-xs text-slate-400 mt-2 text-right italic font-medium">Your feedback helps improve our community.</p>
           </div>
         )}
 

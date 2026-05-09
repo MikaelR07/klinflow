@@ -234,7 +234,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
              </div>
              <div>
                 <h3 className="text-xl font-black text-slate-900 dark:text-white leading-none">Smart Verification</h3>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Asset Intake & Payout</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Asset Intake & Payout</p>
              </div>
           </div>
           <button onClick={onClose} className="p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl text-slate-400">
@@ -249,7 +249,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                 <div className="grid grid-cols-1 gap-4">
                   <div className="flex gap-4">
                     <div className="flex-1 space-y-1">
-                      <label className="text-[10px] font-black text-slate-400 uppercase">Category</label>
+                      <label className="text-xs font-black text-slate-400 uppercase">Category</label>
                       <select 
                         value={material}
                         onChange={(e) => {
@@ -266,7 +266,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                       </select>
                     </div>
                     <div className="flex-1 space-y-1">
-                      <label className="text-[10px] font-black text-slate-400 uppercase">Grade / Sub-type</label>
+                      <label className="text-xs font-black text-slate-400 uppercase">Grade / Sub-type</label>
                       <select 
                         value={subcategory}
                         onChange={(e) => setSubcategory(e.target.value)}
@@ -280,7 +280,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] font-black text-slate-400 uppercase">Weight (KG)</label>
+                    <label className="text-xs font-black text-slate-400 uppercase">Weight (KG)</label>
                     <div className="relative">
                       <Scale className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
                       <input 
@@ -301,7 +301,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                     <Brain className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-none mb-1">Neural Insight</p>
+                    <p className="text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-none mb-1">Neural Insight</p>
                     <p className="text-xs font-bold text-slate-600 dark:text-slate-300 italic leading-snug">"{aiReason}"</p>
                   </div>
                 </div>
@@ -310,13 +310,13 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
               {/* Invoice Display */}
               <div className="bg-slate-900 dark:bg-slate-800 rounded-[2.5rem] p-6 text-white shadow-xl relative overflow-hidden">
                 <div className="flex justify-between items-center mb-6">
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
+                  <h4 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
                     <CreditCard className="w-3 h-3" /> Mission Invoice
                   </h4>
                   {isMarketTrade && (
                     <button 
                       onClick={() => setIsEditingPrice(!isEditingPrice)}
-                      className={`text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border transition-all active:scale-95 ${
+                      className={`text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded-lg border transition-all active:scale-95 ${
                         isEditingPrice 
                           ? 'bg-rose-500/10 text-rose-400 border-rose-500/20 hover:bg-rose-500/20' 
                           : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'
@@ -330,8 +330,8 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                 <div className="space-y-4">
                   <div className="flex justify-between items-start text-sm font-bold">
                     <div className="flex flex-col pt-1">
-                       <span className="text-emerald-400 uppercase text-[10px] tracking-widest">{isMarketTrade ? 'Agreed Deal Value' : 'Material Payout'}</span>
-                      <span className="text-[9px] text-slate-500 font-black uppercase tracking-tighter mt-1">
+                       <span className="text-emerald-400 uppercase text-xs tracking-widest">{isMarketTrade ? 'Agreed Deal Value' : 'Material Payout'}</span>
+                      <span className="text-xs text-slate-500 font-black uppercase tracking-tighter mt-1">
                         {isCounterOffer ? 'Counter-Offer Mode' : isMarketTrade ? 'Marketplace Handshake' : `(${weight}kg @ KSh ${agentRate}/kg)`}
                       </span>
                     </div>
@@ -354,7 +354,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                   </div>
                   <div className="pt-4 border-t border-white/10 flex justify-between items-center">
                     <div>
-                      <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Sustainability Rewards</p>
+                      <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Sustainability Rewards</p>
                       <p className={`text-sm font-black flex items-center gap-2 ${isMarketTrade ? 'text-slate-500' : 'text-primary'}`}>
                         <Sparkles className="w-4 h-4" /> {isMarketTrade ? 'NONE' : `${estimatedGFP} GFP`}
                       </p>
@@ -366,10 +366,10 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
               {/* Payout Target */}
               <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-4">
                 <div className="flex items-center justify-between">
-                   <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{isMarketTrade ? 'Seller Wallet' : 'Recipient Wallet'}</h4>
+                   <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest">{isMarketTrade ? 'Seller Wallet' : 'Recipient Wallet'}</h4>
                    <div className="flex items-center gap-2 text-primary">
                       <Phone className="w-3 h-3" />
-                      <span className="text-[10px] font-black uppercase">Active Channel</span>
+                      <span className="text-xs font-black uppercase">Active Channel</span>
                    </div>
                 </div>
                 
@@ -430,7 +430,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                 <Sparkles className="absolute inset-0 m-auto w-8 h-8 text-primary" />
               </div>
               <h4 className="text-xl font-black text-slate-900 dark:text-white">AI Vision Active...</h4>
-              <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-2">Checking Purity & Material Grade</p>
+              <p className="text-xs font-black uppercase text-slate-400 tracking-widest mt-2">Checking Purity & Material Grade</p>
             </div>
           )}
         </div>

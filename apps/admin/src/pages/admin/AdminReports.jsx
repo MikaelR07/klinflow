@@ -76,12 +76,12 @@ export default function AdminReports() {
                 <div>
                   <p className="text-sm font-semibold">{report.title}</p>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${typeColors[report.type]}`}>
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${typeColors[report.type]}`}>
                       {report.type}
                     </span>
                     <span className="text-xs text-slate-400">{report.period}</span>
                     {report.title === 'Revenue & Collections' ? (
-                      <span className="text-[8px] font-semibold text-emerald-500 uppercase tracking-tighter bg-emerald-500/10 px-1.5 rounded">Live Report</span>
+                      <span className="text-xs font-semibold text-emerald-500 uppercase tracking-tighter bg-emerald-500/10 px-1.5 rounded">Live Report</span>
                     ) : (
                       <>
                         <span className="text-xs text-slate-300">·</span>

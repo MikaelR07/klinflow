@@ -98,13 +98,13 @@ export default function SubscriptionDetail() {
       }`}>
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-[10px] font-semibold uppercase tracking-widest opacity-60">{tier.impactTag}</span>
+            <span className="text-xs font-semibold uppercase tracking-widest opacity-60">{tier.impactTag}</span>
             {tierId === 'premium' && <Crown className="w-3 h-3 text-amber-400 fill-amber-400" />}
           </div>
           <h2 className="text-4xl font-semibold tracking-tight mb-4">{tier.label}</h2>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-semibold">{tier.price === 0 ? 'Free' : `KSh ${tier.price.toLocaleString()}`}</span>
-            <span className="text-[10px] font-semibold opacity-60 uppercase tracking-tighter">/ Month</span>
+            <span className="text-xs font-semibold opacity-60 uppercase tracking-tighter">/ Month</span>
           </div>
         </div>
         
@@ -125,7 +125,7 @@ export default function SubscriptionDetail() {
 
         {/* Benefits List */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 space-y-4">
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">What's Included</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">What's Included</p>
           <div className="space-y-4">
             {details.points.map((point, i) => (
               <div key={i} className="flex items-start gap-4">
@@ -156,8 +156,8 @@ export default function SubscriptionDetail() {
           <div className="bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-200 dark:border-indigo-500/20 rounded-3xl p-6 flex items-center gap-4">
             <ShieldCheck className="w-8 h-8 text-indigo-500" />
             <div>
-              <h4 className="text-[10px] font-semibold text-indigo-700 dark:text-indigo-400 uppercase tracking-widest mb-1">Verified Payment Protection</h4>
-              <p className="text-[10px] font-semibold text-indigo-800 dark:text-indigo-200/80 uppercase tracking-tight">Your funds and recycling value are protected by the platform at all times until you authorize release.</p>
+              <h4 className="text-xs font-semibold text-indigo-700 dark:text-indigo-400 uppercase tracking-widest mb-1">Verified Payment Protection</h4>
+              <p className="text-xs font-semibold text-indigo-800 dark:text-indigo-200/80 uppercase tracking-tight">Your funds and recycling value are protected by the platform at all times until you authorize release.</p>
             </div>
           </div>
         )}

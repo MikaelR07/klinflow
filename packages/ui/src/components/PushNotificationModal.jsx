@@ -63,11 +63,11 @@ export default function PushNotificationModal({ isOpen, onClose }) {
         <div className="mt-8 space-y-3">
            <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl text-left">
               <ShieldCheck className="w-5 h-5 text-emerald-500 shrink-0" />
-              <p className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">Instant Mission Dispatches</p>
+              <p className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">Instant Mission Dispatches</p>
            </div>
            <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-white/5 rounded-2xl text-left">
               <Sparkles className="w-5 h-5 text-amber-500 shrink-0" />
-              <p className="text-[10px] font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">Reward & Payout Alerts</p>
+              <p className="text-xs font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">Reward & Payout Alerts</p>
            </div>
         </div>
 
@@ -83,7 +83,7 @@ export default function PushNotificationModal({ isOpen, onClose }) {
            
            <button 
              onClick={onClose}
-             className="text-[10px] font-black text-slate-400 hover:text-slate-600 uppercase tracking-widest transition-colors"
+             className="text-xs font-black text-slate-400 hover:text-slate-600 uppercase tracking-widest transition-colors"
            >
              Maybe Later
            </button>
@@ -92,7 +92,7 @@ export default function PushNotificationModal({ isOpen, onClose }) {
         {/* Privacy Note */}
         <div className="mt-8 flex items-center justify-center gap-2 text-slate-400">
            <Info className="w-3 h-3" />
-           <p className="text-[9px] font-bold">You can disable this anytime in settings.</p>
+           <p className="text-xs font-bold">You can disable this anytime in settings.</p>
         </div>
 
         {/* Close Button */}

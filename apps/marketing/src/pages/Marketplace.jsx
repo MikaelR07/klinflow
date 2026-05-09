@@ -22,7 +22,7 @@ export default function Marketplace() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 md:gap-24 items-center">
             <div className="order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 text-teal-500 font-bold uppercase tracking-widest text-[10px] mb-6">
+              <div className="inline-flex items-center gap-2 text-teal-500 font-bold uppercase tracking-widest text-xs mb-6">
                 <ShoppingBag className="w-4 h-4" /> The B2B Settlement Layer
               </div>
               <h1 className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
@@ -136,7 +136,7 @@ export default function Marketplace() {
                        <Activity className="w-5 h-5 text-teal-500" />
                        <p className="text-xs font-bold text-white uppercase tracking-widest">Market Liquidity Index</p>
                     </div>
-                    <div className="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-[10px] font-bold text-teal-500 uppercase tracking-widest">
+                    <div className="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-xs font-bold text-teal-500 uppercase tracking-widest">
                        High
                     </div>
                  </div>
@@ -150,7 +150,7 @@ export default function Marketplace() {
                           <p className="text-sm font-bold text-white">{item.label}</p>
                           <div className="flex items-center gap-4">
                              <p className="text-sm font-mono text-slate-300">{item.price}</p>
-                             <p className={`text-[10px] font-bold ${item.change.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{item.change}</p>
+                             <p className={`text-xs font-bold ${item.change.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{item.change}</p>
                           </div>
                        </div>
                     ))}

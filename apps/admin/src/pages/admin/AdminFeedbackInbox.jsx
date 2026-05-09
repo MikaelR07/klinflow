@@ -87,7 +87,7 @@ export default function AdminFeedbackInbox() {
               <hub.icon className="w-5 h-5" />
             </div>
             <h3 className={`text-sm font-semibold tracking-tight leading-tight ${activeHub === hub.id ? 'text-white' : 'dark:text-white'}`}>{hub.label}</h3>
-            <p className={`text-[8px] font-semibold uppercase tracking-widest ${activeHub === hub.id ? 'text-white/40' : 'text-slate-400'}`}>{hub.desc}</p>
+            <p className={`text-xs font-semibold uppercase tracking-widest ${activeHub === hub.id ? 'text-white/40' : 'text-slate-400'}`}>{hub.desc}</p>
           </button>
         ))}
       </div>
@@ -111,11 +111,11 @@ export default function AdminFeedbackInbox() {
                   <div className="flex items-center gap-1.5">
                     <div className={`flex items-center gap-1 px-2 py-1 rounded-lg border ${getRatingColor(item.rating)}`}>
                       <Star className="w-3 h-3 fill-current" />
-                      <span className="text-[10px] font-semibold">{item.rating}.0</span>
+                      <span className="text-xs font-semibold">{item.rating}.0</span>
                     </div>
 
                     {/* SOURCE BADGE */}
-                     <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-semibold uppercase tracking-wider border transition-all ${
+                     <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider border transition-all ${
                        item.sourceApp === 'agent_independent' ? 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20' :
                        item.sourceApp === 'agent_company' ? 'bg-purple-500/10 text-purple-500 border-purple-500/20' :
                        item.sourceApp === 'client' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
@@ -127,14 +127,14 @@ export default function AdminFeedbackInbox() {
                      </div>
                   </div>
 
-                  <div className="flex items-center gap-1 text-[9px] uppercase font-semibold text-slate-400">
+                  <div className="flex items-center gap-1 text-xs uppercase font-semibold text-slate-400">
                      {new Date(item.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="flex-grow space-y-2">
-                  <span className="inline-block px-2 py-0.5 rounded-md text-[9px] font-semibold uppercase tracking-widest bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                  <span className="inline-block px-2 py-0.5 rounded-md text-xs font-semibold uppercase tracking-widest bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                     {item.category}
                   </span>
                   <p className="text-xs text-slate-700 dark:text-slate-300 italic font-medium leading-normal line-clamp-3">"{item.text}"</p>
@@ -147,8 +147,8 @@ export default function AdminFeedbackInbox() {
                        {item.name?.charAt(0) || <User className="w-4 h-4" />}
                      </div>
                      <div className="max-w-[120px]">
-                       <p className="text-[10px] font-semibold dark:text-slate-200 truncate">{item.name || 'Anonymous'}</p>
-                       <p className="text-[9px] text-slate-400 font-mono tracking-tighter truncate">{item.phone || 'No Phone'}</p>
+                       <p className="text-xs font-semibold dark:text-slate-200 truncate">{item.name || 'Anonymous'}</p>
+                       <p className="text-xs text-slate-400 font-mono tracking-tighter truncate">{item.phone || 'No Phone'}</p>
                      </div>
                   </div>
                   

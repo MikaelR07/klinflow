@@ -39,7 +39,7 @@ export const LoadingScreen = ({ message = "Syncing with CleanFlow..." }) => {
              <h2 className="text-sm font-black tracking-[0.4em] text-slate-900 dark:text-white uppercase mb-1">
                {message}
              </h2>
-             <p className="text-[10px] font-bold text-primary animate-pulse tracking-widest uppercase">
+             <p className="text-xs font-bold text-primary animate-pulse tracking-widest uppercase">
                Sustainomics AI Active
              </p>
           </div>
@@ -55,10 +55,10 @@ export const LoadingScreen = ({ message = "Syncing with CleanFlow..." }) => {
       <div className="absolute bottom-12 flex flex-col items-center gap-1 opacity-40">
         <div className="flex items-center gap-2 mb-1">
            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">CleanFlow Logistics</p>
+           <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">CleanFlow Logistics</p>
            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
         </div>
-        <p className="text-[8px] font-bold text-slate-400 dark:text-slate-500">OPTIMIZING CIRCULAR ECONOMY</p>
+        <p className="text-xs font-bold text-slate-400 dark:text-slate-500">OPTIMIZING CIRCULAR ECONOMY</p>
       </div>
 
       {/* Add Custom Keyframes if not in CSS */}

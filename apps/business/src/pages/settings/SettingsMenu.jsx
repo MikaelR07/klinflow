@@ -31,11 +31,11 @@ export default function SettingsMenu() {
         <div className="flex-1">
           <p className="font-semibold text-lg dark:text-white group-hover:text-primary transition-colors">{profile?.business_name || profile?.name || 'User'}</p>
           <div className="flex flex-wrap items-center gap-2 mt-1">
-            <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-md text-[9px] font-bold uppercase tracking-widest border border-slate-200 dark:border-slate-700 flex items-center gap-1">
+            <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-md text-xs font-bold uppercase tracking-widest border border-slate-200 dark:border-slate-700 flex items-center gap-1">
               <Database className="w-2.5 h-2.5" /> 
               {getBusinessLabel(profile?.business_type, 'id')}: CF-{profile?.id?.slice(0, 4).toUpperCase()}
             </span>
-            <span className="text-[10px] text-slate-400 font-medium">| {profile?.phone}</span>
+            <span className="text-xs text-slate-400 font-medium">| {profile?.phone}</span>
           </div>
           <p className="text-xs text-slate-400 mt-1">📍 {profile?.estate || 'Kenya'}</p>
         </div>

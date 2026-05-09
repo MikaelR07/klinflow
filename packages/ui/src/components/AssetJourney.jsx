@@ -21,7 +21,7 @@ export default function AssetJourney({ currentStatus = 'listed' }) {
 
   return (
     <div className="py-4 px-2">
-      <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-6 px-2">Lifecycle Tracking</h4>
+      <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest mb-6 px-2">Lifecycle Tracking</h4>
       <div className="space-y-0">
         {STEPS.map((step, idx) => {
           const isCompleted = idx < currentIndex;
@@ -49,7 +49,7 @@ export default function AssetJourney({ currentStatus = 'listed' }) {
                 <p className={`text-xs font-black tracking-tight ${isCompleted || isCurrent ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                   {step.label}
                 </p>
-                <p className="text-[10px] font-medium text-slate-500 mt-0.5">
+                <p className="text-xs font-medium text-slate-500 mt-0.5">
                   {isCurrent ? 'Current Status' : step.sub}
                 </p>
               </div>
@@ -57,7 +57,7 @@ export default function AssetJourney({ currentStatus = 'listed' }) {
               {isCurrent && (
                 <div className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/10 rounded-full h-fit mt-1">
                   <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-                  <span className="text-[8px] font-black uppercase text-primary tracking-widest">Active</span>
+                  <span className="text-xs font-black uppercase text-primary tracking-widest">Active</span>
                 </div>
               )}
             </div>

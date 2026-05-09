@@ -91,7 +91,7 @@ export default function StaffApplication() {
            <p className="text-sm text-slate-500 font-medium mt-1">You are an official CleanFlow team member.</p>
         </div>
         <div className="bg-slate-900 rounded-[2.5rem] p-8 text-white space-y-2 shadow-2xl border border-white/5">
-           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500">Your Staff ID</p>
+           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Your Staff ID</p>
            <h2 className="text-4xl font-semibold tracking-tighter text-primary">{profile?.fleetId || profile?.fleet_id || 'CF-FLEET-OK'}</h2>
         </div>
         <button onClick={() => navigate('/settings')} className="w-full py-5 bg-slate-100 dark:bg-slate-800 rounded-2xl font-semibold text-xs uppercase tracking-widest text-slate-600 dark:text-slate-300 transition-all active:scale-95">
@@ -111,7 +111,7 @@ export default function StaffApplication() {
           </button>
           <div>
             <h1 className="text-xl font-semibold dark:text-white tracking-tight">Staff Program</h1>
-            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Join the Official Team</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Join the Official Team</p>
           </div>
         </div>
         <button 
@@ -171,7 +171,7 @@ export default function StaffApplication() {
                 <div className="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
                    <div className="flex items-center gap-3">
                       <ShieldAlert className="w-5 h-5 text-orange-500" />
-                      <p className="text-[10px] font-semibold text-slate-500 leading-tight">By submitting, you agree to HQ verification of your NEMA license.</p>
+                      <p className="text-xs font-semibold text-slate-500 leading-tight">By submitting, you agree to HQ verification of your NEMA license.</p>
                    </div>
                 </div>
              </div>

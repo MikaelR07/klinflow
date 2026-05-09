@@ -55,7 +55,7 @@ export default function FleetManagement() {
                  <UserPlus className="w-5 h-5" />
               </div>
               <div>
-                 <p className="text-[9px] font-semibold uppercase tracking-widest text-slate-400">Fleet Invite Code</p>
+                 <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Fleet Invite Code</p>
                  <p className="text-sm font-semibold font-mono tracking-tighter text-slate-900 dark:text-white">{profile?.fleet_invite_code || '---'}</p>
               </div>
            </div>
@@ -85,7 +85,7 @@ export default function FleetManagement() {
              <button
                key={status}
                onClick={() => setFilterStatus(status)}
-               className={`px-6 py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${
+               className={`px-6 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${
                  filterStatus === status 
                    ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
@@ -117,10 +117,10 @@ export default function FleetManagement() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50/50 dark:bg-white/5">
-                  <th className="p-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Agent Detail</th>
-                  <th className="p-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Status</th>
-                  <th className="p-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Performance</th>
-                  <th className="p-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                  <th className="p-6 text-xs font-semibold text-slate-400 uppercase tracking-widest">Agent Detail</th>
+                  <th className="p-6 text-xs font-semibold text-slate-400 uppercase tracking-widest">Status</th>
+                  <th className="p-6 text-xs font-semibold text-slate-400 uppercase tracking-widest text-center">Performance</th>
+                  <th className="p-6 text-xs font-semibold text-slate-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-white/5">
@@ -135,12 +135,12 @@ export default function FleetManagement() {
                           </div>
                           <div>
                              <p className="text-sm font-semibold text-slate-900 dark:text-white leading-none">{agent.name}</p>
-                             <p className="text-[10px] font-semibold text-slate-500 mt-1 uppercase tracking-tighter">{agent.phone}</p>
+                             <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-tighter">{agent.phone}</p>
                           </div>
                        </div>
                     </td>
                     <td className="p-6">
-                       <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-widest ${
+                       <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest ${
                          agent.is_online ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'
                        }`}>
                           <div className={`w-1.5 h-1.5 rounded-full ${agent.is_online ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
@@ -150,7 +150,7 @@ export default function FleetManagement() {
                     <td className="p-6">
                        <div className="flex flex-col items-center">
                           <p className="text-sm font-semibold text-primary">{agent.reward_points || 0}</p>
-                          <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest">Track Points</p>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Track Points</p>
                        </div>
                     </td>
                     <td className="p-6 text-right">

@@ -22,7 +22,7 @@ export default function ProductFleet() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 md:gap-24 items-center">
             <div className="order-2 lg:order-1">
-              <div className="inline-flex items-center gap-2 text-indigo-500 font-bold uppercase tracking-widest text-[10px] mb-6">
+              <div className="inline-flex items-center gap-2 text-indigo-500 font-bold uppercase tracking-widest text-xs mb-6">
                 <Building2 className="w-4 h-4" /> Platform Three: Fleet & Enterprise Admin
               </div>
               <h1 className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
@@ -54,7 +54,7 @@ export default function ProductFleet() {
                 className="absolute -bottom-10 -right-10 p-8 rounded-2xl bg-white dark:bg-slate-900 shadow-2xl border border-slate-100 dark:border-white/5 min-w-[280px] hidden sm:block"
               >
                 <div className="flex items-center justify-between mb-6">
-                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Fleet Yield</p>
+                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Fleet Yield</p>
                    <TrendingUp className="w-4 h-4 text-emerald-500" />
                 </div>
                 <div className="flex items-baseline gap-2 mb-4">
@@ -62,7 +62,7 @@ export default function ProductFleet() {
                    <p className="text-xs font-bold text-emerald-500">+12.5%</p>
                 </div>
                 <div className="space-y-3">
-                   <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                   <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
                       <span>Active Drivers</span>
                       <span>24 / 30</span>
                    </div>
@@ -125,7 +125,7 @@ export default function ProductFleet() {
                 ].map((item, i) => (
                    <div key={i} className={`p-8 rounded-2xl border transition-all ${isDarkMode ? 'bg-white/5 border-white/5 hover:border-indigo-500/20' : 'bg-white border-slate-100 hover:border-indigo-500/20 shadow-lg'}`}>
                       <item.icon className="w-6 h-6 text-indigo-500 mb-6" />
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">{item.label}</p>
+                      <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">{item.label}</p>
                       <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{item.val}</p>
                    </div>
                 ))}

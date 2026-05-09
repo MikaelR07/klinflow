@@ -260,7 +260,7 @@ export default function Register() {
                   <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
                   <input type="text" name="company_name" value={formData.company_name} onChange={handleInputChange} placeholder="e.g. Nairobi Green Fleets" className="w-full pl-11 pr-4 py-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
                 </div>
-                <p className="text-[10px] text-slate-500 mt-1.5 ml-1">This will be your brand name in the CleanFlow marketplace.</p>
+                <p className="text-xs text-slate-500 mt-1.5 ml-1">This will be your brand name in the CleanFlow marketplace.</p>
               </div>
             )}
 
@@ -271,7 +271,7 @@ export default function Register() {
                   <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-orange-400" />
                   <input type="text" name="fleet_invite_code" value={formData.fleet_invite_code} onChange={handleInputChange} placeholder="CF-XXXXXX" className="w-full pl-11 pr-4 py-3 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-orange-500/50 text-sm tracking-widest uppercase" required />
                 </div>
-                <p className="text-[10px] text-slate-500 mt-1.5 ml-1">Ask your Company Admin for this 6-character code.</p>
+                <p className="text-xs text-slate-500 mt-1.5 ml-1">Ask your Company Admin for this 6-character code.</p>
               </div>
             )}
 

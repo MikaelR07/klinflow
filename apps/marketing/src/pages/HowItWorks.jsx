@@ -94,7 +94,7 @@ export default function HowItWorks() {
                   <div className="absolute bottom-8 left-8 right-8 p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10">
                     <div className="flex items-center gap-2 mb-2">
                       <div className={`w-2 h-2 rounded-full bg-${spec.color}-500 animate-pulse`} />
-                      <span className="text-[10px] font-bold text-white uppercase tracking-widest">Protocol Active</span>
+                      <span className="text-xs font-bold text-white uppercase tracking-widest">Protocol Active</span>
                     </div>
                     <p className="text-[11px] text-slate-400 font-medium leading-tight">Live telemetry processing for {spec.title.toLowerCase()}. Nodes synchronized.</p>
                   </div>

@@ -43,7 +43,7 @@ export default function PWAInstallModal({ isOpen, onClose, onInstall }) {
               </div>
               <div>
                 <h4 className="text-xs font-black dark:text-white uppercase">Lightning Fast</h4>
-                <p className="text-[10px] text-slate-500 font-bold">Launches instantly from home screen</p>
+                <p className="text-xs text-slate-500 font-bold">Launches instantly from home screen</p>
               </div>
             </div>
 
@@ -53,7 +53,7 @@ export default function PWAInstallModal({ isOpen, onClose, onInstall }) {
               </div>
               <div>
                 <h4 className="text-xs font-black dark:text-white uppercase">Live Telemetry</h4>
-                <p className="text-[10px] text-slate-500 font-bold">Real-time alerts & status updates</p>
+                <p className="text-xs text-slate-500 font-bold">Real-time alerts & status updates</p>
               </div>
             </div>
 
@@ -63,7 +63,7 @@ export default function PWAInstallModal({ isOpen, onClose, onInstall }) {
               </div>
               <div>
                 <h4 className="text-xs font-black dark:text-white uppercase">Native Experience</h4>
-                <p className="text-[10px] text-slate-500 font-bold">Fullscreen, no browser clutter</p>
+                <p className="text-xs text-slate-500 font-bold">Fullscreen, no browser clutter</p>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function PWAInstallModal({ isOpen, onClose, onInstall }) {
           
           <div className="mt-6 flex items-center justify-center gap-2">
             <Sparkles className="w-3 h-3 text-primary animate-pulse" />
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Powered by HygieneX AI</p>
+            <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Powered by HygieneX AI</p>
           </div>
         </div>
       </div>

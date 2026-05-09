@@ -62,7 +62,7 @@ export default function MyListings() {
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
                     Posted on {new Date(item.createdAt).toLocaleDateString()}
                   </p>
                   
@@ -83,7 +83,7 @@ export default function MyListings() {
                    {item.status === 'active' && <Clock className="w-4 h-4 text-primary animate-pulse" />}
                    {item.status === 'sold' && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
                    {item.status === 'expired' && <XCircle className="w-4 h-4 text-rose-500" />}
-                   <span className="text-[10px] font-semibold uppercase tracking-tighter text-slate-500">
+                   <span className="text-xs font-semibold uppercase tracking-tighter text-slate-500">
                      Status: {item.status}
                    </span>
                 </div>
@@ -91,7 +91,7 @@ export default function MyListings() {
                 {item.status === 'active' && (
                   <button 
                     onClick={() => updateListingStatus(item.id, 'sold')}
-                    className="text-[10px] font-semibold text-primary border-2 border-primary/20 px-3 py-1 rounded-full hover:bg-primary/5 transition-colors"
+                    className="text-xs font-semibold text-primary border-2 border-primary/20 px-3 py-1 rounded-full hover:bg-primary/5 transition-colors"
                   >
                     MARK AS SOLD
                   </button>

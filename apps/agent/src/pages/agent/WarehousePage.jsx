@@ -38,7 +38,7 @@ export default function WarehousePage() {
       {/* ── HEADER ── */}
       <div className="px-1">
         <h1 className="text-2xl font-semibold text-slate-900 dark:text-white leading-none">Warehouse Portal</h1>
-        <p className="text-[10px] text-slate-400 font-semibold mt-2 uppercase tracking-widest">Manage your drop-offs & logistics</p>
+        <p className="text-xs text-slate-400 font-semibold mt-2 uppercase tracking-widest">Manage your drop-offs & logistics</p>
       </div>
 
       {/* ── CURRENT TRUCK LOAD CARD ── */}
@@ -52,18 +52,18 @@ export default function WarehousePage() {
                   </div>
                   <div>
                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white leading-none">Current Truck Load</h3>
-                     <p className="text-[10px] text-slate-400 font-semibold mt-1 uppercase tracking-widest">In Transit to Hub</p>
+                     <p className="text-xs text-slate-400 font-semibold mt-1 uppercase tracking-widest">In Transit to Hub</p>
                   </div>
                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
                <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-                  <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Live Weight</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Live Weight</p>
                   <p className="text-xl font-semibold text-slate-900 dark:text-white">{totalWeight.toFixed(1)} KG</p>
                </div>
                <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-                  <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Items</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Items</p>
                   <p className="text-xl font-semibold text-slate-900 dark:text-white">{assets.length} Units</p>
                </div>
             </div>
@@ -109,7 +109,7 @@ export default function WarehousePage() {
       <div className="p-5 bg-primary/5 border border-primary/10 rounded-[2rem] flex items-center justify-between">
          <div className="flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-primary" />
-            <span className="text-[10px] font-semibold text-primary uppercase tracking-widest">Hub Status: Operational</span>
+            <span className="text-xs font-semibold text-primary uppercase tracking-widest">Hub Status: Operational</span>
          </div>
          <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
       </div>

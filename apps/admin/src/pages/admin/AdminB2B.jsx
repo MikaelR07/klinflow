@@ -33,7 +33,7 @@ export default function AdminB2B() {
             <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">B2B Command Center</h1>
             <div className="flex items-center gap-1.5 px-3 py-1 bg-indigo-500/10 rounded-full border border-indigo-500/20">
               <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
-              <span className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Industrial View</span>
+              <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Industrial View</span>
             </div>
           </div>
           <p className="text-sm text-slate-500 font-medium mt-1">Manage industrial verification, bulk trading, and Green Freight operations.</p>
@@ -47,7 +47,7 @@ export default function AdminB2B() {
             <BadgeCheck className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Queue Size</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Queue Size</p>
             <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">{unverifiedBusinesses.length}</h2>
           </div>
         </div>
@@ -56,7 +56,7 @@ export default function AdminB2B() {
             <TrendingUp className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Active Bulk Trades</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Active Bulk Trades</p>
             <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">{marketplaceFeed.length}</h2>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default function AdminB2B() {
             <Truck className="w-8 h-8" />
           </div>
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1">Freight In-Transit</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Freight In-Transit</p>
             <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">{b2bLogistics.length}</h2>
           </div>
         </div>
@@ -86,7 +86,7 @@ export default function AdminB2B() {
             <tab.icon className="w-4 h-4" />
             {tab.label}
             {tab.count > 0 && (
-              <span className={`px-2 py-0.5 rounded-full text-[9px] ${activeTab === tab.id ? 'bg-primary/10 text-primary' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
+              <span className={`px-2 py-0.5 rounded-full text-xs ${activeTab === tab.id ? 'bg-primary/10 text-primary' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
                 {tab.count}
               </span>
             )}
@@ -126,10 +126,10 @@ export default function AdminB2B() {
                     <table className="w-full text-left">
                       <thead>
                         <tr className="border-b border-slate-100 dark:border-slate-800">
-                          <th className="pb-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Business Entity</th>
-                          <th className="pb-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">License / Type</th>
-                          <th className="pb-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Submitted</th>
-                          <th className="pb-4 text-[10px] font-semibold uppercase tracking-widest text-slate-400 text-right">Actions</th>
+                          <th className="pb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">Business Entity</th>
+                          <th className="pb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">License / Type</th>
+                          <th className="pb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">Submitted</th>
+                          <th className="pb-4 text-xs font-semibold uppercase tracking-widest text-slate-400 text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -140,14 +140,14 @@ export default function AdminB2B() {
                                 <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-lg shadow-sm">🏢</div>
                                 <div>
                                   <p className="text-sm font-semibold text-slate-900 dark:text-white">{biz.name}</p>
-                                  <p className="text-[10px] font-semibold text-slate-400">{biz.phone}</p>
+                                  <p className="text-xs font-semibold text-slate-400">{biz.phone}</p>
                                 </div>
                               </div>
                             </td>
                             <td className="py-5">
                               <div>
                                 <p className="text-xs font-semibold text-primary uppercase tracking-tighter">{biz.nema_license}</p>
-                                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">{biz.business_type}</p>
+                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">{biz.business_type}</p>
                               </div>
                             </td>
                             <td className="py-5">
@@ -187,11 +187,11 @@ export default function AdminB2B() {
                     </div>
                     <div className="flex gap-2">
                        <div className="p-4 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-center min-w-[120px]">
-                          <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Avg Price (PET)</p>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Avg Price (PET)</p>
                           <p className="text-lg font-semibold text-primary">KSh 32/kg</p>
                        </div>
                        <div className="p-4 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-center min-w-[120px]">
-                          <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Weekly Move</p>
+                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Weekly Move</p>
                           <p className="text-lg font-semibold text-emerald-500">+4.2%</p>
                        </div>
                     </div>
@@ -207,21 +207,21 @@ export default function AdminB2B() {
                            <div className="flex justify-between items-start">
                              <div>
                                 <h4 className="font-semibold text-slate-900 dark:text-white text-sm">{item.material}</h4>
-                                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{item.seller?.name}</p>
+                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{item.seller?.name}</p>
                              </div>
-                             <span className="text-[10px] font-semibold text-indigo-500 bg-indigo-500/10 px-2 py-0.5 rounded-full">{item.grade}</span>
+                             <span className="text-xs font-semibold text-indigo-500 bg-indigo-500/10 px-2 py-0.5 rounded-full">{item.grade}</span>
                            </div>
                            <div className="flex items-center gap-4 mt-3">
                               <div>
-                                <p className="text-[8px] font-semibold text-slate-400 uppercase">Volume</p>
+                                <p className="text-xs font-semibold text-slate-400 uppercase">Volume</p>
                                 <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">{item.quantity} {item.unit}</p>
                               </div>
                               <div>
-                                <p className="text-[8px] font-semibold text-slate-400 uppercase">MOQ</p>
+                                <p className="text-xs font-semibold text-slate-400 uppercase">MOQ</p>
                                 <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">{item.moq} {item.unit}</p>
                               </div>
                               <div className="ml-auto text-right">
-                                <p className="text-[8px] font-semibold text-slate-400 uppercase">Floor Price</p>
+                                <p className="text-xs font-semibold text-slate-400 uppercase">Floor Price</p>
                                 <p className="text-sm font-semibold text-primary">KSh {item.price_per_kg}/kg</p>
                               </div>
                            </div>
@@ -255,17 +255,17 @@ export default function AdminB2B() {
                          <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-3 mb-1">
                                <h4 className="font-semibold text-slate-900 dark:text-white truncate">Industrial {order.material} Haul</h4>
-                               <span className="px-2.5 py-1 bg-amber-500/10 text-amber-600 text-[9px] font-semibold uppercase tracking-widest rounded-full border border-amber-500/10">
+                               <span className="px-2.5 py-1 bg-amber-500/10 text-amber-600 text-xs font-semibold uppercase tracking-widest rounded-full border border-amber-500/10">
                                  {order.booking?.status || 'Pending Dispatch'}
                                </span>
                             </div>
-                            <div className="flex items-center gap-4 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+                            <div className="flex items-center gap-4 text-xs font-semibold text-slate-400 uppercase tracking-widest">
                                <span className="flex items-center gap-1.5"><Building2 className="w-3 h-3" /> Buyer: {order.buyer?.name}</span>
                                <span className="flex items-center gap-1.5"><Scale className="w-3 h-3" /> Volume: {order.quantity} KG</span>
                             </div>
                          </div>
                          <div className="text-right">
-                           <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Platform Revenue</p>
+                           <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Platform Revenue</p>
                            <p className="text-lg font-semibold text-slate-900 dark:text-white italic underline decoration-primary decoration-4">KSh {order.total_price * 0.2 > 500 ? (order.total_price * 0.2).toFixed(0) : 500}</p>
                          </div>
                          <button className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 hover:bg-primary hover:text-white transition-all group">

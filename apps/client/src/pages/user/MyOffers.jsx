@@ -156,7 +156,7 @@ export default function MyOffers() {
           <div className="bg-white dark:bg-slate-800 mx-4 px-5 py-4 border border-slate-100 dark:border-slate-700 mb-6 relative overflow-hidden rounded-2xl">
             <div className="relative z-10 flex items-center justify-between">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-0.5">Potential Earnings</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 mb-0.5">Potential Earnings</p>
                 <h2 className="text-xl font-semibold tracking-tight text-emerald-600 dark:text-emerald-400 leading-none">
                   KSh {pendingOffers.reduce((sum, o) => sum + (o.offered_price * o.quantity), 0).toLocaleString()}
                 </h2>
@@ -177,7 +177,7 @@ export default function MyOffers() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative pb-3 text-[10px] font-semibold uppercase tracking-[0.12em] transition-all flex-1 ${
+                className={`relative pb-3 text-xs font-semibold uppercase tracking-[0.12em] transition-all flex-1 ${
                   activeTab === tab.id ? 'text-emerald-600' : 'text-slate-400'
                 }`}
               >
@@ -226,11 +226,11 @@ export default function MyOffers() {
                   className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all z-10"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span className="text-[9px] font-semibold uppercase tracking-widest">Back</span>
+                  <span className="text-xs font-semibold uppercase tracking-widest">Back</span>
                 </button>
 
                 {/* Status Badge */}
-                <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/40 backdrop-blur-xl text-white rounded-full text-[9px] font-semibold uppercase tracking-[0.2em] z-10">
+                <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/40 backdrop-blur-xl text-white rounded-full text-xs font-semibold uppercase tracking-[0.2em] z-10">
                   Offer Review
                 </div>
 
@@ -249,9 +249,9 @@ export default function MyOffers() {
                   </div>
                   <div className="flex items-center gap-2">
                     <User className="w-3 h-3 text-slate-400" />
-                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{selectedOffer.buyerName}</p>
-                    <span className="text-[8px] text-slate-300">•</span>
-                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{selectedOffer.buyerName}</p>
+                    <span className="text-xs text-slate-300">•</span>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1">
                       <MapPin className="w-3 h-3" /> {selectedOffer.listing?.location || 'Nairobi'}
                     </p>
                   </div>
@@ -260,25 +260,25 @@ export default function MyOffers() {
                 {/* Stats Row */}
                 <div className="grid grid-cols-3 gap-3">
                   <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                    <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Qty Requested</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Qty Requested</p>
                     <p className="text-base font-semibold text-slate-700 dark:text-white">{selectedOffer.quantity}</p>
-                    <p className="text-[8px] font-semibold text-slate-300 uppercase">KG</p>
+                    <p className="text-xs font-semibold text-slate-300 uppercase">KG</p>
                   </div>
                   <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                    <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Your Ask</p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Your Ask</p>
                     <p className="text-base font-semibold text-slate-700 dark:text-white">KSh {selectedOffer.listing?.price_per_kg || 'N/A'}</p>
-                    <p className="text-[8px] font-semibold text-slate-300 uppercase">Per KG</p>
+                    <p className="text-xs font-semibold text-slate-300 uppercase">Per KG</p>
                   </div>
                   <div className="bg-slate-900 dark:bg-slate-800 p-4 rounded-2xl border border-slate-800 text-center shadow-lg">
-                    <p className="text-[8px] font-semibold text-emerald-400 uppercase tracking-widest mb-1">Payout</p>
+                    <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-1">Payout</p>
                     <p className="text-base font-semibold text-white">KSh {(selectedOffer.offered_price * selectedOffer.quantity).toLocaleString()}</p>
-                    <p className="text-[8px] font-semibold text-emerald-400/50 uppercase">Total</p>
+                    <p className="text-xs font-semibold text-emerald-400/50 uppercase">Total</p>
                   </div>
                 </div>
 
                 {/* Listing Details */}
                 <div className="bg-white dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
-                  <h4 className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-3">Bid Comparison</h4>
+                  <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Bid Comparison</h4>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold text-slate-500">Your Asking Price</span>
@@ -308,13 +308,13 @@ export default function MyOffers() {
                 <div className="flex gap-3 pt-2">
                   <button 
                     onClick={() => handleDecline(selectedOffer.id)}
-                    className="flex-1 py-4 bg-white dark:bg-slate-800 text-rose-500 border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-[10px] uppercase tracking-widest shadow-sm active:scale-[0.97] transition-all"
+                    className="flex-1 py-4 bg-white dark:bg-slate-800 text-rose-500 border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs uppercase tracking-widest shadow-sm active:scale-[0.97] transition-all"
                   >
                     Decline
                   </button>
                   <button 
                     onClick={() => handleAccept(selectedOffer)}
-                    className="flex-[2] py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                    className="flex-[2] py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-xs uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 active:scale-[0.97] transition-all flex items-center justify-center gap-2"
                   >
                     <Check className="w-4 h-4" /> Accept Offer
                   </button>
@@ -328,7 +328,7 @@ export default function MyOffers() {
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-3xl flex items-center justify-center mx-auto mb-4 text-slate-300">
                     <MessageSquareQuote className="w-8 h-8" />
                   </div>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">No active bids yet</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">No active bids yet</p>
                 </div>
               ) : (
                 pendingOffers.map((offer) => (
@@ -347,11 +347,11 @@ export default function MyOffers() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-[9px] font-semibold text-emerald-600 uppercase tracking-widest">Incoming Bid</span>
-                          <span className="text-[10px] font-semibold text-slate-900 dark:text-white">KSh {offer.offered_price}/kg</span>
+                          <span className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">Incoming Bid</span>
+                          <span className="text-xs font-semibold text-slate-900 dark:text-white">KSh {offer.offered_price}/kg</span>
                         </div>
                         <h4 className="text-sm font-semibold text-slate-900 dark:text-white uppercase truncate tracking-tight">{offer.material}</h4>
-                        <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest truncate mt-1">From: {offer.buyerName}</p>
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest truncate mt-1">From: {offer.buyerName}</p>
                       </div>
                       <ChevronRight className="w-5 h-5 text-slate-200" />
                     </div>
@@ -366,7 +366,7 @@ export default function MyOffers() {
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-300">
                     <Clock className="w-8 h-8" />
                   </div>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">No trades in progress</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">No trades in progress</p>
                 </div>
               ) : (
                 inProgressOffers.map((offer) => {
@@ -387,11 +387,11 @@ export default function MyOffers() {
                         <div className="flex-1 text-left min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
                             <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{offer.material}</h4>
-                            <span className="text-[8px] font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
+                            <span className="text-xs font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
                               <Clock className="w-2 h-2" /> Awaiting Pickup
                             </span>
                           </div>
-                          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest truncate">Agent: {offer.buyerName}</p>
+                          <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest truncate">Agent: {offer.buyerName}</p>
                         </div>
                         <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
@@ -408,20 +408,20 @@ export default function MyOffers() {
                             <div className="pt-4 border-t border-slate-50 dark:border-slate-800/50 space-y-4">
                               <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-2xl border border-slate-100 dark:border-slate-800/50">
-                                  <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Contract Quantity</p>
+                                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Contract Quantity</p>
                                   <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                                     <Scale className="w-3 h-3" /> {offer.quantity} KG
                                   </p>
                                 </div>
                                 <div className="bg-emerald-500/5 dark:bg-emerald-500/10 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-500/20">
-                                  <p className="text-[8px] font-semibold text-emerald-600 uppercase tracking-widest mb-1">Locked Price</p>
+                                  <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-1">Locked Price</p>
                                   <p className="text-xs font-bold text-emerald-600">KSh {offer.offered_price}/kg</p>
                                 </div>
                               </div>
                               
                               <div className="bg-slate-900 dark:bg-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-lg">
                                 <div>
-                                  <p className="text-[8px] font-semibold text-emerald-400 uppercase tracking-widest mb-0.5">Expected Payout</p>
+                                  <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-0.5">Expected Payout</p>
                                   <p className="text-lg font-bold text-white leading-none">KSh {(offer.offered_price * offer.quantity).toLocaleString()}</p>
                                 </div>
                                 <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
@@ -429,7 +429,7 @@ export default function MyOffers() {
                                 </div>
                               </div>
 
-                              <p className="text-[9px] font-medium text-slate-400 italic text-center px-4">
+                              <p className="text-xs font-medium text-slate-400 italic text-center px-4">
                                 Agent is currently dispatched. Funds will be released to your wallet upon weight verification.
                               </p>
                             </div>
@@ -448,7 +448,7 @@ export default function MyOffers() {
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-300">
                     <AlertCircle className="w-8 h-8" />
                   </div>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">No active counters</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">No active counters</p>
                 </div>
               ) : (
                 counterOffers.map((b) => {
@@ -469,11 +469,11 @@ export default function MyOffers() {
                         <div className="flex-1 text-left min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
                             <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{b.waste_type || 'Materials'}</h4>
-                            <span className="text-[8px] font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
+                            <span className="text-xs font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
                               Price Revised
                             </span>
                           </div>
-                          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest truncate">New Offer: KSh {(b.counter_offer_amount || 0).toLocaleString()}</p>
+                          <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest truncate">New Offer: KSh {(b.counter_offer_amount || 0).toLocaleString()}</p>
                         </div>
                         <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
@@ -490,16 +490,16 @@ export default function MyOffers() {
                             <div className="pt-4 border-t border-slate-50 dark:border-slate-800/50 space-y-4">
                               <div className="bg-amber-500/5 dark:bg-amber-500/10 p-4 rounded-2xl border border-amber-500/20">
                                 <div className="flex justify-between items-center mb-3">
-                                  <p className="text-[9px] font-black text-amber-600 uppercase tracking-widest">Revision Details</p>
-                                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Agent: {b.buyerName}</p>
+                                  <p className="text-xs font-black text-amber-600 uppercase tracking-widest">Revision Details</p>
+                                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Agent: {b.buyerName}</p>
                                 </div>
                                 <div className="flex justify-between items-end">
                                   <div>
-                                    <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Original Payout</p>
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Original Payout</p>
                                     <p className="text-sm font-bold text-slate-500 line-through">KSh {(b.total_price || 0).toLocaleString()}</p>
                                   </div>
                                   <div className="text-right">
-                                    <p className="text-[8px] font-semibold text-amber-600 uppercase tracking-widest mb-0.5">Counter-Offer</p>
+                                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest mb-0.5">Counter-Offer</p>
                                     <p className="text-2xl font-black text-amber-600 leading-none">KSh {(b.counter_offer_amount || 0).toLocaleString()}</p>
                                   </div>
                                 </div>
@@ -508,19 +508,19 @@ export default function MyOffers() {
                               <div className="flex gap-2">
                                 <button 
                                   onClick={() => handleRejectCounterOffer(b)} 
-                                  className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 font-semibold text-[10px] uppercase tracking-widest rounded-2xl active:scale-95 transition-all"
+                                  className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 font-semibold text-xs uppercase tracking-widest rounded-2xl active:scale-95 transition-all"
                                 >
                                   Reject
                                 </button>
                                 <button 
                                   onClick={() => handleAcceptCounterOffer(b)} 
-                                  className="flex-[2] py-4 bg-amber-500 text-white font-semibold text-[10px] uppercase tracking-widest rounded-2xl shadow-xl shadow-amber-500/25 active:scale-95 transition-all"
+                                  className="flex-[2] py-4 bg-amber-500 text-white font-semibold text-xs uppercase tracking-widest rounded-2xl shadow-xl shadow-amber-500/25 active:scale-95 transition-all"
                                 >
                                   Accept & Release
                                 </button>
                               </div>
                               
-                              <p className="text-[9px] font-medium text-slate-400 italic text-center px-4">
+                              <p className="text-xs font-medium text-slate-400 italic text-center px-4">
                                 Accepting this revision will finalize the trade at the new price.
                               </p>
                             </div>
@@ -539,7 +539,7 @@ export default function MyOffers() {
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-300">
                     <ShieldCheck className="w-8 h-8" />
                   </div>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">No completed trades</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">No completed trades</p>
                 </div>
               ) : (
                 completedOffers.map((offer) => {
@@ -560,9 +560,9 @@ export default function MyOffers() {
                         <div className="flex-1 text-left min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
                             <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{offer.material}</h4>
-                            <span className="text-[8px] font-semibold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 px-2 py-0.5 rounded uppercase">Settled</span>
+                            <span className="text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 px-2 py-0.5 rounded uppercase">Settled</span>
                           </div>
-                          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest truncate">Agent: {offer.buyerName}</p>
+                          <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest truncate">Agent: {offer.buyerName}</p>
                         </div>
                         <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
@@ -579,20 +579,20 @@ export default function MyOffers() {
                             <div className="pt-4 border-t border-slate-50 dark:border-slate-800/50 space-y-4">
                               <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-2xl border border-slate-100 dark:border-slate-800/50">
-                                  <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Material Volume</p>
+                                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Material Volume</p>
                                   <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                                     <Scale className="w-3 h-3" /> {offer.quantity} KG
                                   </p>
                                 </div>
                                 <div className="bg-emerald-500/5 dark:bg-emerald-500/10 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-500/20">
-                                  <p className="text-[8px] font-semibold text-emerald-600 uppercase tracking-widest mb-1">Final Price</p>
+                                  <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-1">Final Price</p>
                                   <p className="text-xs font-bold text-emerald-600">KSh {offer.offered_price}/kg</p>
                                 </div>
                               </div>
                               
                               <div className="bg-emerald-600 p-4 rounded-2xl flex items-center justify-between shadow-lg shadow-emerald-600/20">
                                 <div>
-                                  <p className="text-[8px] font-semibold text-white/70 uppercase tracking-widest mb-0.5">Total Payout</p>
+                                  <p className="text-xs font-semibold text-white/70 uppercase tracking-widest mb-0.5">Total Payout</p>
                                   <p className="text-lg font-bold text-white leading-none">KSh {(offer.offered_price * offer.quantity).toLocaleString()}</p>
                                 </div>
                                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
@@ -600,7 +600,7 @@ export default function MyOffers() {
                                 </div>
                               </div>
 
-                              <div className="flex items-center gap-2 text-[9px] font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 p-3 rounded-xl justify-center">
+                              <div className="flex items-center gap-2 text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 p-3 rounded-xl justify-center">
                                 <ShieldCheck className="w-3.5 h-3.5" />
                                 <span className="uppercase tracking-widest">Verified & Transferred to Wallet</span>
                               </div>

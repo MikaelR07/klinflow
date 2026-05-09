@@ -177,7 +177,7 @@ export default function HygeneXPage() {
                 <h1 className="text-[15px] font-black leading-tight text-slate-900 dark:text-transparent dark:bg-gradient-to-r dark:from-white dark:to-white/60 dark:bg-clip-text whitespace-nowrap overflow-hidden text-ellipsis">
                   Your Next Reliable Supplier Is Here
                 </h1>
-                <p className="text-[9px] text-slate-400 dark:text-slate-500 font-bold mt-1 uppercase tracking-widest">
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-bold mt-1 uppercase tracking-widest">
                   Look no further for your custom inquiries
                 </p>
               </motion.div>
@@ -206,7 +206,7 @@ export default function HygeneXPage() {
                     </div>
                     <div>
                       <div className="text-[11px] font-bold uppercase tracking-wider leading-none mb-0.5">{item.title}</div>
-                      <div className="text-[9px] text-slate-500 font-medium leading-none">{item.desc}</div>
+                      <div className="text-xs text-slate-500 font-medium leading-none">{item.desc}</div>
                     </div>
                   </button>
                 ))}
@@ -237,7 +237,7 @@ export default function HygeneXPage() {
                       }`}>
                         {renderMessageText(msg.text)}
                       </div>
-                      <div className={`text-[9px] font-semibold uppercase tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
+                      <div className={`text-xs font-semibold uppercase tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
                         {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     </div>
@@ -271,7 +271,7 @@ export default function HygeneXPage() {
               <button 
                 key={chip}
                 onClick={() => sendMessage(chip)}
-                className="whitespace-nowrap px-4 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-[10px] font-bold text-blue-400 uppercase tracking-wider transition-all"
+                className="whitespace-nowrap px-4 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-xs font-bold text-blue-400 uppercase tracking-wider transition-all"
               >
                 {chip}
               </button>

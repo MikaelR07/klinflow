@@ -115,7 +115,7 @@ export default function NotificationsPage() {
                <div className="flex items-center gap-2">
                  <button 
                    onClick={clearAll}
-                   className="text-[10px] font-semibold uppercase text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 px-2 py-1 rounded-md transition-all"
+                   className="text-xs font-semibold uppercase text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 px-2 py-1 rounded-md transition-all"
                  >
                    Clear All
                  </button>
@@ -131,7 +131,7 @@ export default function NotificationsPage() {
                         <p className="text-sm font-semibold dark:text-white">{n.title}</p>
                         <div className="flex items-center gap-1">
                           <Clock className="w-3 h-3 text-slate-300" />
-                          <span className="text-[10px] text-slate-400 font-medium tabular-nums">
+                          <span className="text-xs text-slate-400 font-medium tabular-nums">
                             {formatRelativeTime(n.created_at || n.date)}
                           </span>
                         </div>

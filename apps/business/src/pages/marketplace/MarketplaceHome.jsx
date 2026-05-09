@@ -171,7 +171,7 @@ export default function MarketplaceHome() {
               className="w-full pl-10 pr-4 py-2.5 bg-white/30 dark:bg-white/5 backdrop-blur-2xl border border-slate-200/50 dark:border-white/5 rounded-lg text-sm focus:outline-none focus:border-emerald-500/30 transition-all text-slate-900 dark:text-white"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery('')} className="absolute right-6 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-400 uppercase tracking-wider hover:text-slate-600 transition-colors">Clear</button>
+              <button onClick={() => setSearchQuery('')} className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 uppercase tracking-wider hover:text-slate-600 transition-colors">Clear</button>
             )}
           </div>
 
@@ -186,21 +186,21 @@ export default function MarketplaceHome() {
               }`}
             >
               <LayoutGrid className="w-4 h-4 shrink-0" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">Categories</span>
+              <span className="text-xs font-bold uppercase tracking-wider">Categories</span>
             </button>
             <button 
               onClick={() => navigate('/procurement')}
               className="flex-1 flex items-center gap-2.5 px-3 py-3 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl active:scale-95 transition-all text-slate-700 dark:text-white"
             >
               <FileText className="w-4 h-4 shrink-0" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">Bulk Sourcing</span>
+              <span className="text-xs font-bold uppercase tracking-wider">Bulk Sourcing</span>
             </button>
             <button 
               onClick={() => navigate('/listings')}
               className="flex-1 flex items-center gap-2.5 px-3 py-3 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl active:scale-95 transition-all text-slate-700 dark:text-white"
             >
               <ListOrdered className="w-4 h-4 shrink-0" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">Listings</span>
+              <span className="text-xs font-bold uppercase tracking-wider">Listings</span>
             </button>
           </div>
 
@@ -218,7 +218,7 @@ export default function MarketplaceHome() {
                   <ArrowUpRight className="w-3 h-3 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">Plastic</p>
+                  <p className="text-xs font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">Plastic</p>
                   <p className="text-xs text-slate-900 dark:text-white">PET & HDPE</p>
                 </div>
               </button>
@@ -230,7 +230,7 @@ export default function MarketplaceHome() {
               >
                 <span className="text-lg">🥫</span>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">Metal</p>
+                  <p className="text-xs font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">Metal</p>
                   <p className="text-xs text-slate-900 dark:text-white">Industrial Aluminium</p>
                 </div>
               </button>
@@ -241,7 +241,7 @@ export default function MarketplaceHome() {
                 className="col-span-2 row-span-1 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-[0.45rem] p-2 flex flex-col justify-center items-center text-center group active:scale-95 transition-all"
               >
                 <span className="text-base">📄</span>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white uppercase mt-1">Paper</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white uppercase mt-1">Paper</p>
               </button>
 
               {/* Glass */}
@@ -250,7 +250,7 @@ export default function MarketplaceHome() {
                 className="col-span-2 row-span-1 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-[0.45rem] p-2 flex flex-col justify-center items-center text-center group active:scale-95 transition-all"
               >
                 <span className="text-base">🍾</span>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white uppercase mt-1">Glass</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white uppercase mt-1">Glass</p>
               </button>
 
               {/* Organic */}
@@ -259,7 +259,7 @@ export default function MarketplaceHome() {
                 className="col-span-2 row-span-1 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-[0.45rem] p-2 flex flex-col justify-center items-center text-center group active:scale-95 transition-all"
               >
                 <span className="text-base">🍌</span>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white uppercase mt-1">Organic</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white uppercase mt-1">Organic</p>
               </button>
 
               {/* E-Waste */}
@@ -268,7 +268,7 @@ export default function MarketplaceHome() {
                 className="col-span-2 row-span-1 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-[0.45rem] p-2 flex flex-col justify-center items-center text-center group active:scale-95 transition-all"
               >
                 <span className="text-base">💻</span>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white uppercase mt-1">E-Waste</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white uppercase mt-1">E-Waste</p>
               </button>
 
               {/* Others */}
@@ -277,7 +277,7 @@ export default function MarketplaceHome() {
                 className="col-span-2 row-span-1 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-[0.45rem] p-2 flex flex-col justify-center items-center text-center group active:scale-95 transition-all"
               >
                 <PlusCircle className="w-4 h-4 text-slate-400" />
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white uppercase mt-1">Others</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white uppercase mt-1">Others</p>
               </button>
             </div>
           </div>
@@ -296,7 +296,7 @@ export default function MarketplaceHome() {
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">Active Feed</span>
+              <span className="text-xs font-bold text-emerald-500 uppercase tracking-widest">Active Feed</span>
             </div>
           </div>
 
@@ -339,10 +339,10 @@ export default function MarketplaceHome() {
                   </div>
                   
                   <div className="space-y-1">
-                    <h4 className="font-bold text-white text-[9px] uppercase tracking-tighter line-clamp-2 leading-tight drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.8)]">{item.displayTitle || item.material}</h4>
+                    <h4 className="font-bold text-white text-xs uppercase tracking-tighter line-clamp-2 leading-tight drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.8)]">{item.displayTitle || item.material}</h4>
                     <div className="flex items-center gap-1 text-white">
                       <Scale className="w-2.5 h-2.5 text-emerald-400" />
-                      <span className="text-[10px] font-black drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.8)]">{item.weight_kg}kg</span>
+                      <span className="text-xs font-black drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.8)]">{item.weight_kg}kg</span>
                     </div>
                   </div>
                 </div>
@@ -352,7 +352,7 @@ export default function MarketplaceHome() {
 
           <button 
             onClick={() => navigate('/arrivals')}
-            className="w-full py-3.5 bg-emerald-600 dark:bg-emerald-500 text-white rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] shadow-sm shadow-emerald-500/20 active:scale-95 transition-all flex justify-center items-center gap-2"
+            className="w-full py-3.5 bg-emerald-600 dark:bg-emerald-500 text-white rounded-xl font-bold text-xs uppercase tracking-[0.2em] shadow-sm shadow-emerald-500/20 active:scale-95 transition-all flex justify-center items-center gap-2"
           >
             Enter Terminal <ArrowRight className="w-4 h-4" />
           </button>
@@ -376,7 +376,7 @@ export default function MarketplaceHome() {
                   </div>
                   <div className="relative z-10 flex flex-col justify-end h-full">
                     <h3 className="text-white font-bold text-sm">{shelf.title}</h3>
-                    <p className="text-white/70 text-[10px] font-medium">{shelf.desc}</p>
+                    <p className="text-white/70 text-xs font-medium">{shelf.desc}</p>
                   </div>
                 </div>
               ))}
@@ -398,12 +398,12 @@ export default function MarketplaceHome() {
                 )}
               </h2>
               {hasPersonalization && !searchQuery && (
-                <p className="text-[9px] text-slate-400 mt-1">Based on your specializations: {mySpecializations.join(', ')}</p>
+                <p className="text-xs text-slate-400 mt-1">Based on your specializations: {mySpecializations.join(', ')}</p>
               )}
             </div>
             <button 
               onClick={() => navigate('/buy')} 
-              className="px-4 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[9px] font-bold uppercase tracking-widest rounded-full border border-indigo-100 dark:border-indigo-500/20 active:scale-95 transition-all"
+              className="px-4 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-bold uppercase tracking-widest rounded-full border border-indigo-100 dark:border-indigo-500/20 active:scale-95 transition-all"
             >
               View All
             </button>
@@ -413,7 +413,7 @@ export default function MarketplaceHome() {
             <div className="py-12 text-center">
               <Package className="w-12 h-12 text-slate-200 mx-auto mb-3" />
               <p className="text-sm font-bold text-slate-400">No results for "{searchQuery}"</p>
-              <p className="text-[10px] text-slate-400 mt-1">Try a different material, location, or seller name</p>
+              <p className="text-xs text-slate-400 mt-1">Try a different material, location, or seller name</p>
             </div>
           )}
 
@@ -432,12 +432,12 @@ export default function MarketplaceHome() {
                       <Package className="w-10 h-10 text-slate-200" />
                     </div>
                   )}
-                  <div className="absolute top-2 left-2 px-2 py-0.5 bg-black/40 backdrop-blur-sm rounded-md text-[8px] font-bold text-white uppercase tracking-wider">
+                  <div className="absolute top-2 left-2 px-2 py-0.5 bg-black/40 backdrop-blur-sm rounded-md text-xs font-bold text-white uppercase tracking-wider">
                     {listing.quantity} KG
                   </div>
                   {/* Match Score Badge */}
                   {listing.matchScore >= 50 && (
-                    <div className={`absolute top-2 right-2 px-2 py-0.5 backdrop-blur-sm rounded-md text-[8px] font-black text-white uppercase tracking-wider ${
+                    <div className={`absolute top-2 right-2 px-2 py-0.5 backdrop-blur-sm rounded-md text-xs font-black text-white uppercase tracking-wider ${
                       listing.matchScore >= 80 ? 'bg-emerald-500/80' : 'bg-amber-500/80'
                     }`}>
                       {listing.matchScore}% Match
@@ -446,13 +446,13 @@ export default function MarketplaceHome() {
                 </div>
                 <div className="p-3 space-y-1.5">
                   <h3 className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-tight truncate">{listing.material}</h3>
-                  <div className="flex items-center justify-between text-[9px] text-slate-400 font-medium">
+                  <div className="flex items-center justify-between text-xs text-slate-400 font-medium">
                     <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {listing.location}</span>
                     <span className="flex items-center gap-1"><Scale className="w-3 h-3" /> {listing.quantity} KG</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-black text-emerald-600 italic">KSh {listing.pricePerKg}<span className="text-[9px] text-slate-400 font-medium not-italic ml-0.5">/KG</span></p>
-                    <p className="text-[8px] text-slate-400 font-bold uppercase">MOQ {listing.moq || Math.max(1, Math.round(listing.quantity * 0.1))}kg</p>
+                    <p className="text-sm font-black text-emerald-600 italic">KSh {listing.pricePerKg}<span className="text-xs text-slate-400 font-medium not-italic ml-0.5">/KG</span></p>
+                    <p className="text-xs text-slate-400 font-bold uppercase">MOQ {listing.moq || Math.max(1, Math.round(listing.quantity * 0.1))}kg</p>
                   </div>
                 </div>
               </div>

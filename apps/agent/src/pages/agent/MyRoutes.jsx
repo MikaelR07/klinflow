@@ -37,7 +37,7 @@ const createStopIcon = (number, isNext = false) => L.divIcon({
   className: 'custom-div-icon',
   html: `
     <div class="relative flex items-center justify-center">
-      <div class="w-8 h-8 rounded-full ${isNext ? 'bg-emerald-500 scale-125' : 'bg-slate-800'} border-2 border-white shadow-lg flex items-center justify-center text-white text-[10px] font-semibold z-10">
+      <div class="w-8 h-8 rounded-full ${isNext ? 'bg-emerald-500 scale-125' : 'bg-slate-800'} border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-semibold z-10">
         ${number}
       </div>
       ${isNext ? '<div class="absolute inset-0 w-8 h-8 bg-emerald-500 rounded-full animate-ping opacity-30"></div>' : ''}
@@ -183,12 +183,12 @@ export default function MyRoutes() {
                 <Truck className="w-4 h-4" />
              </div>
              <div>
-               <p className="text-[8px] font-semibold text-slate-500 uppercase tracking-widest leading-none mb-0.5">Total Stops</p>
+               <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest leading-none mb-0.5">Total Stops</p>
                <p className="text-base font-semibold dark:text-white">{activeJobs.length}</p>
              </div>
            </div>
            <div className="text-right">
-              <p className="text-[8px] font-semibold text-emerald-500 uppercase tracking-widest leading-none mb-0.5">Stops Left</p>
+              <p className="text-xs font-semibold text-emerald-500 uppercase tracking-widest leading-none mb-0.5">Stops Left</p>
               <p className="text-base font-semibold dark:text-white">{activeJobs.length}</p>
            </div>
         </div>
@@ -200,7 +200,7 @@ export default function MyRoutes() {
            <div className="w-16 h-16 bg-blue-600/10 rounded-3xl flex items-center justify-center mb-4 animate-pulse">
               <Navigation2 className="w-8 h-8 text-blue-600" />
            </div>
-           <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Finding your location...</p>
+           <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Finding your location...</p>
         </div>
       ) : (
         <div className="flex-1 relative">
@@ -252,8 +252,8 @@ export default function MyRoutes() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-semibold text-emerald-500 uppercase tracking-widest bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-100 dark:border-emerald-800/50">Next Stop</span>
-                      <span className="text-[10px] font-semibold text-slate-400">· {distanceLabel}</span>
+                      <span className="text-xs font-semibold text-emerald-500 uppercase tracking-widest bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-lg border border-emerald-100 dark:border-emerald-800/50">Next Stop</span>
+                      <span className="text-xs font-semibold text-slate-400">· {distanceLabel}</span>
                     </div>
                     <h3 className="text-xl font-semibold dark:text-white mt-1">{nextStop.customer || 'Resident'}</h3>
                     <p className="text-xs text-slate-500 font-semibold">{nextStop.location} · {nextStop.material}</p>
@@ -283,7 +283,7 @@ export default function MyRoutes() {
               {/* Drawer Trigger */}
               <button 
                 onClick={() => setIsDrawerOpen(true)}
-                className="w-full mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest"
+                className="w-full mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-widest"
               >
                 <ChevronUp className="w-4 h-4" /> View Trip List ({activeJobs.length} Stops)
               </button>
@@ -308,7 +308,7 @@ export default function MyRoutes() {
             <div className="p-8">
               <div className="flex items-center justify-between mb-8">
                  <h2 className="text-2xl font-semibold dark:text-white">Trip Manifest</h2>
-                 <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-widest">{activeJobs.length} Missions</span>
+                 <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest">{activeJobs.length} Missions</span>
               </div>
 
               <div className="space-y-4">
@@ -319,11 +319,11 @@ export default function MyRoutes() {
                     </div>
                     <div className="flex-1">
                        <p className="text-sm font-semibold dark:text-white">{item.customer || 'Resident'}</p>
-                       <p className="text-[10px] font-semibold text-slate-500 uppercase">{item.location} · {item.material}</p>
+                       <p className="text-xs font-semibold text-slate-500 uppercase">{item.location} · {item.material}</p>
                     </div>
                     <div className="text-right">
                        <p className="text-xs font-semibold text-blue-600">KSh {item.pay}</p>
-                       <p className="text-[10px] font-semibold text-slate-400 italic">~10kg</p>
+                       <p className="text-xs font-semibold text-slate-400 italic">~10kg</p>
                     </div>
                   </div>
                 ))}

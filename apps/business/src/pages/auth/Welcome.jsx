@@ -15,7 +15,7 @@ export default function Welcome() {
 
         <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 mb-6 w-fit animate-bounce-slow">
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-[10px] font-semibold text-primary uppercase tracking-widest">Africa's #1 B2B Waste Exchange</span>
+          <span className="text-xs font-semibold text-primary uppercase tracking-widest">Africa's #1 B2B Waste Exchange</span>
         </div>
 
         <h1 className="text-5xl font-semibold text-slate-900 dark:text-white leading-[0.95] mb-6 tracking-tighter">

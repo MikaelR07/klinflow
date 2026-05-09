@@ -155,7 +155,7 @@ export default function ListingDetails() {
 
           {/* Status Badge */}
           <div className="absolute top-4 right-4 px-3 py-1.5 bg-emerald-500/90 backdrop-blur-sm rounded-full">
-            <span className="text-[9px] font-black text-white uppercase tracking-widest">{item.status || 'Active'}</span>
+            <span className="text-xs font-black text-white uppercase tracking-widest">{item.status || 'Active'}</span>
           </div>
         </div>
 
@@ -172,7 +172,7 @@ export default function ListingDetails() {
                 {item.isVerified && <BadgeCheck className="w-3.5 h-3.5 text-indigo-500" />}
               </div>
               <span className="text-slate-300 dark:text-slate-600">·</span>
-              <span className="text-[10px] font-medium text-slate-400">{timeAgo(item.createdAt)}</span>
+              <span className="text-xs font-medium text-slate-400">{timeAgo(item.createdAt)}</span>
             </div>
           </div>
 
@@ -180,13 +180,13 @@ export default function ListingDetails() {
           <div className="bg-white dark:bg-slate-800/50 rounded-2xl p-5 border border-slate-100 dark:border-slate-800">
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Asking Price</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Asking Price</p>
                 <p className="text-3xl font-black text-emerald-600 italic leading-none">
                   KSh {item.pricePerKg}<span className="text-sm text-slate-400 font-medium not-italic ml-1">/{item.unit || 'KG'}</span>
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Value</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Total Value</p>
                 <p className="text-lg font-bold text-slate-900 dark:text-white italic">
                   KSh {(item.pricePerKg * item.quantity).toLocaleString()}
                 </p>
@@ -198,17 +198,17 @@ export default function ListingDetails() {
           <div className="grid grid-cols-3 gap-3">
             <div className="bg-white dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800 text-center">
               <Scale className="w-4 h-4 text-emerald-500 mx-auto mb-1.5" />
-              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Available</p>
-              <p className="text-sm font-black text-slate-900 dark:text-white">{item.quantity} <span className="text-[9px] text-slate-400">{item.unit || 'KG'}</span></p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Available</p>
+              <p className="text-sm font-black text-slate-900 dark:text-white">{item.quantity} <span className="text-xs text-slate-400">{item.unit || 'KG'}</span></p>
             </div>
             <div className="bg-white dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800 text-center">
               <Tag className="w-4 h-4 text-indigo-500 mx-auto mb-1.5" />
-              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Min. Order</p>
-              <p className="text-sm font-black text-slate-900 dark:text-white">{item.moq || 1} <span className="text-[9px] text-slate-400">{item.unit || 'KG'}</span></p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Min. Order</p>
+              <p className="text-sm font-black text-slate-900 dark:text-white">{item.moq || 1} <span className="text-xs text-slate-400">{item.unit || 'KG'}</span></p>
             </div>
             <div className="bg-white dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800 text-center">
               <ShieldCheck className="w-4 h-4 text-amber-500 mx-auto mb-1.5" />
-              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Grade</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Grade</p>
               <p className="text-sm font-black text-slate-900 dark:text-white">{item.grade || 'Standard'}</p>
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function ListingDetails() {
                 <MapPin className="w-5 h-5 text-blue-500" />
               </div>
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Location</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Location</p>
                 <p className="text-sm font-bold text-slate-900 dark:text-white">{item.location}</p>
               </div>
             </div>
@@ -229,7 +229,7 @@ export default function ListingDetails() {
             {/* Description */}
             {item.description && (
               <div className="bg-white dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Description</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Description</p>
                 <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{item.description}</p>
               </div>
             )}
@@ -240,21 +240,21 @@ export default function ListingDetails() {
                 <Eye className="w-4 h-4 text-slate-400" />
                 <div>
                   <p className="text-xs font-bold text-slate-900 dark:text-white">{item.views || 0}</p>
-                  <p className="text-[8px] text-slate-400 font-bold uppercase">Views</p>
+                  <p className="text-xs text-slate-400 font-bold uppercase">Views</p>
                 </div>
               </div>
               <div className="flex-1 flex items-center gap-2 bg-white dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
                 <MessageSquare className="w-4 h-4 text-slate-400" />
                 <div>
                   <p className="text-xs font-bold text-slate-900 dark:text-white">{item.offers || 0}</p>
-                  <p className="text-[8px] text-slate-400 font-bold uppercase">Offers</p>
+                  <p className="text-xs text-slate-400 font-bold uppercase">Offers</p>
                 </div>
               </div>
               <div className="flex-1 flex items-center gap-2 bg-white dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
                 <Clock className="w-4 h-4 text-slate-400" />
                 <div>
                   <p className="text-xs font-bold text-slate-900 dark:text-white">{timeAgo(item.createdAt)}</p>
-                  <p className="text-[8px] text-slate-400 font-bold uppercase">Posted</p>
+                  <p className="text-xs text-slate-400 font-bold uppercase">Posted</p>
                 </div>
               </div>
             </div>
@@ -277,17 +277,17 @@ export default function ListingDetails() {
                 <div className="bg-white dark:bg-slate-800/50 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-4 animate-fade-in">
                   <div className="grid grid-cols-2 gap-3">
                     <div className="relative">
-                      <label className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">Your Price</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">Your Price</label>
                       <input
                         type="number"
                         value={offerPrice}
                         onChange={(e) => setOfferPrice(e.target.value)}
                         className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 h-12 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all text-slate-900 dark:text-white"
                       />
-                      <span className="absolute right-3 bottom-3.5 text-[9px] font-bold text-slate-300">KSh/KG</span>
+                      <span className="absolute right-3 bottom-3.5 text-xs font-bold text-slate-300">KSh/KG</span>
                     </div>
                     <div className="relative">
-                      <label className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">Quantity</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">Quantity</label>
                       <input
                         type="number"
                         min={item.moq || 1}
@@ -296,13 +296,13 @@ export default function ListingDetails() {
                         onChange={(e) => setOfferQty(Math.min(item.quantity, Number(e.target.value)))}
                         className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 h-12 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all text-slate-900 dark:text-white"
                       />
-                      <span className="absolute right-3 bottom-3.5 text-[9px] font-bold text-slate-300">KG</span>
+                      <span className="absolute right-3 bottom-3.5 text-xs font-bold text-slate-300">KG</span>
                     </div>
                   </div>
 
                   {offerPrice && offerQty && (
                     <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl p-3 text-center">
-                      <p className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest">Offer Total</p>
+                      <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest">Offer Total</p>
                       <p className="text-xl font-black text-emerald-700 dark:text-emerald-400 italic">
                         KSh {(Number(offerPrice) * Number(offerQty)).toLocaleString()}
                       </p>
@@ -332,7 +332,7 @@ export default function ListingDetails() {
           {isOwnListing && (
             <div className="bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl p-5 text-center border border-indigo-100 dark:border-indigo-500/20">
               <p className="text-xs font-bold text-indigo-600 dark:text-indigo-400">This is your listing</p>
-              <p className="text-[10px] text-slate-400 mt-1">Manage it from your listings page.</p>
+              <p className="text-xs text-slate-400 mt-1">Manage it from your listings page.</p>
             </div>
           )}
         </div>

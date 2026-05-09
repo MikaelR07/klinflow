@@ -90,15 +90,15 @@ export default function IotDetailModal({ show, onClose, item, type }) {
                 <p className="text-sm font-medium text-slate-700 mb-3">Waste Composition</p>
                 <div className="flex gap-2">
                   <div className="flex-1 bg-green-50 rounded-xl p-3 text-center">
-                    <p className="text-[10px] text-green-600 font-medium uppercase tracking-wider mb-1">Organic</p>
+                    <p className="text-xs text-green-600 font-medium uppercase tracking-wider mb-1">Organic</p>
                     <p className="text-xl font-semibold text-green-700">{item.breakdown.organic}%</p>
                   </div>
                   <div className="flex-1 bg-blue-50 rounded-xl p-3 text-center">
-                    <p className="text-[10px] text-blue-600 font-medium uppercase tracking-wider mb-1">Recyclable</p>
+                    <p className="text-xs text-blue-600 font-medium uppercase tracking-wider mb-1">Recyclable</p>
                     <p className="text-xl font-semibold text-blue-700">{item.breakdown.recyclable}%</p>
                   </div>
                   <div className="flex-1 bg-slate-50 rounded-xl p-3 text-center">
-                    <p className="text-[10px] text-slate-500 font-medium uppercase tracking-wider mb-1">Other</p>
+                    <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Other</p>
                     <p className="text-xl font-semibold text-slate-700">{item.breakdown.other}%</p>
                   </div>
                 </div>

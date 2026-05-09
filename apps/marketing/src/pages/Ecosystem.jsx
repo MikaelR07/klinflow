@@ -47,7 +47,7 @@ export default function Ecosystem() {
                          <node.icon className="w-10 h-10" />
                       </div>
                       <h4 className="text-white font-bold text-lg mb-2">{node.title}</h4>
-                      <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{node.desc}</p>
+                      <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">{node.desc}</p>
                    </div>
                 ))}
              </div>

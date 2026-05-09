@@ -55,7 +55,7 @@ export default function ProfilePage() {
             <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Phone Number <span className="lowercase text-[10px] text-slate-400">(Read-only)</span></label>
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Phone Number <span className="lowercase text-xs text-slate-400">(Read-only)</span></label>
             <input type="tel" value={formData.phone} disabled className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-500 dark:text-slate-500 text-sm cursor-not-allowed opacity-70" />
           </div>
           <div>
@@ -88,11 +88,11 @@ export default function ProfilePage() {
           <div className="flex justify-between items-center mb-2 pb-2 border-b border-primary/10">
             <h2 className="text-sm font-semibold text-primary">Business Verification (B2B)</h2>
             {profile?.isVerified ? (
-              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600 text-[10px] font-semibold uppercase">Verified ✓</span>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600 text-xs font-semibold uppercase">Verified ✓</span>
             ) : formData.nemaLicense ? (
-              <span className="px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-[10px] font-semibold uppercase animate-pulse">Pending Review</span>
+              <span className="px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-xs font-semibold uppercase animate-pulse">Pending Review</span>
             ) : (
-              <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-400 text-[10px] font-semibold uppercase">Not Submitted</span>
+              <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-400 text-xs font-semibold uppercase">Not Submitted</span>
             )}
           </div>
           
@@ -116,11 +116,11 @@ export default function ProfilePage() {
                 NEMA License 
                 {formData.nemaLicense && formData.nemaLicense.length > 0 && (
                   !formData.nemaLicense.toUpperCase().startsWith('NEMA/') ? (
-                    <span className="text-red-500 lowercase text-[10px] ml-2">(Must start with NEMA/)</span>
+                    <span className="text-red-500 lowercase text-xs ml-2">(Must start with NEMA/)</span>
                   ) : formData.nemaLicense.length < 10 ? (
-                    <span className="text-orange-500 lowercase text-[10px] ml-2">(Too short)</span>
+                    <span className="text-orange-500 lowercase text-xs ml-2">(Too short)</span>
                   ) : (
-                    <span className="text-emerald-500 lowercase text-[10px] ml-2">(Format Valid)</span>
+                    <span className="text-emerald-500 lowercase text-xs ml-2">(Format Valid)</span>
                   )
                 )}
               </label>
@@ -156,7 +156,7 @@ export default function ProfilePage() {
                         : [...current, spec];
                       setFormData(prev => ({ ...prev, specializations: next }));
                     }}
-                    className={`px-3 py-1.5 rounded-full text-[10px] font-semibold border transition-all ${
+                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                       formData.specializations?.includes(spec)
                         ? 'bg-primary border-primary text-white'
                         : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500'
@@ -168,7 +168,7 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
-          <p className="text-[10px] text-slate-500 leading-relaxed italic">
+          <p className="text-xs text-slate-500 leading-relaxed italic">
             Once submitted, our compliance team will verify your documents to award you the **Verified badge** for the marketplace.
           </p>
         </div>

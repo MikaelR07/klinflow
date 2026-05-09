@@ -59,7 +59,7 @@ export default function HubLanding() {
               
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
-                  <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Phone Number</label>
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Phone Number</label>
                   <input
                     type="tel"
                     value={phone}
@@ -70,7 +70,7 @@ export default function HubLanding() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-2">Security PIN</label>
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Security PIN</label>
                   <input
                     type="password"
                     value={pin}
@@ -105,7 +105,7 @@ export default function HubLanding() {
         <div className="flex items-center gap-4">
           <button 
             onClick={() => setShowLogin(true)}
-            className="bg-primary text-white px-8 py-3 rounded-2xl text-[10px] font-semibold uppercase tracking-widest shadow-xl shadow-primary/20 active:scale-95 transition-all flex items-center gap-2"
+            className="bg-primary text-white px-8 py-3 rounded-2xl text-xs font-semibold uppercase tracking-widest shadow-xl shadow-primary/20 active:scale-95 transition-all flex items-center gap-2"
           >
             <ShieldCheck className="w-4 h-4" />
             Terminal Access Login
@@ -118,7 +118,7 @@ export default function HubLanding() {
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full mb-8">
             <Zap className="w-3 h-3 text-primary" />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Enterprise OS for Circular Economy</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Enterprise OS for Circular Economy</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-[0.9] mb-8">
             Manage your Fleet <br/> <span className="text-primary">& Hub Terminal.</span>
@@ -217,9 +217,9 @@ export default function HubLanding() {
             <span className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white">CleanFlow Operating System © 2026</span>
           </div>
           <div className="flex items-center gap-8">
-            <button className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Privacy</button>
-            <button className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Terms</button>
-            <button className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Contact</button>
+            <button className="text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Privacy</button>
+            <button className="text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Terms</button>
+            <button className="text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-primary transition-colors">Contact</button>
           </div>
         </div>
       </footer>

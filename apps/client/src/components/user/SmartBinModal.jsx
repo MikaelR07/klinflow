@@ -63,7 +63,7 @@ const SmartBinModal = ({ bin, onClose }) => {
               <div style={{ width: `${bin.breakdown.recyclable}%` }} className="bg-blue-500" title={`Recyclable: ${bin.breakdown.recyclable}%`} />
               <div style={{ width: `${bin.breakdown.other}%` }} className="bg-gray-400" title={`Other: ${bin.breakdown.other}%`} />
             </div>
-            <div className="flex justify-between mt-2 text-[10px] text-gray-500 font-medium px-1">
+            <div className="flex justify-between mt-2 text-xs text-gray-500 font-medium px-1">
               <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-green-500"/>Organic {bin.breakdown.organic}%</span>
               <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-blue-500"/>Recyclable {bin.breakdown.recyclable}%</span>
               <span className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-gray-400"/>Other {bin.breakdown.other}%</span>

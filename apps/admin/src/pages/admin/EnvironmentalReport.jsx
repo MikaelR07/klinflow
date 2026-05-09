@@ -136,10 +136,10 @@ export default function EnvironmentalReport() {
               </div>
               <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Environmental Impact Report</h1>
             </div>
-            <p className="text-slate-500 font-semibold uppercase text-[10px] tracking-[0.3em]">CleanFlow PaaS Ecosystem · Quarterly Disclosure</p>
+            <p className="text-slate-500 font-semibold uppercase text-xs tracking-[0.3em]">CleanFlow PaaS Ecosystem · Quarterly Disclosure</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Report Reference</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Report Reference</p>
             <p className="text-sm font-mono font-semibold dark:text-white">CF-EIR-{new Date().getFullYear()}-{(Math.random() * 10000).toFixed(0)}</p>
             <p className="text-xs text-slate-500 mt-1">{new Date().toLocaleDateString('en-KE', { dateStyle: 'long' })}</p>
           </div>
@@ -151,27 +151,27 @@ export default function EnvironmentalReport() {
             <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-white mb-4">
               <Scale className="w-5 h-5" />
             </div>
-            <p className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Total Diversion</p>
+            <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Total Diversion</p>
             <h2 className="text-4xl font-semibold text-slate-900 dark:text-white">{stats.totalKg.toLocaleString()}<span className="text-sm ml-1 font-semibold">KG</span></h2>
-            <p className="text-[10px] text-slate-400 font-semibold mt-1">Waste recovered from landfills</p>
+            <p className="text-xs text-slate-400 font-semibold mt-1">Waste recovered from landfills</p>
           </div>
 
           <div className="p-6 bg-indigo-50 dark:bg-indigo-900/10 rounded-[2rem] border border-indigo-100 dark:border-indigo-800/30">
             <div className="w-10 h-10 bg-indigo-500 rounded-2xl flex items-center justify-center text-white mb-4">
               <Activity className="w-5 h-5" />
             </div>
-            <p className="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Carbon Offset</p>
+            <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Carbon Offset</p>
             <h2 className="text-4xl font-semibold text-slate-900 dark:text-white">{stats.totalCO2.toLocaleString()}<span className="text-sm ml-1 font-semibold">KG CO₂e</span></h2>
-            <p className="text-[10px] text-slate-400 font-semibold mt-1">Estimated greenhouse gas reduction</p>
+            <p className="text-xs text-slate-400 font-semibold mt-1">Estimated greenhouse gas reduction</p>
           </div>
 
           <div className="p-6 bg-slate-900 rounded-[2rem] text-white">
              <div className="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center text-primary mb-4">
                <MapPin className="w-5 h-5" />
              </div>
-             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Communities Served</p>
+             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Communities Served</p>
              <h2 className="text-4xl font-semibold">{Object.keys(stats.byEstate).length}</h2>
-             <p className="text-[10px] text-slate-500 font-semibold mt-1">Active collection catchment areas</p>
+             <p className="text-xs text-slate-500 font-semibold mt-1">Active collection catchment areas</p>
           </div>
         </div>
 
@@ -186,7 +186,7 @@ export default function EnvironmentalReport() {
                   <div key={i} className="space-y-2">
                     <div className="flex justify-between items-end">
                       <span className="text-xs font-semibold dark:text-white">{m.label}</span>
-                      <span className="text-[10px] font-semibold text-slate-400">{m.weight.toLocaleString()} KG · {m.pct.toFixed(1)}%</span>
+                      <span className="text-xs font-semibold text-slate-400">{m.weight.toLocaleString()} KG · {m.pct.toFixed(1)}%</span>
                     </div>
                     <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
                        <div className="h-full bg-primary transition-all duration-1000" style={{ width: `${m.pct}%` }} />
@@ -204,8 +204,8 @@ export default function EnvironmentalReport() {
              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {stats.byEstate.map((e, i) => (
                   <div key={i} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-                    <p className="text-[10px] font-semibold text-slate-400 uppercase truncate">{e.name}</p>
-                    <p className="text-xl font-semibold dark:text-white mt-1">{e.weight.toLocaleString()} <span className="text-[10px] text-slate-400">KG</span></p>
+                    <p className="text-xs font-semibold text-slate-400 uppercase truncate">{e.name}</p>
+                    <p className="text-xl font-semibold dark:text-white mt-1">{e.weight.toLocaleString()} <span className="text-xs text-slate-400">KG</span></p>
                   </div>
                 ))}
              </div>
@@ -215,23 +215,23 @@ export default function EnvironmentalReport() {
         {/* VERIFICATION STATEMENT */}
         <div className="mt-16 pt-8 border-t-2 border-slate-100 dark:border-white/5 grid grid-cols-2 gap-10 italic">
            <div className="space-y-2">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase not-italic">Data Verification</p>
-              <p className="text-[10px] text-slate-500 leading-relaxed">
+              <p className="text-xs font-semibold text-slate-400 uppercase not-italic">Data Verification</p>
+              <p className="text-xs text-slate-500 leading-relaxed">
                 This data is aggregated from verified weight logs captured by agents during the "Log Materials" phase of pickup. 
                 All weights are subject to warehouse audit at the central processing hub.
               </p>
            </div>
            <div className="text-right flex flex-col items-end">
-              <div className="w-24 h-12 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center text-slate-300 font-mono text-[8px] mb-2 uppercase border border-dashed border-slate-300">
+              <div className="w-24 h-12 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center text-slate-300 font-mono text-xs mb-2 uppercase border border-dashed border-slate-300">
                  DIGITAL SIGNATURE
               </div>
-              <p className="text-[10px] font-semibold text-slate-900 dark:text-white not-italic uppercase tracking-widest">CleanFlow Logistics Hub</p>
-              <p className="text-[9px] text-slate-500 not-italic">Automated Systems Branch</p>
+              <p className="text-xs font-semibold text-slate-900 dark:text-white not-italic uppercase tracking-widest">CleanFlow Logistics Hub</p>
+              <p className="text-xs text-slate-500 not-italic">Automated Systems Branch</p>
            </div>
         </div>
 
         {/* PRINT FOOTER */}
-        <div className="hidden print:block mt-12 text-center text-[8px] text-slate-300 uppercase tracking-[0.5em]">
+        <div className="hidden print:block mt-12 text-center text-xs text-slate-300 uppercase tracking-[0.5em]">
            CleanFlow PaaS · Sustainomics Engine · Verified Environmental Data
         </div>
       </div>

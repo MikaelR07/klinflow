@@ -153,7 +153,7 @@ export default function App() {
                 </div>
                 <div>
                    <p className="text-xs font-semibold text-slate-900 dark:text-white">{profile?.name || 'Unknown User'}</p>
-                   <p className="text-[10px] font-semibold text-slate-400 uppercase">
+                   <p className="text-xs font-semibold text-slate-400 uppercase">
                      {profile?.agent_account_type === 'company_admin' ? 'Company Admin' : 'Hub Manager'}
                    </p>
                 </div>
@@ -193,7 +193,7 @@ export default function App() {
               >
                  <Bell className="w-6 h-6" />
                  {unreadCount > 0 && (
-                   <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-slate-950 text-[8px] font-semibold text-white flex items-center justify-center animate-bounce-in">
+                   <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-slate-950 text-xs font-semibold text-white flex items-center justify-center animate-bounce-in">
                      {unreadCount}
                    </span>
                  )}

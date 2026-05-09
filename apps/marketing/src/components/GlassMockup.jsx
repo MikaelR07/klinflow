@@ -67,7 +67,7 @@ export default function GlassMockup({ color = 'emerald', icon: Icon, isDarkMode 
             : 'bg-white/80 border-slate-200 text-slate-900'
         }`}
       >
-        <div className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Status</div>
+        <div className="text-xs font-black uppercase tracking-widest text-emerald-500 mb-1">Status</div>
         <div className="text-xs font-bold">Encrypted Ledger</div>
       </motion.div>
     </div>

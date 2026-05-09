@@ -76,7 +76,7 @@ export default function EcosystemGallery() {
       <div className={`min-h-screen pt-24 md:pt-32 pb-20 md:pb-40 ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
         <div className="max-w-7xl mx-auto px-6">
           
-          <Link to="/" className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-[10px] mb-8 hover:translate-x-[-4px] transition-transform">
+          <Link to="/" className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-xs mb-8 hover:translate-x-[-4px] transition-transform">
             <ChevronLeft className="w-4 h-4" /> Back to Home
           </Link>
 
@@ -107,7 +107,7 @@ export default function EcosystemGallery() {
                   }`}
                 >
                   <div className="absolute top-6 left-6 z-10 flex items-center gap-2">
-                    <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[8px] font-black uppercase tracking-widest text-white border border-white/20">
+                    <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-black uppercase tracking-widest text-white border border-white/20">
                       {shot.category}
                     </span>
                   </div>
@@ -126,7 +126,7 @@ export default function EcosystemGallery() {
                        <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center">
                           <Search className="w-5 h-5" />
                        </div>
-                       <span className="text-[10px] font-bold text-white uppercase tracking-widest">Enlarge Preview</span>
+                       <span className="text-xs font-bold text-white uppercase tracking-widest">Enlarge Preview</span>
                     </div>
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export default function EcosystemGallery() {
             />
             
             <div className="mt-6 text-center max-w-xl px-4">
-               <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2 block">{selectedImage.category}</span>
+               <span className="text-xs font-black text-emerald-500 uppercase tracking-[0.3em] mb-2 block">{selectedImage.category}</span>
                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 tracking-tighter">{selectedImage.title}</h3>
                <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed">{selectedImage.desc}</p>
             </div>

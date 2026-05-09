@@ -143,7 +143,7 @@ export default function ImpactHub() {
         </button>
         <div>
           <h1 className="text-xl font-semibold">GreenFlow Hub</h1>
-          <p className="text-[10px] text-primary font-semibold uppercase tracking-widest">Sustainability Dashboard</p>
+          <p className="text-xs text-primary font-semibold uppercase tracking-widest">Sustainability Dashboard</p>
         </div>
       </div>
 
@@ -160,13 +160,13 @@ export default function ImpactHub() {
             <h2 className="text-2xl font-semibold">{metrics.tier}</h2>
           </div>
           <div className="ml-auto text-right">
-            <p className="text-[10px] font-semibold uppercase tracking-widest opacity-80">Impact Score</p>
+            <p className="text-xs font-semibold uppercase tracking-widest opacity-80">Impact Score</p>
             <p className="text-2xl font-mono font-semibold">{profile?.rewardPoints || 0} GFP</p>
           </div>
         </div>
 
         <div className="space-y-1.5 relative">
-          <div className="flex justify-between items-end text-[10px] font-semibold uppercase tracking-widest">
+          <div className="flex justify-between items-end text-xs font-semibold uppercase tracking-widest">
             <span>Progress to {metrics.nextTier}</span>
             <span>{Math.round(metrics.progress)}%</span>
           </div>
@@ -176,7 +176,7 @@ export default function ImpactHub() {
               style={{ width: `${metrics.progress}%` }}
             ></div>
           </div>
-          <p className="text-[9px] font-semibold text-center opacity-70 italic mt-1">
+          <p className="text-xs font-semibold text-center opacity-70 italic mt-1">
             Your recycling efforts have recovered {kgRecovered}kg of waste from landfills
           </p>
         </div>
@@ -189,7 +189,7 @@ export default function ImpactHub() {
             <Flame className={`w-5 h-5 ${streak > 0 ? 'text-orange-500 fill-orange-500' : 'text-slate-300'}`} />
           </div>
           <div>
-            <p className={`text-[9px] font-semibold uppercase leading-none mb-1 ${streak > 0 ? 'text-orange-600/60' : 'text-slate-400'}`}>Streak</p>
+            <p className={`text-xs font-semibold uppercase leading-none mb-1 ${streak > 0 ? 'text-orange-600/60' : 'text-slate-400'}`}>Streak</p>
             <p className={`text-lg font-semibold leading-none ${streak > 0 ? 'text-orange-600' : 'text-slate-400'}`}>
               {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'None'}
             </p>
@@ -200,7 +200,7 @@ export default function ImpactHub() {
             <Zap className="w-5 h-5 text-blue-500 fill-blue-500" />
           </div>
           <div>
-            <p className="text-[9px] font-semibold uppercase text-blue-600/60 leading-none mb-1">Recovered</p>
+            <p className="text-xs font-semibold uppercase text-blue-600/60 leading-none mb-1">Recovered</p>
             <p className="text-lg font-semibold text-blue-600 leading-none">{kgRecovered}kg</p>
           </div>
         </div>
@@ -214,7 +214,7 @@ export default function ImpactHub() {
           </h3>
           <button 
             onClick={() => setShowBadgeModal(true)}
-            className="text-[10px] font-semibold text-primary uppercase tracking-widest flex items-center gap-1 hover:underline"
+            className="text-xs font-semibold text-primary uppercase tracking-widest flex items-center gap-1 hover:underline"
           >
             How to earn <ChevronRight className="w-3 h-3" />
           </button>
@@ -229,7 +229,7 @@ export default function ImpactHub() {
               <div className={`text-3xl mb-1.5 ${badge.unlocked ? 'transform hover:scale-110 transition-transform' : ''}`}>
                 {badge.icon}
               </div>
-              <p className="text-[9px] font-semibold leading-tight uppercase tracking-tighter text-slate-700 dark:text-slate-300">
+              <p className="text-xs font-semibold leading-tight uppercase tracking-tighter text-slate-700 dark:text-slate-300">
                 {badge.name}
               </p>
             </div>
@@ -251,7 +251,7 @@ export default function ImpactHub() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-sm uppercase tracking-widest">Badge Guide</h3>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">How to earn badges</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">How to earn badges</p>
                 </div>
               </div>
               <button onClick={() => setShowBadgeModal(false)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl">
@@ -281,7 +281,7 @@ export default function ImpactHub() {
                         <Lock className="w-3 h-3 text-slate-300" />
                       )}
                     </div>
-                    <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
+                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
                       {badge.description}
                     </p>
                   </div>

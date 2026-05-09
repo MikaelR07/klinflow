@@ -208,7 +208,7 @@ export default function UserManager() {
            }`}
          >
            {activeHub === 'marketplace' && (
-             <div className="absolute top-4 right-4 px-3 py-1 bg-primary/20 border border-primary/20 text-primary text-[8px] font-semibold uppercase tracking-widest rounded-full animate-pulse">
+             <div className="absolute top-4 right-4 px-3 py-1 bg-primary/20 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-widest rounded-full animate-pulse">
                Active View
              </div>
            )}
@@ -218,7 +218,7 @@ export default function UserManager() {
              <Briefcase className="w-7 h-7" />
            </div>
            <h3 className={`text-xl font-semibold tracking-tight mb-1 ${activeHub === 'marketplace' ? 'text-white' : 'dark:text-white'}`}>Business Partners</h3>
-           <p className={`text-[10px] font-semibold uppercase tracking-widest ${activeHub === 'marketplace' ? 'text-white/40' : 'text-slate-400'}`}>Weavers & Recyclers</p>
+           <p className={`text-xs font-semibold uppercase tracking-widest ${activeHub === 'marketplace' ? 'text-white/40' : 'text-slate-400'}`}>Weavers & Recyclers</p>
          </button>
 
          {/* Hub: Logistics */}
@@ -231,7 +231,7 @@ export default function UserManager() {
            }`}
          >
            {activeHub === 'logistics' && (
-             <div className="absolute top-4 right-4 px-3 py-1 bg-indigo-500/20 border border-indigo-500/20 text-indigo-400 text-[8px] font-semibold uppercase tracking-widest rounded-full animate-pulse">
+             <div className="absolute top-4 right-4 px-3 py-1 bg-indigo-500/20 border border-indigo-500/20 text-indigo-400 text-xs font-semibold uppercase tracking-widest rounded-full animate-pulse">
                Active View
              </div>
            )}
@@ -241,7 +241,7 @@ export default function UserManager() {
              <Truck className="w-7 h-7" />
            </div>
            <h3 className={`text-xl font-semibold tracking-tight mb-1 ${activeHub === 'logistics' ? 'text-white' : 'dark:text-white'}`}>Transport & Drivers</h3>
-           <p className={`text-[10px] font-semibold uppercase tracking-widest ${activeHub === 'logistics' ? 'text-white/40' : 'text-slate-400'}`}>Fleet & Management</p>
+           <p className={`text-xs font-semibold uppercase tracking-widest ${activeHub === 'logistics' ? 'text-white/40' : 'text-slate-400'}`}>Fleet & Management</p>
          </button>
 
          {/* Hub: Community */}
@@ -254,7 +254,7 @@ export default function UserManager() {
            }`}
          >
            {activeHub === 'community' && (
-             <div className="absolute top-4 right-4 px-3 py-1 bg-slate-500/20 border border-slate-500/20 text-slate-400 text-[8px] font-semibold uppercase tracking-widest rounded-full animate-pulse">
+             <div className="absolute top-4 right-4 px-3 py-1 bg-slate-500/20 border border-slate-500/20 text-slate-400 text-xs font-semibold uppercase tracking-widest rounded-full animate-pulse">
                Active View
              </div>
            )}
@@ -264,7 +264,7 @@ export default function UserManager() {
              <Users className="w-7 h-7" />
            </div>
            <h3 className={`text-xl font-semibold tracking-tight mb-1 ${activeHub === 'community' ? 'text-white' : 'dark:text-white'}`}>Resident Members</h3>
-           <p className={`text-[10px] font-semibold uppercase tracking-widest ${activeHub === 'community' ? 'text-white/40' : 'text-slate-400'}`}>Standard & Premium</p>
+           <p className={`text-xs font-semibold uppercase tracking-widest ${activeHub === 'community' ? 'text-white/40' : 'text-slate-400'}`}>Standard & Premium</p>
          </button>
       </div>
 
@@ -274,25 +274,25 @@ export default function UserManager() {
             <div className="flex flex-wrap items-center gap-2">
               <button 
                 onClick={() => setMarketSubFilter('all')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${marketSubFilter === 'all' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${marketSubFilter === 'all' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Everyone
               </button>
               <button 
                 onClick={() => setMarketSubFilter('weavers')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${marketSubFilter === 'weavers' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${marketSubFilter === 'weavers' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Collectors
               </button>
               <button 
                 onClick={() => setMarketSubFilter('industrial')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${marketSubFilter === 'industrial' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${marketSubFilter === 'industrial' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Industrial
               </button>
               <button 
                 onClick={() => setMarketSubFilter('requests')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all flex items-center gap-2 ${marketSubFilter === 'requests' ? 'bg-rose-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all flex items-center gap-2 ${marketSubFilter === 'requests' ? 'bg-rose-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Waitlist
                 {stats.pendingLicenses > 0 && <div className={`w-2 h-2 rounded-full ${marketSubFilter === 'requests' ? 'bg-white' : 'bg-rose-500'} animate-pulse`} />}
@@ -304,31 +304,31 @@ export default function UserManager() {
             <div className="flex flex-wrap items-center gap-2">
               <button 
                 onClick={() => setLogisticsSubFilter('all')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${logisticsSubFilter === 'all' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${logisticsSubFilter === 'all' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 All Personnel
               </button>
               <button 
                 onClick={() => setLogisticsSubFilter('companies')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${logisticsSubFilter === 'companies' ? 'bg-indigo-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${logisticsSubFilter === 'companies' ? 'bg-indigo-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Companies
               </button>
               <button 
                 onClick={() => setLogisticsSubFilter('fleet')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${logisticsSubFilter === 'fleet' ? 'bg-blue-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${logisticsSubFilter === 'fleet' ? 'bg-blue-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Fleet Drivers
               </button>
               <button 
                 onClick={() => setLogisticsSubFilter('independent')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${logisticsSubFilter === 'independent' ? 'bg-emerald-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${logisticsSubFilter === 'independent' ? 'bg-emerald-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Ind. Agents
               </button>
               <button 
                 onClick={() => setLogisticsSubFilter('requests')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all flex items-center gap-2 ${logisticsSubFilter === 'requests' ? 'bg-rose-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all flex items-center gap-2 ${logisticsSubFilter === 'requests' ? 'bg-rose-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Waitlist
                 {stats.pendingApps > 0 && <div className={`w-2 h-2 rounded-full ${logisticsSubFilter === 'requests' ? 'bg-white' : 'bg-rose-500'} animate-pulse`} />}
@@ -340,25 +340,25 @@ export default function UserManager() {
             <div className="flex flex-wrap items-center gap-2">
               <button 
                 onClick={() => setCommunitySubFilter('all')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${communitySubFilter === 'all' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${communitySubFilter === 'all' ? 'bg-primary text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 All Residents
               </button>
               <button 
                 onClick={() => setCommunitySubFilter('premium')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${communitySubFilter === 'premium' ? 'bg-amber-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${communitySubFilter === 'premium' ? 'bg-amber-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Premium
               </button>
               <button 
                 onClick={() => setCommunitySubFilter('standard')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${communitySubFilter === 'standard' ? 'bg-emerald-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${communitySubFilter === 'standard' ? 'bg-emerald-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Standard
               </button>
               <button 
                 onClick={() => setCommunitySubFilter('free')}
-                className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest transition-all ${communitySubFilter === 'free' ? 'bg-slate-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${communitySubFilter === 'free' ? 'bg-slate-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
               >
                 Free / Lite
               </button>
@@ -389,15 +389,15 @@ export default function UserManager() {
             <table className="w-full text-left border-collapse">
                <thead>
                   <tr className="border-b border-slate-50 dark:border-white/5">
-                     <th className="px-8 py-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">User</th>
-                     <th className="px-8 py-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Role / Category</th>
+                     <th className="px-8 py-6 text-xs font-semibold text-slate-400 uppercase tracking-widest">User</th>
+                     <th className="px-8 py-6 text-xs font-semibold text-slate-400 uppercase tracking-widest text-center">Role / Category</th>
                       {activeHub === 'logistics' && logisticsSubFilter === 'fleet' ? (
-                        <th className="px-8 py-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Parent Company</th>
+                        <th className="px-8 py-6 text-xs font-semibold text-slate-400 uppercase tracking-widest text-center">Parent Company</th>
                       ) : activeHub === 'marketplace' ? (
-                        <th className="px-8 py-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">NEMA License</th>
+                        <th className="px-8 py-6 text-xs font-semibold text-slate-400 uppercase tracking-widest text-center">NEMA License</th>
                       ) : null}
-                     <th className="px-8 py-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-center">Status</th>
-                     <th className="px-8 py-6 text-[10px] font-semibold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                     <th className="px-8 py-6 text-xs font-semibold text-slate-400 uppercase tracking-widest text-center">Status</th>
+                     <th className="px-8 py-6 text-xs font-semibold text-slate-400 uppercase tracking-widest text-right">Actions</th>
                   </tr>
                </thead>
                <tbody className="divide-y divide-slate-50 dark:divide-white/5">
@@ -434,12 +434,12 @@ export default function UserManager() {
                                      {u.name}
                                      {(u.is_verified || u.agent_account_type === 'company_admin') && <BadgeCheck className="w-4 h-4 text-primary fill-primary/10" />}
                                   </h4>
-                                  <p className="text-[10px] font-semibold text-slate-400 font-mono mt-0.5">{u.phone}</p>
+                                  <p className="text-xs font-semibold text-slate-400 font-mono mt-0.5">{u.phone}</p>
                                </div>
                             </div>
                          </td>
                          <td className="px-8 py-6 text-center">
-                            <span className={`px-4 py-2 rounded-xl text-[10px] font-semibold uppercase tracking-widest whitespace-nowrap ${
+                            <span className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest whitespace-nowrap ${
                               u.role === 'admin' ? 'bg-slate-900 text-primary border border-primary/20' :
                               u.agent_account_type === 'company_admin' ? 'bg-indigo-500 text-white shadow-lg' :
                               u.agent_account_type === 'fleet_driver' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' :
@@ -466,28 +466,28 @@ export default function UserManager() {
                          {activeHub === 'marketplace' && (
                             <td className="px-8 py-6 text-center">
                                {u.nema_license ? (
-                                  <div className="inline-block px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-semibold rounded-lg border border-slate-200 dark:border-white/5 font-mono">
+                                  <div className="inline-block px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold rounded-lg border border-slate-200 dark:border-white/5 font-mono">
                                      {u.nema_license}
                                   </div>
                                ) : (
-                                  <span className="text-[10px] font-semibold text-slate-300 uppercase tracking-widest italic opacity-50">Not Provided</span>
+                                  <span className="text-xs font-semibold text-slate-300 uppercase tracking-widest italic opacity-50">Not Provided</span>
                                )}
                             </td>
                          )}
                          <td className="px-8 py-6 text-center">
                             {u.role === 'agent' && isApplicant ? (
-                               <span className="px-3 py-1 bg-orange-500 text-white text-[8px] font-semibold rounded-full uppercase tracking-widest animate-pulse">Request</span>
+                               <span className="px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full uppercase tracking-widest animate-pulse">Request</span>
                             ) : u.role === 'agent' ? (
                               <div className="flex flex-col items-center gap-1">
                                  <div className={`w-2 h-2 rounded-full ${u.is_online ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
-                                 <span className="text-[9px] font-semibold uppercase text-slate-400 tracking-tighter">
+                                 <span className="text-xs font-semibold uppercase text-slate-400 tracking-tighter">
                                     {u.is_online ? 'Online' : 'Offline'}
                                  </span>
                               </div>
                             ) : (
                                <div className="flex flex-col items-center gap-1">
                                   <div className={`w-2 h-2 rounded-full ${u.is_verified ? 'bg-emerald-500' : u.role === 'user' ? 'bg-slate-200' : u.nema_license ? 'bg-orange-400 animate-pulse' : 'bg-slate-200'}`} />
-                                  <span className="text-[9px] font-semibold uppercase text-slate-400 tracking-tighter">
+                                  <span className="text-xs font-semibold uppercase text-slate-400 tracking-tighter">
                                      {u.is_verified ? 'Verified' : u.role === 'user' ? 'Member' : u.nema_license ? 'Under Review' : 'Unverified'}
                                   </span>
                                </div>
@@ -498,7 +498,7 @@ export default function UserManager() {
                                {u.role === 'agent' && isApplicant ? (
                                  <button 
                                    onClick={() => approveStaff(u)}
-                                   className="flex items-center gap-2 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-[10px] font-semibold uppercase tracking-widest shadow-lg shadow-orange-500/20 transition-all active:scale-95"
+                                   className="flex items-center gap-2 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-semibold uppercase tracking-widest shadow-lg shadow-orange-500/20 transition-all active:scale-95"
                                  >
                                     <Check className="w-4 h-4" /> Approve
                                  </button>
@@ -507,7 +507,7 @@ export default function UserManager() {
                                    {u.role === 'agent' && (
                                      <button 
                                        onClick={() => toggleStaffStatus(u)}
-                                       className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all text-[9px] font-semibold uppercase tracking-tighter ${u.is_staff ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5 text-slate-400 hover:text-primary'}`}
+                                       className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all text-xs font-semibold uppercase tracking-tighter ${u.is_staff ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5 text-slate-400 hover:text-primary'}`}
                                        title={u.is_staff ? "Remove from Team" : "Add to Team"}
                                      >
                                         <Briefcase className="w-3.5 h-3.5" />
@@ -526,7 +526,7 @@ export default function UserManager() {
                                            }
                                          });
                                        }}
-                                       className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 rounded-xl text-[9px] font-semibold uppercase tracking-tighter hover:bg-slate-200"
+                                       className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 rounded-xl text-xs font-semibold uppercase tracking-tighter hover:bg-slate-200"
                                        title="View Submitted NEMA License"
                                      >
                                         <FileText className="w-3.5 h-3.5" />
@@ -544,7 +544,7 @@ export default function UserManager() {
                                )}
                                <button 
                                  title="Remove User Account"
-                                 className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-100 dark:border-white/5 text-slate-400 hover:text-red-500 bg-white dark:bg-slate-900 text-[9px] font-semibold uppercase tracking-tighter"
+                                 className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-100 dark:border-white/5 text-slate-400 hover:text-red-500 bg-white dark:bg-slate-900 text-xs font-semibold uppercase tracking-tighter"
                                >
                                   <UserMinus className="w-3.5 h-3.5" />
                                   Remove

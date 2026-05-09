@@ -200,20 +200,20 @@ export default function HygeneXPage() {
                             <ShieldCheck className="w-5 h-5" />
                           </div>
                           <div>
-                            <div className="text-[10px] font-semibold uppercase text-emerald-500 tracking-widest">Draft Pickup</div>
+                            <div className="text-xs font-semibold uppercase text-emerald-500 tracking-widest">Draft Pickup</div>
                             <div className="text-xs font-semibold">{msg.metadata.action.payload.waste_type} • {msg.metadata.action.payload.scheduled_date}</div>
                           </div>
                         </div>
                         <button 
                           onClick={() => alert('Booking confirmed in database!')}
-                          className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-[10px] font-semibold uppercase tracking-widest rounded-xl transition-all"
+                          className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-semibold uppercase tracking-widest rounded-xl transition-all"
                         >
                           Confirm & Schedule
                         </button>
                       </motion.div>
                     )}
 
-                    <div className={`text-[9px] font-semibold uppercase tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
+                    <div className={`text-xs font-semibold uppercase tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </div>

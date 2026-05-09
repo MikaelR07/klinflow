@@ -84,12 +84,12 @@ export default function ReviewsPage() {
                           />
                         ))}
                       </div>
-                      <span className="text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-tighter">• {review.date}</span>
+                      <span className="text-xs font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-tighter">• {review.date}</span>
                     </div>
                   </div>
                 </div>
                 <div className="px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-md">
-                   <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest leading-none">id: {review.id.slice(0,8)}</p>
+                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none">id: {review.id.slice(0,8)}</p>
                 </div>
               </div>
 
@@ -105,7 +105,7 @@ export default function ReviewsPage() {
               )}
 
               <div className="flex items-center gap-3 mt-4 pt-4 border-t border-slate-50 dark:border-slate-800">
-                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400 uppercase tracking-widest">
                   <Tag className="w-3 h-3" /> {review.wasteType || 'General Waste'}
                 </div>
               </div>

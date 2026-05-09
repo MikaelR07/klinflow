@@ -25,7 +25,7 @@ export default function BottomNav({ items }) {
                 <div className={`p-1 rounded-lg transition-colors relative ${isActive ? 'bg-primary/10' : ''}`}>
                   <item.icon className="w-5 h-5" />
                   {item.badge > 0 && (
-                    <span className={`absolute -top-1 -right-1 min-w-[16px] h-4 px-1 text-white text-[8px] font-black rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-900 animate-in zoom-in ${item.badgeColor || 'bg-rose-500'}`}>
+                    <span className={`absolute -top-1 -right-1 min-w-[16px] h-4 px-1 text-white text-xs font-black rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-900 animate-in zoom-in ${item.badgeColor || 'bg-rose-500'}`}>
                       {item.badge}
                     </span>
                   )}

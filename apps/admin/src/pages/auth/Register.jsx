@@ -150,7 +150,7 @@ export default function Register() {
                 required 
               />
             </div>
-            <p className="text-[10px] text-slate-500 mt-2 font-semibold italic tracking-tight">Only authorized personnel can provision administrator accounts.</p>
+            <p className="text-xs text-slate-500 mt-2 font-semibold italic tracking-tight">Only authorized personnel can provision administrator accounts.</p>
           </div>
 
           <button

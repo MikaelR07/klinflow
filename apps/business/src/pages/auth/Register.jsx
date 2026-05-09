@@ -141,7 +141,7 @@ export default function Register() {
         {/* Header */}
         <div className="flex flex-col items-center mb-10">
           <div className="w-full flex items-center justify-between mb-6">
-            <Link to="/login" className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors">
+            <Link to="/login" className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors">
               <ArrowLeft className="w-4 h-4" /> Back to Sign In
             </Link>
           </div>
@@ -161,7 +161,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
               </div>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Business Identity</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Business Identity</h3>
             </div>
 
             {/* Business Name */}
@@ -194,7 +194,7 @@ export default function Register() {
 
             {/* Business Type Selector */}
             <div>
-              <p className="text-[9px] font-semibold uppercase tracking-widest text-slate-400 mb-2">Business Category</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Business Category</p>
               <div className="grid grid-cols-2 gap-2">
                 {BUSINESS_TYPES.map(type => (
                   <button
@@ -216,7 +216,7 @@ export default function Register() {
             {/* Weaver Specializations (Conditional) */}
             {formData.businessType === 'weaver' && (
               <div className="animate-in slide-in-from-top-4 duration-300 space-y-3 pt-2">
-                <p className="text-[9px] font-semibold uppercase tracking-widest text-indigo-500">Weaver Specializations</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-indigo-500">Weaver Specializations</p>
                 <div className="flex flex-wrap gap-2">
                   {['PET', 'HDPE', 'Metal', 'Paper', 'Glass', 'E-Waste'].map(spec => (
                     <button
@@ -229,7 +229,7 @@ export default function Register() {
                           : [...current, spec];
                         setFormData(prev => ({ ...prev, specializations: next }));
                       }}
-                      className={`px-3 py-1.5 rounded-full text-[10px] font-semibold border transition-all ${
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                         formData.specializations?.includes(spec)
                           ? 'bg-emerald-500 border-emerald-500 text-white'
                           : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500'
@@ -249,7 +249,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
               </div>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Contact & Security</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Contact & Security</h3>
             </div>
 
             {/* Phone */}
@@ -306,7 +306,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
               </div>
-              <h3 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Operation Area</h3>
+              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Operation Area</h3>
             </div>
             <div className="min-h-[140px]">
               <LocationSelector
@@ -325,7 +325,7 @@ export default function Register() {
           </button>
         </form>
 
-        <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 mt-10">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-400 mt-10">
           Already registered?{' '}
           <Link to="/login" className="text-indigo-600 hover:underline underline-offset-4">Sign In Instead</Link>
         </p>
@@ -367,7 +367,7 @@ export default function Register() {
                   className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-950/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-indigo-500 outline-none transition-all placeholder:text-slate-200"
                 />
                 <div className="flex flex-col items-center mt-4 space-y-3">
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>
                   <button
                     type="button"
                     onClick={async () => {
@@ -378,7 +378,7 @@ export default function Register() {
                         toast.error('Resend Failed', { description: err.message });
                       }
                     }}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 rounded-full text-[9px] font-semibold uppercase tracking-widest transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 rounded-full text-xs font-semibold uppercase tracking-widest transition-all"
                   >
                     Resend Code
                   </button>

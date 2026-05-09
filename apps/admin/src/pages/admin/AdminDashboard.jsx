@@ -205,7 +205,7 @@ export default function AdminDashboard() {
            </button>
            <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/5">
               <Activity className="w-4 h-4 text-emerald-500" />
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Live Sync</span>
+              <span className="text-xs font-semibold uppercase tracking-widest text-slate-500">Live Sync</span>
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-1" />
            </div>
         </div>
@@ -224,7 +224,7 @@ export default function AdminDashboard() {
             }`}
           >
             {activeHub === hub.id && (
-              <div className="absolute top-6 right-6 px-3 py-1 bg-primary text-white text-[9px] font-semibold uppercase tracking-widest rounded-full animate-fade-in shadow-lg shadow-primary/20 flex items-center gap-1.5 z-10">
+              <div className="absolute top-6 right-6 px-3 py-1 bg-primary text-white text-xs font-semibold uppercase tracking-widest rounded-full animate-fade-in shadow-lg shadow-primary/20 flex items-center gap-1.5 z-10">
                 <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                 Selected View
               </div>
@@ -245,7 +245,7 @@ export default function AdminDashboard() {
 
             <div className="flex items-end justify-between">
                <div>
-                  <p className={`text-[10px] font-semibold uppercase tracking-tighter mb-1 text-slate-300`}>Cumulative Peak</p>
+                  <p className={`text-xs font-semibold uppercase tracking-tighter mb-1 text-slate-300`}>Cumulative Peak</p>
                   <p className="text-2xl font-semibold font-mono text-slate-900 dark:text-white">
                     {hub.mainMetric}
                   </p>
@@ -262,7 +262,7 @@ export default function AdminDashboard() {
          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-200 dark:via-white/5 to-transparent" />
          <div className="flex items-center gap-2 px-6 py-2 bg-slate-50 dark:bg-slate-800/50 rounded-full border border-slate-100 dark:border-white/5">
             <BarChart3 className="w-4 h-4 text-primary" />
-            <h2 className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
                {activeHub} Operations Overview
             </h2>
          </div>
@@ -282,7 +282,7 @@ export default function AdminDashboard() {
               <p className="text-xs text-rose-500/80 font-semibold">{highAlerts.length} system anomalies require review.</p>
             </div>
           </div>
-          <button className="px-4 py-2 bg-rose-500 text-white rounded-xl font-semibold text-[10px] uppercase tracking-widest hover:bg-rose-600 transition-colors">
+          <button className="px-4 py-2 bg-rose-500 text-white rounded-xl font-semibold text-xs uppercase tracking-widest hover:bg-rose-600 transition-colors">
             Analyze
           </button>
         </div>
@@ -298,10 +298,10 @@ export default function AdminDashboard() {
               </div>
               <div className="text-emerald-500 flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" />
-                <span className="text-[10px] font-semibold">Live</span>
+                <span className="text-xs font-semibold">Live</span>
               </div>
             </div>
-            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">{kpi.label}</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">{kpi.label}</p>
             <h4 className="text-2xl font-semibold dark:text-white font-mono flex items-baseline gap-1">
               {(kpi.value || 0).toLocaleString()}
               <span className="text-xs font-semibold text-slate-300">{kpi.unit}</span>
@@ -319,10 +319,10 @@ export default function AdminDashboard() {
                   <h3 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-3">
                     Ecosystem Revenue 
                   </h3>
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">Monthly Snapshot • Subscriptions + Service Fees</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">Monthly Snapshot • Subscriptions + Service Fees</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-[10px] font-semibold uppercase tracking-widest shadow-lg shadow-primary/20">
+                  <div className="px-3 py-1.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg text-xs font-semibold uppercase tracking-widest shadow-lg shadow-primary/20">
                     Live Ecosystem Flow
                   </div>
                 </div>
@@ -406,13 +406,13 @@ export default function AdminDashboard() {
                 
                 <div className="space-y-4">
                   <div className="flex justify-between items-end">
-                    <span className="text-[10px] font-semibold uppercase text-slate-400">Agent Utilization</span>
+                    <span className="text-xs font-semibold uppercase text-slate-400">Agent Utilization</span>
                     <span className="text-lg font-semibold text-primary">74%</span>
                   </div>
                   <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div className="h-full w-[74%] bg-gradient-to-r from-primary to-emerald-400 rounded-full" />
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] text-slate-500 font-semibold">
+                  <div className="flex items-center gap-2 text-xs text-slate-500 font-semibold">
                     <Clock className="w-3 h-3" /> Avg. Pickup: 24 mins
                   </div>
                 </div>
@@ -428,10 +428,10 @@ export default function AdminDashboard() {
               </div>
 
               <div className="flex items-center justify-between mb-8 relative z-10">
-                <h3 className="font-semibold uppercase tracking-widest text-[10px] flex items-center gap-2 text-slate-500">
+                <h3 className="font-semibold uppercase tracking-widest text-xs flex items-center gap-2 text-slate-500">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" /> Live Updates
                 </h3>
-                <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-md text-[9px] font-semibold uppercase tracking-widest text-slate-400">
+                <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded-md text-xs font-semibold uppercase tracking-widest text-slate-400">
                   Live
                 </span>
               </div>
@@ -440,7 +440,7 @@ export default function AdminDashboard() {
                 {systemEvents.length === 0 && (
                   <div className="py-20 text-center opacity-30">
                     <Activity className="w-8 h-8 mx-auto mb-3 animate-pulse text-slate-400" />
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Deep Listening...</p>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">Deep Listening...</p>
                   </div>
                 )}
                 {systemEvents.map(ev => (
@@ -452,7 +452,7 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-tight group-hover:text-primary transition-colors">{ev.msg}</p>
-                      <p className="text-[9px] font-semibold uppercase text-slate-400 mt-1">
+                      <p className="text-xs font-semibold uppercase text-slate-400 mt-1">
                          {new Date(ev.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
@@ -461,7 +461,7 @@ export default function AdminDashboard() {
               </div>
 
               <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 relative z-10">
-                 <button className="w-full py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl font-semibold text-[10px] uppercase tracking-widest hover:bg-primary text-slate-500 hover:text-white dark:text-slate-400 transition-all flex items-center justify-center gap-2">
+                 <button className="w-full py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl font-semibold text-xs uppercase tracking-widest hover:bg-primary text-slate-500 hover:text-white dark:text-slate-400 transition-all flex items-center justify-center gap-2">
                     System Hub <ChevronRight className="w-4 h-4" />
                  </button>
               </div>

@@ -68,7 +68,7 @@ export default function CompanyProfile() {
             </div>
             <div>
               <h2 className="text-xl font-semibold tracking-tight">{company?.company_name || company?.name || 'CleanFlow Partner'}</h2>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-primary mt-1">
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary mt-1">
                 {isFleetAdmin ? 'Verified Fleet Company' : 'Independent Agent'}
               </p>
             </div>
@@ -82,15 +82,15 @@ export default function CompanyProfile() {
                   {company?.rating > 0 ? company.rating.toFixed(1) : 'New'}
                 </span>
               </div>
-              <p className="text-[9px] font-semibold text-white/50 uppercase tracking-widest">Rating</p>
+              <p className="text-xs font-semibold text-white/50 uppercase tracking-widest">Rating</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-semibold">{Number(company?.total_pickups || 0)}</p>
-              <p className="text-[9px] font-semibold text-white/50 uppercase tracking-widest">Pickups</p>
+              <p className="text-xs font-semibold text-white/50 uppercase tracking-widest">Pickups</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-semibold">KSh {logisticsFee}</p>
-              <p className="text-[9px] font-semibold text-white/50 uppercase tracking-widest">Base Fee</p>
+              <p className="text-xs font-semibold text-white/50 uppercase tracking-widest">Base Fee</p>
             </div>
           </div>
         </div>
@@ -103,24 +103,24 @@ export default function CompanyProfile() {
             <MapPin className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Service Area</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Service Area</p>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">{company?.location?.estate || 'Nairobi Metro'}</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[9px] font-semibold text-emerald-600 uppercase tracking-widest">Online</span>
+            <span className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">Online</span>
           </div>
         </div>
 
         {/* Accepted Materials */}
         {materials.length > 0 && (
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800">
-            <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-4">Accepted Materials</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Accepted Materials</p>
             <div className="flex flex-wrap gap-2">
               {materials
                 .filter(m => !!MATERIAL_LABELS[m])
                 .map((m) => (
-                  <span key={m} className="px-3 py-1.5 bg-primary/5 border border-primary/15 rounded-full text-[10px] font-semibold text-primary uppercase tracking-widest">
+                  <span key={m} className="px-3 py-1.5 bg-primary/5 border border-primary/15 rounded-full text-xs font-semibold text-primary uppercase tracking-widest">
                     {MATERIAL_LABELS[m]}
                   </span>
                 ))}
@@ -130,12 +130,12 @@ export default function CompanyProfile() {
 
         {/* Pricing Card */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800">
-          <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-4">Their Pricing</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Their Pricing</p>
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">Base Logistics Fee</span>
             <span className="text-lg font-semibold text-primary">KSh {logisticsFee}</span>
           </div>
-          <p className="text-[9px] font-semibold text-slate-400 mt-2">Final price depends on material type and weight, confirmed after pickup.</p>
+          <p className="text-xs font-semibold text-slate-400 mt-2">Final price depends on material type and weight, confirmed after pickup.</p>
         </div>
       </div>
 

@@ -198,7 +198,7 @@ export default function ImpactAnalytics() {
         </button>
         <div>
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none">Impact Analytics</h1>
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-1">Performance Tracking</p>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Performance Tracking</p>
         </div>
       </div>
 
@@ -219,7 +219,7 @@ export default function ImpactAnalytics() {
                     <TrendingUp className="w-4 h-4 text-indigo-600 dark:text-indigo-200" />
                   </div>
                   <div>
-                    <p className="text-[9px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mb-1">Lifetime Revenue</p>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mb-1">Lifetime Revenue</p>
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-0.5">
                       <span className="text-xs font-light text-slate-400 dark:text-indigo-200 opacity-60">KSh</span>
                       {stats.totalEarnings.toLocaleString()}
@@ -248,7 +248,7 @@ export default function ImpactAnalytics() {
                   </div>
                   <div>
                     <p className="text-base font-bold text-slate-900 dark:text-white leading-none">KSh {stats.totalWithdrawn.toLocaleString()}</p>
-                    <p className="text-[8px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-0.5">Total Withdrawn</p>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-0.5">Total Withdrawn</p>
                   </div>
                 </div>
 
@@ -289,8 +289,8 @@ export default function ImpactAnalytics() {
             <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Weekly Target</p>
-                  <p className="text-lg font-semibold dark:text-white">{stats.currentWeekWeight} / {goals.weekly} <span className="text-[10px] text-slate-400">KG</span></p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Weekly Target</p>
+                  <p className="text-lg font-semibold dark:text-white">{stats.currentWeekWeight} / {goals.weekly} <span className="text-xs text-slate-400">KG</span></p>
                 </div>
                 <button 
                   onClick={() => { setGoalType('weekly'); setShowGoalModal(true); }}
@@ -307,8 +307,8 @@ export default function ImpactAnalytics() {
                 />
               </div>
               <div className="flex justify-between mt-2">
-                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">{Math.round(weeklyProgress)}% Completed</p>
-                {weeklyProgress >= 100 && <span className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest">Goal Reached! 🚀</span>}
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{Math.round(weeklyProgress)}% Completed</p>
+                {weeklyProgress >= 100 && <span className="text-xs font-semibold text-emerald-500 uppercase tracking-widest">Goal Reached! 🚀</span>}
               </div>
             </div>
 
@@ -316,8 +316,8 @@ export default function ImpactAnalytics() {
             <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Monthly Target</p>
-                  <p className="text-lg font-semibold dark:text-white">{stats.currentMonthWeight} / {goals.monthly} <span className="text-[10px] text-slate-400">KG</span></p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Monthly Target</p>
+                  <p className="text-lg font-semibold dark:text-white">{stats.currentMonthWeight} / {goals.monthly} <span className="text-xs text-slate-400">KG</span></p>
                 </div>
                 <button 
                   onClick={() => { setGoalType('monthly'); setShowGoalModal(true); }}
@@ -334,8 +334,8 @@ export default function ImpactAnalytics() {
                 />
               </div>
               <div className="flex justify-between mt-2">
-                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">{Math.round(monthlyProgress)}% Completed</p>
-                {monthlyProgress >= 100 && <span className="text-[9px] font-semibold text-amber-500 uppercase tracking-widest">Elite Status! 🏆</span>}
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{Math.round(monthlyProgress)}% Completed</p>
+                {monthlyProgress >= 100 && <span className="text-xs font-semibold text-amber-500 uppercase tracking-widest">Elite Status! 🏆</span>}
               </div>
             </div>
           </div>
@@ -349,7 +349,7 @@ export default function ImpactAnalytics() {
             </h3>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-primary" />
-              <p className="text-[10px] font-semibold text-slate-400 uppercase">KG Recovered</p>
+              <p className="text-xs font-semibold text-slate-400 uppercase">KG Recovered</p>
             </div>
           </div>
 
@@ -368,12 +368,12 @@ export default function ImpactAnalytics() {
                       className={`w-full rounded-t-xl ${day.weight > 0 ? 'bg-primary shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]' : 'bg-slate-100 dark:bg-slate-800'}`}
                     />
                     {day.weight > 0 && (
-                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[8px] font-semibold px-1 py-0.5 rounded opacity-100">
+                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-1 py-0.5 rounded opacity-100">
                         {day.weight}kg
                       </div>
                     )}
                   </div>
-                  <p className="text-[8px] font-semibold text-slate-400 uppercase tracking-tighter">{dayName}</p>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">{dayName}</p>
                 </div>
               );
             })}
@@ -384,15 +384,15 @@ export default function ImpactAnalytics() {
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm">
              <PieChart className="w-5 h-5 text-amber-500 mb-3" />
-             <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Most Recycled</p>
+             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Most Recycled</p>
              <p className="text-sm font-semibold dark:text-white capitalize leading-tight">{stats.topMaterial}</p>
-             <p className="text-[10px] font-semibold text-emerald-500 mt-2">Preferred Partner Type</p>
+             <p className="text-xs font-semibold text-emerald-500 mt-2">Preferred Partner Type</p>
           </div>
           <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm">
              <Trophy className="w-5 h-5 text-indigo-500 mb-3" />
-             <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Consistency</p>
+             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Consistency</p>
              <p className="text-sm font-semibold dark:text-white capitalize leading-tight">{stats.consistencyTier}</p>
-             <p className="text-[10px] font-semibold text-indigo-500 mt-2">Active Streak: {stats.activeStreak} Days</p>
+             <p className="text-xs font-semibold text-indigo-500 mt-2">Active Streak: {stats.activeStreak} Days</p>
           </div>
         </div>
       </div>

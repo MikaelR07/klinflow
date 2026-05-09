@@ -76,7 +76,7 @@ export default function AdminLayout() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{profile?.name}</p>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Company Admin</p>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Company Admin</p>
             </div>
           </div>
           <button 

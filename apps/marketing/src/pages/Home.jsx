@@ -88,7 +88,7 @@ export default function Home() {
             className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-8 ${isDarkMode ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-emerald-50 border-emerald-100'}`}
           >
             <Zap className="w-3 h-3 text-emerald-500" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-500">The Infrastructure for Circular Assets</span>
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-500">The Infrastructure for Circular Assets</span>
           </motion.div>
 
           <motion.h1 
@@ -153,7 +153,7 @@ export default function Home() {
                   <div key={i} className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-200'}`}>
                     <div className="text-2xl font-black text-emerald-500 mb-1">{stat.val}</div>
                     <div className={`text-xs font-bold uppercase tracking-widest mb-1 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{stat.label}</div>
-                    <div className="text-[10px] text-slate-500 font-medium">{stat.sub}</div>
+                    <div className="text-xs text-slate-500 font-medium">{stat.sub}</div>
                   </div>
                 ))}
               </div>
@@ -261,7 +261,7 @@ export default function Home() {
       <section className={`py-40 px-6 relative overflow-hidden ${isDarkMode ? 'bg-slate-950' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 text-indigo-500 font-bold uppercase tracking-widest text-[10px] mb-6">
+            <div className="inline-flex items-center gap-2 text-indigo-500 font-bold uppercase tracking-widest text-xs mb-6">
               <Brain className="w-5 h-5" /> The Sustainomics Engine
             </div>
             <h3 className={`text-3xl md:text-5xl font-bold mb-8 tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>

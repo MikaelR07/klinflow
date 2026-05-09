@@ -79,7 +79,7 @@ export default function SettingsMenu() {
             </div>
             <div className="text-left">
               <p className="text-sm font-semibold dark:text-slate-200">Save AI Chat History</p>
-              <p className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 max-w-[150px] sm:max-w-none truncate">Keep HygeneX chats permanently</p>
+              <p className="text-xs sm:text-xs text-slate-400 dark:text-slate-500 max-w-[150px] sm:max-w-none truncate">Keep HygeneX chats permanently</p>
             </div>
           </div>
           <button 

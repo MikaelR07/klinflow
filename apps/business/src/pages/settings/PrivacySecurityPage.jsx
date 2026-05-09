@@ -68,7 +68,7 @@ export default function PrivacySecurityPage() {
                   <div>
                     <div className="text-sm font-semibold text-slate-700 dark:text-slate-300">Android Application</div>
                     <div className="text-xs text-slate-500">Nairobi, Kenya • Today, 14:30 PM</div>
-                    <div className="text-[10px] font-semibold text-green-500 uppercase mt-1 tracking-wider">Active Session</div>
+                    <div className="text-xs font-semibold text-green-500 uppercase mt-1 tracking-wider">Active Session</div>
                   </div>
                 </div>
              </div>

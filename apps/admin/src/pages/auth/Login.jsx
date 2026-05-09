@@ -63,7 +63,7 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Admin ID / Phone</label>
+              <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Admin ID / Phone</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <Phone className="h-5 w-5 text-slate-500" />
@@ -81,8 +81,8 @@ export default function Login() {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Security Password</label>
-                <button type="button" onClick={handleForgotPin} className="text-[10px] font-semibold text-slate-500 hover:text-white transition-colors uppercase tracking-widest">
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Security Password</label>
+                <button type="button" onClick={handleForgotPin} className="text-xs font-semibold text-slate-500 hover:text-white transition-colors uppercase tracking-widest">
                   Help?
                 </button>
               </div>

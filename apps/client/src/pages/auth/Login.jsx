@@ -57,7 +57,7 @@ export default function Login() {
           <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
             Clean<span className="text-primary italic">Flow</span>
           </h1>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 mt-2 font-semibold">
+          <p className="text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 mt-2 font-semibold">
             Environmental Intelligence
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function Login() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">Phone Identity</label>
+                <label className="block text-xs font-semibold text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">Phone Identity</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-primary">
                     <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
@@ -90,8 +90,8 @@ export default function Login() {
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Security Passcode</label>
-                  <button type="button" onClick={handleForgotPin} className="text-[10px] font-semibold text-primary hover:text-primary-dark transition-colors uppercase tracking-widest">
+                  <label className="block text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Security Passcode</label>
+                  <button type="button" onClick={handleForgotPin} className="text-xs font-semibold text-primary hover:text-primary-dark transition-colors uppercase tracking-widest">
                     Recovery?
                   </button>
                 </div>
@@ -127,7 +127,7 @@ export default function Login() {
           </form>
         </div>
 
-        <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-10">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-10">
           New to the ecosystem?{' '}
           <Link to="/register" className="text-primary hover:underline">Register Now</Link>
         </p>

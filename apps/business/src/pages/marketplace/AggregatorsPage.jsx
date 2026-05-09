@@ -88,8 +88,8 @@ export default function AggregatorsPage() {
       {/* Directory Section */}
       <div className="px-2 space-y-4">
         <div className="flex items-center justify-between px-1">
-          <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Partner Directory</h2>
-          <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">{filteredAggregators.length} Found</span>
+          <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Partner Directory</h2>
+          <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{filteredAggregators.length} Found</span>
         </div>
 
         <div className="space-y-3">
@@ -113,34 +113,34 @@ export default function AggregatorsPage() {
                     </div>
                     <div className="flex items-center gap-1.5 mt-1">
                       <MapPin className="w-3 h-3 text-slate-400" />
-                      <span className="text-[10px] text-slate-500 font-medium truncate">{aggregator.location}</span>
+                      <span className="text-xs text-slate-500 font-medium truncate">{aggregator.location}</span>
                     </div>
                     <div className="mt-2 flex items-center gap-2">
                       <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-amber-50 dark:bg-amber-500/10 rounded text-amber-600 dark:text-amber-400">
                         <Star className="w-2.5 h-2.5 fill-current" />
-                        <span className="text-[9px] font-black">{aggregator.rating}</span>
+                        <span className="text-xs font-black">{aggregator.rating}</span>
                       </div>
-                      <span className="text-[9px] text-slate-400 font-medium">({aggregator.reviews} reviews)</span>
+                      <span className="text-xs text-slate-400 font-medium">({aggregator.reviews} reviews)</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-700/50 rounded-md text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tight">
+                    <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-700/50 rounded-md text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tight">
                       {aggregator.specialization.split(' ')[0]}
                     </span>
-                    <span className="text-[9px] text-slate-300">|</span>
-                    <span className="text-[9px] text-slate-400 font-bold">{aggregator.capacity}</span>
+                    <span className="text-xs text-slate-300">|</span>
+                    <span className="text-xs text-slate-400 font-bold">{aggregator.capacity}</span>
                   </div>
                 </div>
               </div>
 
               {/* Actions */}
               <div className="flex border-t border-slate-50 dark:border-slate-800/50">
-                <button className="flex-1 py-3 flex items-center justify-center gap-2 text-[10px] font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <button className="flex-1 py-3 flex items-center justify-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                   <MessageSquare className="w-3.5 h-3.5" /> Chat
                 </button>
                 <div className="w-[1px] bg-slate-50 dark:bg-slate-800/50" />
-                <button className="flex-1 py-3 flex items-center justify-center gap-2 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <button className="flex-1 py-3 flex items-center justify-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                    View Profile <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>

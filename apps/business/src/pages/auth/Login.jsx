@@ -49,7 +49,7 @@ export default function Login() {
           <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
             Clean<span className="text-indigo-600 italic">Business</span>
           </h1>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 mt-2 font-semibold">
+          <p className="text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 mt-2 font-semibold">
             Kenya's B2B Recycling Marketplace
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function Login() {
             <div className="space-y-4">
               {/* Phone */}
               <div>
-                <label className="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">Business Phone</label>
+                <label className="block text-xs font-semibold text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">Business Phone</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
@@ -85,11 +85,11 @@ export default function Login() {
               {/* Passcode */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Security Passcode</label>
+                  <label className="block text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Security Passcode</label>
                   <button
                     type="button"
                     onClick={() => toast.info('Recovery initiated', { description: 'Reset link sent to your registered phone.' })}
-                    className="text-[10px] font-semibold text-indigo-600 hover:text-indigo-700 transition-colors uppercase tracking-widest"
+                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors uppercase tracking-widest"
                   >
                     Recovery?
                   </button>
@@ -127,7 +127,7 @@ export default function Login() {
           </form>
         </div>
 
-        <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-10">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-10">
           New to the marketplace?{' '}
           <Link to="/register" className="text-indigo-600 hover:underline underline-offset-4">Register Now</Link>
         </p>

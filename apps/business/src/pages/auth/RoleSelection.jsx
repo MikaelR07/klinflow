@@ -48,7 +48,7 @@ export default function RoleSelection() {
             I collect, sort, and aggregate verified waste to sell to industrial buyers in bulk.
           </p>
           
-          <div className="mt-6 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-primary">
+          <div className="mt-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary">
             Start Selling <ArrowRight className="w-3 h-3" />
           </div>
         </button>
@@ -71,7 +71,7 @@ export default function RoleSelection() {
             I want to source high-quality, verified recyclable materials for my manufacturing plant.
           </p>
           
-          <div className="mt-6 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-secondary">
+          <div className="mt-6 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-secondary">
             Source Material <ArrowRight className="w-3 h-3" />
           </div>
         </button>
@@ -80,7 +80,7 @@ export default function RoleSelection() {
       {/* Trust Footer */}
       <div className="flex items-center justify-center gap-2 py-6 opacity-40 grayscale">
         <ShieldCheck className="w-4 h-4" />
-        <span className="text-[10px] font-semibold uppercase tracking-widest">Escrow-Backed Trading Network</span>
+        <span className="text-xs font-semibold uppercase tracking-widest">Escrow-Backed Trading Network</span>
       </div>
     </div>
   );

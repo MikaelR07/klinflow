@@ -102,7 +102,7 @@ export default function SystemConfigPage() {
               {!form.hours ? (
                 <div className="py-10 text-center">
                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-slate-300" />
-                   <p className="text-[10px] font-semibold text-slate-400 mt-2 uppercase tracking-widest">Loading Schedule...</p>
+                   <p className="text-xs font-semibold text-slate-400 mt-2 uppercase tracking-widest">Loading Schedule...</p>
                 </div>
               ) : days.map(day => (
                 <div key={day} className={`p-4 rounded-2xl border transition-all ${form.hours[day]?.active ? 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-white/5' : 'bg-white dark:bg-slate-950 border-dashed border-slate-200 opacity-50'}`}>
@@ -119,7 +119,7 @@ export default function SystemConfigPage() {
                    {form.hours[day]?.active && (
                      <div className="flex items-center gap-3">
                         <div className="flex-1">
-                           <p className="text-[8px] font-semibold text-slate-400 uppercase mb-1">Start Time</p>
+                           <p className="text-xs font-semibold text-slate-400 uppercase mb-1">Start Time</p>
                            <input 
                              type="time" 
                              value={form.hours[day]?.start || '08:00'} 
@@ -128,7 +128,7 @@ export default function SystemConfigPage() {
                            />
                         </div>
                         <div className="flex-1">
-                           <p className="text-[8px] font-semibold text-slate-400 uppercase mb-1">End Time</p>
+                           <p className="text-xs font-semibold text-slate-400 uppercase mb-1">End Time</p>
                            <input 
                              type="time" 
                              value={form.hours[day]?.end || '18:00'} 

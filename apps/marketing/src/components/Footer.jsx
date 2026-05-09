@@ -59,7 +59,7 @@ export default function Footer() {
           
           {sections.map((section) => (
             <div key={section.title}>
-              <h5 className={`text-[10px] font-bold uppercase tracking-[0.2em] mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{section.title}</h5>
+              <h5 className={`text-xs font-bold uppercase tracking-[0.2em] mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{section.title}</h5>
               <ul className="space-y-4">
                 {section.links.map((link) => (
                   <li key={link.name}>
@@ -77,8 +77,8 @@ export default function Footer() {
         </div>
         
         <div className="pt-12 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 italic">© 2026 CleanFlow Logistics. All Rights Reserved.</p>
-          <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 italic">© 2026 CleanFlow Logistics. All Rights Reserved.</p>
+          <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-slate-500">
             <span className="cursor-pointer hover:text-emerald-500 transition-colors">Security</span>
             <span className="cursor-pointer hover:text-emerald-500 transition-colors">Privacy Policy</span>
             <div className="flex items-center gap-2">
