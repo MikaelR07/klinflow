@@ -34,7 +34,7 @@ export const useNotificationStore = create((set, get) => ({
 
   playNotificationSound: () => {
     try {
-      const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
+      const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_7314540449.mp3?filename=notification-sound-7062.mp3');
       audio.volume = 0.5;
       const playPromise = audio.play();
       if (playPromise !== undefined) {

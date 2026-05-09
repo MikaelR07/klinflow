@@ -1,7 +1,7 @@
 /**
  * Seller Home — Revenue dashboard, quick actions, trust score, leaderboard
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Bell, 
@@ -94,33 +94,32 @@ const formatMaterial = (text) => {
 };
 
 export default function SellerHome() {
-  const { 
-    profile, 
-    withdrawRewards, 
-    role, 
-    subscribeToProfileChanges
-  } = useAuthStore();
-  
-  const { 
-    bookings, 
-    fetchBookings, 
-    subscribeToBookings,
-    cleanupBookings,
-    setActiveVerificationBooking
-  } = useBookingStore();
+  const profile = useAuthStore(s => s.profile);
+  const role = useAuthStore(s => s.role);
+  const withdrawRewards = useAuthStore(s => s.withdrawRewards);
+  const subscribeToProfileChanges = useAuthStore(s => s.subscribeToProfileChanges);
 
-  const { 
-    receivedOrders, 
-    fetchReceivedOrders, 
-    getCalculatedScore,
-    receivedOffers,
-    fetchIncomingOffers,
-    myListings,
-    fetchMyActivity
-  } = useMarketplaceStore();
-  
-  const { subscribeToRealtime, cleanup: cleanupNotifications, getUnreadCount, fetchNotifications, subscribeToPush } = useNotificationStore();
-  const { initDevices } = useIotStore();
+  const bookings = useBookingStore(s => s.bookings);
+  const fetchBookings = useBookingStore(s => s.fetchBookings);
+  const subscribeToBookings = useBookingStore(s => s.subscribeToBookings);
+  const cleanupBookings = useBookingStore(s => s.cleanupBookings);
+  const setActiveVerificationBooking = useBookingStore(s => s.setActiveVerificationBooking);
+
+  const receivedOrders = useMarketplaceStore(s => s.receivedOrders);
+  const fetchReceivedOrders = useMarketplaceStore(s => s.fetchReceivedOrders);
+  const getCalculatedScore = useMarketplaceStore(s => s.getCalculatedScore);
+  const receivedOffers = useMarketplaceStore(s => s.receivedOffers);
+  const fetchIncomingOffers = useMarketplaceStore(s => s.fetchIncomingOffers);
+  const myListings = useMarketplaceStore(s => s.myListings);
+  const fetchMyActivity = useMarketplaceStore(s => s.fetchMyActivity);
+
+  const subscribeToRealtime = useNotificationStore(s => s.subscribeToRealtime);
+  const cleanupNotifications = useNotificationStore(s => s.cleanup);
+  const getUnreadCount = useNotificationStore(s => s.getUnreadCount);
+  const fetchNotifications = useNotificationStore(s => s.fetchNotifications);
+  const subscribeToPush = useNotificationStore(s => s.subscribeToPush);
+
+  const initDevices = useIotStore(s => s.initDevices);
   const navigate = useNavigate();
 
   const unreadCount = getUnreadCount();

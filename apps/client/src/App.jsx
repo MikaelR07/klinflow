@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { Home, CalendarPlus, Package, Brain, Gauge, MoreHorizontal, Plus, ShieldCheck, Handshake } from 'lucide-react';
 
@@ -52,11 +52,13 @@ import Login from './pages/auth/Login.jsx';
 import Register from './pages/auth/Register.jsx';
 
 function MobileLayout() {
-  const { profile } = useAuthStore();
-  const { receivedOffers } = useMarketplaceStore();
+  const profile = useAuthStore(s => s.profile);
+  const receivedOffers = useMarketplaceStore(s => s.receivedOffers);
   const isSeller = profile?.role === 'seller';
 
-  const pendingOffers = receivedOffers.filter(o => o.status === 'pending').length;
+  const pendingOffers = useMemo(() => 
+    receivedOffers.filter(o => o.status === 'pending').length, 
+  [receivedOffers]);
 
   const residentNav = [
     { path: '/', icon: Home, label: 'Home' },
@@ -95,11 +97,23 @@ function ProtectedLayout() {
 }
 
 export default function App() {
-  const { role, isAuthenticated, checkAppRole, userId, isInitializing, initializeAuth } = useAuthStore();
-  const { fetchNotifications, subscribeToRealtime } = useNotificationStore();
-  const { fetchConfig } = useSystemStore();
-  const { subscribeToBookings, cleanupBookings } = useBookingStore();
-  const { fetchReceivedOffers, subscribeToReceivedOffers } = useMarketplaceStore();
+  const role = useAuthStore(s => s.role);
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+  const checkAppRole = useAuthStore(s => s.checkAppRole);
+  const userId = useAuthStore(s => s.userId);
+  const isInitializing = useAuthStore(s => s.isInitializing);
+  const initializeAuth = useAuthStore(s => s.initializeAuth);
+
+  const fetchNotifications = useNotificationStore(s => s.fetchNotifications);
+  const subscribeToRealtime = useNotificationStore(s => s.subscribeToRealtime);
+  
+  const fetchConfig = useSystemStore(s => s.fetchConfig);
+  
+  const subscribeToBookings = useBookingStore(s => s.subscribeToBookings);
+  const cleanupBookings = useBookingStore(s => s.cleanupBookings);
+  
+  const fetchReceivedOffers = useMarketplaceStore(s => s.fetchReceivedOffers);
+  const subscribeToReceivedOffers = useMarketplaceStore(s => s.subscribeToReceivedOffers);
   
   // PWA Installation
   const { isInstallable, triggerInstall } = usePWA();

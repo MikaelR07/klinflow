@@ -2,7 +2,7 @@
  * User Home — Aggregator/Marketplace Discovery Mode
  * Connects residents to verified agents & companies near them
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Bell, MapPin, Zap, Wallet, Truck, Recycle, TrendingUp,
@@ -17,9 +17,23 @@ import { PushNotificationModal } from '@cleanflow/ui';
 import SellerHome from './SellerHome';
 
 export default function UserHome() {
-  const { profile, withdrawRewards, role, subscribeToProfileChanges, fetchProfile } = useAuthStore();
-  const { bookings, fetchBookings, subscribeToBookings, cleanupBookings, setActiveVerificationBooking } = useBookingStore();
-  const { subscribeToRealtime, cleanup: cleanupNotifications, getUnreadCount, fetchNotifications, subscribeToPush } = useNotificationStore();
+  const profile = useAuthStore(s => s.profile);
+  const role = useAuthStore(s => s.role);
+  const withdrawRewards = useAuthStore(s => s.withdrawRewards);
+  const subscribeToProfileChanges = useAuthStore(s => s.subscribeToProfileChanges);
+  const fetchProfile = useAuthStore(s => s.fetchProfile);
+
+  const bookings = useBookingStore(s => s.bookings);
+  const fetchBookings = useBookingStore(s => s.fetchBookings);
+  const subscribeToBookings = useBookingStore(s => s.subscribeToBookings);
+  const cleanupBookings = useBookingStore(s => s.cleanupBookings);
+  const setActiveVerificationBooking = useBookingStore(s => s.setActiveVerificationBooking);
+
+  const subscribeToRealtime = useNotificationStore(s => s.subscribeToRealtime);
+  const cleanupNotifications = useNotificationStore(s => s.cleanup);
+  const getUnreadCount = useNotificationStore(s => s.getUnreadCount);
+  const fetchNotifications = useNotificationStore(s => s.fetchNotifications);
+  const subscribeToPush = useNotificationStore(s => s.subscribeToPush);
   const navigate = useNavigate();
 
   const unreadCount = getUnreadCount();
@@ -111,13 +125,16 @@ export default function UserHome() {
     navigate('/withdraw');
   };
 
-  const completedBookings = bookings.filter(b => b.status === 'completed');
-  const totalPickups = completedBookings.length;
-  const kgRecovered = completedBookings.reduce((sum, b) => sum + (Number(b.actual_weight_kg) || 0), 0);
+  const metrics = useMemo(() => {
+    const completed = bookings.filter(b => b.status === 'completed');
+    const totalPickups = completed.length;
+    const kgRecovered = completed.reduce((sum, b) => sum + (Number(b.actual_weight_kg) || 0), 0);
+    const treesSaved = (kgRecovered * 0.1).toFixed(2);
+    const co2OffsetTonnes = ((kgRecovered * 1.2) / 1000).toFixed(3);
+    return { totalPickups, kgRecovered, treesSaved, co2OffsetTonnes };
+  }, [bookings]);
 
-  // ── REALISTIC IMPACT MATH ──
-  const treesSaved = (kgRecovered * 0.1).toFixed(2); // 10kg = 1 Tree (Scientific is 0.017, so 0.1 is 'Fair but Realistic')
-  const co2OffsetTonnes = ((kgRecovered * 1.2) / 1000).toFixed(3);  // 1kg = 1.2kg CO2, divide by 1000 for tonnes
+  const { totalPickups, kgRecovered, treesSaved, co2OffsetTonnes } = metrics;  // 1kg = 1.2kg CO2, divide by 1000 for tonnes
   
   const getImpactLevel = (count) => {
     if (count >= 50) return { label: 'Climate Guardian', icon: '🏆', color: 'text-indigo-600 bg-indigo-50 border-indigo-100' };
@@ -148,7 +165,7 @@ export default function UserHome() {
           <button onClick={() => navigate('/settings/profile')} className="shrink-0">
             <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
               {profile?.avatar_url ? (
-                <img src={profile.avatar_url} className="w-full h-full object-cover" />
+                <img src={profile.avatar_url} className="w-full h-full object-cover" loading="lazy" />
               ) : (
                 profile?.avatar || '👤'
               )}

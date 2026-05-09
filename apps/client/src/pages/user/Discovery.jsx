@@ -203,7 +203,7 @@ export default function DiscoveryHub() {
                         isCompany ? 'bg-indigo-50 dark:bg-indigo-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30'
                       }`}>
                         {partner.avatar_url ? (
-                          <img src={partner.avatar_url} className="w-full h-full object-cover" />
+                          <img src={partner.avatar_url} className="w-full h-full object-cover" loading="lazy" />
                         ) : (
                           isCompany ? '🏢' : '🚛'
                         )}

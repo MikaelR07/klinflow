@@ -74,6 +74,7 @@ serve(async (req) => {
           body: notification.body,
           icon: '/logo192.png',
           badge: '/logo192.png',
+          sound: 'default',
           data: { 
             url: '/settings/notifications',
             notificationId: notification.id

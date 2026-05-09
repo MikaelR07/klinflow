@@ -126,9 +126,7 @@ export default function MyBookings() {
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none">My Bookings</h1>
         </div>
         
-        <div className="z-10 px-3 py-1 bg-primary/10 rounded-full border border-primary/20 bg-white dark:bg-slate-900 shadow-sm">
-          <p className="text-xs font-semibold text-primary uppercase tracking-wider">Total: {bookings.length}</p>
-        </div>
+        <div className="w-9 h-9" /> {/* Spacer to balance the layout */}
       </div>
 
       {/* Tabs */}
