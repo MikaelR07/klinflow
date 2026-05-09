@@ -185,7 +185,7 @@ export default function SellerHome() {
     .slice(0, 3);
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10">
+    <div className="space-y-6 pb-10">
       
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -229,7 +229,6 @@ export default function SellerHome() {
 
       {/* ── REVENUE HERO CARD ── */}
       <div className="relative group">
-        <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-2xl blur-xl opacity-50 dark:opacity-50 opacity-20 group-hover:opacity-70 transition duration-500" />
         <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 rounded-2xl p-6 shadow-none dark:shadow-2xl border border-slate-100 dark:border-white/5">
           <div className="relative z-10 space-y-5">
             <div className="flex items-center justify-between gap-2">
@@ -237,7 +236,7 @@ export default function SellerHome() {
               <div className="space-y-4 w-[45%] shrink-0">
                 <div className="flex items-center gap-1.5 w-fit -mt-2">
                   <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest underline underline-offset-4 decoration-emerald-500/40 dark:decoration-emerald-400/40">Wallet</span>
+                  <span className="text-[10px] sm:text-xs font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest underline underline-offset-4 decoration-emerald-500/40 dark:decoration-emerald-400/40">Seller Wallet</span>
                 </div>
                 
                 <div className="space-y-4">
@@ -246,9 +245,9 @@ export default function SellerHome() {
                   </h2>
                   <button 
                     onClick={() => navigate('/withdraw')}
-                    className="w-fit px-6 py-2.5 sm:px-7 sm:py-3 mt-3 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl text-[10px] sm:text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
+                    className="w-fit px-5 py-3 sm:px-6 sm:py-3.5 mt-6 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl text-[9px] sm:text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
                   >
-                    <Wallet className="w-4 h-4 text-emerald-100" /> Withdraw
+                    <Wallet className="w-3.5 h-3.5 text-emerald-100" /> Withdraw
                   </button>
                 </div>
               </div>
