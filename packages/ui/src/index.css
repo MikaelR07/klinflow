@@ -8,6 +8,7 @@
   :root {
     --primary: 153 100% 33%;
     --primary-foreground: 0 0% 100%;
+    font-size: 105%;
   }
 
   body {
