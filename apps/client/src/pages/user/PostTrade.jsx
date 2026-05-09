@@ -386,15 +386,47 @@ export default function PostTrade() {
                   />
 
                   {photos.length === 0 ? (
-                    <button 
-                      onClick={() => document.getElementById('photo-upload').click()}
-                      className="w-full h-32 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-3 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900 shadow-sm"
-                    >
-                      <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-[1.25rem] flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
-                        <Camera className="w-5 h-5" />
-                      </div>
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tap to Add Photo</p>
-                    </button>
+                    <div className="flex gap-3">
+                      <button 
+                        onClick={() => {
+                          const input = document.createElement('input');
+                          input.type = 'file';
+                          input.accept = 'image/*';
+                          input.capture = 'environment';
+                          input.onchange = (e) => {
+                            const file = e.target.files[0];
+                            if (file) setPhotos(prev => [...prev, file].slice(0, 4));
+                          };
+                          input.click();
+                        }}
+                        className="flex-1 h-32 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900 shadow-sm"
+                      >
+                        <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                          <Camera className="w-5 h-5" />
+                        </div>
+                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Camera</p>
+                      </button>
+
+                      <button 
+                        onClick={() => {
+                          const input = document.createElement('input');
+                          input.type = 'file';
+                          input.accept = 'image/*';
+                          input.multiple = true;
+                          input.onchange = (e) => {
+                            const files = Array.from(e.target.files);
+                            setPhotos(prev => [...prev, ...files].slice(0, 4));
+                          };
+                          input.click();
+                        }}
+                        className="flex-1 h-32 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900 shadow-sm"
+                      >
+                        <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                          <Smartphone className="w-5 h-5" />
+                        </div>
+                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Gallery</p>
+                      </button>
+                    </div>
                   ) : (
                     <div className="grid grid-cols-2 gap-3">
                       {photos.map((p, idx) => (

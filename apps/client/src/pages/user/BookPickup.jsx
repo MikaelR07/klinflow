@@ -445,18 +445,34 @@ export default function BookPickup() {
                           </button>
                         </div>
                       ) : (
-                        <label className="flex flex-col items-center justify-center w-full aspect-[2.5/1] bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl cursor-pointer hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all shadow-sm">
-                          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-2">
-                            <Camera className="w-6 h-6 text-primary" />
-                          </div>
-                          <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest italic">Snap Photo</p>
-                          <input 
-                            type="file" 
-                            accept="image/*" 
-                            className="hidden" 
-                            onChange={(e) => setPhoto(e.target.files[0])} 
-                          />
-                        </label>
+                        <div className="flex gap-3">
+                          <label className="flex-1 flex flex-col items-center justify-center aspect-[1.5/1] bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl cursor-pointer hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all shadow-sm">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-1.5">
+                              <Camera className="w-5 h-5 text-primary" />
+                            </div>
+                            <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest italic">Take Photo</p>
+                            <input 
+                              type="file" 
+                              accept="image/*" 
+                              className="hidden" 
+                              capture="environment"
+                              onChange={(e) => setPhoto(e.target.files[0])} 
+                            />
+                          </label>
+
+                          <label className="flex-1 flex flex-col items-center justify-center aspect-[1.5/1] bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl cursor-pointer hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all shadow-sm">
+                            <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center mb-1.5">
+                              <Smartphone className="w-5 h-5 text-indigo-600" />
+                            </div>
+                            <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest italic">From Gallery</p>
+                            <input 
+                              type="file" 
+                              accept="image/*" 
+                              className="hidden" 
+                              onChange={(e) => setPhoto(e.target.files[0])} 
+                            />
+                          </label>
+                        </div>
                       )}
                     </div>
 

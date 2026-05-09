@@ -58,14 +58,14 @@ function MobileLayout() {
   ];
 
   return (
-    <>
-      <div className="max-w-lg mx-auto px-2 py-5 pb-24">
+    <div className="flex flex-col h-[100dvh] max-w-lg mx-auto">
+      <div className="flex-1 overflow-y-auto overscroll-none py-5 pb-4 px-2">
         <Suspense fallback={<LoadingScreen message="Loading..." />}>
           <Outlet />
         </Suspense>
       </div>
       <BottomNav items={AGENT_NAV} />
-    </>
+    </div>
   );
 }
 
