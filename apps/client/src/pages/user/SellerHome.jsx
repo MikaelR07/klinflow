@@ -233,7 +233,7 @@ export default function SellerHome() {
       />
       
       {/* ── HEADER ── */}
-      <div className="flex items-center justify-between px-1">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('/settings/profile')} className="shrink-0">
             <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
