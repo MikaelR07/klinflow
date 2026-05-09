@@ -132,9 +132,9 @@ export default function TrustScoreDetails() {
           </div>
           
           {/* Metrics Bento Grid */}
-          <div className="relative z-10 grid grid-cols-4 gap-3 pt-6 border-t border-slate-100 dark:border-slate-700/50">
+          <div className="relative z-10 grid grid-cols-4 gap-2.5 pt-6 border-t border-slate-100 dark:border-white/5">
              {/* Large Card: Available Balance */}
-             <div className="col-span-2 flex flex-col justify-between bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 dark:border-emerald-500/20 rounded-2xl p-4">
+             <div className="col-span-2 flex flex-col justify-between bg-emerald-500/10 dark:bg-emerald-500/20 rounded-2xl p-4">
                <div className="flex items-center gap-2 mb-2">
                  <Wallet className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                  <p className="text-[8px] font-bold uppercase tracking-widest text-emerald-600/70 dark:text-emerald-400/70">Available Balance</p>
@@ -143,7 +143,7 @@ export default function TrustScoreDetails() {
              </div>
              
              {/* Large Card: In Escrow */}
-             <div className="col-span-2 flex flex-col justify-between bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/10 dark:border-amber-500/20 rounded-2xl p-4">
+             <div className="col-span-2 flex flex-col justify-between bg-amber-500/10 dark:bg-amber-500/20 rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="w-3 h-3 text-amber-600 dark:text-amber-400" />
                   <p className="text-[8px] font-bold uppercase tracking-widest text-amber-600/70 dark:text-amber-400/70">In Escrow</p>
@@ -152,7 +152,7 @@ export default function TrustScoreDetails() {
              </div>
 
              {/* Small Card: Trades */}
-             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3 text-center">
+             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-white/5 rounded-2xl p-3 text-center">
                <Handshake className="w-3.5 h-3.5 text-slate-400" />
                <div className="space-y-0.5">
                  <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{stats.tradesCompleted}</p>
@@ -161,7 +161,7 @@ export default function TrustScoreDetails() {
              </div>
 
              {/* Small Card: Rate */}
-             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3 text-center">
+             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-white/5 rounded-2xl p-3 text-center">
                <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
                <div className="space-y-0.5">
                  <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 leading-none">{stats.fulfillmentRate}%</p>
@@ -170,7 +170,7 @@ export default function TrustScoreDetails() {
              </div>
 
              {/* Small Card: Days */}
-             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3 text-center">
+             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-white/5 rounded-2xl p-3 text-center">
                <Calendar className="w-3.5 h-3.5 text-slate-400" />
                <div className="space-y-0.5">
                  <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{stats.daysTraded}</p>
@@ -179,7 +179,7 @@ export default function TrustScoreDetails() {
              </div>
              
              {/* Small Card: Time */}
-             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-3 text-center">
+             <div className="col-span-1 flex flex-col items-center justify-center gap-2 bg-slate-50 dark:bg-white/5 rounded-2xl p-3 text-center">
                <Zap className="w-3.5 h-3.5 text-primary" />
                <div className="space-y-0.5">
                  <p className="text-sm font-bold text-primary leading-none">{stats.avgResponseTime || '15'}m</p>
