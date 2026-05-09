@@ -79,7 +79,7 @@ function SellerLeaderboard() {
   const isEmpty = topSellers.length === 0;
 
   return (
-    <div className="overflow-x-hidden bg-slate-50 dark:bg-slate-900 transition-colors">
+    <div className="overflow-x-hidden bg-slate-50 dark:bg-slate-900 transition-colors px-2">
       {/* Header */}
       <div className="pt-0 flex items-center gap-4 relative z-20 mb-4">
         <button onClick={() => navigate(-1)} className="p-3 bg-white dark:bg-slate-900 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
@@ -285,7 +285,7 @@ export default function Leaderboard() {
   const isEmpty = topUsers.length === 0;
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden px-2">
 
       {/* Header */}
       <div className="pt-0 flex items-center gap-4 relative z-20">

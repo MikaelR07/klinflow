@@ -49,7 +49,7 @@ export default function CompanyProfile() {
   const isFleetAdmin = company?.role === 'admin';
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900">
+    <div className="bg-slate-50 dark:bg-slate-900 px-2">
       {/* Header */}
       <div className="p-4 pt-6 flex items-center gap-3">
         <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 dark:border-slate-700">

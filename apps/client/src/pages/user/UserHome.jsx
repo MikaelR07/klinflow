@@ -134,7 +134,7 @@ export default function UserHome() {
   }
 
   return (
-    <div className="px-5 space-y-4 animate-fade-in pb-10">
+    <div className="px-2 space-y-4 animate-fade-in pb-10">
 
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -156,7 +156,7 @@ export default function UserHome() {
           </button>
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
-            <div className="flex items-center gap-1.5 mt-1.5 text-xs text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10 w-fit">
+            <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10 w-fit">
               <MapPin className="w-3 h-3" /> {profile?.location?.estate || 'Nairobi'}
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function UserHome() {
           <div className="flex flex-col gap-6 relative z-10">
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-xs font-semibold text-emerald-200/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                <p className="text-[10px] font-semibold text-emerald-200/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                   <Wallet className="w-3 h-3" /> Wallet Balance
                 </p>
                 <h2 className="text-4xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
@@ -194,7 +194,7 @@ export default function UserHome() {
                 <div className="flex items-center gap-2 mt-3">
                   <button 
                     onClick={() => navigate('/impact-hub')}
-                    className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold text-amber-300 uppercase tracking-widest active:scale-95 transition-all shadow-inner"
+                    className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-lg border border-white/10 text-[10px] font-semibold text-amber-300 uppercase tracking-widest active:scale-95 transition-all shadow-inner"
                   >
                     ⚡ {profile?.rewardPoints || 0} GFP
                   </button>
@@ -212,15 +212,15 @@ export default function UserHome() {
             <div className="flex items-center pt-5 border-t border-white/10 pl-8 sm:pl-12">
               <div className="flex items-center gap-6 sm:gap-10">
                 <div>
-                  <p className="text-xs font-semibold text-emerald-300 uppercase tracking-widest mb-1">Pickups</p>
+                  <p className="text-[8px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">Pickups</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
                 </div>
                 <div className="px-4 sm:px-6 border-x border-white/10">
-                  <p className="text-xs font-semibold text-emerald-300 uppercase tracking-widest mb-1">Recovered</p>
+                  <p className="text-[8px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">Recovered</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-emerald-300 uppercase tracking-widest mb-1">CO2 Offset</p>
+                  <p className="text-[8px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">CO2 Offset</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
                 </div>
               </div>
@@ -242,7 +242,7 @@ export default function UserHome() {
             <Truck className="w-5 h-5" />
           </div>
           <div className="text-center">
-            <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-0.5">Book Now</p>
+            <p className="text-[8px] font-semibold text-primary uppercase tracking-widest mb-0.5">Book Now</p>
             <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Request Pickup</p>
           </div>
         </button>
@@ -253,7 +253,7 @@ export default function UserHome() {
             <Recycle className="w-5 h-5" />
           </div>
           <div className="text-center">
-            <p className="text-xs font-semibold text-indigo-600 uppercase tracking-widest mb-0.5">Track</p>
+            <p className="text-[8px] font-semibold text-indigo-600 uppercase tracking-widest mb-0.5">Track</p>
             <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">My Bookings</p>
           </div>
         </button>
@@ -264,7 +264,7 @@ export default function UserHome() {
             <TrendingUp className="w-5 h-5" />
           </div>
           <div className="text-center">
-            <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-0.5">Insights</p>
+            <p className="text-[8px] font-semibold text-emerald-600 uppercase tracking-widest mb-0.5">Insights</p>
             <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
           </div>
         </button>
@@ -292,10 +292,10 @@ export default function UserHome() {
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center relative">
             <Trophy className="w-6 h-6 text-amber-600" />
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-xs font-semibold text-white rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">!</div>
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-[8px] font-semibold text-white rounded-full flex items-center justify-center border-2 border-white dark:border-slate-900">!</div>
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Global Ranking</p>
+            <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Global Ranking</p>
             <p className="text-sm font-semibold text-slate-900 dark:text-white uppercase">
               {userRank ? `You are #${userRank} on CleanFlow` : 'Unranked — Start Recycling!'}
             </p>
@@ -309,14 +309,14 @@ export default function UserHome() {
       {/* Recent Activity Section */}
       <div className="bg-slate-100/30 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800">
         <div className="flex items-center justify-between mb-6 px-1">
-          <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400">Activity Hub</h3>
+          <h3 className="font-semibold text-[10px] uppercase tracking-widest text-slate-400">Activity Hub</h3>
           <button 
             onClick={() => {
               setIsActivityCleared(true);
               localStorage.setItem(`activity_cleared_${profile?.id}`, 'true');
               toast.info("Activity Feed Cleared");
             }} 
-            className="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest rounded-lg hover:bg-red-50 hover:text-red-500 transition-all"
+            className="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-[9px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest rounded-lg hover:bg-red-50 hover:text-red-500 transition-all"
           >
             Clear
           </button>
@@ -335,15 +335,15 @@ export default function UserHome() {
                   <div>
                     <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize">{booking.wasteType || booking.waste_type} Pickup</p>
                     <div className="flex items-center gap-2">
-                      <p className="text-xs font-semibold text-primary font-mono uppercase">#{String(booking.id).slice(0, 8).toUpperCase()}</p>
-                      <p className="text-xs font-semibold text-slate-400">
+                      <p className="text-[8px] font-semibold text-primary font-mono uppercase">#{String(booking.id).slice(0, 8).toUpperCase()}</p>
+                      <p className="text-[10px] font-semibold text-slate-400">
                         {new Date(booking.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="text-right flex flex-col items-end gap-1">
-                  <p className={`text-xs font-semibold uppercase tracking-widest ${
+                  <p className={`text-[10px] font-semibold uppercase tracking-widest ${
                     booking.status === 'completed' ? 'text-primary' : 
                     booking.status === 'cancelled' ? 'text-rose-500' : 
                     'text-amber-500'
@@ -355,7 +355,7 @@ export default function UserHome() {
                   {booking.status === 'picked_up' && (
                     <button 
                       onClick={(e) => { e.stopPropagation(); handleOpenVerification(booking); }}
-                      className="px-2 py-1 bg-primary text-xs font-semibold text-white uppercase tracking-widest rounded-lg shadow-lg shadow-primary/20 active:scale-90 transition-all flex items-center gap-1"
+                      className="px-2 py-1 bg-primary text-[8px] font-semibold text-white uppercase tracking-widest rounded-lg shadow-lg shadow-primary/20 active:scale-90 transition-all flex items-center gap-1"
                     >
                       Verify Weight <Star className="w-2.5 h-2.5 fill-white" />
                     </button>
@@ -365,8 +365,8 @@ export default function UserHome() {
             ));
           })() : (
             <div className="text-center py-6">
-              <p className="text-xs font-semibold text-slate-300 uppercase tracking-widest">{isActivityCleared ? 'Activity Cleared' : 'No recent pickups'}</p>
-              {!isActivityCleared && <button onClick={() => navigate('/discovery')} className="text-xs font-semibold text-primary uppercase tracking-widest mt-2 underline">Start Recycling →</button>}
+              <p className="text-[10px] font-semibold text-slate-300 uppercase tracking-widest">{isActivityCleared ? 'Activity Cleared' : 'No recent pickups'}</p>
+              {!isActivityCleared && <button onClick={() => navigate('/discovery')} className="text-[9px] font-semibold text-primary uppercase tracking-widest mt-2 underline">Start Recycling →</button>}
             </div>
           )}
         </div>

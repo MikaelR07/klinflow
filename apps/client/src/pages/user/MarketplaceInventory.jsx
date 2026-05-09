@@ -56,11 +56,11 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none -mt-5 pt-5 relative">
+    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none px-2 -mt-5 pt-5">
       
       {/* ── HEADER (Hidden when focused) ── */}
       {!selectedId && (
-        <header className="px-5 pt-1 pb-4">
+        <header className="px-4 pt-1 pb-4">
           <div className="flex items-center justify-center relative mb-3">
             <button 
               onClick={() => navigate(-1)}
@@ -69,7 +69,7 @@ export default function MarketplaceInventory() {
               <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
             </button>
             <div className="bg-white dark:bg-slate-800/50 py-1.5 px-4 rounded-xl border border-slate-100 dark:border-slate-800">
-              <h1 className="text-xs font-bold text-slate-900 dark:text-white tracking-widest uppercase">Manage your listings</h1>
+              <h1 className="text-[10px] font-bold text-slate-900 dark:text-white tracking-widest uppercase">Manage your listings</h1>
             </div>
           </div>
 
@@ -91,7 +91,7 @@ export default function MarketplaceInventory() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`relative pb-2 text-xs font-semibold uppercase tracking-[0.2em] transition-all ${
+                className={`relative pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] transition-all ${
                   activeTab === tab ? 'text-emerald-600' : 'text-slate-400'
                 }`}
               >
@@ -108,10 +108,10 @@ export default function MarketplaceInventory() {
       <main className="mt-0">
         {selectedId && selectedListing ? (
           /* ── FOCUSED DETAIL VIEW (AGENT SOURCING STYLE) ── */
-          <div className="animate-fade-in -mt-7">
+          <div className="animate-fade-in -mx-2 -mt-7">
             
             {/* Edge-to-Edge Hero Image */}
-            <div className="w-full aspect-[4/3] bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
+            <div className="w-full aspect-video bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
               
               {/* Overlaid Back Button */}
               <button 
@@ -119,7 +119,7 @@ export default function MarketplaceInventory() {
                 className="absolute top-8 left-6 z-20 flex items-center gap-2 px-3 py-2 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span className="text-xs font-semibold uppercase tracking-widest">Back</span>
+                <span className="text-[9px] font-semibold uppercase tracking-widest">Back</span>
               </button>
 
               <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
@@ -144,26 +144,26 @@ export default function MarketplaceInventory() {
                 </div>
               )}
 
-              <div className="absolute top-8 right-6 px-3 py-1.5 bg-black/40 backdrop-blur-xl text-white rounded-full text-xs font-semibold uppercase tracking-[0.2em] shadow-lg">
+              <div className="absolute top-8 right-6 px-3 py-1.5 bg-black/40 backdrop-blur-xl text-white rounded-full text-[9px] font-semibold uppercase tracking-[0.2em] shadow-lg">
                 Grade {selectedListing.grade || 'A'}
               </div>
             </div>
 
             {/* Content Sheet (Overlaps Image) */}
-            <div className="relative -mt-8 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-3xl px-5 pt-8 pb-4 space-y-6">
+            <div className="relative -mt-8 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-3xl px-4 pt-8 pb-4 space-y-6">
               
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="bg-white dark:bg-slate-800/50 py-1.5 px-3 rounded-xl border border-slate-100 dark:border-slate-800 w-fit">
-                      <h2 className="text-lg font-bold text-slate-900 dark:text-white">{selectedListing.material}</h2>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">{selectedListing.material}</h2>
                     </div>
                     <div className="bg-white dark:bg-slate-800/50 py-1.5 px-3 rounded-xl border border-slate-100 dark:border-slate-800 w-fit flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5 text-indigo-500" />
-                      <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest italic">{selectedListing.location || 'Nairobi Hub'}</span>
+                      <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-widest italic">{selectedListing.location || 'Nairobi Hub'}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 px-1">
-                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                     <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
                        Posted {new Date(selectedListing.created_at || selectedListing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                      </p>
                   </div>
@@ -171,27 +171,27 @@ export default function MarketplaceInventory() {
 
               {/* Stats Row - Three Column Industrial */}
               <div className="grid grid-cols-3 gap-1.5">
-                <div className="bg-white dark:bg-slate-800/50 p-2 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Asking Rate</p>
-                  <p className="text-base font-black text-emerald-600 italic">KSh {selectedListing.pricePerKg}</p>
-                  <p className="text-xs font-bold text-slate-300 uppercase tracking-widest">/ KG</p>
+                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Asking Rate</p>
+                  <p className="text-sm font-black text-emerald-600 italic">KSh {selectedListing.pricePerKg}</p>
+                  <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">/ KG</p>
                 </div>
-                <div className="bg-white dark:bg-slate-800/50 p-2 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Inventory</p>
-                  <p className="text-base font-black text-slate-900 dark:text-white italic">{selectedListing.quantity}</p>
-                  <p className="text-xs font-bold text-slate-300 uppercase tracking-widest">KG LOAD</p>
+                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Inventory</p>
+                  <p className="text-sm font-black text-slate-900 dark:text-white italic">{selectedListing.quantity}</p>
+                  <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">KG LOAD</p>
                 </div>
-                <div className="bg-white dark:bg-slate-800/50 p-2 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Est. Value</p>
-                  <p className="text-base font-black text-slate-900 dark:text-white italic">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
-                  <p className="text-xs font-bold text-slate-300 uppercase tracking-widest">Net Total</p>
+                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Est. Value</p>
+                  <p className="text-sm font-black text-slate-900 dark:text-white italic">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
+                  <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">Net Total</p>
                 </div>
               </div>
 
               {/* Description */}
               <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2">
-                <h4 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Description</h4>
-                <p className="text-base font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
+                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Description</h4>
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
                   {selectedListing.description || "No description provided"}
                 </p>
               </div>
@@ -208,7 +208,7 @@ export default function MarketplaceInventory() {
                 </button>
                 <button 
                   onClick={() => setSelectedId(null)}
-                  className="w-full py-3.5 bg-white dark:bg-slate-800 text-slate-400 rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-95 transition-all"
+                  className="w-full py-3.5 bg-white dark:bg-slate-800 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all"
                 >
                   Return to Inventory
                 </button>
@@ -231,7 +231,7 @@ export default function MarketplaceInventory() {
                 <div 
                   key={listing.id}
                   onClick={() => setSelectedId(listing.id)}
-                  className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/50 px-5 py-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
+                  className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/50 p-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
@@ -246,20 +246,20 @@ export default function MarketplaceInventory() {
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                          <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Live</span>
+                          <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Live</span>
                         </div>
-                        <span className="text-xs font-semibold text-emerald-600">KSh {listing.pricePerKg}/kg</span>
+                        <span className="text-[10px] font-semibold text-emerald-600">KSh {listing.pricePerKg}/kg</span>
                       </div>
                       
-                      <h3 className="text-base font-semibold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
+                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
                       
                       <div className="flex items-center gap-4 mt-2">
-                        <div className="flex items-center gap-1 text-xs font-semibold text-slate-400">
-                          <Scale className="w-4 h-4" />
+                        <div className="flex items-center gap-1 text-[10px] font-semibold text-slate-400">
+                          <Scale className="w-3.5 h-3.5" />
                           <span>{listing.quantity} KG</span>
                         </div>
-                        <div className="flex items-center gap-1 text-xs font-semibold text-slate-400">
-                          <Clock className="w-4 h-4" />
+                        <div className="flex items-center gap-1 text-[10px] font-semibold text-slate-400">
+                          <Clock className="w-3.5 h-3.5" />
                           <span>{new Date(listing.createdAt || listing.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                       </div>
@@ -278,7 +278,7 @@ export default function MarketplaceInventory() {
 
       {/* Helper Card (Only in list view) */}
       {!selectedId && filteredListings.length > 0 && (activeTab === 'active') && (
-        <div className="px-5 mt-6">
+        <div className="px-4 mt-6">
           <div className="bg-emerald-50 dark:bg-emerald-500/5 rounded-2xl p-4 relative overflow-hidden border border-emerald-100 dark:border-emerald-500/20">
             <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl" />
             <div className="flex items-center gap-4 relative z-10">
@@ -286,7 +286,7 @@ export default function MarketplaceInventory() {
                 <AlertCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="flex-1">
-                <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 leading-none mb-1.5">Market Strategy</h4>
+                <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 leading-none mb-1.5">Market Strategy</h4>
                 <p className="text-xs text-emerald-800/80 dark:text-emerald-100/60 leading-snug font-medium">
                   Adding clear photos increases your chance of an agent bid by <span className="text-emerald-900 dark:text-white font-bold italic">40%</span>.
                 </p>

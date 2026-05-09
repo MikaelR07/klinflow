@@ -232,7 +232,7 @@ export default function PostTrade() {
   };
 
   return (
-    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none">
+    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none px-2">
       
       {/* ── NAVIGATION HEADER ── */}
       <div className="px-4 pt-2 pb-2 flex items-center justify-between">
