@@ -186,7 +186,7 @@ export default function UserHome() {
       </div>
 
       {/* Wallet Hero */}
-      <div className="bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl p-6 overflow-hidden shadow-lg isolate">
+      <div className="bg-gradient-to-br from-primary to-emerald-700 rounded-2xl p-6 overflow-hidden shadow-lg gpu-layer">
         <div className="flex flex-col gap-6 relative z-10">
           <div className="flex items-end justify-between">
             <div>
@@ -240,35 +240,32 @@ export default function UserHome() {
       {/* Quick Actions */}
       <div className="grid grid-cols-3 gap-3">
         <button onClick={() => navigate('/book-pickup')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm">
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-3 active:scale-[0.98] transition-all shadow-sm gpu-layer">
           <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
             <Truck className="w-5 h-5" />
           </div>
           <div className="text-center">
-            <p className="text-[9px] font-semibold text-primary uppercase tracking-widest mb-0.5">Book Now</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Request Pickup</p>
+            <p className="text-[9px] font-semibold text-primary uppercase tracking-widest leading-none">Book Now</p>
           </div>
         </button>
 
         <button onClick={() => navigate('/my-bookings')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm">
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-3 active:scale-[0.98] transition-all shadow-sm gpu-layer">
           <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
             <Recycle className="w-5 h-5" />
           </div>
           <div className="text-center">
-            <p className="text-[9px] font-semibold text-indigo-600 uppercase tracking-widest mb-0.5">Track</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">My Bookings</p>
+            <p className="text-[9px] font-semibold text-indigo-600 uppercase tracking-widest leading-none">My Bookings</p>
           </div>
         </button>
 
         <button onClick={() => navigate('/analytics')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm">
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-3 active:scale-[0.98] transition-all shadow-sm gpu-layer">
           <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
             <TrendingUp className="w-5 h-5" />
           </div>
           <div className="text-center">
-            <p className="text-[9px] font-semibold text-emerald-600 uppercase tracking-widest mb-0.5">Insights</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
+            <p className="text-[9px] font-semibold text-emerald-600 uppercase tracking-widest leading-none">Dashboard</p>
           </div>
         </button>
 
@@ -291,7 +288,7 @@ export default function UserHome() {
       </div>
 
       {/* Estate Ranking */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 flex items-center justify-between group active:scale-[0.98] transition-all" onClick={() => navigate('/leaderboard')}>
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 flex items-center justify-between group active:scale-[0.98] transition-all gpu-layer" onClick={() => navigate('/leaderboard')}>
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center relative">
             <Trophy className="w-6 h-6 text-amber-600" />
