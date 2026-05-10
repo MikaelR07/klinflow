@@ -237,8 +237,72 @@ export const useAgentStore = create(
         rejectedJobs: rejected,
         isLoadingJobs: false 
       });
+
+      // ── TRIGGER DYNAMIC HOTSPOT ANALYSIS ──
+      get().computeLocalHotspots();
     } else {
       set({ isLoadingJobs: false });
+    }
+  },
+
+  computeLocalHotspots: () => {
+    const { availableJobs, coachInsights } = get();
+    if (availableJobs.length < 3) return;
+
+    // Group by estate
+    const clusters = availableJobs.reduce((acc, job) => {
+      const key = job.location || 'Unknown';
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+
+    // Find the largest cluster
+    const [topEstate, count] = Object.entries(clusters).sort((a, b) => b[1] - a[1])[0];
+
+    if (count >= 3) {
+      const hotspotInsight = {
+        id: `hotspot-${topEstate}`,
+        type: 'hotspot',
+        title: '🔥 Hotspot Detected!',
+        message: `${count} missions available in ${topEstate}. Optimize your route now to maximize efficiency.`,
+        action: 'Start Route',
+        target: `/routes?estate=${topEstate}`,
+        icon: '🔥'
+      };
+
+      // Filter out old hotspots and prepend the new one
+      const otherInsights = coachInsights.filter(i => i.type !== 'hotspot');
+      set({ coachInsights: [hotspotInsight, ...otherInsights], currentInsightIndex: 0 });
+    }
+  },
+
+  fetchDynamicInsights: async () => {
+    const { userId } = useAuthStore.getState();
+    if (!userId) return;
+
+    try {
+      const { data, error } = await supabase.functions.invoke('get-agent-insights', {
+        body: { agent_id: userId }
+      });
+
+      if (error) throw error;
+
+      if (data?.insight) {
+        const aiInsight = {
+          id: `ai-${Date.now()}`,
+          type: 'ai-trend',
+          title: data.insight.title || '📈 Market Pulse',
+          message: data.insight.message,
+          action: data.insight.action || 'View Market',
+          target: data.insight.target || '/sourcing',
+          icon: '🧠'
+        };
+
+        const otherInsights = get().coachInsights.filter(i => i.type !== 'ai-trend');
+        set({ coachInsights: [aiInsight, ...otherInsights] });
+      }
+    } catch (err) {
+      console.warn('[AgentStore] Dynamic insights skipped:', err.message);
     }
   },
 

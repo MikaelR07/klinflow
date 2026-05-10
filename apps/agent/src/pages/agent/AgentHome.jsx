@@ -46,6 +46,7 @@ export default function AgentHome() {
   const availableJobs = useAgentStore(s => s.availableJobs);
   const fetchAvailableJobs = useAgentStore(s => s.fetchAvailableJobs);
   const fetchEarnings = useAgentStore(s => s.fetchEarnings);
+  const fetchDynamicInsights = useAgentStore(s => s.fetchDynamicInsights);
   const broadcastLocation = useAgentStore(s => s.broadcastLocation);
   const jobHistory = useAgentStore(s => s.jobHistory);
   const subscribeToJobs = useAgentStore(s => s.subscribeToJobs);
@@ -92,6 +93,7 @@ export default function AgentHome() {
     // Defer heavy data slightly to keep UI responsive
     const jobsTimer = setTimeout(() => fetchAvailableJobs(), 100);
     const assetsTimer = setTimeout(() => fetchAssets(), 300);
+    const aiTimer = setTimeout(() => fetchDynamicInsights(), 600);
 
     // Fetch accepted marketplace trades count
     if (profile?.id) {
@@ -113,6 +115,7 @@ export default function AgentHome() {
     return () => {
       clearTimeout(jobsTimer);
       clearTimeout(assetsTimer);
+      clearTimeout(aiTimer);
     };
   }, []);
 
@@ -492,10 +495,10 @@ export default function AgentHome() {
             </p>
             <div className="flex gap-3">
               <button 
-                onClick={() => navigate('/jobs')}
+                onClick={() => navigate(currentInsight.target || '/jobs')}
                 className="flex-1 py-4 bg-white text-indigo-700 rounded-2xl font-semibold text-xs uppercase tracking-widest shadow-lg active:scale-[0.98] transition-all"
               >
-                Go to Hotspot
+                {currentInsight.action || 'View Details'}
               </button>
               <button 
                 onClick={nextInsight}
