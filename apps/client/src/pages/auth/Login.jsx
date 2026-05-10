@@ -41,7 +41,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8 relative overflow-hidden">
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:to-slate-900 px-4 py-8 relative overflow-hidden">
       {/* Background Decorative Element */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -ml-32 -mb-32" />
@@ -50,15 +50,11 @@ export default function Login() {
         
         {/* Branding */}
         <div className="text-center mb-10">
-          <img src="/logo.png" className="w-56 h-auto mx-auto mb-8 shadow-2xl rounded-3xl" alt="Logo" fetchPriority="high" />
-          <div className="hidden">
-            
-          </div>
           <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
             Clean<span className="text-primary italic">Flow</span>
           </h1>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 mt-2 font-semibold">
-            Environmental Intelligence
+            The Ecosystem of Tomorrow
           </p>
         </div>
 

@@ -40,12 +40,11 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8 relative">
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:to-slate-900 px-4 py-8 relative">
       <div className="max-w-md w-full mx-auto animate-slide-up">
         
         {/* Branding */}
         <div className="text-center mb-10">
-          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl mb-4 mx-auto" alt="Agent Logo" fetchPriority="high" loading="eager" />
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
             Clean<span className="text-secondary">Agent</span>
           </h1>

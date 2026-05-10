@@ -133,7 +133,7 @@ export default function Register() {
 
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-950 px-4 py-12 relative transition-colors duration-500 overflow-x-hidden">
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950/30 px-4 py-12 relative transition-colors duration-500 overflow-x-hidden">
       {/* Visual Accents */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-green-400 to-secondary" />
       <div className={`absolute -top-24 -left-24 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl opacity-50`} />
@@ -147,7 +147,6 @@ export default function Register() {
               <ArrowLeft className="w-4 h-4" /> Back to Sign In
             </Link>
           </div>
-          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl" alt="Logo" fetchPriority="high" />
         </div>
 
         <div className="mb-10 text-center sm:text-left">
