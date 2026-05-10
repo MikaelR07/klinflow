@@ -100,7 +100,7 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="animate-fade-in bg-[#F2F3F4] dark:bg-slate-900 pb-10 relative px-2 min-h-screen">
+    <div className="animate-fade-in bg-[#F2F3F4] dark:bg-slate-900 pb-10 relative px-2">
       <div className="w-full">
         {/* ── SUMMARY SECTION ── */}
         <div className="bg-slate-900 dark:bg-slate-950 p-4 pt-6 pb-4 text-white mb-6 mt-4 relative overflow-hidden shadow-xl shadow-slate-900/10 rounded-[2.5rem]">

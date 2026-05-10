@@ -338,7 +338,7 @@ export default function Leaderboard() {
   const isEmpty = topUsers.length === 0;
 
   return (
-    <div className="overflow-x-hidden px-2 pb-24 bg-[#F8F9FA] dark:bg-slate-950 min-h-screen transition-colors">
+    <div className="overflow-x-hidden px-2 pb-24 bg-[#F8F9FA] dark:bg-slate-950 transition-colors">
 
       {/* Header */}
       <div className="pt-4 flex items-center gap-4 relative z-20 mb-4">

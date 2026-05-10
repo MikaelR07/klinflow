@@ -81,7 +81,7 @@ export default function SubscriptionDetail() {
   const details = expandedDetails[tierId] || expandedDetails.lite;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32 px-2">
+    <div className="bg-slate-50 dark:bg-slate-950 pb-32 px-2">
       {/* Header */}
       <div className="p-6 flex items-center gap-4">
         <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-900 shadow-sm rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">

@@ -117,7 +117,7 @@ export default function AvailableJobs() {
       : rejectedJobs;
 
   return (
-    <div className="animate-fade-in pb-10 bg-[#F2F3F4] dark:bg-slate-900 min-h-screen px-2">
+    <div className="animate-fade-in pb-10 bg-[#F2F3F4] dark:bg-slate-900 px-2">
       {/* ── HEADER TERMINAL (UNIFIED) ── */}
       {!selectedJob && (
         <div className="px-3 pb-1 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 dark:border-slate-800">

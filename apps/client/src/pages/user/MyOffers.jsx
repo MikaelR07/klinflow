@@ -148,7 +148,7 @@ export default function MyOffers() {
   const selectedOffer = receivedOffers?.find(o => o.id === selectedOfferId);
 
   return (
-    <div className="bg-[#F2F3F4] dark:bg-slate-900 relative px-2 min-h-screen">
+    <div className="bg-[#F2F3F4] dark:bg-slate-900 relative px-2">
       
       {/* ── DASHBOARD AREA ── */}
       {!selectedOfferId && (

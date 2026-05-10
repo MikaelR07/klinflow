@@ -167,7 +167,7 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-20 px-2 bg-[#F2F3F4] dark:bg-slate-900 min-h-screen">
+    <div className="space-y-6 animate-fade-in pb-20 px-2 bg-[#F2F3F4] dark:bg-slate-900">
       <div className="flex items-center justify-center px-1">
         <div className="space-y-1">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none text-center">Trade History</h1>
@@ -240,8 +240,9 @@ export default function MyTrades() {
               <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-10 pb-10 space-y-6 rounded-t-xl -mt-6 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
                 {(() => {
                   const b = bookings.find(x => x.id === expandedId);
+                  if (!b) return null;
                   const materialVal = b.waste_type || b.wasteType;
-                  const waste = WASTE_TYPES?.find?.((w) => w.slug === materialVal || w.id === materialVal);
+                  const waste = WASTE_TYPES?.find((w) => w.slug === materialVal || w.id === materialVal);
                   const status = statusConfig[b.status] || statusConfig['pending'];
                   
                   return (
@@ -305,6 +306,7 @@ export default function MyTrades() {
                     </>
                   );
                 })()}
+              </div>
             </motion.div>
           ) : (
             /* ── MAIN LIST VIEW ── */
