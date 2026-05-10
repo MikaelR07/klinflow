@@ -38,7 +38,7 @@ export default function PushNotificationModal({ isOpen, onClose }) {
     <div className="fixed inset-0 z-[3000] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-slate-950/40 backdrop-blur-md animate-fade-in" 
+        className="absolute inset-0 bg-slate-950/60 animate-fade-in" 
         onClick={onClose} 
       />
       

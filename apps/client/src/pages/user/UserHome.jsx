@@ -163,11 +163,11 @@ export default function UserHome() {
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate('/settings/profile')} className="shrink-0">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
+            <div className="w-11 h-11 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-xl shadow-sm overflow-hidden relative border border-slate-100 dark:border-slate-700">
               {profile?.avatar_url ? (
                 <img src={getThumbnailUrl(profile.avatar_url, { width: 100 })} className="w-full h-full object-cover" loading="lazy" />
               ) : (
-                profile?.avatar || '👤'
+                <span className="text-lg opacity-50">{profile?.avatar || '👤'}</span>
               )}
             </div>
           </button>
@@ -186,7 +186,7 @@ export default function UserHome() {
       </div>
 
       {/* Wallet Hero */}
-      <div className="bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl p-6 overflow-hidden shadow-lg">
+      <div className="bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl p-6 overflow-hidden shadow-lg isolate">
         <div className="flex flex-col gap-6 relative z-10">
           <div className="flex items-end justify-between">
             <div>
