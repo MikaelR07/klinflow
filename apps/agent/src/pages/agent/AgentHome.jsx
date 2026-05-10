@@ -99,12 +99,12 @@ export default function AgentHome() {
     if (profile?.id) {
       supabase
         .from('bookings')
-        .select('id', { count: 'exact', head: true })
+        .select('id')
         .eq('agent_id', profile.id)
-        .eq('is_market_trade', true)
+        .or('is_market_trade.eq.true,booking_type.eq.marketplace_pickup')
         .neq('status', 'completed')
         .neq('status', 'cancelled')
-        .then(({ count }) => setAcceptedTradesCount(count || 0));
+        .then(({ data }) => setAcceptedTradesCount(data?.length || 0));
     }
 
     // Subscribe to live profile updates (rating, wallet, points)

@@ -260,7 +260,7 @@ export default function AgentWarehouse() {
                </div>
 
                <div className="break-inside-avoid p-4 bg-white/5 rounded-2xl border border-white/10">
-                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Verified</p>
+                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Verified Pickups</p>
                   <p className="text-lg font-bold text-white tracking-tighter">{realAssets.length}</p>
                </div>
             </div>
@@ -301,28 +301,30 @@ export default function AgentWarehouse() {
 
 
       {/* ── DIRECT MARKETPLACE TRADE (NEW FEATURE) ── */}
-      <div className="bg-indigo-600 rounded-3xl p-6 shadow-xl shadow-indigo-600/20 relative overflow-hidden group border border-indigo-400/30">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4 group-hover:scale-110 transition-transform duration-500" />
-        <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
-              <Tag className="w-6 h-6 text-white" />
+      {profile?.agent_account_type === 'independent' && (
+        <div className="bg-indigo-600 rounded-3xl p-6 shadow-xl shadow-indigo-600/20 relative overflow-hidden group border border-indigo-400/30">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4 group-hover:scale-110 transition-transform duration-500" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
+                <Tag className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white">Sell Stock Terminal</h3>
+                <p className="text-xs text-indigo-100 font-medium">Bypass the hub & sell to weavers</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold text-white">Sell Stock Terminal</h3>
-              <p className="text-xs text-indigo-100 font-medium">Bypass the hub & sell to weavers</p>
-            </div>
-          </div>
 
-          <button 
-            onClick={() => navigate('/warehouse/sell')}
-            className="w-full py-5 bg-white text-indigo-600 rounded-2xl font-semibold text-sm shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
-          >
-            <PlusCircle className="w-5 h-5" />
-            SELL STOCK DIRECTLY
-          </button>
+            <button 
+              onClick={() => navigate('/warehouse/sell')}
+              className="w-full py-5 bg-white text-indigo-600 rounded-2xl font-semibold text-sm shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
+            >
+              <PlusCircle className="w-5 h-5" />
+              SELL STOCK DIRECTLY
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── DYNAMIC INVENTORY GRID ── */}
       <div>

@@ -27,24 +27,30 @@ export default function Sourcing() {
   const [offerQty, setOfferQty] = useState(1);
 
   const [activeBidsCount, setActiveBidsCount] = useState(0);
+  const [acceptedTradesCount, setAcceptedTradesCount] = useState(0);
   const [activeBidsVolume, setActiveBidsVolume] = useState(0);
 
   useEffect(() => {
+    setActiveBidsCount(sentOffers.length || 0);
+    
+    // Fetch accepted trades count from bookings
     if (profile?.id) {
       supabase
         .from('bookings')
-        .select('*, marketplace_listings(quantity)')
+        .select('id', { count: 'exact', head: true })
         .eq('agent_id', profile.id)
-        .eq('is_market_trade', true)
+        .or('is_market_trade.eq.true,booking_type.eq.marketplace_pickup')
         .neq('status', 'completed')
         .neq('status', 'cancelled')
-        .then(({ data }) => {
-          setActiveBidsCount(data?.length || 0);
-          const volume = data?.reduce((acc, b) => acc + (parseFloat(b.bags || 0)), 0) || 0;
-          setActiveBidsVolume(volume);
-        });
+        .then(({ count }) => setAcceptedTradesCount(count || 0));
     }
-  }, [profile?.id]);
+
+    // Sum volume from listings you've bid on
+    const volume = listings
+      .filter(l => sentOffers.some(o => o.listing_id === l.id))
+      .reduce((acc, l) => acc + (parseFloat(l.quantity || 0)), 0);
+    setActiveBidsVolume(volume);
+  }, [sentOffers, listings, profile?.id]);
 
   useEffect(() => {
     fetchListings();
@@ -113,26 +119,26 @@ export default function Sourcing() {
         {/* ── STICKY RADAR HEADER (UNIFIED & FULL-BLEED) ── */}
         {!selectedId && (
           <div className="sticky top-0 z-50 bg-transparent dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100/50 dark:border-slate-800/50 animate-fade-in">
-            {/* SOURCING SUMMARY TICKER */}
-            <div className="px-4 py-3.5 bg-transparent dark:bg-slate-900 flex items-center justify-between border-b border-slate-50 dark:border-slate-800/50">
-               <div className="flex items-center gap-6">
-                  <div>
-                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 dark:text-slate-400 mb-1">Active Bids</p>
-                     <h2 className="text-base font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-none">{activeBidsCount}</h2>
+            <div className="px-4 pt-2 pb-1 bg-transparent dark:bg-slate-900">
+               <div className="bg-white/80 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-300 dark:border-slate-700 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                  <div className="flex items-center gap-8 w-full">
+                     <div>
+                        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-1 leading-none">Pending Bids</p>
+                        <h2 className="text-base font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-none">{activeBidsCount}</h2>
+                     </div>
+                     <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 shrink-0" />
+                     <div>
+                        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-1 leading-none">Accepted</p>
+                        <h2 className="text-base font-black tracking-tighter text-emerald-600 dark:text-emerald-400 leading-none">{acceptedTradesCount}</h2>
+                     </div>
+                     <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 shrink-0 ml-auto" />
+                     <div className="text-right">
+                        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-1 leading-none">Total Payload</p>
+                        <h2 className="text-base font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-none italic">
+                           {activeBidsVolume.toLocaleString()} <span className="text-[10px] text-slate-400 not-italic font-bold opacity-50">KG</span>
+                        </h2>
+                     </div>
                   </div>
-                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 shrink-0" />
-                  <div>
-                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 dark:text-slate-400 mb-1">Total Payload</p>
-                     <h2 className="text-base font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-none italic">
-                        {activeBidsVolume.toLocaleString()} <span className="text-xs text-slate-400 not-italic font-bold opacity-50">KG</span>
-                     </h2>
-                  </div>
-               </div>
-               <div className="flex flex-col items-end">
-                 <div className="flex items-center gap-1.5 px-2 py-1 bg-indigo-500/10 rounded-lg">
-                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Radar Live</span>
-                 </div>
                </div>
             </div>
 
@@ -246,12 +252,6 @@ export default function Sourcing() {
                       <div>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Merchant's Asking Price</p>
                         <p className="text-base font-black text-slate-900 dark:text-white">
-                          KSh {selectedListing.pricePerKg} <span className="text-[10px] font-bold text-slate-400 ml-1">/KG</span>
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Value</p>
-                        <p className="text-base font-black text-emerald-600">
                           KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}
                         </p>
                       </div>

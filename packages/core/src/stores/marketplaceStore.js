@@ -617,6 +617,7 @@ export const useMarketplaceStore = create(
               longitude:    parseFloat(offer.listing?.longitude || offer.longitude) || 0,
               preferred_date: new Date().toISOString().split('T')[0],
               time_slot:    'anytime',
+              is_market_trade: true,
               notes:        offer.listing?.description || `Marketplace trade: ${materialName}`
             });
 
