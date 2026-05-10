@@ -151,7 +151,7 @@ export default function UserHome() {
   }
 
   return (
-    <div className="px-2 space-y-4 animate-fade-in pb-10">
+    <div className="px-4 space-y-4 animate-fade-in pb-10">
 
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -160,8 +160,8 @@ export default function UserHome() {
       />
 
       {/* Header */}
-      <div className="flex items-center justify-between px-1">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
           <button onClick={() => navigate('/settings/profile')} className="shrink-0">
             <div className="w-11 h-11 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-xl shadow-sm overflow-hidden relative border border-slate-100 dark:border-slate-700">
               {profile?.avatar_url ? (
@@ -171,22 +171,22 @@ export default function UserHome() {
               )}
             </div>
           </button>
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
+          <div className="min-w-0">
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white leading-none truncate">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
             <div className="flex items-center gap-1.5 mt-1.5 text-[11px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10 w-fit">
               <MapPin className="w-3 h-3" /> {profile?.location?.estate || 'Nairobi'}
             </div>
           </div>
         </div>
         <button onClick={() => navigate('/settings/notifications')}
-          className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative shadow-sm">
+          className="w-9 h-9 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative shadow-sm">
           <Bell className="w-4 h-4 text-slate-500" />
           {unreadCount > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse" />}
         </button>
       </div>
 
       {/* Wallet Hero */}
-      <div className="bg-gradient-to-br from-primary to-emerald-700 rounded-2xl p-6 overflow-hidden shadow-lg gpu-layer">
+      <div className="bg-gradient-to-br from-primary to-emerald-700 rounded-2xl p-6 shadow-lg gpu-layer">
         <div className="flex flex-col gap-6 relative z-10">
           <div className="flex items-end justify-between">
             <div>
