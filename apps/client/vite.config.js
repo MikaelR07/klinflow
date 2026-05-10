@@ -13,7 +13,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'icons/*.png'],
+      includeAssets: ['logo.png', 'icons/*.png'],
       manifest: {
         name: 'CleanFlow Client',
         short_name: 'CleanFlow',

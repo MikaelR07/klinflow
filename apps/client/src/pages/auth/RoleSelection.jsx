@@ -60,43 +60,41 @@ export default function RoleSelection() {
             key={role.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
+            transition={{ delay: idx * 0.1, ease: "easeOut" }}
             onClick={() => navigate(`/register?type=${role.id}`)}
-            className="w-full text-left group relative active:scale-[0.98] transition-transform"
+            className="w-full text-left group relative active:scale-[0.99] transition-all gpu-layer"
           >
-            <div className={`absolute inset-0 ${role.bgColor} rounded-[2.5rem] blur-xl opacity-0 md:group-hover:opacity-100 transition-opacity`} />
-            
-            <div className="relative bg-white dark:bg-slate-800/50 backdrop-blur-xl border border-slate-100 dark:border-white/5 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all md:group-hover:border-emerald-500/30 md:group-hover:-translate-y-1">
+            <div className="relative bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-white/10 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/40 dark:shadow-none transition-all active:bg-slate-50 dark:active:bg-slate-700/50">
               <div className="flex items-start justify-between mb-6">
-                <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.textColor} border ${role.borderColor}`}>
+                <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.textColor} border ${role.borderColor} shadow-inner`}>
                   <role.icon className="w-8 h-8" />
                 </div>
-                <div className="flex -space-x-2">
+                <div className="flex -space-x-2.5">
                   {[1, 2, 3].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-700 overflow-hidden">
-                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${role.id}${i}`} alt="user" />
+                    <div key={i} className="w-9 h-9 rounded-full border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-700 overflow-hidden shadow-sm">
+                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${role.id}${i}`} alt="user" className="w-full h-full object-cover" />
                     </div>
                   ))}
                 </div>
               </div>
 
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-1">{role.title}</h2>
-              <p className={`text-xs font-semibold uppercase tracking-widest ${role.textColor} mb-4`}>{role.subtitle}</p>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 tracking-tight">{role.title}</h2>
+              <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${role.textColor} mb-4`}>{role.subtitle}</p>
               
-              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 font-medium">
                 {role.description}
               </p>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2.5">
                 {role.benefits.map((benefit, bIdx) => (
-                  <div key={bIdx} className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full border border-slate-100 dark:border-white/5">
-                    <ShieldCheck className={`w-3 h-3 ${role.textColor}`} />
-                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">{benefit}</span>
+                  <div key={bIdx} className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5">
+                    <ShieldCheck className={`w-3.5 h-3.5 ${role.textColor}`} />
+                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tight">{benefit}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="absolute bottom-8 right-8 w-10 h-10 rounded-full bg-slate-900 dark:bg-emerald-500 text-white flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-all translate-x-4 md:group-hover:translate-x-0 hidden md:flex">
+              <div className="absolute bottom-8 right-8 w-11 h-11 rounded-full bg-slate-900 dark:bg-emerald-500 text-white flex items-center justify-center shadow-lg transition-all md:group-hover:scale-110 hidden md:flex">
                 <ArrowRight className="w-5 h-5" />
               </div>
             </div>
