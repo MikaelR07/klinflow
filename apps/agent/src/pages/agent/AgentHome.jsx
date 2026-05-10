@@ -228,7 +228,7 @@ export default function AgentHome() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10">
+    <div className="space-y-6 animate-fade-in pb-24">
       
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -384,7 +384,7 @@ export default function AgentHome() {
       {/* ── AGENT HERO CARD: COMMAND CENTER ── */}
       <div className="relative group">
         <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-2xl blur opacity-0 dark:opacity-40 dark:group-hover:opacity-50 transition duration-1000"></div>
-        <div className="relative bg-white dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-5 dark:shadow-xl dark:shadow-indigo-500/20 overflow-hidden transition-all duration-500">
+        <div className="relative bg-indigo-600 dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-5 dark:shadow-xl dark:shadow-indigo-500/20 overflow-hidden transition-all duration-500">
           
           {/* Subtle Background Elements (Visible mostly in dark mode) */}
           <div className="absolute top-0 right-0 p-6 opacity-[0.03] dark:opacity-10 pointer-events-none">
@@ -421,7 +421,7 @@ export default function AgentHome() {
                   <p className="text-sm font-black text-slate-800 dark:text-white leading-none">
                     {profile.rating ? Number(profile.rating).toFixed(1) : '5.0'}
                   </p>
-                  <p className="text-[8px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Rating</p>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Rating</p>
                 </div>
               </div>
 
@@ -432,7 +432,7 @@ export default function AgentHome() {
                 </div>
                 <div>
                   <p className="text-sm font-black text-slate-800 dark:text-white leading-none">{profile.rewardPoints || 0}</p>
-                  <p className="text-[8px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Points</p>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Points</p>
                 </div>
               </div>
 
@@ -441,7 +441,7 @@ export default function AgentHome() {
                 <Handshake className="w-5 h-5 text-emerald-500" />
                 <div>
                   <h3 className="text-lg font-black text-slate-800 dark:text-white leading-none">{acceptedTradesCount || 0}</h3>
-                  <p className="text-[8px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Accepted Bids</p>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Accepted Bids</p>
                 </div>
               </div>
 
@@ -450,7 +450,7 @@ export default function AgentHome() {
                 <Truck className="w-5 h-5 text-blue-500" />
                 <div>
                   <h3 className="text-lg font-black text-slate-800 dark:text-white leading-none">{earnings.completedToday || 0}</h3>
-                  <p className="text-[8px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Pickups Today</p>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Pickups Today</p>
                 </div>
               </div>
 

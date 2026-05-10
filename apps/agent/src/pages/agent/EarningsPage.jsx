@@ -166,13 +166,13 @@ export default function EarningsPage() {
               {/* 4. Marketplace Accepted Bids */}
               <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-white/10 transition-colors text-center">
                 <span className="text-xl font-bold text-slate-800 dark:text-white">{earnings.marketTrades || 0}</span>
-                <span className="text-[7px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em] mt-1 text-center">Accepted Bids</span>
+                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1 text-center">Accepted Bids</span>
               </div>
 
               {/* 5. Points */}
               <div className="bg-primary/5 dark:bg-primary/20 border border-primary/10 dark:border-primary/30 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-primary/30 transition-colors text-center">
                 <span className="text-xl font-bold text-primary dark:text-primary-light">{profile?.rewardPoints || 0}</span>
-                <span className="text-[7px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em] mt-1">Points</span>
+                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Points</span>
               </div>
             </div>
           </div>

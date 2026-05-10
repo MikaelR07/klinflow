@@ -58,8 +58,8 @@ function MobileLayout() {
   ];
 
   return (
-    <div className="flex flex-col h-[100dvh] max-w-lg mx-auto">
-      <div className="flex-1 overflow-y-auto overscroll-none px-4 pt-4 pb-4">
+    <div className="fixed inset-0 flex flex-col max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-900 overflow-hidden">
+      <div className="flex-1 overflow-y-auto overscroll-none px-4 pt-4">
         <Suspense fallback={<LoadingScreen message="Loading..." />}>
           <Outlet />
         </Suspense>
