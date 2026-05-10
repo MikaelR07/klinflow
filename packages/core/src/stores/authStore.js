@@ -135,43 +135,42 @@ export const useAuthStore = create(
                 set({ profileSubscription: null });
               }
             } else if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
-              // CROSS-TAB SYNC: Force re-fetch of profile to ensure fresh data on load
-              if (true) { // Always fetch fresh profile to prevent stale localStorage data
-                const { data: profileData } = await supabase
-                  .from('profiles')
-                  .select('*')
-                  .eq('id', session.user.id)
-                  .maybeSingle();
-                
-                if (profileData) {
-                  // ── GLOBAL ROLE GATEKEEPER ──
-                  const appRole = get().appRole;
-                  const userRole = profileData.role;
+              // Skip if login() already hydrated the state — avoids double DB fetch on login
+              if (get().isAuthenticated) return;
 
-                  // Define valid role mappings for each app
-                  const isAuthorized = 
-                    (appRole === 'client' && (userRole === 'user' || userRole === 'resident' || userRole === 'seller')) ||
-                    (appRole === 'agent'  && userRole === 'agent') ||
-                    (appRole === 'business' && userRole === 'business') ||
-                    (appRole === 'admin' && (userRole === 'admin' || profileData.agent_account_type === 'company_admin')) ||
-                    !appRole; // If no appRole set, allow all (e.g. for landing pages)
+              const { data: profileData } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', session.user.id)
+                .maybeSingle();
+              
+              if (profileData) {
+                // ── GLOBAL ROLE GATEKEEPER ──
+                const appRole = get().appRole;
+                const userRole = profileData.role;
 
-                  if (!isAuthorized) {
-                    console.error(`[AuthGate] Unauthorized Access. User is ${userRole}, App is ${appRole}`);
-                    await supabase.auth.signOut();
-                    set({ isAuthenticated: false, profile: null });
-                    return;
-                  }
+                const isAuthorized = 
+                  (appRole === 'client' && (userRole === 'user' || userRole === 'resident' || userRole === 'seller')) ||
+                  (appRole === 'agent'  && userRole === 'agent') ||
+                  (appRole === 'business' && userRole === 'business') ||
+                  (appRole === 'admin' && (userRole === 'admin' || profileData.agent_account_type === 'company_admin')) ||
+                  !appRole;
 
-                  const uiProfile = get()._mapProfile(profileData);
-                  set({ 
-                    isAuthenticated: true, 
-                    userId: session.user.id, 
-                    profile: uiProfile,
-                    role: uiProfile.role
-                  });
-                  get().subscribeToProfileChanges(session.user.id);
+                if (!isAuthorized) {
+                  console.error(`[AuthGate] Unauthorized Access. User is ${userRole}, App is ${appRole}`);
+                  await supabase.auth.signOut();
+                  set({ isAuthenticated: false, profile: null });
+                  return;
                 }
+
+                const uiProfile = get()._mapProfile(profileData);
+                set({ 
+                  isAuthenticated: true, 
+                  userId: session.user.id, 
+                  profile: uiProfile,
+                  role: uiProfile.role
+                });
+                get().subscribeToProfileChanges(session.user.id);
               }
             }
           });
