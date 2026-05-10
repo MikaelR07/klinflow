@@ -251,7 +251,7 @@ export default function App() {
             onSubmit={async (val, comment) => {
               try {
                 await submitAgentRating(ratingBooking.id, val, comment);
-                toast.success('Thank you! 💖', { description: 'Your rating has been submitted.' });
+                toast.success('Thank you!', { description: 'Your rating has been submitted.' });
                 setRatingBooking(null);
               } catch (e) {
                 toast.error('Could not save rating');

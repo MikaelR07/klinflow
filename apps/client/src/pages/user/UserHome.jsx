@@ -110,7 +110,7 @@ export default function UserHome() {
     const success = await subscribeToPush();
     if (success) {
       setShowPushPrompt(false);
-      toast.success('Alerts Enabled! 🔔');
+      toast.success('Alerts Enabled!');
     }
   };
 

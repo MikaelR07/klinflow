@@ -168,7 +168,7 @@ export default function SellerHome() {
     const success = await subscribeToPush();
     if (success) {
       setShowPushPrompt(false);
-      toast.success("Native Alerts Enabled! 🔔", {
+      toast.success("Native Alerts Enabled!", {
         description: "You will now receive instant updates on your phone."
       });
     }
@@ -186,7 +186,7 @@ export default function SellerHome() {
         .single();
 
       if (error) throw error;
-      toast.success("History cleared! 🧹");
+      toast.success("History cleared!");
     } catch (err) {
       toast.error("Failed to clear history");
     }

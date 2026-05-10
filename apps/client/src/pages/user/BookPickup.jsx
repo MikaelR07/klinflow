@@ -298,7 +298,7 @@ export default function BookPickup() {
       );
 
       setShowEscrowModal(false);
-      toast.success("Pickup Requested! 🚛");
+      toast.success("Pickup Requested!");
       navigate('/my-bookings');
     } catch (err) {
       toast.error("Booking Failed", { description: err.message });
@@ -546,10 +546,10 @@ export default function BookPickup() {
                                    click: () => { 
                                      if (isCompany) {
                                        setSelectedCompanyId(agent.id);
-                                       toast.success(`Hub Selected`, { icon: '🏢' });
+                                       toast.success(`Hub Selected`);
                                      } else {
                                        setSelectedAgent(agent); 
-                                       toast.success(`Agent Targeted`, { icon: '🚛' }); 
+                                       toast.success(`Agent Targeted`); 
                                      }
                                    }
                                  }}

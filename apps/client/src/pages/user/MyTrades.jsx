@@ -140,7 +140,7 @@ export default function MyTrades() {
       });
       
       if (result.success) {
-        toast.success('Trade Rescheduled! 📅', { 
+        toast.success('Trade Rescheduled!', { 
           description: `Your pickup is now set for ${newDate} at ${newTime}.` 
         });
         setReschedulingTrade(null);
@@ -158,7 +158,7 @@ export default function MyTrades() {
     try {
       await clearBookingHistory(type);
       const label = type === 'completed' ? 'Settled' : 'Cancelled';
-      toast.success(`${label} History Cleared ✨`, { 
+      toast.success(`${label} History Cleared`, { 
         description: 'Past trades have been archived.' 
       });
     } catch (err) {

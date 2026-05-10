@@ -43,7 +43,7 @@ export default function FeedbackPage() {
       }
 
       if (rating === 5) {
-        toast.success('We love you too! 🌿', { description: 'Consider rating us on the App Store.' });
+        toast.success('We love you too!', { description: 'Consider rating us on the App Store.' });
       } else {
         toast.success('Thank You!', { description: 'Your feedback helps us improve CleanFlow.' });
       }

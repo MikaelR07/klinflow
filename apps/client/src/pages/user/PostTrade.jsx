@@ -220,7 +220,7 @@ export default function PostTrade() {
         null 
       );
 
-      toast.success("Collection Posted! 📈");
+      toast.success("Collection Posted!");
       navigate('/my-trades');
     } catch (err) {
       console.error('Submission error:', err);
@@ -381,7 +381,7 @@ export default function PostTrade() {
                       if (files.length > 0) {
                         const newPhotos = [...photos, ...files].slice(0, 4);
                         setPhotos(newPhotos);
-                        toast.success(`${newPhotos.length} Photo${newPhotos.length > 1 ? 's' : ''} Staged! 📸`);
+                        toast.success(`${newPhotos.length} Photo${newPhotos.length > 1 ? 's' : ''} Uploaded!`);
                       }
                     }} 
                   />
@@ -606,7 +606,7 @@ export default function PostTrade() {
                         
                         {pickupMode === 'dropoff' ? (
                           nearbyHubs.map(hub => (
-                            <Marker key={hub.id} position={[hub.hub_location.lat, hub.hub_location.lng]} icon={hubIcon} eventHandlers={{ click: () => { setSelectedHub(hub); toast.success(`${hub.name || hub.company_name} Selected`, { icon: '🏢' }); }}}>
+                            <Marker key={hub.id} position={[hub.hub_location.lat, hub.hub_location.lng]} icon={hubIcon} eventHandlers={{ click: () => { setSelectedHub(hub); toast.success(`${hub.name || hub.company_name} Selected`); }}}>
                                <Popup className="compact-popup">
                                  <div className="p-3 text-center">
                                    <h4 className="text-xs font-semibold text-slate-900">{hub.name || hub.company_name}</h4>
@@ -622,7 +622,7 @@ export default function PostTrade() {
                             {drillDownCompany ? (
                               // Show only agents belonging to this company
                               liveAgents.filter(a => a.company_id === drillDownCompany.id && !a.is_hub_active).map(agent => (
-                                <Marker key={agent.id} position={[agent.location?.latitude || center[0], agent.location?.longitude || center[1]]} icon={agentIcon(selectedAgent?.id === agent.id)} eventHandlers={{ click: () => { setSelectedAgent(agent); toast.success(`Fleet Agent Targeted`, { icon: '🚛' }); }}}>
+                                <Marker key={agent.id} position={[agent.location?.latitude || center[0], agent.location?.longitude || center[1]]} icon={agentIcon(selectedAgent?.id === agent.id)} eventHandlers={{ click: () => { setSelectedAgent(agent); toast.success(`Fleet Agent Targeted`); }}}>
                                    <Popup className="compact-popup"><div className="p-1 px-2 min-w-[80px] text-center"><h4 className="text-xs font-semibold text-slate-900 leading-tight">{agent.name || 'Agent'}</h4><div className="flex items-center justify-center gap-0.5 mt-0.5 text-xs font-semibold text-emerald-500 uppercase"><Star className="w-2 h-2 fill-emerald-500" /><span>4.9</span></div></div></Popup>
                                 </Marker>
                               ))
@@ -647,7 +647,7 @@ export default function PostTrade() {
                                           toast(`Showing ${entity.company_name || entity.name}'s Fleet`, { icon: '🏢' });
                                         } else {
                                           setSelectedAgent(entity);
-                                          toast.success(`Independent Agent Targeted`, { icon: '🚛' });
+                                          toast.success(`Independent Agent Targeted`);
                                         }
                                       }}}
                                     >

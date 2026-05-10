@@ -16,7 +16,7 @@ export default function WeightVerificationModal() {
     setIsProcessing(true);
     try {
       await verifyWeight(activeVerificationBooking.id);
-      toast.success('Weight Verified! ⚖️', {
+      toast.success('Weight Verified!', {
         description: 'Thank you for confirming the collection details.'
       });
       setStep('rate');

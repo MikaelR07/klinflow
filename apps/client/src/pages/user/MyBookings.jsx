@@ -107,7 +107,7 @@ export default function MyBookings() {
     try {
       await clearBookingHistory(type);
       const label = type === 'completed' ? 'Completed' : 'Cancelled';
-      toast.success(`${label} History Cleared ✨`, { 
+      toast.success(`${label} History Cleared`, { 
         description: 'Past reports have been hidden from your view.' 
       });
     } catch (err) {
