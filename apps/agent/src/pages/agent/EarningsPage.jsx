@@ -100,79 +100,79 @@ export default function EarningsPage() {
       {/* ── DASHBOARD HERO: PERFORMANCE HUD ── */}
       <div className="relative group">
         <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/10 via-primary/10 to-blue-600/10 rounded-2xl blur opacity-0 dark:opacity-40 dark:group-hover:opacity-60 transition-opacity"></div>
-        <div className="relative bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-6 dark:shadow-2xl overflow-hidden text-slate-900 dark:text-white transition-colors duration-500">
+        <div className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-white/10 p-6 dark:shadow-2xl overflow-hidden text-white transition-colors duration-500">
           {/* Glassmorphism Accents */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 dark:bg-primary/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 dark:bg-primary/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
           
           <div className="relative z-10">
             {/* Top Row: Stock Value Emphasis */}
             <div className="flex items-end justify-between mb-8 px-2">
               <div>
-                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">Stock Value</p>
+                <p className="text-xs font-semibold text-emerald-100 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">Stock Value</p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-sm font-semibold text-blue-500">KSh</span>
-                  <h2 className="text-4xl font-bold tracking-tighter text-slate-900 dark:text-white">
+                  <span className="text-sm font-semibold text-emerald-300">KSh</span>
+                  <h2 className="text-4xl font-bold tracking-tighter text-white">
                     {Number(earnings.inventoryValue || 0).toLocaleString()}
                   </h2>
                 </div>
               </div>
-              <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
-                <p className="text-xs font-semibold text-blue-500 dark:text-blue-400 uppercase tracking-widest">Live Inventory</p>
+              <div className="px-3 py-1 bg-white/10 border border-white/20 rounded-full">
+                <p className="text-xs font-semibold text-white uppercase tracking-widest">Live Inventory</p>
               </div>
             </div>
 
             {/* Metrics Grid: Masonry-style layout */}
             <div className="grid grid-cols-4 gap-3">
               {/* 1. Rating (Top Left) */}
-              <div className="col-span-2 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-5 flex items-center justify-between hover:bg-white/10 transition-colors">
+              <div className="col-span-2 bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/10 rounded-2xl p-5 flex items-center justify-between hover:bg-white/10 transition-colors">
                 <div className="flex flex-col">
-                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1">Agent Rating</span>
+                  <span className="text-xs font-semibold text-emerald-100 dark:text-slate-400 uppercase tracking-widest mb-1">Agent Rating</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-2xl font-bold">{profile?.rating || '5.0'}</span>
+                    <span className="text-2xl font-bold text-white">{profile?.rating || '5.0'}</span>
                     <div className="flex gap-0.5">
                       {[1,2,3,4,5].map(i => (
-                        <Star key={i} className={`w-2 h-2 ${i <= Math.round(profile?.rating || 5) ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300 dark:text-slate-600'}`} />
+                        <Star key={i} className={`w-2 h-2 ${i <= Math.round(profile?.rating || 5) ? 'text-yellow-400 fill-yellow-400' : 'text-emerald-300 dark:text-slate-600'}`} />
                       ))}
                     </div>
                   </div>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-yellow-400/10 flex items-center justify-center">
-                  <Star className="w-5 h-5 text-yellow-500" />
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Star className="w-5 h-5 text-yellow-400" />
                 </div>
               </div>
 
               {/* 2. Resident Pickups (Top Right) */}
-              <div className="col-span-2 bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-5 flex items-center justify-between hover:bg-white/10 transition-colors">
+              <div className="col-span-2 bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/10 rounded-2xl p-5 flex items-center justify-between hover:bg-white/10 transition-colors">
                 <div className="flex flex-col">
-                  <span className="text-2xl font-bold text-slate-800 dark:text-white">{earnings.residentPickups || 0}</span>
-                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total Pickups</span>
+                  <span className="text-2xl font-bold text-white">{earnings.residentPickups || 0}</span>
+                  <span className="text-xs font-semibold text-emerald-100 dark:text-slate-400 uppercase tracking-widest">Total Pickups</span>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-blue-500 dark:text-blue-400" />
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Truck className="w-5 h-5 text-emerald-300 dark:text-blue-400" />
                 </div>
               </div>
 
               {/* 3. Total Weight (Bottom Left) */}
-              <div className="col-span-2 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl p-5 flex items-center justify-between hover:bg-emerald-500/20 transition-colors">
+              <div className="col-span-2 bg-white/10 dark:bg-emerald-500/10 border border-white/10 dark:border-emerald-500/20 rounded-2xl p-5 flex items-center justify-between hover:bg-white/20 transition-colors">
                 <div>
-                  <h4 className="text-3xl font-bold tracking-tighter text-emerald-600 dark:text-emerald-400">{(earnings.totalKg || 0).toFixed(1)}</h4>
-                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Total KGs</p>
+                  <h4 className="text-3xl font-bold tracking-tighter text-white">{(earnings.totalKg || 0).toFixed(1)}</h4>
+                  <p className="text-xs font-semibold text-emerald-100 dark:text-slate-400 uppercase tracking-widest">Total KGs</p>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center">
-                  <Scale className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Scale className="w-5 h-5 text-emerald-300" />
                 </div>
               </div>
 
               {/* 4. Marketplace Accepted Bids */}
-              <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/10 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-white/10 transition-colors text-center">
-                <span className="text-xl font-bold text-slate-800 dark:text-white">{earnings.marketTrades || 0}</span>
-                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1 text-center">Accepted Bids</span>
+              <div className="bg-white/10 dark:bg-white/5 border border-white/10 dark:border-white/10 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-white/10 transition-colors text-center">
+                <span className="text-xl font-bold text-white">{earnings.marketTrades || 0}</span>
+                <span className="text-[10px] font-bold text-emerald-100 dark:text-slate-400 uppercase tracking-widest mt-1 text-center">Accepted Bids</span>
               </div>
 
               {/* 5. Points */}
-              <div className="bg-primary/5 dark:bg-primary/20 border border-primary/10 dark:border-primary/30 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-primary/30 transition-colors text-center">
-                <span className="text-xl font-bold text-primary dark:text-primary-light">{profile?.rewardPoints || 0}</span>
-                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Points</span>
+              <div className="bg-white/10 dark:bg-primary/20 border border-white/10 dark:border-primary/30 rounded-2xl p-4 flex flex-col justify-center items-center hover:bg-white/20 transition-colors text-center">
+                <span className="text-xl font-bold text-amber-300 dark:text-primary-light">{profile?.rewardPoints || 0}</span>
+                <span className="text-[10px] font-bold text-emerald-100 dark:text-slate-400 uppercase tracking-widest mt-1">Points</span>
               </div>
             </div>
           </div>

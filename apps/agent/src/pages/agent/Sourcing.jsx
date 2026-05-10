@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, MapPin, Scale, TrendingUp, 
   ChevronRight, MessageSquareQuote, Check,
-  ArrowLeft, Clock, Package, CheckCircle2, Info
+  ArrowLeft, Clock, Package, CheckCircle2, Info, User
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore, useAuthStore, supabase, getThumbnailUrl } from '@cleanflow/core';
@@ -25,6 +25,26 @@ export default function Sourcing() {
   const [selectedId, setSelectedId] = useState(null);
   const [offerPrice, setOfferPrice] = useState('');
   const [offerQty, setOfferQty] = useState(1);
+
+  const [activeBidsCount, setActiveBidsCount] = useState(0);
+  const [activeBidsVolume, setActiveBidsVolume] = useState(0);
+
+  useEffect(() => {
+    if (profile?.id) {
+      supabase
+        .from('bookings')
+        .select('*, marketplace_listings(quantity)')
+        .eq('agent_id', profile.id)
+        .eq('is_market_trade', true)
+        .neq('status', 'completed')
+        .neq('status', 'cancelled')
+        .then(({ data }) => {
+          setActiveBidsCount(data?.length || 0);
+          const volume = data?.reduce((acc, b) => acc + (parseFloat(b.bags || 0)), 0) || 0;
+          setActiveBidsVolume(volume);
+        });
+    }
+  }, [profile?.id]);
 
   useEffect(() => {
     fetchListings();
@@ -87,46 +107,46 @@ export default function Sourcing() {
   );
 
   return (
-    <div className="animate-fade-in bg-[#F2F3F4] dark:bg-slate-900 relative px-2">
+    <div className="animate-fade-in space-y-6 pb-24 pt-6 relative">
       <div className="w-full">
         
         {/* ── STICKY RADAR HEADER (UNIFIED & FULL-BLEED) ── */}
         {!selectedId && (
-          <div className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 animate-fade-in">
+          <div className="sticky top-0 z-50 bg-transparent dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100/50 dark:border-slate-800/50 animate-fade-in">
             {/* SOURCING SUMMARY TICKER */}
-            <div className="px-4 py-3.5 bg-white dark:bg-slate-900 flex items-center justify-between border-b border-slate-50 dark:border-slate-800/50">
+            <div className="px-4 py-3.5 bg-transparent dark:bg-slate-900 flex items-center justify-between border-b border-slate-50 dark:border-slate-800/50">
                <div className="flex items-center gap-6">
-                 <div>
-                    <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Active Bids</p>
-                    <h2 className="text-base font-black tracking-tighter text-emerald-600 leading-none">{sentOffers.length}</h2>
-                 </div>
-                 <div className="w-px h-6 bg-slate-100 dark:bg-slate-800 shrink-0" />
-                 <div>
-                    <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-1">Potential Vol.</p>
-                    <h2 className="text-base font-black tracking-tighter text-slate-900 dark:text-white leading-none italic">
-                       {sentOffers.reduce((acc, o) => acc + (parseFloat(o.quantity) || 0), 0).toLocaleString()} <span className="text-xs text-slate-400 not-italic font-bold opacity-50">KG</span>
-                    </h2>
-                 </div>
+                  <div>
+                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 dark:text-slate-400 mb-1">Active Bids</p>
+                     <h2 className="text-base font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-none">{activeBidsCount}</h2>
+                  </div>
+                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 shrink-0" />
+                  <div>
+                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-900 dark:text-slate-400 mb-1">Total Payload</p>
+                     <h2 className="text-base font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-none italic">
+                        {activeBidsVolume.toLocaleString()} <span className="text-xs text-slate-400 not-italic font-bold opacity-50">KG</span>
+                     </h2>
+                  </div>
                </div>
                <div className="flex flex-col items-end">
-                 <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-500/10 rounded-lg">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-black text-emerald-600 uppercase tracking-widest">Live Radar</span>
+                 <div className="flex items-center gap-1.5 px-2 py-1 bg-indigo-500/10 rounded-lg">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Radar Live</span>
                  </div>
                </div>
             </div>
 
             {/* COMPACT SEARCH BAR */}
-            <div className="p-3">
-               <div className="relative group">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Search materials or locations..." 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 py-2.5 pl-10 pr-4 rounded-xl text-[11px] font-bold text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all placeholder:text-slate-300"
-                  />
+            <div className="px-4 py-3 bg-transparent dark:bg-slate-900">
+               <div className="relative">
+                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                 <input 
+                   type="text"
+                   placeholder="Search materials or locations..."
+                   value={searchTerm}
+                   onChange={(e) => setSearchTerm(e.target.value)}
+                   className="w-full pl-9 pr-4 py-2.5 bg-white/80 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[11px] font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm"
+                 />
                </div>
             </div>
           </div>
@@ -182,35 +202,41 @@ export default function Sourcing() {
                </div>
 
                {/* Content Sheet (Overlaps Image) */}
-               <div className="relative -mt-6 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-xl px-3 pt-10 pb-10 space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+               <div className="relative -mt-16 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-2xl px-3 pt-8 pb-10 space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
                  
-                 {/* Unified Material & Seller Card (Matches MyOffers) */}
-                 <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
-                   <div className="flex items-center justify-between">
-                     <div>
-                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Type</p>
-                       <h2 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{selectedListing.material}</h2>
+                 {/* Unified Material, Merchant & Location Cards */}
+                 <div className="grid grid-cols-3 gap-2">
+                   <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
+                     <Package className="w-3.5 h-3.5 text-indigo-500 mb-2" />
+                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Material</p>
+                     <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{selectedListing.material}</p>
+                   </div>
+                   <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
+                     <User className="w-3.5 h-3.5 text-emerald-500 mb-2" />
+                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Merchant</p>
+                     <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{selectedListing.sellerName || 'Verified'}</p>
+                   </div>
+                   <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
+                     <MapPin className="w-3.5 h-3.5 text-rose-500 mb-2" />
+                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Location</p>
+                     <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{selectedListing.location}</p>
+                   </div>
+                 </div>
+
+                 {/* Merchant Stats Quick Card */}
+                 <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center justify-between shadow-sm">
+                   <div className="flex items-center gap-3">
+                     <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                       <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                      </div>
-                     <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-700/50 px-2 py-1 rounded-lg border border-slate-100 dark:border-slate-700">
-                       <MapPin className="w-3.5 h-3.5 text-indigo-500" />
-                       <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest italic">{selectedListing.location}</span>
+                     <div>
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Verification</p>
+                       <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-tight">Verified Grade {selectedListing.grade || 'A'}</p>
                      </div>
                    </div>
-                   <div className="h-px bg-slate-100 dark:bg-slate-700" />
-                   <div className="flex items-center justify-between">
-                     <div className="flex items-center gap-3">
-                       <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                         <Check className="w-4 h-4 text-emerald-600" />
-                       </div>
-                       <div>
-                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Merchant's Name</p>
-                         <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{selectedListing.sellerName || 'Verified Merchant'}</p>
-                       </div>
-                     </div>
-                     <div className="text-right">
-                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Grade</p>
-                       <p className="text-sm font-black text-slate-900 dark:text-white italic">Grade {selectedListing.grade || 'A'}</p>
-                     </div>
+                   <div className="text-right">
+                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Response</p>
+                     <p className="text-xs font-black text-emerald-600 italic">~15 Mins</p>
                    </div>
                  </div>
 
@@ -259,62 +285,86 @@ export default function Sourcing() {
                  )}
 
                  {/* Premium Bid Section */}
-                 <div className="bg-emerald-600 dark:bg-emerald-500/10 p-6 rounded-[2rem] border border-emerald-500/20 shadow-xl shadow-emerald-500/10 space-y-6">
+                 <div className={`${getHasOffer(selectedListing.id) ? 'bg-indigo-600 dark:bg-indigo-500/10' : 'bg-emerald-600 dark:bg-emerald-500/10'} p-6 rounded-[2rem] border border-white/10 shadow-xl space-y-6 transition-colors duration-500`}>
                     <div className="flex items-center justify-center gap-3">
-                       <div className="w-8 h-8 bg-white/20 dark:bg-emerald-400/20 rounded-full flex items-center justify-center">
-                          <MessageSquareQuote className="w-4 h-4 text-white dark:text-emerald-400" />
+                       <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                          {getHasOffer(selectedListing.id) ? (
+                            <CheckCircle2 className="w-4 h-4 text-white" />
+                          ) : (
+                            <MessageSquareQuote className="w-4 h-4 text-white" />
+                          )}
                        </div>
-                       <h3 className="text-[10px] font-bold text-white dark:text-emerald-400 uppercase tracking-[0.2em]">Ready to negotiate?</h3>
+                       <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">
+                         {getHasOffer(selectedListing.id) ? 'Bid Active' : 'Ready to negotiate?'}
+                       </h3>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest ml-1">My Price Offer</label>
-                        <div className="relative">
-                           <input 
-                             type="number" 
-                             value={offerPrice}
-                             onChange={(e) => setOfferPrice(e.target.value)}
-                             className="w-full bg-white/10 dark:bg-slate-900/50 border border-white/20 dark:border-slate-700 h-12 rounded-xl px-4 text-sm font-black text-white outline-none focus:ring-2 focus:ring-white/30 transition-all placeholder:text-white/40"
-                             placeholder="0.00"
-                           />
-                           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/50">/KG</span>
-                        </div>
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest ml-1">Total Weight</label>
-                        <div className="relative">
-                           <input 
-                             type="number" 
-                             max={selectedListing.quantity}
-                             value={offerQty}
-                             onChange={(e) => setOfferQty(e.target.value)}
-                             className="w-full bg-white/10 dark:bg-slate-900/50 border border-white/20 dark:border-slate-700 h-12 rounded-xl px-4 text-sm font-black text-white outline-none focus:ring-2 focus:ring-white/30 transition-all placeholder:text-white/40"
-                             placeholder="0"
-                           />
-                           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/50">KG</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="pt-2 border-t border-white/10 dark:border-emerald-500/10">
-                       <div className="flex items-center justify-between mb-4 px-1">
-                          <p className="text-[10px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest">Total Bid Value</p>
-                          <p className="text-base font-black text-white tracking-tighter">KSh {(parseFloat(offerPrice || 0) * parseFloat(offerQty || 0)).toLocaleString()}</p>
+                    {getHasOffer(selectedListing.id) ? (
+                       <div className="text-center py-4 space-y-2">
+                          <p className="text-xs font-medium text-white/90 leading-relaxed italic px-4">
+                            "Your offer for this material has been sent to the merchant. You'll be notified if they accept your bid."
+                          </p>
+                          <div className="pt-4">
+                             <button 
+                               onClick={() => setSelectedId(null)}
+                               className="w-full py-3 bg-white/20 text-white rounded-xl font-bold text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+                             >
+                               Browse other materials
+                             </button>
+                          </div>
                        </div>
-                       
-                       <button 
-                         onClick={handleMakeOffer}
-                         disabled={isLoading || !offerPrice || !offerQty}
-                         className="w-full py-4 bg-white text-emerald-600 dark:bg-emerald-500 dark:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-                       >
-                         {isLoading ? 'Processing...' : (
-                           <>
-                             <CheckCircle2 className="w-5 h-5" /> Send Offer Now
-                           </>
-                         )}
-                       </button>
-                    </div>
+                    ) : (
+                       <>
+                         <div className="grid grid-cols-2 gap-3">
+                           <div className="space-y-1.5">
+                             <label className="text-[9px] font-bold text-white/60 uppercase tracking-widest ml-1">My Price Offer</label>
+                             <div className="relative">
+                                <input 
+                                  type="number" 
+                                  value={offerPrice}
+                                  onChange={(e) => setOfferPrice(e.target.value)}
+                                  className="w-full bg-white/10 dark:bg-slate-900/50 border border-white/20 dark:border-slate-700 h-12 rounded-xl px-4 text-sm font-black text-white outline-none focus:ring-2 focus:ring-white/30 transition-all placeholder:text-white/40"
+                                  placeholder="0.00"
+                                />
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/50">/KG</span>
+                             </div>
+                           </div>
+                           <div className="space-y-1.5">
+                             <label className="text-[9px] font-bold text-white/60 uppercase tracking-widest ml-1">Total Weight</label>
+                             <div className="relative">
+                                <input 
+                                  type="number" 
+                                  max={selectedListing.quantity}
+                                  value={offerQty}
+                                  onChange={(e) => setOfferQty(e.target.value)}
+                                  className="w-full bg-white/10 dark:bg-slate-900/50 border border-white/20 dark:border-slate-700 h-12 rounded-xl px-4 text-sm font-black text-white outline-none focus:ring-2 focus:ring-white/30 transition-all placeholder:text-white/40"
+                                  placeholder="0"
+                                />
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/50">KG</span>
+                             </div>
+                           </div>
+                         </div>
+
+                         <div className="pt-2 border-t border-white/10">
+                            <div className="flex items-center justify-between mb-4 px-1">
+                               <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Total Bid Value</p>
+                               <p className="text-base font-black text-white tracking-tighter">KSh {(parseFloat(offerPrice || 0) * parseFloat(offerQty || 0)).toLocaleString()}</p>
+                            </div>
+                            
+                            <button 
+                              onClick={handleMakeOffer}
+                              disabled={isLoading || !offerPrice || !offerQty}
+                              className="w-full py-4 bg-white text-emerald-600 dark:bg-emerald-500 dark:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                            >
+                              {isLoading ? 'Processing...' : (
+                                <>
+                                  <CheckCircle2 className="w-5 h-5" /> Send Offer Now
+                                </>
+                              )}
+                            </button>
+                         </div>
+                       </>
+                    )}
                  </div>
 
                  {/* Dismiss Detail */}
@@ -344,37 +394,38 @@ export default function Sourcing() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.05 }}
                     onClick={() => setSelectedId(listing.id)}
-                    className="bg-white dark:bg-slate-900 border-b border-slate-50 dark:border-slate-800/50 p-4 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
+                    className="mx-2 mb-3 bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 active:scale-[0.98] transition-all"
                   >
                     <div className="flex gap-4">
-                      <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-3xl border border-slate-100 dark:border-slate-800">
+                      <div className="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
                         {listing.photo ? (
-                          <img src={getThumbnailUrl(listing.photo, { width: 200 })} loading="lazy" alt={listing.material} className="w-full h-full object-cover" />
+                          <img src={getThumbnailUrl(listing.photo, { width: 150 })} loading="lazy" alt={listing.material} className="w-full h-full object-cover" />
                         ) : (
-                          <Package className="w-6 h-6 text-slate-200" />
+                          <Package className="w-5 h-5 text-slate-200" />
                         )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
+                      <div className="flex-1 min-w-0 flex flex-col justify-center space-y-1">
+                        <div className="flex items-center justify-between">
                           <div className="flex gap-1">
-                            <span className="px-1.5 py-0.5 bg-emerald-500/10 text-emerald-600 text-[7px] font-semibold uppercase tracking-widest rounded">
-                              {listing.grade || 'A'}
+                            <span className="px-1 py-0.5 bg-emerald-500/10 text-emerald-600 text-[6px] font-black uppercase tracking-[0.2em] rounded">
+                              GRADE {listing.grade || 'A'}
                             </span>
                             {getHasOffer(listing.id) && (
-                              <span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-600 text-[7px] font-semibold uppercase tracking-widest rounded flex items-center gap-1">
-                                BID SENT
+                              <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[6px] font-black uppercase tracking-[0.2em] rounded">
+                                ACTIVE BID
                               </span>
                             )}
                           </div>
-                          <span className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">KSh {listing.pricePerKg}/kg</span>
+                          <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">KSh {listing.pricePerKg}/kg</span>
                         </div>
-                        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 uppercase tracking-tight truncate">{listing.material}</h3>
-                        <div className="flex items-center gap-4">
-                          <p className="text-xs font-semibold text-slate-400 flex items-center gap-1 uppercase truncate max-w-[100px]">
-                            <MapPin className="w-3 h-3" /> {listing.location}
+                        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
+                        <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50">
+                          <p className="text-[9px] font-bold text-slate-400 flex items-center gap-1 uppercase truncate max-w-[120px]">
+                            <MapPin className="w-2.5 h-2.5 text-slate-300" /> {listing.location}
                           </p>
-                          <p className="text-xs font-semibold text-slate-400 flex items-center gap-1 uppercase">
-                            <Scale className="w-3 h-3" /> {listing.quantity} KG
+                          <p className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 uppercase shrink-0 pl-2">
+                            <span className="text-[8px] text-slate-400 not-italic font-bold mr-1 opacity-70">Quantity:</span>
+                            <Scale className="w-2.5 h-2.5" /> {listing.quantity} KG
                           </p>
                         </div>
                       </div>

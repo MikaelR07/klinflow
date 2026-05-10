@@ -204,7 +204,7 @@ export default function AgentWarehouse() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10 pt-2">
+    <div className="space-y-6 animate-fade-in pb-10 pt-4 px-4">
       
       {/* ── HEADER ── */}
       <div className="flex items-center justify-between mb-4">
@@ -222,23 +222,23 @@ export default function AgentWarehouse() {
       </div>
 
       {/* ── CURRENT TRUCK LOAD (BULK DISPATCH) ── */}
-      <div className="glass p-5 rounded-3xl border border-emerald-500/20 relative overflow-hidden group">
-         <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/5 rounded-full blur-3xl" />
+      <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-5 rounded-3xl relative overflow-hidden group shadow-xl shadow-emerald-600/20">
+         <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
          <div className="relative z-10">
             <div className="flex items-center justify-between mb-5">
                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
                      {profile?.agent_account_type === 'company_admin' ? (
-                       <Warehouse className="w-6 h-6 text-emerald-600" />
+                       <Warehouse className="w-6 h-6 text-white" />
                      ) : (
-                       <Truck className="w-6 h-6 text-emerald-600" />
+                       <Truck className="w-6 h-6 text-white" />
                      )}
                   </div>
                   <div>
-                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white leading-none">
+                      <h3 className="text-sm font-semibold text-white leading-none">
                        {profile?.agent_account_type === 'company_admin' ? 'Total Incoming Cargo' : 'Current Truck Load'}
                      </h3>
-                     <p className="text-xs text-slate-400 font-medium mt-1">
+                     <p className="text-xs text-emerald-100 font-medium mt-1">
                        {profile?.agent_account_type === 'company_admin' ? 'Active across all drivers' : 'Ready for Drop-off'}
                      </p>
                   </div>
@@ -246,22 +246,22 @@ export default function AgentWarehouse() {
             </div>
 
             <div className="columns-2 gap-3 mb-5 space-y-3">
-               <div className="break-inside-avoid p-5 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+               <div className="break-inside-avoid p-5 bg-white/10 rounded-2xl border border-white/10">
                   <div className="flex items-center gap-2 mb-2">
-                     <Package className="w-4 h-4 text-emerald-600" />
-                     <p className="text-xs font-semibold text-emerald-600">Private Stockpile</p>
+                     <Package className="w-4 h-4 text-indigo-200" />
+                     <p className="text-xs font-semibold text-indigo-100 uppercase tracking-widest">Stockpile</p>
                   </div>
-                  <p className="text-2xl font-bold text-slate-900 dark:text-white">KSh {totalEstimatedValue.toLocaleString()}</p>
+                  <p className="text-xl font-bold text-white tracking-tighter">KSh {totalEstimatedValue.toLocaleString()}</p>
                </div>
                
-               <div className="break-inside-avoid p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-                  <p className="text-xs font-semibold text-slate-400 mb-1">Live Weight</p>
-                  <p className="text-lg font-semibold text-slate-900 dark:text-white">{totalWeight.toFixed(1)} KG</p>
+               <div className="break-inside-avoid p-4 bg-white/5 rounded-2xl border border-white/10">
+                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Live Weight</p>
+                  <p className="text-lg font-bold text-white tracking-tighter">{totalWeight.toFixed(1)} KG</p>
                </div>
 
-               <div className="break-inside-avoid p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-                  <p className="text-xs font-semibold text-slate-400 mb-1">Verified Pickups</p>
-                  <p className="text-lg font-semibold text-slate-900 dark:text-white">{realAssets.length}</p>
+               <div className="break-inside-avoid p-4 bg-white/5 rounded-2xl border border-white/10">
+                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Verified</p>
+                  <p className="text-lg font-bold text-white tracking-tighter">{realAssets.length}</p>
                </div>
             </div>
 
@@ -277,9 +277,9 @@ export default function AgentWarehouse() {
                   <button 
                     onClick={handleDispatch}
                     disabled={realAssets.length === 0}
-                    className="w-full py-3 bg-emerald-600 text-white rounded-2xl font-semibold text-sm shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center disabled:opacity-50 disabled:active:scale-100"
+                    className="w-full py-3 bg-white text-emerald-700 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all flex items-center justify-center disabled:opacity-50 disabled:active:scale-100"
                   >
-                    Notify hub and get check-in code
+                    Notify Hub & Get Check-In Code
                   </button>
                 )}
               </>

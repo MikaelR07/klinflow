@@ -95,15 +95,15 @@ export default function AgentHome() {
     const assetsTimer = setTimeout(() => fetchAssets(), 300);
     const aiTimer = setTimeout(() => fetchDynamicInsights(), 600);
 
-    // Fetch accepted marketplace trades count
+    // Fetch active marketplace trades count
     if (profile?.id) {
-      const today = new Date().toISOString().split('T')[0];
       supabase
         .from('bookings')
         .select('id', { count: 'exact', head: true })
         .eq('agent_id', profile.id)
         .eq('is_market_trade', true)
-        .gte('created_at', today)
+        .neq('status', 'completed')
+        .neq('status', 'cancelled')
         .then(({ count }) => setAcceptedTradesCount(count || 0));
     }
 
@@ -231,7 +231,7 @@ export default function AgentHome() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-24">
+    <div className="space-y-6 animate-fade-in pb-24 px-4 pt-4">
       
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -366,7 +366,7 @@ export default function AgentHome() {
           </div>
           <div className="text-center">
             <p className="text-[8px] font-semibold text-emerald-600 uppercase tracking-widest mb-0.5">Market</p>
-            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Bids</p>
+            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight whitespace-nowrap">Accepted Bids</p>
           </div>
         </button>
 
@@ -390,9 +390,6 @@ export default function AgentHome() {
         <div className="relative bg-indigo-600 dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-5 dark:shadow-xl dark:shadow-indigo-500/20 overflow-hidden transition-all duration-500">
           
           {/* Subtle Background Elements (Visible mostly in dark mode) */}
-          <div className="absolute top-0 right-0 p-6 opacity-[0.03] dark:opacity-10 pointer-events-none">
-            <Package className="w-24 h-24 text-indigo-900 dark:text-indigo-200" />
-          </div>
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 dark:bg-white/5 rounded-full blur-3xl" />
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/5 dark:bg-indigo-400/10 rounded-full blur-3xl" />
           
@@ -416,7 +413,7 @@ export default function AgentHome() {
               </div>
 
               {/* 2. Rating */}
-              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex items-center gap-3">
+              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
                   <Star className="w-4 h-4 text-amber-500 fill-amber-500/20" />
                 </div>
@@ -429,7 +426,7 @@ export default function AgentHome() {
               </div>
 
               {/* 3. Points */}
-              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex items-center gap-3">
+              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0">
                   <Zap className="w-4 h-4 text-indigo-600" />
                 </div>
@@ -440,7 +437,7 @@ export default function AgentHome() {
               </div>
 
               {/* 4. Accepted Bids */}
-              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex flex-col justify-between h-24">
+              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none flex flex-col justify-between h-24">
                 <Handshake className="w-5 h-5 text-emerald-500" />
                 <div>
                   <h3 className="text-lg font-black text-slate-800 dark:text-white leading-none">{acceptedTradesCount || 0}</h3>
@@ -449,7 +446,7 @@ export default function AgentHome() {
               </div>
 
               {/* 5. Pickups Today */}
-              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex flex-col justify-between h-24">
+              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none flex flex-col justify-between h-24">
                 <Truck className="w-5 h-5 text-blue-500" />
                 <div>
                   <h3 className="text-lg font-black text-slate-800 dark:text-white leading-none">{earnings.completedToday || 0}</h3>

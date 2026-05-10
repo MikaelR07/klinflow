@@ -1,4 +1,5 @@
-import { User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle, Truck, BadgeCheck, Clock, DollarSign } from 'lucide-react';
+import { User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle, Truck, BadgeCheck, Clock, DollarSign, Brain } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useAuthStore, getThumbnailUrl } from '@cleanflow/core';
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggleRow } from '@cleanflow/ui';
@@ -7,6 +8,21 @@ import { toast } from 'sonner';
 export default function SettingsMenu() {
   const { profile, logout } = useAuthStore();
   const navigate = useNavigate();
+
+  const [saveChatHistory, setSaveChatHistory] = useState(false);
+
+  useEffect(() => {
+    setSaveChatHistory(localStorage.getItem('saveAiChatHistory') === 'true');
+  }, []);
+
+  const handleToggleHistory = () => {
+    const newVal = !saveChatHistory;
+    setSaveChatHistory(newVal);
+    localStorage.setItem('saveAiChatHistory', newVal.toString());
+    toast.success(`Chat History ${newVal ? 'Enabled' : 'Disabled'}`, {
+      description: newVal ? 'HygeneX will remember your past conversations.' : 'Your chats will clear automatically when you leave.'
+    });
+  };
 
   // Derive status directly — no stale state
   const isStaff = profile?.isStaff === true || profile?.is_staff === true;
@@ -24,7 +40,7 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="space-y-5 animate-fade-in pb-20">
+    <div className="space-y-5 animate-fade-in pb-20 px-4 pt-4">
       <h1 className="text-xl font-semibold dark:text-white tracking-tight">Settings & Profile</h1>
 
       {/* Profile Card (Non-clickable) */}
@@ -51,24 +67,24 @@ export default function SettingsMenu() {
       {profile?.agent_account_type !== 'fleet_driver' && (
         <button 
           onClick={() => navigate('/settings/staff-application')}
-          className={`w-full p-6 rounded-[2.5rem] flex items-center gap-4 text-left transition-all active:scale-95 shadow-xl 
+          className={`w-full p-3.5 rounded-xl flex items-center gap-3.5 text-left transition-all active:scale-95 shadow-md
             ${isVerified ? 'bg-slate-900 text-white' : 
               isPending ? 'bg-orange-500 text-white shadow-orange-500/20' : 
               'bg-primary text-white shadow-primary/20'}`}
         >
-          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center 
+          <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0
             ${isVerified || isPending ? 'bg-white/10' : 'bg-white/20'}`}>
-            {isPending ? <Clock className="w-6 h-6 text-white" /> : <Truck className="w-6 h-6 text-white" />}
+            {isPending ? <Clock className="w-4.5 h-4.5 text-white" /> : <Truck className="w-4.5 h-4.5 text-white" />}
           </div>
           <div className="flex-1">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-white/70 leading-none mb-1">
+            <h4 className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/60 leading-none mb-1">
               {isVerified ? 'CleanFlow Staff' : isPending ? 'Application Sent' : 'Join CleanFlow Team'}
             </h4>
-            <p className="text-lg font-semibold tracking-tight leading-tight">
+            <p className="text-sm font-bold tracking-tight leading-tight">
               {isVerified ? profile?.fleetId || profile?.fleet_id || 'Verified Member' : isPending ? 'Tap to Check Status' : 'Apply to Work With Us'}
             </p>
           </div>
-          <ChevronRight className="w-4 h-4 text-white" />
+          <ChevronRight className="w-3.5 h-3.5 text-white opacity-40" />
         </button>
       )}
 
@@ -90,6 +106,26 @@ export default function SettingsMenu() {
             <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary" />
           </button>
         ))}
+        
+        {/* AI Privacy Toggle */}
+        <div className="w-full flex items-center justify-between p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+          <div className="flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 flex items-center justify-center shadow-sm">
+              <Brain className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+            </div>
+            <div className="text-left">
+              <p className="text-sm font-semibold dark:text-slate-200">Save AI Chat History</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500">Keep HygeneX chats permanently</p>
+            </div>
+          </div>
+          <button 
+            onClick={handleToggleHistory}
+            className={`w-12 h-6 rounded-full p-1 transition-colors ${saveChatHistory ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'}`}
+          >
+            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${saveChatHistory ? 'translate-x-6' : 'translate-x-0'}`} />
+          </button>
+        </div>
+
         <ThemeToggleRow />
       </div>
 

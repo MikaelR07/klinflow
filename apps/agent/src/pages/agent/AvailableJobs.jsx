@@ -117,10 +117,10 @@ export default function AvailableJobs() {
       : rejectedJobs;
 
   return (
-    <div className="animate-fade-in pb-10 bg-[#F2F3F4] dark:bg-slate-900 px-2">
+    <div className="animate-fade-in pb-10 pt-6">
       {/* ── HEADER TERMINAL (UNIFIED) ── */}
       {!selectedJob && (
-        <div className="px-3 pb-1 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 dark:border-slate-800">
+        <div className="px-3 pb-1 bg-transparent dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100/50 dark:border-slate-800/50">
           <div className="flex items-center gap-3 mb-3">
             <button 
               onClick={() => navigate(-1)} 
@@ -223,29 +223,40 @@ export default function AvailableJobs() {
                </div>
 
               {/* Content Sheet (Overlaps Image) */}
-              <div className="relative -mt-6 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-xl px-3 pt-10 pb-10 space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+              <div className="relative -mt-16 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-2xl px-3 pt-8 pb-10 space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
                 
-                {/* Title & Customer */}
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <h2 className="text-2xl font-semibold text-slate-800 dark:text-white uppercase tracking-tight leading-tight">
+                {/* Unified Material, Customer & Location Cards */}
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
+                    <Package className="w-3.5 h-3.5 text-indigo-500 mb-2" />
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Material</p>
+                    <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">
                       {(categories.find(c => c.slug === selectedJob.material) || categories.find(c => c.id === selectedJob.material))?.label || selectedJob.material}
-                    </h2>
-                    <span className={`text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-widest shrink-0 ${
-                      selectedJob.time?.toUpperCase() === 'ASAP' ? 'bg-rose-500 text-white animate-pulse' : 'bg-primary/10 text-primary'
-                    }`}>
-                      {selectedJob.time}
-                    </span>
+                    </p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <User className="w-3 h-3 text-slate-400" />
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{selectedJob.customerName || selectedJob.customer || 'Client Account'}</p>
-                    <span className="text-xs text-slate-300">•</span>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1">
-                      <MapPin className="w-3 h-3" /> {selectedJob.location}
+                  <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
+                    <User className="w-3.5 h-3.5 text-emerald-500 mb-2" />
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Customer</p>
+                    <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">
+                      {selectedJob.customerName || selectedJob.customer || 'Client'}
+                    </p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
+                    <MapPin className="w-3.5 h-3.5 text-rose-500 mb-2" />
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Location</p>
+                    <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">
+                      {selectedJob.location}
                     </p>
                   </div>
                 </div>
+
+                {/* ASAP / Time Status (Subtle Badge) */}
+                {selectedJob.time?.toUpperCase() === 'ASAP' && (
+                  <div className="flex items-center justify-center gap-2 px-4 py-2 bg-rose-500/10 rounded-full border border-rose-500/20 animate-pulse">
+                    <Clock className="w-3 h-3 text-rose-600" />
+                    <span className="text-[9px] font-black text-rose-600 uppercase tracking-[0.2em]">Priority: Urgent Pickup Requested</span>
+                  </div>
+                )}
 
                 {/* Stats Row */}
                 <div className="grid grid-cols-2 gap-3">
@@ -337,10 +348,10 @@ export default function AvailableJobs() {
                     key={job.id}
                     onClick={() => setSelectedJob(job)}
                     whileTap={{ scale: 0.98 }}
-                    className={`group px-3 py-4 border-b transition-all cursor-pointer ${
+                    className={`group mx-1 mb-3 p-4 rounded-2xl border transition-all cursor-pointer shadow-sm ${
                       job.isAI && activeTab === 'available' 
-                        ? 'bg-emerald-500/5 border-emerald-500/10' 
-                        : 'bg-white dark:bg-slate-900/40 hover:bg-white dark:hover:bg-slate-900/60 border-slate-50 dark:border-white/5'
+                        ? 'bg-emerald-500/5 border-emerald-500/20 shadow-emerald-500/10' 
+                        : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 hover:shadow-md'
                     }`}
                   >
                     <div className="flex items-center gap-4">
@@ -350,38 +361,41 @@ export default function AvailableJobs() {
                       </div>
 
                       {/* Content Strip */}
-                      <div className="flex-1 min-w-0 flex flex-col justify-between h-12">
-                        <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0 flex flex-col justify-center space-y-2">
+                        <div className="flex items-start justify-between">
                           <div className="min-w-0">
-                            <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase truncate tracking-tight italic leading-none mb-1.5">
-                              {waste?.label || job.material}
+                            <h3 className="text-[11px] font-black text-slate-900 dark:text-white uppercase truncate tracking-tight leading-none mb-1.5">
+                              <span className="text-indigo-600 dark:text-indigo-400 font-black mr-1.5">Material:</span>
+                              <span className="text-slate-500 dark:text-slate-400 font-bold">{waste?.label || job.material}</span>
                             </h3>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate flex items-center gap-2">
+                              <User className="w-3 h-3" />
                               {job.customerName || job.customer || 'Client'}
                             </p>
                           </div>
-                          <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded-lg font-black text-xs uppercase tracking-tighter shrink-0 ${
+                          <div className={`flex items-center gap-1 px-2 py-1 rounded-lg font-black text-[9px] uppercase tracking-tighter shrink-0 shadow-sm ${
                             job.time?.toUpperCase() === 'ASAP' 
                               ? 'bg-rose-500 text-white animate-pulse' 
                               : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600'
                           }`}>
-                            <Clock className={`w-2.5 h-2.5 ${job.time?.toUpperCase() === 'ASAP' ? 'animate-bounce' : ''}`} /> 
+                            <Clock className="w-2.5 h-2.5" /> 
                             {job.time}
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-800/50 pt-1.5 mt-auto">
-                          <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                        <div className="flex items-center justify-between pt-2 border-t border-slate-50 dark:border-slate-800/50">
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
                             <MapPin className="w-3 h-3 text-slate-300" />
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">
                               {job.location}
                             </p>
                           </div>
-                          <div className="flex items-center gap-2 pl-2">
-                            <div className="flex items-center gap-1 text-xs font-black text-emerald-600 italic tracking-tighter">
-                              <Scale className="w-3 h-3 not-italic" />
-                              <span>{job.actual_weight_kg || job.bags || 0} <span className="text-[7px] uppercase not-italic opacity-50">KG</span></span>
-                            </div>
+                          <div className="flex items-center gap-1.5 pl-4 shrink-0">
+                            <span className="text-[8px] text-slate-400 not-italic font-bold mr-1 opacity-70">Payload:</span>
+                            <Scale className="w-3.5 h-3.5 text-emerald-600" />
+                            <p className="text-[13px] font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">
+                              {job.actual_weight_kg || job.bags || 0} <span className="text-[9px] uppercase not-italic opacity-70">KG</span>
+                            </p>
                           </div>
                         </div>
                       </div>

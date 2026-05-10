@@ -100,28 +100,45 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="animate-fade-in bg-[#F2F3F4] dark:bg-slate-900 pb-10 relative px-2">
+    <div className="animate-fade-in space-y-6 pb-24 relative">
       <div className="w-full">
-        {/* ── SUMMARY SECTION ── */}
-        <div className="bg-slate-900 dark:bg-slate-950 p-4 pt-6 pb-4 text-white mb-6 mt-4 relative overflow-hidden shadow-xl shadow-slate-900/10 rounded-[2.5rem]">
-           <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
-           <div className="relative z-10 flex items-center justify-between">
-              <div className="pl-2">
-                 <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-0.5">Total Pledged</p>
-                 <h2 className="text-xl font-semibold tracking-tighter text-emerald-400">
-                   KSh {activeTrades.reduce((acc, t) => acc + (parseFloat(t.total_price || t.totalPrice) || 0), 0).toLocaleString()}
-                 </h2>
-              </div>
-              <div className="w-px h-8 bg-white/10 mx-4" />
-              <div className="flex-1 text-right pr-2">
-                 <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-0.5">Live Bids</p>
-                 <h2 className="text-xl font-semibold tracking-tighter text-white">{activeTrades.length}</h2>
+        {/* ── HEADER & SUMMARY ── */}
+        <div className="relative flex items-center justify-center mt-2 mb-4">
+           <button 
+             onClick={() => navigate(-1)} 
+             className="absolute left-0 w-10 h-10 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-90 transition-all"
+           >
+             <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+           </button>
+
+           <div className="bg-white dark:bg-slate-950 p-3 px-6 text-slate-900 dark:text-white relative overflow-hidden shadow-sm dark:shadow-xl dark:shadow-slate-950/20 border border-slate-200 dark:border-white/10 rounded-2xl w-fit">
+              <div className="absolute top-0 right-0 w-20 h-20 bg-slate-100 dark:bg-white/5 rounded-full blur-2xl -mr-10 -mt-10" />
+              <div className="relative z-10 flex items-center gap-8">
+                 <div className="text-center">
+                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">Trade Value</p>
+                    <h2 className="text-xl font-black tracking-tighter text-slate-900 dark:text-white">
+                      <span className="text-[10px] font-bold text-primary mr-0.5">KSh</span>
+                      {activeTrades.reduce((acc, t) => acc + (parseFloat(t.total_price || t.totalPrice) || 0), 0).toLocaleString()}
+                    </h2>
+                 </div>
+                 <div className="w-px h-8 bg-slate-200/50 dark:bg-white/10" />
+                 <div className="text-center">
+                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">Live Bids</p>
+                    <h2 className="text-xl font-black tracking-tighter text-slate-900 dark:text-white">{activeTrades.length}</h2>
+                 </div>
               </div>
            </div>
         </div>
 
+        {/* ── DESCRIPTIVE TEXT ── */}
+        <div className="text-center px-6 -mt-2">
+           <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">Active Market Bids</h3>
+           <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-1">
+             Manage your accepted material trades and logistics routes. Track collections and verify stock directly with sellers.
+           </p>
+        </div>
         {/* ── CONTENT AREA ── */}
-        <div className="px-4">
+        <div className="mt-6">
           <AnimatePresence mode="wait">
             {expandedId ? (
               <motion.div 
@@ -129,7 +146,7 @@ export default function MyTrades() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-24"
+                className="fixed inset-0 z-[9999] bg-white dark:bg-slate-900 overflow-y-auto no-scrollbar pb-24 px-4"
               >
                 {(() => {
                   const trade = activeTrades.find(t => t.id === expandedId);
@@ -137,9 +154,9 @@ export default function MyTrades() {
                   const photoUrl = trade.photo_url || trade.listing?.photo;
                   
                   return (
-                    <>
+                    <div className="max-w-lg mx-auto">
                       {/* Edge-to-Edge Hero Image */}
-                      <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-900 relative overflow-hidden">
+                      <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-900 relative overflow-hidden -mx-4 rounded-b-[2rem] shadow-xl">
                         {photoUrl ? (
                           <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
                         ) : (
@@ -159,7 +176,7 @@ export default function MyTrades() {
                       </div>
 
                       {/* Content Sheet */}
-                      <div className="bg-[#F2F3F4] dark:bg-slate-900 px-3 pt-10 pb-10 space-y-6 rounded-t-xl -mt-6 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+                      <div className="pt-10 pb-10 space-y-6 relative z-10">
                         <div className="flex items-center justify-between">
                           <div>
                             <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-2">
@@ -179,17 +196,17 @@ export default function MyTrades() {
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
-                          <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                          <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center shadow-sm">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Volume</p>
                             <p className="text-lg font-black text-slate-900 dark:text-white">{trade.bags || 0} KG</p>
                           </div>
-                          <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                          <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center shadow-sm">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Contract Value</p>
                             <p className="text-lg font-black text-emerald-600">KSh {(trade.total_price || 0).toLocaleString()}</p>
                           </div>
                         </div>
 
-                        <div className="bg-white dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
+                        <div className="bg-white dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Logistics Route</h4>
                            <div className="flex items-center gap-4">
                               <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
@@ -218,7 +235,7 @@ export default function MyTrades() {
                            </button>
                         </div>
                       </div>
-                    </>
+                    </div>
                   );
                 })()}
               </motion.div>
@@ -232,7 +249,7 @@ export default function MyTrades() {
               >
                 {isLoading ? (
                   [1, 2].map(i => (
-                    <div key={i} className="h-16 bg-slate-100 dark:bg-slate-900 rounded-2xl animate-pulse" />
+                    <div key={i} className="h-20 bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse" />
                   ))
                 ) : activeTrades.length === 0 ? (
                   <div className="py-20 text-center">
