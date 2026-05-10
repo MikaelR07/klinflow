@@ -172,16 +172,16 @@ export default function AvailableJobs() {
       <div className={selectedJob ? "animate-fade-in" : ""}>
         <AnimatePresence mode="wait">
           {selectedJob ? (
-            /* ── FOCUSED MISSION DETAIL (Kilimall Style) ── */
+            /* ── FOCUSED MISSION DETAIL (Immersive Kilimall Style) ── */
             <motion.div 
               key="mission-focus"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="-mx-6 -mt-5"
+              className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar"
             >
                {/* Edge-to-Edge Hero Image */}
-               <div className="relative w-full aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden">
+               <div className="relative w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden">
                   <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
                     {(selectedJob.photos?.length > 0 
                       ? selectedJob.photos 
@@ -202,19 +202,23 @@ export default function AvailableJobs() {
                     )}
                   </div>
 
-                  {/* Floating Back Button */}
+                  {/* Floating Back Button - Now with Notch Support */}
                   <button 
                     onClick={() => setSelectedJob(null)}
-                    className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all z-10"
+                    style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+                    className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
                   >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span className="text-xs font-semibold uppercase tracking-widest">Back</span>
+                    <ArrowLeft className="w-5 h-5" />
                   </button>
 
-                  {/* Status Badge */}
-                  <div className="absolute top-4 right-4 px-3 py-1.5 bg-emerald-500/80 backdrop-blur-xl text-white rounded-full text-xs font-semibold uppercase tracking-[0.2em] z-10">
+                  {/* Status Badge - Now with Notch Support */}
+                  <div 
+                    style={{ top: 'calc(env(safe-area-inset-top, 0px) + 20px)' }}
+                    className="absolute right-6 px-3 py-1.5 bg-emerald-500/80 backdrop-blur-xl text-white rounded-full text-[10px] font-bold uppercase tracking-[0.2em] z-10 shadow-lg"
+                  >
                     {activeTab === 'available' ? 'Available' : 'Accepted'}
                   </div>
+
 
                </div>
 

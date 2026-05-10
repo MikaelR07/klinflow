@@ -200,20 +200,17 @@ export default function MyTrades() {
           );
         })}
       </div>
-      {/* ── CONTENT AREA ── */}
       <div className="space-y-4">
         <AnimatePresence mode="wait">
           {expandedId ? (
-            /* ── FOCUSED TRADE DETAIL ── */
             <motion.div 
               key="trade-focus"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="-mx-4 -mt-7"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar"
             >
-              {/* Edge-to-Edge Hero Image */}
-              <div className="w-full aspect-square bg-slate-900 relative overflow-hidden">
+              <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-900 relative overflow-hidden">
                 {(() => {
                   const b = bookings.find(x => x.id === expandedId);
                   const photoUrl = b?.photo_url || b?.photoUrl || b?.photo;
@@ -227,8 +224,10 @@ export default function MyTrades() {
                   );
                 })()}
 
-                {/* Overlaid Header */}
-                <div className="absolute top-8 left-6 z-20 flex items-center gap-3">
+                <div 
+                  style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+                  className="absolute left-6 z-20 flex items-center gap-3"
+                >
                   <button 
                     onClick={() => setExpandedId(null)}
                     className="p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
@@ -238,7 +237,6 @@ export default function MyTrades() {
                 </div>
               </div>
 
-              {/* Content Sheet */}
               <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-10 pb-10 space-y-6 rounded-t-xl -mt-6 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
                 {(() => {
                   const b = bookings.find(x => x.id === expandedId);

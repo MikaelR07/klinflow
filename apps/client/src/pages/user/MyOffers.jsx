@@ -203,16 +203,16 @@ export default function MyOffers() {
       <div className={selectedOfferId ? "animate-fade-in" : ""}>
         <AnimatePresence mode="wait">
           {selectedOfferId && selectedOffer ? (
-            /* ── FOCUSED OFFER DETAIL (Kilimall Style) ── */
+            /* ── FOCUSED OFFER DETAIL (Immersive Kilimall Style) ── */
             <motion.div 
               key="offer-focus"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="-mx-4 -mt-7"
+              className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar"
             >
               {/* Edge-to-Edge Hero Image */}
-              <div className="w-full aspect-square bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
+              <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
                 {selectedOffer.photo ? (
                   <img src={getThumbnailUrl(selectedOffer.photo, { width: 800 })} className="w-full h-full object-cover" />
                 ) : (
@@ -221,14 +221,16 @@ export default function MyOffers() {
                   </div>
                 )}
 
-                {/* Floating Back Button */}
+                {/* Floating Back Button - Now with Notch Support */}
                 <button 
                   onClick={() => setSelectedOfferId(null)}
-                  className="absolute top-8 left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
+                  style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+                  className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
               </div>
+
 
               {/* Content Sheet */}
               <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-10 pb-10 space-y-6 rounded-t-xl -mt-6 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">

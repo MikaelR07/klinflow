@@ -113,19 +113,21 @@ export default function MarketplaceInventory() {
 
       <main className="mt-0">
         {selectedId && selectedListing ? (
-          /* ── FOCUSED DETAIL VIEW (AGENT SOURCING STYLE) ── */
-          <div className="animate-fade-in -mx-4 -mt-7">
+          /* ── FOCUSED DETAIL VIEW (Immersive Kilimall Style) ── */
+          <div className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar animate-in fade-in zoom-in-95 duration-200">
             
             {/* Edge-to-Edge Hero Image */}
-            <div className="w-full aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
+            <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
               
-              {/* Overlaid Back Button */}
+              {/* Overlaid Back Button - Now with Notch Support */}
               <button 
                 onClick={() => setSelectedId(null)}
-                className="absolute top-8 left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
+                style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+                className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
+
 
               <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
                 {(selectedListing.photos?.length > 0 ? selectedListing.photos : [selectedListing.photo]).map((imgUrl, idx) => (

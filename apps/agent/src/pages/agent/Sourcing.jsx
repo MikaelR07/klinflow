@@ -135,10 +135,10 @@ export default function Sourcing() {
         {/* ── CONTENT AREA ── */}
         <main>
           {selectedId && selectedListing ? (
-            /* ── FOCUSED SOURCING VIEW (Kilimall Style) ── */
-            <div className="animate-fade-in -mx-6 -mt-5">
+            /* ── FOCUSED SOURCING VIEW (Immersive Kilimall Style) ── */
+            <div className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar animate-in fade-in zoom-in-95 duration-200">
                {/* Edge-to-Edge Hero Image */}
-               <div className="w-full aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
+               <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
                  <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
                    {(selectedListing.photos?.length > 0 ? selectedListing.photos : [selectedListing.photo]).map((imgUrl, idx) => (
                      <div key={idx} className="flex-none w-full h-full snap-start">
@@ -153,13 +153,15 @@ export default function Sourcing() {
                    ))}
                  </div>
                  
-                 {/* Overlaid Back Button (Matches MyOffers) */}
+                 {/* Overlaid Back Button - Now with Notch Support */}
                  <button 
                    onClick={() => setSelectedId(null)}
-                   className="absolute top-8 left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
+                   style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+                   className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
                  >
                    <ArrowLeft className="w-5 h-5" />
                  </button>
+
 
 
 

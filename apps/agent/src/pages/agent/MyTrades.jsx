@@ -124,13 +124,13 @@ export default function MyTrades() {
         <div className="px-4">
           <AnimatePresence mode="wait">
             {expandedId ? (
-              /* ── FOCUSED TRADE DETAIL ── */
+              /* ── FOCUSED TRADE DETAIL (Immersive Kilimall Style) ── */
               <motion.div 
                 key="trade-focus"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="-mx-6 -mt-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar"
               >
                 {(() => {
                   const trade = activeTrades.find(t => t.id === expandedId);
@@ -139,7 +139,7 @@ export default function MyTrades() {
                   return (
                     <>
                       {/* Edge-to-Edge Hero Image */}
-                      <div className="w-full aspect-square bg-slate-900 relative overflow-hidden">
+                      <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-900 relative overflow-hidden">
                         {photoUrl ? (
                           <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
                         ) : (
@@ -149,9 +149,11 @@ export default function MyTrades() {
                           </div>
                         )}
 
+                        {/* Floating Back Button - Now with Notch Support */}
                         <button 
                           onClick={() => setExpandedId(null)}
-                          className="absolute top-8 left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
+                          style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+                          className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
                         >
                           <ArrowLeft className="w-5 h-5" />
                         </button>
