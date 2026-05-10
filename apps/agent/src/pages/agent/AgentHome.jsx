@@ -394,70 +394,63 @@ export default function AgentHome() {
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/5 dark:bg-indigo-400/10 rounded-full blur-3xl" />
           
           <div className="relative z-10">
-            {/* Masonry-Style Performance Grid */}
-            <div className="grid grid-cols-4 gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5">
               
-              {/* 1. Main Stock Value (Large Card) */}
-              <div className="col-span-2 row-span-2 bg-slate-50 dark:bg-white/10 rounded-3xl p-5 border border-slate-100 dark:border-white/10 flex flex-col justify-between hover:shadow-md transition-all">
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-white/10 flex items-center justify-center">
-                  <Package className="w-4 h-4 text-indigo-600 dark:text-indigo-200" />
+              {/* 1. Main Stock Value (Vertical Hero) */}
+              <div className="row-span-2 bg-white dark:bg-white/10 rounded-3xl p-5 border border-slate-100 dark:border-white/10 shadow-sm flex flex-col justify-between">
+                <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center">
+                  <Package className="w-5 h-5 text-indigo-600 dark:text-indigo-200" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mb-1">
-                    {profile?.agent_account_type === 'company_admin' ? 'Fleet Value' : 'Stock Value'}
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mb-1.5 leading-none">
+                    Asset Value
                   </p>
-                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-0.5">
-                    <span className="text-sm font-light text-slate-400 dark:text-indigo-200 opacity-60">KSh</span>
+                  <h2 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-indigo-300 block mb-0.5 uppercase">KSh</span>
                     {earnings.inventoryValue?.toLocaleString() || 0}
                   </h2>
                 </div>
               </div>
 
-              {/* 2. Rating (Compact Card) */}
-              <div className="bg-slate-50 dark:bg-white/10 rounded-2xl p-3 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center hover:bg-white/20 transition-colors">
-                <Star className="w-4 h-4 text-amber-500 dark:text-amber-300 fill-amber-500/10 dark:fill-amber-300/20 mb-1" />
-                <span className="text-lg font-bold text-slate-900 dark:text-white leading-none">
-                  {profile.rating ? Number(profile.rating).toFixed(1) : '5.0'}
-                </span>
-                <span className="text-[7px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Rating</span>
-              </div>
-
-              {/* 3. Points (Compact Card) */}
-              <div className="bg-slate-50 dark:bg-white/10 rounded-2xl p-3 border border-slate-100 dark:border-white/10 flex flex-col items-center justify-center hover:bg-white/20 transition-colors">
-                <Zap className="w-4 h-4 text-indigo-600 dark:text-amber-300 mb-1" />
-                <span className="text-lg font-bold text-slate-900 dark:text-white leading-none">{profile.rewardPoints || 0}</span>
-                <span className="text-[7px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Points</span>
-              </div>
-
-              {/* 4. Pickups Today (Horizontal Card) */}
-              <div className="col-span-2 bg-slate-50 dark:bg-white/10 rounded-2xl p-3 border border-slate-100 dark:border-white/10 flex items-center gap-3 hover:bg-white/20 transition-colors">
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-400/20 flex items-center justify-center">
-                  <Truck className="w-4 h-4 text-indigo-600 dark:text-indigo-200" />
+              {/* 2. Rating */}
+              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
+                  <Star className="w-4 h-4 text-amber-500 fill-amber-500/20" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{earnings.completedToday || 0}</p>
-                  <p className="text-[10px] font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-0.5">Pickups Today</p>
+                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none">
+                    {profile.rating ? Number(profile.rating).toFixed(1) : '5.0'}
+                  </p>
+                  <p className="text-[8px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Rating</p>
                 </div>
               </div>
 
-              {/* 5. Accepted Bids (Bottom Bar) */}
-              <div className="col-span-4 bg-slate-100/50 dark:bg-white/5 rounded-2xl p-3 border border-slate-200 dark:border-white/5 flex items-center justify-between hover:bg-white/10 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center">
-                    <Handshake className="w-4 h-4 text-emerald-600 dark:text-emerald-300" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 dark:text-indigo-200 uppercase tracking-widest leading-none mb-1">
-                      Marketplace Performance
-                    </p>
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white">{acceptedTradesCount || 0} Accepted Bids</p>
-                  </div>
+              {/* 3. Points */}
+              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0">
+                  <Zap className="w-4 h-4 text-indigo-600" />
                 </div>
-                <div className="text-right px-3 border-l border-slate-200 dark:border-white/10">
-                  <p className="text-[10px] font-semibold text-slate-400 dark:text-indigo-200 uppercase tracking-widest leading-none mb-1">
-                    Lifetime
-                  </p>
-                  <p className="text-xs font-semibold text-slate-900 dark:text-white">{earnings.totalJobs || 0} Total</p>
+                <div>
+                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none">{profile.rewardPoints || 0}</p>
+                  <p className="text-[8px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Points</p>
+                </div>
+              </div>
+
+              {/* 4. Accepted Bids */}
+              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex flex-col justify-between h-24">
+                <Handshake className="w-5 h-5 text-emerald-500" />
+                <div>
+                  <h3 className="text-lg font-black text-slate-800 dark:text-white leading-none">{acceptedTradesCount || 0}</h3>
+                  <p className="text-[8px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Accepted Bids</p>
+                </div>
+              </div>
+
+              {/* 5. Pickups Today */}
+              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex flex-col justify-between h-24">
+                <Truck className="w-5 h-5 text-blue-500" />
+                <div>
+                  <h3 className="text-lg font-black text-slate-800 dark:text-white leading-none">{earnings.completedToday || 0}</h3>
+                  <p className="text-[8px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Pickups Today</p>
                 </div>
               </div>
 
