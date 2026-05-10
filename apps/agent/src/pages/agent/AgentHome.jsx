@@ -386,12 +386,8 @@ export default function AgentHome() {
 
       {/* ── AGENT HERO CARD: COMMAND CENTER ── */}
       <div className="relative group">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-2xl blur opacity-0 dark:opacity-40 dark:group-hover:opacity-50 transition duration-1000"></div>
-        <div className="relative bg-indigo-600 dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-5 dark:shadow-xl dark:shadow-indigo-500/20 overflow-hidden transition-all duration-500">
-          
-          {/* Subtle Background Elements (Visible mostly in dark mode) */}
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 dark:bg-white/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/5 dark:bg-indigo-400/10 rounded-full blur-3xl" />
+
+        <div className="relative bg-indigo-600 dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-5 dark:shadow-xl overflow-hidden transition-all duration-500">
           
           <div className="relative z-10">
             <div className="grid grid-cols-2 gap-2.5">
@@ -426,9 +422,9 @@ export default function AgentHome() {
               </div>
 
               {/* 3. Points */}
-              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0">
-                  <Zap className="w-4 h-4 text-indigo-600" />
+              <div className="bg-white dark:bg-white/5 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
+                  <Zap className="w-4 h-4 text-amber-500" />
                 </div>
                 <div>
                   <p className="text-sm font-black text-slate-800 dark:text-white leading-none">{profile.rewardPoints || 0}</p>

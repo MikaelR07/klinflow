@@ -199,7 +199,7 @@ export default function UserHome() {
               <div className="flex items-center gap-2 mt-3">
                 <button 
                   onClick={() => navigate('/impact-hub')}
-                  className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-lg border border-white/10 text-[11px] font-semibold text-amber-300 uppercase tracking-widest active:scale-95 transition-all shadow-inner"
+                  className="flex items-center gap-1.5 bg-white text-emerald-800 hover:bg-slate-50 dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-white px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
                 >
                   ⚡ {profile?.rewardPoints || 0} GFP
                 </button>
@@ -208,7 +208,7 @@ export default function UserHome() {
             
             <button 
               onClick={handleWithdraw}
-              className="bg-white/20 hover:bg-white/30 text-white border border-white/20 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-xl active:scale-95 transition-all mb-1"
+              className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-white/10 dark:text-white dark:hover:bg-white/20 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-xl active:scale-95 transition-all mb-1"
             >
               Withdraw
             </button>

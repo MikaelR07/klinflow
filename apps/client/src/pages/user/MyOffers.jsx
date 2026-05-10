@@ -148,7 +148,7 @@ export default function MyOffers() {
   const selectedOffer = receivedOffers?.find(o => o.id === selectedOfferId);
 
   return (
-    <div className="bg-[#F2F3F4] dark:bg-slate-900 relative px-2">
+    <div className="relative px-2">
       
       {/* ── DASHBOARD AREA ── */}
       {!selectedOfferId && (
@@ -167,7 +167,7 @@ export default function MyOffers() {
             </div>
           </div>
 
-          <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mb-4">
+          <div className="flex border-b border-slate-200 dark:border-slate-800 mb-4 px-2">
             {[
               { id: 'pending', label: 'Bids', count: pendingOffers.length },
               { id: 'progress', label: 'On-going', count: inProgressOffers.length },
@@ -177,18 +177,18 @@ export default function MyOffers() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 py-3 text-[11px] font-semibold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-1 ${
+                className={`flex-1 py-3 text-[11px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 border-b-2 -mb-px ${
                   activeTab === tab.id
-                    ? 'bg-emerald-600 shadow-lg shadow-emerald-500/20 text-white'
-                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                    ? 'border-emerald-600 text-emerald-600'
+                    : 'border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                 }`}
               >
                 {tab.label}
                 {tab.count > 0 && (
-                  <span className={`px-1.5 py-0.5 text-[8px] font-semibold rounded-full transition-all ${
+                  <span className={`px-1.5 py-0.5 text-[9px] font-bold rounded-full transition-all ${
                     activeTab === tab.id
-                      ? 'bg-white/20 text-white'
-                      : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                      ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                   }`}>
                     {tab.count}
                   </span>

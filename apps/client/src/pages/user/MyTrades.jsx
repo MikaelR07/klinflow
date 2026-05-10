@@ -247,32 +247,42 @@ export default function MyTrades() {
                       </button>
                     </div>
 
-                    <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-8 pb-10 space-y-5 rounded-t-3xl mt-10 relative z-10">
-                      <div className="flex items-start justify-between gap-2">
-                        <div className="bg-white dark:bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 w-fit">
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
-                          <p className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
-                            {waste?.label || formatMaterial(materialVal)}
-                          </p>
-                          <div className={`mt-1.5 w-fit px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${status.color}`}>
-                            {status.label}
+                    <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-8 pb-10 space-y-5 rounded-t-3xl -mt-10 relative z-10">
+                      <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-4 shadow-sm">
+                        <div className="flex items-start justify-between gap-2 border-b border-slate-100 dark:border-slate-700/50 pb-4">
+                          <div>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
+                            <p className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
+                              {waste?.label || formatMaterial(materialVal)}
+                            </p>
+                            <div className={`mt-2 w-fit px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${status.color}`}>
+                              {status.label}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade ID</p>
+                            <p className="text-xs font-bold text-slate-900 dark:text-white font-mono bg-slate-50 dark:bg-slate-900/50 px-2 py-1 rounded-lg">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
                           </div>
                         </div>
-                        <div className="bg-white dark:bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 w-fit text-right">
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade ID</p>
-                          <p className="text-xs font-bold text-slate-900 dark:text-white font-mono">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
+
+                        <div className="flex justify-between items-center pt-1">
+                          <div>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
+                            <p className="text-sm font-black text-slate-900 dark:text-white">{b.actual_weight_kg || b.bags || 0} KG</p>
+                          </div>
+                          <div className="w-px h-8 bg-slate-100 dark:bg-slate-700"></div>
+                          <div className="text-right">
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade Value</p>
+                            <p className="text-sm font-black text-emerald-600">KSh {(b.total_price || b.amount || 0).toLocaleString()}</p>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex gap-2">
-                        <div className="bg-white dark:bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 flex-1 text-center">
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
-                          <p className="text-sm font-black text-slate-900 dark:text-white">{b.actual_weight_kg || b.bags || 0} KG</p>
-                        </div>
-                        <div className="bg-white dark:bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 flex-1 text-center">
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Value</p>
-                          <p className="text-sm font-black text-emerald-600">KSh {(b.total_price || b.amount || 0).toLocaleString()}</p>
-                        </div>
+                      <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-2 shadow-sm">
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Material Description</p>
+                        <p className={`text-sm ${b.notes && !b.notes.startsWith('Marketplace trade') ? 'text-slate-800 dark:text-slate-200 leading-relaxed font-medium' : 'text-slate-400 dark:text-slate-500 italic'}`}>
+                          {(b.notes && !b.notes.startsWith('Marketplace trade')) ? b.notes : 'No description provided.'}
+                        </p>
                       </div>
 
                       <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-3">
