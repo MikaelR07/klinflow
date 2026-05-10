@@ -267,23 +267,23 @@ export default function SellerHome() {
 
       {/* ── REVENUE HERO CARD ── */}
       <div className="relative group">
-        <div className="relative bg-white dark:bg-gradient-to-br dark:from-slate-800 dark:to-[#0a0f1e] rounded-2xl p-5 shadow-none border border-slate-100 dark:border-white/5 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-green-700 via-emerald-600 to-teal-700 dark:from-slate-800 dark:via-slate-800 dark:to-[#0a0f1e] rounded-2xl p-5 shadow-sm border border-green-800/20 dark:border-white/5 overflow-hidden">
           <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
           <div className="flex flex-col gap-5">
             <div className="grid grid-cols-2 w-full gap-0">
-              <div className="flex-1 min-w-0 border-r border-slate-100 dark:border-white/20 pr-4">
+              <div className="flex-1 min-w-0 border-r border-white/20 pr-4">
                 <div className="flex items-center gap-1.5 mb-3">
-                  <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                  <span className="text-[11px] font-semibold text-slate-500 dark:text-white/60 uppercase tracking-widest truncate">Seller Wallet</span>
+                  <Wallet className="w-3.5 h-3.5 text-white/70 shrink-0" />
+                  <span className="text-[11px] font-semibold text-white/70 uppercase tracking-widest truncate">Seller Wallet</span>
                 </div>
                 
-                <h2 className="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-tight mb-4">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tighter leading-tight mb-4">
                   KSh {(profile?.balance || profile?.walletBalance || 0).toLocaleString()}
                 </h2>
 
                 <button 
                   onClick={() => navigate('/withdraw')}
-                  className="bg-emerald-500 hover:bg-emerald-400 text-white px-7 py-3 rounded-xl text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all"
+                  className="bg-white/20 hover:bg-white/30 text-white border border-white/20 px-7 py-3 rounded-xl text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all"
                 >
                   Withdraw
                 </button>
@@ -292,41 +292,41 @@ export default function SellerHome() {
               {/* Credit Meter Column */}
               <div className="flex flex-col items-center justify-center gap-1 pl-4">
                 <CreditRateMeter score={score} />
-                <p className="text-[9px] font-bold text-slate-400 dark:text-white/30 uppercase tracking-widest">Credit Rate</p>
+                <p className="text-[9px] font-bold text-white/50 uppercase tracking-widest">Credit Rate</p>
               </div>
             </div>
 
             {/* Stats row */}
-            <div className="pt-5 border-t border-slate-100 dark:border-white/10">
+            <div className="pt-5 border-t border-white/20">
               <div className="flex items-center justify-between sm:justify-start sm:gap-16 px-1">
                 
                 <div className="flex flex-col items-center gap-1">
-                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">{totalDeals}</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalDeals}</p>
                   <div className="flex items-center gap-1.5">
-                    <Handshake className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                    <p className="text-[10px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">Deals</p>
+                    <Handshake className="w-3.5 h-3.5 text-white/60" />
+                    <p className="text-[10px] font-semibold text-white/60 uppercase tracking-widest">Deals</p>
                   </div>
                 </div>
 
                 {/* Independent Divider */}
-                <div className="w-px h-8 bg-slate-100 dark:bg-white/10" />
+                <div className="w-px h-8 bg-white/20" />
 
                 <div className="flex flex-col items-center gap-1">
-                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">{totalSoldKg}kg</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalSoldKg}kg</p>
                   <div className="flex items-center gap-1.5">
-                    <Scale className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-                    <p className="text-[10px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">Sold KG</p>
+                    <Scale className="w-3.5 h-3.5 text-white/60" />
+                    <p className="text-[10px] font-semibold text-white/60 uppercase tracking-widest">Sold KG</p>
                   </div>
                 </div>
 
                 {/* Independent Divider */}
-                <div className="w-px h-8 bg-slate-100 dark:bg-white/10" />
+                <div className="w-px h-8 bg-white/20" />
 
                 <div className="flex flex-col items-center gap-1">
-                  <p className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
                   <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                    <p className="text-[10px] font-semibold text-slate-400 dark:text-white/40 uppercase tracking-widest">Pending</p>
+                    <Clock className="w-3.5 h-3.5 text-white/60" />
+                    <p className="text-[10px] font-semibold text-white/60 uppercase tracking-widest">Pending</p>
                   </div>
                 </div>
 
