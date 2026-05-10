@@ -136,7 +136,12 @@ export default function Sourcing() {
         <main>
           {selectedId && selectedListing ? (
             /* ── FOCUSED SOURCING VIEW (Immersive Kilimall Style) ── */
-            <div className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar animate-in fade-in zoom-in-95 duration-200">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-24"
+            >
                {/* Edge-to-Edge Hero Image */}
                <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
                  <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
@@ -320,7 +325,7 @@ export default function Sourcing() {
                     Return to Radar
                  </button>
                </div>
-            </div>
+            </motion.div>
           ) : (
             /* ── MAIN RADAR VIEW ── */
             <div className="space-y-1 pb-32">

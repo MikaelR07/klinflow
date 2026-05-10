@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, MapPin, Scale, Wallet, 
   CheckCircle2, Navigation, Phone, Clock,
-  PackageCheck, Info, ShieldCheck, TrendingUp, ChevronDown
+  PackageCheck, Info, ShieldCheck, TrendingUp, ChevronDown, ArrowRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAgentStore, useAuthStore, supabase } from '@cleanflow/core';
+import { useAgentStore, useAuthStore, supabase, getThumbnailUrl } from '@cleanflow/core';
 import { toast } from 'sonner';
 
 export default function MyTrades() {
@@ -102,7 +102,7 @@ export default function MyTrades() {
   return (
     <div className="animate-fade-in bg-[#F2F3F4] dark:bg-slate-900 pb-10 relative px-2 min-h-screen">
       <div className="w-full">
-        {/* ── SUMMARY SECTION (NOW FULL WIDTH) ── */}
+        {/* ── SUMMARY SECTION ── */}
         <div className="bg-slate-900 dark:bg-slate-950 p-4 pt-6 pb-4 text-white mb-6 mt-4 relative overflow-hidden shadow-xl shadow-slate-900/10 rounded-[2.5rem]">
            <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-3xl" />
            <div className="relative z-10 flex items-center justify-between">
@@ -124,17 +124,17 @@ export default function MyTrades() {
         <div className="px-4">
           <AnimatePresence mode="wait">
             {expandedId ? (
-              /* ── FOCUSED TRADE DETAIL (Immersive Kilimall Style) ── */
               <motion.div 
                 key="trade-focus"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar"
+                className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-24"
               >
                 {(() => {
                   const trade = activeTrades.find(t => t.id === expandedId);
-                  const photoUrl = trade?.photo_url || trade?.listing?.photo;
+                  if (!trade) return null;
+                  const photoUrl = trade.photo_url || trade.listing?.photo;
                   
                   return (
                     <>
@@ -144,12 +144,11 @@ export default function MyTrades() {
                           <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800">
-                            <div className="text-6xl mb-4">{trade?.listing?.emoji || '♻️'}</div>
+                            <div className="text-6xl mb-4">{trade.listing?.emoji || '♻️'}</div>
                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Asset Visual Unavailable</p>
                           </div>
                         )}
 
-                        {/* Floating Back Button - Now with Notch Support */}
                         <button 
                           onClick={() => setExpandedId(null)}
                           style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
@@ -174,12 +173,11 @@ export default function MyTrades() {
                           <div className="text-right">
                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Status</p>
                              <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter">
-                                {trade.status.replace('_', ' ')}
+                                {trade.status?.replace('_', ' ')}
                              </div>
                           </div>
                         </div>
 
-                        {/* Stats Grid */}
                         <div className="grid grid-cols-2 gap-3">
                           <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Volume</p>
@@ -204,7 +202,6 @@ export default function MyTrades() {
                            </div>
                         </div>
 
-                        {/* Action Hub */}
                         <div className="pt-4">
                            <button 
                               onClick={() => handleStartMission(trade)}
@@ -220,13 +217,12 @@ export default function MyTrades() {
                               Return to Radar
                            </button>
                         </div>
-                      </>
-                    );
-                  })()}
-              </div>
-            </motion.div>
+                      </div>
+                    </>
+                  );
+                })()}
+              </motion.div>
             ) : (
-              /* ── TRADES LIST ── */
               <motion.div
                 key="list-view"
                 initial={{ opacity: 0 }}

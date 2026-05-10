@@ -209,7 +209,7 @@ export default function MyOffers() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[100] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar"
+              className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-20"
             >
               {/* Edge-to-Edge Hero Image */}
               <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
