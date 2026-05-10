@@ -96,12 +96,11 @@ export default function SettingsMenu() {
       {/* Logout */}
       <button 
         onClick={async () => {
-          const tid = toast.loading('Securing your session and signing out...');
           try {
             await logout();
-            toast.success('You have been logged out', { id: tid });
+            toast.success('Logged Out', { description: 'You have been securely signed out.' });
           } catch (err) {
-            toast.error('Logout completed with local cleanup', { id: tid });
+            // Local state is already cleared by logout()
           } finally {
             navigate('/login', { replace: true });
           }

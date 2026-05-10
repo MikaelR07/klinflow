@@ -5,11 +5,11 @@ import { useState, useEffect } from 'react';
 import { 
   Package, Clock, CheckCircle2, Truck, Star, XCircle, 
   CalendarClock, Zap, HandCoins, Home, ArrowRight, Store, 
-  Info, ShieldCheck, MapPin, ChevronDown
+  Info, ShieldCheck, MapPin, ChevronDown, ArrowLeft
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useBookingStore, WASTE_TYPES, supabase } from '@cleanflow/core';
+import { useBookingStore, WASTE_TYPES, supabase, getThumbnailUrl } from '@cleanflow/core';
 import { EmptyState, AssetJourney, AssetBadge } from '@cleanflow/ui';
 import { toast } from 'sonner';
 

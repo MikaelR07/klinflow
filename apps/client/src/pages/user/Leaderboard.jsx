@@ -137,6 +137,7 @@ function SellerLeaderboard() {
   const profileId = useAuthStore(s => s.profile?.id);
   const [topSellers, setTopSellers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -269,9 +270,18 @@ function SellerLeaderboard() {
                 <div className="flex items-center justify-between mb-2 px-2">
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Merchant Directory</span>
                 </div>
-                {topSellers.slice(3).map((user) => (
+                {topSellers.slice(3, visibleCount).map((user) => (
                   <SellerListItem key={user.id} user={user} />
                 ))}
+                
+                {topSellers.length > visibleCount && (
+                  <button 
+                    onClick={() => setVisibleCount(prev => prev + 20)}
+                    className="mt-4 py-4 w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 active:scale-95 transition-all"
+                  >
+                    Load More Rankings
+                  </button>
+                )}
               </div>
             )}
           </>
@@ -292,6 +302,7 @@ export default function Leaderboard() {
 
   const [topUsers, setTopUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -427,9 +438,18 @@ export default function Leaderboard() {
             {topUsers.length > 3 && (
               <div className="flex flex-col gap-2 pb-20">
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2 mb-2">Top Recyclers List</p>
-                {topUsers.slice(3).map((user) => (
+                {topUsers.slice(3, visibleCount).map((user) => (
                   <ResidentListItem key={user.id} user={user} />
                 ))}
+
+                {topUsers.length > visibleCount && (
+                  <button 
+                    onClick={() => setVisibleCount(prev => prev + 20)}
+                    className="mt-4 py-4 w-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 active:scale-95 transition-all"
+                  >
+                    Load More Rankings
+                  </button>
+                )}
               </div>
             )}
           </>
