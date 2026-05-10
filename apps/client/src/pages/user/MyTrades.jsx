@@ -3,14 +3,14 @@
  */
 import { useState, useEffect } from 'react';
 import { 
-  Package, Clock, CheckCircle2, Truck, Star, XCircle, 
-  CalendarClock, Zap, HandCoins, Home, ArrowRight, Store, 
-  Info, ShieldCheck, MapPin, ChevronDown, ArrowLeft
+  Clock, CheckCircle2, Truck, XCircle,
+  CalendarClock, Zap, HandCoins, ArrowRight, Store,
+  Info, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBookingStore, WASTE_TYPES, supabase, getThumbnailUrl } from '@cleanflow/core';
-import { EmptyState, AssetJourney, AssetBadge } from '@cleanflow/ui';
+import { EmptyState } from '@cleanflow/ui';
 import { toast } from 'sonner';
 
 const statusConfig = {
@@ -99,7 +99,8 @@ export default function MyTrades() {
   const navigate = useNavigate();
   const { bookings, fetchBookings, cancelBooking, clearBookingHistory, rescheduleBooking } = useBookingStore();
   const [activeTab, setActiveTab] = useState('Active');
-  const [expandedId, setExpandedId] = useState(null);
+  const [expandedId, setExpandedId] = useState(null);       // For active trade full-screen
+  const [expandedSettledId, setExpandedSettledId] = useState(null); // For settled dropdown
   const [reschedulingTrade, setReschedulingTrade] = useState(null);
   const [newDate, setNewDate] = useState(new Date().toLocaleDateString('en-CA'));
   const [newTime, setNewTime] = useState('09:00');
@@ -109,12 +110,15 @@ export default function MyTrades() {
     fetchBookings();
   }, []);
 
-  const filteredBookings = bookings.filter((b) => {
-    if (activeTab === 'Active') return b.status === 'pending' || b.status === 'confirmed' || b.status === 'scheduled' || b.status === 'in-progress' || b.status === 'counter_offer_pending';
-    if (activeTab === 'Settled') return b.status === 'completed';
-    if (activeTab === 'Cancelled') return b.status === 'cancelled';
-    return true;
-  });
+  const filteredBookings = bookings
+    .filter((b) => {
+      if (activeTab === 'Active') return b.status === 'pending' || b.status === 'confirmed' || b.status === 'scheduled' || b.status === 'in-progress' || b.status === 'counter_offer_pending';
+      if (activeTab === 'Settled') return b.status === 'completed';
+      if (activeTab === 'Cancelled') return b.status === 'cancelled';
+      return true;
+    })
+    // ── SAFETY: ENSURE NO REDUNDANT/DUPLICATE CARDS ──
+    .filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
 
   const handleCancel = (id) => {
     cancelBooking(id);
@@ -167,7 +171,7 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-20 px-2 bg-[#F2F3F4] dark:bg-slate-900">
+    <div className="space-y-6 animate-fade-in pb-6 px-2 bg-[#F2F3F4] dark:bg-slate-900">
       <div className="flex items-center justify-center px-1">
         <div className="space-y-1">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none text-center">Trade History</h1>
@@ -177,12 +181,15 @@ export default function MyTrades() {
       {/* Tabs */}
       <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
         {TABS.map(tab => {
-          const tabCount = bookings.filter(b => {
-             if (tab === 'Active') return b.status === 'pending' || b.status === 'confirmed' || b.status === 'scheduled' || b.status === 'in-progress' || b.status === 'counter_offer_pending';
-             if (tab === 'Settled') return b.status === 'completed';
-             if (tab === 'Cancelled') return b.status === 'cancelled';
-             return false;
-          }).length;
+          const tabCount = bookings
+            .filter(b => {
+              if (tab === 'Active') return b.status === 'pending' || b.status === 'confirmed' || b.status === 'scheduled' || b.status === 'in-progress' || b.status === 'counter_offer_pending';
+              if (tab === 'Settled') return b.status === 'completed';
+              if (tab === 'Cancelled') return b.status === 'cancelled';
+              return false;
+            })
+            .filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+            .length;
           
           return (
             <button
@@ -203,114 +210,106 @@ export default function MyTrades() {
       <div className="space-y-4">
         <AnimatePresence mode="wait">
           {expandedId ? (
-            <motion.div 
+            /* ── FULL-SCREEN ACTIVE TRADE DETAIL ── */
+            <motion.div
               key="trade-focus"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-24"
+              className="fixed top-0 left-0 right-0 bottom-[64px] z-[50] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-10"
             >
-              <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-900 relative overflow-hidden">
-                {(() => {
-                  const b = bookings.find(x => x.id === expandedId);
-                  const photoUrl = b?.photo_url || b?.photoUrl || b?.photo;
-                  return photoUrl ? (
-                    <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800">
-                      <div className="text-6xl mb-4">{WASTE_TYPES?.find(w => w.slug === (b?.waste_type || b?.wasteType))?.icon || '♻️'}</div>
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Asset Visual Unavailable</p>
+              {(() => {
+                const b = bookings.find(x => x.id === expandedId);
+                if (!b) return null;
+                const materialVal = b.waste_type || b.wasteType;
+                const waste = WASTE_TYPES?.find((w) => w.slug === materialVal || w.id === materialVal);
+                const status = statusConfig[b.status] || statusConfig['pending'];
+                return (
+                  <>
+                    <div className="bg-slate-900 w-full aspect-[4/3] relative overflow-hidden">
+                      {(() => {
+                        const photoUrl = b?.photo_url || b?.photoUrl || b?.photo;
+                        return photoUrl ? (
+                          <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800">
+                            <div className="text-6xl mb-3">{waste?.icon || '♻️'}</div>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">No photo attached</p>
+                          </div>
+                        );
+                      })()}
+                      <button
+                        onClick={() => setExpandedId(null)}
+                        style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+                        className="absolute left-5 p-2.5 bg-black/40 rounded-full text-white active:scale-95 transition-all"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                      </button>
                     </div>
-                  );
-                })()}
 
-                <div 
-                  style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
-                  className="absolute left-6 z-20 flex items-center gap-3"
-                >
-                  <button 
-                    onClick={() => setExpandedId(null)}
-                    className="p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
-                  >
-                    <ArrowLeft className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-10 pb-10 space-y-6 rounded-t-xl -mt-6 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
-                {(() => {
-                  const b = bookings.find(x => x.id === expandedId);
-                  if (!b) return null;
-                  const materialVal = b.waste_type || b.wasteType;
-                  const waste = WASTE_TYPES?.find((w) => w.slug === materialVal || w.id === materialVal);
-                  const status = statusConfig[b.status] || statusConfig['pending'];
-                  
-                  return (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-2">
+                    <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-8 pb-10 space-y-5 rounded-t-3xl mt-10 relative z-10">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="bg-white dark:bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 w-fit">
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
+                          <p className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
                             {waste?.label || formatMaterial(materialVal)}
-                          </h2>
-                          <div className={`w-fit px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${status.color}`}>
+                          </p>
+                          <div className={`mt-1.5 w-fit px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${status.color}`}>
                             {status.label}
                           </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade ID</p>
+                        <div className="bg-white dark:bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 w-fit text-right">
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade ID</p>
                           <p className="text-xs font-bold text-slate-900 dark:text-white font-mono">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
                         </div>
                       </div>
 
-                      {/* Stats Grid */}
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
-                          <p className="text-lg font-black text-slate-900 dark:text-white">{b.actual_weight_kg || b.bags || 0} KG</p>
+                      <div className="flex gap-2">
+                        <div className="bg-white dark:bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 flex-1 text-center">
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
+                          <p className="text-sm font-black text-slate-900 dark:text-white">{b.actual_weight_kg || b.bags || 0} KG</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Settled Amount</p>
-                          <p className="text-lg font-black text-emerald-600">KSh {(b.total_price || b.amount || 0).toLocaleString()}</p>
+                        <div className="bg-white dark:bg-slate-800 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-700 flex-1 text-center">
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Value</p>
+                          <p className="text-sm font-black text-emerald-600">KSh {(b.total_price || b.amount || 0).toLocaleString()}</p>
                         </div>
                       </div>
 
-                      {/* Details */}
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
-                          <div className="flex items-center gap-3">
-                            <MapPin className="w-4 h-4 text-indigo-500" />
-                            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Location</span>
-                          </div>
-                          <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">{b.estate || 'Nairobi Hub'}</span>
-                        </div>
-                        <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
-                          <div className="flex items-center gap-3">
-                            <CalendarClock className="w-4 h-4 text-indigo-500" />
-                            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Completed</span>
-                          </div>
-                          <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">
-                            {new Date(b.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
+                      <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scheduled</span>
+                          <span className="text-xs font-bold text-slate-900 dark:text-white">
+                            {b.date || new Date(b.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
                         </div>
+                        {b.time && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Time</span>
+                            <span className="text-xs font-bold text-slate-900 dark:text-white">{b.time}</span>
+                          </div>
+                        )}
+                        {b.estate && (
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Location</span>
+                            <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">{b.estate}</span>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Action Buttons */}
-                      <div className="pt-4">
-                        <button 
-                          onClick={() => setExpandedId(null)}
-                          className="w-full py-4 bg-slate-900 dark:bg-slate-800 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] active:scale-95 transition-all shadow-xl shadow-slate-900/20"
-                        >
-                          Return to History
-                        </button>
-                      </div>
-                    </>
-                  );
-                })()}
-              </div>
+                      <button
+                        onClick={() => setExpandedId(null)}
+                        className="w-full py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/50 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all shadow-sm"
+                      >
+                        Back to Trades
+                      </button>
+                    </div>
+                  </>
+                );
+              })()}
             </motion.div>
           ) : (
-            /* ── MAIN LIST VIEW ── */
-            <motion.div 
+          /* ── MAIN LIST VIEW ── */
+          <motion.div
               key="list-view"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -346,7 +345,78 @@ export default function MyTrades() {
                     const materialVal = b.waste_type || b.wasteType;
                     const waste = WASTE_TYPES?.find?.((w) => w.slug === materialVal || w.id === materialVal);
                     const status = statusConfig[b.status] || statusConfig['pending'];
+                    const isSettledOpen = expandedSettledId === b.id;
 
+                    {/* ── SETTLED TAB: Dropdown accordion card ── */}
+                    if (activeTab === 'Settled') {
+                      return (
+                        <div key={b.id} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                          {/* Header row - always visible */}
+                          <button
+                            onClick={() => setExpandedSettledId(isSettledOpen ? null : b.id)}
+                            className="w-full p-4 flex items-center gap-3 active:bg-slate-50 dark:active:bg-slate-800 transition-colors"
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-lg shrink-0">
+                              {waste?.icon || '♻️'}
+                            </div>
+                            <div className="flex-1 min-w-0 text-left">
+                              <h3 className="text-xs font-semibold text-slate-900 dark:text-white leading-none uppercase tracking-tight truncate">
+                                {waste?.label || formatMaterial(materialVal)}
+                              </h3>
+                              <p className="text-[10px] font-semibold text-slate-400 mt-1 uppercase tracking-widest">
+                                {new Date(b.updated_at || b.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
+                              </p>
+                            </div>
+                            <div className="text-right shrink-0 mr-2">
+                              <p className="text-sm font-bold text-emerald-600 tracking-tighter leading-none">
+                                KSh {(b.total_price || b.amount || 0).toLocaleString()}
+                              </p>
+                            </div>
+                            {isSettledOpen
+                              ? <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" />
+                              : <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />}
+                          </button>
+
+                          {/* Dropdown detail row */}
+                          <AnimatePresence>
+                            {isSettledOpen && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                              >
+                                <div className="px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
+                                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade ID</p>
+                                      <p className="text-xs font-bold text-slate-900 dark:text-white font-mono">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
+                                    </div>
+                                    <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
+                                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
+                                      <p className="text-xs font-bold text-slate-900 dark:text-white">{b.actual_weight_kg || b.bags || 0} KG</p>
+                                    </div>
+                                    <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl p-3">
+                                      <p className="text-[9px] font-bold text-emerald-600/70 uppercase tracking-widest mb-1">Settled Amount</p>
+                                      <p className="text-xs font-bold text-emerald-600">KSh {(b.total_price || b.amount || 0).toLocaleString()}</p>
+                                    </div>
+                                    <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
+                                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Completed</p>
+                                      <p className="text-xs font-bold text-slate-900 dark:text-white">
+                                        {new Date(b.updated_at || b.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    }
+
+                    {/* ── ACTIVE / CANCELLED TAB: Original card ── */}
                     return (
                       <div key={b.id} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm transition-all">
                         <button 
@@ -371,7 +441,7 @@ export default function MyTrades() {
                               KSh {(b.total_price || b.amount || 0).toLocaleString()}
                             </p>
                             <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                              {b.actual_weight_kg || b.bags || 0}kg Settled
+                              {b.actual_weight_kg || b.bags || 0}kg
                             </p>
                           </div>
                           <ArrowRight className="w-4 h-4 text-slate-300 ml-1" />
