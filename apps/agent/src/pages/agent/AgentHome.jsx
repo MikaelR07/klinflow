@@ -368,7 +368,7 @@ export default function AgentHome() {
         </button>
 
         <button
-          onClick={() => navigate('/analytics')}
+          onClick={() => navigate('/earnings')}
           className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm group"
         >
           <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
