@@ -175,7 +175,10 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950/30 px-4 py-8">
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-4 py-8 relative overflow-hidden">
+      {/* Background Decor (Matched to Welcome Page) */}
+      <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
       <div className="max-w-md w-full mx-auto animate-slide-up">
         
         {/* Header */}

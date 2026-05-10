@@ -133,10 +133,10 @@ export default function Register() {
 
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950/30 px-4 py-12 relative transition-colors duration-500 overflow-x-hidden">
-      {/* Visual Accents */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-green-400 to-secondary" />
-      <div className={`absolute -top-24 -left-24 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl opacity-50`} />
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-4 py-12 relative transition-colors duration-500 overflow-x-hidden">
+      {/* Background Decor (Matched to Welcome Page) */}
+      <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
       
       <div className="max-w-md w-full mx-auto relative z-10 animate-fade-in">
         
