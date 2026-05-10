@@ -105,7 +105,7 @@ export default function AgentSellStock() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F4F4] dark:bg-slate-900 pb-10">
+    <div className="animate-fade-in bg-[#F4F4F4] dark:bg-slate-900 pb-10">
       {/* ── HEADER ── */}
       <div className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-4 sticky top-0 z-50">
         <div className="flex items-center gap-3">

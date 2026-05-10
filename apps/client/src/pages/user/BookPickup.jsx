@@ -339,6 +339,7 @@ export default function BookPickup() {
                             'organic': '/material-categories/organic-waste.webp',
                             'general': '/material-categories/general-waste.webp',
                             'recyclable': '/material-categories/plastic.jpg',
+                            'recyclables': '/material-categories/plastic.jpg',
                             'glass': '/material-categories/glasses.webp',
                             'appliances': '/material-categories/bulky-item.webp',
                             'bulky': '/material-categories/bulky-item.webp',

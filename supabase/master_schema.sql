@@ -229,6 +229,7 @@ ALTER TABLE public.marketplace_listings ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Anyone views active listings" ON public.marketplace_listings FOR SELECT USING (status = 'active' OR seller_id = auth.uid());
 CREATE POLICY "Users post listings" ON public.marketplace_listings FOR INSERT WITH CHECK (auth.uid() = seller_id);
 CREATE POLICY "Sellers update listings" ON public.marketplace_listings FOR UPDATE USING (auth.uid() = seller_id);
+CREATE POLICY "Sellers delete listings" ON public.marketplace_listings FOR DELETE USING (auth.uid() = seller_id);
 
 ALTER TABLE public.marketplace_orders ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Buyers and Sellers view orders" ON public.marketplace_orders FOR SELECT USING (

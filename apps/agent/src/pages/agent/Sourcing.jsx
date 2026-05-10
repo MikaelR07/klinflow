@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, MapPin, Scale, TrendingUp, 
   ChevronRight, MessageSquareQuote, Check,
-  ArrowLeft, Clock, Package
+  ArrowLeft, Clock, Package, CheckCircle2, Info
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore, useAuthStore, supabase, getThumbnailUrl } from '@cleanflow/core';
@@ -87,7 +87,7 @@ export default function Sourcing() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 pb-32 relative">
+    <div className="animate-fade-in bg-[#F2F3F4] dark:bg-slate-900 relative px-2">
       <div className="w-full">
         
         {/* ── STICKY RADAR HEADER (UNIFIED & FULL-BLEED) ── */}
@@ -136,9 +136,9 @@ export default function Sourcing() {
         <main>
           {selectedId && selectedListing ? (
             /* ── FOCUSED SOURCING VIEW (Kilimall Style) ── */
-            <div className="animate-fade-in -mx-2 -mt-5">
+            <div className="animate-fade-in -mx-6 -mt-5">
                {/* Edge-to-Edge Hero Image */}
-               <div className="w-full aspect-[4/3] bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
+               <div className="w-full aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
                  <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
                    {(selectedListing.photos?.length > 0 ? selectedListing.photos : [selectedListing.photo]).map((imgUrl, idx) => (
                      <div key={idx} className="flex-none w-full h-full snap-start">
@@ -153,19 +153,15 @@ export default function Sourcing() {
                    ))}
                  </div>
                  
-                 {/* Floating Back Button */}
+                 {/* Overlaid Back Button (Matches MyOffers) */}
                  <button 
                    onClick={() => setSelectedId(null)}
-                   className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all z-10"
+                   className="absolute top-8 left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
                  >
-                   <ArrowLeft className="w-4 h-4" />
-                   <span className="text-xs font-semibold uppercase tracking-widest">Back</span>
+                   <ArrowLeft className="w-5 h-5" />
                  </button>
 
-                 {/* Grade Badge */}
-                 <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/40 backdrop-blur-xl text-white rounded-full text-xs font-semibold uppercase tracking-[0.2em] z-10">
-                   Grade {selectedListing.grade || 'A'}
-                 </div>
+
 
                  {/* Photo Indicators */}
                  {(selectedListing.photos?.length > 1) && (
@@ -179,109 +175,153 @@ export default function Sourcing() {
                </div>
 
                {/* Content Sheet (Overlaps Image) */}
-               <div className="relative -mt-6 bg-[#F4F4F4] dark:bg-slate-950 rounded-t-2xl px-5 pt-6 pb-6 space-y-5">
+               <div className="relative -mt-6 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-xl px-3 pt-10 pb-10 space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
                  
-                 {/* Title & Seller */}
-                 <div>
-                   <h2 className="text-2xl font-semibold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">{selectedListing.material}</h2>
-                   <div className="flex items-center gap-2 mt-1.5">
-                     <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                       <Check className="w-3 h-3 text-emerald-600" />
-                     </div>
-                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{selectedListing.sellerName || 'Verified Merchant'}</p>
-                     <span className="text-xs text-slate-300">•</span>
-                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1">
-                       <MapPin className="w-3 h-3" /> {selectedListing.location}
-                     </p>
-                   </div>
-                 </div>
-
-                 {/* Stats Row */}
-                 <div className="grid grid-cols-3 gap-3">
-                   <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Ask Price</p>
-                     <p className="text-base font-semibold text-emerald-600">KSh {selectedListing.pricePerKg}</p>
-                     <p className="text-xs font-semibold text-slate-300 uppercase">Per KG</p>
-                   </div>
-                   <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Load</p>
-                     <p className="text-base font-semibold text-slate-700 dark:text-white">{selectedListing.quantity}</p>
-                     <p className="text-xs font-semibold text-slate-300 uppercase">KG Available</p>
-                   </div>
-                   <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Total Value</p>
-                     <p className="text-base font-semibold text-slate-700 dark:text-white">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
-                     <p className="text-xs font-semibold text-slate-300 uppercase">Est.</p>
-                   </div>
-                 </div>
-
-                 {/* Merchant Notes */}
-                 <div className="bg-white dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
-                   <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Merchant's Notes</h4>
-                   <p className="text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed">
-                     {selectedListing.description || "The seller has not provided additional notes for this material."}
-                   </p>
-                 </div>
-
-                 {/* Bid Section */}
-                 <div className="bg-white dark:bg-slate-800 p-5 rounded-[2rem] border-2 border-emerald-500/10 shadow-lg space-y-5">
-                   <div className="flex items-center gap-3">
-                     <div className="w-9 h-9 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-600">
-                       <MessageSquareQuote className="w-4 h-4" />
-                     </div>
-                     <h3 className="text-xs font-semibold text-slate-900 dark:text-white uppercase tracking-widest">Place Your Bid</h3>
-                   </div>
-
-                   <div className="grid grid-cols-2 gap-3">
+                 {/* Unified Material & Seller Card (Matches MyOffers) */}
+                 <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
+                   <div className="flex items-center justify-between">
                      <div>
-                       <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">Offer Price</label>
-                       <div className="relative">
-                          <input 
-                            type="number" 
-                            value={offerPrice}
-                            onChange={(e) => setOfferPrice(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 h-12 rounded-2xl px-4 text-sm font-semibold focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
-                          />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400">/KG</span>
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Type</p>
+                       <h2 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{selectedListing.material}</h2>
+                     </div>
+                     <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-700/50 px-2 py-1 rounded-lg border border-slate-100 dark:border-slate-700">
+                       <MapPin className="w-3.5 h-3.5 text-indigo-500" />
+                       <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest italic">{selectedListing.location}</span>
+                     </div>
+                   </div>
+                   <div className="h-px bg-slate-100 dark:bg-slate-700" />
+                   <div className="flex items-center justify-between">
+                     <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                         <Check className="w-4 h-4 text-emerald-600" />
+                       </div>
+                       <div>
+                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Merchant's Name</p>
+                         <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{selectedListing.sellerName || 'Verified Merchant'}</p>
                        </div>
                      </div>
-                     <div>
-                       <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">Quantity</label>
-                       <div className="relative">
-                          <input 
-                            type="number" 
-                            max={selectedListing.quantity}
-                            value={offerQty}
-                            onChange={(e) => setOfferQty(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 h-12 rounded-2xl px-4 text-sm font-semibold focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all"
-                          />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400">KG</span>
-                       </div>
+                     <div className="text-right">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Grade</p>
+                       <p className="text-sm font-black text-slate-900 dark:text-white italic">Grade {selectedListing.grade || 'A'}</p>
                      </div>
                    </div>
-
-                   <div className="flex items-center justify-between px-1">
-                     <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Estimated Total</span>
-                     <span className="text-sm font-semibold text-emerald-600">KSh {(parseFloat(offerPrice || 0) * parseFloat(offerQty || 0)).toLocaleString()}</span>
-                   </div>
-                   
-                   <button 
-                     onClick={handleMakeOffer}
-                     disabled={isLoading}
-                     className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-xs uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 active:scale-[0.97] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-                   >
-                     {isLoading ? 'Sending...' : (
-                       <>
-                         <Check className="w-5 h-5" /> Confirm & Send Bid
-                       </>
-                     )}
-                   </button>
                  </div>
+
+                 {/* Unified Listing Stats Card */}
+                 <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-4 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Merchant's Asking Price</p>
+                        <p className="text-base font-black text-slate-900 dark:text-white">
+                          KSh {selectedListing.pricePerKg} <span className="text-[10px] font-bold text-slate-400 ml-1">/KG</span>
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Value</p>
+                        <p className="text-base font-black text-emerald-600">
+                          KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="h-px bg-slate-100 dark:bg-slate-700" />
+
+                    <div className="flex items-center justify-between">
+                       <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
+                             <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                          </div>
+                          <div>
+                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Available Stock</p>
+                             <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{selectedListing.quantity} KG</p>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+
+                 {/* Merchant Notes Section */}
+                 {selectedListing.description && (
+                   <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                        <Info className="w-3.5 h-3.5" /> Merchant Notes
+                      </h4>
+                      <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
+                        "{selectedListing.description}"
+                      </p>
+                   </div>
+                 )}
+
+                 {/* Premium Bid Section */}
+                 <div className="bg-emerald-600 dark:bg-emerald-500/10 p-6 rounded-[2rem] border border-emerald-500/20 shadow-xl shadow-emerald-500/10 space-y-6">
+                    <div className="flex items-center justify-center gap-3">
+                       <div className="w-8 h-8 bg-white/20 dark:bg-emerald-400/20 rounded-full flex items-center justify-center">
+                          <MessageSquareQuote className="w-4 h-4 text-white dark:text-emerald-400" />
+                       </div>
+                       <h3 className="text-[10px] font-bold text-white dark:text-emerald-400 uppercase tracking-[0.2em]">Ready to negotiate?</h3>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest ml-1">My Price Offer</label>
+                        <div className="relative">
+                           <input 
+                             type="number" 
+                             value={offerPrice}
+                             onChange={(e) => setOfferPrice(e.target.value)}
+                             className="w-full bg-white/10 dark:bg-slate-900/50 border border-white/20 dark:border-slate-700 h-12 rounded-xl px-4 text-sm font-black text-white outline-none focus:ring-2 focus:ring-white/30 transition-all placeholder:text-white/40"
+                             placeholder="0.00"
+                           />
+                           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/50">/KG</span>
+                        </div>
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest ml-1">Total Weight</label>
+                        <div className="relative">
+                           <input 
+                             type="number" 
+                             max={selectedListing.quantity}
+                             value={offerQty}
+                             onChange={(e) => setOfferQty(e.target.value)}
+                             className="w-full bg-white/10 dark:bg-slate-900/50 border border-white/20 dark:border-slate-700 h-12 rounded-xl px-4 text-sm font-black text-white outline-none focus:ring-2 focus:ring-white/30 transition-all placeholder:text-white/40"
+                             placeholder="0"
+                           />
+                           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/50">KG</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-white/10 dark:border-emerald-500/10">
+                       <div className="flex items-center justify-between mb-4 px-1">
+                          <p className="text-[10px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest">Total Bid Value</p>
+                          <p className="text-base font-black text-white tracking-tighter">KSh {(parseFloat(offerPrice || 0) * parseFloat(offerQty || 0)).toLocaleString()}</p>
+                       </div>
+                       
+                       <button 
+                         onClick={handleMakeOffer}
+                         disabled={isLoading || !offerPrice || !offerQty}
+                         className="w-full py-4 bg-white text-emerald-600 dark:bg-emerald-500 dark:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                       >
+                         {isLoading ? 'Processing...' : (
+                           <>
+                             <CheckCircle2 className="w-5 h-5" /> Send Offer Now
+                           </>
+                         )}
+                       </button>
+                    </div>
+                 </div>
+
+                 {/* Dismiss Detail */}
+                 <button 
+                   onClick={() => setSelectedId(null)}
+                   className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-95 transition-all"
+                 >
+                    Return to Radar
+                 </button>
                </div>
             </div>
           ) : (
             /* ── MAIN RADAR VIEW ── */
-            <div className="space-y-1">
+            <div className="space-y-1 pb-32">
               {filteredListings.length === 0 ? (
                 <div className="py-20 text-center px-4">
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">

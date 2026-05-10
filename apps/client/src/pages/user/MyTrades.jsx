@@ -167,10 +167,10 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-20 px-2">
+    <div className="space-y-6 animate-fade-in pb-20 px-2 bg-[#F2F3F4] dark:bg-slate-900 min-h-screen">
       <div className="flex items-center justify-center px-1">
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight text-center">Trade History</h1>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none text-center">Trade History</h1>
         </div>
       </div>
 
@@ -200,161 +200,191 @@ export default function MyTrades() {
           );
         })}
       </div>
-
+      {/* ── CONTENT AREA ── */}
       <div className="space-y-4">
-        {filteredBookings.length === 0 ? (
-          <div className="pt-10">
-              <EmptyState 
-                icon={Store} 
-                title={`No ${activeTab.toLowerCase()} trades`} 
-                subtitle={
-                  activeTab === 'Settled' ? "No settled trades in your ledger yet." : 
-                  activeTab === 'Active' ? "You have no active recyclable postings." :
-                  "Your cancelled history will appear here."
-                } 
-              />
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {(activeTab === 'Cancelled' || activeTab === 'Settled') && (
-              <div className="flex justify-end mb-2 px-1">
-                <button 
-                  onClick={() => handleClearHistory(activeTab === 'Settled' ? 'completed' : 'cancelled')}
-                  className="text-xs font-semibold text-rose-600 uppercase tracking-widest hover:underline px-4 py-2 bg-rose-50 dark:bg-rose-500/10 rounded-xl flex items-center gap-2 border border-rose-100 dark:border-rose-900/30"
-                >
-                  Clear History
-                </button>
-              </div>
-            )}
-            
-            {filteredBookings.map((b) => {
-              const materialVal = b.waste_type || b.wasteType;
-              const waste = WASTE_TYPES?.find?.((w) => w.slug === materialVal || w.id === materialVal);
-              const bType = b.booking_type || b.bookingType || '';
-              const isPickup = bType === 'pickup' || bType === 'marketplace_pickup' || b.logisticsMode === 'pickup';
-              const isExpanded = expandedId === b.id;
+        <AnimatePresence mode="wait">
+          {expandedId ? (
+            /* ── FOCUSED TRADE DETAIL ── */
+            <motion.div 
+              key="trade-focus"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              className="-mx-4 -mt-7"
+            >
+              {/* Edge-to-Edge Hero Image */}
+              <div className="w-full aspect-square bg-slate-900 relative overflow-hidden">
+                {(() => {
+                  const b = bookings.find(x => x.id === expandedId);
+                  const photoUrl = b?.photo_url || b?.photoUrl || b?.photo;
+                  return photoUrl ? (
+                    <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800">
+                      <div className="text-6xl mb-4">{WASTE_TYPES?.find(w => w.slug === (b?.waste_type || b?.wasteType))?.icon || '♻️'}</div>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Asset Visual Unavailable</p>
+                    </div>
+                  );
+                })()}
 
-              // Context-aware status: marketplace trades that are 'pending' mean the agent hasn't picked up yet
-              let status = statusConfig[b.status] || statusConfig['pending'];
-              if (b.is_market_trade && b.status === 'pending') {
-                status = { label: 'Awaiting Pickup', color: 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400', icon: Truck };
-              }
-
-              return (
-                <div key={b.id} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm transition-all">
-                  
-                  {/* ── COMPACT ROW (Always Visible) ── */}
+                {/* Overlaid Header */}
+                <div className="absolute top-8 left-6 z-20 flex items-center gap-3">
                   <button 
-                    onClick={() => setExpandedId(isExpanded ? null : b.id)}
-                    className="w-full p-4 flex items-center gap-3 active:bg-slate-50 dark:active:bg-slate-800 transition-colors"
+                    onClick={() => setExpandedId(null)}
+                    className="p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xl shrink-0 border border-slate-100 dark:border-slate-700">
-                      {waste?.icon || '♻️'}
-                    </div>
-                    <div className="flex-1 min-w-0 text-left">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-xs font-semibold text-slate-900 dark:text-white leading-none uppercase tracking-tight truncate">
-                          {waste?.label || formatMaterial(materialVal)}
-                        </h3>
-                        <div className={`px-1.5 py-0.5 rounded-full text-[7px] font-semibold uppercase tracking-widest shrink-0 ${status.color}`}>
-                          {status.label}
-                        </div>
-                      </div>
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">
-                        {b.actual_weight_kg || b.actualWeightKg || b.bags || b.weightKg || b.quantity || 0}kg
-                      </p>
-                    </div>
-                    <div className="text-right shrink-0 mr-1">
-                      {b.status === 'counter_offer_pending' ? (
-                        <>
-                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest line-through">
-                            KSh {(b.total_price || b.totalPrice || b.amount || 0).toLocaleString()}
-                          </p>
-                          <p className="text-sm font-semibold text-amber-500 tracking-tighter leading-none font-mono mt-0.5 animate-pulse">
-                            KSh {(b.counter_offer_amount || 0).toLocaleString()}
-                          </p>
-                        </>
-                      ) : (
-                        <p className="text-sm font-semibold text-emerald-600 tracking-tighter leading-none font-mono">
-                          KSh {(b.total_price || b.totalPrice || b.amount || 0).toLocaleString()}
-                        </p>
-                      )}
-                    </div>
-                    <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                    <ArrowLeft className="w-5 h-5" />
                   </button>
+                </div>
+              </div>
 
-                  {/* ── EXPANDED DETAILS (Dropdown) ── */}
-                  {isExpanded && (
-                    <div className="px-4 pb-4 pt-0 space-y-3 border-t border-slate-100 dark:border-slate-800 animate-fade-in">
-                      {/* Logistics & ID */}
-                      <div className="flex items-center justify-between py-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 border border-slate-100 dark:border-slate-700">
-                            {isPickup ? <Truck className="w-4 h-4" /> : <Home className="w-4 h-4" />}
-                          </div>
-                          <div>
-                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Logistics</p>
-                            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">{isPickup ? 'Agent Dispatch' : 'Self Drop-off'}</p>
+              {/* Content Sheet */}
+              <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-10 pb-10 space-y-6 rounded-t-xl -mt-6 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+                {(() => {
+                  const b = bookings.find(x => x.id === expandedId);
+                  const materialVal = b.waste_type || b.wasteType;
+                  const waste = WASTE_TYPES?.find?.((w) => w.slug === materialVal || w.id === materialVal);
+                  const status = statusConfig[b.status] || statusConfig['pending'];
+                  
+                  return (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-2">
+                            {waste?.label || formatMaterial(materialVal)}
+                          </h2>
+                          <div className={`w-fit px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${status.color}`}>
+                            {status.label}
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Listing ID</p>
-                          <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 font-mono">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade ID</p>
+                          <p className="text-xs font-bold text-slate-900 dark:text-white font-mono">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
                         </div>
                       </div>
 
-                      {/* Time */}
-                      <div className="flex items-center justify-between py-2 px-1">
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Schedule</span>
-                        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{b.time_slot || b.time || 'ASAP'}</span>
+                      {/* Stats Grid */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
+                          <p className="text-lg font-black text-slate-900 dark:text-white">{b.actual_weight_kg || b.bags || 0} KG</p>
+                        </div>
+                        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Settled Amount</p>
+                          <p className="text-lg font-black text-emerald-600">KSh {(b.total_price || b.amount || 0).toLocaleString()}</p>
+                        </div>
                       </div>
 
-                      {/* Action Hub */}
-                      {activeTab === 'Active' && b.status === 'counter_offer_pending' ? (
-                        <div className="bg-amber-500/10 p-3 rounded-2xl border border-amber-500/20 mb-2 mt-1">
-                          <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-3 text-center">Open your Offers page to review the Agent's adjusted price proposal.</p>
+                      {/* Details */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
+                          <div className="flex items-center gap-3">
+                            <MapPin className="w-4 h-4 text-indigo-500" />
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Location</span>
+                          </div>
+                          <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">{b.estate || 'Nairobi Hub'}</span>
                         </div>
-                      ) : activeTab === 'Active' && (
-                        <div className="grid grid-cols-2 gap-2 pt-1">
-                          <button 
-                            onClick={(e) => { 
-                              e.stopPropagation(); 
-                              setReschedulingTrade(b);
-                              setNewDate(b.preferred_date || new Date().toLocaleDateString('en-CA'));
-                              // If it's a non-numeric time string like 'Any Time' or 'ASAP', clear it to show placeholder
-                              const currentTime = b.time_slot || '';
-                              const isValidTime = /^([01]\d|2[0-3]):?([0-5]\d)$/.test(currentTime);
-                              setNewTime(isValidTime ? currentTime : '');
-                            }}
-                            className="h-10 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl flex items-center justify-center gap-2 text-slate-900 dark:text-white text-xs font-semibold uppercase tracking-widest transition-all active:scale-95 border border-slate-100 dark:border-slate-700"
-                          >
-                            <CalendarClock className="w-3.5 h-3.5 text-indigo-500" /> Reschedule
-                          </button>
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); handleCancel(b.id); }}
-                            className="h-10 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-xl flex items-center justify-center gap-2 text-rose-600 text-xs font-semibold uppercase tracking-widest transition-all active:scale-95 border border-rose-100 dark:border-rose-900/10"
-                          >
-                             <XCircle className="w-3.5 h-3.5" /> Cancel
-                           </button>
+                        <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800">
+                          <div className="flex items-center gap-3">
+                            <CalendarClock className="w-4 h-4 text-indigo-500" />
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Completed</span>
+                          </div>
+                          <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">
+                            {new Date(b.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </span>
                         </div>
-                      )}
+                      </div>
 
-                      {activeTab === 'Settled' && (
-                        <div className="flex items-center justify-between pt-1">
-                           <div className="flex items-center gap-2 text-emerald-500">
-                              <CheckCircle2 className="w-3.5 h-3.5 fill-emerald-500/10" />
-                              <span className="text-xs font-semibold uppercase tracking-[0.2em]">Asset Settled</span>
-                           </div>
-                           <button className="text-xs font-semibold text-indigo-600 uppercase tracking-widest underline underline-offset-4">View Receipt</button>
-                        </div>
-                      )}
+                      {/* Action Buttons */}
+                      <div className="pt-4">
+                        <button 
+                          onClick={() => setExpandedId(null)}
+                          className="w-full py-4 bg-slate-900 dark:bg-slate-800 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] active:scale-95 transition-all shadow-xl shadow-slate-900/20"
+                        >
+                          Return to History
+                        </button>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </motion.div>
+          ) : (
+            /* ── MAIN LIST VIEW ── */
+            <motion.div 
+              key="list-view"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="space-y-3"
+            >
+              {filteredBookings.length === 0 ? (
+                <div className="pt-10">
+                    <EmptyState 
+                      icon={Store} 
+                      title={`No ${activeTab.toLowerCase()} trades`} 
+                      subtitle={
+                        activeTab === 'Settled' ? "No settled trades in your ledger yet." : 
+                        activeTab === 'Active' ? "You have no active recyclable postings." :
+                        "Your cancelled history will appear here."
+                      } 
+                    />
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {(activeTab === 'Cancelled' || activeTab === 'Settled') && (
+                    <div className="flex justify-end mb-2 px-1">
+                      <button 
+                        onClick={() => handleClearHistory(activeTab === 'Settled' ? 'completed' : 'cancelled')}
+                        className="text-xs font-semibold text-rose-600 uppercase tracking-widest hover:underline px-4 py-2 bg-rose-50 dark:bg-rose-500/10 rounded-xl flex items-center gap-2 border border-rose-100 dark:border-rose-900/30"
+                      >
+                        Clear History
+                      </button>
                     </div>
                   )}
+                  
+                  {filteredBookings.map((b) => {
+                    const materialVal = b.waste_type || b.wasteType;
+                    const waste = WASTE_TYPES?.find?.((w) => w.slug === materialVal || w.id === materialVal);
+                    const status = statusConfig[b.status] || statusConfig['pending'];
+
+                    return (
+                      <div key={b.id} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm transition-all">
+                        <button 
+                          onClick={() => setExpandedId(b.id)}
+                          className="w-full p-4 flex items-center gap-3 active:bg-slate-50 dark:active:bg-slate-800 transition-colors"
+                        >
+                          <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xl shrink-0 border border-slate-100 dark:border-slate-700">
+                            {waste?.icon || '♻️'}
+                          </div>
+                          <div className="flex-1 min-w-0 text-left">
+                            <div className="flex items-center gap-2">
+                              <h3 className="text-xs font-semibold text-slate-900 dark:text-white leading-none uppercase tracking-tight truncate">
+                                {waste?.label || formatMaterial(materialVal)}
+                              </h3>
+                            </div>
+                            <div className={`mt-1.5 w-fit px-1.5 py-0.5 rounded-full text-[7px] font-semibold uppercase tracking-widest ${status.color}`}>
+                              {status.label}
+                            </div>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="text-sm font-black text-slate-900 dark:text-white tracking-tighter leading-none font-mono">
+                              KSh {(b.total_price || b.amount || 0).toLocaleString()}
+                            </p>
+                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                              {b.actual_weight_kg || b.bags || 0}kg Settled
+                            </p>
+                          </div>
+                          <ArrowRight className="w-4 h-4 text-slate-300 ml-1" />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
-        )}
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* ── RESCHEDULE MODAL ── */}

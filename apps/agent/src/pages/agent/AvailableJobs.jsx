@@ -117,24 +117,27 @@ export default function AvailableJobs() {
       : rejectedJobs;
 
   return (
-    <div className="min-h-screen pb-32">
+    <div className="animate-fade-in pb-10 bg-[#F2F3F4] dark:bg-slate-900 min-h-screen px-2">
       {/* ── HEADER TERMINAL (UNIFIED) ── */}
       {!selectedJob && (
-        <div className="px-3 pt-3 pb-1 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 dark:border-slate-800">
+        <div className="px-3 pb-1 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3 mb-3">
             <button 
               onClick={() => navigate(-1)} 
-              className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 active:scale-95 transition-all shadow-sm"
+              className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 active:scale-95 transition-all"
             >
-              <ArrowLeft className="w-4 h-4 text-slate-600 dark:text-slate-400" />
+              <ArrowLeft className="w-5 h-5 dark:text-white" />
             </button>
-            <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 rounded-xl px-4 py-2.5 border border-slate-100 dark:border-slate-800 flex items-center gap-2">
-              <RefreshCw className={`w-3.5 h-3.5 text-slate-300 ${isLoadingJobs ? 'animate-spin' : ''}`} />
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Live Missions Radar</p>
+            <div className="flex-1 text-center">
+              <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none">Available Missions</h1>
+            </div>
+            <div className="w-9 h-9 flex items-center justify-center">
+              <RefreshCw className={`w-4 h-4 text-slate-300 ${isLoadingJobs ? 'animate-spin' : ''}`} />
             </div>
           </div>
 
-          <div className="flex items-center justify-between px-1">
+          {/* Tabs */}
+          <div className="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200/50 dark:border-slate-800/50 mb-1">
             {[
               { id: 'available', label: 'Requested', count: availableJobs.length },
               { id: 'active', label: 'Accepted', count: activeJobs.length },
@@ -143,22 +146,21 @@ export default function AvailableJobs() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative pb-2.5 text-xs font-black uppercase tracking-[0.15em] transition-all flex-1 ${
-                  activeTab === tab.id ? 'text-indigo-600' : 'text-slate-400'
+                className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                  activeTab === tab.id 
+                    ? 'bg-white dark:bg-slate-800 shadow-sm text-indigo-600' 
+                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
                 }`}
               >
-                <div className="flex items-center justify-center gap-1.5">
-                  <span className="whitespace-nowrap">{tab.label}</span>
-                  {tab.count > 0 && (
-                    <span className={`text-[8px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${
-                      activeTab === tab.id ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
-                    }`}>
-                      {tab.count}
-                    </span>
-                  )}
-                </div>
-                {activeTab === tab.id && (
-                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 rounded-full" />
+                {tab.label}
+                {tab.count > 0 && (
+                  <span className={`px-1.5 py-0.5 text-xs font-semibold rounded-full transition-all ${
+                    activeTab === tab.id 
+                      ? 'bg-indigo-600 text-white scale-110 shadow-sm shadow-indigo-500/30' 
+                      : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                  }`}>
+                    {tab.count}
+                  </span>
                 )}
               </button>
             ))}
@@ -176,10 +178,10 @@ export default function AvailableJobs() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="-mx-2 -mt-5"
+              className="-mx-6 -mt-5"
             >
                {/* Edge-to-Edge Hero Image */}
-               <div className="relative w-full aspect-[4/3] bg-slate-200 dark:bg-slate-800 overflow-hidden">
+               <div className="relative w-full aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden">
                   <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
                     {(selectedJob.photos?.length > 0 
                       ? selectedJob.photos 
@@ -217,7 +219,7 @@ export default function AvailableJobs() {
                </div>
 
               {/* Content Sheet (Overlaps Image) */}
-              <div className="relative -mt-6 bg-slate-50 dark:bg-slate-900 rounded-t-[2rem] px-5 pt-6 pb-6 space-y-5">
+              <div className="relative -mt-6 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-xl px-3 pt-10 pb-10 space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
                 
                 {/* Title & Customer */}
                 <div>

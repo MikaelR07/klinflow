@@ -262,6 +262,26 @@ export const useMarketplaceStore = create(
         return mapped;
       },
 
+      // ── DELETE A LISTING (Withdraw from market) ──────────────────
+      deleteListing: async (id) => {
+        set({ isLoading: true });
+        const { error } = await supabase
+          .from('marketplace_listings')
+          .delete()
+          .eq('id', id);
+
+        if (error) {
+          set({ isLoading: false });
+          throw new Error(error.message);
+        }
+
+        set(state => ({
+          listings:   state.listings.filter(l => l.id !== id),
+          myListings: state.myListings.filter(l => l.id !== id),
+          isLoading:  false
+        }));
+      },
+
       // ── UPDATE LISTING STATUS ─────────────────────────────────────
       updateListingStatus: async (id, status) => {
         const { error } = await supabase

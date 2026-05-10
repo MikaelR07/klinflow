@@ -78,24 +78,24 @@ export default function ProfilePage() {
             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} disabled={uploading} />
           </label>
         </div>
-        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-3">Professional Photo</p>
+        <p className="text-xs text-slate-500 font-medium mt-3">Professional Photo</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
         
         {/* Basic Details */}
         <div className="card p-5 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-2 pb-2 border-b border-slate-100 dark:border-slate-800">Basic Information</h2>
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-white mb-2 pb-2 border-b border-slate-100 dark:border-slate-800">Basic Information</h2>
           <div>
-            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Full Name</label>
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Full Name</label>
             <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Phone Number <span className="lowercase text-xs text-slate-400">(Read-only)</span></label>
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Phone Number <span className="text-slate-400 font-normal">(Read-only)</span></label>
             <input type="tel" value={formData.phone} disabled className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-500 dark:text-slate-500 text-sm cursor-not-allowed opacity-70" />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Email (Optional)</label>
+            <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Email (Optional)</label>
             <input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="you@example.com" className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" />
           </div>
         </div>
@@ -113,7 +113,7 @@ export default function ProfilePage() {
           <div className="card p-5 space-y-4 bg-secondary/5 border-secondary/20">
              <h2 className="text-sm font-semibold text-secondary mb-2 pb-2 border-b border-secondary/20">Agent Logistics</h2>
              <div>
-              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Verified ID Number</label>
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5">Verified ID Number</label>
               <input type="text" value={formData.idNumber} disabled className="w-full px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-500 text-sm cursor-not-allowed opacity-70" />
             </div>
           </div>

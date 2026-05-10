@@ -204,7 +204,7 @@ export default function AgentWarehouse() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-24 min-h-screen pt-2">
+    <div className="space-y-6 animate-fade-in pb-10 pt-2">
       
       {/* ── HEADER ── */}
       <div className="flex items-center justify-between mb-4">
@@ -214,7 +214,7 @@ export default function AgentWarehouse() {
           </button>
           <div>
             <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">Warehouse Portal</h1>
-            <p className="text-xs text-primary font-semibold uppercase tracking-widest">
+            <p className="text-xs text-primary font-semibold">
               {profile?.agent_account_type === 'company_admin' ? 'Total Fleet Inventory' : 'Truck Load & Inventory'}
             </p>
           </div>
@@ -235,10 +235,10 @@ export default function AgentWarehouse() {
                      )}
                   </div>
                   <div>
-                     <h3 className="text-sm font-semibold text-slate-900 dark:text-white leading-none">
+                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white leading-none">
                        {profile?.agent_account_type === 'company_admin' ? 'Total Incoming Cargo' : 'Current Truck Load'}
                      </h3>
-                     <p className="text-xs text-slate-400 font-semibold mt-1 uppercase tracking-widest">
+                     <p className="text-xs text-slate-400 font-medium mt-1">
                        {profile?.agent_account_type === 'company_admin' ? 'Active across all drivers' : 'Ready for Drop-off'}
                      </p>
                   </div>
@@ -248,19 +248,19 @@ export default function AgentWarehouse() {
             <div className="columns-2 gap-3 mb-5 space-y-3">
                <div className="break-inside-avoid p-5 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
                   <div className="flex items-center gap-2 mb-2">
-                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                     <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Private Stockpile</p>
+                     <Package className="w-4 h-4 text-emerald-600" />
+                     <p className="text-xs font-semibold text-emerald-600">Private Stockpile</p>
                   </div>
-                  <p className="text-2xl font-bold text-slate-900 dark:text-white tracking-tighter">KSh {totalEstimatedValue.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-slate-900 dark:text-white">KSh {totalEstimatedValue.toLocaleString()}</p>
                </div>
                
                <div className="break-inside-avoid p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Live Weight</p>
+                  <p className="text-xs font-semibold text-slate-400 mb-1">Live Weight</p>
                   <p className="text-lg font-semibold text-slate-900 dark:text-white">{totalWeight.toFixed(1)} KG</p>
                </div>
 
                <div className="break-inside-avoid p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Verified Pickups</p>
+                  <p className="text-xs font-semibold text-slate-400 mb-1">Verified Pickups</p>
                   <p className="text-lg font-semibold text-slate-900 dark:text-white">{realAssets.length}</p>
                </div>
             </div>
@@ -269,15 +269,15 @@ export default function AgentWarehouse() {
               <>
                 {profile?.hub_transfer_pin ? (
                   <div className="p-6 bg-emerald-500 rounded-[2rem] text-center shadow-xl shadow-emerald-500/20 animate-bounce-in">
-                    <p className="text-xs font-semibold text-emerald-900 uppercase tracking-widest mb-2">Gate Verification PIN</p>
-                    <div className="text-5xl font-semibold text-white tracking-[0.2em]">{profile.hub_transfer_pin}</div>
+                    <p className="text-xs font-semibold text-emerald-900 mb-2">Gate Verification PIN</p>
+                    <div className="text-5xl font-semibold text-white">{profile.hub_transfer_pin}</div>
                     <p className="text-xs font-semibold text-emerald-100 mt-3">Show this code to the Hub Manager to transfer cargo.</p>
                   </div>
                 ) : (
                   <button 
                     onClick={handleDispatch}
                     disabled={realAssets.length === 0}
-                    className="w-full py-3 bg-emerald-600 text-white rounded-2xl font-semibold text-xs uppercase tracking-widest shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center disabled:opacity-50 disabled:active:scale-100"
+                    className="w-full py-3 bg-emerald-600 text-white rounded-2xl font-semibold text-sm shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center disabled:opacity-50 disabled:active:scale-100"
                   >
                     Notify hub and get check-in code
                   </button>
@@ -289,7 +289,7 @@ export default function AgentWarehouse() {
                <button 
                  onClick={handleTransferInventory}
                  disabled={isTransferring || realAssets.length === 0}
-                 className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-semibold text-xs uppercase tracking-[0.1em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                 className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-semibold text-sm shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                >
                  <CheckCircle2 className="w-5 h-5" />
                  RECEIVE ALL FLEET CARGO
@@ -301,7 +301,7 @@ export default function AgentWarehouse() {
 
 
       {/* ── DIRECT MARKETPLACE TRADE (NEW FEATURE) ── */}
-      <div className="bg-indigo-600 rounded-3xl p-6 shadow-xl shadow-indigo-600/20 relative overflow-hidden group border-2 border-indigo-400/30">
+      <div className="bg-indigo-600 rounded-3xl p-6 shadow-xl shadow-indigo-600/20 relative overflow-hidden group border border-indigo-400/30">
         <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4 group-hover:scale-110 transition-transform duration-500" />
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-6">
@@ -309,14 +309,14 @@ export default function AgentWarehouse() {
               <Tag className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h3 className="text-sm font-black text-white uppercase tracking-tight italic">Direct Trade Terminal</h3>
-              <p className="text-xs text-indigo-100 font-bold uppercase tracking-widest">Bypass the hub & sell to weavers</p>
+              <h3 className="text-lg font-semibold text-white">Sell Stock Terminal</h3>
+              <p className="text-xs text-indigo-100 font-medium">Bypass the hub & sell to weavers</p>
             </div>
           </div>
 
           <button 
             onClick={() => navigate('/warehouse/sell')}
-            className="w-full py-5 bg-white text-indigo-600 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
+            className="w-full py-5 bg-white text-indigo-600 rounded-2xl font-semibold text-sm shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
           >
             <PlusCircle className="w-5 h-5" />
             SELL STOCK DIRECTLY
@@ -327,14 +327,14 @@ export default function AgentWarehouse() {
       {/* ── DYNAMIC INVENTORY GRID ── */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400">Stocked Materials</h3>
-          <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full uppercase">Real-Time DB</span>
+          <h3 className="font-semibold text-sm text-slate-900 dark:text-white">Stocked Materials</h3>
+          <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">Real-Time DB</span>
         </div>
 
         {dynamicInventory.length === 0 ? (
           <div className="text-center py-10 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700">
             <Package className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest leading-relaxed">
+            <p className="text-xs font-semibold text-slate-500 leading-relaxed">
               Inventory Empty.<br/>No verified assets found.
             </p>
           </div>
@@ -345,9 +345,9 @@ export default function AgentWarehouse() {
                 <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/10 flex items-center justify-center text-${item.color}-500 mb-3`}>
                   <Package className="w-5 h-5" />
                 </div>
-                <h4 className="font-semibold text-slate-900 dark:text-white text-sm leading-tight mb-1 capitalize">{item.type}</h4>
+                <h4 className="font-semibold text-slate-900 dark:text-white text-sm mb-1 capitalize">{item.type}</h4>
                 <p className="text-2xl font-semibold text-primary mb-1">{item.weight.toFixed(1)}<span className="text-sm text-slate-400">kg</span></p>
-                <p className="text-xs font-semibold text-slate-400 uppercase">KSh {item.totalValue.toLocaleString()}</p>
+                <p className="text-xs font-semibold text-slate-400">KSh {item.totalValue.toLocaleString()}</p>
               </div>
             ))}
           </div>
@@ -358,8 +358,8 @@ export default function AgentWarehouse() {
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm mt-8">
         <div className="flex items-center justify-between mb-8 px-2">
           <div>
-            <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400">Material Sales</h3>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">Weaver Payouts</p>
+            <h3 className="font-semibold text-sm text-slate-900 dark:text-white">Material Sales</h3>
+            <p className="text-xs text-slate-500">Weaver Payouts</p>
           </div>
           <Package className="w-5 h-5 text-indigo-400" />
         </div>
@@ -367,12 +367,12 @@ export default function AgentWarehouse() {
         {salesLoading ? (
           <div className="flex flex-col items-center py-10 gap-3">
             <div className="w-8 h-8 border-4 border-indigo-100 border-t-indigo-500 rounded-full animate-spin" />
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Syncing Orders...</p>
+            <p className="text-xs font-semibold text-slate-400">Syncing Orders...</p>
           </div>
         ) : materialSales.length === 0 ? (
           <div className="text-center py-10 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border-2 border-dashed border-slate-100 dark:border-slate-800">
             <Package className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-relaxed px-10">
+            <p className="text-xs font-semibold text-slate-400 leading-relaxed px-10">
               No material sales yet.<br/>Verify recyclables to attract Weavers.
             </p>
           </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Brain, Mic, Send, Lightbulb, MapPin, Loader2, StopCircle, ShieldCheck, Activity, User } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Brain, Mic, Send, Lightbulb, MapPin, Loader2, StopCircle, ShieldCheck, Activity, User, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuthStore, ROLES } from '@cleanflow/core';
 import { useHygenexStore } from '@cleanflow/core';
@@ -94,6 +94,7 @@ export default function HygeneXPage() {
   
   const { isListening, startListening, stopListening } = useVoiceRecognition();
 
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
@@ -103,7 +104,6 @@ export default function HygeneXPage() {
 
   useEffect(() => {
     if (location.state?.autoStartMic) {
-      // Small delay to ensure browser speech engine is ready after navigation
       setTimeout(() => {
         if (!isListening) toggleMic();
       }, 800);
@@ -131,6 +131,7 @@ export default function HygeneXPage() {
     if (isListening) stopListening();
     else startListening((text) => setInputText(text));
   };
+
   const renderMessageText = (text) => {
     if (!text) return '';
     if (typeof text === 'object') return text.text || JSON.stringify(text);
@@ -156,7 +157,21 @@ export default function HygeneXPage() {
   };
 
   return (
-    <div className={`flex flex-col absolute inset-0 bg-white dark:bg-slate-900 text-slate-900 dark:text-white ${role === ROLES.ADMIN ? 'lg:static lg:h-[calc(100dvh-56px)]' : 'lg:static lg:h-[calc(100dvh-56px-70px)]'}`}>
+    <div className="flex flex-col fixed inset-0 bg-white dark:bg-slate-900 text-slate-900 dark:text-white z-50">
+      {/* HEADER: Back Button */}
+      <div className="absolute top-0 left-0 right-0 p-4 z-40 flex items-center gap-3 pt-6">
+        <button 
+          onClick={() => navigate(-1)}
+          className="p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shadow-sm"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <div className="flex items-center gap-2">
+           <Brain className="w-5 h-5 text-emerald-500" />
+           <span className="font-semibold text-slate-900 dark:text-white">HygeneX</span>
+        </div>
+      </div>
+
       {/* 1. CHAT ENGINE (FULL WIDTH) */}
       <div className="flex-1 flex flex-col relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
@@ -168,13 +183,15 @@ export default function HygeneXPage() {
               const isAi = msg.role === 'ai';
               return (
                 <motion.div 
+                  key={idx}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  key={idx} 
                   className={`flex gap-6 ${isAi ? '' : 'flex-row-reverse'}`}
                 >
                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
-                    isAi ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-white/5 border-white/10 text-slate-400'
+                    isAi 
+                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' 
+                      : 'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                   }`}>
                     {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
                   </div>
@@ -182,8 +199,8 @@ export default function HygeneXPage() {
                   <div className="flex flex-col gap-2 max-w-[85%]">
                     <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${
                       isAi 
-                        ? 'bg-slate-50 dark:bg-white/[0.03] border-slate-100 dark:border-white/5 text-slate-700 dark:text-slate-200 rounded-tl-none' 
-                        : 'bg-emerald-500 border-emerald-400 text-white font-medium rounded-tr-none shadow-lg shadow-emerald-500/10'
+                        ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-none shadow-sm' 
+                        : 'bg-primary border-primary text-white font-medium rounded-tr-none shadow-lg shadow-primary/20'
                     }`}>
                       {renderMessageText(msg.text)}
                     </div>
@@ -237,38 +254,38 @@ export default function HygeneXPage() {
           </div>
         </div>
 
+        {/* Input Control */}
       </div>
 
-      {/* Floating Input Control */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 pb-24 lg:pb-8 z-30 pointer-events-none">
-        <div className="max-w-3xl mx-auto pointer-events-auto">
-          <div className="relative group bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-slate-100 dark:border-white/10 rounded-[2.5rem] p-2 shadow-2xl shadow-emerald-500/10">
+      <div className="shrink-0 w-full z-30 px-4 pb-4 lg:pb-10 pt-2 bg-transparent">
+        <div className="w-full max-w-4xl mx-auto bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] shadow-2xl overflow-hidden">
+          <div className="relative flex items-end">
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={isListening ? "I'm listening..." : "Ask HygeneX anything..."}
-              className="w-full bg-transparent border-none py-4 pl-14 pr-16 text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-0 resize-none min-h-[56px]"
+              placeholder={isListening ? "I'm listening..." : "Message HygeneX..."}
+              className="w-full bg-transparent border-none py-4 pl-14 pr-14 text-base md:text-lg text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-0 resize-none min-h-[56px] max-h-[150px]"
               rows={1}
             />
             
             <button 
               onClick={toggleMic}
-              className={`absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all z-20 ${
-                isListening ? 'bg-emerald-500 text-white animate-pulse shadow-lg shadow-emerald-500/50 scale-110' : 'text-slate-400 dark:text-slate-500 hover:text-emerald-500 bg-slate-50 dark:bg-white/5'
+              className={`absolute left-2 bottom-2 p-2.5 rounded-full transition-all z-20 ${
+                isListening ? 'bg-emerald-500 text-white animate-pulse shadow-lg shadow-emerald-500/50 scale-105' : 'text-slate-400 dark:text-slate-500 hover:text-emerald-500 bg-slate-50 dark:bg-white/5'
               }`}
             >
-              {isListening ? <StopCircle className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              {isListening ? <StopCircle className="w-5 h-5 md:w-6 md:h-6" /> : <Mic className="w-5 h-5 md:w-6 md:h-6" />}
             </button>
 
             <button 
               onClick={handleSend}
               disabled={!inputText.trim()}
-              className={`absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all ${
+              className={`absolute right-2 bottom-2 p-2.5 rounded-full transition-all ${
                 inputText.trim() ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' : 'text-slate-300 dark:text-slate-700 pointer-events-none'
               }`}
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-5 h-5 md:w-6 md:h-6" />
             </button>
           </div>
         </div>

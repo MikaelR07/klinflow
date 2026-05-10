@@ -251,10 +251,8 @@ export default function AgentHome() {
           </button>
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile.name.split(' ')[0]}! 👋</h1>
-            <div className="flex items-center gap-2 mt-1.5">
-              <div className="flex items-center gap-1.5 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10">
-                <MapPin className="w-3 h-3" /> {profile.location?.estate || profile.estate || 'Nairobi Sector'}
-              </div>
+            <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10 w-fit">
+              <MapPin className="w-3 h-3" /> {profile.location?.estate || profile.estate || 'Nairobi Sector'}
             </div>
           </div>
         </div>
@@ -331,54 +329,54 @@ export default function AgentHome() {
       <div className="grid grid-cols-3 gap-2.5">
         <button
           onClick={() => navigate('/jobs')}
-          className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-1.5 hover:shadow-lg transition-all active:scale-95 group"
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm group"
         >
           <div className="relative">
             {availableJobs.length > 0 && (
               <div className="absolute -top-1 -right-1 min-w-[16px] h-4 bg-blue-500 rounded-full flex items-center justify-center px-1 shadow-lg shadow-blue-500/30 z-10">
-                <span className="text-[7px] font-black text-white">{availableJobs.length}</span>
+                <span className="text-[8px] font-bold text-white">{availableJobs.length}</span>
               </div>
             )}
-            <div className="w-8 h-8 bg-blue-100/50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
-              <Briefcase className="w-4 h-4" />
+            <div className="w-10 h-10 bg-blue-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+              <Briefcase className="w-5 h-5" />
             </div>
           </div>
           <div className="text-center">
-            <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5">Missions</p>
-            <p className="text-xs font-black text-slate-900 dark:text-white leading-tight uppercase italic">Open Jobs</p>
+            <p className="text-[8px] font-semibold text-primary uppercase tracking-widest mb-0.5">Missions</p>
+            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Open Jobs</p>
           </div>
         </button>
         
         <button
           onClick={() => navigate('/trades')}
-          className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-1.5 hover:shadow-lg transition-all active:scale-95 group"
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm group"
         >
           <div className="relative">
             {acceptedTradesCount > 0 && (
               <div className="absolute -top-1 -right-1 min-w-[16px] h-4 bg-emerald-500 rounded-full flex items-center justify-center px-1 shadow-lg shadow-emerald-500/30 z-10">
-                <span className="text-[7px] font-black text-white">{acceptedTradesCount}</span>
+                <span className="text-[8px] font-bold text-white">{acceptedTradesCount}</span>
               </div>
             )}
-            <div className="w-8 h-8 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-              <Handshake className="w-4 h-4" />
+            <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+              <Handshake className="w-5 h-5" />
             </div>
           </div>
           <div className="text-center">
-            <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5">Market</p>
-            <p className="text-xs font-black text-slate-900 dark:text-white leading-tight uppercase italic">Accepted Bids</p>
+            <p className="text-[8px] font-semibold text-emerald-600 uppercase tracking-widest mb-0.5">Market</p>
+            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Bids</p>
           </div>
         </button>
 
         <button
-          onClick={() => navigate('/earnings')}
-          className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-1.5 hover:shadow-lg transition-all active:scale-95 group"
+          onClick={() => navigate('/analytics')}
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm group"
         >
-          <div className="w-8 h-8 bg-amber-100/50 dark:bg-amber-900/40 rounded-xl flex items-center justify-center text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-all">
-            <TrendingUp className="w-4 h-4" />
+          <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+            <TrendingUp className="w-5 h-5" />
           </div>
           <div className="text-center">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5">Analytics</p>
-            <p className="text-xs font-black text-slate-900 dark:text-white leading-tight uppercase italic">Stats</p>
+            <p className="text-[8px] font-semibold text-indigo-600 uppercase tracking-widest mb-0.5">Stats</p>
+            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
           </div>
         </button>
       </div>
@@ -477,9 +475,9 @@ export default function AgentHome() {
           <Navigation className="w-5 h-5 text-white" />
         </div>
         <div className="text-left flex-1 min-w-0">
-          <p className="text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-0.5 italic">Route Optimizer</p>
-          <p className="text-[13px] font-black text-slate-900 dark:text-white leading-tight uppercase italic">Smart Logistics Terminal</p>
-          <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-0.5">Live Multi-Stop Tracking</p>
+          <p className="text-[8px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-0.5">Route Optimizer</p>
+          <p className="text-[13px] font-bold text-slate-900 dark:text-white leading-tight">Logistics Terminal</p>
+          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest mt-0.5">Live Multi-Stop Tracking</p>
         </div>
         <ChevronRight className="w-4 h-4 text-slate-300" />
       </button>

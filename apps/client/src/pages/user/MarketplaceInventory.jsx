@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { 
   Package, Search, Plus, ArrowLeft,
   Trash2, MapPin, Scale, ChevronRight,
-  Tag, AlertCircle, Clock
+  Tag, AlertCircle, Clock, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore, useAuthStore, getThumbnailUrl } from '@cleanflow/core';
@@ -25,18 +25,24 @@ export default function MarketplaceInventory() {
   const [activeTab, setActiveTab] = useState('active');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     fetchMyActivity();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to remove this listing?')) return;
+  const handleDelete = () => {
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
     try {
-      await deleteListing(id);
+      await deleteListing(selectedId);
+      setShowDeleteModal(false);
       setSelectedId(null);
-      toast.success('Listing Removed', { description: 'The item has been withdrawn from the market.' });
+      toast.success('Listing Deleted', { description: 'The item has been removed from the marketplace.' });
     } catch (err) {
+      setShowDeleteModal(false);
       toast.error('Failed to remove', { description: err.message });
     }
   };
@@ -111,7 +117,7 @@ export default function MarketplaceInventory() {
           <div className="animate-fade-in -mx-4 -mt-7">
             
             {/* Edge-to-Edge Hero Image */}
-            <div className="w-full aspect-[3/2] bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
+            <div className="w-full aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
               
               {/* Overlaid Back Button */}
               <button 
@@ -147,43 +153,50 @@ export default function MarketplaceInventory() {
             </div>
 
             {/* Content Sheet (Overlaps Image) */}
-            <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-5 pb-2 space-y-4">
+            <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-10 pb-10 space-y-6 rounded-t-xl -mt-6 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
               
-                <div className="space-y-2">
+                {/* Unified Listing Detail Card */}
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
                   <div className="flex items-center justify-between">
-                    <div className="bg-white dark:bg-slate-800/50 py-1.5 px-3 rounded-xl border border-slate-100 dark:border-slate-800 w-fit">
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">{selectedListing.material}</h2>
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Type</p>
+                      <h2 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{selectedListing.material}</h2>
                     </div>
-                    <div className="bg-white dark:bg-slate-800/50 py-1.5 px-3 rounded-xl border border-slate-100 dark:border-slate-800 w-fit flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-700/50 py-1.5 px-3 rounded-xl border border-slate-100 dark:border-slate-700 w-fit">
                       <MapPin className="w-3.5 h-3.5 text-indigo-500" />
                       <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-widest italic">{selectedListing.location || 'Nairobi Hub'}</span>
                     </div>
                   </div>
+
+                  <div className="h-px bg-slate-100 dark:bg-slate-700" />
+
                   <div className="flex items-center gap-2 px-1">
                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
                        Posted {new Date(selectedListing.created_at || selectedListing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                      </p>
                   </div>
-                </div>
 
-              {/* Stats Row - Three Column Industrial */}
-              <div className="grid grid-cols-3 gap-1.5">
-                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Asking Rate</p>
-                  <p className="text-sm font-black text-emerald-600 italic">KSh {selectedListing.pricePerKg}</p>
-                  <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">/ KG</p>
+                  <div className="h-px bg-slate-100 dark:bg-slate-700" />
+
+                  {/* Stats Row - Unified Internal */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center">
+                      <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Asking Rate</p>
+                      <p className="text-sm font-black text-emerald-600 italic leading-none">KSh {selectedListing.pricePerKg}</p>
+                      <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest mt-1">/ KG</p>
+                    </div>
+                    <div className="text-center border-x border-slate-100 dark:border-slate-700 px-1">
+                      <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Inventory</p>
+                      <p className="text-sm font-black text-slate-900 dark:text-white italic leading-none">{selectedListing.quantity}</p>
+                      <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest mt-1">KG LOAD</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Est. Value</p>
+                      <p className="text-sm font-black text-slate-900 dark:text-white italic leading-none">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
+                      <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest mt-1">Net Total</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Inventory</p>
-                  <p className="text-sm font-black text-slate-900 dark:text-white italic">{selectedListing.quantity}</p>
-                  <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">KG LOAD</p>
-                </div>
-                <div className="bg-white dark:bg-slate-800/50 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
-                  <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-1">Est. Value</p>
-                  <p className="text-sm font-black text-slate-900 dark:text-white italic">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
-                  <p className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">Net Total</p>
-                </div>
-              </div>
 
               {/* Description */}
               <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2">
@@ -195,10 +208,10 @@ export default function MarketplaceInventory() {
               {/* Management Controls */}
               <div className="space-y-2">
                 <button 
-                  onClick={() => handleDelete(selectedListing.id)}
+                  onClick={handleDelete}
                   className="w-full py-3.5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3"
                 >
-                  <Trash2 className="w-4 h-4" /> Withdraw Listing
+                  <Trash2 className="w-4 h-4" /> Delete Listing
                 </button>
                 <button 
                   onClick={() => setSelectedId(null)}
@@ -284,6 +297,45 @@ export default function MarketplaceInventory() {
                 <p className="text-xs text-emerald-800/80 dark:text-emerald-100/60 leading-snug font-medium">
                   Adding clear photos increases your chance of an agent bid by <span className="text-emerald-900 dark:text-white font-bold italic">40%</span>.
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── DELETE CONFIRMATION MODAL ── */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setShowDeleteModal(false)} />
+          <div className="relative w-full max-w-[300px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden animate-slide-up border border-slate-100 dark:border-slate-800">
+            <div className="h-24 bg-rose-500 flex items-center justify-center relative">
+              <div className="w-14 h-14 bg-white rounded-2xl shadow-xl flex items-center justify-center">
+                <Trash2 className="w-7 h-7 text-rose-500" />
+              </div>
+              <button 
+                onClick={() => setShowDeleteModal(false)}
+                className="absolute top-3 right-3 p-1.5 bg-black/20 hover:bg-black/40 rounded-full text-white backdrop-blur-md transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="p-6 text-center">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight uppercase italic leading-none mb-1">Delete Listing?</h2>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">This action is permanent</p>
+              
+              <div className="space-y-2">
+                <button 
+                  onClick={confirmDelete}
+                  className="w-full py-3 bg-rose-500 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-rose-500/20 active:scale-95 transition-all"
+                >
+                  Yes, Delete
+                </button>
+                <button 
+                  onClick={() => setShowDeleteModal(false)}
+                  className="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded-xl font-bold text-xs uppercase tracking-widest active:scale-95 transition-all"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>

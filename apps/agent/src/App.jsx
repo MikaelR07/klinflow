@@ -59,7 +59,7 @@ function MobileLayout() {
 
   return (
     <div className="flex flex-col h-[100dvh] max-w-lg mx-auto">
-      <div className="flex-1 overflow-y-auto overscroll-none py-5 pb-4 px-2">
+      <div className="flex-1 overflow-y-auto overscroll-none px-4 pt-4 pb-4">
         <Suspense fallback={<LoadingScreen message="Loading..." />}>
           <Outlet />
         </Suspense>
@@ -132,6 +132,7 @@ export default function App() {
         <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} />
 
         <Route element={<ProtectedLayout />}>
+          <Route path="/hygenex" element={<HygeneXPage />} />
           <Route element={<DynamicRoleLayout />}>
             <Route path="/" element={<RoleBasedIndex />} />
             <Route path="/jobs" element={<AvailableJobs />} />
@@ -143,7 +144,6 @@ export default function App() {
             <Route path="/trades" element={<MyTrades />} />
             <Route path="/earnings" element={<EarningsPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
-            <Route path="/hygenex" element={<HygeneXPage />} />
             
             <Route path="/admin/agents" element={<FleetManagement />} />
             <Route path="/admin/earnings" element={<EarningsPage />} />

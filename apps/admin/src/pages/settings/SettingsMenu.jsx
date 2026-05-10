@@ -66,7 +66,7 @@ export default function SettingsMenu() {
         <LogOut className="w-5 h-5" /> Secure Sign Out
       </button>
 
-      <p className="text-center text-xs text-slate-400 font-medium pb-20 pt-4">CleanFlow KE v2.1 · Made in Kenya 🇰🇪</p>
+      <p className="text-center text-xs text-slate-400 font-medium pb-20 pt-4">CleanFlow V1.0</p>
     </div>
   );
 }

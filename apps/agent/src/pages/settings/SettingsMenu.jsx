@@ -85,7 +85,7 @@ export default function SettingsMenu() {
             </div>
             <div className="flex-1 text-left">
               <p className="text-sm font-semibold dark:text-slate-200">{item.label}</p>
-              <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{item.subtitle}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500">{item.subtitle}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary" />
           </button>
@@ -105,7 +105,7 @@ export default function SettingsMenu() {
         <LogOut className="w-5 h-5" /> SECURE SIGN OUT
       </button>
 
-      <p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-widest pt-4">CleanFlow KE v2.1 · Nairobi 🇰🇪</p>
+      <p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-widest pt-4">CleanFlow V1.0</p>
     </div>
   );
 }

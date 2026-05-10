@@ -78,14 +78,14 @@ export default function NotificationsPage() {
         
         {/* Inbox */}
         <div className="card p-0 overflow-hidden divide-y divide-slate-100 dark:divide-slate-800 border-b-4 border-b-primary shadow-lg">
-           <div className="p-4 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between">
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between">
               <div className="flex items-center gap-2">
                  <BellRing className="w-4 h-4 text-primary" />
-                 <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-900 dark:text-white">Live Feed</h2>
+                 <h2 className="text-sm font-semibold text-slate-900 dark:text-white">Live Feed</h2>
               </div>
               <button 
                 onClick={clearAll}
-                className="text-xs font-semibold uppercase text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 px-2 py-1 rounded-md transition-all"
+                className="text-xs font-semibold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 px-2.5 py-1 rounded-lg transition-all"
               >
                 Clear All
               </button>
@@ -107,7 +107,7 @@ export default function NotificationsPage() {
               {notifications.length === 0 && (
                 <div className="py-12 px-6 text-center">
                    <BellRing className="w-12 h-12 text-slate-200 mx-auto mb-3 opacity-20" />
-                   <p className="text-xs text-slate-400 font-semibold uppercase tracking-tighter">No Active Notifications</p>
+                   <p className="text-xs text-slate-400 font-semibold">No Active Notifications</p>
                 </div>
               )}
            </div>

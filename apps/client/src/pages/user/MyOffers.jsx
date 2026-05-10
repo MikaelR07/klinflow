@@ -148,7 +148,7 @@ export default function MyOffers() {
   const selectedOffer = receivedOffers?.find(o => o.id === selectedOfferId);
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900 relative px-2">
+    <div className="bg-[#F2F3F4] dark:bg-slate-900 relative px-2 min-h-screen">
       
       {/* ── DASHBOARD AREA ── */}
       {!selectedOfferId && (
@@ -212,7 +212,7 @@ export default function MyOffers() {
               className="-mx-4 -mt-7"
             >
               {/* Edge-to-Edge Hero Image */}
-              <div className="w-full aspect-[3/2] bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
+              <div className="w-full aspect-square bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
                 {selectedOffer.photo ? (
                   <img src={getThumbnailUrl(selectedOffer.photo, { width: 800 })} className="w-full h-full object-cover" />
                 ) : (
@@ -231,14 +231,17 @@ export default function MyOffers() {
               </div>
 
               {/* Content Sheet */}
-              <div className="bg-slate-50 dark:bg-slate-900 px-4 pt-5 pb-2 space-y-4">
+              <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-10 pb-10 space-y-6 rounded-t-xl -mt-6 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
                 
                 {/* Title & Info */}
                 <div className="space-y-4">
                   {/* Unified Material & Asking Price Card */}
                   <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight">{selectedOffer.material}</h2>
+                      <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Type</p>
+                        <h2 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{selectedOffer.material}</h2>
+                      </div>
                       <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-700/50 px-2 py-1 rounded-lg border border-slate-100 dark:border-slate-700">
                         <MapPin className="w-3.5 h-3.5 text-indigo-500" />
                         <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest italic">{selectedOffer.listing?.location || 'Nairobi Hub'}</span>
