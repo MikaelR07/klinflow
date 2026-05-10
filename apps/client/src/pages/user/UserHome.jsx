@@ -186,7 +186,7 @@ export default function UserHome() {
       </div>
 
       {/* Wallet Hero */}
-      <div className="bg-gradient-to-br from-primary to-emerald-700 rounded-2xl p-6 shadow-lg gpu-layer">
+      <div className="bg-gradient-to-br from-emerald-800 via-green-800 to-teal-900 rounded-2xl p-6 shadow-lg gpu-layer">
         <div className="flex flex-col gap-6 relative z-10">
           <div className="flex items-end justify-between">
             <div>
