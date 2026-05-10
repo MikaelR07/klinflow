@@ -21,7 +21,7 @@ export default function TopTabs({ active }) {
         return (
           <button
             key={tab.path}
-            onClick={() => navigate(tab.path, tab.path === '/hygenex' ? { state: { autoStartMic: true } } : undefined)}
+            onClick={() => navigate(tab.path)}
             className={`text-xs font-bold uppercase tracking-widest transition-all duration-300 active:opacity-60 pb-0.5 text-slate-900 dark:text-white ${
               isActive ? 'scale-100' : 'scale-90 opacity-60'
             }`}

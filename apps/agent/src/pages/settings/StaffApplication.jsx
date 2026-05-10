@@ -82,7 +82,7 @@ export default function StaffApplication() {
   // ── VERIFIED STAFF VIEW ──
   if (isVerified) {
     return (
-      <div className="animate-fade-in p-6 text-center space-y-6 pt-12">
+      <div className="animate-fade-in px-4 pt-4 text-center space-y-6">
         <div className="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-primary/20">
            <ShieldCheck className="w-12 h-12 text-primary" />
         </div>
@@ -103,10 +103,10 @@ export default function StaffApplication() {
 
   // ── APPLICATION / PENDING VIEW ──
   return (
-    <div className="animate-slide-up pb-20 px-6 max-w-lg mx-auto">
-      <header className="flex items-center justify-between mb-8 pt-6">
+    <div className="animate-slide-up pb-20 px-4 pt-4 max-w-lg mx-auto">
+      <header className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+          <button onClick={() => navigate(-1)} className="p-2 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
             <ArrowLeft className="w-5 h-5 text-slate-500" />
           </button>
           <div>

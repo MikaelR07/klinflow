@@ -472,7 +472,7 @@ export default function AdminDashboard() {
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        onClick={() => navigate('/hygenex', { state: { autoStartMic: true } })}
+        onClick={() => navigate('/hygenex')}
         className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-500/50 z-50 border-4 border-white dark:border-slate-800"
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-20" />

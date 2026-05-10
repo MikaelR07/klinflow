@@ -131,7 +131,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-950 px-4 py-12 relative overflow-x-hidden transition-colors duration-500">
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-4 py-12 relative overflow-x-hidden transition-colors duration-500">
       {/* Top accent bar */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500" />
       <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -145,7 +145,6 @@ export default function Register() {
               <ArrowLeft className="w-4 h-4" /> Back to Sign In
             </Link>
           </div>
-          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl" alt="Business Logo" fetchPriority="high" loading="eager" />
         </div>
 
         <div className="mb-10">

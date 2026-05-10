@@ -50,9 +50,9 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="animate-slide-up pb-20">
+    <div className="animate-slide-up pb-20 pt-4 px-4">
       <header className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+        <button onClick={() => navigate('/settings')} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h1 className="text-xl font-semibold dark:text-white">My Profile</h1>

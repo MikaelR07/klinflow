@@ -48,14 +48,14 @@ const BUSINESS_NAV = [
 
 function MobileLayout() {
   return (
-    <>
-      <div className="max-w-lg mx-auto px-2 py-5 pb-24">
+    <div className="flex flex-col h-[100dvh] max-w-lg mx-auto">
+      <div className="flex-1 overflow-y-auto overscroll-none px-2 py-5 pb-4">
         <Suspense fallback={<LoadingScreen message="Loading Terminal..." />}>
           <Outlet />
         </Suspense>
       </div>
       <BottomNav items={BUSINESS_NAV} />
-    </>
+    </div>
   );
 }
 

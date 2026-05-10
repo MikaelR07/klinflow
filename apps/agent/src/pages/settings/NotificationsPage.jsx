@@ -50,6 +50,22 @@ export default function NotificationsPage() {
     }
   };
 
+  const formatTime = (isoString) => {
+    if (!isoString) return 'Just now';
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  };
+
   const ToggleSwitch = ({ label, description, checked, onChange }) => (
     <div className="flex items-center justify-between py-3">
       <div className="pr-4">
@@ -66,9 +82,9 @@ export default function NotificationsPage() {
   );
 
   return (
-    <div className="animate-slide-up pb-24">
+    <div className="animate-slide-up pb-24 pt-4 px-4">
       <header className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+        <button onClick={() => navigate('/settings')} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h1 className="text-xl font-semibold dark:text-white">Notification Center</h1>
@@ -91,14 +107,14 @@ export default function NotificationsPage() {
               </button>
            </div>
            
-           <div className="max-h-[300px] overflow-y-auto">
+           <div className="max-h-[400px] overflow-y-auto no-scrollbar">
               {notifications.map((n) => (
                 <div key={n.id} className={`p-4 flex gap-4 transition-colors ${!n.read ? 'bg-primary/5 border-l-4 border-l-primary' : ''}`}>
                    <div className="mt-1">{getIcon(n.type)}</div>
                    <div className="flex-1">
                       <div className="flex items-center justify-between mb-0.5">
                         <p className="text-sm font-semibold dark:text-white">{n.title}</p>
-                        <span className="text-xs text-slate-400 font-medium">Just now</span>
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{formatTime(n.created_at)}</span>
                       </div>
                       <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{n.body}</p>
                    </div>

@@ -23,39 +23,67 @@ import { useAuthStore, useHygenexStore, ROLES } from '@cleanflow/core';
 function useVoiceRecognition() {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef(null);
+  const isListeningRef = useRef(false);
 
   const stopListening = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
+    if (recognitionRef.current && isListeningRef.current) {
+      try { recognitionRef.current.stop(); } catch(e) {}
     }
     setIsListening(false);
+    isListeningRef.current = false;
   };
 
   const startListening = (onResult) => {
+    if (isListeningRef.current) return; // Prevent double start glitch
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       setIsListening(true);
+      isListeningRef.current = true;
       setTimeout(() => {
         onResult("Predict my waste for next week");
         setIsListening(false);
+        isListeningRef.current = false;
       }, 2000);
       return;
     }
     
-    const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    
-    recognition.onstart = () => setIsListening(true);
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      onResult(transcript);
-    };
-    recognition.onerror = () => setIsListening(false);
-    recognition.onend = () => setIsListening(false);
-    
-    recognition.start();
+    try {
+      const recognition = new SpeechRecognition();
+      recognitionRef.current = recognition;
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      
+      recognition.onstart = () => {
+        setIsListening(true);
+        isListeningRef.current = true;
+      };
+      
+      recognition.onresult = (event) => {
+        let text = '';
+        for (let i = 0; i < event.results.length; ++i) {
+          text += event.results[i][0].transcript;
+        }
+        onResult(text);
+      };
+      
+      recognition.onerror = (e) => {
+        console.error("Speech error:", e.error);
+        setIsListening(false);
+        isListeningRef.current = false;
+      };
+      
+      recognition.onend = () => {
+        setIsListening(false);
+        isListeningRef.current = false;
+      };
+      
+      recognition.start();
+    } catch (err) {
+      console.error("Speech API error:", err);
+      setIsListening(false);
+      isListeningRef.current = false;
+    }
   };
   
   return { isListening, startListening, stopListening };
@@ -78,14 +106,6 @@ export default function HygeneXPage() {
     initChat();
     return () => stopChat();
   }, [initChat, stopChat]);
-
-  useEffect(() => {
-    if (location.state?.autoStartMic) {
-      setTimeout(() => {
-        if (!isListening) toggleMic();
-      }, 800);
-    }
-  }, [location.state]);
 
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
