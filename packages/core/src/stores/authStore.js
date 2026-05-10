@@ -105,6 +105,26 @@ export const useAuthStore = create(
             set({ isAuthenticated: false, token: null, profile: null, userId: null });
           }
 
+          // ── FOREGROUND SESSION SYNC (Applies to ALL CleanFlow Apps) ──
+          if (typeof window !== 'undefined' && !window._cfAuthVisibilitySetup) {
+            window._cfAuthVisibilitySetup = true;
+            window.addEventListener('visibilitychange', async () => {
+              if (document.visibilityState === 'visible' && get().isAuthenticated) {
+                console.log('[AuthGate] App returned to foreground, verifying session...');
+                try {
+                  const { data, error } = await supabase.auth.getSession();
+                  if (error || !data.session) {
+                    console.warn('[AuthGate] Foreground check: Session expired. Logging out safely.');
+                    get().logout();
+                    toast.error('Session Expired', { description: 'Please log in again to continue safely.' });
+                  }
+                } catch (e) {
+                  // Ignore network errors, only act on explicit auth failures
+                }
+              }
+            });
+          }
+
           // Listen for session changes (Login/Logout) across tabs
           supabase.auth.onAuthStateChange(async (event, session) => {
             if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {

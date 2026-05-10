@@ -528,12 +528,16 @@ export const useMarketplaceStore = create(
         if (!userId) throw new Error('Not authenticated');
         set({ isLoading: true });
 
+        console.log('[Marketplace] makeOffer called with listing:', listing, 'price:', price, 'qty:', quantity);
+        const resolvedSellerId = listing.sellerId || listing.seller_id;
+        console.log('[Marketplace] Resolved seller_id for insert:', resolvedSellerId);
+
         const { data, error } = await supabase
           .from('marketplace_offers')
           .insert({
             listing_id:  listing.id,
             buyer_id:    userId,
-            seller_id:   listing.sellerId || listing.seller_id,
+            seller_id:   resolvedSellerId,
             offered_price: price,
             quantity:    quantity,
             status:      'pending'
@@ -551,6 +555,19 @@ export const useMarketplaceStore = create(
           sentOffers: [data, ...state.sentOffers],
           isLoading: false
         }));
+
+        // Send a notification to the seller so they are instantly alerted
+        try {
+          await supabase.from('notifications').insert({
+            target_user: listing.sellerId || listing.seller_id,
+            target_role: 'user', // Sellers are users
+            title: 'New Bid Received! 🔔',
+            body: `An agent offered KSh ${price}/kg for your ${listing.material}.`,
+            type: 'info'
+          });
+        } catch (notifErr) {
+          console.warn('[Marketplace] Could not send notification:', notifErr);
+        }
 
         toast.success('Offer Sent! 📬', {
           description: `You offered KSh ${price}/kg for ${listing.material}.`
@@ -728,6 +745,8 @@ export const useMarketplaceStore = create(
         const { userId } = useAuthStore.getState();
         if (!userId) return;
 
+        console.log('[Marketplace] Fetching received offers for seller:', userId);
+
         const { data, error } = await supabase
           .from('marketplace_offers')
           .select(`
@@ -737,13 +756,23 @@ export const useMarketplaceStore = create(
           .eq('seller_id', userId)
           .order('created_at', { ascending: false });
 
+        console.log('[Marketplace] fetchReceivedOffers response data:', data, 'error:', error);
+
         if (!error) {
+          if (!data || data.length === 0) {
+            console.log('[Marketplace] No offers found, setting receivedOffers to []');
+            set({ receivedOffers: [] });
+            return;
+          }
+
           // Fetch buyer names separately to avoid complex join issues in real-time
           const buyerIds = [...new Set(data.map(o => o.buyer_id))];
-          const { data: buyers } = await supabase
+          const { data: buyers, error: buyersError } = await supabase
             .from('profiles')
             .select('id, name')
             .in('id', buyerIds);
+          
+          console.log('[Marketplace] Fetched buyers:', buyers, 'error:', buyersError);
 
           const mapped = data.map(o => {
             const buyer = buyers?.find(b => b.id === o.buyer_id);
