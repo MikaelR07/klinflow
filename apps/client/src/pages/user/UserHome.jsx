@@ -186,62 +186,48 @@ export default function UserHome() {
       </div>
 
       {/* Wallet Hero */}
-      <div className="relative group">
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500/30 to-teal-500/30 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000" />
-        <div className="relative bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl p-6 overflow-hidden">
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full" />
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-400/10 rounded-full" />
-          
-          {/* Decorative Trees (Relocated to Top Right) */}
-          <div className="absolute top-6 right-6 flex -space-x-2 z-20">
-             {[1,2,3].map(i => (
-               <div key={i} className="w-8 h-8 rounded-full border-2 border-emerald-700 bg-emerald-50 flex items-center justify-center text-sm shadow-lg transform hover:scale-110 transition-transform">🌲</div>
-             ))}
-          </div>
-
-          <div className="flex flex-col gap-6 relative z-10">
-            <div className="flex items-end justify-between">
-              <div>
-                <p className="text-[11px] font-semibold text-emerald-200/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
-                  <Wallet className="w-3 h-3" /> Wallet Balance
-                </p>
-                <h2 className="text-4xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
-                  KSh {(profile?.balance || profile?.walletBalance || 0).toLocaleString()}
-                </h2>
-                <div className="flex items-center gap-2 mt-3">
-                  <button 
-                    onClick={() => navigate('/impact-hub')}
-                    className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-lg border border-white/10 text-[11px] font-semibold text-amber-300 uppercase tracking-widest active:scale-95 transition-all shadow-inner"
-                  >
-                    ⚡ {profile?.rewardPoints || 0} GFP
-                  </button>
-                </div>
+      <div className="bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-2xl p-6 overflow-hidden shadow-lg">
+        <div className="flex flex-col gap-6 relative z-10">
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="text-[11px] font-semibold text-emerald-200/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                <Wallet className="w-3 h-3" /> Wallet Balance
+              </p>
+              <h2 className="text-4xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
+                KSh {(profile?.balance || profile?.walletBalance || 0).toLocaleString()}
+              </h2>
+              <div className="flex items-center gap-2 mt-3">
+                <button 
+                  onClick={() => navigate('/impact-hub')}
+                  className="flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-lg border border-white/10 text-[11px] font-semibold text-amber-300 uppercase tracking-widest active:scale-95 transition-all shadow-inner"
+                >
+                  ⚡ {profile?.rewardPoints || 0} GFP
+                </button>
               </div>
-              
-              <button 
-                onClick={handleWithdraw}
-                className="bg-white/20 hover:bg-white/30 text-white border border-white/20 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-xl active:scale-95 transition-all mb-1"
-              >
-                Withdraw
-              </button>
             </div>
             
-            <div className="flex items-center pt-5 border-t border-white/10 pl-8 sm:pl-12">
-              <div className="flex items-center gap-6 sm:gap-10">
-                <div>
-                  <p className="text-[10px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">Pickups</p>
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
-                </div>
-                <div className="px-4 sm:px-6 border-x border-white/10">
-                  <p className="text-[10px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">Recovered</p>
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
-                </div>
-                <div>
-                  <p className="text-[10px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">CO2 Offset</p>
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
-                </div>
+            <button 
+              onClick={handleWithdraw}
+              className="bg-white/20 hover:bg-white/30 text-white border border-white/20 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-xl active:scale-95 transition-all mb-1"
+            >
+              Withdraw
+            </button>
+          </div>
+          
+          <div className="flex items-center pt-5 border-t border-white/10 px-1">
+            <div className="flex items-center gap-6 sm:gap-10">
+              <div>
+                <p className="text-[10px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">Pickups</p>
+                <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
               </div>
-              
+              <div className="px-4 sm:px-6 border-x border-white/10">
+                <p className="text-[10px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">Recovered</p>
+                <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold text-emerald-300 uppercase tracking-widest mb-1">CO2 Offset</p>
+                <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
+              </div>
             </div>
           </div>
         </div>
