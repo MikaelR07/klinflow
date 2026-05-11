@@ -66,7 +66,7 @@ export default function RoleSelection() {
             onClick={() => navigate(`/register?type=${role.id}`)}
             className="w-full text-left group relative active:scale-[0.99] transition-all gpu-layer"
           >
-            <div className="relative bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-[2.5rem] p-8 shadow-2xl dark:shadow-none transition-all active:bg-slate-200 dark:active:bg-slate-700 overflow-hidden">
+            <div className="relative bg-[#FFFFFF] dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-[2.5rem] p-8 transition-all active:bg-slate-100 dark:active:bg-slate-800 overflow-hidden">
               <div className="flex items-start justify-between mb-6">
                 <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.iconColor} border ${role.borderColor} shadow-inner`}>
                   <role.icon className="w-8 h-8" />
