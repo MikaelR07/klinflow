@@ -33,13 +33,13 @@ export default function RoleSelection() {
         {/* Weaver Card */}
         <button
           onClick={() => handleSelection('weaver')}
-          className="group relative bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 p-8 rounded-[2.5rem] text-left md:hover:border-primary transition-all active:scale-[0.98] shadow-sm md:hover:shadow-xl md:hover:shadow-primary/10 overflow-hidden"
+          className="group relative bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 p-8 rounded-[2.5rem] text-left transition-all active:scale-[0.98] overflow-hidden"
         >
           <div className="absolute top-0 right-0 p-6 opacity-10 md:group-hover:opacity-20 md:group-hover:scale-110 transition-all">
             <Package className="w-24 h-24 text-primary" />
           </div>
           
-          <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center mb-6 border border-emerald-600">
             <Package className="w-7 h-7" />
           </div>
           
@@ -56,13 +56,13 @@ export default function RoleSelection() {
         {/* Recycler Card */}
         <button
           onClick={() => handleSelection('recycler')}
-          className="group relative bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 p-8 rounded-[2.5rem] text-left md:hover:border-secondary transition-all active:scale-[0.98] shadow-sm md:hover:shadow-xl md:hover:shadow-secondary/10 overflow-hidden"
+          className="group relative bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 p-8 rounded-[2.5rem] text-left transition-all active:scale-[0.98] overflow-hidden"
         >
           <div className="absolute top-0 right-0 p-6 opacity-10 md:group-hover:opacity-20 md:group-hover:scale-110 transition-all">
             <Factory className="w-24 h-24 text-secondary" />
           </div>
           
-          <div className="w-14 h-14 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center mb-6">
+          <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center mb-6 border border-blue-700">
             <Factory className="w-7 h-7" />
           </div>
           
