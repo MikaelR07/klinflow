@@ -48,13 +48,15 @@ const BUSINESS_NAV = [
 
 function MobileLayout() {
   return (
-    <div className="flex flex-col h-[100dvh] max-w-lg mx-auto">
-      <div className="flex-1 overflow-y-auto overscroll-none px-2 py-5 pb-4">
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-slate-50 dark:bg-slate-950">
+      <div className="flex-1 pt-[env(safe-area-inset-top,1.5rem)] pb-[calc(env(safe-area-inset-bottom,0px)+6rem)] px-1">
         <Suspense fallback={<LoadingScreen message="Loading Terminal..." />}>
           <Outlet />
         </Suspense>
       </div>
-      <BottomNav items={BUSINESS_NAV} />
+      <div className="fixed bottom-0 left-0 right-0 z-[100] max-w-lg mx-auto pb-[env(safe-area-inset-bottom,0px)] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800">
+        <BottomNav items={BUSINESS_NAV} />
+      </div>
     </div>
   );
 }

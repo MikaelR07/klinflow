@@ -231,7 +231,7 @@ export default function AgentHome() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-24 px-4 pt-4">
+    <div className="space-y-6">
       
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 

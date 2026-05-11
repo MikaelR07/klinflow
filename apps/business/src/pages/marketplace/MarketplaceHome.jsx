@@ -154,7 +154,7 @@ export default function MarketplaceHome() {
   };
 
   return (
-    <div className="animate-fade-in -mt-5 -mx-2 pb-12">
+    <div className="space-y-6">
       {/* ── MISSION CONTROL HEADER (UNIFIED) ── */}
       <div className="bg-[#F4F4F4] dark:bg-slate-900 pt-2 pb-4 px-0 relative overflow-hidden">
         {/* Landing Page Grid Pattern */}
