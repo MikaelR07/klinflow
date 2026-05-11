@@ -254,8 +254,8 @@ export default function AgentHome() {
           </button>
           <div>
             <h1 className="text-base font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile.name.split(' ')[0]}! 👋</h1>
-            <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10 w-fit">
-              <MapPin className="w-3 h-3" /> {profile.location?.estate || profile.estate || 'Nairobi Sector'}
+            <div className="flex items-center gap-1 mt-1 text-[9px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 w-fit">
+              <MapPin className="w-2.5 h-2.5" /> {profile.location?.estate || profile.estate || 'Nairobi Sector'}
             </div>
           </div>
         </div>
