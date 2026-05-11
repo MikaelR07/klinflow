@@ -22,6 +22,8 @@ export default function Welcome() {
       >
         {/* Hero Section */}
         <div className="flex-1 flex flex-col justify-center relative z-10">
+          
+          <img src="/logo.png" alt="CleanFlow Logo" className="h-16 w-auto mb-10 mr-auto" />
 
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 mb-6 w-fit">
             <Sparkles className="w-4 h-4 text-emerald-500" />
