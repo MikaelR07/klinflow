@@ -78,16 +78,25 @@ export default function ImpactAnalytics() {
         
         const topMaterial = Object.entries(materialCounts).sort((a, b) => b[1] - a[1])[0] || ['None', 0];
 
-        // Weekly progress (last 7 days)
-        const last7Days = Array.from({ length: 7 }, (_, i) => {
-          const d = new Date();
-          d.setDate(now.getDate() - i);
-          return d.toLocaleDateString('en-CA');
-        }).reverse();
+        // Weekly progress (Current Week: Mon-Sun)
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // 0 (Sun) to 6 (Sat)
+        const diffToMonday = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+        const monday = new Date(today.setDate(diffToMonday));
+        monday.setHours(0, 0, 0, 0);
 
-        const weeklyData = last7Days.map(dateStr => {
+        const currentWeekDays = Array.from({ length: 7 }, (_, i) => {
+          const d = new Date(monday);
+          d.setDate(monday.getDate() + i);
+          return d.toLocaleDateString('en-CA');
+        });
+
+        const weeklyData = currentWeekDays.map(dateStr => {
           const weightOnDay = completed
-            .filter(b => new Date(b.updated_at || b.created_at).toLocaleDateString('en-CA') === dateStr)
+            .filter(b => {
+              const bDate = new Date(b.updated_at || b.created_at).toLocaleDateString('en-CA');
+              return bDate === dateStr;
+            })
             .reduce((sum, b) => sum + (Number(b.actual_weight_kg) || 0), 0);
           return { date: dateStr, weight: weightOnDay };
         });
@@ -353,7 +362,7 @@ export default function ImpactAnalytics() {
             {stats.weeklyData.map((day, i) => {
               const maxWeight = Math.max(...stats.weeklyData.map(d => d.weight), 5);
               const height = (day.weight / maxWeight) * 100;
-              const dayName = new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' });
+              const dayName = new Date(day.date).toLocaleDateString('en-US', { weekday: 'short' }).charAt(0);
               
               return (
                 <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-2">
