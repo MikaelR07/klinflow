@@ -5,34 +5,60 @@ import { useAuthStore, supabase, getThumbnailUrl } from '@cleanflow/core';
 
 // ── SUB-COMPONENTS (DEFINED OUTSIDE TO PREVENT RE-MOUNTS) ─────────────────────────
 
-const MerchantPodiumSlot = memo(({ user, height, bgClass, isFirst }) => (
-  <div className="flex flex-col items-center flex-1">
-    <div className={`${isFirst ? 'w-20 h-20' : 'w-14 h-14'} rounded-[2rem] border-2 ${user ? (isFirst ? 'border-amber-400 bg-slate-900 shadow-amber-500/20' : 'border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800') : 'border-dashed border-slate-300 dark:border-slate-600'} flex items-center justify-center mb-3 relative overflow-hidden shadow-xl`}>
-      {user?.avatarUrl ? (
-        <img 
-          src={getThumbnailUrl(user.avatarUrl, { width: isFirst ? 200 : 150 })} 
-          className="w-full h-full object-cover" 
-          alt={user.name}
-          loading={isFirst ? "eager" : "lazy"}
-          fetchPriority={isFirst ? "high" : "auto"}
-        />
-      ) : (
-        <span className="text-xl">{user ? '👤' : '—'}</span>
-      )}
-      {isFirst && <Crown className={`w-8 h-8 ${user ? 'text-amber-400' : 'text-slate-300'} absolute -top-1 right-0 -rotate-12`} />}
+const MerchantPodiumSlot = memo(({ user, height, isFirst, rank }) => {
+  const getRankTheme = () => {
+    if (rank === 1) return { 
+      podium: 'bg-gradient-to-b from-amber-400 to-amber-600 border-amber-300 shadow-amber-500/40',
+      avatar: 'border-amber-400 bg-amber-50',
+      name: 'text-amber-950',
+      revenue: 'text-white'
+    };
+    if (rank === 2) return { 
+      podium: 'bg-gradient-to-b from-slate-200 to-slate-400 dark:from-slate-700 dark:to-slate-800 border-slate-300 dark:border-slate-600 shadow-slate-500/20',
+      avatar: 'border-slate-300 bg-slate-50 dark:bg-slate-800',
+      name: 'text-slate-900 dark:text-slate-200',
+      revenue: 'text-slate-950 dark:text-white'
+    };
+    if (rank === 3) return { 
+      podium: 'bg-gradient-to-b from-emerald-400 to-emerald-600 border-emerald-300 shadow-emerald-500/20',
+      avatar: 'border-emerald-300 bg-emerald-50 dark:bg-emerald-800',
+      name: 'text-emerald-950 dark:text-emerald-100',
+      revenue: 'text-white'
+    };
+    return { podium: 'bg-white', avatar: 'border-slate-200', name: 'text-slate-400', revenue: 'text-slate-600' };
+  };
+
+  const theme = getRankTheme();
+
+  return (
+    <div className="flex flex-col items-center flex-1">
+      <div className={`${isFirst ? 'w-20 h-20' : 'w-14 h-14'} rounded-[2rem] border-2 ${user ? `${theme.avatar} shadow-xl` : 'border-dashed border-slate-300 dark:border-slate-600'} flex items-center justify-center mb-3 relative overflow-hidden shadow-xl`}>
+        {user?.avatarUrl ? (
+          <img 
+            src={getThumbnailUrl(user.avatarUrl, { width: isFirst ? 200 : 150 })} 
+            className="w-full h-full object-cover" 
+            alt={user.name}
+            loading={isFirst ? "eager" : "lazy"}
+            fetchPriority={isFirst ? "high" : "auto"}
+          />
+        ) : (
+          <span className="text-xl">{user ? '👤' : '—'}</span>
+        )}
+        {isFirst && <Crown className={`w-8 h-8 ${user ? 'text-amber-500' : 'text-slate-300'} absolute -top-1 right-0 -rotate-12`} />}
+      </div>
+      <div className={`w-full ${user ? `${theme.podium} border` : 'bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700'} rounded-2xl ${height} flex flex-col items-center justify-center relative shadow-2xl transition-all duration-500`}>
+        {user ? (
+          <>
+            <p className={`text-[10px] font-black ${theme.name} uppercase tracking-widest truncate w-20 text-center mt-2`}>{user.name}</p>
+            <p className={`font-black tracking-tighter ${isFirst ? 'text-sm' : 'text-[10px]'} ${theme.revenue}`}>KSh {user.revenue.toLocaleString()}</p>
+          </>
+        ) : (
+          <p className="text-[10px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest">Open</p>
+        )}
+      </div>
     </div>
-    <div className={`w-full ${user ? bgClass : 'bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700'} rounded-2xl ${height} flex flex-col items-center justify-center relative shadow-2xl transition-all duration-500`}>
-      {user ? (
-        <>
-          <p className={`text-[10px] font-black ${isFirst ? 'text-amber-400' : 'text-slate-400'} uppercase tracking-widest truncate w-20 text-center mt-2`}>{user.name}</p>
-          <p className={`font-black tracking-tighter ${isFirst ? 'text-sm text-white' : 'text-[10px] text-emerald-500'}`}>KSh {user.revenue.toLocaleString()}</p>
-        </>
-      ) : (
-        <p className="text-[10px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest">Open</p>
-      )}
-    </div>
-  </div>
-));
+  );
+});
 
 const PodiumSlot = memo(({ user, height, bgClass, medalClass, isFirst }) => (
   <div className="flex flex-col items-center flex-1">
@@ -233,19 +259,19 @@ function SellerLeaderboard() {
               <MerchantPodiumSlot
                 user={topSellers[1] || null}
                 height="h-28"
-                bgClass="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800"
+                rank={2}
                 isFirst={false}
               />
               <MerchantPodiumSlot
                 user={topSellers[0] || null}
                 height="h-40"
-                bgClass="bg-slate-900 dark:bg-slate-900 border-x border-t border-amber-400/30 shadow-amber-500/10"
+                rank={1}
                 isFirst={true}
               />
               <MerchantPodiumSlot
                 user={topSellers[2] || null}
                 height="h-24"
-                bgClass="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800"
+                rank={3}
                 isFirst={false}
               />
             </div>
