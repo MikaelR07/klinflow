@@ -125,7 +125,7 @@ export default function EnvironmentalReport() {
       </div>
 
       {/* ── THE REPORT DOCUMENT ── */}
-      <div ref={reportRef} className="bg-white dark:bg-slate-950 p-12 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-2xl print:shadow-none print:border-none print:rounded-none print:p-0">
+      <div ref={reportRef} className="bg-white dark:bg-slate-900 p-12 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-2xl print:shadow-none print:border-none print:rounded-none print:p-0">
         
         {/* REPORT HEADER */}
         <div className="flex justify-between items-start border-b-4 border-primary pb-8 mb-10">

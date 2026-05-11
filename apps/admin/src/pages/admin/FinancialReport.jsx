@@ -96,7 +96,7 @@ export default function FinancialReport() {
       </div>
 
       {/* ── FINANCIAL DOCUMENT ── */}
-      <div className="bg-white dark:bg-slate-950 p-12 rounded-[3.5rem] border border-slate-100 dark:border-white/5 shadow-2xl print:p-0 print:border-none print:shadow-none print:rounded-none">
+      <div className="bg-white dark:bg-slate-900 p-12 rounded-[3.5rem] border border-slate-100 dark:border-white/5 shadow-2xl print:p-0 print:border-none print:shadow-none print:rounded-none">
         
         {/* HEADER */}
         <div className="flex justify-between items-start border-b-4 border-slate-900 dark:border-white pb-8 mb-10">

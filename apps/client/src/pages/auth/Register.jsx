@@ -332,7 +332,7 @@ export default function Register() {
 
       {/* ── VERIFICATION OVERLAY ────────────────────────────────────── */}
       {isVerifying && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
           <div className="max-w-sm w-full bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in zoom-in slide-in-from-bottom-8 duration-500 ease-out">
             <button 
               onClick={() => setIsVerifying(false)}
@@ -363,7 +363,7 @@ export default function Register() {
                   value={formData.otp} 
                   onChange={(e) => setFormData(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
                   placeholder="000000" 
-                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-950/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200" 
+                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200" 
                 />
                 <div className="flex flex-col items-center mt-4 space-y-3">
                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>

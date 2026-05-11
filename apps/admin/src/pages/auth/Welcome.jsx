@@ -5,7 +5,7 @@ export default function Welcome() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col p-6 overflow-hidden relative text-white">
+    <div className="min-h-screen bg-slate-900 flex flex-col p-6 overflow-hidden relative text-white">
       {/* Background Decor */}
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-primary/20 rounded-full blur-3xl" />
       <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl" />
@@ -51,7 +51,7 @@ export default function Welcome() {
       <div className="relative z-10 pb-8 space-y-4 max-w-md mx-auto w-full">
         <button
           onClick={() => navigate('/login')}
-          className="w-full py-5 bg-white text-slate-950 rounded-3xl font-semibold text-base shadow-2xl shadow-white/10 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+          className="w-full py-5 bg-white text-slate-900 rounded-3xl font-semibold text-base shadow-2xl shadow-white/10 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
         >
           Enter Command Center <ArrowRight className="w-5 h-5" />
         </button>

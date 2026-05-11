@@ -35,7 +35,7 @@ export default function BusinessLogin() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8 relative">
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-4 py-8 relative">
       
       <Link 
         to="/login" 

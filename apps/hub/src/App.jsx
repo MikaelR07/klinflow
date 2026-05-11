@@ -68,7 +68,7 @@ export default function App() {
   }, [isDarkMode]);
 
   if (isInitializing) {
-    return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Loading OS...</div>;
+    return <div className="min-h-screen bg-slate-900 flex items-center justify-center text-white">Loading OS...</div>;
   }
 
   if (!isAuthorized) {
@@ -99,7 +99,7 @@ export default function App() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans selection:bg-primary/20">
+    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans selection:bg-primary/20">
       
       {/* ── SIDEBAR ── */}
       <aside className={`
@@ -193,7 +193,7 @@ export default function App() {
               >
                  <Bell className="w-6 h-6" />
                  {unreadCount > 0 && (
-                   <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-slate-950 text-xs font-semibold text-white flex items-center justify-center animate-bounce-in">
+                   <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-slate-900 text-xs font-semibold text-white flex items-center justify-center animate-bounce-in">
                      {unreadCount}
                    </span>
                  )}
@@ -216,7 +216,7 @@ export default function App() {
       {/* Overlay */}
       {isSidebarOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-slate-950/20 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-slate-900/20 backdrop-blur-sm lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}

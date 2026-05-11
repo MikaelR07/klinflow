@@ -78,7 +78,7 @@ export default function BusinessRegister() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-950 px-4 py-8">
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-4 py-8">
       <div className="max-w-md w-full mx-auto animate-slide-up">
         
         {/* Header */}

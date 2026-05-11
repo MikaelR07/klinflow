@@ -49,7 +49,7 @@ export default function CreateRFQ() {
   };
 
   return (
-    <div className="bg-slate-100 dark:bg-slate-950 min-h-screen">
+    <div className="bg-slate-100 dark:bg-slate-900 min-h-screen">
       <div className="max-w-lg mx-auto bg-white dark:bg-slate-900 min-h-screen relative animate-fade-in flex flex-col">
         
         {/* ── HEADER ── */}

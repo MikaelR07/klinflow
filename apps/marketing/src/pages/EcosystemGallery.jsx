@@ -73,7 +73,7 @@ export default function EcosystemGallery() {
 
   return (
     <Layout>
-      <div className={`min-h-screen pt-24 md:pt-32 pb-20 md:pb-40 ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+      <div className={`min-h-screen pt-24 md:pt-32 pb-20 md:pb-40 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
         <div className="max-w-7xl mx-auto px-6">
           
           <Link to="/" className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-xs mb-8 hover:translate-x-[-4px] transition-transform">
@@ -119,7 +119,7 @@ export default function EcosystemGallery() {
                     className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105" 
                   />
                   
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-8 flex flex-col justify-end">
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-8 flex flex-col justify-end">
                     <h4 className="text-xl font-bold text-white mb-2">{shot.title}</h4>
                     <p className="text-xs text-slate-300 font-medium leading-relaxed mb-6">{shot.desc}</p>
                     <div className="flex items-center gap-3">
@@ -139,7 +139,7 @@ export default function EcosystemGallery() {
       {/* LIGHTBOX MODAL */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/98 backdrop-blur-2xl p-6"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/98 backdrop-blur-2xl p-6"
           onClick={() => setSelectedImage(null)}
         >
           <motion.div 

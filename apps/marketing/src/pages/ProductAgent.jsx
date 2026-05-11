@@ -15,7 +15,7 @@ export default function ProductAgent() {
       {/* ── HERO SECTION ─────────────────────────────────────────── */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`} />
+          <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`} />
           <div className={`absolute top-0 right-0 w-[600px] h-[600px] bg-blue-500/10 blur-[120px] rounded-full`} />
         </div>
 
@@ -45,7 +45,7 @@ export default function ProductAgent() {
             <div className="order-1 lg:order-2">
               <div className="rounded-2xl overflow-hidden border border-white/5 shadow-2xl relative bg-slate-900">
                 <img src="/grid/agent-home.png" alt="Agent Terminal: Mission Control" loading="lazy" className="w-full h-auto" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
               </div>
               {/* Floating UI Card */}
               <motion.div 
@@ -109,7 +109,7 @@ export default function ProductAgent() {
       </section>
 
       {/* ── PERFORMANCE MONITORING ─────────────────────────────────────────── */}
-      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div className="order-2 lg:order-1">
             <div className="p-12 rounded-2xl bg-slate-900 border border-white/5 shadow-2xl relative overflow-hidden">

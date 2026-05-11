@@ -102,7 +102,7 @@ export default function NetworkOracle() {
                       <span className="font-semibold text-sm text-slate-700 dark:text-slate-200">{m.material_name}</span>
                     </div>
                     {editingId === m.id ? (
-                      <div className="flex items-center gap-1 bg-white dark:bg-slate-950 px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center gap-1 bg-white dark:bg-slate-900 px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700">
                         <input 
                           autoFocus
                           type="number"

@@ -172,7 +172,7 @@ export default function ArrivalDetails() {
   );
 
   return (
-    <div className="bg-white dark:bg-slate-950 min-h-screen">
+    <div className="bg-white dark:bg-slate-900 min-h-screen">
       <div className="w-full min-h-screen relative animate-fade-in overflow-hidden">
         
         {/* ── IMMERSIVE HERO IMAGE (TRUE FULL-BLEED) ── */}
@@ -249,7 +249,7 @@ export default function ArrivalDetails() {
               <p className="text-xl font-black text-slate-900 dark:text-white italic">{item.grade || 'A'}</p>
               <p className="text-xs font-bold text-slate-300 uppercase">Quality</p>
             </div>
-            <div className="p-5 text-center bg-slate-950 dark:bg-black text-white">
+            <div className="p-5 text-center bg-slate-900 dark:bg-black text-white">
               <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-1">Valuation</p>
               <p className="text-xl font-black italic">
                 {item.price_per_kg ? `KSh ${item.price_per_kg}` : 'Quote'}

@@ -17,7 +17,7 @@ const MerchantPodiumSlot = memo(({ user, height, isFirst, rank }) => {
       podium: 'bg-gradient-to-b from-slate-200 to-slate-400 dark:from-slate-700 dark:to-slate-800 border-slate-300 dark:border-slate-600 shadow-slate-500/20',
       avatar: 'border-slate-300 bg-slate-50 dark:bg-slate-800',
       name: 'text-slate-900 dark:text-slate-200',
-      revenue: 'text-slate-950 dark:text-white'
+      revenue: 'text-slate-900 dark:text-white'
     };
     if (rank === 3) return { 
       podium: 'bg-gradient-to-b from-emerald-400 to-emerald-600 border-emerald-300 shadow-emerald-500/20',

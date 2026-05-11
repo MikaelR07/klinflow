@@ -15,7 +15,7 @@ export default function Marketplace() {
       {/* ── HERO SECTION ─────────────────────────────────────────── */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`} />
+          <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`} />
           <div className={`absolute top-0 right-0 w-[600px] h-[600px] bg-teal-500/10 blur-[120px] rounded-full`} />
         </div>
 
@@ -45,7 +45,7 @@ export default function Marketplace() {
             <div className="order-1 lg:order-2">
               <div className="rounded-2xl overflow-hidden border border-white/5 shadow-2xl relative bg-slate-900">
                 <img src="/grid/business-home.png" alt="Marketplace Terminal: Industrial Exchange" loading="lazy" className="w-full h-auto" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
               </div>
             </div>
           </div>
@@ -72,7 +72,7 @@ export default function Marketplace() {
             ].map((role) => (
               <div 
                 key={role.title}
-                className={`p-8 md:p-12 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-950 border-white/5 hover:border-teal-500/20' : 'bg-slate-50 border-slate-100 hover:border-teal-500/20 shadow-lg'}`}
+                className={`p-8 md:p-12 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-900 border-white/5 hover:border-teal-500/20' : 'bg-slate-50 border-slate-100 hover:border-teal-500/20 shadow-lg'}`}
               >
                 <div className={`w-16 h-16 rounded-2xl bg-${role.color}-500/10 text-${role.color}-500 flex items-center justify-center mb-8`}>
                   <role.icon className="w-8 h-8" />
@@ -89,7 +89,7 @@ export default function Marketplace() {
       </section>
 
       {/* ── B2B MECHANICS ─────────────────────────────────────────── */}
-      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
         <div className="max-w-7xl mx-auto">
            <div className="text-center mb-24">
               <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-teal-500 mb-6">Built-In Liquidity</h2>
@@ -130,7 +130,7 @@ export default function Marketplace() {
       <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-900' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
            <div className="order-2 lg:order-1">
-              <div className="p-10 rounded-2xl bg-slate-950 border border-white/5 relative overflow-hidden">
+              <div className="p-10 rounded-2xl bg-slate-900 border border-white/5 relative overflow-hidden">
                  <div className="flex items-center justify-between mb-10">
                     <div className="flex items-center gap-3">
                        <Activity className="w-5 h-5 text-teal-500" />

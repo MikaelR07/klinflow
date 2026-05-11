@@ -208,7 +208,7 @@ export default function HubSettings() {
                        name="capacityKg"
                        value={formData.capacityKg}
                        onChange={handleChange}
-                       className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-primary outline-none transition-all"
+                       className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-primary outline-none transition-all"
                      />
                   </div>
                 </div>
@@ -235,7 +235,7 @@ export default function HubSettings() {
                         name="minWeight"
                         value={formData.minWeight}
                         onChange={handleChange}
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
                       />
                       <p className="text-xs text-slate-400 mt-2">Pickups below this weight will be ignored by matching.</p>
                    </div>
@@ -246,7 +246,7 @@ export default function HubSettings() {
                         name="maxWeight"
                         value={formData.maxWeight}
                         onChange={handleChange}
-                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
                       />
                       <p className="text-xs text-slate-400 mt-2">Maximum weight your fleet can handle in a single trip.</p>
                    </div>
@@ -304,7 +304,7 @@ export default function HubSettings() {
                       value={formData.address}
                       onChange={handleChange}
                       rows={3}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-3xl px-6 py-5 text-sm font-semibold focus:ring-2 focus:ring-primary outline-none transition-all resize-none"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-3xl px-6 py-5 text-sm font-semibold focus:ring-2 focus:ring-primary outline-none transition-all resize-none"
                     />
                   </div>
                   <div>
@@ -314,7 +314,7 @@ export default function HubSettings() {
                       name="operatingHours"
                       value={formData.operatingHours}
                       onChange={handleChange}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-primary outline-none"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-primary outline-none"
                     />
                   </div>
                 </div>

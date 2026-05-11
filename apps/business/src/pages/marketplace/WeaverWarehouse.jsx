@@ -219,7 +219,7 @@ export default function WeaverWarehouse() {
               </div>
             </div>
           )) : (
-            <div className="py-20 text-center bg-slate-50 dark:bg-slate-950/50 rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-slate-800">
+            <div className="py-20 text-center bg-slate-50 dark:bg-slate-900/50 rounded-[3rem] border-2 border-dashed border-slate-200 dark:border-slate-800">
                <Package className="w-12 h-12 text-slate-200 mx-auto mb-4" />
                <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest">Your warehouse is empty.</p>
                <button onClick={() => navigate('/')} className="text-primary text-xs font-semibold uppercase tracking-widest mt-4">Claim Assets Now <ArrowRight className="w-3 h-3 inline ml-1" /></button>
@@ -254,7 +254,7 @@ export default function WeaverWarehouse() {
                        <select 
                          value={newSideAsset.materialType}
                          onChange={(e) => setNewSideAsset({...newSideAsset, materialType: e.target.value})}
-                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-semibold outline-none focus:border-primary transition-all appearance-none"
+                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-semibold outline-none focus:border-primary transition-all appearance-none"
                        >
                           <option value="PET">PET Plastic</option>
                           <option value="HDPE">HDPE Plastic</option>
@@ -269,7 +269,7 @@ export default function WeaverWarehouse() {
                          type="number"
                          value={newSideAsset.weightKg}
                          onChange={(e) => setNewSideAsset({...newSideAsset, weightKg: Number(e.target.value)})}
-                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-semibold outline-none focus:border-primary transition-all"
+                         className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-semibold outline-none focus:border-primary transition-all"
                        />
                     </div>
                  </div>

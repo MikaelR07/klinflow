@@ -224,9 +224,9 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-end justify-center p-0 md:p-4">
-      <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-md" onClick={onClose} />
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
       
-      <div className="relative w-full max-w-lg bg-white dark:bg-slate-950 rounded-t-[3rem] md:rounded-[3rem] shadow-2xl overflow-hidden animate-slide-up pb-10">
+      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-[3rem] md:rounded-[3rem] shadow-2xl overflow-hidden animate-slide-up pb-10">
         <div className="p-6 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
@@ -342,7 +342,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                           type="number"
                           value={customPayoutAmount === null ? basePayoutAmount : customPayoutAmount}
                           onChange={(e) => setCustomPayoutAmount(Number(e.target.value))}
-                          className="w-32 bg-slate-950 border border-emerald-500/50 rounded-xl px-3 py-1.5 text-right text-emerald-400 font-mono text-xl outline-none focus:border-emerald-400 shadow-inner"
+                          className="w-32 bg-slate-900 border border-emerald-500/50 rounded-xl px-3 py-1.5 text-right text-emerald-400 font-mono text-xl outline-none focus:border-emerald-400 shadow-inner"
                           autoFocus
                         />
                       ) : (

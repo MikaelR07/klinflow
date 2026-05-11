@@ -33,7 +33,7 @@ const appSuite = [
 
 export default function DownloadSection({ isDarkMode }) {
   return (
-    <section className={`py-40 px-6 relative overflow-hidden ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+    <section className={`py-40 px-6 relative overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-20">
           <div className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-xs mb-6">
@@ -80,14 +80,14 @@ export default function DownloadSection({ isDarkMode }) {
                   <div className="flex flex-col gap-4">
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Available for {app.platform}</p>
                     <div className="flex flex-wrap gap-3">
-                      <button className="flex items-center gap-3 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-xl hover:scale-105 transition-all shadow-lg group">
+                      <button className="flex items-center gap-3 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl hover:scale-105 transition-all shadow-lg group">
                         <Apple className="w-5 h-5" />
                         <div className="text-left">
                           <p className="text-xs font-bold uppercase leading-none opacity-60">App Store</p>
                           <p className="text-xs font-black tracking-tight leading-tight">Download</p>
                         </div>
                       </button>
-                      <button className="flex items-center gap-3 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-xl hover:scale-105 transition-all shadow-lg group">
+                      <button className="flex items-center gap-3 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl hover:scale-105 transition-all shadow-lg group">
                         <PlayCircle className="w-5 h-5" />
                         <div className="text-left">
                           <p className="text-xs font-bold uppercase leading-none opacity-60">Play Store</p>

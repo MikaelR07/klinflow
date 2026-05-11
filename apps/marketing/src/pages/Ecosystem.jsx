@@ -21,7 +21,7 @@ export default function Ecosystem() {
     <Layout>
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-950' : 'bg-slate-50'}`} />
+          <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`} />
           <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 blur-[150px] rounded-full`} />
         </div>
 

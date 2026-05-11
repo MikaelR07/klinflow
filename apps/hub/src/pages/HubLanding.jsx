@@ -38,11 +38,11 @@ export default function HubLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans selection:bg-primary/20">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans selection:bg-primary/20">
       
       {/* ── LOGIN MODAL ── */}
       {showLogin && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-2xl overflow-hidden animate-slide-up relative">
             <button 
               onClick={() => setShowLogin(false)}
@@ -65,7 +65,7 @@ export default function HubLanding() {
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
                     placeholder="e.g. +254712345678"
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm font-semibold focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm font-semibold focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
                     required
                   />
                 </div>
@@ -76,7 +76,7 @@ export default function HubLanding() {
                     value={pin}
                     onChange={e => setPin(e.target.value)}
                     placeholder="••••"
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm font-semibold focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-xl px-4 py-3 text-sm font-semibold focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
                     required
                   />
                 </div>

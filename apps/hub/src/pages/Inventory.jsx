@@ -149,7 +149,7 @@ export default function Inventory() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F4F4] dark:bg-slate-950 pb-32">
+    <div className="min-h-screen bg-[#F4F4F4] dark:bg-slate-900 pb-32">
       
       <AnimatePresence mode="wait">
         {viewLevel === 'category' && (

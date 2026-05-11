@@ -302,7 +302,7 @@ export default function MarketHub() {
             <div key={cat.id || index} className={`p-5 rounded-[2rem] border shadow-sm transition-all ${
               cat.is_active 
                 ? 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800' 
-                : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 opacity-50'
+                : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 opacity-50'
             }`}>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shrink-0">

@@ -256,7 +256,7 @@ export default function BuyRecyclables() {
 
       {/* Material Passport / Provenance Modal */}
       {detailModal && (
-        <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-4 bg-slate-900/80 backdrop-blur-xl animate-in fade-in duration-300">
           <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[3rem] p-8 shadow-2xl border border-white/10 overflow-hidden relative animate-in slide-in-from-bottom-12 duration-500">
             <button onClick={() => setDetailModal(null)} className="absolute top-6 right-6 p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500">
               <X className="w-5 h-5" />
@@ -272,7 +272,7 @@ export default function BuyRecyclables() {
 
             <div className="space-y-8">
               {/* Authentication Block */}
-              <div className="bg-slate-50 dark:bg-slate-950/50 rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
+              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-6 border border-slate-100 dark:border-slate-800">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -328,7 +328,7 @@ export default function BuyRecyclables() {
 
       {/* Order Modal */}
       {orderModal && (
-        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
           <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-[3rem] p-8 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in slide-in-from-bottom-12 duration-500">
             <div className="flex items-center justify-between mb-8">
               <div>
@@ -383,7 +383,7 @@ export default function BuyRecyclables() {
 
       {/* Offer Modal */}
       {offerModal && (
-        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-in fade-in duration-200">
           <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-[2rem] p-6 shadow-2xl border border-slate-200 dark:border-slate-800 animate-in slide-in-from-bottom-8 duration-300">
             <div className="flex items-center justify-between mb-6">
               <div>

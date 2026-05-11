@@ -242,7 +242,7 @@ export default function SellRecyclables() {
             <div className="aspect-video bg-slate-100 dark:bg-slate-800 relative">
               <img src={formData.photo} alt="Preview" className="w-full h-full object-cover" />
               <div className="absolute top-3 right-3">
-                <span className="bg-white/90 dark:bg-slate-950/90 text-xs font-semibold text-primary px-2 py-1 rounded-full border border-primary/20">
+                <span className="bg-white/90 dark:bg-slate-900/90 text-xs font-semibold text-primary px-2 py-1 rounded-full border border-primary/20">
                    AI MATCH SCORE: 95%
                 </span>
               </div>

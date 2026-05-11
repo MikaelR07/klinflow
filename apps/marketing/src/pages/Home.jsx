@@ -167,7 +167,7 @@ export default function Home() {
       </section>
 
       {/* ── THE CORE SYSTEM LOOP ─────────────────────────────────────────── */}
-      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-950' : 'bg-white'}`}>
+      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-900' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-end justify-between gap-8 mb-20">
             <div className="max-w-2xl text-left">
@@ -200,7 +200,7 @@ export default function Home() {
       </section>
 
       {/* CORE PRODUCT SUITE: MASONRY GRID ──────────────────────────────────── */}
-      <section className={`py-16 md:py-32 relative z-10 ${isDarkMode ? 'bg-slate-950/50' : 'bg-slate-50/50'}`}>
+      <section className={`py-16 md:py-32 relative z-10 ${isDarkMode ? 'bg-slate-900/50' : 'bg-slate-50/50'}`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-3xl mb-20 text-left">
             <div className={`text-xs font-bold uppercase tracking-[0.3em] mb-4 ${isDarkMode ? 'text-emerald-500' : 'text-emerald-600'}`}>The Ecosystem</div>
@@ -258,7 +258,7 @@ export default function Home() {
       </section>
 
       {/* ── HYGENEX AI: Material Valuation ───────────────────────────────── */}
-      <section className={`py-40 px-6 relative overflow-hidden ${isDarkMode ? 'bg-slate-950' : 'bg-white'}`}>
+      <section className={`py-40 px-6 relative overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
           <div>
             <div className="inline-flex items-center gap-2 text-indigo-500 font-bold uppercase tracking-widest text-xs mb-6">
@@ -345,7 +345,7 @@ export default function Home() {
       {/* LIGHTBOX MODAL */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-xl p-6"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/95 backdrop-blur-xl p-6"
           onClick={() => setSelectedImage(null)}
         >
           <motion.div 

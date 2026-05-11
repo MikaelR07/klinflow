@@ -266,7 +266,7 @@ export default function AgentHome() {
         >
           <Bell className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-red-600 text-white text-xs font-semibold rounded-full flex items-center justify-center ring-2 ring-[#F8F8FF] dark:ring-slate-950 shadow-md animate-in zoom-in">
+            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-red-600 text-white text-xs font-semibold rounded-full flex items-center justify-center ring-2 ring-[#F8F8FF] dark:ring-slate-900 shadow-md animate-in zoom-in">
               {unreadCount}
             </span>
           )}

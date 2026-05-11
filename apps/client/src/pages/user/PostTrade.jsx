@@ -521,7 +521,7 @@ export default function PostTrade() {
                </div>
 
                {/* ESTIMATED VALUE CARD */}
-               <div className="bg-slate-900 dark:bg-slate-950 rounded-2xl p-6 relative overflow-hidden">
+               <div className="bg-slate-900 dark:bg-slate-900 rounded-2xl p-6 relative overflow-hidden">
                   <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full" />
                   <div className="relative z-10 flex items-center justify-between">
                      <div>
@@ -836,7 +836,7 @@ export default function PostTrade() {
                 </div>
 
                 {/* ── FINANCIAL BREAKDOWN ── */}
-                <div className="bg-slate-900 dark:bg-slate-950 rounded-2xl p-8 space-y-6">
+                <div className="bg-slate-900 dark:bg-slate-900 rounded-2xl p-8 space-y-6">
                    <div className="space-y-4">
                       <div className="flex justify-between items-center text-white/50">
                          <span className="text-xs font-semibold uppercase tracking-widest">Gross Value</span>

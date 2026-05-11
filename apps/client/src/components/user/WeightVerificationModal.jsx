@@ -50,9 +50,9 @@ export default function WeightVerificationModal() {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-md" onClick={clearActiveVerification} />
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={clearActiveVerification} />
       
-      <div className="relative w-full max-w-[340px] bg-white dark:bg-slate-950 rounded-[2.5rem] shadow-2xl border border-slate-200 dark:border-white/5 overflow-hidden animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-[340px] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-200 dark:border-white/5 overflow-hidden animate-in zoom-in-95 duration-200">
         
         {/* HEADER */}
         <div className="p-6 pb-0 flex justify-between items-center">

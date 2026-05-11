@@ -105,7 +105,7 @@ export default function SystemConfigPage() {
                    <p className="text-xs font-semibold text-slate-400 mt-2 uppercase tracking-widest">Loading Schedule...</p>
                 </div>
               ) : days.map(day => (
-                <div key={day} className={`p-4 rounded-2xl border transition-all ${form.hours[day]?.active ? 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-white/5' : 'bg-white dark:bg-slate-950 border-dashed border-slate-200 opacity-50'}`}>
+                <div key={day} className={`p-4 rounded-2xl border transition-all ${form.hours[day]?.active ? 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-white/5' : 'bg-white dark:bg-slate-900 border-dashed border-slate-200 opacity-50'}`}>
                    <div className="flex items-center justify-between mb-3">
                       <span className="text-xs font-semibold uppercase tracking-widest text-slate-900 dark:text-white">{day}</span>
                       <button 

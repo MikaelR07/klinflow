@@ -13,7 +13,7 @@ export default function ProtectedRoute({ children }) {
   // IMPORTANT: Wait for session restoration to complete
   if (isInitializing) {
     return (
-      <div className="min-h-dvh flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 gap-4">
+      <div className="min-h-dvh flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 gap-4">
         <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30 animate-pulse">
           <Recycle className="w-7 h-7 text-white" />
         </div>

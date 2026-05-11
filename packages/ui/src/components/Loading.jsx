@@ -3,7 +3,7 @@ import { Recycle } from 'lucide-react';
 
 export const LoadingScreen = ({ message = "Syncing with CleanFlow..." }) => {
   return (
-    <div className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center animate-fade-in overflow-hidden">
+    <div className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center animate-fade-in overflow-hidden">
       
       {/* Background Ambient Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[120px] animate-pulse" />

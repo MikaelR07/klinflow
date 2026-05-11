@@ -37,7 +37,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className={`py-16 md:py-32 px-6 border-t transition-colors relative z-20 ${isDarkMode ? 'border-white/5 bg-slate-950 text-white' : 'border-slate-200 bg-white text-slate-900'}`}>
+    <footer className={`py-16 md:py-32 px-6 border-t transition-colors relative z-20 ${isDarkMode ? 'border-white/5 bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-900'}`}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
           <div className="lg:col-span-2">
