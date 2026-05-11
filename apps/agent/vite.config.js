@@ -19,7 +19,7 @@ export default defineConfig({
         short_name: 'CF Agent',
         description: 'CleanFlow Agent PWA for waste collectors',
         theme_color: '#00A651',
-        background_color: '#ffffff',
+        background_color: '#0f172a',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',

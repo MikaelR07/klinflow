@@ -18,8 +18,8 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="space-y-5 animate-fade-in">
-      <h1 className="text-xl font-semibold dark:text-white">Settings & Profile</h1>
+    <div className="space-y-6">
+      <h1 className="text-xl font-semibold dark:text-white text-center">Settings & Profile</h1>
 
       {/* Profile Card */}
       <button 

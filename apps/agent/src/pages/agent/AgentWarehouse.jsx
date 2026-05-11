@@ -222,109 +222,92 @@ export default function AgentWarehouse() {
       </div>
 
       {/* ── CURRENT TRUCK LOAD (BULK DISPATCH) ── */}
-      <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-5 rounded-3xl relative overflow-hidden group shadow-xl shadow-emerald-600/20">
-         <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
+      <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-4 rounded-2xl relative overflow-hidden group">
          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-5">
-               <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
-                     {profile?.agent_account_type === 'company_admin' ? (
-                       <Warehouse className="w-6 h-6 text-white" />
-                     ) : (
-                       <Truck className="w-6 h-6 text-white" />
-                     )}
-                  </div>
-                  <div>
-                      <h3 className="text-sm font-semibold text-white leading-none">
-                       {profile?.agent_account_type === 'company_admin' ? 'Total Incoming Cargo' : 'Current Truck Load'}
-                     </h3>
-                     <p className="text-xs text-emerald-100 font-medium mt-1">
-                       {profile?.agent_account_type === 'company_admin' ? 'Active across all drivers' : 'Ready for Drop-off'}
-                     </p>
-                  </div>
-               </div>
+            <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                    {profile?.agent_account_type === 'company_admin' ? (
+                    <Warehouse className="w-5 h-5 text-white" />
+                    ) : (
+                    <Truck className="w-5 h-5 text-white" />
+                    )}
+                </div>
+                <div>
+                    <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                    {profile?.agent_account_type === 'company_admin' ? 'Fleet Inventory' : 'Current Truck Load'}
+                    </h3>
+                    <p className="text-[10px] text-emerald-100 font-medium opacity-80 uppercase tracking-tight">
+                    Verified for Dispatch
+                    </p>
+                </div>
             </div>
 
-            <div className="columns-2 gap-3 mb-5 space-y-3">
-               <div className="break-inside-avoid p-5 bg-white/10 rounded-2xl border border-white/10">
-                  <div className="flex items-center gap-2 mb-2">
-                     <Package className="w-4 h-4 text-indigo-200" />
-                     <p className="text-xs font-semibold text-indigo-100 uppercase tracking-widest">Stockpile</p>
-                  </div>
-                  <p className="text-xl font-bold text-white tracking-tighter">KSh {totalEstimatedValue.toLocaleString()}</p>
+            <div className="grid grid-cols-3 gap-2">
+               <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm">
+                  <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Value</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">KSh {totalEstimatedValue.toLocaleString()}</p>
                </div>
                
-               <div className="break-inside-avoid p-4 bg-white/5 rounded-2xl border border-white/10">
-                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Live Weight</p>
-                  <p className="text-lg font-bold text-white tracking-tighter">{totalWeight.toFixed(1)} KG</p>
+               <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm">
+                  <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Weight</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">{totalWeight.toFixed(1)} KG</p>
                </div>
 
-               <div className="break-inside-avoid p-4 bg-white/5 rounded-2xl border border-white/10">
-                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Verified Pickups</p>
-                  <p className="text-lg font-bold text-white tracking-tighter">{realAssets.length}</p>
+               <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm">
+                  <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">Assets</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">{realAssets.length}</p>
                </div>
             </div>
 
+            {profile?.agent_account_type === 'independent' && (
+               <button 
+                 onClick={() => navigate('/warehouse/sell')}
+                 className="mt-3 w-full flex items-center justify-between p-3 bg-indigo-600 rounded-xl active:scale-95 transition-all group shadow-sm text-white"
+               >
+                 <div className="flex items-center gap-2">
+                   <div className="w-8 h-8 rounded-lg bg-white/20 text-white flex items-center justify-center">
+                     <Tag className="w-4 h-4" />
+                   </div>
+                   <div className="text-left">
+                     <h3 className="text-[10px] font-bold uppercase tracking-wider">Sell Stock Terminal</h3>
+                     <p className="text-[8px] text-indigo-100 font-medium uppercase tracking-tight">Direct-to-Weaver Trade</p>
+                   </div>
+                 </div>
+                 <ChevronRight className="w-4 h-4 text-white" />
+               </button>
+            )}
+
             {profile?.agent_account_type === 'fleet_driver' && (
-              <>
+              <div className="mt-3">
                 {profile?.hub_transfer_pin ? (
-                  <div className="p-6 bg-emerald-500 rounded-[2rem] text-center shadow-xl shadow-emerald-500/20 animate-bounce-in">
-                    <p className="text-xs font-semibold text-emerald-900 mb-2">Gate Verification PIN</p>
-                    <div className="text-5xl font-semibold text-white">{profile.hub_transfer_pin}</div>
-                    <p className="text-xs font-semibold text-emerald-100 mt-3">Show this code to the Hub Manager to transfer cargo.</p>
+                  <div className="p-3 bg-emerald-500 rounded-xl text-center shadow-lg border border-white/10 animate-bounce-in">
+                    <p className="text-[9px] font-bold text-emerald-900 uppercase tracking-widest mb-1">Gate PIN</p>
+                    <div className="text-2xl font-black text-white tracking-widest">{profile.hub_transfer_pin}</div>
                   </div>
                 ) : (
                   <button 
                     onClick={handleDispatch}
                     disabled={realAssets.length === 0}
-                    className="w-full py-3 bg-white text-emerald-700 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all flex items-center justify-center disabled:opacity-50 disabled:active:scale-100"
+                    className="w-full py-2.5 bg-white text-emerald-700 rounded-xl font-bold text-[10px] uppercase tracking-widest shadow-md active:scale-95 transition-all disabled:opacity-50"
                   >
-                    Notify Hub & Get Check-In Code
+                    Get Check-In Code
                   </button>
                 )}
-              </>
+              </div>
             )}
             
             {profile?.agent_account_type === 'company_admin' && (
                <button 
                  onClick={handleTransferInventory}
                  disabled={isTransferring || realAssets.length === 0}
-                 className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-semibold text-sm shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                 className="mt-3 w-full py-3 bg-slate-50 dark:bg-slate-900 rounded-xl font-bold text-[10px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 text-slate-900 dark:text-white disabled:opacity-50"
                >
-                 <CheckCircle2 className="w-5 h-5" />
-                 RECEIVE ALL FLEET CARGO
+                 <CheckCircle2 className="w-4 h-4" />
+                 Receive Fleet Cargo
                </button>
             )}
          </div>
       </div>
-
-
-
-      {/* ── DIRECT MARKETPLACE TRADE (NEW FEATURE) ── */}
-      {profile?.agent_account_type === 'independent' && (
-        <div className="bg-indigo-600 rounded-3xl p-6 shadow-xl shadow-indigo-600/20 relative overflow-hidden group border border-indigo-400/30">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/4 group-hover:scale-110 transition-transform duration-500" />
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
-                <Tag className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white">Sell Stock Terminal</h3>
-                <p className="text-xs text-indigo-100 font-medium">Bypass the hub & sell to weavers</p>
-              </div>
-            </div>
-
-            <button 
-              onClick={() => navigate('/warehouse/sell')}
-              className="w-full py-5 bg-white text-indigo-600 rounded-2xl font-semibold text-sm shadow-lg active:scale-95 transition-all flex items-center justify-center gap-3"
-            >
-              <PlusCircle className="w-5 h-5" />
-              SELL STOCK DIRECTLY
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* ── DYNAMIC INVENTORY GRID ── */}
       <div>
@@ -341,15 +324,20 @@ export default function AgentWarehouse() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-2">
             {dynamicInventory.map(item => (
-              <div key={item.id} className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-colors shadow-sm">
-                <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/10 flex items-center justify-center text-${item.color}-500 mb-3`}>
-                  <Package className="w-5 h-5" />
+              <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-colors shadow-sm">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <div className={`w-7 h-7 rounded-lg bg-${item.color}-500/10 flex items-center justify-center text-${item.color}-500 shrink-0`}>
+                    <Package className="w-3.5 h-3.5" />
+                  </div>
+                  <h4 className="font-bold text-slate-900 dark:text-white text-[10px] uppercase tracking-tighter truncate">{item.type}</h4>
                 </div>
-                <h4 className="font-semibold text-slate-900 dark:text-white text-sm mb-1 capitalize">{item.type}</h4>
-                <p className="text-2xl font-semibold text-primary mb-1">{item.weight.toFixed(1)}<span className="text-sm text-slate-400">kg</span></p>
-                <p className="text-xs font-semibold text-slate-400">KSh {item.totalValue.toLocaleString()}</p>
+                <div className="flex items-baseline gap-0.5">
+                  <p className="text-base font-bold text-slate-900 dark:text-white tracking-tight">{item.weight.toFixed(1)}</p>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase">kg</span>
+                </div>
+                <p className="text-[9px] font-semibold text-primary truncate">KSh {item.totalValue.toLocaleString()}</p>
               </div>
             ))}
           </div>
