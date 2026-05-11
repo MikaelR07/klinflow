@@ -214,7 +214,7 @@ export default function ImpactAnalytics() {
       <div className="space-y-6 pb-24">
         {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
         <div className="relative">
-          <div className="relative bg-gradient-to-br from-emerald-600 to-teal-800 dark:from-orange-900 dark:to-amber-950 rounded-3xl p-6 text-white border-none overflow-hidden">
+          <div className="relative bg-gradient-to-br from-emerald-600 to-teal-800 rounded-3xl p-6 text-white border-none overflow-hidden">
             {/* Clean Flat Layout */}
             
             <div className="relative z-10">
