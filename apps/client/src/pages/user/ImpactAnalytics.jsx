@@ -190,7 +190,7 @@ export default function ImpactAnalytics() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F8F8FF] dark:bg-slate-900 flex flex-col px-4">
+    <div className="fixed inset-0 z-50 bg-[#F8F8FF] dark:bg-slate-900 flex flex-col px-4 pt-10">
       {/* ── TOP NAV ── */}
       <div className="shrink-0 z-40 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 mb-6">
         <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center shadow-sm active:scale-90 transition-all border border-slate-100 dark:border-slate-800">
