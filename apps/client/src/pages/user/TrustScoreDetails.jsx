@@ -93,9 +93,9 @@ export default function TrustScoreDetails() {
   ];
 
   return (
-    <div className="pb-20 space-y-6 animate-fade-in">
+    <div className="pb-20 space-y-6 animate-fade-in px-4">
       {/* ── HEADER ── */}
-      <div className="flex items-center gap-4 px-1">
+      <div className="flex items-center gap-4 py-4">
          <button 
            onClick={() => navigate(-1)} 
            className="p-3 bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
@@ -245,7 +245,7 @@ export default function TrustScoreDetails() {
 
         {/* ── HUSTLE MILESTONES ── */}
         <div className="space-y-4">
-           <h2 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight px-1 flex items-center gap-2">
+           <h2 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
              <Award className="w-4 h-4 text-amber-500" /> Merchant Milestones
            </h2>
            <div className="space-y-3">

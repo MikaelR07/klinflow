@@ -62,7 +62,7 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none px-2 -mt-5 pt-5">
+    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none px-4 -mt-5 pt-5">
       
       {/* ── HEADER (Hidden when focused) ── */}
       {!selectedId && (

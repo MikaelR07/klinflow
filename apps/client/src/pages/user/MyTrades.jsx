@@ -171,7 +171,7 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-6 px-2 bg-[#F2F3F4] dark:bg-slate-900">
+    <div className="space-y-6 animate-fade-in pb-6 px-4 bg-[#F2F3F4] dark:bg-slate-900">
       <div className="flex items-center justify-center px-1">
         <div className="space-y-1">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none text-center">Trade History</h1>
