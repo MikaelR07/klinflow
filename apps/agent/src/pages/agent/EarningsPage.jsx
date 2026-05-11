@@ -291,8 +291,10 @@ export default function EarningsPage() {
               <Bar dataKey="weight" radius={[8, 8, 8, 8]} barSize={24}>
                 {earnings.weeklyData.map((entry, index) => {
                   const todayIndex = (new Date().getDay() + 6) % 7; 
+                  const hasData = entry.weight > 0;
+                  const isToday = index === todayIndex;
                   return (
-                    <Cell key={`cell-${entry.day}`} fill={index === todayIndex ? '#10b981' : '#e2e8f0'} />
+                    <Cell key={`cell-${entry.day}`} fill={hasData ? (isToday ? '#10b981' : '#34d399') : '#e2e8f0'} />
                   );
                 })}
               </Bar>
