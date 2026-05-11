@@ -383,11 +383,11 @@ export default function MyOffers() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">Incoming Bid</span>
-                          <span className="text-xs font-semibold text-slate-900 dark:text-white">KSh {offer.offered_price}/kg</span>
+                          <span className="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest">Incoming Bid</span>
+                          <span className="text-[10px] font-semibold text-slate-900 dark:text-white">KSh {offer.offered_price}/kg</span>
                         </div>
-                        <h4 className="text-sm font-semibold text-slate-900 dark:text-white uppercase truncate tracking-tight">{offer.material}</h4>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest truncate mt-1">From: {offer.buyerName}</p>
+                        <h4 className="text-xs font-semibold text-slate-900 dark:text-white uppercase truncate tracking-tight">{offer.material}</h4>
+                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest truncate mt-1">From: {offer.buyerName}</p>
                       </div>
                       <ChevronRight className="w-5 h-5 text-slate-200" />
                     </div>
@@ -422,12 +422,12 @@ export default function MyOffers() {
                         </div>
                         <div className="flex-1 text-left min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
-                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{offer.material}</h4>
-                            <span className="text-xs font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
+                            <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{offer.material}</h4>
+                            <span className="text-[10px] font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
                               <Clock className="w-2 h-2" /> Awaiting Pickup
                             </span>
                           </div>
-                          <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest truncate">Agent: {offer.buyerName}</p>
+                          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest truncate">Agent: {offer.buyerName}</p>
                         </div>
                         <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
@@ -444,21 +444,21 @@ export default function MyOffers() {
                             <div className="pt-4 border-t border-slate-50 dark:border-slate-800/50 space-y-4">
                               <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-2xl border border-slate-100 dark:border-slate-800/50">
-                                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Contract Quantity</p>
-                                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Contract Quantity</p>
+                                  <p className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                                     <Scale className="w-3 h-3" /> {offer.quantity} KG
                                   </p>
                                 </div>
                                 <div className="bg-emerald-500/5 dark:bg-emerald-500/10 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-500/20">
-                                  <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-1">Locked Price</p>
-                                  <p className="text-xs font-bold text-emerald-600">KSh {offer.offered_price}/kg</p>
+                                  <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest mb-1">Locked Price</p>
+                                  <p className="text-[10px] font-bold text-emerald-600">KSh {offer.offered_price}/kg</p>
                                 </div>
                               </div>
                               
                               <div className="bg-emerald-600 dark:bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20 shadow-xl shadow-emerald-500/10 flex items-center justify-between">
                                 <div>
                                   <p className="text-[10px] font-bold text-emerald-100 dark:text-emerald-400/60 uppercase tracking-widest mb-1">Expected Payout</p>
-                                  <p className="text-xl font-black text-white dark:text-emerald-400 leading-none">
+                                  <p className="text-lg font-black text-white dark:text-emerald-400 leading-none">
                                     KSh {(offer.offered_price * offer.quantity).toLocaleString()}
                                   </p>
                                 </div>
@@ -467,7 +467,7 @@ export default function MyOffers() {
                                 </div>
                               </div>
 
-                              <p className="text-xs font-medium text-slate-400 italic text-center px-4">
+                              <p className="text-[10px] font-medium text-slate-400 italic text-center px-4">
                                 Agent is currently dispatched. Funds will be released to your wallet upon weight verification.
                               </p>
                             </div>
@@ -506,12 +506,12 @@ export default function MyOffers() {
                         </div>
                         <div className="flex-1 text-left min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
-                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{b.waste_type || 'Materials'}</h4>
-                            <span className="text-xs font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
+                            <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{b.waste_type || 'Materials'}</h4>
+                            <span className="text-[10px] font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
                               Price Revised
                             </span>
                           </div>
-                          <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest truncate">New Offer: KSh {(b.counter_offer_amount || 0).toLocaleString()}</p>
+                          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest truncate">New Offer: KSh {(b.counter_offer_amount || 0).toLocaleString()}</p>
                         </div>
                         <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
@@ -528,17 +528,17 @@ export default function MyOffers() {
                             <div className="pt-4 border-t border-slate-50 dark:border-slate-800/50 space-y-4">
                               <div className="bg-amber-500/5 dark:bg-amber-500/10 p-4 rounded-2xl border border-amber-500/20">
                                 <div className="flex justify-between items-center mb-3">
-                                  <p className="text-xs font-black text-amber-600 uppercase tracking-widest">Revision Details</p>
-                                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Agent: {b.buyerName}</p>
+                                  <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest">Revision Details</p>
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Agent: {b.buyerName}</p>
                                 </div>
                                 <div className="flex justify-between items-end">
                                   <div>
-                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Original Payout</p>
-                                    <p className="text-sm font-bold text-slate-500 line-through">KSh {(b.total_price || 0).toLocaleString()}</p>
+                                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Original Payout</p>
+                                    <p className="text-xs font-bold text-slate-500 line-through">KSh {(b.total_price || 0).toLocaleString()}</p>
                                   </div>
                                   <div className="text-right">
-                                    <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest mb-0.5">Counter-Offer</p>
-                                    <p className="text-2xl font-black text-amber-600 leading-none">KSh {(b.counter_offer_amount || 0).toLocaleString()}</p>
+                                    <p className="text-[10px] font-semibold text-amber-600 uppercase tracking-widest mb-0.5">Counter-Offer</p>
+                                    <p className="text-xl font-black text-amber-600 leading-none">KSh {(b.counter_offer_amount || 0).toLocaleString()}</p>
                                   </div>
                                 </div>
                               </div>
@@ -597,10 +597,10 @@ export default function MyOffers() {
                         </div>
                         <div className="flex-1 text-left min-w-0">
                           <div className="flex items-center justify-between mb-0.5">
-                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{offer.material}</h4>
-                            <span className="text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 px-2 py-0.5 rounded uppercase">Settled</span>
+                            <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate uppercase tracking-tight">{offer.material}</h4>
+                            <span className="text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 px-2 py-0.5 rounded uppercase">Settled</span>
                           </div>
-                          <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest truncate">Agent: {offer.buyerName}</p>
+                          <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest truncate">Agent: {offer.buyerName}</p>
                         </div>
                         <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
                       </button>
@@ -617,28 +617,28 @@ export default function MyOffers() {
                             <div className="pt-4 border-t border-slate-50 dark:border-slate-800/50 space-y-4">
                               <div className="grid grid-cols-2 gap-3">
                                 <div className="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-2xl border border-slate-100 dark:border-slate-800/50">
-                                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Material Volume</p>
-                                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Material Volume</p>
+                                  <p className="text-[10px] font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                                     <Scale className="w-3 h-3" /> {offer.quantity} KG
                                   </p>
                                 </div>
                                 <div className="bg-emerald-500/5 dark:bg-emerald-500/10 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-500/20">
-                                  <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mb-1">Final Price</p>
-                                  <p className="text-xs font-bold text-emerald-600">KSh {offer.offered_price}/kg</p>
+                                  <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-widest mb-1">Final Price</p>
+                                  <p className="text-[10px] font-bold text-emerald-600">KSh {offer.offered_price}/kg</p>
                                 </div>
                               </div>
                               
                               <div className="bg-emerald-600 p-4 rounded-2xl flex items-center justify-between shadow-lg shadow-emerald-600/20">
                                 <div>
-                                  <p className="text-xs font-semibold text-white/70 uppercase tracking-widest mb-0.5">Total Payout</p>
-                                  <p className="text-lg font-bold text-white leading-none">KSh {(offer.offered_price * offer.quantity).toLocaleString()}</p>
+                                  <p className="text-[10px] font-semibold text-white/70 uppercase tracking-widest mb-0.5">Total Payout</p>
+                                  <p className="text-base font-bold text-white leading-none">KSh {(offer.offered_price * offer.quantity).toLocaleString()}</p>
                                 </div>
                                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                                   <Check className="w-5 h-5 text-white" />
                                 </div>
                               </div>
 
-                              <div className="flex items-center gap-2 text-xs font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 p-3 rounded-xl justify-center">
+                              <div className="flex items-center gap-2 text-[10px] font-semibold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 p-3 rounded-xl justify-center">
                                 <ShieldCheck className="w-3.5 h-3.5" />
                                 <span className="uppercase tracking-widest">Verified & Transferred to Wallet</span>
                               </div>
