@@ -54,7 +54,7 @@ export default function ImpactAnalytics() {
       if (!profile?.id) return;
       setIsLoading(true);
 
-      // Fetch ALL completed bookings, ignoring 'hidden_for_client'
+      // Fetch ALL completed bookings
       const { data, error } = await supabase
         .from('bookings')
         .select('*')
@@ -190,10 +190,10 @@ export default function ImpactAnalytics() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F8F8FF] dark:bg-slate-900 flex flex-col">
+    <div className="fixed inset-0 z-50 bg-[#F8F8FF] dark:bg-slate-900 flex flex-col px-4">
       {/* ── TOP NAV ── */}
-      <div className="shrink-0 z-40 bg-[#F8F8FF] dark:bg-slate-900 px-4 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800">
-        <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center shadow-sm active:scale-90 transition-all">
+      <div className="shrink-0 z-40 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 mb-6">
+        <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center shadow-sm active:scale-90 transition-all border border-slate-100 dark:border-slate-800">
           <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
         <div>
@@ -202,70 +202,70 @@ export default function ImpactAnalytics() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-2 space-y-4 pb-24">
+      <div className="flex-1 overflow-y-auto space-y-6 pb-24">
         {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
         <div className="relative group">
-          <div className="relative bg-indigo-600 dark:bg-gradient-to-br dark:from-indigo-700 dark:via-indigo-600 dark:to-blue-600 border border-slate-200 dark:border-white/10 rounded-2xl p-6 dark:shadow-xl dark:shadow-indigo-500/20 overflow-hidden transition-all duration-500">
+          <div className="relative bg-gradient-to-br from-green-700 via-emerald-600 to-teal-700 dark:from-orange-800 dark:via-amber-800 dark:to-rose-950 rounded-3xl p-6 text-white shadow-xl border-none overflow-hidden transition-all duration-500">
+            <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_0%,_transparent_70%)] pointer-events-none" />
             
             <div className="relative z-10">
-              {/* Masonry-Style Impact Grid */}
               <div className="grid grid-cols-4 gap-2.5">
                 
                 {/* 1. Primary: Lifetime Revenue (Large) */}
-                <div className="col-span-2 row-span-2 bg-white/10 rounded-2xl p-5 border border-white/10 dark:border-white/5 flex flex-col justify-between">
-                  <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4 text-white" />
+                <div className="col-span-2 row-span-2 bg-orange-100 dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex flex-col justify-between">
+                  <div className="w-8 h-8 rounded-lg bg-orange-200 dark:bg-white/10 flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-orange-700 dark:text-amber-300" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Lifetime Revenue</p>
-                    <h2 className="text-2xl font-black text-white tracking-tighter leading-none flex items-baseline gap-0.5">
-                      <span className="text-xs font-bold text-indigo-200 opacity-60">KSh</span>
+                    <p className="text-[10px] font-black text-orange-900/60 dark:text-white/50 uppercase tracking-widest mb-1">Lifetime Revenue</p>
+                    <h2 className="text-2xl font-black text-orange-950 dark:text-white tracking-tighter leading-none flex items-baseline gap-0.5">
+                      <span className="text-xs font-bold text-orange-900/40 dark:text-white/30">KSh</span>
                       {stats.totalEarnings.toLocaleString()}
                     </h2>
                   </div>
                 </div>
 
                 {/* 2. Recyclables Recovered */}
-                <div className="bg-white/10 rounded-2xl p-3 border border-white/10 dark:border-white/5 flex flex-col items-center justify-center">
-                  <Scale className="w-4 h-4 text-white mb-1" />
-                  <span className="text-lg font-black text-white leading-none">{stats.totalWeight}</span>
-                  <span className="text-[8px] font-bold text-indigo-100 uppercase tracking-widest mt-1">KG</span>
+                <div className="bg-orange-100 dark:bg-slate-900 rounded-2xl p-3 border border-white/20 dark:border-white/10 flex flex-col items-center justify-center">
+                  <Scale className="w-4 h-4 text-orange-700 dark:text-white/50 mb-1" />
+                  <span className="text-lg font-black text-orange-950 dark:text-white leading-none">{stats.totalWeight}</span>
+                  <span className="text-[8px] font-black text-orange-900/40 dark:text-white/30 uppercase tracking-widest mt-1">KG</span>
                 </div>
 
                 {/* 3. Global Rank */}
-                <div className="bg-white/10 rounded-2xl p-3 border border-white/10 dark:border-white/5 flex flex-col items-center justify-center">
-                  <Trophy className="w-4 h-4 text-amber-300 fill-amber-300/20 mb-1" />
-                  <span className="text-lg font-black text-white leading-none">#{stats.globalRank || '—'}</span>
-                  <span className="text-[8px] font-bold text-indigo-100 uppercase tracking-widest mt-1">Rank</span>
+                <div className="bg-orange-100 dark:bg-slate-900 rounded-2xl p-3 border border-white/20 dark:border-white/10 flex flex-col items-center justify-center">
+                  <Trophy className="w-4 h-4 text-amber-600 dark:text-amber-300 fill-amber-600/10 dark:fill-amber-300/20 mb-1" />
+                  <span className="text-lg font-black text-orange-950 dark:text-white leading-none">#{stats.globalRank || '—'}</span>
+                  <span className="text-[8px] font-black text-orange-900/40 dark:text-white/30 uppercase tracking-widest mt-1">Rank</span>
                 </div>
 
                 {/* 4. Withdrawn (Horizontal) */}
-                <div className="col-span-2 bg-white/10 rounded-2xl p-3 border border-white/10 dark:border-white/5 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-white" />
+                <div className="col-span-2 bg-orange-100 dark:bg-slate-900 rounded-2xl p-3 border border-white/20 dark:border-white/10 flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-orange-200 dark:bg-white/10 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-300" />
                   </div>
                   <div>
-                    <p className="text-base font-black text-white leading-none">KSh {stats.totalWithdrawn.toLocaleString()}</p>
-                    <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-0.5">Withdrawn</p>
+                    <p className="text-base font-black text-orange-950 dark:text-white leading-none">KSh {stats.totalWithdrawn.toLocaleString()}</p>
+                    <p className="text-[10px] font-black text-orange-900/60 dark:text-white/50 uppercase tracking-widest mt-0.5">Withdrawn</p>
                   </div>
                 </div>
 
                 {/* 5. Metrics Strip (Bottom Row) */}
-                <div className="col-span-4 bg-black/10 dark:bg-black/20 rounded-2xl p-3 border border-white/5 flex items-center justify-between">
+                <div className="col-span-4 bg-orange-200 dark:bg-slate-900 rounded-2xl p-3 border border-white/20 dark:border-white/10 flex items-center justify-between">
                   <div className="flex items-center gap-4 px-2">
                     <div className="text-center">
-                      <p className="text-sm font-black text-white leading-none">{stats.totalPickups}</p>
-                      <p className="text-[8px] font-bold text-indigo-100 uppercase tracking-widest mt-1">Pickups</p>
+                      <p className="text-sm font-black text-orange-950 dark:text-white leading-none">{stats.totalPickups}</p>
+                      <p className="text-[8px] font-black text-orange-900/50 dark:text-white/40 uppercase tracking-widest mt-1">Pickups</p>
                     </div>
-                    <div className="w-[1px] h-6 bg-white/10" />
+                    <div className="w-[1px] h-6 bg-orange-900/20 dark:bg-white/10" />
                     <div className="text-center">
-                      <p className="text-sm font-black text-white leading-none">{profile?.rewardPoints || 0}</p>
-                      <p className="text-[8px] font-bold text-indigo-100 uppercase tracking-widest mt-1">GFP</p>
+                      <p className="text-sm font-black text-orange-950 dark:text-white leading-none">{profile?.rewardPoints || 0}</p>
+                      <p className="text-[8px] font-black text-orange-900/50 dark:text-white/40 uppercase tracking-widest mt-1">GFP</p>
                     </div>
                   </div>
-                  <div className="text-right px-4 border-l border-white/10">
-                     <p className="text-[8px] font-bold text-indigo-100 uppercase tracking-widest mb-1">Most Recycled</p>
-                     <p className="text-xs font-black text-white capitalize truncate max-w-[100px]">{stats.topMaterial}</p>
+                  <div className="text-right px-4 border-l border-orange-900/20 dark:border-white/10">
+                     <p className="text-[8px] font-black text-orange-900/50 dark:text-white/40 uppercase tracking-widest mb-1">Most Recycled</p>
+                     <p className="text-xs font-black text-orange-950 dark:text-white capitalize truncate max-w-[100px]">{stats.topMaterial}</p>
                   </div>
                 </div>
 
@@ -283,71 +283,69 @@ export default function ImpactAnalytics() {
           </div>
 
           <div className="grid grid-cols-1 gap-3">
-            {/* Weekly Goal */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm relative">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Weekly Target</p>
-                  <p className="text-lg font-semibold dark:text-white">{stats.currentWeekWeight} / {goals.weekly} <span className="text-xs text-slate-400">KG</span></p>
+                  <p className="text-lg font-black dark:text-white tracking-tight">{stats.currentWeekWeight} / {goals.weekly} <span className="text-xs font-bold text-slate-400">KG</span></p>
                 </div>
                 <button 
                   onClick={() => { setGoalType('weekly'); setShowGoalModal(true); }}
-                  className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center active:bg-primary active:text-white"
+                  className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center active:bg-primary active:text-white transition-all shadow-inner"
                 >
-                  <Edit3 className="w-4 h-4" />
+                  <Edit3 className="w-4 h-4 text-slate-400" />
                 </button>
               </div>
-              <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full">
+              <div className="h-3 w-full bg-slate-50 dark:bg-slate-800/50 rounded-full overflow-hidden border border-slate-100 dark:border-slate-800">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: `${weeklyProgress}%` }}
-                  className={`h-full rounded-full ${weeklyProgress >= 100 ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-primary'}`}
+                  className={`h-full rounded-full ${weeklyProgress >= 100 ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]' : 'bg-primary'}`}
                 />
               </div>
-              <div className="flex justify-between mt-2">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{Math.round(weeklyProgress)}% Completed</p>
-                {weeklyProgress >= 100 && <span className="text-xs font-semibold text-emerald-500 uppercase tracking-widest">Goal Reached! 🚀</span>}
+              <div className="flex justify-between mt-3">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{Math.round(weeklyProgress)}% Completed</p>
+                {weeklyProgress >= 100 && <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">Goal Reached! 🚀</span>}
               </div>
             </div>
 
-            {/* Monthly Goal */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm relative">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Monthly Target</p>
-                  <p className="text-lg font-semibold dark:text-white">{stats.currentMonthWeight} / {goals.monthly} <span className="text-xs text-slate-400">KG</span></p>
+                  <p className="text-lg font-black dark:text-white tracking-tight">{stats.currentMonthWeight} / {goals.monthly} <span className="text-xs font-bold text-slate-400">KG</span></p>
                 </div>
                 <button 
                   onClick={() => { setGoalType('monthly'); setShowGoalModal(true); }}
-                  className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center active:bg-emerald-500 active:text-white"
+                  className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center active:bg-emerald-500 active:text-white transition-all shadow-inner"
                 >
-                  <Edit3 className="w-4 h-4" />
+                  <Edit3 className="w-4 h-4 text-slate-400" />
                 </button>
               </div>
-              <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full">
+              <div className="h-3 w-full bg-slate-50 dark:bg-slate-800/50 rounded-full overflow-hidden border border-slate-100 dark:border-slate-800">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: `${monthlyProgress}%` }}
-                  className={`h-full rounded-full ${monthlyProgress >= 100 ? 'bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]' : 'bg-emerald-500'}`}
+                  className={`h-full rounded-full ${monthlyProgress >= 100 ? 'bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 'bg-emerald-500'}`}
                 />
               </div>
-              <div className="flex justify-between mt-2">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{Math.round(monthlyProgress)}% Completed</p>
-                {monthlyProgress >= 100 && <span className="text-xs font-semibold text-amber-500 uppercase tracking-widest">Elite Status! 🏆</span>}
+              <div className="flex justify-between mt-3">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{Math.round(monthlyProgress)}% Completed</p>
+                {monthlyProgress >= 100 && <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em]">Elite Status! 🏆</span>}
               </div>
             </div>
           </div>
         </div>
 
         {/* ── RECYCLING TRENDS (BAR CHART) ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400 flex items-center gap-2">
               <BarChart className="w-4 h-4 text-indigo-500" /> Weekly Trends
             </h3>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-primary" />
-              <p className="text-xs font-semibold text-slate-400 uppercase">KG Recovered</p>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">KG Recovered</p>
             </div>
           </div>
 
@@ -363,15 +361,15 @@ export default function ImpactAnalytics() {
                     <motion.div 
                       initial={{ height: 0 }}
                       animate={{ height: `${height}%` }}
-                      className={`w-full rounded-t-xl ${day.weight > 0 ? 'bg-primary shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]' : 'bg-slate-100 dark:bg-slate-800'}`}
+                      className={`w-full rounded-t-xl ${day.weight > 0 ? 'bg-primary shadow-[0_0_15px_rgba(var(--primary-rgb),0.2)]' : 'bg-slate-50 dark:bg-slate-800/50'}`}
                     />
                     {day.weight > 0 && (
-                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-1 py-0.5 rounded opacity-100">
+                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-black px-1 py-0.5 rounded opacity-100">
                         {day.weight}kg
                       </div>
                     )}
                   </div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">{dayName}</p>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{dayName}</p>
                 </div>
               );
             })}
@@ -380,17 +378,17 @@ export default function ImpactAnalytics() {
 
         {/* ── MATERIAL DIVERSITY ── */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
              <PieChart className="w-5 h-5 text-amber-500 mb-3" />
              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Most Recycled</p>
-             <p className="text-sm font-semibold dark:text-white capitalize leading-tight">{stats.topMaterial}</p>
-             <p className="text-xs font-semibold text-emerald-500 mt-2">Preferred Partner Type</p>
+             <p className="text-base font-black dark:text-white capitalize tracking-tight leading-tight">{stats.topMaterial}</p>
+             <p className="text-[10px] font-black text-emerald-500 mt-2 uppercase tracking-widest">Preferred Partner</p>
           </div>
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
              <Trophy className="w-5 h-5 text-indigo-500 mb-3" />
              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Consistency</p>
-             <p className="text-sm font-semibold dark:text-white capitalize leading-tight">{stats.consistencyTier}</p>
-             <p className="text-xs font-semibold text-indigo-500 mt-2">Active Streak: {stats.activeStreak} Days</p>
+             <p className="text-base font-black dark:text-white capitalize tracking-tight leading-tight">{stats.consistencyTier}</p>
+             <p className="text-[10px] font-black text-indigo-500 mt-2 uppercase tracking-widest">Streak: {stats.activeStreak} Days</p>
           </div>
         </div>
       </div>
@@ -410,18 +408,18 @@ export default function ImpactAnalytics() {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-t-2xl p-8 shadow-2xl"
+              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-t-[2.5rem] p-8 shadow-2xl"
             >
               <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-8" />
-              <h3 className="text-2xl font-semibold text-slate-900 dark:text-white text-center mb-2">Set {goalType} Target</h3>
-              <p className="text-xs font-semibold text-slate-400 text-center mb-8 uppercase tracking-widest">How many Kilograms do you want to recycle?</p>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white text-center mb-2 tracking-tight">Set {goalType} Target</h3>
+              <p className="text-xs font-bold text-slate-400 text-center mb-8 uppercase tracking-[0.2em]">KG Goal</p>
               
               <div className="grid grid-cols-3 gap-4 mb-8">
                 {[10, 20, 50, 100, 200, 500].map(val => (
                   <button 
                     key={val}
                     onClick={() => handleUpdateGoal(val)}
-                    className="py-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 text-lg font-semibold text-slate-900 dark:text-white hover:bg-primary hover:text-white transition-all active:scale-95"
+                    className="py-5 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-lg font-black text-slate-900 dark:text-white hover:bg-primary hover:text-white transition-all active:scale-95 shadow-inner"
                   >
                     {val}
                   </button>
@@ -430,7 +428,7 @@ export default function ImpactAnalytics() {
 
               <button 
                 onClick={() => setShowGoalModal(false)}
-                className="w-full py-5 text-slate-400 font-semibold text-xs uppercase tracking-widest"
+                className="w-full py-5 text-slate-400 font-black text-[10px] uppercase tracking-[0.3em]"
               >
                 Cancel
               </button>
@@ -440,8 +438,4 @@ export default function ImpactAnalytics() {
       </AnimatePresence>
     </div>
   );
-}
-
-function Drophy({ className }) {
-  return <Trophy className={className} />;
 }
