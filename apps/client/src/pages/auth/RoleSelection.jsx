@@ -13,9 +13,10 @@ export default function RoleSelection() {
       description: 'Perfect for homes, cafes, or offices. Book a professional collector to your doorstep, keep your space clean, and get paid for every kilogram you segregate.',
       icon: Home,
       accent: 'emerald',
-      bgColor: 'bg-emerald-500/10',
-      borderColor: 'border-emerald-500/20',
-      textColor: 'text-emerald-500',
+      bgColor: 'bg-emerald-500',
+      borderColor: 'border-emerald-600',
+      iconColor: 'text-white',
+      textColor: 'text-emerald-600 dark:text-emerald-400',
       benefits: ['Doorstep Pickups', 'Cashback Rewards', 'Impact Tracking']
     },
     {
@@ -25,9 +26,10 @@ export default function RoleSelection() {
       description: 'Best for informal pickers, yard owners, or collection groups. List your verified inventory as a "Waste-Asset" and sell directly to factories (Weavers) for top prices.',
       icon: TrendingUp,
       accent: 'blue',
-      bgColor: 'bg-blue-500/10',
-      borderColor: 'border-blue-500/20',
-      textColor: 'text-blue-500',
+      bgColor: 'bg-blue-600',
+      borderColor: 'border-blue-700',
+      iconColor: 'text-white',
+      textColor: 'text-blue-600 dark:text-blue-400',
       benefits: ['Direct-to-Market', 'Inventory Management', 'Micro-Credit Access']
     }
   ];
@@ -64,9 +66,9 @@ export default function RoleSelection() {
             onClick={() => navigate(`/register?type=${role.id}`)}
             className="w-full text-left group relative active:scale-[0.99] transition-all gpu-layer"
           >
-            <div className="relative bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-white/10 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/40 dark:shadow-none transition-all active:bg-slate-50 dark:active:bg-slate-700/50">
+            <div className="relative bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-[2.5rem] p-8 shadow-2xl dark:shadow-none transition-all active:bg-slate-200 dark:active:bg-slate-700 overflow-hidden">
               <div className="flex items-start justify-between mb-6">
-                <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.textColor} border ${role.borderColor} shadow-inner`}>
+                <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.iconColor} border ${role.borderColor} shadow-inner`}>
                   <role.icon className="w-8 h-8" />
                 </div>
                 <div className="flex -space-x-2.5">
@@ -87,9 +89,9 @@ export default function RoleSelection() {
 
               <div className="flex flex-wrap gap-2.5">
                 {role.benefits.map((benefit, bIdx) => (
-                  <div key={bIdx} className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5">
-                    <ShieldCheck className={`w-3.5 h-3.5 ${role.textColor}`} />
-                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tight">{benefit}</span>
+                  <div key={bIdx} className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-100 dark:bg-emerald-900 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-tight">{benefit}</span>
                   </div>
                 ))}
               </div>

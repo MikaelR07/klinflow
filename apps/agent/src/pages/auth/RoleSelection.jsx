@@ -13,9 +13,10 @@ export default function RoleSelection() {
       description: 'Perfect for entrepreneurs with their own transport. Accept jobs, manage your own schedule, and earn directly for every kilogram you deliver to the market.',
       icon: UserCheck,
       accent: 'emerald',
-      bgColor: 'bg-emerald-500/10',
-      borderColor: 'border-emerald-500/20',
-      textColor: 'text-emerald-500',
+      bgColor: 'bg-emerald-500',
+      borderColor: 'border-emerald-600',
+      iconColor: 'text-white',
+      textColor: 'text-emerald-600 dark:text-emerald-400',
       benefits: ['Flexible Hours', 'Direct Earnings', 'Business Growth']
     },
     {
@@ -25,9 +26,10 @@ export default function RoleSelection() {
       description: 'Work for a registered logistics company. Follow assigned routes, manage professional fleet assets, and execute tasks as part of a larger recycling team.',
       icon: Truck,
       accent: 'blue',
-      bgColor: 'bg-blue-500/10',
-      borderColor: 'border-blue-500/20',
-      textColor: 'text-blue-500',
+      bgColor: 'bg-blue-600',
+      borderColor: 'border-blue-700',
+      iconColor: 'text-white',
+      textColor: 'text-blue-600 dark:text-blue-400',
       benefits: ['Assigned Tasks', 'Fleet Support', 'Smart Routing']
     },
     {
@@ -37,9 +39,10 @@ export default function RoleSelection() {
       description: 'Best for waste management companies. Access the Agent Hub to monitor your entire fleet in real-time, track aggregate earnings, and manage staff performance.',
       icon: Briefcase,
       accent: 'amber',
-      bgColor: 'bg-amber-500/10',
-      borderColor: 'border-amber-500/20',
-      textColor: 'text-amber-500',
+      bgColor: 'bg-amber-500',
+      borderColor: 'border-amber-600',
+      iconColor: 'text-white',
+      textColor: 'text-amber-600 dark:text-amber-400',
       benefits: ['Fleet Monitoring', 'Admin Dashboard', 'Team Management']
     }
   ];
@@ -78,9 +81,9 @@ export default function RoleSelection() {
           >
             <div className={`absolute inset-0 ${role.bgColor} rounded-[2.5rem] blur-xl opacity-0 md:group-hover:opacity-100 transition-opacity`} />
             
-            <div className="relative bg-white dark:bg-slate-800/50 backdrop-blur-xl border border-slate-100 dark:border-white/5 rounded-[2.5rem] p-8 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all md:group-hover:border-emerald-500/30 md:group-hover:-translate-y-1">
+            <div className="relative bg-slate-100 dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 rounded-[2.5rem] p-8 shadow-2xl dark:shadow-none transition-all md:group-hover:border-emerald-500/30 md:group-hover:-translate-y-1">
               <div className="flex items-start justify-between mb-6">
-                <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.textColor} border ${role.borderColor}`}>
+                <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.iconColor} border ${role.borderColor}`}>
                   <role.icon className="w-8 h-8" />
                 </div>
                 <div className="flex -space-x-2">
@@ -101,9 +104,9 @@ export default function RoleSelection() {
 
               <div className="flex flex-wrap gap-2">
                 {role.benefits.map((benefit, bIdx) => (
-                  <div key={bIdx} className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 dark:bg-white/5 rounded-full border border-slate-100 dark:border-white/5">
-                    <ShieldCheck className={`w-3 h-3 ${role.textColor}`} />
-                    <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">{benefit}</span>
+                   <div key={bIdx} className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-900 rounded-full border border-emerald-200 dark:border-emerald-800">
+                    <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-xs font-semibold text-emerald-800 dark:text-emerald-300">{benefit}</span>
                   </div>
                 ))}
               </div>
