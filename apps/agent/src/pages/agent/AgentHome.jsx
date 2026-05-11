@@ -393,7 +393,7 @@ export default function AgentHome() {
             <div className="grid grid-cols-2 gap-2.5">
               
               {/* 1. Main Stock Value (Vertical Hero) */}
-              <div className="row-span-2 bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200/50 dark:border-white/10 shadow-sm flex flex-col justify-between">
+              <div className="row-span-2 bg-white dark:bg-slate-900 rounded-3xl p-5 flex flex-col justify-between">
                 <div className="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-white/5 flex items-center justify-center">
                   <Package className="w-5 h-5 text-emerald-600 dark:text-orange-400" />
                 </div>
@@ -409,7 +409,7 @@ export default function AgentHome() {
               </div>
 
               {/* 2. Rating */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200/50 dark:border-white/10 shadow-sm flex items-center justify-between">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex items-center justify-between">
                 <div>
                   <h4 className="text-xl font-black text-slate-900 dark:text-white">{profile?.rating || '5.0'}</h4>
                   <p className="text-[9px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Rating</p>
@@ -420,7 +420,7 @@ export default function AgentHome() {
               </div>
 
               {/* 3. Points */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200/50 dark:border-white/10 shadow-sm flex items-center justify-between">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex items-center justify-between">
                 <div>
                   <h4 className="text-xl font-black text-emerald-600 dark:text-orange-400">{profile.rewardPoints || 0}</h4>
                   <p className="text-[9px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Points</p>
@@ -431,7 +431,7 @@ export default function AgentHome() {
               </div>
 
               {/* 4. Accepted Bids */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200/50 dark:border-white/10 shadow-sm flex flex-col justify-between">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex flex-col justify-between">
                 <Handshake className="w-5 h-5 text-emerald-600 dark:text-orange-400" />
                 <div>
                   <h3 className="text-xl font-black text-slate-900 dark:text-white leading-none">{acceptedTradesCount || 0}</h3>
@@ -440,7 +440,7 @@ export default function AgentHome() {
               </div>
 
               {/* 5. Pickups Today */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200/50 dark:border-white/10 shadow-sm flex flex-col justify-between">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex flex-col justify-between">
                 <Truck className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 <div>
                   <h3 className="text-xl font-black text-slate-900 dark:text-white leading-none">{earnings.completedToday || 0}</h3>

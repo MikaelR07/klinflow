@@ -122,7 +122,7 @@ export default function EarningsPage() {
             {/* Metrics Grid: Masonry-style layout */}
             <div className="grid grid-cols-4 gap-3">
               {/* 1. Rating (Top Left) */}
-              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex flex-col shadow-sm transition-colors">
+              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 flex flex-col transition-colors">
                 <span className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mb-1">Agent Rating</span>
                 <div className="flex items-center gap-1.5">
                   <span className="text-2xl font-black text-slate-900 dark:text-white">{profile?.rating || '5.0'}</span>
@@ -135,25 +135,25 @@ export default function EarningsPage() {
               </div>
 
               {/* 2. Resident Pickups (Top Right) */}
-              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex flex-col shadow-sm transition-colors">
+              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 flex flex-col transition-colors">
                 <span className="text-2xl font-black text-slate-900 dark:text-white leading-none mb-1">{earnings.residentPickups || 0}</span>
                 <span className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest">Total Pickups</span>
               </div>
 
               {/* 3. Total Weight (Bottom Left) */}
-              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex flex-col shadow-sm transition-colors">
+              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 flex flex-col transition-colors">
                 <h4 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">{(earnings.totalKg || 0).toFixed(1)}</h4>
                 <p className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Total KGs</p>
               </div>
 
               {/* 4. Marketplace Accepted Bids */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-white/20 dark:border-white/10 flex flex-col justify-center items-center text-center shadow-sm transition-colors">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex flex-col justify-center items-center text-center transition-colors">
                 <span className="text-xl font-black text-slate-900 dark:text-white">{earnings.marketTrades || 0}</span>
                 <span className="text-[8px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Bids</span>
               </div>
 
               {/* 5. Points */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-white/20 dark:border-white/10 flex flex-col justify-center items-center text-center shadow-sm transition-colors">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex flex-col justify-center items-center text-center transition-colors">
                 <span className="text-xl font-black text-emerald-600 dark:text-amber-400">{profile?.rewardPoints || 0}</span>
                 <span className="text-[8px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Points</span>
               </div>
