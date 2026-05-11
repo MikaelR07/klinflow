@@ -393,60 +393,60 @@ export default function AgentHome() {
             <div className="grid grid-cols-2 gap-2.5">
               
               {/* 1. Main Stock Value (Vertical Hero) */}
-              <div className="row-span-2 bg-white dark:bg-white/10 rounded-3xl p-5 border border-slate-100 dark:border-white/10 shadow-sm flex flex-col justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-white/5 flex items-center justify-center">
-                  <Package className="w-5 h-5 text-indigo-600 dark:text-indigo-200" />
+              <div className="row-span-2 bg-indigo-500 rounded-3xl p-5 border border-indigo-400/50 shadow-sm flex flex-col justify-between">
+                <div className="w-10 h-10 rounded-2xl bg-indigo-400/50 flex items-center justify-center">
+                  <Package className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mb-1.5 leading-none">
+                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mb-1.5 leading-none">
                     Asset Value
                   </p>
-                  <h2 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter leading-none">
-                    <span className="text-[10px] font-bold text-slate-400 dark:text-indigo-300 block mb-0.5 uppercase">KSh</span>
+                  <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
+                    <span className="text-[10px] font-bold text-indigo-200 block mb-0.5 uppercase">KSh</span>
                     {earnings.inventoryValue?.toLocaleString() || 0}
                   </h2>
                 </div>
               </div>
 
               {/* 2. Rating */}
-              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <Star className="w-4 h-4 text-amber-500 fill-amber-500/20" />
+              <div className="bg-indigo-500 rounded-2xl p-4 border border-indigo-400/50 shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-indigo-400/50 flex items-center justify-center shrink-0">
+                  <Star className="w-4 h-4 text-yellow-300 fill-yellow-300/20" />
                 </div>
                 <div>
-                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none">
+                  <p className="text-sm font-black text-white leading-none">
                     {profile.rating ? Number(profile.rating).toFixed(1) : '5.0'}
                   </p>
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Rating</p>
+                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-1">Rating</p>
                 </div>
               </div>
 
               {/* 3. Points */}
-              <div className="bg-white dark:bg-white/5 rounded-2xl p-4 border border-slate-100 dark:border-white/10 shadow-sm flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <Zap className="w-4 h-4 text-amber-500" />
+              <div className="bg-indigo-500 rounded-2xl p-4 border border-indigo-400/50 shadow-sm flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-indigo-400/50 flex items-center justify-center shrink-0">
+                  <Zap className="w-4 h-4 text-amber-300" />
                 </div>
                 <div>
-                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none">{profile.rewardPoints || 0}</p>
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Points</p>
+                  <p className="text-sm font-black text-white leading-none">{profile.rewardPoints || 0}</p>
+                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-1">Points</p>
                 </div>
               </div>
 
               {/* 4. Accepted Bids */}
-              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none flex flex-col justify-between h-24">
-                <Handshake className="w-5 h-5 text-emerald-500" />
+              <div className="bg-indigo-500 rounded-2xl p-4 border border-indigo-400/50 shadow-sm flex flex-col justify-between h-24">
+                <Handshake className="w-5 h-5 text-emerald-300" />
                 <div>
-                  <h3 className="text-lg font-black text-slate-800 dark:text-white leading-none">{acceptedTradesCount || 0}</h3>
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Accepted Bids</p>
+                  <h3 className="text-lg font-black text-white leading-none">{acceptedTradesCount || 0}</h3>
+                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-1">Accepted Bids</p>
                 </div>
               </div>
 
               {/* 5. Pickups Today */}
-              <div className="bg-white dark:bg-white/10 rounded-2xl p-4 border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none flex flex-col justify-between h-24">
-                <Truck className="w-5 h-5 text-blue-500" />
+              <div className="bg-indigo-500 rounded-2xl p-4 border border-indigo-400/50 shadow-sm flex flex-col justify-between h-24">
+                <Truck className="w-5 h-5 text-blue-300" />
                 <div>
-                  <h3 className="text-lg font-black text-slate-800 dark:text-white leading-none">{earnings.completedToday || 0}</h3>
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-indigo-200 uppercase tracking-widest mt-1">Pickups Today</p>
+                  <h3 className="text-lg font-black text-white leading-none">{earnings.completedToday || 0}</h3>
+                  <p className="text-[10px] font-bold text-indigo-100 uppercase tracking-widest mt-1">Pickups Today</p>
                 </div>
               </div>
 
