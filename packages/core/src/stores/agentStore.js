@@ -486,6 +486,7 @@ export const useAgentStore = create(
             totalInvestment: grossInvestment,
             inventoryValue: inventoryValue,
             totalKg: totalKgRecovered,
+            thisWeekKg: Object.values(weeklyDataMap).reduce((sum, w) => sum + w, 0),
             today: todayEarnings + todayTradingRevenue,
             thisMonth: monthEarnings,
             completedToday,

@@ -254,7 +254,7 @@ export default function EarningsPage() {
           </div>
           <div className="flex items-center gap-1.5 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
              <ArrowUpRight className="w-3 h-3 text-emerald-500" />
-             <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)} KG Total</span>
+             <span className="text-xs font-semibold text-emerald-500">{(earnings.thisWeekKg || 0).toFixed(0)} KG This Week</span>
           </div>
         </div>
         
