@@ -244,7 +244,7 @@ export default function SellerHome() {
             </div>
           </button>
           <div className="min-w-0">
-            <h1 className="text-lg font-semibold tracking-tight text-slate-900 dark:text-white leading-none truncate">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
+            <h1 className="text-base font-semibold tracking-tight text-slate-900 dark:text-white leading-none truncate">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
             <div className="flex items-center gap-1.5 mt-1.5 text-[11px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10 w-fit">
               <MapPin className="w-3 h-3" /> {profile?.location?.estate || 'Nairobi'}
             </div>
