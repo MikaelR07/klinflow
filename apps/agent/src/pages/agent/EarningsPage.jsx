@@ -80,7 +80,7 @@ export default function EarningsPage() {
   };
 
   return (
-    <div className="space-y-5 animate-fade-in pb-10 pt-10 px-4">
+    <div className="space-y-6">
       
       {/* ── HEADER ── */}
       <div className="flex items-center justify-between px-1">
@@ -101,7 +101,7 @@ export default function EarningsPage() {
       {/* ── DASHBOARD HERO: PERFORMANCE HUD ── */}
       <div className="relative group">
 
-        <div className="relative bg-gradient-to-br from-emerald-700 via-emerald-600 to-teal-800 dark:from-orange-800 dark:via-amber-800 dark:to-rose-950 rounded-3xl border border-slate-200 dark:border-white/10 pt-4 pb-6 px-6 dark:shadow-2xl overflow-hidden text-white transition-all duration-500">
+        <div className="relative bg-gradient-to-br from-emerald-600 to-teal-800 rounded-3xl pt-4 pb-6 px-6 overflow-hidden text-white transition-all duration-500">
           <div className="relative z-10">
             {/* Top Row: Stock Value Emphasis */}
             <div className="flex items-end justify-between mb-8 px-2">

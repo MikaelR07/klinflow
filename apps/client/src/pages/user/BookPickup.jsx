@@ -310,7 +310,7 @@ export default function BookPickup() {
   const center = [customLocation.latitude || -1.2635, customLocation.longitude || 36.8048];
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900 px-2">
+    <div className="space-y-6">
       
       {/* ── HEADER ── */}
       <div className="p-2 pt-2 px-1 flex items-center justify-between">
@@ -746,13 +746,13 @@ export default function BookPickup() {
                   </div>
                 </div>
 
-                <div className="p-8 rounded-3xl text-center relative overflow-hidden shadow-2xl transition-all bg-slate-900 dark:bg-slate-800 text-white mt-6">
+                <div className="p-8 rounded-3xl text-center relative overflow-hidden shadow-2xl transition-all bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 mt-6">
                   <div className="absolute top-0 right-0 p-4 opacity-5"><Scale className="w-24 h-24" /></div>
-                  <div className="relative z-10">
+                  <div className="space-y-6">
                     <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary mb-4">Direct Verification</p>
-                    <h3 className="text-3xl font-semibold tracking-tighter mt-1 italic">Weight Verified Payout</h3>
+                    <h3 className="text-3xl font-semibold tracking-tighter mt-1 italic text-slate-900 dark:text-white">Weight Verified Payout</h3>
                     <p className="text-xs font-semibold text-slate-400 mt-4 leading-relaxed">
-                      You will be paid instantly to your wallet based on the <span className="text-white">KSh {activeRate}/kg</span> {selectedAgent || selectedCompanyId ? 'rate offered by your selected partner' : 'standard market rate'}.
+                      You will be paid instantly to your wallet based on the <span className="text-slate-900 dark:text-white">KSh {activeRate}/kg</span> {selectedAgent || selectedCompanyId ? 'rate offered by your selected partner' : 'standard market rate'}.
                     </p>
                   </div>
                 </div>

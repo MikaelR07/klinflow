@@ -33,8 +33,8 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="space-y-5 animate-fade-in px-2">
-      <h1 className="text-xl font-semibold dark:text-white">Settings & Profile</h1>
+    <div className="space-y-6">
+      <h1 className="text-xl font-semibold dark:text-white text-center">Settings & Profile</h1>
 
       {/* Profile Summary Header (Non-clickable) */}
       <div className="w-full card flex items-center gap-4 p-5 text-left">

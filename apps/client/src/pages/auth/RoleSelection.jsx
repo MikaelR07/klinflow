@@ -35,7 +35,7 @@ export default function RoleSelection() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col p-6 relative overflow-hidden">
+    <div className="flex flex-col space-y-10">
       {/* Background Decor */}
       <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />

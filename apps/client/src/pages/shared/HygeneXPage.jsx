@@ -176,7 +176,7 @@ export default function HygeneXPage() {
   };
 
   return (
-    <div className="flex flex-col fixed inset-0 bg-white dark:bg-slate-900 text-slate-900 dark:text-white z-50">
+    <div className="flex flex-col fixed inset-0 bg-white dark:bg-slate-900 text-slate-900 dark:text-white z-50 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
       {/* HEADER: Back Button */}
       <div className="absolute top-0 left-0 right-0 p-4 z-40 flex items-center gap-3 pt-6">
         <button 

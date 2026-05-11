@@ -254,7 +254,7 @@ export default function AgentHome() {
           </button>
           <div>
             <h1 className="text-base font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile.name.split(' ')[0]}! 👋</h1>
-            <div className="flex items-center gap-1 mt-1 text-[9px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 w-fit">
+            <div className="flex items-center gap-1 mt-1 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 w-fit">
               <MapPin className="w-2.5 h-2.5" /> {profile.location?.estate || profile.estate || 'Nairobi Sector'}
             </div>
           </div>
@@ -273,6 +273,8 @@ export default function AgentHome() {
         </button>
       </div>
 
+      <div className="h-px w-full bg-slate-200 dark:bg-slate-800/50" />
+      
       {/* ── AGENT ONLINE STATUS TOGGLE (Unified Logic) ── */}
       {(!(profile?.agent_account_type === 'company_admin' || profile?.company_name || profile?.fleet_invite_code)) ? (
         <div className="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between transition-all">
@@ -387,7 +389,7 @@ export default function AgentHome() {
       {/* ── AGENT HERO CARD: COMMAND CENTER ── */}
       <div className="relative group">
 
-        <div className="relative bg-gradient-to-br from-emerald-700 via-emerald-600 to-teal-800 dark:from-orange-800 dark:via-amber-800 dark:to-rose-950 border border-slate-200 dark:border-white/10 rounded-3xl p-5 dark:shadow-xl overflow-hidden transition-all duration-500">
+        <div className="relative bg-gradient-to-br from-emerald-600 to-teal-800 rounded-3xl p-5 overflow-hidden transition-all duration-500">
           
           <div className="relative z-10">
             <div className="grid grid-cols-2 gap-2.5">

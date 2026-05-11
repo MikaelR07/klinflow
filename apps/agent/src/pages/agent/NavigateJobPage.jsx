@@ -114,7 +114,7 @@ export default function NavigateJobPage() {
 
 
   return (
-    <div className="h-[calc(100dvh-120px)] flex flex-col -mx-4 -mt-5 relative overflow-hidden">
+    <div className="flex flex-col space-y-6">
       {/* Top Header Overlay */}
       <div className="absolute top-4 left-4 right-4 z-[1000] flex items-center justify-between pointer-events-none">
         <button 

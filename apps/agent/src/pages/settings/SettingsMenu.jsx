@@ -40,8 +40,8 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="space-y-5 animate-fade-in pb-20 px-4 pt-4">
-      <h1 className="text-xl font-semibold dark:text-white tracking-tight">Settings & Profile</h1>
+    <div className="space-y-6">
+      <h1 className="text-xl font-semibold dark:text-white tracking-tight text-center">Settings & Profile</h1>
 
       {/* Profile Card (Non-clickable) */}
       <div 

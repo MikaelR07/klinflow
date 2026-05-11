@@ -14,9 +14,6 @@
   body {
     @apply antialiased text-slate-800 dark:text-slate-50 bg-[#F4F4F4] dark:bg-slate-900 transition-colors duration-300;
     /* Native App Feel Optimizations */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-    
     /* GESTURE LOCK: Prevents browser-native back/forward gestures */
     overscroll-behavior-x: none;
     overscroll-behavior-y: contain;

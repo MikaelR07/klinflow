@@ -113,7 +113,7 @@ export default function Sourcing() {
   );
 
   return (
-    <div className="animate-fade-in space-y-6 pb-24 pt-6 relative">
+    <div className="space-y-6">
       <div className="w-full">
         
         {/* ── STICKY RADAR HEADER (UNIFIED & FULL-BLEED) ── */}

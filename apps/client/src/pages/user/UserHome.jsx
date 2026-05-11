@@ -160,21 +160,22 @@ export default function UserHome() {
       />
 
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 min-w-0 flex-1">
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-3">
+          {/* Profile Avatar */}
           <button onClick={() => navigate('/settings/profile')} className="shrink-0">
-            <div className="w-11 h-11 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-xl shadow-sm overflow-hidden relative border border-slate-100 dark:border-slate-700">
+            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
               {profile?.avatar_url ? (
-                <img src={getThumbnailUrl(profile.avatar_url, { width: 100 })} className="w-full h-full object-cover" loading="lazy" />
+                <img src={getThumbnailUrl(profile.avatar_url, { width: 200 })} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-lg opacity-50">{profile?.avatar || '👤'}</span>
+                profile?.avatar || '👤'
               )}
             </div>
           </button>
-          <div className="min-w-0">
-            <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-none truncate">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
-            <div className="flex items-center gap-1 mt-1.5 text-[11px] text-primary font-bold uppercase tracking-widest bg-primary/5 px-2.5 py-1 rounded-full border border-primary/10 w-fit">
-              <MapPin className="w-3 h-3" /> {profile?.location?.estate || 'Nairobi'}
+          <div>
+            <h1 className="text-base font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
+            <div className="flex items-center gap-1 mt-1 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 w-fit">
+              <MapPin className="w-2.5 h-2.5" /> {profile?.location?.estate || profile?.estate || 'Nairobi'}
             </div>
           </div>
         </div>
@@ -184,7 +185,8 @@ export default function UserHome() {
           {unreadCount > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse" />}
         </button>
       </div>
-
+      <div className="h-px w-full bg-slate-200 dark:bg-slate-800/50" />
+      
       {/* Wallet Hero */}
       <div className="bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl p-5 shadow-lg gpu-layer">
         <div className="flex flex-col gap-6 relative z-10">

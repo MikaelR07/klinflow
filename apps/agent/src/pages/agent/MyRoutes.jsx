@@ -174,7 +174,7 @@ export default function MyRoutes() {
   }, [tripDistance]);
 
   return (
-    <div className="fixed inset-0 bg-slate-100 dark:bg-slate-950 z-[100] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-[#F8F8FF] dark:bg-slate-900 z-[100] overflow-hidden flex flex-col">
       {/* ── TOP HUD (Earnings & Load) ── */}
       <div className="absolute top-4 left-4 right-4 z-[1000] pointer-events-none flex gap-3">
         <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-3 rounded-2xl shadow-xl border border-white/20 flex-1 pointer-events-auto flex items-center justify-between">

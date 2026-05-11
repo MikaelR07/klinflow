@@ -204,7 +204,7 @@ export default function AgentWarehouse() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in pb-10 pt-4 px-4">
+    <div className="space-y-6">
       
       {/* ── HEADER ── */}
       <div className="flex items-center justify-between mb-4">

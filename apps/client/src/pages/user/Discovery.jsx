@@ -69,7 +69,7 @@ export default function DiscoveryHub() {
   }, [partners, activeMaterial, activeScale, searchQuery]);
 
   return (
-    <div className="bg-[#F8F8FF] dark:bg-slate-900 px-2">
+    <div className="space-y-6">
       {/* ── STICKY HEADER ── */}
       <div className="sticky top-0 z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border-b border-slate-100 dark:border-white/5 p-4">
         <div className="w-full mx-auto">

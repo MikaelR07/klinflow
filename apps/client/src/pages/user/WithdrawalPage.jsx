@@ -51,7 +51,7 @@ export default function WithdrawalPage() {
   };
 
   return (
-    <div className="animate-fade-in pb-10 px-4">
+    <div className="space-y-6">
       {/* Header */}
       <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-2 px-1 rounded-3xl mb-6 shadow-sm">
         <div className="max-w-md mx-auto flex items-center gap-4">

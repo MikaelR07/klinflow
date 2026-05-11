@@ -19,7 +19,7 @@ export default function AdminLayout() {
   ];
 
   return (
-    <div className="min-h-dvh bg-slate-50 dark:bg-slate-900 flex">
+    <div className="flex min-h-dvh">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div 

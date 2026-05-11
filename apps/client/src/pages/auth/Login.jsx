@@ -41,7 +41,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-4 py-12 relative transition-colors duration-500 overflow-x-hidden">
+    <div className="flex flex-col justify-center space-y-10">
       {/* Background Decor (Matched to Welcome Page) */}
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
