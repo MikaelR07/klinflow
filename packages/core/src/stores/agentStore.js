@@ -395,8 +395,16 @@ export const useAgentStore = create(
       if (error) throw error;
 
       if (data) {
+        // Calculate the current Monday window
         const now = new Date();
-        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const todayStr = now.toLocaleDateString('en-CA');
+        
+        const currentMonday = new Date(now);
+        const dayOfWeek = currentMonday.getDay();
+        const diffToMonday = currentMonday.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+        currentMonday.setDate(diffToMonday);
+        currentMonday.setHours(0, 0, 0, 0);
+
         const weeklyDataMap = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
         
         let totalPayouts = 0;
@@ -406,7 +414,6 @@ export const useAgentStore = create(
         let monthEarnings = 0;
         let completedToday = 0;
         let totalJobs = 0;
-        const todayStr = now.toLocaleDateString('en-CA');
 
         const processedIds = new Set();
         data.forEach(b => {
@@ -431,8 +438,6 @@ export const useAgentStore = create(
           if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()) {
             monthEarnings += serviceCommission;
           }
-          const dayName = dayNames[d.getDay()];
-          // Removed: weeklyDataMap[dayName] += serviceCommission;
         });
 
         // ── NEW: Fetch Assets for Material Value & KG Tracking ──
@@ -450,6 +455,7 @@ export const useAgentStore = create(
         let totalMaterialValue = 0;
         let todayTradingRevenue = 0;
 
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         assetsData?.forEach(a => {
           totalMaterialValue += (Number(a.estimated_value) || 0);
           const weight = Number(a.weight_kg) || 0;
@@ -462,10 +468,12 @@ export const useAgentStore = create(
             todayTradingRevenue += (Number(a.estimated_value) || 0);
           }
 
-          // Track weekly weight distribution
-          const dayName = dayNames[d.getDay()];
-          if (weeklyDataMap[dayName] !== undefined) {
-            weeklyDataMap[dayName] += weight;
+          // Track weekly weight distribution (ONLY if within the current Monday-Sunday window)
+          if (d >= currentMonday) {
+            const dayName = dayNames[d.getDay()];
+            if (weeklyDataMap[dayName] !== undefined) {
+              weeklyDataMap[dayName] += weight;
+            }
           }
         });
 
@@ -484,7 +492,15 @@ export const useAgentStore = create(
             totalJobs,
             residentPickups: data.filter(b => b.status === 'completed' && !b.is_market_trade).length,
             marketTrades: data.filter(b => b.status === 'completed' && b.is_market_trade).length,
-            weeklyData: Object.entries(weeklyDataMap).map(([day, weight]) => ({ day, weight }))
+            weeklyData: [
+              { day: 'M', weight: weeklyDataMap.Mon },
+              { day: 'T', weight: weeklyDataMap.Tue },
+              { day: 'W', weight: weeklyDataMap.Wed },
+              { day: 'T', weight: weeklyDataMap.Thu },
+              { day: 'F', weight: weeklyDataMap.Fri },
+              { day: 'S', weight: weeklyDataMap.Sat },
+              { day: 'S', weight: weeklyDataMap.Sun }
+            ]
           },
           jobHistory: data
             .filter(b => b.hidden_for_agent !== true)
