@@ -250,7 +250,7 @@ export default function EarningsPage() {
         <div className="flex items-center justify-between mb-8 px-2">
           <div>
             <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400">Collection Volume</h3>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">This Week's Recovery (KG)</p>
+            <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">Weekly Recovery</p>
           </div>
           <div className="flex items-center gap-1.5 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
              <ArrowUpRight className="w-3 h-3 text-emerald-500" />
