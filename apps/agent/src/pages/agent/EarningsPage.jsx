@@ -44,7 +44,8 @@ export default function EarningsPage() {
   });
 
   const handleGoalChange = (type, value) => {
-    const newGoals = { ...goals, [type]: Number(value) || 0 };
+    const val = value === '' ? '' : Number(value);
+    const newGoals = { ...goals, [type]: val };
     setGoals(newGoals);
     localStorage.setItem(`agent_goals_${profile?.id}`, JSON.stringify(newGoals));
   };

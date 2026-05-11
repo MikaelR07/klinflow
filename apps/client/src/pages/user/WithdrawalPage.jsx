@@ -134,7 +134,10 @@ export default function WithdrawalPage() {
                     <input 
                       type="number"
                       value={amount}
-                      onChange={(e) => setAmount(Number(e.target.value))}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setAmount(val === '' ? '' : Number(val));
+                      }}
                       className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-4 pl-14 pr-4 font-semibold text-xl focus:border-primary outline-none transition-all dark:text-white"
                       placeholder="0.00"
                     />
