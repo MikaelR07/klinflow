@@ -208,7 +208,7 @@ export default function UserHome() {
             
             <button 
               onClick={handleWithdraw}
-              className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-white/10 dark:text-white dark:hover:bg-white/20 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-xl active:scale-95 transition-all mb-1"
+              className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest shadow-xl active:scale-95 transition-all mb-1"
             >
               Withdraw
             </button>
