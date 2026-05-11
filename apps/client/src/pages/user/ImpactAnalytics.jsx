@@ -199,7 +199,7 @@ export default function ImpactAnalytics() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F8F8FF] dark:bg-slate-900 flex flex-col px-4 pt-8">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-950 flex flex-col px-4 pt-8 pb-24">
       {/* ── TOP NAV ── */}
       <div className="shrink-0 z-40 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 mb-6">
         <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center shadow-sm active:scale-90 transition-all border border-slate-100 dark:border-slate-800">
@@ -213,15 +213,15 @@ export default function ImpactAnalytics() {
 
       <div className="flex-1 overflow-y-auto space-y-6 pb-24">
         {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
-        <div className="relative group">
-          <div className="relative bg-gradient-to-br from-green-700 via-emerald-600 to-teal-700 dark:from-orange-800 dark:via-amber-800 dark:to-rose-950 rounded-3xl p-6 text-white shadow-xl border-none overflow-hidden transition-all duration-500">
-            <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_0%,_transparent_70%)] pointer-events-none" />
+        <div className="relative">
+          <div className="relative bg-gradient-to-br from-emerald-600 to-teal-800 dark:from-orange-900 dark:to-amber-950 rounded-[2.5rem] p-6 text-white border-none overflow-hidden">
+            {/* Clean Flat Layout */}
             
             <div className="relative z-10">
-              <div className="grid grid-cols-4 gap-2.5">
+              <div className="grid grid-cols-4 gap-2">
                 
                 {/* 1. Primary: Lifetime Revenue (Large) */}
-                <div className="col-span-2 row-span-2 bg-orange-100 dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex flex-col justify-between">
+                <div className="col-span-2 row-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border-2 border-white/10 dark:border-white/5 flex flex-col justify-between">
                   <div className="w-8 h-8 rounded-lg bg-orange-200 dark:bg-white/10 flex items-center justify-center">
                     <TrendingUp className="w-4 h-4 text-orange-700 dark:text-amber-300" />
                   </div>
@@ -235,21 +235,21 @@ export default function ImpactAnalytics() {
                 </div>
 
                 {/* 2. Recyclables Recovered */}
-                <div className="bg-orange-100 dark:bg-slate-900 rounded-2xl p-3 border border-white/20 dark:border-white/10 flex flex-col items-center justify-center">
+                <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 border-2 border-white/10 dark:border-white/5 flex flex-col items-center justify-center">
                   <Scale className="w-4 h-4 text-orange-700 dark:text-white/50 mb-1" />
                   <span className="text-lg font-black text-orange-950 dark:text-white leading-none">{stats.totalWeight}</span>
                   <span className="text-[8px] font-black text-orange-900/40 dark:text-white/30 uppercase tracking-widest mt-1">KG</span>
                 </div>
 
                 {/* 3. Global Rank */}
-                <div className="bg-orange-100 dark:bg-slate-900 rounded-2xl p-3 border border-white/20 dark:border-white/10 flex flex-col items-center justify-center">
+                <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 border-2 border-white/10 dark:border-white/5 flex flex-col items-center justify-center">
                   <Trophy className="w-4 h-4 text-amber-600 dark:text-amber-300 fill-amber-600/10 dark:fill-amber-300/20 mb-1" />
                   <span className="text-lg font-black text-orange-950 dark:text-white leading-none">#{stats.globalRank || '—'}</span>
                   <span className="text-[8px] font-black text-orange-900/40 dark:text-white/30 uppercase tracking-widest mt-1">Rank</span>
                 </div>
 
                 {/* 4. Withdrawn (Horizontal) */}
-                <div className="col-span-2 bg-orange-100 dark:bg-slate-900 rounded-2xl p-3 border border-white/20 dark:border-white/10 flex items-center gap-3">
+                <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-3 border-2 border-white/10 dark:border-white/5 flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-orange-200 dark:bg-white/10 flex items-center justify-center">
                     <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-300" />
                   </div>
@@ -260,7 +260,7 @@ export default function ImpactAnalytics() {
                 </div>
 
                 {/* 5. Metrics Strip (Bottom Row) */}
-                <div className="col-span-4 bg-orange-200 dark:bg-slate-900 rounded-2xl p-3 border border-white/20 dark:border-white/10 flex items-center justify-between">
+                <div className="col-span-4 bg-white/10 dark:bg-slate-900/40 rounded-2xl p-3 border-2 border-white/10 dark:border-white/5 flex items-center justify-between">
                   <div className="flex items-center gap-4 px-2">
                     <div className="text-center">
                       <p className="text-sm font-black text-orange-950 dark:text-white leading-none">{stats.totalPickups}</p>
