@@ -122,43 +122,28 @@ export default function EarningsPage() {
             {/* Metrics Grid: Masonry-style layout */}
             <div className="grid grid-cols-4 gap-3">
               {/* 1. Rating (Top Left) */}
-              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex items-center justify-between shadow-sm transition-colors">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mb-1">Agent Rating</span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-2xl font-black text-slate-900 dark:text-white">{profile?.rating || '5.0'}</span>
-                    <div className="flex gap-0.5">
-                      {[1,2,3,4,5].map(i => (
-                        <Star key={i} className={`w-2 h-2 ${i <= Math.round(profile?.rating || 5) ? 'text-amber-500 fill-amber-500' : 'text-slate-100 dark:text-white/10'}`} />
-                      ))}
-                    </div>
+              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex flex-col shadow-sm transition-colors">
+                <span className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mb-1">Agent Rating</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-2xl font-black text-slate-900 dark:text-white">{profile?.rating || '5.0'}</span>
+                  <div className="flex gap-0.5">
+                    {[1,2,3,4,5].map(i => (
+                      <Star key={i} className={`w-2 h-2 ${i <= Math.round(profile?.rating || 5) ? 'text-amber-500 fill-amber-500' : 'text-slate-100 dark:text-white/10'}`} />
+                    ))}
                   </div>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-white/10 flex items-center justify-center">
-                  <Star className="w-5 h-5 text-amber-500" />
                 </div>
               </div>
 
               {/* 2. Resident Pickups (Top Right) */}
-              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex items-center justify-between shadow-sm transition-colors">
-                <div className="flex flex-col">
-                  <span className="text-2xl font-black text-slate-900 dark:text-white leading-none mb-1">{earnings.residentPickups || 0}</span>
-                  <span className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest">Total Pickups</span>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-white/10 flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                </div>
+              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex flex-col shadow-sm transition-colors">
+                <span className="text-2xl font-black text-slate-900 dark:text-white leading-none mb-1">{earnings.residentPickups || 0}</span>
+                <span className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest">Total Pickups</span>
               </div>
 
               {/* 3. Total Weight (Bottom Left) */}
-              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex items-center justify-between shadow-sm transition-colors">
-                <div>
-                  <h4 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">{(earnings.totalKg || 0).toFixed(1)}</h4>
-                  <p className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Total KGs</p>
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-white/10 flex items-center justify-center">
-                  <Scale className="w-5 h-5 text-emerald-600 dark:text-amber-300" />
-                </div>
+              <div className="col-span-2 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-white/20 dark:border-white/10 flex flex-col shadow-sm transition-colors">
+                <h4 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">{(earnings.totalKg || 0).toFixed(1)}</h4>
+                <p className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Total KGs</p>
               </div>
 
               {/* 4. Marketplace Accepted Bids */}
