@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { Store, PlusCircle, ShoppingBag, Package, Brain, MoreHorizontal } from 'lucide-react';
 
 // Shared Packages
-import { useAuthStore, useThemeStore, usePWA, ROLES } from '@cleanflow/core';
+import { useAuthStore, useThemeStore, useNotificationStore, usePWA, ROLES } from '@cleanflow/core';
 import { Navbar, BottomNav, PWAInstallModal, ProtectedRoute, LoadingScreen } from '@cleanflow/ui';
 import { Toaster } from 'sonner';
 
@@ -70,8 +70,10 @@ function ProtectedLayout() {
 }
 
 export default function App() {
-  const { role, isAuthenticated, checkAppRole, isInitializing, initializeAuth } = useAuthStore();
-  
+  const fetchNotifications = useNotificationStore(s => s.fetchNotifications);
+  const subscribeToRealtime = useNotificationStore(s => s.subscribeToRealtime);
+  const userId = useAuthStore(s => s.userId);
+
   // PWA Installation
   const { isInstallable, triggerInstall } = usePWA();
   const [showInstallModal, setShowInstallModal] = useState(false);
@@ -92,10 +94,15 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && userId) {
       checkAppRole('business');
+      
+      // Initialize Notification Listeners
+      const targetRole = role || ROLES.BUSINESS;
+      fetchNotifications(userId, targetRole);
+      subscribeToRealtime(userId, targetRole);
     }
-  }, [isAuthenticated, checkAppRole]);
+  }, [isAuthenticated, userId, role, checkAppRole]);
 
   if (isInitializing) {
     return <LoadingScreen message="Syncing Marketplace..." />;

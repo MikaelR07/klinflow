@@ -164,8 +164,13 @@ export const useBookingStore = create((set, get) => ({
   },
 
   createBooking: async (booking) => {
+    // 1. Proactive Session Guard
+    const { data: { session } } = await supabase.auth.getSession();
     const { userId } = useAuthStore.getState();
-    if (!userId) return;
+    if (!userId || !session) {
+      console.warn('[BookingStore] Operation blocked: Session missing.');
+      throw new Error("Your session has expired. Please log in again.");
+    }
 
     // Generate H3 index for the booking location (Resolution 7 is standard for ~5km clusters)
     let h3_index = null;

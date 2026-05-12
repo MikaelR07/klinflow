@@ -163,20 +163,21 @@ export const useAgentStore = create(
     
     const sub = supabase
       .channel('public:agent-bookings')
+      // Listener 1: Only notify for NEW pending jobs on the public radar
       .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'bookings' }, 
+        { event: 'INSERT', schema: 'public', table: 'bookings', filter: 'status=eq.pending' }, 
         (payload) => {
-          // If the event is an insert of a pending job, play a sound
-          if (payload.eventType === 'INSERT' && payload.new.status === 'pending') {
-            useNotificationStore.getState().playNotificationSound();
-          }
-
-          // Always refresh available jobs (for the Radar)
+          useNotificationStore.getState().playNotificationSound();
           get().fetchAvailableJobs();
-
-          // If the job is assigned to the current agent, refresh active jobs too
-          if (payload.new && (payload.new.agent_id === userId || payload.old?.agent_id === userId)) {
-            get().fetchActiveJobs();
+        }
+      )
+      // Listener 2: Only listen to updates strictly assigned to this agent
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'bookings', filter: `agent_id=eq.${userId}` }, 
+        (payload) => {
+          get().fetchActiveJobs();
+          if (payload.new?.status === 'pending' || payload.old?.status === 'pending') {
+             get().fetchAvailableJobs();
           }
         }
       )
@@ -390,7 +391,8 @@ export const useAgentStore = create(
 
       const { data, error } = await query
         .in('status', ['completed', 'cancelled', 'confirmed', 'in_progress', 'picked_up'])
-        .order('updated_at', { ascending: false });
+        .order('updated_at', { ascending: false })
+        .limit(500);
 
       if (error) throw error;
 
@@ -453,7 +455,9 @@ export const useAgentStore = create(
           assetQuery = assetQuery.eq('verifier_id', userId);
         }
         
-        const { data: assetsData } = await assetQuery;
+        const { data: assetsData } = await assetQuery
+          .order('created_at', { ascending: false })
+          .limit(500);
         
         let totalMaterialValue = 0;
         let todayTradingRevenue = 0;
@@ -559,6 +563,19 @@ export const useAgentStore = create(
       if (updateError) throw updateError;
       await get().fetchAvailableJobs();
       await get().fetchActiveJobs();
+
+      // Notify the Resident
+      const job = get().activeJobs.find(j => j.id === jobId);
+      if (job) {
+        useNotificationStore.getState().addNotification(
+          "Mission Accepted! 🚛",
+          `Agent ${profile.name} has claimed your pickup and is preparing to head your way.`,
+          'success',
+          'user',
+          job.user_id || job.userId
+        );
+      }
+
       return true;
     } catch (err) {
       console.error('[AgentStore] Job Acceptance Failed:', err);

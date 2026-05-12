@@ -110,16 +110,40 @@ export const useAuthStore = create(
             window._cfAuthVisibilitySetup = true;
             window.addEventListener('visibilitychange', async () => {
               if (document.visibilityState === 'visible' && get().isAuthenticated) {
-                console.log('[AuthGate] App returned to foreground, verifying session...');
+                console.log('[AuthGate] App returned to foreground, verifying connection...');
                 try {
+                  // 1. Proactively refresh the session to ensure RLS tokens are alive
                   const { data, error } = await supabase.auth.getSession();
+                  
                   if (error || !data.session) {
-                    console.warn('[AuthGate] Foreground check: Session expired. Logging out safely.');
+                    console.warn('[AuthGate] Foreground check: Session missing or invalid. Verifying with server...');
+                    // Try one last hard refresh before giving up
+                    const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
+                    if (refreshError || !refreshData.session) {
+                      console.error('[AuthGate] Connection unrecoverable. Logging out.');
+                      get().logout();
+                      toast.error('Connection Lost', { description: 'Your session has expired. Please sign in again.' });
+                      return;
+                    }
+                  }
+
+                  // 2. Verified session exists, now verify the Profile is still reachable
+                  // This catches cases where the user might have been deleted or roles changed
+                  const { data: profileCheck, error: dbError } = await supabase
+                    .from('profiles')
+                    .select('id')
+                    .eq('id', get().userId)
+                    .maybeSingle();
+
+                  if (dbError || !profileCheck) {
+                    console.error('[AuthGate] Profile no longer accessible. Logging out.');
                     get().logout();
-                    toast.error('Session Expired', { description: 'Please log in again to continue safely.' });
+                    toast.error('Account Sync Error', { description: 'Please log in again to refresh your profile.' });
+                  } else {
+                    console.log('[AuthGate] Session and Profile verified. Ready to flow.');
                   }
                 } catch (e) {
-                  // Ignore network errors, only act on explicit auth failures
+                  console.warn('[AuthGate] Background sync failed (Network?):', e);
                 }
               }
             });

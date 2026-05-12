@@ -100,47 +100,53 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="animate-fade-in space-y-4 pb-24 pt-4 px-4 relative">
-      <div className="w-full">
-        {/* ── STANDARDIZED HEADER ── */}
-        <div className="relative flex items-center justify-center mb-4">
-           <button 
-             onClick={() => navigate(-1)} 
-             className="absolute left-0 w-10 h-10 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-90 transition-all"
-           >
-             <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-           </button>
-           
-           <div className="text-center">
-              <h1 className="text-lg font-bold text-slate-800 dark:text-white uppercase tracking-tighter leading-none">Accepted Bids</h1>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Marketplace Trade Control</p>
-           </div>
-        </div>
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── TOP NAV & STATS (Unified Edge to Edge) ── */}
+      <div className="-mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-[100]">
+        <div className="max-w-lg mx-auto">
+          {/* Header row */}
+          <div className="flex items-center justify-between px-4 mb-6">
+             <button 
+               onClick={() => navigate(-1)} 
+               className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
+             >
+               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+             </button>
+             
+             <div className="text-center">
+                <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Accepted Bids</h1>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Marketplace Control</p>
+             </div>
 
-        {/* ── QUICK STATS TICKER ── */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-2xl p-4 shadow-sm mb-4">
-          <div className="flex items-center justify-around">
+             <div className="w-11" /> {/* Spacer */}
+          </div>
+
+          {/* Stats row - Inside the header */}
+          <div className="flex items-center justify-around px-2">
             <div className="text-center">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Active Deals</p>
-              <p className="text-lg font-bold text-slate-800 dark:text-white leading-none">{activeTrades.length}</p>
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 leading-none">Active Deals</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-white leading-none tracking-tight">{activeTrades.length}</p>
             </div>
             <div className="w-px h-8 bg-slate-100 dark:bg-white/10" />
             <div className="text-center">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Est. Weight</p>
-              <p className="text-lg font-black text-emerald-600 leading-none">
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 leading-none">Est. Weight</p>
+              <p className="text-xl font-black text-emerald-600 leading-none tracking-tight">
                 {activeTrades.reduce((acc, t) => acc + (parseFloat(t.actual_weight_kg || t.quantity) || 0), 0).toLocaleString()} <span className="text-[10px] opacity-50">KG</span>
               </p>
             </div>
             <div className="w-px h-8 bg-slate-100 dark:bg-white/10" />
             <div className="text-center">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Value</p>
-              <p className="text-lg font-black text-indigo-600 leading-none">
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5 leading-none">Total Value</p>
+              <p className="text-xl font-black text-indigo-600 leading-none tracking-tight">
                 <span className="text-[10px] mr-0.5">KSh</span>
                 {activeTrades.reduce((acc, t) => acc + (parseFloat(t.total_price || t.totalPrice) || 0), 0).toLocaleString()}
               </p>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="flex-1 space-y-px pb-24 pt-0 px-3 relative max-w-lg mx-auto w-full">
 
         {/* ── CONTENT AREA ── */}
         <div className="">
@@ -302,7 +308,7 @@ export default function MyTrades() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-all"
+                      className="bg-white dark:bg-slate-900 -mx-3 border-y border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition-all"
                     >
                       <button 
                         onClick={() => setExpandedId(trade.id)}

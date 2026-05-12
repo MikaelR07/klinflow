@@ -25,7 +25,8 @@ export default function WarehousePage() {
       "Incoming Bulk Drop! 🚚",
       `Agent ${profile.name} is heading to the Hub with a full truck (~${totalWeight.toFixed(1)}kg).`,
       'info',
-      'hub'
+      'hub',
+      profile.company_id || null // Targeted Hub Manager if available
     );
     toast.success("Dispatch Notification Sent! 🏢", {
       description: "The Hub Manager has been notified of your arrival."

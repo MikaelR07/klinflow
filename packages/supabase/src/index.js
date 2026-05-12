@@ -26,7 +26,6 @@ export const supabase = isSupabaseConfigured
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: false,
-        storageKey: 'cleanflow-session-v2',
       },
     })
   : null;

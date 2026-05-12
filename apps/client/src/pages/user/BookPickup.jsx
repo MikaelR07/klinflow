@@ -310,26 +310,28 @@ export default function BookPickup() {
   const center = [customLocation.latitude || -1.2635, customLocation.longitude || 36.8048];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-12">
       
       {/* ── HEADER ── */}
-      <div className="p-2 pt-2 px-1 flex items-center justify-between">
-         <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100"><ArrowLeft className="w-5 h-5 dark:text-white" /></button>
+      <div className="p-4 pt-4 px-5 flex items-center justify-between sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-[10]">
+         <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="p-2.5 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
+            <ArrowLeft className="w-5 h-5 dark:text-white" />
+         </button>
          <div className="flex flex-col items-end">
-            <h1 className="text-xl font-semibold text-slate-900 dark:text-white tracking-tighter leading-none">Step {step} of 3</h1>
-            <div className="flex gap-1 mt-1.5">
-               {[1, 2, 3].map(i => (<div key={i} className={`h-1 rounded-full transition-all ${i === step ? 'w-6 bg-primary' : 'w-2 bg-slate-200 dark:bg-slate-800'}`} />))}
+            <h1 className="text-sm font-semibold text-slate-900 dark:text-white tracking-widest leading-none uppercase italic">Step {step} <span className="text-slate-300 dark:text-slate-700 not-italic">/</span> 3</h1>
+            <div className="flex gap-1 mt-2">
+               {[1, 2, 3].map(i => (<div key={i} className={`h-1.5 rounded-full transition-all duration-500 ${i === step ? 'w-8 bg-primary shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'w-2 bg-slate-100 dark:bg-slate-800'}`} />))}
             </div>
          </div>
       </div>
 
-      <div className="px-0">
+      <div className="px-5">
         <AnimatePresence mode="wait">
           
           {step === 1 && (
-            <motion.div key="p1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 px-0">
+            <motion.div key="p1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
                <div className="space-y-4">
-                  <h2 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">What are we picking up?</h2>
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight italic leading-tight">What are we<br/>picking up?</h2>
                   {!wasteType ? (
                     <div className="grid grid-cols-2 gap-4">
                         {categories.map((cat) => {
@@ -497,8 +499,8 @@ export default function BookPickup() {
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
-                          {selectedCompanyId ? `Fleet Dispatch` : 'Nearby Partners'}
+                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight italic leading-tight">
+                          {selectedCompanyId ? `Fleet Dispatch` : 'Nearby\nPartners'}
                         </h2>
                         {selectedCompanyId && (
                           <div className="flex items-center gap-2 mt-1">
@@ -702,7 +704,7 @@ export default function BookPickup() {
 
           {step === 3 && (
             <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 pb-6">
-               <h2 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight px-2">Marketplace Summary</h2>
+               <h2 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight italic px-2">Marketplace Summary</h2>
                <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-0">
                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Pickup Breakdown</p>
                   

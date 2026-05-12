@@ -52,16 +52,23 @@ function ChangeView({ center }) {
 
 export default function PostTrade() {
   const navigate = useNavigate();
-  const { profile, userId } = useAuthStore();
-  const { 
-    selectedTime, selectTime, createBooking, 
-    liveAgents, fetchNearbyAgents, 
-    subscribeToAgents, cleanupAgents
-  } = useBookingStore();
+  const profile = useAuthStore(s => s.profile);
+  const userId = useAuthStore(s => s.userId);
+  const selectedTime = useBookingStore(s => s.selectedTime);
+  const selectTime = useBookingStore(s => s.selectTime);
+  const createBooking = useBookingStore(s => s.createBooking);
+  const liveAgents = useBookingStore(s => s.liveAgents);
+  const fetchNearbyAgents = useBookingStore(s => s.fetchNearbyAgents);
+  const subscribeToAgents = useBookingStore(s => s.subscribeToAgents);
+  const cleanupAgents = useBookingStore(s => s.cleanupAgents);
   const liveWeavers = []; // Placeholder until weaver store is built
-  const { categories, fetchCategories } = useServiceStore();
-  const { prices, fetchPrices, getPriceForMaterial } = usePriceStore();
-  const { fetchConfig, getConfigValue } = useSystemStore();
+  const categories = useServiceStore(s => s.categories);
+  const fetchCategories = useServiceStore(s => s.fetchCategories);
+  const prices = usePriceStore(s => s.prices);
+  const fetchPrices = usePriceStore(s => s.fetchPrices);
+  const getPriceForMaterial = usePriceStore(s => s.getPriceForMaterial);
+  const fetchConfig = useSystemStore(s => s.fetchConfig);
+  const getConfigValue = useSystemStore(s => s.getConfigValue);
 
   const [step, setStep] = useState(1);
   const [wasteType, setWasteType] = useState(null);
@@ -232,25 +239,30 @@ export default function PostTrade() {
   };
 
   return (
-    <div className="space-y-6">
-      
-      {/* ── NAVIGATION HEADER ── */}
-      <div className="px-1 pt-2 pb-2 flex items-center justify-between">
-         <button 
-           onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} 
-           className="p-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
-         >
-           <ArrowLeft className="w-5 h-5 text-slate-900 dark:text-white" />
-         </button>
-         <div className="flex flex-col items-end">
-            <span className="text-xs font-semibold uppercase tracking-widest text-emerald-600">Step {step} of 4</span>
-            <div className="flex gap-1 mt-1">
-               {[1, 2, 3, 4].map(i => (<div key={i} className={`h-1 rounded-full transition-all ${i === step ? 'w-6 bg-emerald-600' : 'w-2 bg-slate-200 dark:bg-slate-800'}`} />))}
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
+      <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between max-w-lg mx-auto pb-2">
+          <button onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+          </button>
+          
+          <div className="text-center">
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">New Trade</h1>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Step {step} of 4</p>
+          </div>
+          
+          <div className="w-11 h-11 flex items-center justify-center">
+            <div className="flex gap-1">
+               {[1, 2, 3, 4].map(i => (
+                 <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-4 bg-emerald-500' : 'w-1.5 bg-slate-100 dark:bg-slate-800'}`} />
+               ))}
             </div>
-         </div>
+          </div>
+        </div>
       </div>
 
-      <div className="px-0">
+      <div className="flex-1 space-y-0 pb-24 pt-6 relative max-w-lg mx-auto w-full px-5">
         <AnimatePresence mode="wait">
           
           {/* ── STEP 1: MATERIAL & WEIGHT ── */}
@@ -355,7 +367,7 @@ export default function PostTrade() {
 
           {/* ── STEP 2: VALUATION & PROOF ── */}
           {step === 2 && (
-            <motion.div key="p2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+            <motion.div key="p2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8 pb-12">
                <div className="space-y-1">
                   <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Valuation</h2>
                   <p className="text-sm font-medium text-slate-500 leading-tight">Provide proof and set your asking price.</p>
@@ -510,30 +522,14 @@ export default function PostTrade() {
                           rows="2"
                           value={customDescription}
                           onChange={(e) => setCustomDescription(e.target.value)}
-                          placeholder="Describe your material to buyer..."
+                          placeholder="Tell the buyer and agent more about the quality or collection specifics..."
                           className="w-full bg-transparent text-sm font-semibold text-slate-700 dark:text-white outline-none placeholder:text-slate-300 resize-none"
                         />
                      </div>
                   </div>
-                  <p className="text-xs font-medium text-slate-400 leading-relaxed italic">
-                    Tell the buyer and agent more about the quality or collection specifics.
-                  </p>
                </div>
 
-               {/* ESTIMATED VALUE CARD */}
-               <div className="bg-slate-900 dark:bg-slate-900 rounded-2xl p-6 relative overflow-hidden">
-                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full" />
-                  <div className="relative z-10 flex items-center justify-between">
-                     <div>
-                        <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-1">Your Est. Revenue</p>
-                        <h3 className="text-3xl font-semibold text-white tracking-tighter">KSh {assetValue.toLocaleString()}</h3>
-                     </div>
-                     <div className="text-right">
-                        <p className="text-xs font-semibold text-white/40 leading-none">Net Payout</p>
-                        <p className="text-xs font-semibold text-emerald-400/70 uppercase tracking-widest mt-1">Pending Verification</p>
-                     </div>
-                  </div>
-               </div>
+
 
 
             </motion.div>
@@ -541,7 +537,7 @@ export default function PostTrade() {
 
           {/* ── STEP 3: COLLECTION METHOD ── */}
           {step === 3 && (
-            <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
+            <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 pb-12">
                 <div className="space-y-1">
                   <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Collection Method</h2>
                   <p className="text-sm font-medium text-slate-500 leading-tight">How would you like to get your materials to us?</p>
@@ -781,7 +777,7 @@ export default function PostTrade() {
 
           {/* ── STEP 4: POST SUMMARY ── */}
           {step === 4 && (
-            <motion.div key="p4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
+            <motion.div key="p4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 pb-12">
                 <div className="space-y-1">
                   <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Post Summary</h2>
                   <p className="text-sm font-medium text-slate-500 leading-tight">Review your trade details before confirming.</p>
@@ -836,21 +832,27 @@ export default function PostTrade() {
                 </div>
 
                 {/* ── FINANCIAL BREAKDOWN ── */}
-                <div className="bg-slate-900 dark:bg-slate-900 rounded-2xl p-8 space-y-6">
-                   <div className="space-y-4">
-                      <div className="flex justify-between items-center text-white/50">
-                         <span className="text-xs font-semibold uppercase tracking-widest">Gross Value</span>
-                         <span className="text-sm font-semibold">KSh {assetValue.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-rose-400">
-                         <span className="text-xs font-semibold uppercase tracking-widest">Logistics Fee</span>
-                         <span className="text-sm font-semibold">- KSh {pickupMode === 'pickup' ? logisticsFee : 0}</span>
-                      </div>
-                      <div className="pt-4 border-t border-white/10 flex justify-between items-center">
-                         <span className="text-xs font-semibold text-white uppercase tracking-widest">Net Revenue</span>
-                         <div className="text-right">
-                            <h3 className="text-3xl font-semibold text-emerald-400 tracking-tighter">KSh {(assetValue - (pickupMode === 'pickup' ? logisticsFee : 0)).toLocaleString()}</h3>
-                            <p className="text-xs font-semibold text-white/30 uppercase tracking-[0.2em] mt-1">Paid to Wallet</p>
+                <div className="bg-emerald-600 dark:bg-emerald-700 rounded-[2rem] p-8 relative overflow-hidden shadow-2xl border border-white/20">
+                   <div className="absolute -top-16 -right-16 w-56 h-56 bg-white/20 rounded-full blur-3xl" />
+                   <div className="relative z-10 space-y-6">
+                      <div className="space-y-4">
+                         <div className="flex justify-between items-center text-white">
+                            <span className="text-[10px] font-black uppercase tracking-widest">Gross Value</span>
+                            <span className="text-sm font-bold">KSh {assetValue.toLocaleString()}</span>
+                         </div>
+                         <div className="flex justify-between items-center text-white/90">
+                            <span className="text-[10px] font-black uppercase tracking-widest">Logistics Fee</span>
+                            <span className="text-sm font-bold">- KSh {pickupMode === 'pickup' ? logisticsFee : 0}</span>
+                         </div>
+                         <div className="pt-4 border-t border-white/20 flex justify-between items-center">
+                            <span className="text-[10px] font-black text-white uppercase tracking-widest">EST. REVENUE</span>
+                            <div className="text-right">
+                               <h3 className="text-3xl font-black text-white tracking-tighter">KSh {(assetValue - (pickupMode === 'pickup' ? logisticsFee : 0)).toLocaleString()}</h3>
+                               <p className="text-[10px] font-bold text-white/95 uppercase tracking-widest mt-1.5 flex items-center justify-end gap-1.5">
+                                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                                 PAYOUT: AWAITING VERIFICATION
+                               </p>
+                            </div>
                          </div>
                       </div>
                    </div>
@@ -912,7 +914,7 @@ export default function PostTrade() {
                     </div>
                     <div>
                       <h4 className="text-xs font-semibold uppercase tracking-widest text-emerald-700">Zero Charges</h4>
-                      <p className="text-[11px] font-medium text-emerald-800/70 dark:text-emerald-400 leading-relaxed mt-1">
+                      <p className="text-[11px] font-medium text-emerald-800/70 dark:text-amber-400 leading-relaxed mt-1">
                         Self drop-offs are **completely free**. You will receive 100% of your waste value without any deductions.
                       </p>
                     </div>

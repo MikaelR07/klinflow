@@ -242,10 +242,10 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
           </button>
         </div>
 
-        <div className="p-6 max-h-[70vh] overflow-y-auto">
+        <div className="max-h-[70vh] overflow-y-auto py-6">
           {step === 'result' && (
             <div className="space-y-6">
-              <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+              <div className="p-6 bg-slate-50 dark:bg-slate-800/40 border-y border-slate-100 dark:border-slate-800">
                 <div className="grid grid-cols-1 gap-4">
                   <div className="flex gap-4">
                     <div className="flex-1 space-y-1">
@@ -296,7 +296,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
 
               {/* AI Insight Display */}
               {aiReason && (
-                <div className="p-4 bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 rounded-3xl flex items-start gap-3 animate-slide-up">
+                <div className="mx-6 p-4 bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 rounded-3xl flex items-start gap-3 animate-slide-up">
                   <div className="w-8 h-8 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
                     <Brain className="w-4 h-4" />
                   </div>
@@ -308,9 +308,9 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
               )}
 
               {/* Invoice Display */}
-              <div className="bg-slate-900 dark:bg-slate-800 rounded-[2.5rem] p-6 text-white shadow-xl relative overflow-hidden">
+              <div className="bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 p-6 text-white shadow-xl relative overflow-hidden border-y border-white/5">
                 <div className="flex justify-between items-center mb-6">
-                  <h4 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
+                  <h4 className="text-xs font-black uppercase tracking-[0.3em] text-white/50 flex items-center gap-2">
                     <CreditCard className="w-3 h-3" /> Mission Invoice
                   </h4>
                   {isMarketTrade && (
@@ -330,8 +330,8 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                 <div className="space-y-4">
                   <div className="flex justify-between items-start text-sm font-bold">
                     <div className="flex flex-col pt-1">
-                       <span className="text-emerald-400 uppercase text-xs tracking-widest">{isMarketTrade ? 'Agreed Deal Value' : 'Material Payout'}</span>
-                      <span className="text-xs text-slate-500 font-black uppercase tracking-tighter mt-1">
+                       <span className="text-emerald-300 uppercase text-xs tracking-widest">{isMarketTrade ? 'Agreed Deal Value' : 'Material Payout'}</span>
+                      <span className="text-xs text-white/40 font-black uppercase tracking-tighter mt-1">
                         {isCounterOffer ? 'Counter-Offer Mode' : isMarketTrade ? 'Marketplace Handshake' : `(${weight}kg @ KSh ${agentRate}/kg)`}
                       </span>
                     </div>
@@ -354,8 +354,8 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                   </div>
                   <div className="pt-4 border-t border-white/10 flex justify-between items-center">
                     <div>
-                      <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Sustainability Rewards</p>
-                      <p className={`text-sm font-black flex items-center gap-2 ${isMarketTrade ? 'text-slate-500' : 'text-primary'}`}>
+                      <p className="text-xs font-black text-white/40 uppercase tracking-widest">Sustainability Rewards</p>
+                      <p className={`text-sm font-black flex items-center gap-2 ${isMarketTrade ? 'text-white/20' : 'text-emerald-300'}`}>
                         <Sparkles className="w-4 h-4" /> {isMarketTrade ? 'NONE' : `${estimatedGFP} GFP`}
                       </p>
                     </div>
@@ -364,7 +364,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
               </div>
 
               {/* Payout Target */}
-              <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800 space-y-4">
+              <div className="p-6 bg-slate-50 dark:bg-slate-800/40 border-y border-slate-100 dark:border-slate-800 space-y-4">
                 <div className="flex items-center justify-between">
                    <h4 className="text-xs font-black uppercase text-slate-400 tracking-widest">{isMarketTrade ? 'Seller Wallet' : 'Recipient Wallet'}</h4>
                    <div className="flex items-center gap-2 text-primary">
@@ -409,16 +409,18 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking }) {
                 </div>
               </div>
 
-              <button 
-                onClick={handleFinalConfirm}
-                disabled={isProcessing || weight <= 0}
-                className={`w-full py-5 text-white font-black text-sm rounded-3xl shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50 ${
-                  isCounterOffer ? 'bg-amber-500 shadow-amber-500/30' : 'bg-primary shadow-primary/30'
-                }`}
-              >
-                {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
-                {isProcessing ? 'Processing Transaction...' : isCounterOffer ? 'SUBMIT COUNTER-OFFER' : 'COMPLETE PICKUP & PAYOUT'}
-              </button>
+              <div className="px-6">
+                <button 
+                  onClick={handleFinalConfirm}
+                  disabled={isProcessing || weight <= 0}
+                  className={`w-full py-5 text-white font-black text-sm rounded-3xl shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50 ${
+                    isCounterOffer ? 'bg-amber-500 shadow-amber-500/30' : 'bg-primary shadow-primary/30'
+                  }`}
+                >
+                  {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
+                  {isProcessing ? 'Processing Transaction...' : isCounterOffer ? 'SUBMIT COUNTER-OFFER' : 'COMPLETE PICKUP & PAYOUT'}
+                </button>
+              </div>
             </div>
           )}
 

@@ -29,11 +29,17 @@ export default function ImpactAnalytics() {
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [goalType, setGoalType] = useState('weekly'); // 'weekly' or 'monthly'
   
-  // Goals State (Persisted in localStorage for now, could be in DB later)
-  const [goals, setGoals] = useState(() => {
-    const saved = localStorage.getItem(`user_goals_${profile?.id}`);
-    return saved ? JSON.parse(saved) : { weekly: 10, monthly: 50 };
-  });
+  // Goals State (Persisted in localStorage for now)
+  const [goals, setGoals] = useState({ weekly: 10, monthly: 50 });
+
+  useEffect(() => {
+    if (profile?.id) {
+      const saved = localStorage.getItem(`user_goals_${profile.id}`);
+      if (saved) {
+        setGoals(JSON.parse(saved));
+      }
+    }
+  }, [profile?.id]);
 
   const [lifetimeStats, setLifetimeStats] = useState({
     totalWeight: 0,
@@ -201,7 +207,7 @@ export default function ImpactAnalytics() {
   return (
     <div className="space-y-6">
       {/* ── TOP NAV ── */}
-      <div className="shrink-0 z-40 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 mb-6">
+      <div className="shrink-0 z-40 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 mb-2">
         <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center shadow-sm active:scale-90 transition-all border border-slate-100 dark:border-slate-800">
           <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
@@ -213,7 +219,7 @@ export default function ImpactAnalytics() {
 
       <div className="space-y-6 pb-24">
         {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
-        <div className="relative">
+        <div className="relative -mt-2">
           <div className="relative bg-gradient-to-br from-emerald-600 to-teal-800 rounded-3xl p-6 text-white border-none overflow-hidden">
             {/* Clean Flat Layout */}
             

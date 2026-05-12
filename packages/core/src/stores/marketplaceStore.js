@@ -822,7 +822,8 @@ export const useMarketplaceStore = create(
           .on('postgres_changes', { 
             event: '*', 
             schema: 'public', 
-            table: 'marketplace_offers' 
+            table: 'marketplace_offers',
+            filter: `seller_id=eq.${userId}`
           }, async (payload) => {
             // Re-fetch to ensure we have the listing data (joins are hard in realtime payloads)
             await get().fetchReceivedOffers();

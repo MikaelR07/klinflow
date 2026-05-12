@@ -1,7 +1,7 @@
 /**
  * Sourcing Page — Agent's marketplace portal for buying recyclable materials
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, MapPin, Scale, TrendingUp, 
@@ -11,15 +11,18 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore, useAuthStore, supabase, getThumbnailUrl } from '@cleanflow/core';
 import { toast } from 'sonner';
+import { Virtuoso } from 'react-virtuoso';
 
 export default function Sourcing() {
   const navigate = useNavigate();
-  const { 
-    listings, fetchListings, makeOffer, 
-    sentOffers, fetchSentOffers,
-    isLoading 
-  } = useMarketplaceStore();
-  const { profile } = useAuthStore();
+  const listings = useMarketplaceStore(s => s.listings);
+  const fetchListings = useMarketplaceStore(s => s.fetchListings);
+  const makeOffer = useMarketplaceStore(s => s.makeOffer);
+  const sentOffers = useMarketplaceStore(s => s.sentOffers);
+  const fetchSentOffers = useMarketplaceStore(s => s.fetchSentOffers);
+  const isLoading = useMarketplaceStore(s => s.isLoading);
+  
+  const profile = useAuthStore(s => s.profile);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedId, setSelectedId] = useState(null);
@@ -56,14 +59,42 @@ export default function Sourcing() {
     fetchListings();
     fetchSentOffers();
 
+    const mapListing = (l) => ({
+      id: l.id,
+      material: l.material,
+      quantity: l.quantity,
+      pricePerKg: l.price_per_kg,
+      location: l.location,
+      latitude: l.latitude,
+      longitude: l.longitude,
+      status: l.status,
+      photo: l.photo_url,
+      grade: l.grade,
+      sellerName: l.seller_id // Simplified for realtime, actual name needs join
+    });
+
     const channelName = `sourcing-radar-${Date.now()}`;
     const channel = supabase.channel(channelName)
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'marketplace_listings' }, 
-        () => fetchListings()
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            const mapped = mapListing(payload.new);
+            useMarketplaceStore.setState(s => ({ listings: [mapped, ...s.listings] }));
+          } else if (payload.eventType === 'UPDATE') {
+            const mapped = mapListing(payload.new);
+            useMarketplaceStore.setState(s => ({
+              listings: s.listings.map(l => l.id === payload.new.id ? { ...l, ...mapped } : l)
+            }));
+          } else if (payload.eventType === 'DELETE') {
+            useMarketplaceStore.setState(s => ({
+              listings: s.listings.filter(l => l.id !== payload.old.id)
+            }));
+          }
+        }
       )
       .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'marketplace_offers' },
+        { event: '*', schema: 'public', table: 'marketplace_offers', filter: `buyer_id=eq.${profile?.id}` },
         () => fetchSentOffers()
       )
       .subscribe();
@@ -107,51 +138,73 @@ export default function Sourcing() {
     return sentOffers.some(o => o.listing_id === listingId);
   };
 
-  const filteredListings = listings.filter(l => 
-    l.material.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    l.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredListings = useMemo(() => {
+    if (!searchTerm) return listings;
+    const term = searchTerm.toLowerCase();
+    return listings.filter(l => 
+      (l.material && l.material.toLowerCase().includes(term)) ||
+      (l.location && l.location.toLowerCase().includes(term))
+    );
+  }, [listings, searchTerm]);
 
   return (
-    <div className="space-y-6">
-      <div className="w-full">
-        
-        {/* ── STICKY RADAR HEADER (UNIFIED & FULL-BLEED) ── */}
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
+      {!selectedId && (
+        <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between max-w-lg mx-auto pb-2">
+            <button onClick={() => navigate(-1)} className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+              <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+            </button>
+            
+            <div className="text-center">
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Radar</h1>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Sourcing Portal</p>
+            </div>
+            
+            <div className="w-11" /> {/* Spacer */}
+          </div>
+        </div>
+      )}
+
+      <div className="flex-1 space-y-0 pb-24 pt-0 relative max-w-lg mx-auto w-full">
+        {/* ── DASHBOARD AREA ── */}
         {!selectedId && (
-          <div className="sticky top-0 z-50 bg-transparent dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100/50 dark:border-slate-800/50 animate-fade-in">
-            <div className="px-4 pt-2 pb-1 bg-transparent dark:bg-slate-900">
-               <div className="bg-white/80 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-300 dark:border-slate-700 rounded-2xl p-4 shadow-sm flex items-center justify-between">
-                  <div className="flex items-center gap-8 w-full">
+          <div className="space-y-0">
+            {/* Radar Stats Dashboard */}
+            <div className="px-0 pt-0 pb-0 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+               <div className="p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-6 w-full">
                      <div>
-                        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-1 leading-none">Pending Bids</p>
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1 leading-none">Bids</p>
                         <h2 className="text-base font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-none">{activeBidsCount}</h2>
                      </div>
-                     <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 shrink-0" />
+                     <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 shrink-0" />
                      <div>
-                        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-1 leading-none">Accepted</p>
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1 leading-none">Accepted</p>
                         <h2 className="text-base font-black tracking-tighter text-emerald-600 dark:text-emerald-400 leading-none">{acceptedTradesCount}</h2>
                      </div>
-                     <div className="w-px h-6 bg-slate-200 dark:bg-slate-800 shrink-0 ml-auto" />
+                     <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 shrink-0 ml-auto" />
                      <div className="text-right">
-                        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-1 leading-none">Total Payload</p>
-                        <h2 className="text-base font-black tracking-tighter text-indigo-600 dark:text-indigo-400 leading-none italic">
-                           {activeBidsVolume.toLocaleString()} <span className="text-[10px] text-slate-400 not-italic font-bold opacity-50">KG</span>
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1 leading-none">Payload</p>
+                        <h2 className="text-base font-black tracking-tighter text-slate-900 dark:text-white leading-none">
+                           {activeBidsVolume.toLocaleString()} <span className="text-[10px] text-slate-400 not-italic font-bold opacity-70">KG</span>
                         </h2>
                      </div>
                   </div>
                </div>
             </div>
 
-            {/* COMPACT SEARCH BAR */}
-            <div className="px-4 py-3 bg-transparent dark:bg-slate-900">
-               <div className="relative">
-                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+            {/* Compact Search Bar */}
+            <div className="px-4 py-2 bg-white dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-800">
+               <div className="relative group">
+                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                  <input 
                    type="text"
                    placeholder="Search materials or locations..."
                    value={searchTerm}
                    onChange={(e) => setSearchTerm(e.target.value)}
-                   className="w-full pl-9 pr-4 py-2.5 bg-white/80 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[11px] font-bold text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm"
+                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm"
                  />
                </div>
             </div>
@@ -208,7 +261,7 @@ export default function Sourcing() {
                </div>
 
                {/* Content Sheet (Overlaps Image) */}
-               <div className="relative -mt-16 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-2xl px-3 pt-8 pb-10 space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
+               <div className="relative -mt-[104px] bg-[#F2F3F4] dark:bg-slate-900 rounded-t-[2rem] px-3 pt-8 pb-10 space-y-6 shadow-[0_-20px_40px_rgba(0,0,0,0.15)]">
                  
                  {/* Unified Material, Merchant & Location Cards */}
                  <div className="grid grid-cols-3 gap-2">
@@ -387,54 +440,54 @@ export default function Sourcing() {
                   <p className="text-sm font-semibold text-slate-400">No materials found nearby</p>
                 </div>
               ) : (
-                filteredListings.map((listing, i) => (
-                  <motion.div
-                    key={listing.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    onClick={() => setSelectedId(listing.id)}
-                    className="mx-2 mb-3 bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 active:scale-[0.98] transition-all"
-                  >
-                    <div className="flex gap-4">
-                      <div className="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
-                        {listing.photo ? (
-                          <img src={getThumbnailUrl(listing.photo, { width: 150 })} loading="lazy" alt={listing.material} className="w-full h-full object-cover" />
-                        ) : (
-                          <Package className="w-5 h-5 text-slate-200" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0 flex flex-col justify-center space-y-1">
-                        <div className="flex items-center justify-between">
-                          <div className="flex gap-1">
-                            <span className="px-1 py-0.5 bg-emerald-500/10 text-emerald-600 text-[6px] font-black uppercase tracking-[0.2em] rounded">
-                              GRADE {listing.grade || 'A'}
-                            </span>
-                            {getHasOffer(listing.id) && (
-                              <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[6px] font-black uppercase tracking-[0.2em] rounded">
-                                ACTIVE BID
+                <Virtuoso
+                  useWindowScroll
+                  data={filteredListings}
+                  itemContent={(index, listing) => (
+                    <div
+                      onClick={() => setSelectedId(listing.id)}
+                      className="mx-2 mb-3 bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 active:scale-[0.98] transition-all"
+                    >
+                      <div className="flex gap-4">
+                        <div className="w-14 h-14 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
+                          {listing.photo ? (
+                            <img src={getThumbnailUrl(listing.photo, { width: 150 })} loading="lazy" alt={listing.material} className="w-full h-full object-cover" />
+                          ) : (
+                            <Package className="w-5 h-5 text-slate-200" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0 flex flex-col justify-center space-y-1">
+                          <div className="flex items-center justify-between">
+                            <div className="flex gap-1">
+                              <span className="px-1 py-0.5 bg-emerald-500/10 text-emerald-600 text-[6px] font-black uppercase tracking-[0.2em] rounded">
+                                GRADE {listing.grade || 'A'}
                               </span>
-                            )}
+                              {getHasOffer(listing.id) && (
+                                <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[6px] font-black uppercase tracking-[0.2em] rounded">
+                                  ACTIVE BID
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">KSh {listing.pricePerKg}/kg</span>
                           </div>
-                          <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">KSh {listing.pricePerKg}/kg</span>
+                          <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
+                          <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50">
+                            <p className="text-[9px] font-bold text-slate-400 flex items-center gap-1 uppercase truncate max-w-[120px]">
+                              <MapPin className="w-2.5 h-2.5 text-slate-300" /> {listing.location}
+                            </p>
+                            <p className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 uppercase shrink-0 pl-2">
+                              <span className="text-[8px] text-slate-400 not-italic font-bold mr-1 opacity-70">Quantity:</span>
+                              <Scale className="w-2.5 h-2.5" /> {listing.quantity} KG
+                            </p>
+                          </div>
                         </div>
-                        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
-                        <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50">
-                          <p className="text-[9px] font-bold text-slate-400 flex items-center gap-1 uppercase truncate max-w-[120px]">
-                            <MapPin className="w-2.5 h-2.5 text-slate-300" /> {listing.location}
-                          </p>
-                          <p className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 uppercase shrink-0 pl-2">
-                            <span className="text-[8px] text-slate-400 not-italic font-bold mr-1 opacity-70">Quantity:</span>
-                            <Scale className="w-2.5 h-2.5" /> {listing.quantity} KG
-                          </p>
+                        <div className="flex items-center justify-center text-slate-200">
+                          <ChevronRight className="w-5 h-5" />
                         </div>
-                      </div>
-                      <div className="flex items-center justify-center text-slate-200">
-                        <ChevronRight className="w-5 h-5" />
                       </div>
                     </div>
-                  </motion.div>
-                ))
+                  )}
+                />
               )}
             </div>
           )}

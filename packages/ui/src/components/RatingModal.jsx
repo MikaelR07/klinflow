@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Star, X, Send, Heart, MessageSquare, ArrowRight } from 'lucide-react';
+import { Star, X, Heart, ArrowRight } from 'lucide-react';
 
 export default function RatingModal({ isOpen, onClose, onSubmit, onSkip, agentName = 'your agent' }) {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
-  const [feedback, setFeedback] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
@@ -12,7 +12,7 @@ export default function RatingModal({ isOpen, onClose, onSubmit, onSkip, agentNa
   const handleSubmit = async () => {
     if (rating === 0) return;
     setIsSubmitting(true);
-    await onSubmit(rating, feedback);
+    await onSubmit(rating);
     setIsSubmitting(false);
     onClose();
   };
@@ -68,21 +68,6 @@ export default function RatingModal({ isOpen, onClose, onSubmit, onSkip, agentNa
           ))}
         </div>
 
-        {/* Feedback Input */}
-        {rating > 0 && (
-          <div className="px-8 pb-6 animate-in slide-in-from-top-4 duration-300">
-            <div className="relative">
-              <MessageSquare className="absolute top-4 left-3 w-4 h-4 text-slate-300" />
-              <textarea
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                placeholder="Optional: What went well? (or what could be better?)"
-                className="w-full h-24 pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-2xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all resize-none dark:text-white"
-              />
-            </div>
-            <p className="text-xs text-slate-400 mt-2 text-right italic font-medium">Your feedback helps improve our community.</p>
-          </div>
-        )}
 
         {/* Footer */}
         <div className="p-6 bg-slate-50 dark:bg-slate-800/30 flex gap-3">

@@ -233,226 +233,230 @@ export default function AgentHome() {
   return (
     <div className="space-y-6">
       
-      {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
         isOpen={showPushPrompt}
         onClose={() => setShowPushPrompt(false)}
       />
-      
-      {/* ── HEADER ── */}
-      <div className="flex items-center justify-between px-1">
-        <div className="flex items-center gap-3">
-          {/* Profile Avatar */}
-          <button onClick={() => navigate('/settings/profile')} className="shrink-0">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
-              {profile?.avatar_url ? (
-                <img src={getThumbnailUrl(profile.avatar_url, { width: 200 })} className="w-full h-full object-cover" />
-              ) : (
-                profile?.avatar || '👤'
+      {/* ── TOP NAV & CORE CONTROLS ── */}
+      <div className="space-y-3">
+        {/* Header Section - Edge to Edge */}
+        <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-2 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-4">
+              {/* Profile Avatar */}
+              <div className="shrink-0">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
+                  {profile?.avatar_url ? (
+                    <img src={getThumbnailUrl(profile.avatar_url, { width: 300 })} className="w-full h-full object-cover" />
+                  ) : (
+                    profile?.avatar || '👤'
+                  )}
+                </div>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Hello, {profile.name.split(' ')[0]}! 👋</h1>
+                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold uppercase tracking-wider bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                  <MapPin className="w-3 h-3" /> {profile.location?.estate || profile.estate || 'Nairobi Sector'}
+                </div>
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => navigate('/settings/notifications')}
+              className="relative w-11 h-11 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
+            >
+              <Bell className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-800 shadow-md animate-in zoom-in">
+                  {unreadCount}
+                </span>
               )}
-            </div>
-          </button>
-          <div>
-            <h1 className="text-base font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile.name.split(' ')[0]}! 👋</h1>
-            <div className="flex items-center gap-1 mt-1 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 w-fit">
-              <MapPin className="w-2.5 h-2.5" /> {profile.location?.estate || profile.estate || 'Nairobi Sector'}
-            </div>
+            </button>
           </div>
         </div>
         
-        <button 
-          onClick={() => navigate('/settings/notifications')}
-          className="relative w-9 h-9 rounded-xl bg-[#F8F8FF] dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
-        >
-          <Bell className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-red-600 text-white text-xs font-semibold rounded-full flex items-center justify-center ring-2 ring-[#F8F8FF] dark:ring-slate-900 shadow-md animate-in zoom-in">
-              {unreadCount}
-            </span>
+        {/* ── CORE CONTROLS GROUP ── */}
+        <div className="space-y-3">
+          {/* ── AGENT ONLINE STATUS TOGGLE (Unified Logic) ── */}
+          {(!(profile?.agent_account_type === 'company_admin' || profile?.company_name || profile?.fleet_invite_code)) ? (
+            <div className="w-full p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between transition-all shadow-sm">
+              <div className="flex items-center gap-4 relative z-10">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner transition-colors ${
+                  profile.isOnline ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200/50 dark:bg-slate-700 text-slate-400'
+                }`}>
+                  {isToggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-4 h-4" />}
+                </div>
+                <div className="text-left">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] leading-none mb-1.5 opacity-80 text-primary">System Status</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">
+                    {profile.isOnline ? 'Active Radar' : 'Offline'}
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={handleToggle}
+                disabled={isToggling}
+                className={`relative w-14 h-8 rounded-full transition-all duration-300 ${
+                  profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-slate-300 dark:bg-slate-700'
+                }`}
+              >
+                <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 shadow-sm ${
+                  profile.isOnline ? 'left-[28px]' : 'left-[4px]'
+                }`} />
+              </button>
+            </div>
+          ) : (
+            <div className="w-full p-6 rounded-3xl bg-slate-900 text-white shadow-xl shadow-slate-900/20 flex items-center justify-between transition-all border border-white/5">
+              <div className="flex items-center gap-4 relative z-10">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner transition-colors ${
+                  profile.isOnline ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'
+                }`}>
+                  {isToggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-5 h-5" />}
+                </div>
+                <div className="text-left">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] leading-none mb-1.5 text-emerald-400">Company Control</p>
+                  <p className="text-base font-bold tracking-tight">{profile.isOnline ? 'Radar Active' : 'System Offline'}</p>
+                </div>
+              </div>
+              <button 
+                onClick={handleToggle}
+                disabled={isToggling}
+                className={`relative w-16 h-9 rounded-full transition-all duration-300 ${
+                  profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-slate-800 border border-white/10'
+                }`}
+              >
+                <div className={`absolute top-1 w-7 h-7 bg-white rounded-full transition-all duration-300 shadow-sm ${
+                  profile.isOnline ? 'left-[32px]' : 'left-[4px]'
+                }`} />
+              </button>
+            </div>
           )}
-        </button>
-      </div>
 
-      <div className="h-px w-full bg-slate-200 dark:bg-slate-800/50" />
-      
-      {/* ── AGENT ONLINE STATUS TOGGLE (Unified Logic) ── */}
-      {(!(profile?.agent_account_type === 'company_admin' || profile?.company_name || profile?.fleet_invite_code)) ? (
-        <div className="w-full p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between transition-all">
-          <div className="flex items-center gap-3 relative z-10">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-inner transition-colors ${
-              profile.isOnline ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-200/50 dark:bg-slate-700 text-slate-400'
-            }`}>
-              {isToggling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Power className="w-4 h-4" />}
-            </div>
-            <div className="text-left">
-              <p className="text-[10px] font-bold uppercase tracking-widest leading-none mb-1 opacity-80 text-primary">System Status</p>
-              <p className="text-xs font-bold text-slate-900 dark:text-white">
-                {profile.isOnline ? 'Active Radar' : 'Offline'}
-              </p>
-            </div>
-          </div>
-          <button 
-            onClick={handleToggle}
-            disabled={isToggling}
-            className={`relative w-11 h-6 rounded-full transition-all duration-300 ${
-              profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-slate-300 dark:bg-slate-700'
-            }`}
-          >
-            <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-all duration-300 shadow-sm ${
-              profile.isOnline ? 'left-[22px]' : 'left-[2px]'
-            }`} />
-          </button>
-        </div>
-      ) : (
-        <div className="w-full p-4 rounded-2xl bg-slate-900 text-white shadow-xl shadow-slate-900/20 flex items-center justify-between transition-all">
-          <div className="flex items-center gap-3 relative z-10">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-inner transition-colors ${
-              profile.isOnline ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-500'
-            }`}>
-              {isToggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-5 h-5" />}
-            </div>
-            <div className="text-left">
-              <p className="text-[10px] font-bold uppercase tracking-widest leading-none mb-1 text-emerald-400">Company Control</p>
-              <p className="text-sm font-bold tracking-tight">{profile.isOnline ? 'Online' : 'Offline'}</p>
-            </div>
-          </div>
-          <button 
-            onClick={handleToggle}
-            disabled={isToggling}
-            className={`relative w-14 h-8 rounded-full transition-all duration-300 ${
-              profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-slate-800 border border-white/10'
-            }`}
-          >
-            <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 shadow-sm ${
-              profile.isOnline ? 'left-[28px]' : 'left-[4px]'
-            }`} />
-          </button>
-        </div>
-      )}
-
-      {/* ── QUICK ACTION MATRIX ── */}
-      <div className="grid grid-cols-3 gap-2.5">
-        <button
-          onClick={() => navigate('/jobs')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm group"
-        >
-          <div className="relative">
-            {availableJobs.length > 0 && (
-              <div className="absolute -top-1 -right-1 min-w-[16px] h-4 bg-blue-500 rounded-full flex items-center justify-center px-1 shadow-lg shadow-blue-500/30 z-10">
-                <span className="text-[8px] font-bold text-white">{availableJobs.length}</span>
+          {/* ── QUICK ACTION MATRIX ── */}
+          <div className="grid grid-cols-3 gap-2.5">
+            <button
+              onClick={() => navigate('/jobs')}
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm group"
+            >
+              <div className="relative">
+                {availableJobs.length > 0 && (
+                  <div className="absolute -top-1 -right-1 min-w-[16px] h-4 bg-blue-500 rounded-full flex items-center justify-center px-1 shadow-lg shadow-blue-500/30 z-10">
+                    <span className="text-[8px] font-bold text-white">{availableJobs.length}</span>
+                  </div>
+                )}
+                <div className="w-12 h-12 bg-blue-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                  <Briefcase className="w-6 h-6" />
+                </div>
               </div>
-            )}
-            <div className="w-10 h-10 bg-blue-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
-              <Briefcase className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-center">
-            <p className="text-[8px] font-semibold text-primary uppercase tracking-widest mb-0.5">Missions</p>
-            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Open Jobs</p>
-          </div>
-        </button>
-        
-        <button
-          onClick={() => navigate('/trades')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm group"
-        >
-          <div className="relative">
-            {acceptedTradesCount > 0 && (
-              <div className="absolute -top-1 -right-1 min-w-[16px] h-4 bg-emerald-500 rounded-full flex items-center justify-center px-1 shadow-lg shadow-emerald-500/30 z-10">
-                <span className="text-[8px] font-bold text-white">{acceptedTradesCount}</span>
+              <div className="text-center">
+                <p className="text-[8px] font-semibold text-primary uppercase tracking-widest mb-0.5">Missions</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Open Jobs</p>
               </div>
-            )}
-            <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
-              <Handshake className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-center">
-            <p className="text-[8px] font-semibold text-emerald-600 uppercase tracking-widest mb-0.5">Market</p>
-            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight whitespace-nowrap">Accepted Bids</p>
-          </div>
-        </button>
+            </button>
+            
+            <button
+              onClick={() => navigate('/trades')}
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm group"
+            >
+              <div className="relative">
+                {acceptedTradesCount > 0 && (
+                  <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-blue-500 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
+                    <span className="text-[8px] font-semibold text-white">{acceptedTradesCount}</span>
+                  </div>
+                )}
+                <div className="w-12 h-12 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                  <Handshake className="w-6 h-6" />
+                </div>
+              </div>
+              <div className="text-center">
+                <p className="text-[8px] font-semibold text-emerald-600 uppercase tracking-widest mb-0.5">Market</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight whitespace-nowrap">Accepted Bids</p>
+              </div>
+            </button>
 
-        <button
-          onClick={() => navigate('/earnings')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all shadow-sm group"
-        >
-          <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
-            <TrendingUp className="w-5 h-5" />
+            <button
+              onClick={() => navigate('/earnings')}
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm group"
+            >
+              <div className="w-12 h-12 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <div className="text-center">
+                <p className="text-[8px] font-semibold text-indigo-600 uppercase tracking-widest mb-0.5">Stats</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
+              </div>
+            </button>
           </div>
-          <div className="text-center">
-            <p className="text-[8px] font-semibold text-indigo-600 uppercase tracking-widest mb-0.5">Stats</p>
-            <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
-          </div>
-        </button>
-      </div>
+        </div>
 
-      {/* ── AGENT HERO CARD: COMMAND CENTER ── */}
-      <div className="relative group">
+        {/* ── AGENT HERO CARD: COMMAND CENTER ── */}
+        <div className="relative group">
 
-        <div className="relative bg-gradient-to-br from-emerald-600 to-teal-800 rounded-3xl p-5 overflow-hidden transition-all duration-500">
+        <div className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-emerald-800 dark:to-emerald-950 rounded-3xl p-5 overflow-hidden transition-all duration-500">
           
           <div className="relative z-10">
             <div className="grid grid-cols-2 gap-2.5">
               
               {/* 1. Main Stock Value (Vertical Hero) */}
-              <div className="row-span-2 bg-white dark:bg-slate-900 rounded-3xl p-5 flex flex-col justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-white/5 flex items-center justify-center">
-                  <Package className="w-5 h-5 text-emerald-600 dark:text-orange-400" />
+              <div className="row-span-2 bg-[#428981] rounded-3xl p-5 flex flex-col justify-between">
+                <div className="w-10 h-10 rounded-2xl bg-[#3a7a73] flex items-center justify-center">
+                  <Package className="w-5 h-5 text-emerald-200" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mb-1.5 leading-none">
+                  <p className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-1.5 leading-none">
                     Asset Value
                   </p>
-                  <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                    <span className="text-[10px] font-bold text-slate-400 block mb-0.5 uppercase">KSh</span>
+                  <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
+                    <span className="text-[10px] font-bold text-white/80 block mb-0.5 uppercase">KSh</span>
                     {earnings.inventoryValue?.toLocaleString() || 0}
                   </h2>
                 </div>
               </div>
 
               {/* 2. Rating */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex items-center justify-between">
+              <div className="bg-[#428981] rounded-2xl p-4 flex items-center justify-between">
                 <div>
-                  <h4 className="text-xl font-black text-slate-900 dark:text-white">{profile?.rating || '5.0'}</h4>
-                  <p className="text-[9px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Rating</p>
+                  <h4 className="text-xl font-black text-white">{profile?.rating || '5.0'}</h4>
+                  <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mt-1">Rating</p>
                 </div>
-                <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-white/5 flex items-center justify-center">
-                  <Star className="w-4 h-4 text-amber-500" />
+                <div className="w-8 h-8 rounded-xl bg-[#3a7a73] flex items-center justify-center">
+                  <Star className="w-4 h-4 text-amber-300" />
                 </div>
               </div>
 
               {/* 3. Points */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex items-center justify-between">
+              <div className="bg-[#428981] rounded-2xl p-4 flex items-center justify-between">
                 <div>
-                  <h4 className="text-xl font-black text-emerald-600 dark:text-orange-400">{profile.rewardPoints || 0}</h4>
-                  <p className="text-[9px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Points</p>
+                  <h4 className="text-xl font-black text-emerald-200">{profile.rewardPoints || 0}</h4>
+                  <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mt-1">Points</p>
                 </div>
-                <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-white/5 flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-emerald-600 dark:text-orange-400" />
+                <div className="w-8 h-8 rounded-xl bg-[#3a7a73] flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-emerald-200" />
                 </div>
               </div>
 
               {/* 4. Accepted Bids */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex flex-col justify-between">
-                <Handshake className="w-5 h-5 text-emerald-600 dark:text-orange-400" />
+              <div className="bg-[#428981] rounded-2xl p-4 flex flex-col justify-between">
+                <Handshake className="w-5 h-5 text-emerald-200" />
                 <div>
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white leading-none">{acceptedTradesCount || 0}</h3>
-                  <p className="text-[9px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Accepted Bids</p>
+                  <h3 className="text-xl font-black text-white leading-none">{acceptedTradesCount || 0}</h3>
+                  <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mt-1">Accepted Bids</p>
                 </div>
               </div>
 
               {/* 5. Pickups Today */}
-              <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 flex flex-col justify-between">
-                <Truck className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="bg-[#428981] rounded-2xl p-4 flex flex-col justify-between">
+                <Truck className="w-5 h-5 text-emerald-200" />
                 <div>
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white leading-none">{earnings.completedToday || 0}</h3>
-                  <p className="text-[9px] font-black text-slate-400 dark:text-white/50 uppercase tracking-widest mt-1">Pickups Today</p>
+                  <h3 className="text-xl font-black text-white leading-none">{earnings.completedToday || 0}</h3>
+                  <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mt-1">Pickups Today</p>
                 </div>
               </div>
 
             </div>
           </div>
         </div>
+      </div>
       </div>
 
       {/* ── ROUTE OPTIMIZER CTA ── */}

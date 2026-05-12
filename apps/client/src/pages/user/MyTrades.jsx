@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { 
   Clock, CheckCircle2, Truck, XCircle,
   CalendarClock, Zap, HandCoins, ArrowRight, Store,
-  Info, ChevronDown, ChevronUp
+  Info, ChevronDown, ChevronUp, ArrowLeft
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -166,48 +166,59 @@ export default function MyTrades() {
         description: 'Past trades have been archived.' 
       });
     } catch (err) {
-      toast.error('Clear failed');
+      toast.error('Failed to clear history', { description: err.message });
     }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-center px-1">
-        <div className="space-y-1">
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none text-center">Trade History</h1>
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
+      <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center justify-between max-w-lg mx-auto pb-4">
+          <button onClick={() => navigate(-1)} className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+          </button>
+          
+          <div className="text-center">
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Trade History</h1>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Marketplace Ledger</p>
+          </div>
+          
+          <div className="w-11" /> {/* Spacer */}
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-        {TABS.map(tab => {
-          const tabCount = bookings
-            .filter(b => {
-              if (tab === 'Active') return b.status === 'pending' || b.status === 'confirmed' || b.status === 'scheduled' || b.status === 'in-progress' || b.status === 'counter_offer_pending';
-              if (tab === 'Settled') return b.status === 'completed';
-              if (tab === 'Cancelled') return b.status === 'cancelled';
-              return false;
-            })
-            .filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
-            .length;
-          
-          return (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-3 text-[11px] font-semibold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center ${
-                activeTab === tab 
-                  ? 'bg-emerald-600 shadow-lg shadow-emerald-500/20 text-white' 
-                  : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
-              }`}
-            >
-              {tab}
-              <TradeCounter count={tabCount} active={activeTab === tab} />
-            </button>
-          );
-        })}
-      </div>
-      <div className="space-y-4">
+      <div className="flex-1 space-y-0 pb-24 pt-0 relative max-w-lg mx-auto w-full">
+        {/* Tabs */}
+        <div className="flex bg-slate-100 dark:bg-slate-900 p-1 border-b border-slate-200 dark:border-slate-800">
+          {TABS.map(tab => {
+            const tabCount = bookings
+              .filter(b => {
+                if (tab === 'Active') return b.status === 'pending' || b.status === 'confirmed' || b.status === 'scheduled' || b.status === 'in-progress' || b.status === 'counter_offer_pending';
+                if (tab === 'Settled') return b.status === 'completed';
+                if (tab === 'Cancelled') return b.status === 'cancelled';
+                return false;
+              })
+              .filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+              .length;
+            
+            return (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 py-2.5 text-[11px] font-bold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center ${
+                  activeTab === tab 
+                    ? 'bg-white dark:bg-slate-800 shadow-sm text-emerald-600' 
+                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+                }`}
+              >
+                {tab}
+                <TradeCounter count={tabCount} active={activeTab === tab} />
+              </button>
+            );
+          })}
+        </div>
+      <div className="space-y-4 px-3 pt-4">
         <AnimatePresence mode="wait">
           {expandedId ? (
             /* ── FULL-SCREEN ACTIVE TRADE DETAIL ── */
@@ -585,6 +596,7 @@ export default function MyTrades() {
           </div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }

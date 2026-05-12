@@ -124,13 +124,7 @@ export default function NavigateJobPage() {
           <ArrowLeft className="w-5 h-5 text-slate-700 dark:text-slate-200" />
         </button>
 
-        <div className="p-2 px-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-xl shadow-lg pointer-events-auto border border-slate-200 dark:border-slate-800 flex items-center gap-2">
-          <div className="flex flex-col text-right">
-            <span className="text-xs font-semibold uppercase text-slate-400 tracking-widest">Target</span>
-            <span className="text-xs font-semibold text-slate-900 dark:text-white uppercase">{job.location}</span>
-          </div>
-          <MapPin className="w-3.5 h-3.5 text-primary" />
-        </div>
+
       </div>
 
       {/* Map View - Full Screen Background */}
@@ -185,21 +179,23 @@ export default function NavigateJobPage() {
         
         {/* Main Content */}
         <div className="max-w-md mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-primary border border-emerald-100 dark:border-emerald-800">
-                 <User className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-1">Mission Target</p>
-                <h3 className="text-lg font-semibold dark:text-white leading-tight">{job.customerName?.split(' ')[0] || job.customer?.split(' ')[0] || 'Resident'}</h3>
-                <p className="text-xs text-slate-500 font-semibold">{job.location} · {job.material}</p>
-              </div>
+          <div className="flex gap-2 mb-6">
+            <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Client</span>
+              <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{job.customerName?.split(' ')[0] || job.customer?.split(' ')[0] || 'Client'}</span>
+            </div>
+            <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Location</span>
+              <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{job.location}</span>
+            </div>
+            <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</span>
+              <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{job.material}</span>
             </div>
             
             <button 
               onClick={() => window.location.href = `tel:${job.phone || '+254700000000'}`}
-              className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 active:scale-95 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+              className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center active:scale-95 transition-all shadow-lg shadow-emerald-500/30 shrink-0 self-center"
             >
               <Phone className="w-5 h-5" />
             </button>
@@ -229,14 +225,7 @@ export default function NavigateJobPage() {
 
           {/* Scrollable details if expanded */}
           <div className="space-y-6">
-            {job.photoUrl && (
-              <div className="space-y-2">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em] ml-1">Asset Preview</p>
-                <div className="w-full aspect-video rounded-3xl overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-md bg-slate-50">
-                  <img src={getThumbnailUrl(job.photoUrl, { width: 400 })} loading="lazy" className="w-full h-full object-cover" alt="Client's recyclables preview" />
-                </div>
-              </div>
-            )}
+
 
             {!hasArrived ? (
               <div className="space-y-4">

@@ -1,7 +1,7 @@
 /**
  * MarketplaceInventory.jsx — Manage Live B2B Listings
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { 
   Package, Search, Plus, ArrowLeft,
   Trash2, MapPin, Scale, ChevronRight,
@@ -11,16 +11,16 @@ import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore, useAuthStore, getThumbnailUrl } from '@cleanflow/core';
 import { EmptyState, LoadingScreen } from '@cleanflow/ui';
 import { toast } from 'sonner';
+import { Virtuoso } from 'react-virtuoso';
+import { motion } from 'framer-motion';
 
 export default function MarketplaceInventory() {
   const navigate = useNavigate();
-  const { profile } = useAuthStore();
-  const { 
-    myListings, 
-    fetchMyActivity, 
-    deleteListing, 
-    isLoading 
-  } = useMarketplaceStore();
+  const profile = useAuthStore(s => s.profile);
+  const myListings = useMarketplaceStore(s => s.myListings);
+  const fetchMyActivity = useMarketplaceStore(s => s.fetchMyActivity);
+  const deleteListing = useMarketplaceStore(s => s.deleteListing);
+  const isLoading = useMarketplaceStore(s => s.isLoading);
   
   const [activeTab, setActiveTab] = useState('active');
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,67 +49,74 @@ export default function MarketplaceInventory() {
 
   const selectedListing = myListings.find(l => l.id === selectedId);
 
-  const filteredListings = myListings.filter(l => {
+  const filteredListings = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    const matchesSearch = !q || 
-      l.material.toLowerCase().includes(q) ||
-      String(l.quantity).includes(q) ||
-      String(l.pricePerKg).includes(q);
-    const matchesTab = activeTab === 'active' ? l.status === 'active' : l.status !== 'active';
-    return matchesSearch && matchesTab;
-  });
+    return myListings.filter(l => {
+      const matchesSearch = !q || 
+        (l.material && l.material.toLowerCase().includes(q)) ||
+        String(l.quantity).includes(q) ||
+        String(l.pricePerKg).includes(q);
+      const matchesTab = activeTab === 'active' ? l.status === 'active' : l.status !== 'active';
+      return matchesSearch && matchesTab;
+    });
+  }, [myListings, searchQuery, activeTab]);
 
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="bg-[#F2F3F4] dark:bg-slate-900 overscroll-none px-4 -mt-5 pt-5">
-      
-      {/* ── HEADER (Hidden when focused) ── */}
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
-        <header className="px-4 pt-1 pb-4">
-          <div className="flex items-center justify-center relative mb-3">
-            <button 
-              onClick={() => navigate(-1)}
-              className="absolute left-0 p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all"
-            >
-              <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+        <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between max-w-lg mx-auto pb-2">
+            <button onClick={() => navigate(-1)} className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+              <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
             </button>
-            <div className="bg-white dark:bg-slate-800/50 py-1.5 px-4 rounded-xl border border-slate-100 dark:border-slate-800">
-              <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-widest uppercase">Manage your listings</h1>
+            
+            <div className="text-center">
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Inventory</h1>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">My Listings</p>
             </div>
+            
+            <div className="w-11" /> {/* Spacer */}
           </div>
-
-          <div className="flex gap-2">
-            <div className="relative flex-1 group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input 
-                type="text" 
-                placeholder="Search listings..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none transition-all"
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-5 mt-5 px-1">
-            {['active', 'closed'].map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`relative pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] transition-all ${
-                  activeTab === tab ? 'text-emerald-600' : 'text-slate-400'
-                }`}
-              >
-                {tab}
-                {activeTab === tab && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full" />
-                )}
-              </button>
-            ))}
-          </div>
-        </header>
+        </div>
       )}
+
+      <div className="flex-1 space-y-0 pb-24 pt-0 relative max-w-lg mx-auto w-full">
+        {/* ── DASHBOARD AREA ── */}
+        {!selectedId && (
+          <div className="space-y-0">
+            <div className="px-4 py-2 bg-white dark:bg-slate-900/50">
+              <div className="relative group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input 
+                  type="text" 
+                  placeholder="Search listings..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-11 pr-4 py-3.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                />
+              </div>
+            </div>
+
+            <div className="flex bg-slate-100 dark:bg-slate-900 p-1 border-y border-slate-200 dark:border-slate-800">
+              {['active', 'closed'].map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex-1 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                    activeTab === tab
+                      ? 'bg-white dark:bg-slate-800 shadow-sm text-emerald-600'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
       <main className="mt-0">
         {selectedId && selectedListing ? (
@@ -241,50 +248,53 @@ export default function MarketplaceInventory() {
                 />
               </div>
             ) : (
-              filteredListings.map(listing => (
-                <div 
-                  key={listing.id}
-                  onClick={() => setSelectedId(listing.id)}
-                  className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors shadow-sm"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 rounded-2xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
-                      {listing.photo ? (
-                        <img src={getThumbnailUrl(listing.photo, { width: 200 })} loading="lazy" className="w-full h-full object-cover" />
-                      ) : (
-                        <Package className="w-6 h-6 text-slate-300" />
-                      )}
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-2">
-                          <span className={`w-1.5 h-1.5 rounded-full ${listing.status === 'active' ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]' : 'bg-slate-300 dark:bg-slate-600'}`} />
-                          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{listing.status === 'active' ? 'Live' : 'Closed'}</span>
-                        </div>
-                        <span className="text-sm font-bold text-emerald-600">KSh {listing.pricePerKg}/kg</span>
+              <Virtuoso
+                useWindowScroll
+                data={filteredListings}
+                itemContent={(index, listing) => (
+                  <div 
+                    onClick={() => setSelectedId(listing.id)}
+                    className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors shadow-sm mb-1.5"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-20 h-20 rounded-2xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
+                        {listing.photo ? (
+                          <img src={getThumbnailUrl(listing.photo, { width: 200 })} loading="lazy" className="w-full h-full object-cover" />
+                        ) : (
+                          <Package className="w-6 h-6 text-slate-300" />
+                        )}
                       </div>
                       
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
-                      
-                      <div className="flex items-center gap-4 mt-2">
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
-                          <Scale className="w-3.5 h-3.5" />
-                          <span>{listing.quantity} KG</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-1">
+                          <div className="flex items-center gap-2">
+                            <span className={`w-1.5 h-1.5 rounded-full ${listing.status === 'active' ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]' : 'bg-slate-300 dark:bg-slate-600'}`} />
+                            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{listing.status === 'active' ? 'Live' : 'Closed'}</span>
+                          </div>
+                          <span className="text-sm font-bold text-emerald-600">KSh {listing.pricePerKg}/kg</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
-                          <Clock className="w-3.5 h-3.5" />
-                          <span>{new Date(listing.createdAt || listing.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase truncate tracking-tight">{listing.material}</h3>
+                        
+                        <div className="flex items-center gap-4 mt-2">
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+                            <Scale className="w-3.5 h-3.5" />
+                            <span>{listing.quantity} KG</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>{new Date(listing.createdAt || listing.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="text-slate-200 dark:text-slate-700">
-                      <ChevronRight className="w-5 h-5" />
+                      
+                      <div className="text-slate-200 dark:text-slate-700">
+                        <ChevronRight className="w-5 h-5" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                )}
+              />
             )}
           </div>
         )}
@@ -348,6 +358,7 @@ export default function MarketplaceInventory() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

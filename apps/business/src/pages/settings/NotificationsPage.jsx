@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, Save, BellRing, Smartphone, MessageSquare } from 'lucide-react';
-import { useAuthStore, ROLES } from '@cleanflow/core';
+import { useAuthStore, useNotificationStore, ROLES } from '@cleanflow/core';
 import { toast } from 'sonner';
 
 export default function NotificationsPage() {
@@ -50,19 +50,49 @@ export default function NotificationsPage() {
   );
 
   return (
-    <div className="animate-slide-up pb-20">
-      <header className="flex items-center gap-3 mb-6">
+    <div className="animate-slide-up pb-20 px-4">
+      <header className="flex items-center gap-3 mb-6 pt-4">
         <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-xl font-semibold dark:text-white">Notifications</h1>
+        <h1 className="text-xl font-semibold dark:text-white">Business Alerts</h1>
       </header>
 
       <div className="space-y-6">
         
         {/* Channels */}
         <div className="card p-5">
-           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Delivery Channel</h2>
+           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+              <Smartphone className="w-4 h-4 text-slate-400" /> Delivery Channels
+           </h2>
+
+           {/* Native Push Authorization */}
+           <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+             <div className="flex items-center gap-3 mb-3">
+               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                 <BellRing className="w-5 h-5" />
+               </div>
+               <div>
+                 <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white">Business Intelligence Alerts</h3>
+                 <p className="text-[9px] text-slate-400 font-medium mt-0.5 uppercase">Get notified of trades & logistics</p>
+               </div>
+             </div>
+             
+             <button 
+               onClick={async () => {
+                 const ok = await useNotificationStore.getState().subscribeToPush();
+                 if (ok) {
+                   toast.success('Terminal Linked! 📡', { description: 'Business push alerts are now active.' });
+                 } else {
+                   toast.error('Auth Failed', { description: 'Please enable notifications in device settings.' });
+                 }
+               }}
+               className="w-full py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-[10px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
+             >
+               Enable Native Push
+             </button>
+           </div>
+
            <div className="grid grid-cols-2 gap-3">
               <button onClick={() => setPrefs({...prefs, channel: 'push'})} className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${prefs.channel === 'push' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}>
                 <Smartphone className="w-6 h-6" />

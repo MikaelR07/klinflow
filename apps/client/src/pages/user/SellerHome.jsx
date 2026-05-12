@@ -223,7 +223,7 @@ export default function SellerHome() {
     .slice(0, 3);
 
   return (
-    <div className="px-4 space-y-6 pb-10">
+    <div className="space-y-6 pb-10">
       
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -231,38 +231,40 @@ export default function SellerHome() {
         onClose={handleDismissPush}
       />
       
-      {/* ── HEADER ── */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 min-w-0 flex-1">
-          <button onClick={() => navigate('/settings/profile')} className="shrink-0">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
-              {profile?.avatar_url ? (
-                <img src={getThumbnailUrl(profile.avatar_url, { width: 100 })} className="w-full h-full object-cover" />
-              ) : (
-                profile?.avatar || '👤'
+      {/* ── TOP NAV & HERO ── */}
+      <div className="space-y-3">
+        {/* Header Section - Edge to Edge */}
+        <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-2 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              {/* Profile Avatar */}
+              <div className="shrink-0">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
+                  {profile?.avatar_url ? (
+                    <img src={getThumbnailUrl(profile.avatar_url, { width: 300 })} className="w-full h-full object-cover" />
+                  ) : (
+                    profile?.avatar || '👤'
+                  )}
+                </div>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
+                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold uppercase tracking-wider bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                  <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'Nairobi'}
+                </div>
+              </div>
+            </div>
+            <button onClick={() => navigate('/settings/notifications')}
+              className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative shadow-sm active:scale-95 transition-all">
+              <Bell className="w-5 h-5 text-slate-500" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-800 shadow-md animate-in zoom-in">
+                  {unreadCount}
+                </span>
               )}
-            </div>
-          </button>
-          <div className="min-w-0">
-            <h1 className="text-base font-semibold tracking-tight text-slate-900 dark:text-white leading-none truncate">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
-            <div className="flex items-center gap-1 mt-1 text-[9px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 w-fit">
-              <MapPin className="w-2.5 h-2.5" /> {profile?.location?.estate || 'Nairobi'}
-            </div>
+            </button>
           </div>
         </div>
-
-        <div className="flex items-center gap-2 sm:gap-3">
-          <button 
-            onClick={() => navigate('/settings/notifications')}
-            className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center relative active:scale-90 transition-all shadow-sm group shrink-0"
-          >
-            <Bell className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
-            {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-rose-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse" />
-            )}
-          </button>
-        </div>
-      </div>
 
 
       {/* ── REVENUE HERO CARD ── */}
@@ -337,14 +339,14 @@ export default function SellerHome() {
       </div>
 
       {/* ── HUSTLE ACTION CENTER (TRIO CONTROLS) ── */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-2.5">
         <button
           onClick={() => navigate('/post-trade')}
-          className="bg-emerald-600 rounded-2xl p-3 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
+          className="bg-emerald-600 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all group relative"
         >
           <div className="absolute top-0 right-0 w-10 h-10 bg-white/10 rounded-bl-2xl rounded-tr-2xl" />
-          <div className="w-10 h-10 bg-white/20 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
-            <Plus className="w-5 h-5" />
+          <div className="w-12 h-12 bg-white/20 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+            <Plus className="w-6 h-6" />
           </div>
           <div className="text-center">
             <p className="text-[10px] font-semibold text-white uppercase tracking-widest leading-none">Sell Now</p>
@@ -353,7 +355,7 @@ export default function SellerHome() {
 
         <button
           onClick={() => navigate('/inventory')}
-          className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-3 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+          className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all group"
         >
           <div className="relative">
             {myListings.filter(l => l.status === 'active').length > 0 && (
@@ -361,8 +363,8 @@ export default function SellerHome() {
                 <span className="text-[8px] font-semibold text-white">{myListings.filter(l => l.status === 'active').length}</span>
               </div>
             )}
-            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 text-slate-400 group-hover:text-emerald-500 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-              <Package className="w-5 h-5" />
+            <div className="w-12 h-12 bg-slate-50 dark:bg-slate-800 text-slate-400 group-hover:text-emerald-500 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+              <Package className="w-6 h-6" />
             </div>
           </div>
           <div className="text-center">
@@ -372,7 +374,7 @@ export default function SellerHome() {
 
         <button
           onClick={() => navigate('/my-offers')}
-          className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-3 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+          className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all group"
         >
           <div className="relative">
             {receivedOffers.filter(o => o.status === 'pending').length > 0 && (
@@ -380,8 +382,8 @@ export default function SellerHome() {
                 <span className="text-[8px] font-semibold text-white">{receivedOffers.filter(o => o.status === 'pending').length}</span>
               </div>
             )}
-            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 text-slate-400 group-hover:text-emerald-500 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-              <Handshake className="w-5 h-5" />
+            <div className="w-12 h-12 bg-slate-50 dark:bg-slate-800 text-slate-400 group-hover:text-emerald-500 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+              <Handshake className="w-6 h-6" />
             </div>
           </div>
           <div className="text-center">
@@ -389,6 +391,8 @@ export default function SellerHome() {
           </div>
         </button>
       </div>
+
+      </div> {/* End space-y-3 */}
 
       {/* ── FINANCIAL TRUST SCORE ── */}
       <div 

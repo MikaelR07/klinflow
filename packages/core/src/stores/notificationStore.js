@@ -19,10 +19,12 @@ export const useNotificationStore = create((set, get) => ({
 
   fetchNotifications: async (userId, role) => {
     const lastCleared = localStorage.getItem(`cf_nots_cleared_${userId}`) || '1970-01-01T00:00:00Z';
+    
+    // Logic: (Target me specifically) OR (Target my role AND not targeted at anyone else) OR (Target everyone AND not targeted at anyone else)
     const { data, error } = await supabase
       .from('notifications')
       .select('*')
-      .or(`target_user.eq.${userId},target_role.eq.${(role || '').toLowerCase()},target_role.eq.all`)
+      .or(`target_user.eq.${userId},and(target_role.eq.${(role || '').toLowerCase()},target_user.is.null),and(target_role.eq.all,target_user.is.null)`)
       .gt('created_at', lastCleared)
       .order('created_at', { ascending: false })
       .limit(50);
@@ -76,7 +78,13 @@ export const useNotificationStore = create((set, get) => ({
       }, (payload) => {
         const n = payload.new;
         const targetRole = (n.target_role || '').toLowerCase();
-        const targeted = n.target_user === userId || targetRole === myRole || targetRole === 'all';
+        
+        // Strict privacy check:
+        // 1. If it has a target_user, it MUST match the current userId.
+        // 2. If it has no target_user, it must match myRole or be 'all'.
+        const targeted = n.target_user 
+          ? n.target_user === userId 
+          : (targetRole === myRole || targetRole === 'all');
         
         if (targeted) {
           set((state) => ({

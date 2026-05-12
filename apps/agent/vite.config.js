@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import viteCompression from 'vite-plugin-compression';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 
@@ -11,7 +12,12 @@ export default defineConfig({
   envDir: resolve(__dirname, '../../'),
   plugins: [
     react(),
+    viteCompression({ algorithm: 'brotliCompress', ext: '.br' }),
+    viteCompression({ algorithm: 'gzip', ext: '.gz' }),
     VitePWA({
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
       registerType: 'autoUpdate',
       includeAssets: ['logo.png', 'icons/*.png'],
       manifest: {
@@ -42,5 +48,16 @@ export default defineConfig({
   ],
   server: {
     port: 5174
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          supabase: ['@supabase/supabase-js'],
+          ui: ['framer-motion', 'lucide-react', 'react-virtuoso']
+        }
+      }
+    }
   }
 });

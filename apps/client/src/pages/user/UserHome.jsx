@@ -159,36 +159,43 @@ export default function UserHome() {
         onClose={() => setShowPushPrompt(false)}
       />
 
-      {/* Header */}
-      <div className="flex items-center justify-between px-1">
-        <div className="flex items-center gap-3">
-          {/* Profile Avatar */}
-          <button onClick={() => navigate('/settings/profile')} className="shrink-0">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-xl shadow-md border-2 border-white dark:border-slate-800 active:scale-90 transition-all overflow-hidden">
-              {profile?.avatar_url ? (
-                <img src={getThumbnailUrl(profile.avatar_url, { width: 200 })} className="w-full h-full object-cover" />
-              ) : (
-                profile?.avatar || '👤'
+      {/* ── TOP NAV & HERO ── */}
+      <div className="space-y-3">
+        {/* Header Section - Edge to Edge */}
+        <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-2 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-4">
+              {/* Profile Avatar */}
+              <div className="shrink-0">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
+                  {profile?.avatar_url ? (
+                    <img src={getThumbnailUrl(profile.avatar_url, { width: 300 })} className="w-full h-full object-cover" />
+                  ) : (
+                    profile?.avatar || '👤'
+                  )}
+                </div>
+              </div>
+              <div>
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
+                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold uppercase tracking-wider bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                  <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'Nairobi'}
+                </div>
+              </div>
+            </div>
+            <button onClick={() => navigate('/settings/notifications')}
+              className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative shadow-sm active:scale-95 transition-all">
+              <Bell className="w-5 h-5 text-slate-500" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-800 shadow-md animate-in zoom-in">
+                  {unreadCount}
+                </span>
               )}
-            </div>
-          </button>
-          <div>
-            <h1 className="text-base font-semibold tracking-tight text-slate-900 dark:text-white leading-none">Hello, {profile?.name?.split(' ')[0]}! 👋</h1>
-            <div className="flex items-center gap-1 mt-1 text-[10px] text-primary font-semibold uppercase tracking-widest bg-primary/5 px-2 py-0.5 rounded-full border border-primary/10 w-fit">
-              <MapPin className="w-2.5 h-2.5" /> {profile?.location?.estate || profile?.estate || 'Nairobi'}
-            </div>
+            </button>
           </div>
         </div>
-        <button onClick={() => navigate('/settings/notifications')}
-          className="w-9 h-9 shrink-0 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative shadow-sm">
-          <Bell className="w-4 h-4 text-slate-500" />
-          {unreadCount > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse" />}
-        </button>
-      </div>
-      <div className="h-px w-full bg-slate-200 dark:bg-slate-800/50" />
-      
-      {/* Wallet Hero */}
-      <div className="bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl p-5 shadow-lg gpu-layer">
+
+        {/* Wallet Hero */}
+        <div className="bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl p-5 shadow-lg gpu-layer">
         <div className="flex flex-col gap-6 relative z-10">
           <div className="flex items-end justify-between">
             <div>
@@ -235,42 +242,44 @@ export default function UserHome() {
         </div>
       </div>
 
-
-
       {/* Subscription Tier Card Hidden for Launch */}
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2.5">
         <button onClick={() => navigate('/book-pickup')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-3 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-          <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-            <Truck className="w-5 h-5" />
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
+          <div className="w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+            <Truck className="w-6 h-6" />
           </div>
           <div className="text-center">
-            <p className="text-[9px] font-semibold text-primary uppercase tracking-widest leading-none">Book Now</p>
+            <p className="text-[8px] font-semibold text-primary uppercase tracking-widest mb-0.5">Book Now</p>
+            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Pickup</p>
           </div>
         </button>
 
         <button onClick={() => navigate('/my-bookings')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-3 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-          <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <Recycle className="w-5 h-5" />
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
+          <div className="w-12 h-12 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <Recycle className="w-6 h-6" />
           </div>
           <div className="text-center">
-            <p className="text-[9px] font-semibold text-indigo-600 uppercase tracking-widest leading-none">My Bookings</p>
+            <p className="text-[8px] font-semibold text-indigo-600 uppercase tracking-widest mb-0.5">Track</p>
+            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Bookings</p>
           </div>
         </button>
 
         <button onClick={() => navigate('/analytics')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-3 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-          <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-            <TrendingUp className="w-5 h-5" />
+          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
+          <div className="w-12 h-12 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+            <TrendingUp className="w-6 h-6" />
           </div>
           <div className="text-center">
-            <p className="text-[9px] font-semibold text-emerald-600 uppercase tracking-widest leading-none">Dashboard</p>
+            <p className="text-[8px] font-semibold text-emerald-600 uppercase tracking-widest mb-0.5">Stats</p>
+            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
           </div>
         </button>
 
+      </div>
       </div>
 
       {/* Discovery Entry Point */}
