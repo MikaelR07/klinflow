@@ -1,21 +1,26 @@
 {
-  "name": "@cleanflow/core",
+  "name": "@klinflow/core",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.js",
+  "main": "./src/index.ts",
   "exports": {
-    ".": "./src/index.js",
-    "./stores/*": "./src/stores/*.js",
-    "./lib/*": "./src/lib/*.js",
-    "./data/*": "./src/data/*.js",
+    ".": "./src/index.ts",
+    "./stores/*": "./src/stores/*.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./data/*": "./src/data/*.ts",
     "./src/*": "./src/*"
   },
   "dependencies": {
-    "@cleanflow/constants": "*",
-    "@cleanflow/supabase": "*",
+    "@klinflow/constants": "*",
+    "@klinflow/supabase": "*",
+    "@klinflow/types": "*",
     "@supabase/supabase-js": "^2.103.3",
     "h3-js": "^4.4.0",
+    "zod": "^4.4.3",
     "zustand": "^5.0.12"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit"
   }
 }

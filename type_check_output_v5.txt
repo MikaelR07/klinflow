@@ -1,0 +1,121 @@
+
+> client@1.0.0 type-check
+> tsc --noEmit
+
+src/App.tsx(140,43): error TS2339: Property 'agentRating' does not exist on type '{ id: string; userId: string; wasteType: string; totalPrice: number; status: "pending" | "confirmed" | "assigned" | "arrived" | "picked_up" | "completed" | "cancelled" | "disputed"; isMarketTrade: boolean; ... 9 more ...; photoUrl?: string | ... 1 more ... | undefined; }'.
+src/App.tsx(143,41): error TS2339: Property 'updatedAt' does not exist on type '{ id: string; userId: string; wasteType: string; totalPrice: number; status: "pending" | "confirmed" | "assigned" | "arrived" | "picked_up" | "completed" | "cancelled" | "disputed"; isMarketTrade: boolean; ... 9 more ...; photoUrl?: string | ... 1 more ... | undefined; }'.
+src/components/user/IotCard.tsx(3,35): error TS7031: Binding element 'item' implicitly has an 'any' type.
+src/components/user/IotCard.tsx(3,41): error TS7031: Binding element 'type' implicitly has an 'any' type.
+src/components/user/IotCard.tsx(3,47): error TS7031: Binding element 'onClick' implicitly has an 'any' type.
+src/components/user/IotDetailModal.tsx(6,42): error TS7031: Binding element 'show' implicitly has an 'any' type.
+src/components/user/IotDetailModal.tsx(6,48): error TS7031: Binding element 'onClose' implicitly has an 'any' type.
+src/components/user/IotDetailModal.tsx(6,57): error TS7031: Binding element 'item' implicitly has an 'any' type.
+src/components/user/IotDetailModal.tsx(6,63): error TS7031: Binding element 'type' implicitly has an 'any' type.
+src/components/user/IotLinkModal.tsx(6,40): error TS7031: Binding element 'show' implicitly has an 'any' type.
+src/components/user/IotLinkModal.tsx(6,46): error TS7031: Binding element 'onClose' implicitly has an 'any' type.
+src/components/user/IotLinkModal.tsx(15,29): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/user/IotLinkModal.tsx(126,21): error TS7031: Binding element 'className' implicitly has an 'any' type.
+src/components/user/SmartBinCard.tsx(5,25): error TS7031: Binding element 'bin' implicitly has an 'any' type.
+src/components/user/SmartBinCard.tsx(8,25): error TS7006: Parameter 'level' implicitly has an 'any' type.
+src/components/user/SmartBinModal.tsx(6,26): error TS7031: Binding element 'bin' implicitly has an 'any' type.
+src/components/user/SmartBinModal.tsx(6,31): error TS7031: Binding element 'onClose' implicitly has an 'any' type.
+src/components/user/SmartBinModal.tsx(17,29): error TS7006: Parameter 'level' implicitly has an 'any' type.
+src/components/user/WeightVerificationModal.tsx(24,57): error TS18046: 'err' is of type 'unknown'.
+src/pages/auth/AdminLogin.tsx(14,35): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/AdminLogin.tsx(23,31): error TS2345: Argument of type 'string' is not assignable to parameter of type 'UserRole | undefined'.
+src/pages/auth/AdminRegister.tsx(20,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/AdminRegister.tsx(24,38): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/AdminRegister.tsx(68,57): error TS18046: 'err' is of type 'unknown'.
+src/pages/auth/Register.tsx(70,27): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'SetStateAction<null>'.
+src/pages/settings/FeedbackPage.tsx(22,31): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/settings/FeedbackPage.tsx(33,9): error TS2322: Type 'string | null | undefined' is not assignable to type 'string | undefined'.
+  Type 'null' is not assignable to type 'string | undefined'.
+src/pages/settings/NotificationsPage.tsx(8,38): error TS2339: Property 'updateNotificationPrefs' does not exist on type 'AuthState'.
+src/pages/settings/NotificationsPage.tsx(29,78): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ pickupReminders: any; aiInsights: any; rewardAlerts: any; emergencyAlerts: any; agentJobAlerts: any; channel: any; }'.
+  No index signature with a parameter of type 'string' was found on type '{ pickupReminders: any; aiInsights: any; rewardAlerts: any; emergencyAlerts: any; agentJobAlerts: any; channel: any; }'.
+src/pages/settings/PrivacySecurityPage.tsx(8,19): error TS2339: Property 'changePin' does not exist on type 'AuthState'.
+src/pages/settings/PrivacySecurityPage.tsx(8,30): error TS2339: Property 'deleteAccount' does not exist on type 'AuthState'.
+src/pages/settings/PrivacySecurityPage.tsx(16,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/settings/PrivacySecurityPage.tsx(30,51): error TS18046: 'err' is of type 'unknown'.
+src/pages/settings/ProfilePage.tsx(108,47): error TS2345: Argument of type '(prev: { name: string; email: string; phone: string; location: { estate: string; latitude: number; longitude: number; }; idNumber: string; }) => { location: LocationValue; name: string; email: string; phone: string; idNumber: string; }' is not assignable to parameter of type 'SetStateAction<{ name: string; email: string; phone: string; location: { estate: string; latitude: number; longitude: number; }; idNumber: string; }>'.
+  Type '(prev: { name: string; email: string; phone: string; location: { estate: string; latitude: number; longitude: number; }; idNumber: string; }) => { location: LocationValue; name: string; email: string; phone: string; idNumber: string; }' is not assignable to type '(prevState: { name: string; email: string; phone: string; location: { estate: string; latitude: number; longitude: number; }; idNumber: string; }) => { name: string; email: string; phone: string; location: { ...; }; idNumber: string; }'.
+    Call signature return types '{ location: LocationValue; name: string; email: string; phone: string; idNumber: string; }' and '{ name: string; email: string; phone: string; location: { estate: string; latitude: number; longitude: number; }; idNumber: string; }' are incompatible.
+      The types of 'location.estate' are incompatible between these types.
+        Type 'string | undefined' is not assignable to type 'string'.
+          Type 'undefined' is not assignable to type 'string'.
+src/pages/settings/SettingsMenu.tsx(45,22): error TS2339: Property 'avatar' does not exist on type '{ id: string; role: string; walletBalance: number; rewardPoints: number; isVerified: boolean; isOnline: boolean; isEnRoute: boolean; name?: string | null | undefined; fullName?: string | null | undefined; ... 21 more ...; updatedAt?: string | ... 1 more ... | undefined; }'.
+src/pages/settings/SubscriptionDetail.tsx(10,36): error TS2307: Cannot find module '@cleanflow/core/src/data/mockData' or its corresponding type declarations.
+src/pages/settings/SubscriptionDetail.tsx(16,20): error TS2339: Property 'updateSubscription' does not exist on type 'AuthState'.
+src/pages/settings/SubscriptionDetail.tsx(81,35): error TS2538: Type 'undefined' cannot be used as an index type.
+src/pages/settings/SubscriptionDetail.tsx(130,34): error TS7006: Parameter 'point' implicitly has an 'any' type.
+src/pages/settings/SubscriptionDetail.tsx(130,41): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/pages/settings/SubscriptionPage.tsx(5,36): error TS2307: Cannot find module '@cleanflow/core/src/data/mockData' or its corresponding type declarations.
+src/pages/settings/SubscriptionPage.tsx(10,20): error TS2339: Property 'updateSubscription' does not exist on type 'AuthState'.
+src/pages/settings/SupportPage.tsx(13,31): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(60,31): error TS7006: Parameter 'event' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(68,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(134,28): error TS2339: Property 'scrollIntoView' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(89,39): error TS2339: Property 'notes' does not exist on type '{ id: string; userId: string; wasteType: string; totalPrice: number; status: "pending" | "confirmed" | "assigned" | "arrived" | "picked_up" | "completed" | "cancelled" | "disputed"; isMarketTrade: boolean; ... 9 more ...; photoUrl?: string | ... 1 more ... | undefined; }'.
+src/pages/user/BookPickup.tsx(98,25): error TS18048: 'date' is possibly 'undefined'.
+src/pages/user/BookPickup.tsx(99,25): error TS18048: 'time' is possibly 'undefined'.
+src/pages/user/BookPickup.tsx(202,29): error TS2339: Property 'config' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(208,31): error TS2339: Property 'config' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(223,35): error TS2339: Property 'config' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(305,52): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/BookPickup.tsx(531,25): error TS2322: Type 'any[]' is not assignable to type 'LatLngExpression | undefined'.
+  Type 'any[]' is not assignable to type 'LatLngTuple'.
+    Target requires 2 element(s) but source may have fewer.
+src/pages/user/BookPickup.tsx(568,53): error TS2339: Property 'rating' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(622,31): error TS2339: Property 'fleet_invite_code' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(802,48): error TS2554: Expected 0 arguments, but got 1.
+src/pages/user/CircularResume.tsx(41,48): error TS18048: 'factor' is possibly 'undefined'.
+src/pages/user/CircularResume.tsx(177,16): error TS2304: Cannot find name 'ChevronRight'.
+src/pages/user/CommunityCollective.tsx(29,60): error TS2339: Property 'estate' does not exist on type '{ id: string; role: string; walletBalance: number; rewardPoints: number; isVerified: boolean; isOnline: boolean; isEnRoute: boolean; name?: string | null | undefined; fullName?: string | null | undefined; ... 21 more ...; updatedAt?: string | ... 1 more ... | undefined; }'.
+src/pages/user/Discovery.tsx(250,32): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/pages/user/ImpactAnalytics.tsx(147,40): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/pages/user/ImpactAnalytics.tsx(148,37): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/pages/user/ImpactAnalytics.tsx(185,29): error TS7006: Parameter 'value' implicitly has an 'any' type.
+src/pages/user/ImpactAnalytics.tsx(368,36): error TS7006: Parameter 'day' implicitly has an 'any' type.
+src/pages/user/ImpactAnalytics.tsx(368,41): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/pages/user/MarketIntelligenceHub.tsx(302,21): error TS7006: Parameter 'props' implicitly has an 'any' type.
+src/pages/user/MarketplaceInventory.tsx(40,27): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+src/pages/user/MarketplaceInventory.tsx(46,54): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/MarketplaceInventory.tsx(145,18): error TS2532: Object is possibly 'undefined'.
+src/pages/user/MarketplaceInventory.tsx(145,19): error TS18048: 'selectedListing.photoUrls.length' is possibly 'undefined'.
+src/pages/user/MarketplaceInventory.tsx(158,17): error TS18048: 'selectedListing.photoUrls.length' is possibly 'undefined'.
+src/pages/user/MarketplaceInventory.tsx(160,20): error TS18048: 'selectedListing.photoUrls' is possibly 'undefined'.
+src/pages/user/MarketplaceInventory.tsx(219,36): error TS2339: Property 'description' does not exist on type '{ id: string; sellerId: string; material: string; quantity: number; pricePerKg: number; unit: string; status: "cancelled" | "expired" | "active" | "sold"; createdAt: string; grade?: string | undefined; ... 7 more ...; sellerName?: string | undefined; }'.
+src/pages/user/MarketplaceInventory.tsx(256,50): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SetStateAction<null>'.
+src/pages/user/MyBookings.tsx(68,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/MyBookings.tsx(79,20): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/MyBookings.tsx(81,16): error TS2532: Object is possibly 'undefined'.
+src/pages/user/MyBookings.tsx(158,55): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/MyIotPage.tsx(43,9): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(44,25): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(45,16): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(46,25): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(48,25): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyOffers.tsx(135,9): error TS2367: This comparison appears to be unintentional because the types '"pending" | "cancelled" | "accepted" | "declined"' and '"completed"' have no overlap.
+src/pages/user/MyOffers.tsx(135,37): error TS2367: This comparison appears to be unintentional because the types '"pending" | "cancelled" | "accepted" | "declined"' and '"paid"' have no overlap.
+src/pages/user/MyOffers.tsx(247,148): error TS2551: Property 'listing' does not exist on type '{ id: string; listingId: string; buyerId: string; sellerId: string; offeredPrice: number; quantity: number; status: "pending" | "cancelled" | "accepted" | "declined"; createdAt: string; material?: string | undefined; photo?: string | ... 1 more ... | undefined; buyerName?: string | undefined; }'. Did you mean 'listingId'?
+src/pages/user/MyOffers.tsx(254,109): error TS2551: Property 'listing' does not exist on type '{ id: string; listingId: string; buyerId: string; sellerId: string; offeredPrice: number; quantity: number; status: "pending" | "cancelled" | "accepted" | "declined"; createdAt: string; material?: string | undefined; photo?: string | ... 1 more ... | undefined; buyerName?: string | undefined; }'. Did you mean 'listingId'?
+src/pages/user/MyOffers.tsx(288,108): error TS2551: Property 'listing' does not exist on type '{ id: string; listingId: string; buyerId: string; sellerId: string; offeredPrice: number; quantity: number; status: "pending" | "cancelled" | "accepted" | "declined"; createdAt: string; material?: string | undefined; photo?: string | ... 1 more ... | undefined; buyerName?: string | undefined; }'. Did you mean 'listingId'?
+src/pages/user/MyOffers.tsx(298,52): error TS2551: Property 'listing' does not exist on type '{ id: string; listingId: string; buyerId: string; sellerId: string; offeredPrice: number; quantity: number; status: "pending" | "cancelled" | "accepted" | "declined"; createdAt: string; material?: string | undefined; photo?: string | ... 1 more ... | undefined; buyerName?: string | undefined; }'. Did you mean 'listingId'?
+src/pages/user/MyOffers.tsx(298,107): error TS2551: Property 'listing' does not exist on type '{ id: string; listingId: string; buyerId: string; sellerId: string; offeredPrice: number; quantity: number; status: "pending" | "cancelled" | "accepted" | "declined"; createdAt: string; material?: string | undefined; photo?: string | ... 1 more ... | undefined; buyerName?: string | undefined; }'. Did you mean 'listingId'?
+src/pages/user/MyOffers.tsx(301,36): error TS2551: Property 'listing' does not exist on type '{ id: string; listingId: string; buyerId: string; sellerId: string; offeredPrice: number; quantity: number; status: "pending" | "cancelled" | "accepted" | "declined"; createdAt: string; material?: string | undefined; photo?: string | ... 1 more ... | undefined; buyerName?: string | undefined; }'. Did you mean 'listingId'?
+src/pages/user/MyOffers.tsx(301,76): error TS2551: Property 'listing' does not exist on type '{ id: string; listingId: string; buyerId: string; sellerId: string; offeredPrice: number; quantity: number; status: "pending" | "cancelled" | "accepted" | "declined"; createdAt: string; material?: string | undefined; photo?: string | ... 1 more ... | undefined; buyerName?: string | undefined; }'. Did you mean 'listingId'?
+src/pages/user/MyOffers.tsx(311,113): error TS2551: Property 'listing' does not exist on type '{ id: string; listingId: string; buyerId: string; sellerId: string; offeredPrice: number; quantity: number; status: "pending" | "cancelled" | "accepted" | "declined"; createdAt: string; material?: string | undefined; photo?: string | ... 1 more ... | undefined; buyerName?: string | undefined; }'. Did you mean 'listingId'?

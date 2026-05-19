@@ -12,7 +12,8 @@ BEGIN
     SELECT * FROM public.bookings
     WHERE status = 'pending'
     AND is_market_trade = false                      -- Marketplace trades bypass the 'Requested' tab
-    AND (agent_id IS NULL OR agent_id = agent_uuid); -- Show open pool OR missions targeted to me
+    AND (agent_id IS NULL OR agent_id = agent_uuid)  -- Show open pool OR missions targeted to me
+    ORDER BY created_at DESC;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
@@ -30,6 +31,7 @@ BEGIN
         OR
         -- Scenario B: Resident pickups (Only show after the agent has clicked 'Accept')
         (is_market_trade = false AND status IN ('confirmed', 'scheduled', 'accepted', 'in_progress', 'in-progress', 'picked_up'))
-    );
+    )
+    ORDER BY created_at DESC;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

@@ -49,7 +49,7 @@ BEGIN
     SET wallet_balance = wallet_balance - v_agent_deduction
     WHERE id = v_target_wallet_uuid;
 
-    -- Pay Resident directly into their CleanFlow digital wallet
+    -- Pay Resident directly into their Klinflow digital wallet
     IF p_client_uuid IS NOT NULL THEN
         UPDATE profiles
         SET wallet_balance = wallet_balance + p_estimated_value,

@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════
--- CleanFlow KE — DB Cleanup Script
+-- Klinflow KE — DB Cleanup Script
 -- Removes all columns, tables, and functions that are no longer
 -- used by any app after the resident-mode unification.
 -- 

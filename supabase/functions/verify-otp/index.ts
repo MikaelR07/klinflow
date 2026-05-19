@@ -1,9 +1,16 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
+import { getEnv, validateEnv } from '../_shared/env.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const PayloadSchema = z.object({
+  phone: z.string().min(1),
+  otp: z.string().min(1)
+});
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -11,8 +18,16 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { phone, otp } = await req.json();
-    if (!phone || !otp) throw new Error('Phone and OTP are required.');
+    validateEnv(['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
+    
+    const body = await req.json();
+    const parseResult = PayloadSchema.safeParse(body);
+    
+    if (!parseResult.success) {
+      throw new Error(`Invalid payload: ${parseResult.error.message}`);
+    }
+    
+    const { phone, otp } = parseResult.data;
 
     // Normalize phone
     let normalized = phone.replace(/\D/g, '');
@@ -21,8 +36,8 @@ Deno.serve(async (req) => {
     const e164 = '+' + normalized;
 
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+      getEnv('SUPABASE_URL'),
+      getEnv('SUPABASE_SERVICE_ROLE_KEY')
     );
 
     // Fetch stored OTP record
@@ -55,7 +70,7 @@ Deno.serve(async (req) => {
     });
 
   } catch (err) {
-    console.error('[CleanFlow OTP Verify] Error:', err.message);
+    console.error('[Klinflow OTP Verify] Error:', err.message);
     return new Response(JSON.stringify({ success: false, error: err.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,

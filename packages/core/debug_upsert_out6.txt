@@ -1,0 +1,102 @@
+src/debug_from.ts(6,5): error TS2322: Type 'string' is not assignable to type 'PostgrestQueryBuilder<{ PostgrestVersion: "12"; }, { Tables: { profiles: { Row: { id: string; email: string | null; name: string | null; phone: string | null; role: string | null; wallet_balance: number; reward_points: number; ... 24 more ...; updated_at: string | null; }; Insert: { ...; }; Update: { ...; }; Relatio...'.
+src/debug_schema.ts(61,5): error TS2322: Type '"debug_tables_result"' is not assignable to type 'true'.
+src/debug_schema.ts(62,5): error TS2322: Type '"debug_views_result"' is not assignable to type 'true'.
+src/debug_schema.ts(63,5): error TS2322: Type '"debug_functions_result"' is not assignable to type 'true'.
+src/debug_schema.ts(64,5): error TS2322: Type '"debug_enums_result"' is not assignable to type 'true'.
+src/debug_schema2.ts(31,5): error TS2322: Type '"res_profiles"' is not assignable to type 'true'.
+src/debug_schema2.ts(32,5): error TS2322: Type '"res_bookings"' is not assignable to type 'true'.
+src/debug_schema2.ts(33,5): error TS2322: Type '"res_notifications"' is not assignable to type 'true'.
+src/debug_schema2.ts(34,5): error TS2322: Type '"res_listings"' is not assignable to type 'true'.
+src/debug_schema2.ts(35,5): error TS2322: Type '"res_offers"' is not assignable to type 'true'.
+src/debug_schema2.ts(36,5): error TS2322: Type '"res_orders"' is not assignable to type 'true'.
+src/debug_schema2.ts(37,5): error TS2322: Type '"res_assets"' is not assignable to type 'true'.
+src/debug_schema2.ts(38,5): error TS2322: Type '"res_configs"' is not assignable to type 'true'.
+src/debug_schema2.ts(39,5): error TS2322: Type '"res_ledger"' is not assignable to type 'true'.
+src/debug_schema2.ts(40,5): error TS2322: Type '"res_categories"' is not assignable to type 'true'.
+src/debug_schema3.ts(15,5): error TS2322: Type '"row"' is not assignable to type 'true'.
+src/debug_schema3.ts(16,5): error TS2322: Type '"insert"' is not assignable to type 'true'.
+src/debug_schema3.ts(17,5): error TS2322: Type '"update"' is not assignable to type 'true'.
+src/debug_schema3.ts(18,5): error TS2322: Type '"relationships"' is not assignable to type 'true'.
+src/debug_schema4.ts(12,5): error TS2322: Type '"res_public_schema"' is not assignable to type 'true'.
+src/debug_schema4.ts(19,18): error TS2749: 'insertType' refers to a value, but is being used as a type here. Did you mean 'typeof insertType'?
+src/debug_schema5.ts(18,5): error TS2322: Type '"res_agent"' is not assignable to type 'true'.
+src/debug_schema5.ts(21,5): error TS2322: Type '"res_push"' is not assignable to type 'true'.
+src/debug_schema5.ts(24,5): error TS2322: Type '"res_notifications"' is not assignable to type 'true'.
+src/stores/adminStore.ts(61,52): error TS2345: Argument of type 'string' is not assignable to parameter of type '"get_available_bookings" | "get_active_agent_jobs" | "accept_booking" | "agent_completes_pickup" | "submit_counter_offer" | "link_iot_device" | "get_b2b_market_stats" | "complete_booking_split_payout" | "weaver_claim_asset" | "client_releases_funds" | "pulse_iot_device"'.
+src/stores/adminStore.ts(144,26): error TS2339: Property 'latitude' does not exist on type 'string | number | boolean | { [key: string]: Json | undefined; } | Json[]'.
+  Property 'latitude' does not exist on type 'string'.
+src/stores/adminStore.ts(145,26): error TS2339: Property 'longitude' does not exist on type 'string | number | boolean | { [key: string]: Json | undefined; } | Json[]'.
+  Property 'longitude' does not exist on type 'string'.
+src/stores/adminStore.ts(146,29): error TS2339: Property 'status' does not exist on type 'string | number | boolean | { [key: string]: Json | undefined; } | Json[]'.
+  Property 'status' does not exist on type 'string'.
+src/stores/agentStore.ts(326,11): error TS2322: Type '{ id: string; material: string | null; bags: number; actual_weight_kg: number; pay: number; location: string | null; time: string | null; status: string; latitude: number | null; longitude: number | null; ... 10 more ...; total_price: number; }[]' is not assignable to type 'AgentJob[]'.
+  Property 'agent_id' is missing in type '{ id: string; material: string | null; bags: number; actual_weight_kg: number; pay: number; location: string | null; time: string | null; status: string; latitude: number | null; longitude: number | null; ... 10 more ...; total_price: number; }' but required in type 'AgentJob'.
+src/stores/agentStore.ts(497,11): error TS2322: Type '{ id: any; material: any; location: any; date: string; status: any; pay: any; photo_url: any; photos: any[]; }[]' is not assignable to type 'AgentJob[]'.
+  Type '{ id: any; material: any; location: any; date: string; status: any; pay: any; photo_url: any; photos: any[]; }' is missing the following properties from type 'AgentJob': bags, actual_weight_kg, time, agent_id, and 4 more.
+src/stores/agentStore.ts(566,29): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/stores/agentStore.ts(604,9): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/stores/assetStore.ts(52,23): error TS18048: 'factor' is possibly 'undefined'.
+src/stores/assetStore.ts(81,13): error TS2322: Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 13 more ...; weaver: SelectQueryError<...>; }[]' is not assignable to type 'Asset[]'.
+  Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 13 more ...; weaver: SelectQueryError<...>; }' is not assignable to type 'Asset'.
+    Types of property 'grade' are incompatible.
+      Type 'string | null' is not assignable to type 'string'.
+        Type 'null' is not assignable to type 'string'.
+src/stores/assetStore.ts(104,13): error TS2322: Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 11 more ...; booking: SelectQueryError<...>; }[]' is not assignable to type 'Asset[]'.
+  Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 11 more ...; booking: SelectQueryError<...>; }' is not assignable to type 'Asset'.
+    Types of property 'grade' are incompatible.
+      Type 'string | null' is not assignable to type 'string'.
+        Type 'null' is not assignable to type 'string'.
+src/stores/assetStore.ts(109,3): error TS2322: Type '(bookingId: string, verificationData: any) => Promise<{ id: string; }>' is not assignable to type '(bookingId: string, verificationData: any) => Promise<Asset>'.
+  Type 'Promise<{ id: string; }>' is not assignable to type 'Promise<Asset>'.
+    Type '{ id: string; }' is missing the following properties from type 'Asset': material_type, grade, weight_kg, estimated_value, and 6 more.
+src/stores/assetStore.ts(168,53): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/stores/assetStore.ts(183,9): error TS2561: Object literal may only specify known properties, but 'p_booking_uuid' does not exist in type '{ p_booking_id: string; p_weaver_payout: number; p_agent_payout: number; }'. Did you mean to write 'p_booking_id'?
+src/stores/assetStore.ts(213,11): error TS2345: Argument of type '(state: AssetStore) => { assets: (Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; ... 13 more ...; updated_at: string | null; })[]; isLoading: false; }' is not assignable to parameter of type 'AssetStore | Partial<AssetStore> | ((state: AssetStore) => AssetStore | Partial<AssetStore>)'.
+  Type '(state: AssetStore) => { assets: (Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; ... 13 more ...; updated_at: string | null; })[]; isLoading: false; }' is not assignable to type '(state: AssetStore) => AssetStore | Partial<AssetStore>'.
+    Type '{ assets: (Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; })[]; isLoading: false; }' is not assignable to type 'AssetStore | Partial<AssetStore>'.
+      Type '{ assets: (Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; })[]; isLoading: false; }' is not assignable to type 'Partial<AssetStore>'.
+        Types of property 'assets' are incompatible.
+          Type '(Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; })[]' is not assignable to type 'Asset[]'.
+            Type 'Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; }' is not assignable to type 'Asset'.
+              Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 10 more ...; updated_at: string | null; }' is not assignable to type 'Asset'.
+                Types of property 'grade' are incompatible.
+                  Type 'string | null' is not assignable to type 'string'.
+                    Type 'null' is not assignable to type 'string'.
+src/stores/assetStore.ts(254,3): error TS2322: Type '(data: any) => Promise<{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; }>' is not assignable to type '(data: any) => Promise<Asset>'.
+  Type 'Promise<{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 10 more ...; updated_at: string | null; }>' is not assignable to type 'Promise<Asset>'.
+    Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 10 more ...; updated_at: string | null; }' is not assignable to type 'Asset'.
+      Types of property 'grade' are incompatible.
+        Type 'string | null' is not assignable to type 'string'.
+          Type 'null' is not assignable to type 'string'.
+src/stores/assetStore.ts(259,24): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ Plastics: { name: string; basePrice: number; }; Metals: { name: string; basePrice: number; }; 'Paper & Cardboard': { name: string; basePrice: number; }; Glass: { name: string; basePrice: number; }; 'E-Waste': { ...; }; }'.
+src/stores/assetStore.ts(287,11): error TS2345: Argument of type '(state: AssetStore) => { assets: (Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; ... 13 more ...; updated_at: string | null; })[]; isLoading: false; }' is not assignable to parameter of type 'AssetStore | Partial<AssetStore> | ((state: AssetStore) => AssetStore | Partial<AssetStore>)'.
+  Type '(state: AssetStore) => { assets: (Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; ... 13 more ...; updated_at: string | null; })[]; isLoading: false; }' is not assignable to type '(state: AssetStore) => AssetStore | Partial<AssetStore>'.
+    Type '{ assets: (Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; })[]; isLoading: false; }' is not assignable to type 'AssetStore | Partial<AssetStore>'.
+      Type '{ assets: (Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; })[]; isLoading: false; }' is not assignable to type 'Partial<AssetStore>'.
+        Types of property 'assets' are incompatible.
+          Type '(Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; })[]' is not assignable to type 'Asset[]'.
+            Type 'Asset | { id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; ... 11 more ...; updated_at: string | null; }' is not assignable to type 'Asset'.
+              Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 10 more ...; updated_at: string | null; }' is not assignable to type 'Asset'.
+                Types of property 'grade' are incompatible.
+                  Type 'string | null' is not assignable to type 'string'.
+                    Type 'null' is not assignable to type 'string'.
+src/stores/bookingStore.ts(147,23): error TS2322: Type '{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }[]' is not assignable to type 'Booking[]'.
+  Type '{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }' is not assignable to type 'Booking'.
+    Types of property 'latitude' are incompatible.
+      Type 'number | null' is not assignable to type 'number | undefined'.
+        Type 'null' is not assignable to type 'number | undefined'.
+src/stores/bookingStore.ts(164,3): error TS2322: Type '(booking: any) => Promise<{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }>' is not assignable to type '(booking: any) => Promise<Booking>'.
+  Type 'Promise<{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }>' is not assignable to type 'Promise<Booking>'.
+    Type '{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }' is not assignable to type 'Booking'.
+      Types of property 'latitude' are incompatible.
+        Type 'number | null' is not assignable to type 'number | undefined'.
+          Type 'null' is not assignable to type 'number | undefined'.
+src/stores/bookingStore.ts(214,35): error TS2538: Type 'undefined' cannot be used as an index type.
+src/stores/bookingStore.ts(268,9): error TS2561: Object literal may only specify known properties, but 'p_booking_uuid' does not exist in type '{ p_booking_id: string; }'. Did you mean to write 'p_booking_id'?
+src/stores/feedbackStore.ts(58,64): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: RejectExcessProperties<{ id?: string | undefined; user_id?: string | null | undefined; name: string; phone?: string | null | undefined; rating: number; category?: string | null | undefined; feedback?: string | null | undefined; source_app: string; created_at?: string | undefined; }, { ...; }>, options?: { ...; } | undefined): PostgrestFilterBuilder<...>', gave the following error.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+  Overload 2 of 2, '(values: RejectExcessProperties<{ id?: string | undefined; user_id?: string | null | undefined; name: string; phone?: string | null | undefined; rating: number; category?: string | null | undefined; feedback?: string | null | undefined; source_app: string; created_at?: string | undefined; }, { ...; }>[], options?: { ...; } | undefined): PostgrestFilterBuilder<...>', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'RejectExcessProperties<{ id?: string | undefined; user_id?: string | null | undefined; name: string; phone?: string | null | undefined; rating: number; category?: string | null | undefined; feedback?: string | null | undefined; source_app: string; created_at?: string | undefined; }, { ...; }>[]'.

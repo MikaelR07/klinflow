@@ -1,0 +1,740 @@
+src/App.tsx(108,44): error TS2339: Property 'checkAppRole' does not exist on type 'AuthState'.
+src/App.tsx(135,54): error TS2339: Property 'activeReleaseBooking' does not exist on type 'BookingStore'.
+src/App.tsx(141,62): error TS2551: Property 'agentRating' does not exist on type 'Booking'. Did you mean 'agent_rating'?
+src/App.tsx(141,96): error TS2551: Property 'agentId' does not exist on type 'Booking'. Did you mean 'agent_id'?
+src/App.tsx(142,41): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+src/App.tsx(144,41): error TS2339: Property 'updated_at' does not exist on type 'Booking'.
+src/App.tsx(144,57): error TS2339: Property 'date' does not exist on type 'Booking'.
+src/App.tsx(145,28): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/App.tsx(145,34): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/App.tsx(149,37): error TS2345: Argument of type 'Booking' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'Booking' provides no match for the signature '(prevState: null): null'.
+src/App.tsx(194,32): error TS2345: Argument of type '{ unsubscribe: () => void; }' is not assignable to parameter of type 'RealtimeChannel'.
+  Type '{ unsubscribe: () => void; }' is missing the following properties from type 'RealtimeChannel': topic, params, socket, bindings, and 20 more.
+src/App.tsx(260,39): error TS2339: Property 'agentName' does not exist on type 'never'.
+src/App.tsx(261,13): error TS2322: Type '(val: any, comment: any) => Promise<void>' is not assignable to type '(rating: number) => void | Promise<void>'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+src/App.tsx(261,30): error TS7006: Parameter 'val' implicitly has an 'any' type.
+src/App.tsx(261,35): error TS7006: Parameter 'comment' implicitly has an 'any' type.
+src/App.tsx(263,41): error TS18047: 'ratingBooking' is possibly 'null'.
+src/App.tsx(271,37): error TS2345: Argument of type '(prev: never[]) => any[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type '(prev: never[]) => any[]' is not assignable to type '(prevState: never[]) => never[]'.
+    Type 'any[]' is not assignable to type 'never[]'.
+      Type 'any' is not assignable to type 'never'.
+src/App.tsx(271,55): error TS18047: 'ratingBooking' is possibly 'null'.
+src/components/user/IotCard.tsx(3,35): error TS7031: Binding element 'item' implicitly has an 'any' type.
+src/components/user/IotCard.tsx(3,41): error TS7031: Binding element 'type' implicitly has an 'any' type.
+src/components/user/IotCard.tsx(3,47): error TS7031: Binding element 'onClick' implicitly has an 'any' type.
+src/components/user/IotDetailModal.tsx(6,42): error TS7031: Binding element 'show' implicitly has an 'any' type.
+src/components/user/IotDetailModal.tsx(6,48): error TS7031: Binding element 'onClose' implicitly has an 'any' type.
+src/components/user/IotDetailModal.tsx(6,57): error TS7031: Binding element 'item' implicitly has an 'any' type.
+src/components/user/IotDetailModal.tsx(6,63): error TS7031: Binding element 'type' implicitly has an 'any' type.
+src/components/user/IotLinkModal.tsx(6,40): error TS7031: Binding element 'show' implicitly has an 'any' type.
+src/components/user/IotLinkModal.tsx(6,46): error TS7031: Binding element 'onClose' implicitly has an 'any' type.
+src/components/user/IotLinkModal.tsx(15,29): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/components/user/IotLinkModal.tsx(126,21): error TS7031: Binding element 'className' implicitly has an 'any' type.
+src/components/user/SmartBinCard.tsx(5,25): error TS7031: Binding element 'bin' implicitly has an 'any' type.
+src/components/user/SmartBinCard.tsx(8,25): error TS7006: Parameter 'level' implicitly has an 'any' type.
+src/components/user/SmartBinModal.tsx(6,26): error TS7031: Binding element 'bin' implicitly has an 'any' type.
+src/components/user/SmartBinModal.tsx(6,31): error TS7031: Binding element 'onClose' implicitly has an 'any' type.
+src/components/user/SmartBinModal.tsx(17,29): error TS7006: Parameter 'level' implicitly has an 'any' type.
+src/components/user/WeightVerificationModal.tsx(24,57): error TS18046: 'err' is of type 'unknown'.
+src/main.tsx(5,8): error TS2882: Cannot find module or type declarations for side-effect import of '@cleanflow/ui/src/index.css'.
+src/main.tsx(6,28): error TS2307: Cannot find module 'virtual:pwa-register' or its corresponding type declarations.
+src/main.tsx(12,21): error TS2345: Argument of type 'HTMLElement | null' is not assignable to parameter of type 'Container'.
+  Type 'null' is not assignable to type 'Container'.
+src/pages/auth/AdminLogin.tsx(12,11): error TS2339: Property 'login' does not exist on type 'AuthState'.
+src/pages/auth/AdminLogin.tsx(14,35): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/AdminRegister.tsx(18,11): error TS2339: Property 'register' does not exist on type 'AuthState'.
+src/pages/auth/AdminRegister.tsx(20,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/AdminRegister.tsx(24,38): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/AdminRegister.tsx(46,38): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+src/pages/auth/AdminRegister.tsx(68,57): error TS18046: 'err' is of type 'unknown'.
+src/pages/auth/Login.tsx(12,11): error TS2339: Property 'login' does not exist on type 'AuthState'.
+src/pages/auth/Login.tsx(14,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/Login.tsx(32,51): error TS18046: 'err' is of type 'unknown'.
+src/pages/auth/Login.tsx(38,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/Register.tsx(32,11): error TS2339: Property 'register' does not exist on type 'AuthState'.
+src/pages/auth/Register.tsx(32,21): error TS2339: Property 'checkAvailability' does not exist on type 'AuthState'.
+src/pages/auth/Register.tsx(32,40): error TS2339: Property 'sendOtp' does not exist on type 'AuthState'.
+src/pages/auth/Register.tsx(32,49): error TS2339: Property 'verifyOtp' does not exist on type 'AuthState'.
+src/pages/auth/Register.tsx(41,9): error TS2353: Object literal may only specify known properties, and 'otp' does not exist in type 'CredentialRequestOptions'.
+src/pages/auth/Register.tsx(44,46): error TS18047: 'otp' is possibly 'null'.
+src/pages/auth/Register.tsx(44,50): error TS2339: Property 'code' does not exist on type 'Credential'.
+src/pages/auth/Register.tsx(53,36): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/Register.tsx(80,39): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/auth/Register.tsx(92,29): error TS2339: Property 'estate' does not exist on type 'never'.
+src/pages/auth/Register.tsx(102,48): error TS18046: 'err' is of type 'unknown'.
+src/pages/auth/Register.tsx(120,32): error TS18046: 'err' is of type 'unknown'.
+src/pages/auth/Register.tsx(123,11): error TS18046: 'err' is of type 'unknown'.
+src/pages/auth/Register.tsx(123,48): error TS18046: 'err' is of type 'unknown'.
+src/pages/auth/Register.tsx(312,17): error TS2322: Type 'null' is not assignable to type 'LocationValue'.
+src/pages/auth/Register.tsx(313,51): error TS2345: Argument of type '(prev: { name: string; email: string; phone: string; otp: string; pin: string; confirmPin: string; role: string; location: null; gender: string; }) => { location: LocationValue; name: string; ... 6 more ...; gender: string; }' is not assignable to parameter of type 'SetStateAction<{ name: string; email: string; phone: string; otp: string; pin: string; confirmPin: string; role: string; location: null; gender: string; }>'.
+  Type '(prev: { name: string; email: string; phone: string; otp: string; pin: string; confirmPin: string; role: string; location: null; gender: string; }) => { location: LocationValue; name: string; ... 6 more ...; gender: string; }' is not assignable to type '(prevState: { name: string; email: string; phone: string; otp: string; pin: string; confirmPin: string; role: string; location: null; gender: string; }) => { name: string; email: string; phone: string; ... 5 more ...; gender: string; }'.
+    Call signature return types '{ location: LocationValue; name: string; email: string; phone: string; otp: string; pin: string; confirmPin: string; role: string; gender: string; }' and '{ name: string; email: string; phone: string; otp: string; pin: string; confirmPin: string; role: string; location: null; gender: string; }' are incompatible.
+      The types of 'location' are incompatible between these types.
+        Type 'LocationValue' is not assignable to type 'null'.
+src/pages/auth/Register.tsx(377,69): error TS18046: 'err' is of type 'unknown'.
+src/pages/settings/FeedbackPage.tsx(22,31): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/settings/FeedbackPage.tsx(33,24): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/pages/settings/NotificationsPage.tsx(8,30): error TS2339: Property 'updateNotificationPrefs' does not exist on type 'AuthState'.
+src/pages/settings/NotificationsPage.tsx(29,25): error TS7006: Parameter 'key' implicitly has an 'any' type.
+src/pages/settings/NotificationsPage.tsx(29,70): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ pickupReminders: boolean; aiInsights: boolean; rewardAlerts: boolean; emergencyAlerts: boolean; agentJobAlerts: boolean; channel: "push" | "email" | "sms"; }'.
+src/pages/settings/NotificationsPage.tsx(44,31): error TS7006: Parameter 'dateString' implicitly has an 'any' type.
+src/pages/settings/NotificationsPage.tsx(73,20): error TS7006: Parameter 'type' implicitly has an 'any' type.
+src/pages/settings/NotificationsPage.tsx(82,27): error TS7031: Binding element 'label' implicitly has an 'any' type.
+src/pages/settings/NotificationsPage.tsx(82,34): error TS7031: Binding element 'description' implicitly has an 'any' type.
+src/pages/settings/NotificationsPage.tsx(82,47): error TS7031: Binding element 'checked' implicitly has an 'any' type.
+src/pages/settings/NotificationsPage.tsx(82,56): error TS7031: Binding element 'onChange' implicitly has an 'any' type.
+src/pages/settings/NotificationsPage.tsx(135,67): error TS2339: Property 'date' does not exist on type 'Notification'.
+src/pages/settings/PrivacySecurityPage.tsx(8,19): error TS2339: Property 'changePin' does not exist on type 'AuthState'.
+src/pages/settings/PrivacySecurityPage.tsx(8,30): error TS2339: Property 'deleteAccount' does not exist on type 'AuthState'.
+src/pages/settings/PrivacySecurityPage.tsx(16,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/settings/PrivacySecurityPage.tsx(30,51): error TS18046: 'err' is of type 'unknown'.
+src/pages/settings/ProfilePage.tsx(9,41): error TS2339: Property 'uploadAvatar' does not exist on type 'AuthState'.
+src/pages/settings/ProfilePage.tsx(14,20): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/pages/settings/ProfilePage.tsx(15,21): error TS2339: Property 'email' does not exist on type 'Profile'.
+src/pages/settings/ProfilePage.tsx(18,24): error TS2551: Property 'idNumber' does not exist on type 'Profile'. Did you mean 'id_number'?
+src/pages/settings/ProfilePage.tsx(23,35): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/settings/ProfilePage.tsx(32,51): error TS18046: 'err' is of type 'unknown'.
+src/pages/settings/ProfilePage.tsx(38,29): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/settings/SettingsMenu.tsx(45,22): error TS2339: Property 'avatar' does not exist on type 'Profile'.
+src/pages/settings/SettingsMenu.tsx(49,74): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/pages/settings/SubscriptionDetail.tsx(10,36): error TS2307: Cannot find module '@cleanflow/core/src/data/mockData' or its corresponding type declarations.
+src/pages/settings/SubscriptionDetail.tsx(16,20): error TS2339: Property 'updateSubscription' does not exist on type 'AuthState'.
+src/pages/settings/SubscriptionDetail.tsx(81,35): error TS2538: Type 'undefined' cannot be used as an index type.
+src/pages/settings/SubscriptionDetail.tsx(130,34): error TS7006: Parameter 'point' implicitly has an 'any' type.
+src/pages/settings/SubscriptionDetail.tsx(130,41): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/pages/settings/SubscriptionPage.tsx(5,36): error TS2307: Cannot find module '@cleanflow/core/src/data/mockData' or its corresponding type declarations.
+src/pages/settings/SubscriptionPage.tsx(10,20): error TS2339: Property 'updateSubscription' does not exist on type 'AuthState'.
+src/pages/settings/SubscriptionPage.tsx(14,26): error TS7006: Parameter 'tierId' implicitly has an 'any' type.
+src/pages/settings/SubscriptionPage.tsx(46,29): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(47,28): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(51,20): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(58,64): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(65,22): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(66,22): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(69,22): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(74,22): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(74,57): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(81,18): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(81,37): error TS7006: Parameter 'feature' implicitly has an 'any' type.
+src/pages/settings/SubscriptionPage.tsx(81,46): error TS7006: Parameter 'i' implicitly has an 'any' type.
+src/pages/settings/SubscriptionPage.tsx(92,46): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SubscriptionPage.tsx(100,63): error TS18046: 'tier' is of type 'unknown'.
+src/pages/settings/SupportPage.tsx(13,31): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(11,15): error TS7016: Could not find a declaration file for module 'leaflet'. '/home/mikael/Desktop/Coding/cleanflow/node_modules/leaflet/dist/leaflet-src.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/leaflet` if it exists or add a new declaration (.d.ts) file containing `declare module 'leaflet';`
+src/pages/shared/HygeneXPage.tsx(27,36): error TS2339: Property 'stop' does not exist on type 'never'.
+src/pages/shared/HygeneXPage.tsx(33,27): error TS7006: Parameter 'onResult' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(36,38): error TS2551: Property 'SpeechRecognition' does not exist on type 'Window & typeof globalThis'. Did you mean 'SpeechRecognitionEvent'?
+src/pages/shared/HygeneXPage.tsx(36,66): error TS2339: Property 'webkitSpeechRecognition' does not exist on type 'Window & typeof globalThis'.
+src/pages/shared/HygeneXPage.tsx(59,31): error TS7006: Parameter 'event' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(67,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(90,21): error TS7031: Binding element 'isListening' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(90,34): error TS7031: Binding element 'isTyping' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(133,28): error TS2339: Property 'scrollIntoView' does not exist on type 'never'.
+src/pages/shared/HygeneXPage.tsx(142,26): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(151,26): error TS7006: Parameter 'text' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(154,30): error TS7006: Parameter 'text' implicitly has an 'any' type.
+src/pages/shared/HygeneXPage.tsx(228,34): error TS2339: Property 'metadata' does not exist on type 'Message'.
+src/pages/shared/HygeneXPage.tsx(240,73): error TS2339: Property 'metadata' does not exist on type 'Message'.
+src/pages/shared/HygeneXPage.tsx(240,116): error TS2339: Property 'metadata' does not exist on type 'Message'.
+src/pages/user/BookPickup.tsx(15,15): error TS7016: Could not find a declaration file for module 'leaflet'. '/home/mikael/Desktop/Coding/cleanflow/node_modules/leaflet/dist/leaflet-src.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/leaflet` if it exists or add a new declaration (.d.ts) file containing `declare module 'leaflet';`
+src/pages/user/BookPickup.tsx(32,20): error TS7006: Parameter 'isSelected' implicitly has an 'any' type.
+src/pages/user/BookPickup.tsx(41,23): error TS7031: Binding element 'center' implicitly has an 'any' type.
+src/pages/user/BookPickup.tsx(77,24): error TS2345: Argument of type 'ServiceCategory' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'ServiceCategory' provides no match for the signature '(prevState: null): null'.
+src/pages/user/BookPickup.tsx(79,13): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '(prevState: null) => null'.
+src/pages/user/BookPickup.tsx(86,47): error TS2339: Property 'weight' does not exist on type 'Booking'.
+src/pages/user/BookPickup.tsx(96,25): error TS18048: 'date' is possibly 'undefined'.
+src/pages/user/BookPickup.tsx(97,25): error TS18048: 'time' is possibly 'undefined'.
+src/pages/user/BookPickup.tsx(101,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SetStateAction<null>'.
+src/pages/user/BookPickup.tsx(139,87): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+src/pages/user/BookPickup.tsx(156,35): error TS2345: Argument of type 'NearbyAgent' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'NearbyAgent' provides no match for the signature '(prevState: null): null'.
+src/pages/user/BookPickup.tsx(165,24): error TS7006: Parameter 'lat1' implicitly has an 'any' type.
+src/pages/user/BookPickup.tsx(165,30): error TS7006: Parameter 'lon1' implicitly has an 'any' type.
+src/pages/user/BookPickup.tsx(165,36): error TS7006: Parameter 'lat2' implicitly has an 'any' type.
+src/pages/user/BookPickup.tsx(165,42): error TS7006: Parameter 'lon2' implicitly has an 'any' type.
+src/pages/user/BookPickup.tsx(201,29): error TS2339: Property 'config' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(207,31): error TS2339: Property 'config' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(213,57): error TS2339: Property 'slug' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(218,42): error TS2339: Property 'config' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(219,22): error TS2339: Property 'agent_account_type' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(219,78): error TS2339: Property 'company_id' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(220,65): error TS2339: Property 'company_id' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(222,35): error TS2339: Property 'config' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(227,63): error TS2339: Property 'slug' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(227,81): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(228,81): error TS2339: Property 'price_per_unit' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(250,77): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(250,94): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(264,90): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(267,20): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/BookPickup.tsx(267,37): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/BookPickup.tsx(276,33): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(278,36): error TS2339: Property 'type' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(294,50): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/BookPickup.tsx(294,69): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/BookPickup.tsx(294,86): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/BookPickup.tsx(297,24): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(304,52): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/BookPickup.tsx(349,43): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ ewaste: string; metal: string; organic: string; general: string; recyclable: string; recyclables: string; glass: string; appliances: string; bulky: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ ewaste: string; metal: string; organic: string; general: string; recyclable: string; recyclables: string; glass: string; appliances: string; bulky: string; }'.
+src/pages/user/BookPickup.tsx(355,46): error TS2345: Argument of type 'ServiceCategory' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'ServiceCategory' provides no match for the signature '(prevState: null): null'.
+src/pages/user/BookPickup.tsx(357,35): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '(prevState: null) => null'.
+src/pages/user/BookPickup.tsx(384,136): error TS2339: Property 'icon' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(386,105): error TS2339: Property 'label' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(415,45): error TS2345: Argument of type 'number | ""' is not assignable to parameter of type 'SetStateAction<number>'.
+  Type 'string' is not assignable to type 'SetStateAction<number>'.
+src/pages/user/BookPickup.tsx(462,57): error TS18047: 'e.target.files' is possibly 'null'.
+src/pages/user/BookPickup.tsx(462,57): error TS2345: Argument of type 'File | undefined' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'undefined' is not assignable to type 'SetStateAction<null>'.
+src/pages/user/BookPickup.tsx(475,57): error TS18047: 'e.target.files' is possibly 'null'.
+src/pages/user/BookPickup.tsx(475,57): error TS2345: Argument of type 'File | undefined' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'undefined' is not assignable to type 'SetStateAction<null>'.
+src/pages/user/BookPickup.tsx(530,25): error TS2322: Type '{ children: (Element | Element[])[]; center: any[]; zoom: number; zoomControl: boolean; className: string; }' is not assignable to type 'IntrinsicAttributes & MapContainerProps & RefAttributes<LeafletMap>'.
+  Property 'center' does not exist on type 'IntrinsicAttributes & MapContainerProps & RefAttributes<LeafletMap>'.
+src/pages/user/BookPickup.tsx(536,51): error TS2322: Type '{ position: any[]; icon: any; }' is not assignable to type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+src/pages/user/BookPickup.tsx(540,64): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(546,34): error TS2322: Type '{ children: Element; key: string; position: any[]; icon: any; eventHandlers: { click: () => void; }; }' is not assignable to type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+src/pages/user/BookPickup.tsx(553,57): error TS2345: Argument of type 'NearbyAgent' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'NearbyAgent' provides no match for the signature '(prevState: null): null'.
+src/pages/user/BookPickup.tsx(559,41): error TS2322: Type '{ children: Element; maxWidth: number; className: string; }' is not assignable to type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+  Property 'maxWidth' does not exist on type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+src/pages/user/BookPickup.tsx(566,53): error TS2339: Property 'rating' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(589,67): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(620,31): error TS2339: Property 'fleet_invite_code' does not exist on type 'NearbyAgent'.
+src/pages/user/BookPickup.tsx(627,48): error TS2345: Argument of type 'NearbyAgent' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'NearbyAgent' provides no match for the signature '(prevState: null): null'.
+src/pages/user/BookPickup.tsx(639,53): error TS2345: Argument of type 'AISuggestion | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.
+src/pages/user/BookPickup.tsx(640,151): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(642,139): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(643,85): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(646,111): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(647,108): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(659,138): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(660,59): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/BookPickup.tsx(715,75): error TS2339: Property 'label' does not exist on type 'never'.
+src/pages/user/BookPickup.tsx(800,48): error TS2554: Expected 0 arguments, but got 1.
+src/pages/user/CircularResume.tsx(28,78): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/CircularResume.tsx(39,39): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/CircularResume.tsx(40,22): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ plastics: number; pet: number; hdpe: number; metals: number; aluminium: number; paper: number; glass: number; ewaste: number; organic: number; default: number; }'.
+src/pages/user/CircularResume.tsx(46,38): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/CircularResume.tsx(47,7): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+src/pages/user/CircularResume.tsx(47,20): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+src/pages/user/CircularResume.tsx(90,28): error TS2339: Property 'avatar' does not exist on type 'Profile'.
+src/pages/user/CircularResume.tsx(99,124): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/pages/user/CircularResume.tsx(177,16): error TS2304: Cannot find name 'ChevronRight'.
+src/pages/user/CircularResume.tsx(193,95): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+src/pages/user/CircularResume.tsx(196,74): error TS18046: 'weight' is of type 'unknown'.
+src/pages/user/CompanyProfile.tsx(31,20): error TS2345: Argument of type '{ id: string; email: string | null; name: string | null; phone: string | null; role: string | null; wallet_balance: number; reward_points: number; balance: number | null; location: Json; ... 23 more ...; agent_configurations: SelectQueryError<...>; }' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type '{ id: string; email: string | null; name: string | null; phone: string | null; role: string | null; wallet_balance: number; reward_points: number; balance: number | null; location: Json; ... 23 more ...; agent_configurations: SelectQueryError<...>; }' provides no match for the signature '(prevState: null): null'.
+src/pages/user/CompanyProfile.tsx(44,42): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(44,74): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(44,109): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(47,17): error TS2339: Property 'service_profile' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(47,53): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/pages/user/CompanyProfile.tsx(47,73): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/pages/user/CompanyProfile.tsx(48,62): error TS2339: Property 'service_profile' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(49,33): error TS2339: Property 'role' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(70,78): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(70,103): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(82,29): error TS2339: Property 'rating' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(82,42): error TS18047: 'company' is possibly 'null'.
+src/pages/user/CompanyProfile.tsx(88,69): error TS2339: Property 'total_pickups' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(107,91): error TS2339: Property 'location' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(121,25): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/pages/user/CompanyProfile.tsx(122,23): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/pages/user/CompanyProfile.tsx(146,110): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(146,135): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(150,42): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/CompanyProfile.tsx(150,67): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(45,21): error TS2345: Argument of type 'SelectQueryError<"column 'total_pickups' does not exist on 'profiles'.">[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type 'SelectQueryError<"column 'total_pickups' does not exist on 'profiles'.">[]' is not assignable to type 'never[]'.
+    Type 'SelectQueryError<"column 'total_pickups' does not exist on 'profiles'.">' is not assignable to type 'never'.
+src/pages/user/Discovery.tsx(57,39): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(57,65): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(57,93): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(58,64): error TS2339: Property 'service_profile' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(58,100): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/pages/user/Discovery.tsx(58,120): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/pages/user/Discovery.tsx(59,47): error TS2339: Property 'service_profile' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(59,76): error TS2339: Property 'agent_account_type' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(64,11): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(65,11): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(184,53): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(184,85): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(184,119): error TS2339: Property 'agent_configurations' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(185,73): error TS2339: Property 'service_profile' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(186,78): error TS2339: Property 'service_profile' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(186,114): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/pages/user/Discovery.tsx(186,134): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/pages/user/Discovery.tsx(187,61): error TS2339: Property 'service_profile' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(187,96): error TS2339: Property 'agent_account_type' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(188,41): error TS2339: Property 'agent_account_type' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(192,32): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(196,63): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(205,34): error TS2339: Property 'avatar_url' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(206,61): error TS2339: Property 'avatar_url' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(218,53): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(218,77): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(218,93): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(220,38): error TS2339: Property 'role' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(225,81): error TS2339: Property 'rating' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(225,102): error TS2339: Property 'rating' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(230,55): error TS2339: Property 'total_pickups' does not exist on type 'never'.
+src/pages/user/Discovery.tsx(248,35): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/pages/user/Discovery.tsx(250,32): error TS7006: Parameter 'm' implicitly has an 'any' type.
+src/pages/user/FinancingHub.tsx(127,64): error TS2345: Argument of type '{ id: string; title: string; description: string; amount: number; tenure: string; interest: string; requiredScore: number; requiredVolume: number; icon: JSX.Element; color: string; }' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type '{ id: string; title: string; description: string; amount: number; tenure: string; interest: string; requiredScore: number; requiredVolume: number; icon: Element; color: string; }' provides no match for the signature '(prevState: null): null'.
+src/pages/user/FinancingHub.tsx(215,37): error TS2339: Property 'icon' does not exist on type 'never'.
+src/pages/user/FinancingHub.tsx(218,116): error TS2339: Property 'title' does not exist on type 'never'.
+src/pages/user/FinancingHub.tsx(219,122): error TS2339: Property 'amount' does not exist on type 'never'.
+src/pages/user/FinancingHub.tsx(226,109): error TS2339: Property 'amount' does not exist on type 'never'.
+src/pages/user/FinancingHub.tsx(230,104): error TS2339: Property 'tenure' does not exist on type 'never'.
+src/pages/user/ImpactAnalytics.tsx(74,104): error TS2339: Property 'weight_kg' does not exist on type '{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }'.
+src/pages/user/ImpactAnalytics.tsx(81,42): error TS2551: Property 'wasteType' does not exist on type '{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }'. Did you mean 'waste_type'?
+src/pages/user/ImpactAnalytics.tsx(82,11): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+src/pages/user/ImpactAnalytics.tsx(82,35): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+src/pages/user/ImpactAnalytics.tsx(85,75): error TS2571: Object is of type 'unknown'.
+src/pages/user/ImpactAnalytics.tsx(85,82): error TS2571: Object is of type 'unknown'.
+src/pages/user/ImpactAnalytics.tsx(147,40): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/pages/user/ImpactAnalytics.tsx(148,37): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/pages/user/ImpactAnalytics.tsx(149,41): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/pages/user/ImpactAnalytics.tsx(149,51): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/pages/user/ImpactAnalytics.tsx(168,11): error TS2322: Type 'number' is not assignable to type 'null'.
+src/pages/user/ImpactAnalytics.tsx(170,11): error TS2322: Type '{ date: string; weight: number; }[]' is not assignable to type 'never[]'.
+  Type '{ date: string; weight: number; }' is not assignable to type 'never'.
+src/pages/user/ImpactAnalytics.tsx(185,29): error TS7006: Parameter 'value' implicitly has an 'any' type.
+src/pages/user/ImpactAnalytics.tsx(369,73): error TS2339: Property 'weight' does not exist on type 'never'.
+src/pages/user/ImpactAnalytics.tsx(370,35): error TS2339: Property 'weight' does not exist on type 'never'.
+src/pages/user/ImpactAnalytics.tsx(371,44): error TS2339: Property 'date' does not exist on type 'never'.
+src/pages/user/ImpactAnalytics.tsx(379,61): error TS2339: Property 'weight' does not exist on type 'never'.
+src/pages/user/ImpactAnalytics.tsx(381,26): error TS2339: Property 'weight' does not exist on type 'never'.
+src/pages/user/ImpactAnalytics.tsx(383,30): error TS2339: Property 'weight' does not exist on type 'never'.
+src/pages/user/ImpactHub.tsx(24,108): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(25,109): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(26,117): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(27,106): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(28,110): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(29,113): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(30,114): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(31,101): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(32,113): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(33,101): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(34,111): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(35,111): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(36,111): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(37,111): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(38,110): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(39,121): error TS7006: Parameter 'stats' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(42,26): error TS7006: Parameter 'bookings' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(44,13): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(45,10): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(50,13): error TS7006: Parameter 'd' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(56,21): error TS7006: Parameter 'd' implicitly has an 'any' type.
+src/pages/user/ImpactHub.tsx(95,20): error TS2339: Property 'getGFPMetrics' does not exist on type 'AuthState'.
+src/pages/user/ImpactHub.tsx(110,46): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/ImpactHub.tsx(121,54): error TS2339: Property 'weight' does not exist on type 'Booking'.
+src/pages/user/Leaderboard.tsx(8,36): error TS2339: Property 'user' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(8,42): error TS2339: Property 'height' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(8,50): error TS2339: Property 'isFirst' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(8,59): error TS2339: Property 'rank' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(63,28): error TS2339: Property 'user' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(63,34): error TS2339: Property 'height' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(63,42): error TS2339: Property 'bgClass' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(63,51): error TS2339: Property 'medalClass' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(63,63): error TS2339: Property 'isFirst' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(96,32): error TS2339: Property 'user' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(130,34): error TS2339: Property 'user' does not exist on type '{}'.
+src/pages/user/Leaderboard.tsx(190,23): error TS2345: Argument of type '{ id: string; name: string; revenue: number; rank: number; isUser: boolean; avatarUrl: string | null; }[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type '{ id: string; name: string; revenue: number; rank: number; isUser: boolean; avatarUrl: string | null; }[]' is not assignable to type 'never[]'.
+    Type '{ id: string; name: string; revenue: number; rank: number; isUser: boolean; avatarUrl: string | null; }' is not assignable to type 'never'.
+src/pages/user/Leaderboard.tsx(260,17): error TS2322: Type '{ user: null; height: string; rank: number; isFirst: boolean; }' is not assignable to type 'IntrinsicAttributes & object'.
+  Property 'user' does not exist on type 'IntrinsicAttributes & object'.
+src/pages/user/Leaderboard.tsx(266,17): error TS2322: Type '{ user: null; height: string; rank: number; isFirst: boolean; }' is not assignable to type 'IntrinsicAttributes & object'.
+  Property 'user' does not exist on type 'IntrinsicAttributes & object'.
+src/pages/user/Leaderboard.tsx(272,17): error TS2322: Type '{ user: null; height: string; rank: number; isFirst: boolean; }' is not assignable to type 'IntrinsicAttributes & object'.
+  Property 'user' does not exist on type 'IntrinsicAttributes & object'.
+src/pages/user/Leaderboard.tsx(300,45): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/Leaderboard.tsx(300,49): error TS2322: Type '{ key: any; user: never; }' is not assignable to type 'IntrinsicAttributes & object'.
+  Property 'user' does not exist on type 'IntrinsicAttributes & object'.
+src/pages/user/Leaderboard.tsx(356,21): error TS2345: Argument of type '{ id: string; name: string; kg: number; rank: number; isUser: boolean; avatarUrl: string | null; }[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type '{ id: string; name: string; kg: number; rank: number; isUser: boolean; avatarUrl: string | null; }[]' is not assignable to type 'never[]'.
+    Type '{ id: string; name: string; kg: number; rank: number; isUser: boolean; avatarUrl: string | null; }' is not assignable to type 'never'.
+src/pages/user/Leaderboard.tsx(427,17): error TS2322: Type '{ user: null; height: string; bgClass: string; medalClass: string; isFirst: boolean; }' is not assignable to type 'IntrinsicAttributes & object'.
+  Property 'user' does not exist on type 'IntrinsicAttributes & object'.
+src/pages/user/Leaderboard.tsx(434,17): error TS2322: Type '{ user: null; height: string; bgClass: string; medalClass: string; isFirst: boolean; }' is not assignable to type 'IntrinsicAttributes & object'.
+  Property 'user' does not exist on type 'IntrinsicAttributes & object'.
+src/pages/user/Leaderboard.tsx(441,17): error TS2322: Type '{ user: null; height: string; bgClass: string; medalClass: string; isFirst: boolean; }' is not assignable to type 'IntrinsicAttributes & object'.
+  Property 'user' does not exist on type 'IntrinsicAttributes & object'.
+src/pages/user/Leaderboard.tsx(468,47): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/Leaderboard.tsx(468,51): error TS2322: Type '{ key: any; user: never; }' is not assignable to type 'IntrinsicAttributes & object'.
+  Property 'user' does not exist on type 'IntrinsicAttributes & object'.
+src/pages/user/MarketIntelligenceHub.tsx(302,21): error TS7006: Parameter 'props' implicitly has an 'any' type.
+src/pages/user/MarketplaceInventory.tsx(40,27): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string'.
+src/pages/user/MarketplaceInventory.tsx(46,54): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/MarketplaceInventory.tsx(189,57): error TS2551: Property 'created_at' does not exist on type 'MarketplaceListing'. Did you mean 'createdAt'?
+src/pages/user/MarketplaceInventory.tsx(256,50): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SetStateAction<null>'.
+src/pages/user/MarketplaceInventory.tsx(286,74): error TS2551: Property 'created_at' does not exist on type 'MarketplaceListing'. Did you mean 'createdAt'?
+src/pages/user/MyBookings.tsx(21,33): error TS7031: Binding element 'b' implicitly has an 'any' type.
+src/pages/user/MyBookings.tsx(65,16): error TS7006: Parameter 'time24' implicitly has an 'any' type.
+src/pages/user/MyBookings.tsx(68,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/MyBookings.tsx(75,16): error TS7006: Parameter 'time12' implicitly has an 'any' type.
+src/pages/user/MyBookings.tsx(79,20): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/MyBookings.tsx(81,16): error TS2532: Object is possibly 'undefined'.
+src/pages/user/MyBookings.tsx(87,27): error TS7031: Binding element 'count' implicitly has an 'any' type.
+src/pages/user/MyBookings.tsx(87,34): error TS7031: Binding element 'active' implicitly has an 'any' type.
+src/pages/user/MyBookings.tsx(123,25): error TS7006: Parameter 'id' implicitly has an 'any' type.
+src/pages/user/MyBookings.tsx(131,29): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/pages/user/MyBookings.tsx(141,66): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(142,40): error TS2339: Property 'wasteType' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(142,73): error TS2339: Property 'waste_type' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(143,37): error TS2339: Property 'estate' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(144,36): error TS2339: Property 'notes' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(145,36): error TS2339: Property 'phone' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(158,55): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/MyBookings.tsx(164,37): error TS7006: Parameter 'type' implicitly has an 'any' type.
+src/pages/user/MyBookings.tsx(245,36): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/MyBookings.tsx(248,28): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ completed: { label: string; color: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 4 more ...; cancelled: { ...; }; }'.
+  No index signature with a parameter of type 'string' was found on type '{ completed: { label: string; color: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 4 more ...; cancelled: { ...; }; }'.
+src/pages/user/MyBookings.tsx(249,63): error TS2551: Property 'createdAt' does not exist on type 'Booking'. Did you mean 'created_at'?
+src/pages/user/MyBookings.tsx(250,28): error TS2551: Property 'createdAt' does not exist on type 'Booking'. Did you mean 'created_at'?
+src/pages/user/MyBookings.tsx(251,19): error TS2339: Property 'date' does not exist on type 'Booking'.
+src/pages/user/MyBookings.tsx(261,53): error TS2345: Argument of type 'Booking' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'Booking' provides no match for the signature '(prevState: null): null'.
+src/pages/user/MyBookings.tsx(371,41): error TS2339: Property 'wasteType' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(371,56): error TS2339: Property 'waste_type' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(374,26): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ completed: { label: string; color: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 4 more ...; cancelled: { ...; }; }'.
+src/pages/user/MyBookings.tsx(374,41): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(374,70): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(401,22): error TS2339: Property 'photo_url' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(403,46): error TS2339: Property 'photo_url' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(417,179): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(429,128): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(434,128): error TS2339: Property 'estate' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(443,28): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(445,37): error TS2339: Property 'total_price' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(447,31): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(461,100): error TS2339: Property 'weight' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(461,112): error TS2339: Property 'bags' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(470,107): error TS2339: Property 'time_slot' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(475,22): error TS2339: Property 'status' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(475,51): error TS2339: Property 'weaverId' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(475,65): error TS2339: Property 'assetId' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(477,54): error TS2339: Property 'weaverId' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(481,23): error TS2339: Property 'notes' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(481,34): error TS2339: Property 'waste_type' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(487,37): error TS2339: Property 'notes' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(487,103): error TS2339: Property 'estate' does not exist on type 'never'.
+src/pages/user/MyBookings.tsx(501,79): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/MyIotPage.tsx(27,28): error TS7006: Parameter 'item' implicitly has an 'any' type.
+src/pages/user/MyIotPage.tsx(27,34): error TS7006: Parameter 'type' implicitly has an 'any' type.
+src/pages/user/MyIotPage.tsx(43,9): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(44,25): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(45,16): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(46,25): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(48,25): error TS18048: 'target' is possibly 'undefined'.
+src/pages/user/MyIotPage.tsx(86,29): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/pages/user/MyOffers.tsx(41,47): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/MyOffers.tsx(42,56): error TS2345: Argument of type '{ unsubscribe: () => void; }' is not assignable to parameter of type 'RealtimeChannel'.
+  Type '{ unsubscribe: () => void; }' is missing the following properties from type 'RealtimeChannel': topic, params, socket, bindings, and 20 more.
+src/pages/user/MyOffers.tsx(45,31): error TS7006: Parameter 'offer' implicitly has an 'any' type.
+src/pages/user/MyOffers.tsx(55,32): error TS7006: Parameter 'offerId' implicitly has an 'any' type.
+src/pages/user/MyOffers.tsx(66,43): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/pages/user/MyOffers.tsx(68,44): error TS2345: Argument of type '"complete_booking_trade_payout"' is not assignable to parameter of type '"get_available_bookings" | "get_active_agent_jobs" | "accept_booking" | "agent_completes_pickup" | "submit_counter_offer" | "link_iot_device" | "get_b2b_market_stats" | "complete_booking_split_payout" | "weaver_claim_asset" | "client_releases_funds" | "pulse_iot_device"'.
+src/pages/user/MyOffers.tsx(78,60): error TS18046: 'error' is of type 'unknown'.
+src/pages/user/MyOffers.tsx(82,43): error TS7006: Parameter 'b' implicitly has an 'any' type.
+src/pages/user/MyOffers.tsx(98,45): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/MyOffers.tsx(100,63): error TS2551: Property 'created_at' does not exist on type 'MarketplaceOffer'. Did you mean 'createdAt'?
+src/pages/user/MyOffers.tsx(126,41): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/MyOffers.tsx(128,59): error TS2551: Property 'created_at' does not exist on type 'MarketplaceOffer'. Did you mean 'createdAt'?
+src/pages/user/MyOffers.tsx(139,41): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/MyOffers.tsx(141,59): error TS2551: Property 'created_at' does not exist on type 'MarketplaceOffer'. Did you mean 'createdAt'?
+src/pages/user/MyOffers.tsx(298,38): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+src/pages/user/MyOffers.tsx(298,93): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+src/pages/user/MyOffers.tsx(334,134): error TS2339: Property 'price' does not exist on type 'MarketplaceOffer'.
+src/pages/user/MyOffers.tsx(336,139): error TS2339: Property 'price' does not exist on type 'MarketplaceOffer'.
+src/pages/user/MyOffers.tsx(336,164): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+src/pages/user/MyOffers.tsx(371,55): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SetStateAction<null>'.
+src/pages/user/MyOffers.tsx(415,59): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'string' is not assignable to type 'SetStateAction<null>'.
+src/pages/user/MyOffers.tsx(499,59): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'string' is not assignable to type 'SetStateAction<null>'.
+src/pages/user/MyOffers.tsx(530,124): error TS2339: Property 'buyerName' does not exist on type 'Booking'.
+src/pages/user/MyOffers.tsx(590,59): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'string' is not assignable to type 'SetStateAction<null>'.
+src/pages/user/MyTrades.tsx(28,25): error TS7031: Binding element 'count' implicitly has an 'any' type.
+src/pages/user/MyTrades.tsx(28,32): error TS7031: Binding element 'active' implicitly has an 'any' type.
+src/pages/user/MyTrades.tsx(53,25): error TS7006: Parameter 'val' implicitly has an 'any' type.
+src/pages/user/MyTrades.tsx(56,7): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ plastic: string; paper: string; metal: string; glass: string; organic: string; ewaste: string; 'e-waste': string; electronic: string; recyclable: string; general: string; bulky: string; appliances: string; }'.
+src/pages/user/MyTrades.tsx(56,37): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ plastic: string; paper: string; metal: string; glass: string; organic: string; ewaste: string; 'e-waste': string; electronic: string; recyclable: string; general: string; bulky: string; appliances: string; }'.
+src/pages/user/MyTrades.tsx(67,48): error TS7006: Parameter 'word' implicitly has an 'any' type.
+src/pages/user/MyTrades.tsx(76,16): error TS7006: Parameter 'time24' implicitly has an 'any' type.
+src/pages/user/MyTrades.tsx(79,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/MyTrades.tsx(86,16): error TS7006: Parameter 'time12' implicitly has an 'any' type.
+src/pages/user/MyTrades.tsx(90,20): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/MyTrades.tsx(92,16): error TS2532: Object is possibly 'undefined'.
+src/pages/user/MyTrades.tsx(123,25): error TS7006: Parameter 'id' implicitly has an 'any' type.
+src/pages/user/MyTrades.tsx(135,64): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(136,38): error TS2339: Property 'waste_type' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(137,35): error TS2339: Property 'actual_weight_kg' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(137,73): error TS2339: Property 'bags' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(138,35): error TS2339: Property 'estate' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(139,37): error TS2339: Property 'latitude' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(140,38): error TS2339: Property 'longitude' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(141,34): error TS2339: Property 'notes' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(142,36): error TS2339: Property 'agent_id' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(143,37): error TS2339: Property 'photo_url' does not exist on type 'never'.
+src/pages/user/MyTrades.tsx(155,55): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/MyTrades.tsx(161,37): error TS7006: Parameter 'type' implicitly has an 'any' type.
+src/pages/user/MyTrades.tsx(169,61): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/MyTrades.tsx(235,55): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/MyTrades.tsx(236,58): error TS2339: Property 'slug' does not exist on type 'WasteType'.
+src/pages/user/MyTrades.tsx(237,32): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ completed: { label: string; color: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 5 more ...; counter_offer_pending: { ...; }; }'.
+  No index signature with a parameter of type 'string' was found on type '{ completed: { label: string; color: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 5 more ...; counter_offer_pending: { ...; }; }'.
+src/pages/user/MyTrades.tsx(242,61): error TS2551: Property 'photoUrl' does not exist on type 'Booking'. Did you mean 'photo_url'?
+src/pages/user/MyTrades.tsx(242,76): error TS2339: Property 'photo' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(287,105): error TS2339: Property 'amount' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(303,32): error TS2339: Property 'date' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(306,28): error TS2339: Property 'time' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(309,99): error TS2339: Property 'time' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(366,59): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/MyTrades.tsx(367,64): error TS2339: Property 'slug' does not exist on type 'WasteType'.
+src/pages/user/MyTrades.tsx(368,36): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ completed: { label: string; color: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 5 more ...; counter_offer_pending: { ...; }; }'.
+  No index signature with a parameter of type 'string' was found on type '{ completed: { label: string; color: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; }; ... 5 more ...; counter_offer_pending: { ...; }; }'.
+src/pages/user/MyTrades.tsx(377,65): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'string' is not assignable to type 'SetStateAction<null>'.
+src/pages/user/MyTrades.tsx(388,45): error TS2339: Property 'updated_at' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(393,58): error TS2339: Property 'amount' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(423,114): error TS2339: Property 'amount' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(428,53): error TS2339: Property 'updated_at' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(444,56): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SetStateAction<null>'.
+src/pages/user/MyTrades.tsx(462,56): error TS2339: Property 'amount' does not exist on type 'Booking'.
+src/pages/user/MyTrades.tsx(506,121): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(16,15): error TS7016: Could not find a declaration file for module 'leaflet'. '/home/mikael/Desktop/Coding/cleanflow/node_modules/leaflet/dist/leaflet-src.js' implicitly has an 'any' type.
+  Try `npm i --save-dev @types/leaflet` if it exists or add a new declaration (.d.ts) file containing `declare module 'leaflet';`
+src/pages/user/PostTrade.tsx(36,20): error TS7006: Parameter 'isSelected' implicitly has an 'any' type.
+src/pages/user/PostTrade.tsx(43,22): error TS7006: Parameter 'isSelected' implicitly has an 'any' type.
+src/pages/user/PostTrade.tsx(50,23): error TS7031: Binding element 'center' implicitly has an 'any' type.
+src/pages/user/PostTrade.tsx(67,9): error TS7034: Variable 'liveWeavers' implicitly has type 'any[]' in some locations where its type cannot be determined.
+src/pages/user/PostTrade.tsx(96,24): error TS7006: Parameter 'lat1' implicitly has an 'any' type.
+src/pages/user/PostTrade.tsx(96,30): error TS7006: Parameter 'lon1' implicitly has an 'any' type.
+src/pages/user/PostTrade.tsx(96,36): error TS7006: Parameter 'lat2' implicitly has an 'any' type.
+src/pages/user/PostTrade.tsx(96,42): error TS7006: Parameter 'lon2' implicitly has an 'any' type.
+src/pages/user/PostTrade.tsx(148,22): error TS2345: Argument of type 'ServiceCategory' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'ServiceCategory' provides no match for the signature '(prevState: null): null'.
+src/pages/user/PostTrade.tsx(150,11): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '(prevState: null) => null'.
+src/pages/user/PostTrade.tsx(164,46): error TS2339: Property 'price_per_unit' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(170,67): error TS2339: Property 'discount' does not exist on type 'string'.
+src/pages/user/PostTrade.tsx(174,77): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(174,94): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(191,11): error TS7034: Variable 'photoUrls' implicitly has type 'any[]' in some locations where its type cannot be determined.
+src/pages/user/PostTrade.tsx(214,19): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/PostTrade.tsx(214,37): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/PostTrade.tsx(216,9): error TS2561: Object literal may only specify known properties, but 'pricePerKg' does not exist in type 'Partial<{ id: string; seller_id: string; material: string; quantity: number; price_per_kg: number; description: string | null; location: string | null; latitude: number | null; longitude: number | null; ... 11 more ...; updated_at: string | null; }>'. Did you mean to write 'price_per_kg'?
+src/pages/user/PostTrade.tsx(217,60): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(218,59): error TS2339: Property 'lat' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(219,60): error TS2339: Property 'lng' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(220,42): error TS7005: Variable 'photoUrls' implicitly has an 'any[]' type.
+src/pages/user/PostTrade.tsx(228,21): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/pages/user/PostTrade.tsx(228,53): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/PostTrade.tsx(228,71): error TS18047: 'selected' is possibly 'null'.
+src/pages/user/PostTrade.tsx(238,52): error TS18046: 'err' is of type 'unknown'.
+src/pages/user/PostTrade.tsx(245,31): error TS7006: Parameter 'result' implicitly has an 'any' type.
+src/pages/user/PostTrade.tsx(248,29): error TS2345: Argument of type 'ServiceCategory' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'ServiceCategory' provides no match for the signature '(prevState: null): null'.
+src/pages/user/PostTrade.tsx(251,38): error TS2322: Type 'any' is not assignable to type 'never'.
+src/pages/user/PostTrade.tsx(252,43): error TS2345: Argument of type 'number' is not assignable to parameter of type 'SetStateAction<null>'.
+src/pages/user/PostTrade.tsx(266,32): error TS2339: Property 'label' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(307,53): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(319,39): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ ewaste: string; metal: string; organic: string; general: string; recyclable: string; recyclables: string; glass: string; appliances: string; bulky: string; }'.
+  No index signature with a parameter of type 'string' was found on type '{ ewaste: string; metal: string; organic: string; general: string; recyclable: string; recyclables: string; glass: string; appliances: string; bulky: string; }'.
+src/pages/user/PostTrade.tsx(325,42): error TS2345: Argument of type 'ServiceCategory' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'ServiceCategory' provides no match for the signature '(prevState: null): null'.
+src/pages/user/PostTrade.tsx(327,31): error TS2353: Object literal may only specify known properties, and 'id' does not exist in type '(prevState: null) => null'.
+src/pages/user/PostTrade.tsx(383,54): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SetStateAction<number>'.
+src/pages/user/PostTrade.tsx(419,48): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(iterable: Iterable<File> | ArrayLike<File>): File[]', gave the following error.
+    Argument of type 'FileList | null' is not assignable to parameter of type 'Iterable<File> | ArrayLike<File>'.
+      Type 'null' is not assignable to type 'Iterable<File> | ArrayLike<File>'.
+  Overload 2 of 4, '(arrayLike: ArrayLike<File>): File[]', gave the following error.
+    Argument of type 'FileList | null' is not assignable to parameter of type 'ArrayLike<File>'.
+      Type 'null' is not assignable to type 'ArrayLike<File>'.
+src/pages/user/PostTrade.tsx(422,35): error TS2345: Argument of type 'File[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type 'File[]' is not assignable to type 'never[]'.
+    Type 'File' is not assignable to type 'never'.
+src/pages/user/PostTrade.tsx(437,42): error TS18047: 'e.target' is possibly 'null'.
+src/pages/user/PostTrade.tsx(437,51): error TS2339: Property 'files' does not exist on type 'EventTarget'.
+src/pages/user/PostTrade.tsx(438,49): error TS2345: Argument of type '(prev: never[]) => any[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type '(prev: never[]) => any[]' is not assignable to type '(prevState: never[]) => never[]'.
+    Type 'any[]' is not assignable to type 'never[]'.
+      Type 'any' is not assignable to type 'never'.
+src/pages/user/PostTrade.tsx(457,54): error TS18047: 'e.target' is possibly 'null'.
+src/pages/user/PostTrade.tsx(457,63): error TS2339: Property 'files' does not exist on type 'EventTarget'.
+src/pages/user/PostTrade.tsx(458,39): error TS2345: Argument of type '(prev: never[]) => unknown[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type '(prev: never[]) => unknown[]' is not assignable to type '(prevState: never[]) => never[]'.
+    Type 'unknown[]' is not assignable to type 'never[]'.
+      Type 'unknown' is not assignable to type 'never'.
+src/pages/user/PostTrade.tsx(501,42): error TS2531: Object is possibly 'null'.
+src/pages/user/PostTrade.tsx(541,47): error TS2345: Argument of type 'number | null' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'number' is not assignable to type 'SetStateAction<null>'.
+src/pages/user/PostTrade.tsx(543,25): error TS2322: Type 'number' is not assignable to type 'string'.
+src/pages/user/PostTrade.tsx(560,27): error TS2322: Type 'string' is not assignable to type 'number'.
+src/pages/user/PostTrade.tsx(624,107): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(624,140): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(636,36): error TS2322: Type '{ children: (Element | Element[])[]; center: any[]; zoom: number; zoomControl: boolean; className: string; }' is not assignable to type 'IntrinsicAttributes & MapContainerProps & RefAttributes<LeafletMap>'.
+  Property 'center' does not exist on type 'IntrinsicAttributes & MapContainerProps & RefAttributes<LeafletMap>'.
+src/pages/user/PostTrade.tsx(639,51): error TS2322: Type '{ position: any[]; icon: any; }' is not assignable to type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+src/pages/user/PostTrade.tsx(643,106): error TS2322: Type '{ children: Element; key: string; position: any[]; icon: any; eventHandlers: { click: () => void; }; }' is not assignable to type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+src/pages/user/PostTrade.tsx(643,168): error TS2345: Argument of type '{ distance: number; id: string; name: string; company_name?: string; location: any; role: string; is_online: boolean; business_type?: string; isStaff?: boolean; agent_account_type?: string; company_id?: string; is_hub_active?: boolean; hub_address?: string; hub_location?: any; }' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type '{ distance: number; id: string; name: string; company_name?: string | undefined; location: any; role: string; is_online: boolean; business_type?: string | undefined; isStaff?: boolean | undefined; ... 4 more ...; hub_location?: any; }' provides no match for the signature '(prevState: null): null'.
+src/pages/user/PostTrade.tsx(644,39): error TS2322: Type '{ children: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+src/pages/user/PostTrade.tsx(658,88): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(659,147): error TS2322: Type '{ children: Element; key: string; position: any[]; icon: any; eventHandlers: { click: () => void; }; }' is not assignable to type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+src/pages/user/PostTrade.tsx(659,178): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(659,245): error TS2345: Argument of type 'NearbyAgent' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'NearbyAgent' provides no match for the signature '(prevState: null): null'.
+src/pages/user/PostTrade.tsx(660,43): error TS2322: Type '{ children: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+src/pages/user/PostTrade.tsx(668,46): error TS2345: Argument of type 'NearbyAgent' is not assignable to parameter of type 'never'.
+src/pages/user/PostTrade.tsx(672,60): error TS2339: Property 'agent_account_type' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(675,51): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(676,57): error TS2339: Property 'location' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(676,97): error TS2339: Property 'location' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(677,39): error TS2322: Type '{ children: Element; key: any; position: any[]; icon: any; eventHandlers: { click: () => void; }; }' is not assignable to type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+src/pages/user/PostTrade.tsx(677,87): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(677,101): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(677,132): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(677,146): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(681,67): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(681,90): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(688,47): error TS2322: Type '{ children: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+src/pages/user/PostTrade.tsx(690,132): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(690,155): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(690,171): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(702,30): error TS7005: Variable 'liveWeavers' implicitly has an 'any[]' type.
+src/pages/user/PostTrade.tsx(703,168): error TS2322: Type '{ children: Element; key: any; position: any[]; icon: any; }' is not assignable to type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+  Property 'icon' does not exist on type 'IntrinsicAttributes & MarkerProps & RefAttributes<LeafletMarker<any>>'.
+src/pages/user/PostTrade.tsx(704,40): error TS2322: Type '{ children: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & PopupProps & RefAttributes<LeafletPopup>'.
+src/pages/user/PostTrade.tsx(724,96): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(724,116): error TS2339: Property 'company_name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(725,137): error TS2339: Property 'hub_address' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(725,164): error TS2339: Property 'distance' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(743,124): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(767,52): error TS2345: Argument of type '{ time: string; type: string; discount: number; label: string; }' is not assignable to parameter of type 'string'.
+src/pages/user/PostTrade.tsx(768,150): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/PostTrade.tsx(770,138): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/PostTrade.tsx(771,84): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/PostTrade.tsx(774,110): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/PostTrade.tsx(775,107): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/PostTrade.tsx(777,137): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/PostTrade.tsx(778,58): error TS2339: Property 'time' does not exist on type 'string'.
+src/pages/user/PostTrade.tsx(827,35): error TS2339: Property 'icon' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(830,104): error TS2339: Property 'label' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(862,114): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(866,98): error TS2339: Property 'address' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(1004,102): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/PostTrade.tsx(1009,48): error TS2554: Expected 0 arguments, but got 1.
+src/pages/user/SellerHome.tsx(80,25): error TS7006: Parameter 'text' implicitly has an 'any' type.
+src/pages/user/SellerHome.tsx(93,10): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ ewaste: string; iron: string; plastic: string; paper: string; glass: string; organic: string; metal: string; }'.
+src/pages/user/SellerHome.tsx(99,47): error TS2339: Property 'withdrawRewards' does not exist on type 'AuthState'.
+src/pages/user/SellerHome.tsx(196,54): error TS2339: Property 'is_market_trade' does not exist on type 'Booking'.
+src/pages/user/SellerHome.tsx(196,75): error TS2339: Property 'isMarketTrade' does not exist on type 'Booking'.
+src/pages/user/SellerHome.tsx(202,43): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/SellerHome.tsx(207,61): error TS2551: Property 'total_price' does not exist on type 'MarketplaceOrder'. Did you mean 'totalPrice'?
+src/pages/user/SellerHome.tsx(211,62): error TS2551: Property 'totalPrice' does not exist on type 'Booking'. Did you mean 'total_price'?
+src/pages/user/SellerHome.tsx(218,43): error TS2551: Property 'createdAt' does not exist on type 'Booking'. Did you mean 'created_at'?
+src/pages/user/SellerHome.tsx(222,48): error TS2551: Property 'createdAt' does not exist on type 'Booking'. Did you mean 'created_at'?
+src/pages/user/SellerHome.tsx(222,98): error TS2551: Property 'createdAt' does not exist on type 'Booking'. Did you mean 'created_at'?
+src/pages/user/SellerHome.tsx(246,30): error TS2339: Property 'avatar' does not exist on type 'Profile'.
+src/pages/user/SellerHome.tsx(251,128): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/pages/user/SellerHome.tsx(535,25): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/SellerHome.tsx(535,64): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/SellerHome.tsx(538,119): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/TrustScoreDetails.tsx(32,56): error TS2339: Property 'is_market_trade' does not exist on type 'Booking'.
+src/pages/user/TrustScoreDetails.tsx(32,77): error TS2339: Property 'isMarketTrade' does not exist on type 'Booking'.
+src/pages/user/TrustScoreDetails.tsx(37,96): error TS2551: Property 'totalPrice' does not exist on type 'Booking'. Did you mean 'total_price'?
+src/pages/user/TrustScoreDetails.tsx(40,97): error TS2551: Property 'totalPrice' does not exist on type 'Booking'. Did you mean 'total_price'?
+src/pages/user/TrustScoreDetails.tsx(43,47): error TS2339: Property 'totalPrice' does not exist on type 'MarketplaceOffer'.
+src/pages/user/TrustScoreDetails.tsx(43,63): error TS2339: Property 'total_price' does not exist on type 'MarketplaceOffer'.
+src/pages/user/TrustScoreDetails.tsx(48,72): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/pages/user/TrustScoreDetails.tsx(58,37): error TS2551: Property 'createdAt' does not exist on type 'Booking'. Did you mean 'created_at'?
+src/pages/user/TrustScoreDetails.tsx(58,52): error TS2339: Property 'date' does not exist on type 'Booking'.
+src/pages/user/TrustScoreDetails.tsx(74,36): error TS2551: Property 'created_at' does not exist on type 'MarketplaceOffer'. Did you mean 'createdAt'?
+src/pages/user/TrustScoreDetails.tsx(76,25): error TS2339: Property 'updated_at' does not exist on type 'MarketplaceOffer'.
+src/pages/user/TrustScoreDetails.tsx(76,49): error TS2339: Property 'updated_at' does not exist on type 'MarketplaceOffer'.
+src/pages/user/TrustScoreDetails.tsx(77,25): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/pages/user/TrustScoreDetails.tsx(77,31): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/pages/user/TrustScoreDetails.tsx(85,39): error TS2345: Argument of type 'MarketplaceOffer[]' is not assignable to parameter of type 'MarketplaceOrder[]'.
+  Type 'MarketplaceOffer' is missing the following properties from type 'MarketplaceOrder': unitPrice, totalPrice
+src/pages/user/UserHome.tsx(22,47): error TS2339: Property 'withdrawRewards' does not exist on type 'AuthState'.
+src/pages/user/UserHome.tsx(76,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'SetStateAction<null>'.
+src/pages/user/UserHome.tsx(84,24): error TS2532: Object is possibly 'undefined'.
+src/pages/user/UserHome.tsx(94,35): error TS7006: Parameter 'booking' implicitly has an 'any' type.
+src/pages/user/UserHome.tsx(95,34): error TS2345: Argument of type '{ id: any; waste_type: any; actual_weight_kg: any; total_price: any; }' is not assignable to parameter of type 'Booking'.
+  Type '{ id: any; waste_type: any; actual_weight_kg: any; total_price: any; }' is missing the following properties from type 'Booking': user_id, bags, fee, estate, and 7 more.
+src/pages/user/UserHome.tsx(139,27): error TS7006: Parameter 'count' implicitly has an 'any' type.
+src/pages/user/UserHome.tsx(174,30): error TS2339: Property 'avatar' does not exist on type 'Profile'.
+src/pages/user/UserHome.tsx(179,128): error TS2339: Property 'name' does not exist on type 'Profile'.
+src/pages/user/UserHome.tsx(344,30): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/UserHome.tsx(347,109): error TS2551: Property 'wasteType' does not exist on type 'Booking'. Did you mean 'waste_type'?
+src/pages/user/WithdrawalPage.tsx(18,35): error TS2339: Property 'withdrawRewards' does not exist on type 'AuthState'.
+src/pages/user/WithdrawalPage.tsx(97,46): error TS2345: Argument of type '{ id: string; name: string; icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>; color: string; bg: string; description: string; }' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type '{ id: string; name: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; color: string; bg: string; description: string; }' provides no match for the signature '(prevState: null): null'.
+src/pages/user/WithdrawalPage.tsx(120,54): error TS2339: Property 'bg' does not exist on type 'never'.
+src/pages/user/WithdrawalPage.tsx(120,67): error TS2339: Property 'color' does not exist on type 'never'.
+src/pages/user/WithdrawalPage.tsx(121,29): error TS2339: Property 'icon' does not exist on type 'never'.
+src/pages/user/WithdrawalPage.tsx(125,95): error TS2339: Property 'name' does not exist on type 'never'.
+src/pages/user/WithdrawalPage.tsx(139,35): error TS2345: Argument of type 'number | ""' is not assignable to parameter of type 'SetStateAction<number>'.
+  Type 'string' is not assignable to type 'SetStateAction<number>'.
+src/pages/user/WithdrawalPage.tsx(153,29): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/WithdrawalPage.tsx(160,41): error TS2339: Property 'id' does not exist on type 'never'.
+src/pages/user/WithdrawalPage.tsx(199,71): error TS18047: 'method' is possibly 'null'.
+src/sw.ts(5,23): error TS2339: Property '__WB_MANIFEST' does not exist on type 'Window & typeof globalThis'.
+src/sw.ts(10,14): error TS2339: Property 'data' does not exist on type 'Event'.
+src/sw.ts(16,24): error TS2339: Property 'data' does not exist on type 'Event'.
+src/sw.ts(33,11): error TS2339: Property 'waitUntil' does not exist on type 'Event'.
+src/sw.ts(34,12): error TS2339: Property 'registration' does not exist on type 'Window & typeof globalThis'.
+src/sw.ts(43,9): error TS2339: Property 'notification' does not exist on type 'Event'.
+src/sw.ts(45,27): error TS2339: Property 'notification' does not exist on type 'Event'.
+src/sw.ts(47,9): error TS2339: Property 'waitUntil' does not exist on type 'Event'.
+src/sw.ts(48,5): error TS2304: Cannot find name 'clients'.
+src/sw.ts(48,75): error TS7006: Parameter 'windowClients' implicitly has an 'any' type.
+src/sw.ts(56,11): error TS2304: Cannot find name 'clients'.
+src/sw.ts(57,16): error TS2304: Cannot find name 'clients'.
+src/sw.ts(66,10): error TS2339: Property 'skipWaiting' does not exist on type 'Window & typeof globalThis'.

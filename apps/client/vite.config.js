@@ -21,9 +21,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.png', 'icons/*.png'],
       manifest: {
-        name: 'CleanFlow Client',
-        short_name: 'CleanFlow',
-        description: 'CleanFlow Client PWA for households',
+        name: 'Klinflow Client',
+        short_name: 'Klinflow',
+        description: 'Klinflow Client PWA for households',
         theme_color: '#00A651',
         background_color: '#ffffff',
         display: 'standalone',

@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@klinflow/core": ["../core/src/index.ts"],
+      "@klinflow/types": ["../types/src/index.ts"],
+      "@klinflow/constants": ["../constants/src/index.ts"],
+      "@klinflow/supabase": ["../supabase/src/index.ts"]
+    }
+  },
+  "references": [
+    { "path": "../core" },
+    { "path": "../types" },
+    { "path": "../constants" },
+    { "path": "../supabase" }
+  ],
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -18,9 +18,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'CleanFlow Business', // Normalized name
+        name: 'Klinflow Business', // Normalized name
         short_name: 'CF Business',
-        description: 'CleanFlow Business PWA for companies and recyclers',
+        description: 'Klinflow Business PWA for companies and recyclers',
         theme_color: '#00A651',
         background_color: '#ffffff',
         display: 'standalone',

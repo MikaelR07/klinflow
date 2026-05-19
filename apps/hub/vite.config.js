@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'CleanFlow Hub',
+        name: 'Klinflow Hub',
         short_name: 'CF Hub',
-        description: 'CleanFlow Hub PWA for material processing and inventory audit',
+        description: 'Klinflow Hub PWA for material processing and inventory audit',
         theme_color: '#00A651',
         background_color: '#ffffff',
         display: 'standalone',

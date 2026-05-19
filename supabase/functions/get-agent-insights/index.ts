@@ -1,5 +1,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
+import { getEnv, validateEnv } from '../_shared/env.ts';
+
+const PayloadSchema = z.object({
+  agent_id: z.string().uuid()
+});
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,12 +18,21 @@ serve(async (req) => {
   }
 
   try {
+    validateEnv(['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
+
     const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      getEnv('SUPABASE_URL'),
+      getEnv('SUPABASE_SERVICE_ROLE_KEY')
     )
 
-    const { agent_id } = await req.json()
+    const body = await req.json();
+    const parseResult = PayloadSchema.safeParse(body);
+    
+    if (!parseResult.success) {
+      throw new Error(`Invalid payload: ${parseResult.error.message}`);
+    }
+    
+    const { agent_id } = parseResult.data;
 
     // 1. Analyze Market Trends (Most popular material today)
     const { data: popularMaterial } = await supabase

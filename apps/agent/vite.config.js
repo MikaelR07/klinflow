@@ -21,9 +21,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.png', 'icons/*.png'],
       manifest: {
-        name: 'CleanFlow Agent',
-        short_name: 'CF Agent',
-        description: 'CleanFlow Agent PWA for waste collectors',
+        name: 'Klinflow Agent',
+        short_name: 'Klinflow',
+        description: 'Klinflow Agent PWA for waste collectors',
         theme_color: '#00A651',
         background_color: '#0f172a',
         display: 'standalone',

@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "noEmit": true,
+    "composite": false,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@klinflow/core": ["../../packages/core/src/index.ts"],
+      "@klinflow/ui": ["../../packages/ui/src/index.ts"],
+      "@klinflow/constants": ["../../packages/constants/src/index.ts"],
+      "@klinflow/supabase": ["../../packages/supabase/src/index.ts"],
+      "@klinflow/types": ["../../packages/types/src/index.ts"]
+    }
+  },
+  "references": [
+    { "path": "../../packages/core" },
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/constants" },
+    { "path": "../../packages/supabase" },
+    { "path": "../../packages/types" }
+  ],
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

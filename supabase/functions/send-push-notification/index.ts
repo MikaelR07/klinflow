@@ -1,23 +1,37 @@
 import { serve } from "https://deno.land/std@0.131.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import webpush from "https://esm.sh/web-push"
+import { getEnv, validateEnv } from '../_shared/env.ts'
+import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
 
 // ── ENVIRONMENT VARIABLES ──
-// These must be set in your Supabase Dashboard under Settings > Edge Functions
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-const VAPID_PUBLIC_KEY = Deno.env.get('VAPID_PUBLIC_KEY')!
-const VAPID_PRIVATE_KEY = Deno.env.get('VAPID_PRIVATE_KEY')!
+validateEnv(['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'VAPID_PUBLIC_KEY', 'VAPID_PRIVATE_KEY'])
+
+const SUPABASE_URL = getEnv('SUPABASE_URL')
+const SUPABASE_SERVICE_ROLE_KEY = getEnv('SUPABASE_SERVICE_ROLE_KEY')
+const VAPID_PUBLIC_KEY = getEnv('VAPID_PUBLIC_KEY')
+const VAPID_PRIVATE_KEY = getEnv('VAPID_PRIVATE_KEY')
 
 // Initialize Supabase Client
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 // Initialize Web Push
 webpush.setVapidDetails(
-  'mailto:support@cleanflow.ke',
+  'mailto:support@klinflow.ke',
   VAPID_PUBLIC_KEY,
   VAPID_PRIVATE_KEY
 )
+
+const NotificationPayloadSchema = z.object({
+  notification: z.object({
+    id: z.string().optional(),
+    title: z.string(),
+    body: z.string(),
+    metadata: z.any().optional().nullable()
+  }),
+  target_user: z.string().uuid().optional().nullable(),
+  target_role: z.string().optional().nullable()
+});
 
 serve(async (req) => {
   // ── AUTH CHECK (Internal Only) ──
@@ -28,7 +42,14 @@ serve(async (req) => {
   }
 
   try {
-    const { notification, target_user, target_role } = await req.json()
+    const body = await req.json();
+    const parseResult = NotificationPayloadSchema.safeParse(body);
+    
+    if (!parseResult.success) {
+      throw new Error(`Invalid push notification payload: ${parseResult.error.message}`);
+    }
+    
+    const { notification, target_user, target_role } = parseResult.data;
     console.log(`[PushEngine] Processing: ${notification.title} for ${target_user || target_role}`)
 
     let targetUserIds: string[] = []
@@ -39,9 +60,32 @@ serve(async (req) => {
     } else if (target_role && target_role !== 'all') {
       const { data: profiles } = await supabase
         .from('profiles')
-        .select('id')
+        .select('id, agent_account_type, company_id')
         .eq('role', target_role)
-      targetUserIds = profiles?.map(p => p.id) || []
+      
+      let allRoleIds = profiles?.map(p => p.id) || [];
+      
+      // Material Filtering for Agents
+      if (target_role === 'agent' && notification.metadata?.wasteType) {
+         const wasteType = notification.metadata.wasteType;
+         const { data: configs } = await supabase.from('agent_configurations').select('agent_id, accepted_materials');
+         
+         const validConfigMap = new Map();
+         if (configs) {
+             configs.forEach((c: any) => {
+                 validConfigMap.set(c.agent_id, c.accepted_materials);
+             });
+         }
+         
+         allRoleIds = profiles?.filter(p => {
+             const targetAgentId = (p.agent_account_type === 'fleet_driver' && p.company_id) ? p.company_id : p.id;
+             const accepted = validConfigMap.get(targetAgentId) || [];
+             if (accepted.length === 0) return true; // default: accept all
+             return accepted.includes(wasteType);
+         }).map(p => p.id) || [];
+      }
+      
+      targetUserIds = allRoleIds;
     } else if (target_role === 'all') {
       const { data: profiles } = await supabase
         .from('profiles')

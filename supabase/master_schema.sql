@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════
--- CleanFlow KE — Monolithic Master Supabase Schema V2
+-- Klinflow KE — Monolithic Master Supabase Schema V2
 -- INSTRUCTIONS: Run this entire file in: Supabase Dashboard → SQL Editor
 -- WARNING: This will drop existing tables to apply the fresh architecture.
 -- ═══════════════════════════════════════════════════════════════

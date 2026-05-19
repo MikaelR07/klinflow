@@ -1,22 +1,26 @@
 {
-  "name": "@cleanflow/ui",
+  "name": "@klinflow/ui",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "main": "./src/index.js",
+  "main": "./src/index.ts",
   "exports": {
-    ".": "./src/index.js",
-    "./components/*": "./src/components/*.jsx",
+    ".": "./src/index.ts",
+    "./components/*": "./src/components/*.tsx",
     "./src/*": "./src/*"
   },
   "dependencies": {
-    "@cleanflow/core": "*",
+    "@klinflow/core": "*",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.8.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-leaflet": "^5.0.0",
     "sonner": "^2.0.7",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.2",
+    "zod": "^4.4.3"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit"
   }
 }

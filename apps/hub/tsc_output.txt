@@ -1,0 +1,21 @@
+src/main.tsx(4,8): error TS2882: Cannot find module or type declarations for side-effect import of './index.css'.
+src/main.tsx(6,28): error TS2307: Cannot find module 'virtual:pwa-register' or its corresponding type declarations.
+src/pages/HubDashboard.tsx(174,27): error TS2345: Argument of type '{ id: string; agent: string; profile_picture_url: string | null | undefined; weight: string; status: string; }[]' is not assignable to parameter of type 'SetStateAction<HubAlert[]>'.
+  Type '{ id: string; agent: string; profile_picture_url: string | null | undefined; weight: string; status: string; }[]' is not assignable to type 'HubAlert[]'.
+    Type '{ id: string; agent: string; profile_picture_url: string | null | undefined; weight: string; status: string; }' is not assignable to type 'HubAlert'.
+      Types of property 'profile_picture_url' are incompatible.
+        Type 'string | null | undefined' is not assignable to type 'string | undefined'.
+          Type 'null' is not assignable to type 'string | undefined'.
+src/pages/HubDashboard.tsx(196,106): error TS18047: 'profile' is possibly 'null'.
+src/pages/HubDashboard.tsx(205,38): error TS18047: 'profile' is possibly 'null'.
+src/pages/HubDashboard.tsx(266,15): error TS2322: Type '{ children: Element; initial: { height: number; opacity: number; }; animate: { height: string; opacity: number; }; exit: { height: number; opacity: number; }; className: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+src/pages/IncomingDrops.tsx(47,68): error TS7006: Parameter 'agent' implicitly has an 'any' type.
+src/pages/Inventory.tsx(188,13): error TS2322: Type '{ children: Element[]; key: string; initial: { opacity: number; y: number; }; animate: { opacity: number; y: number; }; exit: { opacity: number; y: number; }; className: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+src/pages/Inventory.tsx(242,15): error TS2322: Type '{ children: Element[]; key: string; initial: { opacity: number; x: number; }; animate: { opacity: number; x: number; }; exit: { opacity: number; x: number; }; className: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+src/pages/Inventory.tsx(282,15): error TS2322: Type '{ children: Element[]; key: string; initial: { opacity: number; x: number; }; animate: { opacity: number; x: number; }; exit: { opacity: number; x: number; }; className: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+src/pages/Inventory.tsx(330,15): error TS2322: Type '{ children: Element[]; key: string; initial: { opacity: number; y: number; }; animate: { opacity: number; y: number; }; exit: { opacity: number; y: number; }; className: string; }' is not assignable to type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & HTMLAttributesWithoutMotionProps<unknown, unknown> & MotionProps & RefAttributes<unknown>'.

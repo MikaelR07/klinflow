@@ -1,0 +1,47 @@
+src/debug_from.ts(6,5): error TS2322: Type 'string' is not assignable to type 'PostgrestQueryBuilder<{ PostgrestVersion: "12"; }, { Tables: { profiles: { Row: { id: string; email: string | null; name: string | null; phone: string | null; role: string | null; wallet_balance: number; reward_points: number; ... 24 more ...; updated_at: string | null; }; Insert: { ...; }; Update: { ...; }; Relatio...'.
+src/debug_schema.ts(61,5): error TS2322: Type '"debug_tables_result"' is not assignable to type 'true'.
+src/debug_schema.ts(62,5): error TS2322: Type '"debug_views_result"' is not assignable to type 'true'.
+src/debug_schema.ts(63,5): error TS2322: Type '"debug_functions_result"' is not assignable to type 'true'.
+src/debug_schema.ts(64,5): error TS2322: Type '"debug_enums_result"' is not assignable to type 'true'.
+src/debug_schema2.ts(31,5): error TS2322: Type '"res_profiles"' is not assignable to type 'true'.
+src/debug_schema2.ts(32,5): error TS2322: Type '"res_bookings"' is not assignable to type 'true'.
+src/debug_schema2.ts(33,5): error TS2322: Type '"res_notifications"' is not assignable to type 'true'.
+src/debug_schema2.ts(34,5): error TS2322: Type '"res_listings"' is not assignable to type 'true'.
+src/debug_schema2.ts(35,5): error TS2322: Type '"res_offers"' is not assignable to type 'true'.
+src/debug_schema2.ts(36,5): error TS2322: Type '"res_orders"' is not assignable to type 'true'.
+src/debug_schema2.ts(37,5): error TS2322: Type '"res_assets"' is not assignable to type 'true'.
+src/debug_schema2.ts(38,5): error TS2322: Type '"res_configs"' is not assignable to type 'true'.
+src/debug_schema2.ts(39,5): error TS2322: Type '"res_ledger"' is not assignable to type 'true'.
+src/debug_schema2.ts(40,5): error TS2322: Type '"res_categories"' is not assignable to type 'true'.
+src/debug_schema3.ts(15,5): error TS2322: Type '"row"' is not assignable to type 'true'.
+src/debug_schema3.ts(16,5): error TS2322: Type '"insert"' is not assignable to type 'true'.
+src/debug_schema3.ts(17,5): error TS2322: Type '"update"' is not assignable to type 'true'.
+src/debug_schema3.ts(18,5): error TS2322: Type '"relationships"' is not assignable to type 'true'.
+src/debug_schema4.ts(12,5): error TS2322: Type '"res_public_schema"' is not assignable to type 'true'.
+src/debug_schema4.ts(19,18): error TS2749: 'insertType' refers to a value, but is being used as a type here. Did you mean 'typeof insertType'?
+src/debug_schema5.ts(18,5): error TS2322: Type '"res_agent"' is not assignable to type 'true'.
+src/debug_schema5.ts(21,5): error TS2322: Type '"res_push"' is not assignable to type 'true'.
+src/debug_schema5.ts(24,5): error TS2322: Type '"res_notifications"' is not assignable to type 'true'.
+src/stores/assetStore.ts(81,13): error TS2322: Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 13 more ...; weaver: SelectQueryError<...>; }[]' is not assignable to type 'Asset[]'.
+  Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 13 more ...; weaver: SelectQueryError<...>; }' is not assignable to type 'Asset'.
+    Types of property 'estimated_value' are incompatible.
+      Type 'number | null' is not assignable to type 'number'.
+        Type 'null' is not assignable to type 'number'.
+src/stores/assetStore.ts(104,13): error TS2322: Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 11 more ...; booking: SelectQueryError<...>; }[]' is not assignable to type 'Asset[]'.
+  Type '{ id: string; booking_id: string | null; verifier_id: string | null; weaver_id: string | null; owner_id: string | null; material_type: string; grade: string | null; weight_kg: number; ... 11 more ...; booking: SelectQueryError<...>; }' is not assignable to type 'Asset'.
+    Types of property 'estimated_value' are incompatible.
+      Type 'number | null' is not assignable to type 'number'.
+        Type 'null' is not assignable to type 'number'.
+src/stores/assetStore.ts(183,9): error TS2561: Object literal may only specify known properties, but 'p_booking_uuid' does not exist in type '{ p_booking_id: string; p_weaver_payout: number; p_agent_payout: number; }'. Did you mean to write 'p_booking_id'?
+src/stores/bookingStore.ts(147,23): error TS2322: Type '{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }[]' is not assignable to type 'Booking[]'.
+  Type '{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }' is not assignable to type 'Booking'.
+    Types of property 'latitude' are incompatible.
+      Type 'number | null' is not assignable to type 'number | undefined'.
+        Type 'null' is not assignable to type 'number | undefined'.
+src/stores/bookingStore.ts(164,3): error TS2322: Type '(booking: any) => Promise<{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }>' is not assignable to type '(booking: any) => Promise<Booking>'.
+  Type 'Promise<{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }>' is not assignable to type 'Promise<Booking>'.
+    Type '{ id: string; user_id: string; agent_id: string | null; status: string; waste_type: string | null; bags: number; actual_weight_kg: number; estate: string | null; time_slot: string | null; ... 17 more ...; updated_at: string | null; }' is not assignable to type 'Booking'.
+      Types of property 'latitude' are incompatible.
+        Type 'number | null' is not assignable to type 'number | undefined'.
+          Type 'null' is not assignable to type 'number | undefined'.
+src/stores/bookingStore.ts(268,9): error TS2561: Object literal may only specify known properties, but 'p_booking_uuid' does not exist in type '{ p_booking_id: string; }'. Did you mean to write 'p_booking_id'?

@@ -1,20 +1,22 @@
 {
-  "name": "@cleanflow/hub",
+  "name": "@klinflow/hub",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@cleanflow/core": "*",
-    "@cleanflow/ui": "*",
+    "@klinflow/core": "*",
+    "@klinflow/ui": "*",
     "framer-motion": "^10.12.16",
     "lucide-react": "^0.263.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",

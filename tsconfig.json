@@ -1,0 +1,16 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/types" },
+    { "path": "packages/constants" },
+    { "path": "packages/supabase" },
+    { "path": "packages/core" },
+    { "path": "packages/ui" },
+    { "path": "apps/client" },
+    { "path": "apps/agent" },
+    { "path": "apps/business" },
+    { "path": "apps/admin" },
+    { "path": "apps/marketing" },
+    { "path": "apps/hub" }
+  ]
+}

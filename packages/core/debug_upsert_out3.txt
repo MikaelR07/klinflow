@@ -1,0 +1,2 @@
+src/stores/authStore.ts(442,28): error TS1005: ')' expected.
+src/stores/authStore.ts(571,35): error TS1005: ')' expected.

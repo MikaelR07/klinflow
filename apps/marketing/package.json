@@ -7,11 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@cleanflow/core": "*",
-    "@cleanflow/ui": "*",
+    "@klinflow/core": "*",
+    "@klinflow/ui": "*",
     "framer-motion": "^11.0.3",
     "lucide-react": "^1.8.0",
     "react": "^19.2.4",

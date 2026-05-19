@@ -1,0 +1,8 @@
+/* 
+ * Admin Custom Root Styling — scales base font size down to achieve the premium, 
+ * compact and dense look matching the Company Admin layout in the Agent app.
+ */
+
+html {
+  font-size: 87.5% !important; /* Reduces base size from 16px to 14px for uniform desktop density */
+}

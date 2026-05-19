@@ -1,0 +1,203 @@
+import { useEffect, useState, lazy, Suspense } from 'react';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Home, Briefcase, Brain, Wallet, MoreHorizontal, Package, Search } from 'lucide-react';
+
+// Shared Packages
+import { useAuthStore, useThemeStore, useNotificationStore, usePWA, ROLES, useAgentStore, useMarketplaceStore } from '@klinflow/core';
+import { Navbar, BottomNav, PWAInstallModal, ProtectedRoute, LoadingScreen } from '@klinflow/ui';
+import { Toaster } from 'sonner';
+
+// LAZY LOADED PAGES
+const AgentHome = lazy(() => import('./pages/agent/AgentHome'));
+const AvailableJobs = lazy(() => import('./pages/agent/AvailableJobs'));
+const EarningsPage = lazy(() => import('./pages/agent/EarningsPage'));
+const MyRoutes = lazy(() => import('./pages/agent/MyRoutes'));
+const ReviewsPage = lazy(() => import('./pages/agent/ReviewsPage'));
+const NavigateJobPage = lazy(() => import('./pages/agent/NavigateJobPage'));
+const AgentWarehouse = lazy(() => import('./pages/agent/AgentWarehouse'));
+const AgentSellStock = lazy(() => import('./pages/agent/AgentSellStock'));
+const Sourcing = lazy(() => import('./pages/agent/Sourcing'));
+const MyTrades = lazy(() => import('./pages/agent/MyTrades'));
+const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
+
+// Settings Pages
+const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
+const AgentConfigurationPage = lazy(() => import('./pages/settings/AgentConfigurationPage'));
+const ProfilePage = lazy(() => import('./pages/settings/ProfilePage'));
+const NotificationsPage = lazy(() => import('./pages/settings/NotificationsPage'));
+const NotificationsFeed = lazy(() => import('./pages/agent/NotificationsFeed'));
+const PrivacySecurityPage = lazy(() => import('./pages/settings/PrivacySecurityPage'));
+const SupportPage = lazy(() => import('./pages/settings/SupportPage'));
+const FeedbackPage = lazy(() => import('./pages/settings/FeedbackPage'));
+const StaffApplication = lazy(() => import('./pages/settings/StaffApplication'));
+
+import Welcome from './pages/auth/Welcome';
+import RoleSelection from './pages/auth/RoleSelection';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+
+// Admin Pages
+import AdminLayout from './pages/admin/AdminLayout';
+const CompanyAdminDashboard = lazy(() => import('./pages/admin/CompanyAdminDashboard'));
+const FleetManagement = lazy(() => import('./pages/admin/FleetManagement'));
+const FleetFinance = lazy(() => import('./pages/admin/FleetFinance'));
+
+function MobileLayout() {
+  const { availableJobs } = useAgentStore();
+  const { listings, fetchListings } = useMarketplaceStore();
+  const { profile } = useAuthStore();
+  
+  const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
+
+  useEffect(() => { fetchListings(); }, []);
+
+  const AGENT_NAV = [
+    { path: '/', icon: Home, label: 'Home' },
+    { path: '/jobs', icon: Briefcase, label: 'Jobs', badge: availableJobs.length, badgeColor: 'bg-blue-500 shadow-sm shadow-blue-500/30' },
+    { path: '/warehouse', icon: Package, label: 'Warehouse' },
+    { path: '/sourcing', icon: Search, label: 'MarketPlace', badge: listings.length, badgeColor: 'bg-emerald-500 shadow-sm shadow-emerald-500/30' },
+    { path: '/settings', icon: MoreHorizontal, label: 'More' },
+  ];
+
+  return (
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-900">
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] pb-[calc(env(safe-area-inset-bottom,0px)+6rem)] px-1">
+        <Suspense fallback={<LoadingScreen message="Loading..." />}>
+          <Outlet />
+        </Suspense>
+      </div>
+      <div className="fixed bottom-0 left-0 right-0 z-[100] max-w-lg mx-auto pb-[env(safe-area-inset-bottom,0px)] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800">
+        <BottomNav items={AGENT_NAV} />
+      </div>
+    </div>
+  );
+}
+
+function DynamicRoleLayout() {
+  const { profile } = useAuthStore();
+  if (profile?.agentAccountType === 'company_admin') {
+    return <AdminLayout />;
+  }
+  return <MobileLayout />;
+}
+
+function RoleBasedIndex() {
+  const { profile } = useAuthStore();
+  if (profile?.agentAccountType === 'company_admin') {
+    return <CompanyAdminDashboard />;
+  }
+  return <AgentHome />;
+}
+
+function ProtectedLayout() {
+  return (
+    <ProtectedRoute>
+      <Outlet />
+    </ProtectedRoute>
+  );
+}
+
+export default function App() {
+  const { role, isAuthenticated, checkAppRole, userId, isInitializing, initializeAuth, profile } = useAuthStore();
+  const { fetchNotifications, subscribeToRealtime } = useNotificationStore();
+  const { subscribeToJobs, cleanupJobs, fetchAgentConfig } = useAgentStore();
+  const { isInstallable, triggerInstall } = usePWA();
+  const [showInstallModal, setShowInstallModal] = useState(false);
+
+  useEffect(() => {
+    const hasPrompted = sessionStorage.getItem('pwa_prompted');
+    if (isInstallable && !hasPrompted) {
+      setShowInstallModal(true);
+      sessionStorage.setItem('pwa_prompted', 'true');
+    }
+  }, [isInstallable]);
+
+  useEffect(() => {
+    initializeAuth();
+  }, []);
+
+  // 1. Stable, global Notification real-time subscription (Decoupled from online/offline job toggles)
+  useEffect(() => {
+    if (isAuthenticated && userId) {
+      checkAppRole('agent');
+      fetchNotifications(userId, role);
+      subscribeToRealtime(userId, role, profile?.agentAccountType || undefined);
+      fetchAgentConfig(); // Ensure agent config is loaded globally on login
+    }
+  }, [isAuthenticated, checkAppRole, userId, role, profile?.agentAccountType, fetchNotifications, subscribeToRealtime, fetchAgentConfig]);
+
+  // 2. Offline/Online-status based Jobs (Dispatch/Booking) subscription
+  useEffect(() => {
+    if (isAuthenticated && userId) {
+      if (profile?.isOnline) {
+        subscribeToJobs();
+      } else {
+        cleanupJobs();
+      }
+    }
+
+    return () => {
+      cleanupJobs();
+    };
+  }, [isAuthenticated, userId, profile?.isOnline, subscribeToJobs, cleanupJobs]);
+
+  if (isInitializing) {
+    return <LoadingScreen message="Syncing Dispatch..." />;
+  }
+
+  return (
+    <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-900 transition-colors duration-200">
+      <Routes>
+        <Route path="/welcome" element={isAuthenticated ? <Navigate to="/" replace /> : <Welcome />} />
+        <Route path="/role-selection" element={isAuthenticated ? <Navigate to="/" replace /> : <RoleSelection />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
+        <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} />
+
+        <Route element={<ProtectedLayout />}>
+          <Route path="/hygenex" element={<HygeneXPage />} />
+          <Route element={<DynamicRoleLayout />}>
+            <Route path="/" element={<RoleBasedIndex />} />
+            <Route path="/jobs" element={<AvailableJobs />} />
+            <Route path="/jobs/navigate/:id" element={<NavigateJobPage />} />
+            <Route path="/routes" element={<MyRoutes />} />
+            <Route path="/warehouse" element={<AgentWarehouse />} />
+            <Route path="/warehouse/sell" element={<AgentSellStock />} />
+            <Route path="/sourcing" element={<Sourcing />} />
+            <Route path="/trades" element={<MyTrades />} />
+            <Route path="/earnings" element={<EarningsPage />} />
+            <Route path="/reviews" element={<ReviewsPage />} />
+            <Route path="/notifications" element={<NotificationsFeed />} />
+            
+            <Route path="/admin/agents" element={<FleetManagement />} />
+            <Route path="/admin/earnings" element={<EarningsPage />} />
+            <Route path="/admin/finance" element={<FleetFinance />} />
+
+            <Route path="/settings">
+              <Route index element={<SettingsMenu />} />
+              <Route path="configuration" element={<AgentConfigurationPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="notifications" element={<NotificationsPage />} />
+              <Route path="privacy" element={<PrivacySecurityPage />} />
+              <Route path="support" element={<SupportPage />} />
+              <Route path="feedback" element={<FeedbackPage />} />
+              <Route path="staff-application" element={<StaffApplication />} />
+            </Route>
+
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Route>
+      </Routes>
+
+      <PWAInstallModal 
+        isOpen={showInstallModal} 
+        onClose={() => setShowInstallModal(false)}
+        onInstall={() => {
+          setShowInstallModal(false);
+          triggerInstall();
+        }}
+      />
+
+      <Toaster position="top-center" richColors />
+    </div>
+  );
+}

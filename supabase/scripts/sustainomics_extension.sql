@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════
--- CleanFlow KE — Sustainomics Extension (Rewards & Subscriptions)
+-- Klinflow KE — Sustainomics Extension (Rewards & Subscriptions)
 -- Description: Blueprint for financial infrastructure on Supabase.
 -- ════════════════════════════════════════════════════════════════
 

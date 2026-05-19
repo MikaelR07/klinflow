@@ -33,7 +33,7 @@ BEGIN
         v_cashback_percentage := 10.00;
     END IF;
 
-    -- 3. Calculate the Splits (CleanFlow takes 10%)
+    -- 3. Calculate the Splits (Klinflow takes 10%)
     v_platform_cut := p_estimated_value * 0.10;
     v_client_cashback := p_estimated_value * (v_cashback_percentage / 100.0);
     

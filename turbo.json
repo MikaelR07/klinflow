@@ -11,6 +11,10 @@
     },
     "lint": {
       "dependsOn": ["^build"]
+    },
+    "type-check": {
+      "dependsOn": ["^build"],
+      "cache": true
     }
   }
 }
