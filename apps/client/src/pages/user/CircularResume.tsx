@@ -10,7 +10,9 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAuthStore, useBookingStore, useMarketplaceStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 
 export default function CircularResume() {
   const navigate = useNavigate();
@@ -77,7 +79,7 @@ export default function CircularResume() {
         </div>
       </div>
 
-      <main className="flex-1 px-1 pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-24 max-w-lg mx-auto w-full space-y-4">
+      <main className="flex-1 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-24 max-w-lg mx-auto w-full space-y-4">
         
         {/* ── THE PROFESSIONAL ID CARD ── */}
         <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-5 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">

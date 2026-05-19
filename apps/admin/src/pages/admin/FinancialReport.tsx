@@ -6,7 +6,7 @@ import {
   Calendar, Building2, UserCheck, Briefcase
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
 
 export default function FinancialReport() {
   const navigate = useNavigate();

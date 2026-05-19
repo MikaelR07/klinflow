@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useBookingStore } from '@klinflow/core';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
 import { Star, X, Heart, Scale, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 

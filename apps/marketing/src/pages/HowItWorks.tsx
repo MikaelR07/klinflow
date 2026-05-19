@@ -4,7 +4,7 @@ import {
   Warehouse, Zap, BarChart3, LockKeyhole,
   CheckCircle2, ArrowRight
 } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import Layout from '../layouts/Layout';
 
 const technicalSpecs = [

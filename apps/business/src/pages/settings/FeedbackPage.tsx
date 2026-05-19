@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFeedbackStore, useAuthStore } from '@klinflow/core';
+import { useFeedbackStore } from '@klinflow/core/stores/feedbackStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { ArrowLeft, Loader2, Star, Send } from 'lucide-react';
 import { toast } from 'sonner';
 

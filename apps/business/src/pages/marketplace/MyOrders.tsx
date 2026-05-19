@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Package, Clock, CheckCircle2, XCircle, ShoppingBag, Loader2, Truck } from 'lucide-react';
-import { useMarketplaceStore } from '@klinflow/core';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 
 const STATUS_CONFIG = {
   pending:   { label: 'Pending',   color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',   icon: Clock },

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, Shield, Lock, Trash2, Smartphone } from 'lucide-react';
-import { useAuthStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { toast } from 'sonner';
 
 export default function PrivacySecurityPage() {

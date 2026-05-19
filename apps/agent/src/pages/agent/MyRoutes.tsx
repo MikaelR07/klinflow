@@ -22,7 +22,8 @@ import {
 import { MapContainer, TileLayer, Marker, Polyline, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { useNavigate } from 'react-router-dom';
-import { useAgentStore, useAuthStore } from '@klinflow/core';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { toast } from 'sonner';
 
 // ── CUSTOM ICONS ──

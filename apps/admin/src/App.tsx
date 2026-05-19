@@ -3,8 +3,14 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { LayoutDashboard, MessageSquare, Brain, MapPin, Settings, Users } from 'lucide-react';
 
 // Shared Packages
-import { useAuthStore, useNotificationStore, useSystemStore, ROLES } from '@klinflow/core';
-import { Navbar, AdminSidebar, ProtectedRoute, BottomNav } from '@klinflow/ui';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { useSystemStore } from '@klinflow/core/stores/systemStore';
+import { ROLES } from '@klinflow/constants';
+import Navbar from '@klinflow/ui/components/Navbar';
+import AdminSidebar from '@klinflow/ui/components/AdminSidebar';
+import ProtectedRoute from '@klinflow/ui/components/ProtectedRoute';
+import BottomNav from '@klinflow/ui/components/BottomNav';
 
 import { Toaster } from 'sonner';
 

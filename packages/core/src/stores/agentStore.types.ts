@@ -1,7 +1,7 @@
 import { Database } from '@klinflow/supabase';
 
 export type AgentConfiguration = Database['public']['Tables']['agent_configurations']['Row'];
-export type Profile = Database['public']['Tables']['profiles']['Row'];
+export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 export type Booking = Database['public']['Tables']['bookings']['Row'];
 
 export interface AgentJob {
@@ -58,6 +58,7 @@ export interface Earnings {
   totalInvestment?: number;
   inventoryValue?: number;
   totalKg?: number;
+  todayKg?: number;
   thisWeekKg?: number;
   residentPickups?: number;
   marketTrades?: number;
@@ -89,7 +90,8 @@ export interface AgentStore {
   isLoadingJobs: boolean;
   currentInsightIndex: number;
   jobSubscription: { unsubscribe: () => void } | null;
-  fleetDrivers: Partial<Profile>[];
+  reviewSubscription: { unsubscribe: () => void } | null;
+  fleetDrivers: Partial<ProfileRow>[];
   isLoadingFleet: boolean;
   fetchFleetDrivers: () => Promise<void>;
   agentConfig: AgentConfiguration | null;

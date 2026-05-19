@@ -10,7 +10,9 @@ import {
   Scale,
   Loader2
 } from 'lucide-react';
-import { supabase, useAuthStore, normalizeKeys, Asset, Profile } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { normalizeKeys, Asset, Profile } from '@klinflow/core/validation';
 
 interface IncomingDrop {
   id: string;

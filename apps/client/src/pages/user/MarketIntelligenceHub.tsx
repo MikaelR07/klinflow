@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePriceStore } from '@klinflow/core';
+import { usePriceStore } from '@klinflow/core/stores/priceStore';
 
 const COMMODITY_TRENDS = [
   { id: 'pet', label: 'PET Plastic', price: 22, change: '+5.4%', trend: 'up', demand: 'High' },

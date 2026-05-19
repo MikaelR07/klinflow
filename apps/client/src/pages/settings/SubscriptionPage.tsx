@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, ArrowLeft, Crown, Zap, Shield, Sparkles, Star } from 'lucide-react';
-import { useAuthStore, SUBSCRIPTION_TIERS } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { SUBSCRIPTION_TIERS } from '@klinflow/core/data/mockData';
 import { toast } from 'sonner';
 
 export default function SubscriptionPage() {

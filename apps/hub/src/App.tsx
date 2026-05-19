@@ -15,7 +15,9 @@ import {
   ShieldAlert
 } from 'lucide-react';
 
-import { useThemeStore, useAuthStore, useNotificationStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { Toaster } from 'sonner';
 import HubDashboard from './pages/HubDashboard';
 import Inventory from './pages/Inventory';

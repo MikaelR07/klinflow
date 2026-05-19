@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useFeedbackStore } from '@klinflow/core';
+import { useFeedbackStore } from '@klinflow/core/stores/feedbackStore';
 import { Star, MessageSquare, Trash2, CalendarClock, User, Briefcase, Truck, Users, LayoutGrid, AlertTriangle, X, UserCheck, Building2, Smartphone } from 'lucide-react';
 import { toast } from 'sonner';
 

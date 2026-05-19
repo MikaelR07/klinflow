@@ -9,7 +9,10 @@ import {
   ArrowLeft, Clock, Package, CheckCircle2, Info, User
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useMarketplaceStore, useAuthStore, supabase, getThumbnailUrl } from '@klinflow/core';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { supabase } from '@klinflow/supabase';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
 import { Virtuoso } from 'react-virtuoso';
 

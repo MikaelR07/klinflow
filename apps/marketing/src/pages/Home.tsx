@@ -8,7 +8,7 @@ import {
   LineChart, User, Building2, Package, Warehouse,
   ExternalLink, Brain
 } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import Layout from '../layouts/Layout';
 import DownloadSection from '../components/DownloadSection';
 import GlassMockup from '../components/GlassMockup';
@@ -25,7 +25,7 @@ const appCards = [
   { 
     title: 'Client Dashboard', 
     desc: 'Household waste management & B2B seller listings.', 
-    img: '/grid/seller-home.png',
+    img: '/grid/seller-home.webp',
     path: '/products/client',
     icon: User,
     color: 'emerald'
@@ -33,7 +33,7 @@ const appCards = [
   { 
     title: 'Agent Terminal', 
     desc: 'Mission control for independent agents and fleet drivers.', 
-    img: '/grid/agent-home.png',
+    img: '/grid/agent-home.webp',
     path: '/products/agent',
     icon: Truck,
     color: 'blue'
@@ -41,7 +41,7 @@ const appCards = [
   { 
     title: 'Fleet Admin', 
     desc: 'B2B management for recycling centers and fleet companies.', 
-    img: '/grid/business-home.png',
+    img: '/grid/business-home.webp',
     path: '/products/fleet',
     icon: Building2,
     color: 'indigo'
@@ -49,7 +49,7 @@ const appCards = [
   { 
     title: 'Hub Command', 
     desc: 'Industrial-grade intake and material processing system.', 
-    img: '/grid/Hub-home.png',
+    img: '/grid/Hub-home.webp',
     path: '/products/hub',
     icon: Warehouse,
     color: 'rose'
@@ -58,18 +58,18 @@ const appCards = [
 
 export default function Home() {
   const { isDarkMode } = useThemeStore();
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<typeof screenshots[0] | null>(null);
 
   const screenshots = [
-    { src: '/grid/agent-home.png', alt: 'Agent Terminal - Tactical Mission Control' },
-    { src: '/grid/seller-home.png', alt: 'Merchant Dashboard - Marketplace Trade Hub' },
-    { src: '/grid/book-pickup.png', alt: 'Resident Terminal - Mission Request Interface' },
-    { src: '/grid/business-home.png', alt: 'B2B Business Portal - Bulk Material Sourcing' },
-    { src: '/grid/Resident-home.png', alt: 'Resident Dashboard - Household Waste Management' },
-    { src: '/grid/Hub-home.png', alt: 'Hub Command Center - Industrial Intake' },
-    { src: '/grid/admin-dashboard.png', alt: 'System Administration - Global Network Stats' },
-    { src: '/grid/company-owner-home.png', alt: 'Fleet Admin - Logistics Company Management' },
-    { src: '/grid/agent-dashboard.png', alt: 'Agent Analytics - Performance & Earnings Tracking' },
+    { src: '/grid/agent-home.webp', alt: 'Agent Terminal - Tactical Mission Control' },
+    { src: '/grid/seller-home.webp', alt: 'Merchant Dashboard - Marketplace Trade Hub' },
+    { src: '/grid/book-pickup.webp', alt: 'Resident Terminal - Mission Request Interface' },
+    { src: '/grid/business-home.webp', alt: 'B2B Business Portal - Bulk Material Sourcing' },
+    { src: '/grid/Resident-home.webp', alt: 'Resident Dashboard - Household Waste Management' },
+    { src: '/grid/Hub-home.webp', alt: 'Hub Command Center - Industrial Intake' },
+    { src: '/grid/admin-dashboard.webp', alt: 'System Administration - Global Network Stats' },
+    { src: '/grid/company-owner-home.webp', alt: 'Fleet Admin - Logistics Company Management' },
+    { src: '/grid/agent-dashboard.webp', alt: 'Agent Analytics - Performance & Earnings Tracking' },
   ];
 
   return (

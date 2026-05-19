@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useAgentStore, useAuthStore, useServiceStore, WASTE_CATEGORIES, getCategoryBySlug, supabase } from '@klinflow/core';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { WASTE_CATEGORIES, getCategoryBySlug } from '@klinflow/core/data/wasteDefinitions';
+import { supabase } from '@klinflow/supabase';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 

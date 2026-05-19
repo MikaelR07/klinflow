@@ -3,7 +3,7 @@
  */
 import { FileText, Download, Calendar, Sparkles, BarChart3, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAdminStore } from '@klinflow/core';
+import { useAdminStore } from '@klinflow/core/stores/adminStore';
 
 const reports = [
   { title: 'Monthly Operations Report', period: 'March 2026', type: 'Operations', date: '2026-04-01', size: '2.4 MB' },

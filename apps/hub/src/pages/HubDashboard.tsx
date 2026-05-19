@@ -15,13 +15,9 @@ import {
   X,
   ChevronDown
 } from 'lucide-react';
-import { 
-  useAuthStore, 
-  supabase,
-  normalizeKeys,
-  Asset,
-  Profile 
-} from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { supabase } from '@klinflow/supabase';
+import { normalizeKeys, Asset, Profile } from '@klinflow/core/validation';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 

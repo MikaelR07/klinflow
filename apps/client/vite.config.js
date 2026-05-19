@@ -55,7 +55,8 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
           supabase: ['@supabase/supabase-js'],
-          ui: ['framer-motion', 'lucide-react', 'leaflet', 'react-leaflet']
+          ui: ['framer-motion', 'lucide-react', 'leaflet', 'react-leaflet'],
+          data: ['recharts', 'zod', 'zustand']
         }
       }
     }

@@ -3,7 +3,7 @@ import {
   Home as HomeIcon, CheckCircle2, ArrowRight, 
   Wallet, Search, Trash2, Sprout, HandCoins
 } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import Layout from '../layouts/Layout';
 
 export default function ForResidents() {

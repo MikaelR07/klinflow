@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, Save } from 'lucide-react';
-import { useAuthStore, ROLES, getBusinessLabel } from '@klinflow/core';
+import { useAuthStore, getBusinessLabel } from '@klinflow/core/stores/authStore';
+import { ROLES } from '@klinflow/constants';
 import { toast } from 'sonner';
 import LocationSelector from '@klinflow/ui/components/LocationSelector';
 

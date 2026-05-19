@@ -10,7 +10,10 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
-import { useAgentStore, useAuthStore, useServiceStore, getThumbnailUrl } from '@klinflow/core';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import type { AgentJob } from '@klinflow/core/stores/agentStore.types';
 import EmptyState from '@klinflow/ui/components/EmptyState';
 import { SkeletonCard } from '@klinflow/ui/components/Skeletons';
@@ -173,11 +176,11 @@ export default function AvailableJobs() {
                       </div>
 
                       {/* Content Sheet */}
-                      <div className="relative -mt-20 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-[2rem] px-3 pt-8 pb-10 space-y-6 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.15)]">
+                      <div className="relative -mt-36 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-[1rem] px-3 pt-4 pb-2 space-y-5 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.15)]">
                         <div className="flex items-center justify-between mb-4">
                           <div>
-                            <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em]">Mission Request</p>
-                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 leading-none">Pickup ID: {job.id.slice(0, 8).toUpperCase()}</p>
+                            <p className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.2em]">Mission Request</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 leading-none">Pickup ID: {job.id.slice(0, 8).toUpperCase()}</p>
                           </div>
                           <div className="text-right">
                              <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-tighter border ${
@@ -194,17 +197,17 @@ export default function AvailableJobs() {
                         <div className="grid grid-cols-3 gap-2">
                           <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
                             <Package className="w-3.5 h-3.5 text-indigo-500 mb-2" />
-                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Material-Type</p>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Material-Type</p>
                             <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{waste?.label || job.material}</p>
                           </div>
                           <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
                             <User className="w-3.5 h-3.5 text-emerald-500 mb-2" />
-                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Client's Name</p>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Client's Name</p>
                             <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{job.customerName || job.customer || 'Resident'}</p>
                           </div>
                           <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
                             <MapPin className="w-3.5 h-3.5 text-rose-500 mb-2" />
-                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Location</p>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Location</p>
                             <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{job.location}</p>
                           </div>
                         </div>

@@ -3,7 +3,7 @@ import {
   Truck, Navigation, Zap, Briefcase, 
   HandCoins, TrendingUp, CheckCircle2, ArrowRight
 } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import Layout from '../layouts/Layout';
 
 export default function ForAgents() {

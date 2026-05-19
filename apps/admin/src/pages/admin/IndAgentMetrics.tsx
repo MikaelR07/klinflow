@@ -5,7 +5,7 @@ import {
   ChevronDown, ChevronUp, Award, BarChart3,
   Tag, Zap, Target, Activity
 } from 'lucide-react';
-import { supabase } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
 
 const MATERIAL_LABELS = {
   recyclable: 'Recyclables',

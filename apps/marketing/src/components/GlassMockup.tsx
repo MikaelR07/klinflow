@@ -1,6 +1,12 @@
 import { motion } from 'framer-motion';
 
-export default function GlassMockup({ color = 'emerald', icon: Icon, isDarkMode }) {
+interface GlassMockupProps {
+  color?: 'emerald' | 'blue' | 'indigo' | 'rose';
+  icon?: any;
+  isDarkMode: boolean;
+}
+
+export default function GlassMockup({ color = 'emerald', icon: Icon, isDarkMode }: GlassMockupProps) {
   const colors = {
     emerald: 'from-emerald-500/20 to-teal-500/10',
     blue: 'from-blue-500/20 to-cyan-500/10',

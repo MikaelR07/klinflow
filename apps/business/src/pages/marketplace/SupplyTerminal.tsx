@@ -16,10 +16,11 @@ import {
   Check
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  useAuthStore, useAssetStore, useMarketplaceStore, 
-  getBusinessLabel, supabase, getThumbnailUrl 
-} from '@klinflow/core';
+import { useAuthStore, getBusinessLabel } from '@klinflow/core/stores/authStore';
+import { useAssetStore } from '@klinflow/core/stores/assetStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { supabase } from '@klinflow/supabase';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
 
 export default function SupplyTerminal() {

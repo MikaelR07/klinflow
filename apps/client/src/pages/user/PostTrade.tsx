@@ -18,10 +18,17 @@ import L from 'leaflet';
 window.L = L;
 import { toast } from 'sonner';
 
-import { 
-  useBookingStore, useAuthStore, useServiceStore, usePriceStore,
-  useSystemStore, useNotificationStore, useMarketplaceStore, uploadFile, MATERIAL_TYPES, supabase, compressImage
-} from '@klinflow/core';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { usePriceStore } from '@klinflow/core/stores/priceStore';
+import { useSystemStore } from '@klinflow/core/stores/systemStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { uploadFile } from '@klinflow/core/lib/storage';
+import { MATERIAL_TYPES } from '@klinflow/core/stores/assetStore';
+import { supabase } from '@klinflow/supabase';
+import { compressImage } from '@klinflow/core/utils/imageUtils';
 
 
 // ── COMPACT MAP ICONS ───────────────────────────────────────────
@@ -267,7 +274,7 @@ export default function PostTrade() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-0 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] relative max-w-lg mx-auto w-full px-5">
+      <div className="flex-1 space-y-0 pb-2 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] relative max-w-lg mx-auto w-full px-5">
         <AnimatePresence mode="wait">
           
           {/* ── STEP 1: MATERIAL & WEIGHT ── */}
@@ -450,10 +457,10 @@ export default function PostTrade() {
                           };
                           input.click();
                         }}
-                        className="flex-1 h-32 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900 shadow-sm"
+                        className="flex-1 h-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1.5 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900 shadow-sm"
                       >
-                        <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
-                          <Camera className="w-5 h-5" />
+                        <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                          <Camera className="w-4 h-4" />
                         </div>
                         <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Camera</p>
                       </button>
@@ -470,10 +477,10 @@ export default function PostTrade() {
                           };
                           input.click();
                         }}
-                        className="flex-1 h-32 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900 shadow-sm"
+                        className="flex-1 h-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1.5 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900 shadow-sm"
                       >
-                        <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 rounded-xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
-                          <Smartphone className="w-5 h-5" />
+                        <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/40 rounded-lg flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                          <Smartphone className="w-4 h-4" />
                         </div>
                         <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Gallery</p>
                       </button>
@@ -584,31 +591,31 @@ export default function PostTrade() {
                 <div className="grid grid-cols-2 gap-4">
                   <button 
                     onClick={() => setPickupMode('pickup')}
-                    className={`p-5 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${
+                    className={`p-3.5 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
                       pickupMode === 'pickup' ? 'border-emerald-500 bg-emerald-50/10 shadow-lg shadow-emerald-500/5' : 'border-slate-200 bg-white'
                     }`}
                   >
-                    <div className={`w-12 h-12 rounded-3xl flex items-center justify-center ${pickupMode === 'pickup' ? 'bg-emerald-500 text-white' : 'bg-slate-50 text-slate-400'}`}>
-                      <Truck className="w-6 h-6" />
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${pickupMode === 'pickup' ? 'bg-emerald-500 text-white' : 'bg-slate-50 text-slate-400'}`}>
+                      <Truck className="w-5 h-5" />
                     </div>
                     <div className="text-center">
-                      <p className={`text-xs font-semibold ${pickupMode === 'pickup' ? 'text-emerald-600' : 'text-slate-900'}`}>Dispatch Agent</p>
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-0.5">We come to you</p>
+                      <p className={`text-xs font-bold leading-tight ${pickupMode === 'pickup' ? 'text-emerald-600' : 'text-slate-900'}`}>Dispatch Agent</p>
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5">We come to you</p>
                     </div>
                   </button>
 
                   <button 
                     onClick={() => setPickupMode('dropoff')}
-                    className={`p-5 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${
+                    className={`p-3.5 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${
                       pickupMode === 'dropoff' ? 'border-emerald-500 bg-emerald-50/10' : 'border-slate-200 bg-white'
                     }`}
                   >
-                    <div className={`w-12 h-12 rounded-3xl flex items-center justify-center ${pickupMode === 'dropoff' ? 'bg-emerald-500 text-white' : 'bg-slate-50 text-slate-400'}`}>
-                      <Home className="w-6 h-6" />
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${pickupMode === 'dropoff' ? 'bg-emerald-500 text-white' : 'bg-slate-50 text-slate-400'}`}>
+                      <Home className="w-5 h-5" />
                     </div>
                     <div className="text-center">
-                      <p className={`text-xs font-semibold ${pickupMode === 'dropoff' ? 'text-emerald-600' : 'text-slate-900'}`}>Self Drop-off</p>
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-0.5">Bring to a Hub</p>
+                      <p className={`text-xs font-bold leading-tight ${pickupMode === 'dropoff' ? 'text-emerald-600' : 'text-slate-900'}`}>Self Drop-off</p>
+                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5">Bring to a Hub</p>
                     </div>
                   </button>
                 </div>
@@ -632,7 +639,7 @@ export default function PostTrade() {
                       </div>
                     )}
                   </div>
-                  <div className="h-[200px] w-full rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 relative shadow-sm group">
+                  <div className="h-64 -mx-3.5 w-auto rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 relative shadow-sm group">
                      <MapContainer center={center as [number, number]} zoom={13} zoomControl={false} className="h-full w-full z-0">
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                          <ChangeView center={center as [number, number]} />
@@ -768,34 +775,34 @@ export default function PostTrade() {
                      {/* ASAP BUTTON */}
                      <button 
                        onClick={() => { selectTime({ time: 'ASAP', type: 'any', discount: 0, label: 'Agents available' }); setIsManualTime(false); }} 
-                       className={`w-full p-6 rounded-2xl border-2 transition-all text-left flex items-center gap-4 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-emerald-600 border-primary shadow-xl shadow-primary/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'}`}
+                       className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-emerald-600 border-primary shadow-xl shadow-primary/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'}`}
                      >
-                       <div className={`w-14 h-14 rounded-3xl flex items-center justify-center shrink-0 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-white/20' : 'bg-emerald-600/10'}`}>
-                         <Zap className={`w-7 h-7 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-emerald-600'}`} />
+                       <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-white/20' : 'bg-emerald-600/10'}`}>
+                         <Zap className={`w-5 h-5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-emerald-600'}`} />
                        </div>
                        <div className="flex-1">
-                         <p className={`text-lg font-semibold leading-tight ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>ASAP</p>
-                         <p className={`text-[11px] font-semibold mt-0.5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white/70' : 'text-slate-400'}`}>First available agent</p>
+                         <p className={`text-sm font-semibold leading-tight ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>ASAP</p>
+                         <p className={`text-[10px] font-bold mt-0.5 leading-tight ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white/70' : 'text-slate-400'}`}>First available agent</p>
                        </div>
-                       <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'border-white bg-white' : 'border-slate-200'}`}>
-                         {!isManualTime && (selectedTime as any)?.time === 'ASAP' && <div className="w-3 h-3 rounded-full bg-emerald-600" />}
+                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'border-white bg-white' : 'border-slate-200'}`}>
+                         {!isManualTime && (selectedTime as any)?.time === 'ASAP' && <div className="w-2.5 h-2.5 rounded-full bg-emerald-600" />}
                        </div>
                      </button>
 
                      {/* SCHEDULE LATER */}
                      <button 
                        onClick={() => setIsManualTime(true)} 
-                       className={`w-full p-5 rounded-2xl border-2 transition-all text-left flex items-center gap-4 ${isManualTime ? 'bg-slate-900 dark:bg-slate-700 border-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border-dashed border-slate-200 dark:border-white/10'}`}
+                       className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${isManualTime ? 'bg-slate-900 dark:bg-slate-700 border-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border-dashed border-slate-200 dark:border-white/10'}`}
                      >
                        <div className={`w-14 h-14 rounded-3xl flex items-center justify-center shrink-0 ${isManualTime ? 'bg-white/10' : 'bg-slate-50 dark:bg-slate-900'}`}>
-                         <Clock className={`w-6 h-6 ${isManualTime ? 'text-emerald-600' : 'text-slate-400'}`} />
+                         <Clock className={`w-5 h-5 ${isManualTime ? 'text-emerald-600' : 'text-slate-400'}`} />
                        </div>
                        <div className="flex-1">
-                         <p className={`text-sm font-semibold leading-tight ${isManualTime ? 'text-white' : 'text-slate-900 dark:text-white'}`}>Schedule Later</p>
-                         <p className={`text-xs font-semibold mt-0.5 ${isManualTime ? 'text-white/50' : 'text-slate-400'}`}>Pick a date & time</p>
+                         <p className={`text-[13px] font-semibold leading-tight ${isManualTime ? 'text-white' : 'text-slate-900 dark:text-white'}`}>Schedule Later</p>
+                         <p className={`text-[10px] font-bold mt-0.5 leading-tight ${isManualTime ? 'text-white/50' : 'text-slate-400'}`}>Pick a date & time</p>
                        </div>
                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isManualTime ? 'border-white bg-white' : 'border-slate-200'}`}>
-                         {isManualTime && <div className="w-3 h-3 rounded-full bg-slate-900" />}
+                         {isManualTime && <div className="w-2.5 h-2.5 rounded-full bg-slate-900" />}
                        </div>
                      </button>
                   </div>

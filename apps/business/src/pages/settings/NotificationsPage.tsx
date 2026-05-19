@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, Save, BellRing, Smartphone, MessageSquare } from 'lucide-react';
-import { useAuthStore, useNotificationStore, ROLES } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { ROLES } from '@klinflow/constants';
 import { toast } from 'sonner';
 
 export default function NotificationsPage() {

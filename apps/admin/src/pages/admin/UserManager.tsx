@@ -5,7 +5,7 @@ import {
   Loader2, ArrowUpDown, Smartphone, Briefcase,
   FileText, Check, X, Truck
 } from 'lucide-react';
-import { supabase } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
 
 export default function UserManager() {

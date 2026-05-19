@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo, memo } from 'react';
 import { Crown, Medal, Info, ArrowLeft, Sparkles, Recycle, Trophy, TrendingUp, User as UserIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, supabase, getThumbnailUrl } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { supabase } from '@klinflow/supabase';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 
 // ── SUB-COMPONENTS (DEFINED OUTSIDE TO PREVENT RE-MOUNTS) ─────────────────────────
 

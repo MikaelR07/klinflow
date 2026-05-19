@@ -8,7 +8,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
   LineChart, Line, PieChart, Pie, Cell, Legend, AreaChart, Area 
 } from 'recharts';
-import { useAdminStore } from '@klinflow/core';
+import { useAdminStore } from '@klinflow/core/stores/adminStore';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';

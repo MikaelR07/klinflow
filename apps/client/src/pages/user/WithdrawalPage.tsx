@@ -5,7 +5,7 @@ import {
   Smartphone as PhoneIcon, Landmark, CreditCard
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { toast } from 'sonner';
 
 interface Method {

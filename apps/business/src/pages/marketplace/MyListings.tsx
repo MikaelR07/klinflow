@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Eye, Gavel, CheckCircle2, XCircle, Clock, Package, Loader2, MoreVertical } from 'lucide-react';
-import { useMarketplaceStore, getThumbnailUrl } from '@klinflow/core';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 
 export default function MyListings() {
   const myListings = useMarketplaceStore(s => s.myListings);

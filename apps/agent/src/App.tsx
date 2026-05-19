@@ -3,8 +3,18 @@ import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { Home, Briefcase, Brain, Wallet, MoreHorizontal, Package, Search } from 'lucide-react';
 
 // Shared Packages
-import { useAuthStore, useThemeStore, useNotificationStore, usePWA, ROLES, useAgentStore, useMarketplaceStore } from '@klinflow/core';
-import { Navbar, BottomNav, PWAInstallModal, ProtectedRoute, LoadingScreen } from '@klinflow/ui';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { usePWA } from '@klinflow/core/hooks/usePWA';
+import { ROLES } from '@klinflow/constants';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import Navbar from '@klinflow/ui/components/Navbar';
+import BottomNav from '@klinflow/ui/components/BottomNav';
+import PWAInstallModal from '@klinflow/ui/components/PWAInstallModal';
+import ProtectedRoute from '@klinflow/ui/components/ProtectedRoute';
+import { LoadingScreen } from '@klinflow/ui/components/Loading';
 import { Toaster } from 'sonner';
 
 // LAZY LOADED PAGES

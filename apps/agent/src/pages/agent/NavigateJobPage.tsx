@@ -8,10 +8,16 @@ import { MapPin, ArrowLeft, ArrowRight, Phone, Navigation, CheckCircle, User, Za
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
-import { useAgentStore, useAuthStore, useNotificationStore, NOTIFICATION_TYPES, useAssetStore, useServiceStore, supabase, getThumbnailUrl } from '@klinflow/core';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore, NOTIFICATION_TYPES } from '@klinflow/core/stores/notificationStore';
+import { useAssetStore } from '@klinflow/core/stores/assetStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { supabase } from '@klinflow/supabase';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import type { AgentJob } from '@klinflow/core/stores/agentStore.types';
 import type { Database } from '@klinflow/supabase';
-import { AIScannerModal } from '@klinflow/ui';
+import AIScannerModal from '@klinflow/ui/components/AIScannerModal';
 import { toast } from 'sonner';
 
 type BookingRow = Database['public']['Tables']['bookings']['Row'];

@@ -16,7 +16,8 @@ import {
   X as XIcon
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase, useAuthStore } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 

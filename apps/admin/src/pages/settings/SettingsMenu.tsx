@@ -1,7 +1,7 @@
 import { User, Bell, Shield, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle, Settings2 } from 'lucide-react';
-import { useAuthStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useNavigate } from 'react-router-dom';
-import { ThemeToggleRow } from '@klinflow/ui';
+import ThemeToggleRow from '@klinflow/ui/components/ThemeToggleRow';
 import { toast } from 'sonner';
 
 export default function SettingsMenu() {

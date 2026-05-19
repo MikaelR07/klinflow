@@ -14,7 +14,7 @@ import {
   X,
   Loader2
 } from 'lucide-react';
-import { useAuthStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { toast } from 'sonner';
 
 export default function HubLanding() {

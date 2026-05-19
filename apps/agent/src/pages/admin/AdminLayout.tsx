@@ -1,8 +1,9 @@
 import { Suspense, useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { useAuthStore, supabase } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { supabase } from '@klinflow/supabase';
 import { LayoutDashboard, Users, Settings, LogOut, Menu, X, Truck, DollarSign, Banknote } from 'lucide-react';
-import { LoadingScreen } from '@klinflow/ui';
+import { LoadingScreen } from '@klinflow/ui/components/Loading';
 
 export default function AdminLayout() {
   const navigate = useNavigate();

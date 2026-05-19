@@ -4,7 +4,7 @@ import {
   ArrowLeft, Save, Loader2, Settings2, Phone, 
   MessageCircle, Clock, Calendar, Check, X, Shield 
 } from 'lucide-react';
-import { useSystemStore } from '@klinflow/core';
+import { useSystemStore } from '@klinflow/core/stores/systemStore';
 import { toast } from 'sonner';
 
 export default function SystemConfigPage() {

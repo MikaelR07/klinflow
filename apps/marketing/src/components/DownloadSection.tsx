@@ -31,7 +31,7 @@ const appSuite = [
   }
 ];
 
-export default function DownloadSection({ isDarkMode }) {
+export default function DownloadSection({ isDarkMode }: { isDarkMode: boolean }) {
   return (
     <section className={`py-40 px-6 relative overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
       <div className="max-w-7xl mx-auto">

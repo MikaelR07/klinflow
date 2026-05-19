@@ -11,12 +11,9 @@ import {
   Package,
   Layers
 } from 'lucide-react';
-import { 
-  useAuthStore, 
-  supabase,
-  normalizeKeys,
-  Profile
-} from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { supabase } from '@klinflow/supabase';
+import { normalizeKeys, Profile } from '@klinflow/core/validation';
 import { toast } from 'sonner';
 
 interface SupportedCategory {

@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Upload, Loader2, Tag, Scale, Coins, Info, MapPin, Package } from 'lucide-react';
-import { useMarketplaceStore, useAuthStore, uploadFile, compressImage } from '@klinflow/core';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { uploadFile } from '@klinflow/core/lib/storage';
+import { compressImage } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
 
 export default function SellRecyclables() {

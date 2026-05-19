@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Star, MessageSquare, ArrowLeft, User, Calendar, Tag, Loader2, TrendingUp, Award, ThumbsUp, Heart, ChevronDown, ChevronUp, Clock, Check, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAgentStore, useAuthStore, getThumbnailUrl } from '@klinflow/core';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import EmptyState from '@klinflow/ui/components/EmptyState';
 import { motion, AnimatePresence } from 'framer-motion';
 

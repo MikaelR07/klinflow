@@ -4,7 +4,7 @@ import {
   Search, Check, X, ShieldCheck, 
   Activity, AlertCircle, ShoppingBag, ArrowRight, Scale
 } from 'lucide-react';
-import { useAdminStore } from '@klinflow/core';
+import { useAdminStore } from '@klinflow/core/stores/adminStore';
 import { toast } from 'sonner';
 
 export default function AdminB2B() {

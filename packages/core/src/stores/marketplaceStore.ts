@@ -569,7 +569,7 @@ export const useMarketplaceStore = create<MarketplaceStore>((set, get) => ({
             total_price: offer.offeredPrice * offer.quantity,
             preferred_date: new Date().toISOString().split('T')[0],
             photo_url: offer.photo,
-            weight_kg: offer.quantity,
+            actual_weight_kg: offer.quantity,
             estate: offer.listing?.location || undefined,
             latitude: offer.listing?.latitude || undefined,
             longitude: offer.listing?.longitude || undefined

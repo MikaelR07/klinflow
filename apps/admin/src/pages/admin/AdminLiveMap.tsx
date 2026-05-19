@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { useAdminStore } from '@klinflow/core';
+import { useAdminStore } from '@klinflow/core/stores/adminStore';
 import { useEffect } from 'react';
 
 import L from 'leaflet';

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BellRing, CheckCircle2, AlertTriangle, Gift, Info, Clock } from 'lucide-react';
-import { useAuthStore, useNotificationStore, NOTIFICATION_TYPES } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore, NOTIFICATION_TYPES } from '@klinflow/core/stores/notificationStore';
 
 export default function NotificationsFeed() {
   const navigate = useNavigate();

@@ -7,7 +7,8 @@ import {
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
-import { useAssetStore, usePriceStore, MATERIAL_TYPES } from '@klinflow/core';
+import { useAssetStore, MATERIAL_TYPES } from '@klinflow/core/stores/assetStore';
+import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { toast } from 'sonner';
 
 const getMaterialIcon = (label: string | null | undefined) => {

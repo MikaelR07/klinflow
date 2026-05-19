@@ -8,7 +8,6 @@ import {
 export type Listing = Database['public']['Tables']['marketplace_listings']['Row'];
 export type Order = Database['public']['Tables']['marketplace_orders']['Row'];
 export type Offer = Database['public']['Tables']['marketplace_offers']['Row'];
-export type Profile = Database['public']['Tables']['profiles']['Row'];
 
 export interface MarketplaceStore {
   listings: MarketplaceListing[];

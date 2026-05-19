@@ -34,12 +34,14 @@ import {
   FileText,
   ListOrdered
 } from 'lucide-react';
-import { 
-  useAuthStore, useAssetStore, useMarketplaceStore, 
-  usePriceStore, getBusinessLabel, getThumbnailUrl 
-} from '@klinflow/core';
+import { useAuthStore, getBusinessLabel } from '@klinflow/core/stores/authStore';
+import { useAssetStore } from '@klinflow/core/stores/assetStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { usePriceStore } from '@klinflow/core/stores/priceStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
-import { AssetBadge, TopUpModal } from '@klinflow/ui';
+import AssetBadge from '@klinflow/ui/components/AssetBadge';
+import TopUpModal from '@klinflow/ui/components/TopUpModal';
 import TopTabs from '../../components/TopTabs';
 
 export default function MarketplaceHome() {

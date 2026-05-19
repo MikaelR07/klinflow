@@ -10,7 +10,9 @@ import {
   Clock, Handshake, Calendar
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, useMarketplaceStore, useBookingStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
 
 export default function TrustScoreDetails() {
   const navigate = useNavigate();
@@ -90,7 +92,7 @@ export default function TrustScoreDetails() {
   ];
 
   return (
-    <div className="pb-20 animate-fade-in">
+    <div className="pb-2 px-1.5 animate-fade-in">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
@@ -111,137 +113,135 @@ export default function TrustScoreDetails() {
         </div>
       </div>
 
-      <div className="pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)] space-y-6">
+      <div className="pt-[calc(env(safe-area-inset-top,1rem)+4rem)] space-y-6">
         {/* ── MASTER DASHBOARD CARD ── */}
-        <div className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 rounded-[1rem] p-3 text-white shadow-2xl border-none overflow-hidden transition-all">
-          <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(255,255,255,0.08)_0%,_transparent_70%)] pointer-events-none" />
-          
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1rem] p-4 shadow-sm">
           {/* Bento Dashboard Grid */}
-          <div className="relative z-10 grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2">
              
              {/* Lifetime Earnings (2-col) */}
-             <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-3 flex items-center gap-3">
-               <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center shrink-0">
-                 <TrendingUp className="w-4 h-4 text-white" />
+             <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-3 flex items-center gap-3">
+               <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                 <TrendingUp className="w-4 h-4" />
                </div>
                <div className="flex-1 min-w-0">
-                 <p className="text-[8px] font-black uppercase tracking-widest text-emerald-300/60 mb-0.5">Lifetime Earnings</p>
-                 <p className="text-base font-black text-white leading-none tracking-tight">KSh {stats.lifetimeEarnings.toLocaleString()}</p>
+                 <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-0.5">Lifetime Earnings</p>
+                 <p className="text-base font-black text-slate-900 dark:text-white leading-none tracking-tight">KSh {stats.lifetimeEarnings.toLocaleString()}</p>
                </div>
              </div>
 
              {/* Total Traded */}
-             <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Scale className="w-3.5 h-3.5 text-emerald-400/60 mb-1.5" />
-               <p className="text-sm font-black text-white leading-none tracking-tighter">{stats.totalWeight.toLocaleString()}</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-emerald-300/40 mt-0.5">KG Traded</p>
+             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Scale className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 mb-1.5" />
+               <p className="text-sm font-black text-slate-900 dark:text-white leading-none tracking-tighter">{stats.totalWeight.toLocaleString()}</p>
+               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">KG Traded</p>
              </div>
 
              {/* Available Balance (2-col) */}
-             <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-3 flex items-center gap-3">
-               <div className="w-8 h-8 rounded-xl bg-emerald-600/30 flex items-center justify-center shrink-0">
-                 <Wallet className="w-4 h-4 text-emerald-300" />
+             <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-3 flex items-center gap-3">
+               <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                 <Wallet className="w-4 h-4" />
                </div>
                <div className="flex-1 min-w-0">
-                 <p className="text-[8px] font-black uppercase tracking-widest text-emerald-300/50 mb-0.5">Available Balance</p>
-                 <p className="text-sm font-black text-white leading-none">KSh {walletBalance.toLocaleString()}</p>
+                 <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-0.5">Available Balance</p>
+                 <p className="text-sm font-black text-slate-900 dark:text-white leading-none">KSh {walletBalance.toLocaleString()}</p>
                </div>
              </div>
 
              {/* Trades Count */}
-             <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Handshake className="w-3.5 h-3.5 text-emerald-400/50 mb-1.5" />
-               <p className="text-sm font-black text-white leading-none">{stats.tradesCompleted}</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-emerald-300/40 mt-0.5">Trades</p>
+             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Handshake className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 mb-1.5" />
+               <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.tradesCompleted}</p>
+               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Trades</p>
              </div>
 
              {/* In Escrow (2-col) */}
-             <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-3 flex items-center gap-3">
-               <div className="w-8 h-8 rounded-xl bg-emerald-600/30 flex items-center justify-center shrink-0">
-                 <Clock className="w-4 h-4 text-emerald-300" />
+             <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-3 flex items-center gap-3">
+               <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                 <Clock className="w-4 h-4" />
                </div>
                <div className="flex-1 min-w-0">
-                 <p className="text-[8px] font-black uppercase tracking-widest text-emerald-300/50 mb-0.5">In Escrow</p>
-                 <p className="text-sm font-black text-white leading-none">KSh {stats.pendingBalance.toLocaleString()}</p>
+                 <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-0.5">In Escrow</p>
+                 <p className="text-sm font-black text-slate-900 dark:text-white leading-none">KSh {stats.pendingBalance.toLocaleString()}</p>
                </div>
              </div>
 
              {/* Fulfillment Rate */}
-             <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <TrendingUp className="w-3.5 h-3.5 text-emerald-400 mb-1.5" />
-               <p className="text-sm font-black text-white leading-none">{stats.fulfillmentRate}%</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-emerald-300/40 mt-0.5">Rate</p>
+             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+               <TrendingUp className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 mb-1.5" />
+               <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.fulfillmentRate}%</p>
+               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Rate</p>
              </div>
 
              {/* Bottom row: 3 equal small cards */}
-             <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Calendar className="w-3.5 h-3.5 text-emerald-400/50 mb-1.5" />
-               <p className="text-sm font-black text-white leading-none">{stats.daysTraded}</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-emerald-300/40 mt-0.5">Days</p>
+             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 mb-1.5" />
+               <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.daysTraded}</p>
+               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Days</p>
              </div>
 
-             <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Zap className="w-3.5 h-3.5 text-emerald-400 mb-1.5" />
-               <p className="text-sm font-black text-white leading-none">{stats.avgResponseTime || '15'}m</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-emerald-300/40 mt-0.5">Avg Time</p>
+             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Zap className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 mb-1.5" />
+               <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.avgResponseTime || '15'}m</p>
+               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Avg Time</p>
              </div>
 
-             <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Sparkles className="w-3.5 h-3.5 text-emerald-400/60 mb-1.5" />
-               <p className="text-sm font-black text-white leading-none">{score}%</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-emerald-300/40 mt-0.5">Score</p>
+             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 mb-1.5" />
+               <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{score}%</p>
+               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Score</p>
              </div>
           </div>
+        </div>
 
-          {/* Integrated Trust Score Gauge & Loan Action */}
-          <div className="relative z-10 mt-3 pt-3 border-t border-white/10">
-             <div className="flex justify-center mb-4">
-               <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-950/40 text-white rounded-full text-xs font-bold uppercase tracking-widest">
-                 <ShieldCheck className="w-3 h-3 text-emerald-300" /> Your Credit Score
-               </div>
+        {/* ── TRUST SCORE METER CARD ── */}
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800/80 shadow-sm">
+          <div className="flex justify-center mb-4.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Your Credit Score
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6 w-full">
+             {/* Info & Action Left */}
+             <div className="flex-1 space-y-4">
+                <div>
+                   <span className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">{score}%</span>
+                   <div className="mt-1">
+                      <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight">Exceptional!</p>
+                      <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 italic">Excellent profile</p>
+                   </div>
+                </div>
+                <button className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap">
+                  Apply Loan
+                </button>
              </div>
 
-             <div className="flex items-center gap-6 w-full">
-                {/* Info & Action Left */}
-                <div className="flex-1 space-y-4">
-                   <div>
-                      <span className="text-4xl font-black text-white tracking-tighter leading-none">{score}%</span>
-                      <div className="mt-1">
-                         <p className="text-xs font-bold text-white uppercase tracking-tight">Exceptional!</p>
-                         <p className="text-[10px] font-bold text-emerald-300/80 italic">Reach your goals</p>
-                      </div>
-                   </div>
-                   <button className="w-full py-3.5 bg-white text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-black/10 active:scale-95 whitespace-nowrap">
-                     Apply Loan
-                   </button>
-                </div>
-
-                {/* Gauge Right - Expanded to fill more space */}
-                <div className="flex-[1.6] relative aspect-[2/1]">
-                   <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 55">
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="0" />
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f97316" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-21.5" />
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#eab308" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-43" />
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#4ade80" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-64.5" />
-                     <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-86" />
-                     
-                     <path d="M 18 50 A 32 32 0 0 1 82 50" stroke="currentColor" className="text-white" strokeOpacity="0.1" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
-                     
-                     <g 
-                       className="transition-transform duration-1000 ease-out origin-[50px_50px]" 
-                       style={{ transform: `rotate(${(score / 100) * 180 - 90}deg)` }}
-                     >
-                       <line 
-                         x1="50" y1="50" x2="50" y2="22" 
-                         stroke="currentColor" 
-                         strokeWidth="2.5" 
-                         strokeLinecap="round" 
-                         className="text-white" 
-                       />
-                     </g>
-                     <circle cx="50" cy="50" r="4" fill="currentColor" className="text-white" />
-                   </svg>
-                </div>
+             {/* Gauge Right - Expanded to fill more space */}
+             <div className="flex-[1.4] relative aspect-[2/1]">
+                <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 55">
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f43f5e" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="0" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f97316" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-21.5" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#eab308" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-43" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#4ade80" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-64.5" />
+                  <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#10b981" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-86" />
+                  
+                  <path d="M 18 50 A 32 32 0 0 1 82 50" stroke="currentColor" className="text-slate-100 dark:text-slate-800" strokeOpacity="0.5" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
+                  
+                  <g 
+                    className="transition-transform duration-1000 ease-out origin-[50px_50px]" 
+                    style={{ transform: `rotate(${(score / 100) * 180 - 90}deg)` }}
+                  >
+                    <line 
+                      x1="50" y1="50" x2="50" y2="22" 
+                      stroke="currentColor" 
+                      strokeWidth="2.5" 
+                      strokeLinecap="round" 
+                      className="text-emerald-500" 
+                    />
+                  </g>
+                  <circle cx="50" cy="50" r="4" fill="currentColor" className="text-emerald-500" />
+                </svg>
              </div>
           </div>
         </div>

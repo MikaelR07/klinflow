@@ -11,7 +11,9 @@ import {
   ChevronRight,
   ShieldAlert
 } from 'lucide-react';
-import { useNotificationStore, useAuthStore, AppNotification } from '@klinflow/core';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { AppNotification } from '@klinflow/core/validation';
 import { toast } from 'sonner';
 
 export default function Notifications() {

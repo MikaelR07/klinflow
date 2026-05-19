@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, useAgentStore, getThumbnailUrl } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { Wallet, Truck, Star, Briefcase, ChevronRight, Copy, CheckCircle2, Users, Power, Loader2, RefreshCw, TrendingUp, Zap, Plus, X } from 'lucide-react';
 import { toast } from 'sonner';
 

@@ -5,8 +5,11 @@ import { useState, useEffect } from 'react';
 import { Package, Clock, CheckCircle2, Truck, Star, XCircle, CalendarClock, Zap, ChevronDown, ArrowLeft, Info, MapPin, Scale } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useBookingStore, useServiceStore, getThumbnailUrl, useAuthStore } from '@klinflow/core';
-import { AssetJourney } from '@klinflow/ui';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import AssetJourney from '@klinflow/ui/components/AssetJourney';
 import { toast } from 'sonner';
 
 const statusConfig = {
@@ -201,67 +204,70 @@ export default function MyBookings() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
-      {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-[100]">
-        <div className="flex items-center justify-between max-w-lg mx-auto">
-          <button onClick={() => navigate(-1)} className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
-            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
-          </button>
-          
-          <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">My Bookings</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Pickup History</p>
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="w-full mx-auto space-y-4">
+          <div className="flex items-center justify-between">
+            <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
+              <ArrowLeft className="w-4 h-4 dark:text-white" />
+            </button>
+            
+            <div className="text-center">
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">My Bookings</h1>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Pickup History</p>
+            </div>
+            
+            <div className="w-10" /> {/* Spacer */}
           </div>
-          
-          <div className="w-11" /> {/* Spacer */}
+
+          {/* Tabs */}
+          <div className="flex bg-slate-100/85 dark:bg-slate-800/85 p-1 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+            {TABS.map(tab => {
+              const tabCount = bookings.filter((b: any) => {
+                const rawDate = b.updatedAt || b.updated_at || b.createdAt || b.created_at || b.date;
+                const bookingTime = rawDate ? new Date(rawDate).getTime() : 0;
+
+                if (tab === 'Upcoming') {
+                  return ['pending', 'confirmed', 'scheduled', 'in-progress', 'assigned', 'arrived', 'picked_up'].includes(b.status);
+                }
+                
+                const clearedAtStr = tab === 'Completed' ? profile?.completedClearedAt : profile?.cancelledClearedAt;
+                let clearedAt = 0;
+                if (clearedAtStr) {
+                  const parsed = new Date(clearedAtStr).getTime();
+                  if (!isNaN(parsed)) clearedAt = parsed;
+                }
+
+                if (b.hiddenForClient) return false;
+
+                if (tab === 'Completed') return b.status === 'completed' && bookingTime > clearedAt;
+                if (tab === 'Cancelled') return b.status === 'cancelled' && bookingTime > clearedAt;
+                return false;
+              }).length;
+              
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center justify-center ${
+                    activeTab === tab 
+                      ? 'bg-white dark:bg-slate-700 shadow-sm text-primary dark:text-white' 
+                      : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+                  }`}
+                >
+                  {tab}
+                  <BookingCounter count={tabCount} active={activeTab === tab} />
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="flex-1 space-y-2 pb-24 pt-0 relative max-w-lg mx-auto w-full">
-        {/* Tabs */}
-        <div className="flex bg-slate-100 dark:bg-slate-900 p-1 border-b border-slate-200 dark:border-slate-800">
-          {TABS.map(tab => {
-            const tabCount = bookings.filter((b: any) => {
-              const rawDate = b.updatedAt || b.updated_at || b.createdAt || b.created_at || b.date;
-              const bookingTime = rawDate ? new Date(rawDate).getTime() : 0;
-
-              if (tab === 'Upcoming') {
-                return ['pending', 'confirmed', 'scheduled', 'in-progress', 'assigned', 'arrived', 'picked_up'].includes(b.status);
-              }
-              
-              const clearedAtStr = tab === 'Completed' ? profile?.completedClearedAt : profile?.cancelledClearedAt;
-              let clearedAt = 0;
-              if (clearedAtStr) {
-                const parsed = new Date(clearedAtStr).getTime();
-                if (!isNaN(parsed)) clearedAt = parsed;
-              }
-
-              if (b.hiddenForClient) return false;
-
-              if (tab === 'Completed') return b.status === 'completed' && bookingTime > clearedAt;
-              if (tab === 'Cancelled') return b.status === 'cancelled' && bookingTime > clearedAt;
-              return false;
-            }).length;
-            
-            return (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-2.5 text-[11px] font-bold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center ${
-                  activeTab === tab 
-                    ? 'bg-white dark:bg-slate-800 shadow-sm text-primary dark:text-primary-light' 
-                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
-                }`}
-              >
-                {tab}
-                <BookingCounter count={tabCount} active={activeTab === tab} />
-              </button>
-            );
-          })}
-        </div>
+      <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+6rem)] px-0 relative max-w-lg mx-auto w-full space-y-4">
 
       {filteredBookings.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="flex flex-col items-center justify-center py-16 text-center px-4">
           <Package className="w-12 h-12 text-slate-300 dark:text-slate-600 mb-4" />
           <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">{`No ${activeTab.toLowerCase()} bookings`}</p>
           <p className="text-xs font-medium text-slate-400">
@@ -273,7 +279,7 @@ export default function MyBookings() {
       ) : (
         <div className="space-y-1">
           {(activeTab === 'Cancelled' || activeTab === 'Completed') && (
-            <div className="flex justify-end mb-2">
+            <div className="flex justify-end mb-2 px-4">
               <button 
                 onClick={() => handleClearHistory(activeTab.toLowerCase())}
                 className="text-xs font-bold text-rose-600 hover:underline px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg flex items-center gap-2"
@@ -294,7 +300,7 @@ export default function MyBookings() {
             return (
               <div 
                 key={b.id} 
-                className="card bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:shadow-lg transition-all shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden"
+                className="w-full bg-white dark:bg-slate-900 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-800/80 hover:shadow-lg transition-all overflow-hidden"
               >
                 {/* Clickable Header */}
                 <div 
@@ -303,8 +309,12 @@ export default function MyBookings() {
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shadow-inner border border-slate-100 dark:border-slate-700 shrink-0">
-                        {waste?.icon || '📦'}
+                      <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shadow-inner border border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
+                        {b.photoUrl ? (
+                          <img src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" loading="lazy" />
+                        ) : (
+                          waste?.icon || '📦'
+                        )}
                       </div>
                       <div className="space-y-1">
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">

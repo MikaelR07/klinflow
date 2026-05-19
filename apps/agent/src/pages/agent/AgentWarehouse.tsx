@@ -16,7 +16,10 @@ import {
   ChevronRight,
   CheckCircle2
 } from 'lucide-react';
-import { useAuthStore, useNotificationStore, useAssetStore, supabase } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { useAssetStore } from '@klinflow/core/stores/assetStore';
+import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
 
 const CLAIM_STATUS = {

@@ -3,7 +3,7 @@
 -- Fix: Explicitly check if the user is an owner. If not, only return their own data.
 -- This prevents fleet drivers from seeing company-wide stats on their personal earnings page.
 
-CREATE OR REPLACE FUNCTION public.get_company_stats_v2(p_user_id UUID)
+CREATE OR REPLACE FUNCTION public.get_company_stats_v2(p_company_id UUID)
 RETURNS json AS $$
 DECLARE
   result json;
@@ -14,17 +14,17 @@ BEGIN
   -- 1. Check if the user is an owner or company admin
   SELECT (agent_account_type IN ('company_admin', 'owner')) INTO v_is_owner
   FROM public.profiles
-  WHERE id = p_user_id;
+  WHERE id = p_company_id;
 
   -- 2. Determine which IDs to aggregate
   IF COALESCE(v_is_owner, false) THEN
     -- If owner, aggregate their own data plus all their fleet drivers
-    SELECT COALESCE(array_agg(id), ARRAY[p_user_id]::UUID[]) INTO v_driver_ids 
+    SELECT COALESCE(array_agg(id), ARRAY[p_company_id]::UUID[]) INTO v_driver_ids 
     FROM public.profiles 
-    WHERE company_id = p_user_id OR id = p_user_id;
+    WHERE company_id = p_company_id OR id = p_company_id;
   ELSE
     -- If individual agent or fleet driver, ONLY aggregate their own data
-    v_driver_ids := ARRAY[p_user_id];
+    v_driver_ids := ARRAY[p_company_id];
   END IF;
 
   -- 3. Calculate Aggregated Metrics

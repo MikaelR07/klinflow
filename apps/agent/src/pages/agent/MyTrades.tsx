@@ -6,7 +6,10 @@ import {
   PackageCheck, Info, ShieldCheck, TrendingUp, ChevronDown, ArrowRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAgentStore, useAuthStore, supabase, getThumbnailUrl } from '@klinflow/core';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { supabase } from '@klinflow/supabase';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
 import type { Database } from '@klinflow/supabase';
 

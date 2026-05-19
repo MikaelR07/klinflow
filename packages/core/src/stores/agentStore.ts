@@ -10,7 +10,7 @@ import { useNotificationStore } from './notificationStore';
 import { usePriceStore } from './priceStore';
 import { useSettingsStore } from './settingsStore';
 import { ROLES } from '@klinflow/constants';
-import { AgentStore, AgentJob, CoachInsight, Booking, Profile, AgentConfiguration, AgentReview } from './agentStore.types';
+import { AgentStore, AgentJob, CoachInsight, Booking, ProfileRow, AgentConfiguration, AgentReview } from './agentStore.types';
 
 export const useAgentStore = create<AgentStore>()(
   persist(
@@ -67,7 +67,7 @@ export const useAgentStore = create<AgentStore>()(
         .order('name');
         
       if (error) throw error;
-      set({ fleetDrivers: data as Partial<Profile>[] });
+      set({ fleetDrivers: data as Partial<ProfileRow>[] });
     } catch (err) {
       console.error('Fetch fleet drivers error:', err);
     } finally {
@@ -252,7 +252,7 @@ export const useAgentStore = create<AgentStore>()(
       const { data: profilesData } = userIds.length > 0 
         ? await supabase.from('profiles').select('id, name, phone').in('id', userIds)
         : { data: [] };
-      const profileMap: Record<string, Partial<Profile>> = Object.fromEntries(profilesData?.map((p: any) => [p.id, p]) || []);
+      const profileMap: Record<string, Partial<ProfileRow>> = Object.fromEntries(profilesData?.map((p: any) => [p.id, p]) || []);
 
       const mapped: AgentJob[] = filteredJobs.map(b => ({
           id: b.id,
@@ -364,7 +364,7 @@ export const useAgentStore = create<AgentStore>()(
     const { data: profilesData } = userIds.length > 0 
       ? await supabase.from('profiles').select('id, name, phone').in('id', userIds)
       : { data: [] };
-    const profileMap: Record<string, Partial<Profile>> = Object.fromEntries(profilesData?.map((p: any) => [p.id, p]) || []);
+    const profileMap: Record<string, Partial<ProfileRow>> = Object.fromEntries(profilesData?.map((p: any) => [p.id, p]) || []);
 
     const mapped: AgentJob[] = typedBookings.map(b => ({
       id: b.id,
@@ -461,13 +461,15 @@ export const useAgentStore = create<AgentStore>()(
             status: b.status,
             pay: b.fee || 0,
             photo_url: b.photo_url,
+            photoUrl: b.photo_url || null,
             photos: b.photo_url ? [b.photo_url] : [],
             bags: b.bags || 0,
             actual_weight_kg: b.actual_weight_kg || 0,
             time: b.time_slot || '',
             agent_id: b.agent_id || '',
             user_id: b.user_id || '',
-            customer: 'Customer',
+            phone: b.profiles?.phone || '',
+            customer: b.profiles?.name || 'Customer',
             total_price: b.total_price || 0,
             booking_type: b.booking_type || 'standard',
             fee: b.fee || 0,
@@ -533,7 +535,7 @@ export const useAgentStore = create<AgentStore>()(
       const { data: profilesData } = userIds.length > 0 
         ? await supabase.from('profiles').select('id, name, avatar_url').in('id', userIds)
         : { data: [] };
-      const profileMap: Record<string, Partial<Profile>> = Object.fromEntries(profilesData?.map((p: any) => [p.id, p]) || []);
+      const profileMap: Record<string, Partial<ProfileRow>> = Object.fromEntries(profilesData?.map((p: any) => [p.id, p]) || []);
 
       set({ 
         recentReviews: bookingsData.map((b: any) => ({

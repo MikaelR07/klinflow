@@ -10,10 +10,15 @@ import {
   Users, ShieldCheck, X, Sparkles, Search, Brain
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useBookingStore, useAuthStore, useNotificationStore, supabase, getThumbnailUrl } from '@klinflow/core';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { supabase } from '@klinflow/supabase';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 
 import { toast } from 'sonner';
-import { PushNotificationModal, LoadingScreen } from '@klinflow/ui';
+import PushNotificationModal from '@klinflow/ui/components/PushNotificationModal';
+import { LoadingScreen } from '@klinflow/ui/components/Loading';
 import SellerHome from './SellerHome';
 
 export default function UserHome() {
@@ -39,7 +44,6 @@ export default function UserHome() {
   const unreadCount = getUnreadCount();
   const [showPushPrompt, setShowPushPrompt] = useState(false);
   const [userRank, setUserRank] = useState<number | null>(null);
-  const [scrolled, setScrolled] = useState(false);
   const [isActivityCleared, setIsActivityCleared] = useState(() => {
     return localStorage.getItem(`activity_cleared_${profile?.id}`) === 'true';
   });
@@ -59,12 +63,8 @@ export default function UserHome() {
       setShowPushPrompt(true);
     }
 
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      // NOTE: Do NOT call cleanupNotifications() or cleanupBookings() here — it destroys the global subscription
-      window.removeEventListener('scroll', handleScroll);
-    };
+    // NOTE: Do NOT call cleanupNotifications() or cleanupBookings() here — it destroys the global subscription
+    return () => {};
   }, [profile?.id, role]);
 
   // Fetch dynamic global rank
@@ -158,7 +158,7 @@ export default function UserHome() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-1.5">
 
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal 
@@ -167,13 +167,9 @@ export default function UserHome() {
       />
 
       {/* ── TOP NAV & HERO ── */}
-      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
+      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
         {/* Header Section - Edge to Edge - DYNAMIC STICKY */}
-        <div className={`fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto transition-all duration-300 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b ${
-          scrolled 
-            ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-slate-200 dark:border-slate-800 shadow-sm' 
-            : 'bg-transparent border-transparent'
-        }`}>
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
@@ -187,17 +183,19 @@ export default function UserHome() {
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-                  Hello, {(profile?.fullName || profile?.name || 'Resident').split(' ')[0]}! 👋
+                <h1 className="text-xl font-bold italic tracking-tight text-slate-900 dark:text-white leading-tight">
+                  Hello {(profile?.fullName || profile?.name || 'Resident').split(' ')[0]},👋
                 </h1>
                 <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold uppercase tracking-wider bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 w-fit">
                   <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'Nairobi'}
                 </div>
               </div>
             </div>
-            <button onClick={() => navigate('/notifications')}
-              className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative shadow-sm active:scale-95 transition-all">
-              <Bell className="w-5 h-5 text-slate-500" />
+            <button 
+              onClick={() => navigate('/notifications')}
+              className="relative w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
+            >
+              <Bell className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
               {Number(unreadCount) > 0 && (
                 <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-800 shadow-md animate-in zoom-in">
                   {unreadCount}

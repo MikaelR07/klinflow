@@ -5,9 +5,13 @@ import {
   Search, Briefcase, Star, CreditCard, ShieldCheck, HelpCircle, X, Loader2, Zap, Sun, Moon
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useAuthStore, useAgentStore, getThumbnailUrl, supabase, useThemeStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { supabase } from '@klinflow/supabase';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import { useNavigate } from 'react-router-dom';
-import { ThemeToggleRow } from '@klinflow/ui';
+import ThemeToggleRow from '@klinflow/ui/components/ThemeToggleRow';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -160,9 +164,9 @@ export default function SettingsMenu() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
         {/* ── HERO BENTO CARD ── */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white shadow-2xl shadow-primary/20 mb-6 group">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white mb-6 group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 dark:bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32 transition-transform group-hover:scale-110 duration-700" />
           
           <div className="relative z-10 space-y-2.5">

@@ -5,11 +5,10 @@ import {
   Search, ArrowRight, Layers, Sparkles,
   Info, AlertCircle, CheckCircle2, Loader2, X, Brain
 } from 'lucide-react';
-import { 
-  useAssetStore, useAuthStore, useMarketplaceStore, 
-  MATERIAL_TYPES, ASSET_SOURCES, getBusinessLabel 
-} from '@klinflow/core';
-import { AssetBadge } from '@klinflow/ui';
+import { useAssetStore, MATERIAL_TYPES, ASSET_SOURCES } from '@klinflow/core/stores/assetStore';
+import { useAuthStore, getBusinessLabel } from '@klinflow/core/stores/authStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import AssetBadge from '@klinflow/ui/components/AssetBadge';
 import { toast } from 'sonner';
 
 export default function WeaverWarehouse() {

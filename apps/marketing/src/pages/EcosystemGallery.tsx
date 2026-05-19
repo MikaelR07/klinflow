@@ -7,60 +7,60 @@ import {
   TrendingUp, Clock
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useThemeStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import Layout from '../layouts/Layout';
 
 const allScreenshots = [
   { 
-    src: '/grid/route-optimizer.png', 
+    src: '/grid/route-optimizer.webp', 
     title: 'Tactical Navigation',
     category: 'Logistics',
     desc: 'Agent HUD with AI-optimized multi-stop routing and real-time pickup telemetry.' 
   },
   { 
-    src: '/grid/visualproof.png', 
+    src: '/grid/visualproof.webp', 
     title: 'HygeneX Vision Scan',
     category: 'Intelligence',
     desc: 'AI-powered material grading and purity verification for instant asset valuation.' 
   },
   { 
-    src: '/grid/book-pickup.png', 
+    src: '/grid/book-pickup.webp', 
     title: 'Mission Request',
     category: 'Consumer',
     desc: 'Streamlined waste categorization and collection scheduling for residents.' 
   },
   { 
-    src: '/grid/arrival-detail.png', 
+    src: '/grid/arrival-detail.webp', 
     title: 'Agent Verification',
     category: 'Logistics',
     desc: 'On-site terminal for weight verification and material grade confirmation.' 
   },
   { 
-    src: '/grid/post-info.png', 
+    src: '/grid/post-info.webp', 
     title: 'B2B Trade Listing',
     category: 'Marketplace',
     desc: 'Advanced data entry for bulk material sales including grade and moisture parameters.' 
   },
   { 
-    src: '/grid/offer-review.png', 
+    src: '/grid/offer-review.webp', 
     title: 'Escrow Negotiation',
     category: 'Financial',
     desc: 'Transparent bidding and fund release system for large-scale material trades.' 
   },
   { 
-    src: '/grid/post-summary.png', 
+    src: '/grid/post-summary.webp', 
     title: 'Mission Settlement',
     category: 'Financial',
     desc: 'Digital receipts and automated wallet payouts upon successful collection.' 
   },
   { 
-    src: '/grid/impact-analysis.png', 
+    src: '/grid/impact-analysis.webp', 
     title: 'Sustainomics Analytics',
     category: 'Intelligence',
     desc: 'Deep-dive environmental impact metrics and historical trade performance.' 
   },
   { 
-    src: '/grid/collection-method.png', 
+    src: '/grid/collection-method.webp', 
     title: 'Logistics Strategy',
     category: 'Logistics',
     desc: 'Dynamic selection between agent pickup and self-service hub drop-offs.' 
@@ -69,7 +69,7 @@ const allScreenshots = [
 
 export default function EcosystemGallery() {
   const { isDarkMode } = useThemeStore();
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<typeof allScreenshots[0] | null>(null);
 
   return (
     <Layout>

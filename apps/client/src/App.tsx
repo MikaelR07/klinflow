@@ -2,14 +2,22 @@ import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { Home, CalendarPlus, Package, Brain, Gauge, MoreHorizontal, Plus, ShieldCheck, Handshake } from 'lucide-react';
 
-import { 
-  useAuthStore, useThemeStore, useNotificationStore, useSystemStore, 
-  useBookingStore, usePWA, useMarketplaceStore, supabase, NOTIFICATION_TYPES, ROLES 
-} from '@klinflow/core';
-import { 
-  Navbar, BottomNav, ProtectedRoute, VoiceBookingModal, 
-  NEMAReportModal, LoadingScreen, PWAInstallModal 
-} from '@klinflow/ui';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
+import { useNotificationStore, NOTIFICATION_TYPES } from '@klinflow/core/stores/notificationStore';
+import { useSystemStore } from '@klinflow/core/stores/systemStore';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { usePWA } from '@klinflow/core/hooks/usePWA';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { supabase } from '@klinflow/supabase';
+import { ROLES } from '@klinflow/constants';
+import Navbar from '@klinflow/ui/components/Navbar';
+import BottomNav from '@klinflow/ui/components/BottomNav';
+import ProtectedRoute from '@klinflow/ui/components/ProtectedRoute';
+import VoiceBookingModal from '@klinflow/ui/components/VoiceBookingModal';
+import NEMAReportModal from '@klinflow/ui/components/NEMAReportModal';
+import { LoadingScreen } from '@klinflow/ui/components/Loading';
+import PWAInstallModal from '@klinflow/ui/components/PWAInstallModal';
 import { Toaster, toast } from 'sonner';
 
 // Components

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Recycle, Building2, Phone, Lock, Mail, MapPin, Loader2, ArrowLeft, Briefcase } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAuthStore, ROLES } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { ROLES } from '@klinflow/constants';
 import LocationSelector from '@klinflow/ui/components/LocationSelector';
 
 const BUSINESS_TYPES = [

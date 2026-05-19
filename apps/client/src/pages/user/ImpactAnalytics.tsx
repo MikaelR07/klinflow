@@ -17,7 +17,10 @@ import {
   Edit3
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, useBookingStore, supabase, normalizeKeys } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { supabase } from '@klinflow/supabase';
+import { normalizeKeys } from '@klinflow/core/validation';
 import { toast } from 'sonner';
 
 export default function ImpactAnalytics() {
@@ -205,82 +208,84 @@ export default function ImpactAnalytics() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* ── TOP NAV ── */}
-      <div className="shrink-0 z-40 py-4 flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 mb-2">
-        <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center shadow-sm active:scale-90 transition-all border border-slate-100 dark:border-slate-800">
-          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-        </button>
-        <div>
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-none">Impact Analytics</h1>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Performance Tracking</p>
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate(-1)} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
+            <ArrowLeft className="w-4 h-4 dark:text-white" />
+          </button>
+          <div>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">Impact Analytics</h1>
+            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Performance Tracking</p>
+          </div>
         </div>
       </div>
 
-      <div className="space-y-6 pb-24">
+      <div className="space-y-6 pb-2 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)]">
         {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
-        <div className="relative -mt-2 group px-1">
-          <div className="relative bg-gradient-to-br from-emerald-700 to-teal-900 rounded-[2rem] p-4 text-white shadow-2xl overflow-hidden transition-all duration-500">
-            <div className="relative z-10">
+        <div className="relative -mt-2 px-1">
+          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] p-4 shadow-sm">
+            <div>
               <div className="grid grid-cols-3 gap-3">
                 
                 {/* 1. Primary: Lifetime Revenue (Horizontal 2x1 Card) */}
-                <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-4 flex items-center gap-3 border border-emerald-800/30">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600/30 text-emerald-300 flex items-center justify-center shrink-0">
+                <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 border border-slate-100 dark:border-slate-800/50">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
                     <TrendingUp className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-emerald-300/80 uppercase tracking-widest leading-none">Lifetime Revenue</p>
-                    <h2 className="text-xl font-black text-white tracking-tighter leading-none mt-1 flex items-baseline gap-0.5">
-                      <span className="text-[10px] font-bold text-emerald-450 block mr-0.5 uppercase">KSh</span>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Lifetime Revenue</p>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none mt-1 flex items-baseline gap-0.5">
+                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mr-0.5 uppercase">KSh</span>
                       {stats.totalEarnings.toLocaleString()}
                     </h2>
                   </div>
                 </div>
 
                 {/* 2. Recyclables Recovered (1x1 Square Card) */}
-                <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-3 flex flex-col items-center justify-center border border-emerald-800/30">
-                  <Scale className="w-4 h-4 text-emerald-400 mb-1" />
-                  <span className="text-base font-black text-white leading-none mt-0.5">{stats.totalWeight}</span>
-                  <span className="text-[8px] font-black text-emerald-300/60 uppercase tracking-widest mt-0.5">KG</span>
+                <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-3 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800/50">
+                  <Scale className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mb-1" />
+                  <span className="text-base font-black text-slate-900 dark:text-white leading-none mt-0.5">{stats.totalWeight}</span>
+                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">KG</span>
                 </div>
 
                 {/* 3. Withdrawn (Horizontal 2x1 Card) */}
-                <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-4 flex items-center gap-3 border border-emerald-800/30">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600/30 text-emerald-300 flex items-center justify-center shrink-0">
+                <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 border border-slate-100 dark:border-slate-800/50">
+                  <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-emerald-300/80 uppercase tracking-widest leading-none">Withdrawn</p>
-                    <h2 className="text-xl font-black text-white tracking-tighter leading-none mt-1 flex items-baseline gap-0.5">
-                      <span className="text-[10px] font-bold text-emerald-450 block mr-0.5 uppercase">KSh</span>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Withdrawn</p>
+                    <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none mt-1 flex items-baseline gap-0.5">
+                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mr-0.5 uppercase">KSh</span>
                       {stats.totalWithdrawn.toLocaleString()}
                     </h2>
                   </div>
                 </div>
 
                 {/* 4. Global Rank (1x1 Square Card) */}
-                <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-3 flex flex-col items-center justify-center border border-emerald-800/30">
-                  <Trophy className="w-4 h-4 text-amber-400 mb-1" />
-                  <span className="text-base font-black text-white leading-none mt-0.5">#{stats.globalRank || '—'}</span>
-                  <span className="text-[8px] font-black text-emerald-300/60 uppercase tracking-widest mt-0.5">Rank</span>
+                <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-3 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800/50">
+                  <Trophy className="w-4 h-4 text-amber-500 mb-1" />
+                  <span className="text-base font-black text-slate-900 dark:text-white leading-none mt-0.5">#{stats.globalRank || '—'}</span>
+                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Rank</span>
                 </div>
 
                 {/* 5. Metrics Strip (Bottom Row 3x1 Card) */}
-                <div className="col-span-3 bg-emerald-950/40 rounded-2xl p-4 grid grid-cols-3 gap-1 border border-emerald-800/30">
+                <div className="col-span-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 grid grid-cols-3 gap-1 border border-slate-100 dark:border-slate-800/50">
                   <div className="text-center">
-                    <p className="text-sm font-black text-white leading-none">{stats.totalPickups}</p>
-                    <p className="text-[8px] font-black text-emerald-300/60 uppercase tracking-widest mt-1.5">Pickups</p>
+                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.totalPickups}</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">Pickups</p>
                   </div>
                   
-                  <div className="text-center border-l border-emerald-800/40">
-                    <p className="text-sm font-black text-white leading-none">{profile?.reward_points || 0}</p>
-                    <p className="text-[8px] font-black text-emerald-300/60 uppercase tracking-widest mt-1.5">GFP</p>
+                  <div className="text-center border-l border-slate-200 dark:border-slate-700">
+                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{profile?.reward_points || 0}</p>
+                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">GFP</p>
                   </div>
 
-                  <div className="text-center border-l border-emerald-800/40">
-                     <p className="text-[8px] font-black text-emerald-300/60 uppercase tracking-widest mb-0.5">Most Recycled</p>
-                     <p className="text-xs font-black text-white capitalize truncate max-w-[100px] mx-auto leading-none mt-1">{stats.topMaterial}</p>
+                  <div className="text-center border-l border-slate-200 dark:border-slate-700">
+                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Most Recycled</p>
+                     <p className="text-xs font-black text-slate-900 dark:text-white capitalize truncate max-w-[100px] mx-auto leading-none mt-1">{stats.topMaterial}</p>
                   </div>
                 </div>
 

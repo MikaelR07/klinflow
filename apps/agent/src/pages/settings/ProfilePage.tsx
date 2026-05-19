@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2, Save, Camera } from 'lucide-react';
-import { useAuthStore, ROLES, getThumbnailUrl } from '@klinflow/core';
+import { ArrowLeft, Loader2, Save, Camera, Target, Move } from 'lucide-react';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { ROLES } from '@klinflow/constants';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
 import LocationSelector from '@klinflow/ui/components/LocationSelector';
 
@@ -50,13 +52,21 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="animate-slide-up pb-20 pt-4 px-4">
-      <header className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate('/settings')} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="text-xl font-semibold dark:text-white">My Profile</h1>
-      </header>
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate('/settings')} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
+            <ArrowLeft className="w-4 h-4 dark:text-white" />
+          </button>
+          <div>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">My Profile</h1>
+            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Personal Information</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)] pb-24 px-1.5 space-y-6 max-w-lg mx-auto">
 
       {/* Avatar Section */}
       <div className="flex flex-col items-center mb-8">
@@ -101,11 +111,28 @@ export default function ProfilePage() {
         </div>
 
         {/* Active Application Location */}
-        <div className="card p-5 space-y-4">
-          <LocationSelector 
-            value={formData.location} 
-            onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))} 
-          />
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <label className="text-xs font-black text-slate-400 dark:text-slate-555 uppercase tracking-[0.2em]">Location Area</label>
+            {formData.location?.accuracy && (
+              <span className="flex items-center gap-1.5 text-xs font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full uppercase tracking-widest">
+                <Target className="w-3 h-3" /> Precision {Math.round(formData.location.accuracy)}m
+              </span>
+            )}
+          </div>
+          
+          <div className="card p-0 overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm relative z-0">
+            <LocationSelector 
+              value={formData.location} 
+              onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))} 
+              hideHeaderText={true}
+              hideFooterText={true}
+            />
+          </div>
+
+          <p className="text-xs text-slate-400 mt-2 italic leading-relaxed px-1 text-center">
+            Klinflow uses your GPS pin for pinpoint accuracy. This marker determines your primary routing dispatch and operational zone.
+          </p>
         </div>
 
         {/* Agent Details */}
@@ -128,6 +155,7 @@ export default function ProfilePage() {
         </button>
 
       </form>
+      </div>
     </div>
   );
 }

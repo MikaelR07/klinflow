@@ -160,7 +160,7 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
         ...data,
         icon: icon || '🗑️',
         description: description || '',
-        price_per_unit: data.price_per_unit !== undefined ? data.price_per_unit : data.price_per_kg
+        price_per_unit: data.price_per_kg
       } as ServiceCategory;
 
       set(state => ({

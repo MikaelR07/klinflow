@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import viteCompression from 'vite-plugin-compression';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 
@@ -11,12 +12,14 @@ export default defineConfig({
   envDir: resolve(__dirname, '../../'),
   plugins: [
     react(),
+    viteCompression({ algorithm: 'brotliCompress', ext: '.br' }),
+    viteCompression({ algorithm: 'gzip', ext: '.gz' }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'Klinflow Admin', // Normalized name
-        short_name: 'CF Admin',
+        name: 'Klin Admin',
+        short_name: 'Klin Admin',
         description: 'Klinflow Admin PWA for administrators',
         theme_color: '#00A651',
         background_color: '#ffffff',
@@ -42,5 +45,27 @@ export default defineConfig({
   ],
   server: {
     port: 5176
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          supabase: ['@supabase/supabase-js'],
+          ui: ['framer-motion', 'lucide-react'],
+          data: ['recharts', 'zod', 'zustand'],
+          maps: ['leaflet', 'react-leaflet']
+        }
+      }
+    }
+  },
+  resolve: {
+    alias: {
+      '@klinflow/core': resolve(__dirname, '../../packages/core/src'),
+      '@klinflow/ui': resolve(__dirname, '../../packages/ui/src'),
+      '@klinflow/constants': resolve(__dirname, '../../packages/constants/src'),
+      '@klinflow/supabase': resolve(__dirname, '../../packages/supabase/src'),
+      '@klinflow/types': resolve(__dirname, '../../packages/types/src')
+    }
   }
 });

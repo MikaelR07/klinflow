@@ -6,7 +6,7 @@ import {
   User, Truck, Building2, Warehouse,
   Sun, Moon, Globe
 } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -16,8 +16,17 @@ export default function Header() {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -32,7 +41,7 @@ export default function Header() {
     { name: 'Hub Logistics', desc: 'Intake and processing system', path: '/products/hub', icon: Warehouse, color: 'text-rose-500' },
   ];
 
-  const getPortalLink = (app) => {
+  const getPortalLink = (app: 'client' | 'agent' | 'business' | 'admin') => {
     if (import.meta.env.DEV) {
       const ports = { client: '5173', agent: '5174', business: '5175', admin: '5176' };
       return `http://localhost:${ports[app]}`;

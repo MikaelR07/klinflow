@@ -17,7 +17,9 @@ import {
   Package 
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useAuthStore, useHygenexStore, ROLES } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useHygenexStore } from '@klinflow/core/stores/hygenexStore';
+import { ROLES } from '@klinflow/constants';
 
 // Custom Voice Hook
 function useVoiceRecognition() {

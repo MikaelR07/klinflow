@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ShieldAlert, User, Phone, Mail, Lock, KeyRound, Loader2 } from 'lucide-react';
-import { useAuthStore, ROLES } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { ROLES } from '@klinflow/constants';
 import { toast } from 'sonner';
 
 export default function AdminRegister() {

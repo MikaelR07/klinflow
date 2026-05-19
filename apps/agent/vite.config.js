@@ -21,8 +21,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.png', 'icons/*.png'],
       manifest: {
-        name: 'Klinflow Agent',
-        short_name: 'Klinflow',
+        name: 'Klin Agent',
+        short_name: 'Klin Agent',
         description: 'Klinflow Agent PWA for waste collectors',
         theme_color: '#00A651',
         background_color: '#0f172a',
@@ -55,7 +55,9 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
           supabase: ['@supabase/supabase-js'],
-          ui: ['framer-motion', 'lucide-react', 'react-virtuoso']
+          ui: ['framer-motion', 'lucide-react', 'react-virtuoso'],
+          maps: ['leaflet', 'react-leaflet'],
+          data: ['recharts', 'zod', 'zustand']
         }
       }
     }

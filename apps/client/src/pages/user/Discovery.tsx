@@ -6,7 +6,10 @@ import {
   Sparkles, Filter, ChevronRight, Scale, Info, Package
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase, MATERIAL_LABELS, WASTE_CATEGORIES, getThumbnailUrl, normalizeKeys } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
+import { MATERIAL_LABELS, WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { normalizeKeys } from '@klinflow/core/validation';
 
 const SCALE_DEFS = [
   { id: 'all', label: 'Any Scale', icon: Truck, description: 'Show all partners' },
@@ -23,7 +26,6 @@ export default function DiscoveryHub() {
   const [partners, setPartners] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
-
   const materials = ['all', 'recyclable', 'metal', 'ewaste', 'paper', 'glass', 'organic', 'general'];
 
   useEffect(() => {
@@ -70,9 +72,9 @@ export default function DiscoveryHub() {
   }, [partners, activeMaterial, activeScale, searchQuery]);
 
   return (
-    <div className="space-y-6">
-      {/* ── STICKY HEADER ── */}
-      <div className="sticky top-0 z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border-b border-slate-100 dark:border-white/5 p-4">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── FIXED HEADER ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="w-full mx-auto">
           <div className="flex items-center gap-4 mb-4">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
@@ -109,7 +111,7 @@ export default function DiscoveryHub() {
         </div>
       </div>
 
-      <div className="w-full p-0 py-6 space-y-6">
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+5.75rem)] pb-6 px-0 space-y-6">
         
         {/* ── EXPANDABLE FILTERS ── */}
         <AnimatePresence>
@@ -118,7 +120,7 @@ export default function DiscoveryHub() {
               initial={{ height: 0, opacity: 0, marginBottom: 0 }}
               animate={{ height: 'auto', opacity: 1, marginBottom: 24 }}
               exit={{ height: 0, opacity: 0, marginBottom: 0 }}
-              className="overflow-hidden space-y-5"
+              className="overflow-hidden space-y-5 px-4"
             >
               {/* Material Filter */}
               <div className="space-y-2">
@@ -134,8 +136,8 @@ export default function DiscoveryHub() {
                       onClick={() => setActiveMaterial(m)}
                       className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest whitespace-nowrap transition-all border ${
                         activeMaterial === m 
-                        ? 'bg-primary border-primary text-white' 
-                        : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-100 dark:border-slate-800'
+                          ? 'bg-primary border-primary text-white' 
+                          : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-100 dark:border-slate-800'
                       }`}
                     >
                       {m === 'all' ? 'All' : ((MATERIAL_LABELS as any)[m] || m)}
@@ -154,8 +156,8 @@ export default function DiscoveryHub() {
                       onClick={() => setActiveScale(s.id)}
                       className={`p-3 rounded-2xl border text-left transition-all ${
                         activeScale === s.id
-                        ? 'border-primary bg-primary/5'
-                        : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800'
+                          ? 'border-primary bg-primary/5'
+                          : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800'
                       }`}
                     >
                       <p className={`text-xs font-semibold uppercase tracking-tight mb-0.5 ${activeScale === s.id ? 'text-primary' : 'dark:text-white'}`}>
@@ -173,9 +175,9 @@ export default function DiscoveryHub() {
         </AnimatePresence>
 
         {/* ── PARTNERS LIST ── */}
-        <div className="space-y-3">
+        <div className="space-y-1">
           {isLoading ? (
-            <div className="space-y-3">
+            <div className="space-y-1.5 px-4">
               {[1, 2, 3, 4].map(i => (
                 <div key={i} className="h-28 bg-white dark:bg-slate-800 rounded-3xl animate-pulse" />
               ))}
@@ -195,12 +197,12 @@ export default function DiscoveryHub() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   onClick={() => navigate(`/company/${partner.id}`)}
-                  className="w-full bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-100 dark:border-white/5 shadow-sm active:scale-[0.99] transition-all group text-left"
+                  className="w-full bg-white dark:bg-slate-900 p-4 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-800/80 active:scale-[0.99] transition-all group text-left"
                 >
                   <div className="flex gap-4">
                     {/* Avatar/Icon */}
                     <div className="relative shrink-0">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-inner relative overflow-hidden ${
+                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-inner relative overflow-hidden ${
                         isCompany ? 'bg-indigo-50 dark:bg-indigo-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30'
                       }`}>
                         {partner.avatarUrl ? (
@@ -232,7 +234,7 @@ export default function DiscoveryHub() {
                               </div>
                               <span className="text-xs text-slate-300">•</span>
                               <span className={`text-xs font-semibold uppercase tracking-widest ${
-                                 scale === 'bulk' || scale === 'industrial' ? 'text-indigo-500' : 'text-emerald-500'
+                                scale === 'bulk' || scale === 'industrial' ? 'text-indigo-500' : 'text-emerald-500'
                               }`}>
                                  {scale}
                               </span>
@@ -247,12 +249,17 @@ export default function DiscoveryHub() {
                       <div className="flex flex-wrap gap-1 mt-2">
                         {acceptedMaterials
                           .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
-                          .slice(0, 4)
+                          .slice(0, 3)
                           .map((m: any) => (
                             <span key={m} className="px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 border border-slate-100/50 dark:border-white/5">
                               {(MATERIAL_LABELS as any)[m]}
                             </span>
                           ))}
+                        {acceptedMaterials.filter((m: any) => !!(MATERIAL_LABELS as any)[m]).length > 3 && (
+                          <span className="px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-xs font-semibold text-slate-400 dark:text-slate-500 border border-slate-100/50 dark:border-white/5 italic">
+                            etc
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -260,7 +267,7 @@ export default function DiscoveryHub() {
               );
             })
           ) : (
-            <div className="text-center py-24 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
+            <div className="mx-4 text-center py-24 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
               <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Search className="w-8 h-8 text-slate-200" />
               </div>
@@ -279,15 +286,17 @@ export default function DiscoveryHub() {
         </div>
 
         {/* ── INFO BOX ── */}
-        <div className="bg-blue-50/50 dark:bg-blue-900/10 p-6 rounded-[2.5rem] border border-blue-100/50 dark:border-blue-800/30 flex items-start gap-4">
-          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center shrink-0">
-             <Info className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <h4 className="text-xs font-semibold text-blue-900 dark:text-blue-400 uppercase tracking-widest mb-1">Choosing the right scale</h4>
-            <p className="text-xs font-medium text-blue-800/60 dark:text-blue-300/60 leading-relaxed">
-              Standard agents use motorbikes for fast, small pickups. Bulk partners use trucks for estate-wide or industrial recycling.
-            </p>
+        <div className="px-4">
+          <div className="bg-blue-50/50 dark:bg-blue-900/10 p-6 rounded-[2.5rem] border border-blue-100/50 dark:border-blue-800/30 flex items-start gap-4">
+            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center shrink-0">
+               <Info className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-blue-900 dark:text-blue-400 uppercase tracking-widest mb-1">Choosing the right scale</h4>
+              <p className="text-xs font-medium text-blue-800/60 dark:text-blue-300/60 leading-relaxed">
+                Standard agents use small vehicles for fast, small pickups. Bulk partners use trucks for estate-wide or industrial recycling.
+              </p>
+            </div>
           </div>
         </div>
 

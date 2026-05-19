@@ -9,7 +9,8 @@ import {
   ChevronDown, ChevronUp, Eye, MessageSquare
 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuthStore, useMarketplaceStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 import { toast } from 'sonner';
 
 export default function ListingDetails() {

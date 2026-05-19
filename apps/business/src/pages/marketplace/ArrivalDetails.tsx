@@ -21,10 +21,10 @@ import {
   BadgeCheck
 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  useAuthStore, useAssetStore, useMarketplaceStore, 
-  supabase 
-} from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useAssetStore } from '@klinflow/core/stores/assetStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 

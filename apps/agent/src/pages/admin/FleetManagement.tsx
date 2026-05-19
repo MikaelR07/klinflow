@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useAuthStore, useAgentStore, getThumbnailUrl } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { Users, Search, Filter, Mail, Phone, MoreVertical, ShieldCheck, UserMinus, UserPlus, Copy, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 

@@ -15,7 +15,11 @@ import {
   Info,
   DollarSign
 } from 'lucide-react';
-import { useAuthStore, useAgentStore, WASTE_CATEGORIES, supabase, compressImage } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
+import { supabase } from '@klinflow/supabase';
+import { compressImage } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
 
 export default function AgentSellStock() {

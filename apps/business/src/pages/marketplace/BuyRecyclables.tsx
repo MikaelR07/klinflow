@@ -4,7 +4,9 @@ import {
   Filter, Search, ArrowLeft, MapPin, Tag, 
   ShoppingCart, Loader2, X, Package, BadgeCheck, MessageSquareQuote
 } from 'lucide-react';
-import { useMarketplaceStore, useAuthStore, getThumbnailUrl } from '@klinflow/core';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
 
 export default function BuyRecyclables() {

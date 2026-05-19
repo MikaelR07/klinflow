@@ -738,6 +738,28 @@ export type Database = {
         }
         Returns: string
       }
+      deposit_to_wallet: {
+        Args: {
+          p_amount: number
+        }
+        Returns: void
+      }
+      get_company_stats_v2: {
+        Args: {
+          p_company_id: string
+        }
+        Returns: {
+          total: number
+          todayPayout: number
+          inventoryValue: number
+          totalJobs: number
+          completedToday: number
+          totalKgRecovered: number
+          todayKg: number
+          thisWeekKg: number
+          weeklyData: { day: string; weight: number }[]
+        }
+      }
       process_wallet_topup: {
         Args: {
           p_amount: number

@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Recycle, User, Phone, Lock, Hash, Loader2, ArrowLeft, ShieldCheck, Briefcase, Mail, Venus, Mars } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAuthStore, ROLES } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { ROLES } from '@klinflow/constants';
 import LocationSelector from '@klinflow/ui/components/LocationSelector';
 
 export default function Register() {

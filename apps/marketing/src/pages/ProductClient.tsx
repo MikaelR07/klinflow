@@ -4,7 +4,7 @@ import {
   ShoppingBag, CheckCircle2, ArrowRight,
   Handshake, Layout as LayoutIcon, BarChart3
 } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import Layout from '../layouts/Layout';
 
 export default function ProductClient() {
@@ -44,7 +44,7 @@ export default function ProductClient() {
 
             <div className="order-1 lg:order-2">
               <div className="rounded-2xl overflow-hidden border border-white/5 shadow-2xl relative">
-                <img src="/grid/seller-home.png" alt="Client Terminal: Seller Home" loading="lazy" className="w-full h-auto" />
+                <img src="/grid/seller-home.webp" alt="Client Terminal: Seller Home" loading="lazy" className="w-full h-auto" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
               </div>
               {/* Floating UI Card */}

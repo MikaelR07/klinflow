@@ -6,7 +6,7 @@ import {
   Calendar, Building2, UserCheck
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
 
 // CO2 Offset Multipliers (KG CO2 saved per KG material recycled)
 // Source: EPA / Industry averages

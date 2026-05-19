@@ -17,10 +17,15 @@ import L from 'leaflet';
 window.L = L;
 import { toast } from 'sonner';
 
-import { 
-  useBookingStore, useAuthStore, useServiceStore, usePriceStore,
-  useSystemStore, useNotificationStore, uploadFile, MATERIAL_TYPES, compressImage
-} from '@klinflow/core';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { usePriceStore } from '@klinflow/core/stores/priceStore';
+import { useSystemStore } from '@klinflow/core/stores/systemStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { uploadFile } from '@klinflow/core/lib/storage';
+import { MATERIAL_TYPES } from '@klinflow/core/stores/assetStore';
+import { compressImage } from '@klinflow/core/utils/imageUtils';
 
 // ── COMPACT MAP ICONS ───────────────────────────────────────────
 
@@ -630,7 +635,7 @@ export default function BookPickup() {
                     </motion.div>
                   )}
 
-                  <div className="h-[250px] w-full rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 relative shadow-sm group">
+                  <div className="h-64 -mx-3.5 w-auto rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 relative shadow-sm group">
                       <MapContainer center={center as [number, number]} zoom={13} zoomControl={false} className="h-full w-full z-0">
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                         <Marker position={center as any} {...({ icon: userIcon } as any)} />
@@ -675,35 +680,35 @@ export default function BookPickup() {
                   </div>
 
                   {/* Active Selection Cards */}
-                  {(selectedAgent || selectedCompanyId) && (
-                    <div className="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-primary/20 shadow-xl mt-4 animate-slide-up">
-                       <div className="flex items-center justify-between gap-3">
-                          <div className="flex items-center gap-3">
-                             <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-xl">
-                                {selectedCompanyId && !selectedAgent ? '🏢' : '🚛'}
-                             </div>
-                             <div>
-                                <p className="text-xs font-semibold text-primary uppercase tracking-widest leading-none">
-                                   {selectedCompanyId && !selectedAgent ? 'Fleet Hub Selected' : 'Targeting Agent'}
-                                </p>
-                                <h4 className="text-sm font-semibold text-slate-900 dark:text-white mt-1">
-                                   {selectedAgent ? selectedAgent.name : (liveAgents.find(a => a.id === selectedCompanyId)?.companyName || 'Selected Hub')}
-                                </h4>
-                             </div>
-                          </div>
-                          <button 
-                             onClick={() => {
-                                setSelectedAgent(null);
-                                setSelectedCompanyId(null);
-                                toast.success("Selection Cleared");
-                             }}
-                             className="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
-                          >
-                             <X className="w-5 h-5" />
-                          </button>
-                       </div>
-                    </div>
-                  )}
+                   {(selectedAgent || selectedCompanyId) && (
+                     <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-primary/20 shadow-xl mt-3 animate-slide-up">
+                        <div className="flex items-center justify-between gap-3">
+                           <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-lg">
+                                 {selectedCompanyId && !selectedAgent ? '🏢' : '🚛'}
+                              </div>
+                              <div>
+                                 <p className="text-[10px] font-bold text-primary uppercase tracking-widest leading-none">
+                                    {selectedCompanyId && !selectedAgent ? 'Fleet Hub Selected' : 'Targeting Agent'}
+                                 </p>
+                                 <h4 className="text-xs font-semibold text-slate-900 dark:text-white mt-1">
+                                    {selectedAgent ? selectedAgent.name : (liveAgents.find(a => a.id === selectedCompanyId)?.companyName || 'Selected Hub')}
+                                 </h4>
+                              </div>
+                           </div>
+                           <button 
+                              onClick={() => {
+                                 setSelectedAgent(null);
+                                 setSelectedCompanyId(null);
+                                 toast.success("Selection Cleared");
+                              }}
+                              className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
+                           >
+                              <X className="w-4 h-4" />
+                           </button>
+                        </div>
+                     </div>
+                   )}
 
                   {/* Fleet Drivers List for Selected Hub */}
                   {selectedCompanyId && !selectedAgent && (
@@ -741,12 +746,12 @@ export default function BookPickup() {
                   )}
 
                   {/* Preferred Agent Search */}
-                  <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm mt-4">
-                     <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">Search by Name or Invite Code (Optional)</h2>
+                  <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mt-3.5">
+                     <h2 className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2.5">Search by Name or Invite Code (Optional)</h2>
                      <input 
                        type="text" 
                        placeholder="e.g. Klinflow Hub, Agent John..." 
-                       className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 text-sm font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all"
+                       className="w-full bg-slate-50 dark:bg-slate-800 py-2.5 px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all"
                        onChange={(e) => {
                           const query = e.target.value.toLowerCase();
                           if (!query) return;
@@ -773,14 +778,14 @@ export default function BookPickup() {
                       {/* SMART ASAP BUTTON */}
                       <button 
                         onClick={() => { selectTime({ time: 'ASAP', type: 'asap' }); setIsManualTime(false); }} 
-                        className={`w-full p-6 rounded-3xl border-2 transition-all text-left flex items-center gap-4 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-primary border-primary shadow-xl shadow-primary/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'}`}
+                        className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-primary border-primary shadow-xl shadow-primary/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'}`}
                       >
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-white/20' : 'bg-primary/10'}`}>
-                          <Zap className={`w-7 h-7 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-primary'}`} />
+                        <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-white/20' : 'bg-primary/10'}`}>
+                          <Zap className={`w-5 h-5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-primary'}`} />
                         </div>
                         <div className="flex-1">
-                          <p className={`text-lg font-semibold leading-tight ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>ASAP</p>
-                          <p className={`text-[11px] font-semibold mt-0.5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white/70' : 'text-slate-400'}`}>
+                          <p className={`text-sm font-semibold leading-tight ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>ASAP</p>
+                          <p className={`text-[10px] font-bold mt-0.5 leading-tight ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white/70' : 'text-slate-400'}`}>
                              {(() => {
                                const hubs = filteredAgents.filter(a => a.agentAccountType === 'company_admin').length;
                                const agents = filteredAgents.filter(a => a.agentAccountType === 'independent' || a.agentAccountType === 'fleet_driver').length;
@@ -792,25 +797,25 @@ export default function BookPickup() {
                              })()}
                           </p>
                         </div>
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'border-white bg-white' : 'border-slate-200'}`}>
-                          {!isManualTime && (selectedTime as any)?.time === 'ASAP' && <div className="w-3 h-3 rounded-full bg-primary" />}
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'border-white bg-white' : 'border-slate-200'}`}>
+                          {!isManualTime && (selectedTime as any)?.time === 'ASAP' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
                         </div>
                       </button>
 
                       {/* SCHEDULE LATER */}
                       <button 
                         onClick={() => setIsManualTime(true)} 
-                        className={`w-full p-5 rounded-3xl border-2 transition-all text-left flex items-center gap-4 ${isManualTime ? 'bg-slate-900 dark:bg-slate-700 border-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border-dashed border-slate-200 dark:border-white/10'}`}
+                        className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${isManualTime ? 'bg-slate-900 dark:bg-slate-700 border-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border-dashed border-slate-200 dark:border-white/10'}`}
                       >
                         <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${isManualTime ? 'bg-white/10' : 'bg-slate-50 dark:bg-slate-900'}`}>
-                          <Clock className={`w-6 h-6 ${isManualTime ? 'text-primary' : 'text-slate-400'}`} />
+                          <Clock className={`w-5 h-5 ${isManualTime ? 'text-primary' : 'text-slate-400'}`} />
                         </div>
                         <div className="flex-1">
-                          <p className={`text-sm font-semibold leading-tight ${isManualTime ? 'text-white' : 'text-slate-900 dark:text-white'}`}>Schedule Later</p>
-                          <p className={`text-xs font-semibold mt-0.5 ${isManualTime ? 'text-white/50' : 'text-slate-400'}`}>Pick a date & time</p>
+                          <p className={`text-[13px] font-semibold leading-tight ${isManualTime ? 'text-white' : 'text-slate-900 dark:text-white'}`}>Schedule Later</p>
+                          <p className={`text-[10px] font-bold mt-0.5 leading-tight ${isManualTime ? 'text-white/50' : 'text-slate-400'}`}>Pick a date & time</p>
                         </div>
                         <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isManualTime ? 'border-white bg-white' : 'border-slate-200'}`}>
-                          {isManualTime && <div className="w-3 h-3 rounded-full bg-slate-900" />}
+                          {isManualTime && <div className="w-2.5 h-2.5 rounded-full bg-slate-900" />}
                         </div>
                       </button>
                    </div>

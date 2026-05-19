@@ -10,7 +10,9 @@ import {
   ShieldCheck,
   AlertCircle
 } from 'lucide-react';
-import { useAuthStore, useNotificationStore, useAssetStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { useAssetStore } from '@klinflow/core/stores/assetStore';
 import { toast } from 'sonner';
 
 export default function WarehousePage() {

@@ -4,7 +4,8 @@ import {
   ArrowLeft, ShieldCheck, Briefcase, ChevronRight, Loader2, CheckCircle2,
   Truck, ShieldAlert, RefreshCw, Heart, TrendingUp, Award, Sparkles
 } from 'lucide-react';
-import { useAuthStore, supabase } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
 
 export default function StaffApplication() {

@@ -7,6 +7,10 @@
   "exports": {
     ".": "./src/index.ts",
     "./stores/*": "./src/stores/*.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./utils/*": "./src/utils/*.ts",
+    "./validation": "./src/validation/index.ts",
+    "./validation/*": "./src/validation/*.ts",
     "./lib/*": "./src/lib/*.ts",
     "./data/*": "./src/data/*.ts",
     "./src/*": "./src/*"

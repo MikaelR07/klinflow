@@ -1,17 +1,24 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import path from 'path';
+import viteCompression from 'vite-plugin-compression';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  envDir: resolve(__dirname, '../../'),
   plugins: [
     react(),
+    viteCompression({ algorithm: 'brotliCompress', ext: '.br' }),
+    viteCompression({ algorithm: 'gzip', ext: '.gz' }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'Klinflow Hub',
-        short_name: 'CF Hub',
+        name: 'Klin Hub',
+        short_name: 'Klin Hub',
         description: 'Klinflow Hub PWA for material processing and inventory audit',
         theme_color: '#00A651',
         background_color: '#ffffff',
@@ -39,9 +46,21 @@ export default defineConfig({
     port: 5178,
     host: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          supabase: ['@supabase/supabase-js'],
+          ui: ['framer-motion', 'lucide-react'],
+          data: ['recharts', 'zod', 'zustand']
+        }
+      }
+    }
+  },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': resolve(__dirname, './src'),
     },
   },
 });

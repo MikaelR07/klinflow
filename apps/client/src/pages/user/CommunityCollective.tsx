@@ -12,7 +12,8 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuthStore, useBookingStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
 
 const ACTIVE_SWARMS = [
   { id: 'swarm-1', estate: 'Eastleigh Section 3', material: 'Mixed Plastic', currentWeight: 145, targetWeight: 200, participants: 4, timeLeft: '2h 15m' },
@@ -50,7 +51,7 @@ export default function CommunityCollective() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-20 max-w-lg mx-auto w-full px-1 space-y-6">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-2 max-w-lg mx-auto w-full px-1.5 space-y-6">
         
         {/* ── COMMUNITY PRIDE BANNER ── */}
         <div className="bg-gradient-to-br from-emerald-600 to-emerald-900 rounded-2xl p-5 text-white relative overflow-hidden shadow-xl shadow-emerald-500/20">

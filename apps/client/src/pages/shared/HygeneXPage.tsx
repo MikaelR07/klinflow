@@ -2,8 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Brain, Mic, Send, Lightbulb, MapPin, Loader2, StopCircle, ShieldCheck, Activity, User, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useAuthStore, ROLES } from '@klinflow/core';
-import { useHygenexStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { ROLES } from '@klinflow/constants';
+import { useHygenexStore } from '@klinflow/core/stores/hygenexStore';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 

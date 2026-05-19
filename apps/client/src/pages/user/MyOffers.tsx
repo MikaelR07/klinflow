@@ -10,15 +10,12 @@ import {
   Package, MapPin, Tag, User, ChevronRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  useMarketplaceStore, 
-  useAuthStore, 
-  useBookingStore, 
-  supabase, 
-  getThumbnailUrl,
-  Booking,
-  MarketplaceOffer
-} from '@klinflow/core';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { supabase } from '@klinflow/supabase';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { Booking, MarketplaceOffer } from '@klinflow/core/validation';
 import { toast } from 'sonner';
 
 export default function MyOffers() {
@@ -175,7 +172,7 @@ export default function MyOffers() {
             </div>
 
             {/* Integrated Tab Nav */}
-            <div className="flex bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl">
+            <div className="flex bg-slate-100 dark:bg-slate-800/80 p-2 rounded-xl">
               {[
                 { id: 'pending', label: 'Bids', count: pendingOffers.length },
                 { id: 'progress', label: 'On-going', count: inProgressOffers.length },
@@ -185,7 +182,7 @@ export default function MyOffers() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 py-1.5 text-[9px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 ${
+                  className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 ${
                     activeTab === tab.id
                       ? 'bg-white dark:bg-slate-700 shadow-sm text-emerald-600 dark:text-emerald-400 font-black'
                       : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'

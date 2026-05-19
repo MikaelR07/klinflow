@@ -18,7 +18,10 @@ import {
   Sparkles,
   Globe
 } from 'lucide-react';
-import { useAuthStore, useBookingStore, supabase, Booking } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { supabase } from '@klinflow/supabase';
+import { Booking } from '@klinflow/core/validation';
 
 // Badge definitions — unlock conditions are checked dynamically
 const BADGE_DEFS = [

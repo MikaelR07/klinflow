@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFeedbackStore, useAuthStore } from '@klinflow/core';
+import { useFeedbackStore } from '@klinflow/core/stores/feedbackStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { ArrowLeft, Loader2, Star, Send } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -44,13 +45,21 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="animate-slide-up pb-20 pt-4 px-4">
-      <header className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate('/settings')} className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="text-xl font-semibold dark:text-white">Give Feedback</h1>
-      </header>
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate('/settings')} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
+            <ArrowLeft className="w-4 h-4 dark:text-white" />
+          </button>
+          <div>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">Give Feedback</h1>
+            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Share Your Experience</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)] pb-24 px-1.5 space-y-6 max-w-lg mx-auto">
 
       <form onSubmit={handleSubmit} className="space-y-6">
         
@@ -112,6 +121,7 @@ export default function FeedbackPage() {
         </div>
 
       </form>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,8 @@ import {
   ShieldCheck, Shield, Sparkles, Building2, X, Mail
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAuthStore, ROLES } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { ROLES } from '@klinflow/constants';
 import LocationSelector from '@klinflow/ui/components/LocationSelector';
 
 const BUSINESS_TYPES = [

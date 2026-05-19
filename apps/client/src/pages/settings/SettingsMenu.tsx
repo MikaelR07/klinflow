@@ -9,9 +9,13 @@ import {
   TrendingUp, Globe, BarChart3, Briefcase, Award, History, Building2,
   Users, Star, CreditCard, ChevronDown, CheckCircle2, X, Plus, Info, Trophy
 } from 'lucide-react';
-import { useAuthStore, useBookingStore, useMarketplaceStore, getThumbnailUrl, useThemeStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import { useNavigate } from 'react-router-dom';
-import { ThemeToggleRow } from '@klinflow/ui';
+import ThemeToggleRow from '@klinflow/ui/components/ThemeToggleRow';
 import { toast } from 'sonner';
 
 export default function SettingsMenu() {
@@ -93,7 +97,7 @@ export default function SettingsMenu() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
         
         {/* ── PROFILE BENTO CARD ── */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Leaf, Globe, Mail, MessageSquare } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core';
+import { useThemeStore } from '@klinflow/core/stores/themeStore';
 
 export default function Footer() {
   const { isDarkMode } = useThemeStore();

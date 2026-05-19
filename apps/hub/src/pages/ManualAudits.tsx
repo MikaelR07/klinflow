@@ -13,7 +13,8 @@ import {
   Loader2,
   Sparkles
 } from 'lucide-react';
-import { supabase, normalizeKeys, Asset, Profile } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
+import { normalizeKeys, Asset, Profile } from '@klinflow/core/validation';
 
 interface AuditAgent {
   id: string;

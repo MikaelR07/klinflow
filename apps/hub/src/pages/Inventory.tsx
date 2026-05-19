@@ -19,17 +19,12 @@ import {
   Scale
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  supabase, 
-  useAuthStore, 
-  getCategoryBySlug, 
-  getSubcategoryLabel, 
-  usePriceStore,
-  normalizeKeys,
-  Asset,
-  AssetSchema,
-  safeParseArray
-} from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { getCategoryBySlug, getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
+import { usePriceStore } from '@klinflow/core/stores/priceStore';
+import { normalizeKeys, Asset, AssetSchema } from '@klinflow/core/validation';
+import { safeParseArray } from '@klinflow/core/validation/utils';
 import { toast } from 'sonner';
 
 interface CategoryGroup {

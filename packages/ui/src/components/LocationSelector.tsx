@@ -30,6 +30,8 @@ interface LocationValue {
 interface LocationSelectorProps {
   value: LocationValue;
   onChange: (val: LocationValue) => void;
+  hideHeaderText?: boolean;
+  hideFooterText?: boolean;
 }
 
 // ── REVERSE GEOCODE HELPER ─────────────────────────────────────────
@@ -74,7 +76,12 @@ function MapEvents({ onMove }: { onMove: (lat: number, lon: number) => void }) {
   return null;
 }
 
-export default function LocationSelector({ value, onChange }: LocationSelectorProps) {
+export default function LocationSelector({ 
+  value, 
+  onChange,
+  hideHeaderText = false,
+  hideFooterText = false
+}: LocationSelectorProps) {
   const [isCapturing, setIsCapturing] = useState(false);
   const [showMap, setShowMap] = useState(!!value?.latitude);
   const [accuracy, setAccuracy] = useState<number | null>(null);
@@ -144,18 +151,20 @@ export default function LocationSelector({ value, onChange }: LocationSelectorPr
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Location Area</label>
-        {accuracy && (
-          <span className="flex items-center gap-1.5 text-xs font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full uppercase tracking-widest">
-            <Target className="w-3 h-3" /> Precision {Math.round(accuracy)}m
-          </span>
-        )}
-      </div>
+    <div className={hideHeaderText ? "w-full" : "space-y-4"}>
+      {!hideHeaderText && (
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Location Area</label>
+          {accuracy && (
+            <span className="flex items-center gap-1.5 text-xs font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full uppercase tracking-widest">
+              <Target className="w-3 h-3" /> Precision {Math.round(accuracy)}m
+            </span>
+          )}
+        </div>
+      )}
 
       {!showMap ? (
-        <div className="grid grid-cols-2 gap-3">
+        <div className={hideHeaderText ? "grid grid-cols-2 gap-3 p-4" : "grid grid-cols-2 gap-3"}>
           <button 
             type="button"
             onClick={handleDetect}
@@ -176,8 +185,8 @@ export default function LocationSelector({ value, onChange }: LocationSelectorPr
           </button>
         </div>
       ) : (
-        <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
-          <div className="h-48 w-full rounded-[2.5rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl relative z-0">
+        <div className={hideHeaderText ? "w-full animate-in fade-in slide-in-from-top-4 duration-500" : "space-y-4 animate-in fade-in slide-in-from-top-4 duration-500"}>
+          <div className={hideHeaderText ? "h-56 w-full relative z-0" : "h-48 w-full rounded-[2.5rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl relative z-0"}>
             <MapContainer center={initialPos as any} zoom={15} style={{ height: '100%', width: '100%' }} zoomControl={false} {...({} as any)}>
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <RecenterMap lat={value?.latitude} lng={value?.longitude} />
@@ -216,9 +225,11 @@ export default function LocationSelector({ value, onChange }: LocationSelectorPr
             )}
           </div>
 
-          <p className="text-xs text-slate-400 font-bold uppercase tracking-widest text-center">
-            <Move className="w-3 h-3 inline mr-1 mb-0.5" /> Drag the pin to your exact pickup gate
-          </p>
+          {!hideFooterText && (
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-widest text-center">
+              <Move className="w-3 h-3 inline mr-1 mb-0.5" /> Drag the pin to your exact pickup gate
+            </p>
+          )}
         </div>
       )}
     </div>

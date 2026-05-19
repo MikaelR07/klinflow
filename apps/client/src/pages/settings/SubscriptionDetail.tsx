@@ -6,7 +6,8 @@ import {
   Crown, Star, Globe2, CreditCard, Clock, 
   Info, TrendingUp, Building2
 } from 'lucide-react';
-import { useAuthStore, SUBSCRIPTION_TIERS } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { SUBSCRIPTION_TIERS } from '@klinflow/core/data/mockData';
 import { toast } from 'sonner';
 
 export default function SubscriptionDetail() {

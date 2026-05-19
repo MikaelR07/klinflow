@@ -4,7 +4,8 @@ import {
   Loader2, CheckCircle2, BadgeCheck, BarChart3,
   Award, Zap, Users, Target, Activity
 } from 'lucide-react';
-import { supabase, useAdminStore } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
+import { useAdminStore } from '@klinflow/core/stores/adminStore';
 
 const MATERIAL_LABELS = {
   recyclable: 'Recyclables',
