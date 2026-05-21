@@ -180,7 +180,7 @@ export default function MyTrades() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm z-50 transition-colors">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors">
         <div className="max-w-lg mx-auto space-y-2.5">
           <div className="flex items-center justify-between">
             <button onClick={() => navigate(-1)} className="w-8 h-8 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
@@ -188,8 +188,8 @@ export default function MyTrades() {
             </button>
             
             <div className="text-center">
-              <h1 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Trade History</h1>
-              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-0.5">Marketplace Ledger</p>
+              <h1 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Trade History</h1>
+              <p className="text-[9px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-0.5">Marketplace Ledger</p>
             </div>
             
             <div className="w-8" /> {/* Spacer */}
@@ -212,7 +212,7 @@ export default function MyTrades() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 ${
+                  className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 ${
                     activeTab === tab 
                       ? 'bg-white dark:bg-slate-700 shadow-sm text-emerald-600 dark:text-emerald-400 font-black' 
                       : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
@@ -261,7 +261,7 @@ export default function MyTrades() {
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800">
                             <div className="text-6xl mb-3">{waste?.icon || '♻️'}</div>
-                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">No photo attached</p>
+                            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">No photo attached</p>
                           </div>
                         );
                       })()}
@@ -278,35 +278,35 @@ export default function MyTrades() {
                       <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-4 shadow-sm">
                         <div className="flex items-start justify-between gap-2 border-b border-slate-100 dark:border-slate-700/50 pb-4">
                           <div>
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
-                            <p className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
+                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Material</p>
+                            <p className="text-xs font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-tight">
                               {waste?.label || formatMaterial(materialVal)}
                             </p>
-                            <div className={`mt-2 w-fit px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${status.color}`}>
+                            <div className={`mt-2 w-fit px-2 py-0.5 rounded-full text-[9px] font-bold capitalize tracking-widest ${status.color}`}>
                               {status.label}
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade ID</p>
+                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Trade ID</p>
                             <p className="text-xs font-bold text-slate-900 dark:text-white font-mono bg-slate-50 dark:bg-slate-900/50 px-2 py-1 rounded-lg">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
                           </div>
                         </div>
 
                         <div className="flex justify-between items-center pt-1">
                           <div>
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
+                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Quantity</p>
                             <p className="text-sm font-black text-slate-900 dark:text-white">{b.actualWeightKg || b.bags || 0} KG</p>
                           </div>
                           <div className="w-px h-8 bg-slate-100 dark:bg-slate-700"></div>
                           <div className="text-right">
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade Value</p>
+                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Trade Value</p>
                             <p className="text-sm font-black text-emerald-600">KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p>
                           </div>
                         </div>
                       </div>
 
                       <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-2 shadow-sm">
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Material Description</p>
+                        <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest">Material Description</p>
                         <p className={`text-sm ${b.notes && !b.notes.startsWith('Marketplace trade') ? 'text-slate-800 dark:text-slate-200 leading-relaxed font-medium' : 'text-slate-400 dark:text-slate-500 italic'}`}>
                           {(b.notes && !b.notes.startsWith('Marketplace trade')) ? b.notes : 'No description provided.'}
                         </p>
@@ -314,28 +314,28 @@ export default function MyTrades() {
 
                       <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scheduled</span>
+                          <span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Scheduled</span>
                           <span className="text-xs font-bold text-slate-900 dark:text-white">
                             {b.date || new Date(b.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
                         </div>
                         {b.time && (
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Time</span>
+                            <span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Time</span>
                             <span className="text-xs font-bold text-slate-900 dark:text-white">{b.time}</span>
                           </div>
                         )}
                         {b.estate && (
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Location</span>
-                            <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">{b.estate}</span>
+                            <span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Location</span>
+                            <span className="text-xs font-bold text-slate-900 dark:text-white capitalize">{b.estate}</span>
                           </div>
                         )}
                       </div>
 
                       <button
                         onClick={() => setExpandedId(null)}
-                        className="w-full py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/50 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] active:scale-95 transition-all shadow-sm"
+                        className="w-full py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/50 rounded-2xl font-bold text-[10px] capitalize tracking-[0.2em] active:scale-95 transition-all shadow-sm"
                       >
                         Back to Trades
                       </button>
@@ -386,10 +386,10 @@ export default function MyTrades() {
                               {waste?.icon || '♻️'}
                             </div>
                             <div className="flex-1 min-w-0 text-left">
-                              <h3 className="text-[11px] font-bold text-slate-900 dark:text-white leading-none uppercase tracking-tight truncate">
+                              <h3 className="text-[11px] font-bold text-slate-900 dark:text-white leading-none capitalize tracking-tight truncate">
                                 {waste?.label || formatMaterial(materialVal)}
                               </h3>
-                              <p className="text-[10px] font-semibold text-slate-400 mt-1 uppercase tracking-widest">
+                              <p className="text-[10px] font-semibold text-slate-400 mt-1 capitalize tracking-widest">
                                 {new Date(b.updatedAt || b.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                               </p>
                             </div>
@@ -416,19 +416,19 @@ export default function MyTrades() {
                                 <div className="px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-800 space-y-2">
                                   <div className="grid grid-cols-2 gap-2">
                                     <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
-                                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Trade ID</p>
+                                      <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Trade ID</p>
                                       <p className="text-xs font-bold text-slate-900 dark:text-white font-mono">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
                                     </div>
                                     <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
-                                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Quantity</p>
+                                      <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Quantity</p>
                                       <p className="text-xs font-bold text-slate-900 dark:text-white">{b.actualWeightKg || b.bags || 0} KG</p>
                                     </div>
                                     <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl p-3">
-                                      <p className="text-[9px] font-bold text-emerald-600/70 uppercase tracking-widest mb-1">Settled Amount</p>
+                                      <p className="text-[9px] font-bold text-emerald-600/70 capitalize tracking-widest mb-1">Settled Amount</p>
                                       <p className="text-xs font-bold text-emerald-600">KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p>
                                     </div>
                                     <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
-                                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Completed</p>
+                                      <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Completed</p>
                                       <p className="text-xs font-bold text-slate-900 dark:text-white">
                                         {new Date(b.updatedAt || b.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                       </p>
@@ -454,11 +454,11 @@ export default function MyTrades() {
                           </div>
                           <div className="flex-1 min-w-0 text-left">
                             <div className="flex items-center gap-2">
-                              <h3 className="text-[11px] font-bold text-slate-900 dark:text-white leading-none uppercase tracking-tight truncate">
+                              <h3 className="text-[11px] font-bold text-slate-900 dark:text-white leading-none capitalize tracking-tight truncate">
                                 {waste?.label || formatMaterial(materialVal)}
                               </h3>
                             </div>
-                            <div className={`mt-1.5 w-fit px-1.5 py-0.5 rounded-full text-[7px] font-semibold uppercase tracking-widest ${status.color}`}>
+                            <div className={`mt-1.5 w-fit px-1.5 py-0.5 rounded-full text-[7px] font-semibold capitalize tracking-widest ${status.color}`}>
                               {status.label}
                             </div>
                           </div>
@@ -466,7 +466,7 @@ export default function MyTrades() {
                             <p className="text-sm font-black text-slate-900 dark:text-white tracking-tighter leading-none font-mono">
                               KSh {(b.totalPrice || b.amount || 0).toLocaleString()}
                             </p>
-                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                            <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-1">
                               {b.actualWeightKg || b.bags || 0}kg
                             </p>
                           </div>
@@ -480,7 +480,7 @@ export default function MyTrades() {
                     <div className="flex justify-center pt-20 pb-12 px-4 w-full">
                       <button 
                         onClick={() => handleClearHistory(activeTab === 'Settled' ? 'completed' : 'cancelled')}
-                        className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-[0.15em] bg-white dark:bg-slate-800 border border-rose-200 dark:border-rose-900/30 shadow-sm px-6 py-3 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors flex items-center gap-2"
+                        className="text-[10px] font-bold text-rose-600 dark:text-rose-400 capitalize tracking-[0.15em] bg-white dark:bg-slate-800 border border-rose-200 dark:border-rose-900/30 shadow-sm px-6 py-3 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors flex items-center gap-2"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                         Clear {activeTab} History
@@ -520,19 +520,19 @@ export default function MyTrades() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Reschedule Trade</h3>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">CF-{reschedulingTrade.id?.slice(0, 8).toUpperCase()}</p>
+                    <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">CF-{reschedulingTrade.id?.slice(0, 8).toUpperCase()}</p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Quick Select Slot</label>
+                    <label className="text-[10px] font-bold text-slate-400 capitalize tracking-widest ml-1">Quick Select Slot</label>
                     <div className="grid grid-cols-3 gap-2">
                       {TIME_SLOTS.map(slot => (
                         <button
                           key={slot.id}
                           onClick={() => setNewTime(slot.value)}
-                          className={`py-3 px-1 rounded-xl text-[11px] font-bold uppercase tracking-tight transition-all border ${
+                          className={`py-3 px-1 rounded-xl text-[11px] font-bold capitalize tracking-tight transition-all border ${
                             newTime === slot.value
                               ? 'bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-600/20'
                               : 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500'
@@ -546,7 +546,7 @@ export default function MyTrades() {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">New Date</label>
+                      <label className="text-[10px] font-bold text-slate-400 capitalize tracking-widest ml-1">New Date</label>
                       <input 
                         type="text" 
                         value={newDate} 
@@ -558,7 +558,7 @@ export default function MyTrades() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Custom Time</label>
+                      <label className="text-[10px] font-bold text-slate-400 capitalize tracking-widest ml-1">Custom Time</label>
                       <input 
                         type="text" 
                         value={newTime} 
@@ -596,14 +596,14 @@ export default function MyTrades() {
                 <div className="flex gap-3">
                   <button 
                     onClick={() => setReschedulingTrade(null)}
-                    className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs uppercase tracking-widest rounded-2xl active:scale-95 transition-all"
+                    className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold text-xs capitalize tracking-widest rounded-2xl active:scale-95 transition-all"
                   >
                     Cancel
                   </button>
                   <button 
                     disabled={isSubmitting}
                     onClick={handleRescheduleSubmit}
-                    className="flex-[2] py-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-widest rounded-2xl shadow-xl shadow-indigo-600/20 active:scale-95 transition-all disabled:opacity-50"
+                    className="flex-[2] py-4 bg-indigo-600 text-white font-bold text-xs capitalize tracking-widest rounded-2xl shadow-xl shadow-indigo-600/20 active:scale-95 transition-all disabled:opacity-50"
                   >
                     {isSubmitting ? 'Updating...' : 'Confirm New Time'}
                   </button>

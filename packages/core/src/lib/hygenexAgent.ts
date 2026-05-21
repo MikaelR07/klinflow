@@ -30,16 +30,6 @@ async function invoke(body: any) {
   return res.json();
 }
 
-interface IotAlertPayload {
-  binId?: string;
-  binName?: string;
-  fillLevel?: number;
-  aqi?: number;
-  odourLevel?: string;
-  estate?: string;
-  userId: string;
-}
-
 interface UserMessagePayload {
   userMessage: string;
   userId: string;
@@ -48,13 +38,6 @@ interface UserMessagePayload {
 }
 
 export const callHygeneXAgent = {
-  iotAlert: ({ binId, binName, fillLevel, aqi, odourLevel, estate, userId }: IotAlertPayload) =>
-    invoke({
-      type: 'iot_alert',
-      userId,
-      payload: { binId, binName, fillLevel, aqi, odourLevel, estate },
-    }),
-
   userMessage: ({ userMessage, userId, chatHistory = [], userRole = 'user' }: UserMessagePayload) =>
     invoke({
       type: 'user_message',

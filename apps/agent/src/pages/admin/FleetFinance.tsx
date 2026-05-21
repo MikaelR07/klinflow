@@ -156,7 +156,7 @@ export default function FleetFinance() {
         </button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Fleet Finance</h1>
-          <p className="text-xs text-slate-500 font-medium uppercase tracking-widest mt-0.5">Fund Requests & Disbursement</p>
+          <p className="text-xs text-slate-500 font-medium capitalize tracking-widest mt-0.5">Fund Requests & Disbursement</p>
         </div>
       </div>
 
@@ -166,12 +166,12 @@ export default function FleetFinance() {
           <Wallet className="w-24 h-24 rotate-12" />
         </div>
         <div className="relative z-10">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Company Treasury</p>
+          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Company Treasury</p>
           <h2 className="text-3xl font-black tracking-tighter">KSh {Number(profile?.walletBalance || 0).toLocaleString()}</h2>
           <div className="mt-3 flex items-center gap-3">
             <div className="px-2 py-0.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest">Active</span>
+              <span className="text-[9px] font-bold text-emerald-400 capitalize tracking-widest">Active</span>
             </div>
           </div>
         </div>
@@ -180,14 +180,14 @@ export default function FleetFinance() {
       {/* Pending Requests */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
-          <h3 className="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-[11px]">Pending Requests</h3>
+          <h3 className="font-bold text-slate-900 dark:text-white capitalize tracking-widest text-[11px]">Pending Requests</h3>
           <span className="px-2 py-0.5 bg-amber-500/10 text-amber-500 text-[10px] font-bold rounded-md">{requests.length}</span>
         </div>
 
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-16 gap-3 opacity-50">
             <Loader2 className="w-6 h-6 animate-spin text-primary" />
-            <p className="text-[10px] font-bold uppercase tracking-widest">Loading...</p>
+            <p className="text-[10px] font-bold capitalize tracking-widest">Loading...</p>
           </div>
         ) : requests.length === 0 ? (
           <div className="bg-white dark:bg-slate-900 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl py-14 text-center space-y-3">
@@ -257,7 +257,7 @@ export default function FleetFinance() {
                             {/* Reason */}
                             {req.reason && (
                               <div className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl">
-                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Purpose</p>
+                                <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Purpose</p>
                                 <p className="text-xs text-slate-700 dark:text-slate-300 font-medium italic leading-relaxed">"{req.reason}"</p>
                               </div>
                             )}

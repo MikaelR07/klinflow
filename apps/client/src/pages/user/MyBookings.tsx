@@ -25,7 +25,7 @@ function BookingAmountDisplay({ b }: { b: any }) {
   if (b.status !== 'completed') {
     const fee = b.fee || 0;
     return (
-      <span className={`text-lg font-semibold font-mono ${fee > 0 ? 'text-primary dark:text-primary-light' : 'text-slate-400 text-xs uppercase tracking-widest'}`}>
+      <span className={`text-lg font-semibold font-mono ${fee > 0 ? 'text-primary dark:text-primary-light' : 'text-slate-400 text-xs capitalize tracking-widest'}`}>
         {fee > 0 ? `KSh ${fee.toLocaleString()}` : 'Est. at Pickup'}
       </span>
     );
@@ -39,13 +39,13 @@ function BookingAmountDisplay({ b }: { b: any }) {
     <div className="flex flex-col items-end gap-1">
       {!agentPaidClient && (
         <div className="flex items-center gap-1.5">
-          <span className="text-xs font-semibold text-rose-500 uppercase tracking-widest">You Paid</span>
+          <span className="text-xs font-semibold text-rose-500 capitalize tracking-widest">You Paid</span>
           <span className="text-base font-semibold text-rose-600 dark:text-rose-400 font-mono">KSh {paid.toLocaleString()}</span>
         </div>
       )}
       {earned > 0 ? (
         <div className="flex items-center gap-1.5">
-          <span className="text-xs font-semibold text-emerald-500 uppercase tracking-widest">
+          <span className="text-xs font-semibold text-emerald-500 capitalize tracking-widest">
             {agentPaidClient ? 'Agent Paid You' : 'You Earned'}
           </span>
           <span className="text-base font-semibold text-emerald-600 dark:text-emerald-400 font-mono">KSh {earned.toLocaleString()}</span>
@@ -205,7 +205,7 @@ export default function MyBookings() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="w-full mx-auto space-y-4">
           <div className="flex items-center justify-between">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
@@ -213,8 +213,8 @@ export default function MyBookings() {
             </button>
             
             <div className="text-center">
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">My Bookings</h1>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Pickup History</p>
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
+              <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup History</p>
             </div>
             
             <div className="w-10" /> {/* Spacer */}
@@ -249,7 +249,7 @@ export default function MyBookings() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center justify-center ${
+                  className={`flex-1 py-2 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${
                     activeTab === tab 
                       ? 'bg-white dark:bg-slate-700 shadow-sm text-primary dark:text-white' 
                       : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
@@ -317,10 +317,10 @@ export default function MyBookings() {
                         )}
                       </div>
                       <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
                           material-type:<span className="text-slate-900 dark:text-white">{waste?.label || wasteTypeVal}</span>
                         </p>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
                           ID: <span className="text-primary font-mono">{b.id.slice(0, 8).toUpperCase()}</span>
                         </p>
                         <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1.5">
@@ -361,13 +361,13 @@ export default function MyBookings() {
                 <div className="w-16 h-16 bg-blue-50 dark:bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CalendarClock className="w-8 h-8 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">Reschedule</h3>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white capitalize tracking-tighter">Reschedule</h3>
                 <p className="text-xs font-medium text-slate-500">Pick a new pickup slot</p>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">New Date</label>
+                  <label className="text-[10px] font-bold text-slate-400 capitalize tracking-widest px-1">New Date</label>
                   <input 
                     type="date"
                     value={newDate}
@@ -376,13 +376,13 @@ export default function MyBookings() {
                   />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">New Time</label>
+                  <label className="text-[10px] font-bold text-slate-400 capitalize tracking-widest px-1">New Time</label>
                   <div className="grid grid-cols-3 gap-2">
                     {TIME_SLOTS.map(slot => (
                       <button
                         key={slot.id}
                         onClick={() => setNewTime(slot.value)}
-                        className={`py-3 rounded-xl text-[10px] font-black uppercase transition-all ${
+                        className={`py-3 rounded-xl text-[10px] font-black capitalize transition-all ${
                           newTime === slot.value 
                             ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
                             : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
@@ -398,14 +398,14 @@ export default function MyBookings() {
               <div className="flex gap-3 pt-4">
                 <button 
                   onClick={() => setReschedulingBooking(null)}
-                  className="flex-1 py-4 text-slate-400 font-bold text-[10px] uppercase tracking-widest active:opacity-50"
+                  className="flex-1 py-4 text-slate-400 font-bold text-[10px] capitalize tracking-widest active:opacity-50"
                 >
                   Cancel
                 </button>
                 <button 
                   disabled={isSubmitting}
                   onClick={handleRescheduleSubmit}
-                  className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all disabled:opacity-50"
+                  className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] capitalize tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all disabled:opacity-50"
                 >
                   {isSubmitting ? '...' : 'Confirm'}
                 </button>
@@ -440,7 +440,7 @@ export default function MyBookings() {
                   >
                     <ArrowLeft className="w-5 h-5" />
                   </button>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest">Pickup Detail</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white capitalize tracking-widest">Pickup Detail</p>
                   <div className="w-10" /> {/* Spacer for balance */}
                 </div>
               </div>
@@ -456,33 +456,33 @@ export default function MyBookings() {
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-slate-800 opacity-50">
                       <Package className="w-20 h-20 text-slate-300" />
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">No photo provided</p>
+                      <p className="text-xs font-bold text-slate-400 capitalize tracking-widest">No photo provided</p>
                     </div>
                   )}
                 </div>
 
                 <div className="relative -mt-24 bg-white dark:bg-slate-900 rounded-t-[1rem] px-4 pt-6 pb-24 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
                   <div className="inline-flex items-center px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl">
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">pickup id: <span className="text-slate-900 dark:text-white font-mono">{String(b.id || '').slice(0, 8).toUpperCase()}</span></p>
+                    <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest">pickup id: <span className="text-slate-900 dark:text-white font-mono">{String(b.id || '').slice(0, 8).toUpperCase()}</span></p>
                   </div>
 
                   <div className="grid grid-cols-3 gap-2">
                     <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
                       <Package className="w-4 h-4 text-primary mb-2" />
-                      <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Material</p>
-                      <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{String(waste?.label || wasteTypeVal)}</p>
+                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Material</p>
+                      <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{String(waste?.label || wasteTypeVal)}</p>
                     </div>
                     <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
                       <Clock className="w-4 h-4 text-amber-500 mb-2" />
-                      <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-2">Status</p>
-                      <span className={`text-[9px] font-black tracking-[0.05em] px-2 py-1 rounded-lg uppercase shadow-sm whitespace-nowrap ${status.color}`}>
+                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-2">Status</p>
+                      <span className={`text-[9px] font-black tracking-[0.05em] px-2 py-1 rounded-lg capitalize shadow-sm whitespace-nowrap ${status.color}`}>
                         {String(status.label)}
                       </span>
                     </div>
                     <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
                       <MapPin className="w-4 h-4 text-rose-500 mb-2" />
-                      <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Origin</p>
-                      <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{String(b.estate || '')}</p>
+                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Origin</p>
+                      <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{String(b.estate || '')}</p>
                     </div>
                   </div>
 
@@ -490,13 +490,13 @@ export default function MyBookings() {
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
                     <div className="flex items-center justify-between relative z-10">
                       <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest">Settlement Value</p>
+                        <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest">Settlement Value</p>
                         {b.status === 'completed' ? (
                           <p className="text-3xl font-black text-white tracking-tighter leading-none">
                             KSh {(b.totalPrice || 0).toLocaleString()}
                           </p>
                         ) : b.status === 'cancelled' ? (
-                          <p className="text-xl font-black text-emerald-200 uppercase tracking-[0.2em] italic leading-none opacity-50">Cancelled</p>
+                          <p className="text-xl font-black text-emerald-200 capitalize tracking-[0.2em] italic leading-none opacity-50">Cancelled</p>
                         ) : (
                           <div className="flex flex-col gap-1">
                             <p className="text-xl font-black text-white tracking-tighter flex items-center gap-2 leading-none">
@@ -506,19 +506,19 @@ export default function MyBookings() {
                         )}
                       </div>
                       <div className="text-right">
-                         <p className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest mb-2">Est. Weight</p>
+                         <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest mb-2">Est. Weight</p>
                          <div className="flex items-center gap-2 justify-end">
                             <Scale className="w-4 h-4 text-emerald-200" />
-                            <p className="text-lg font-black text-white uppercase leading-none">{b.actualWeightKg || b.bags || 0} KG</p>
+                            <p className="text-lg font-black text-white capitalize leading-none">{b.actualWeightKg || b.bags || 0} KG</p>
                          </div>
                       </div>
                     </div>
                     <div className="h-px bg-white/10 relative z-10" />
                     <div className="space-y-2 relative z-10">
-                      <p className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest">Scheduled Slot</p>
+                      <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest">Scheduled Slot</p>
                       <div className="flex items-center gap-3">
                          <Clock className="w-4 h-4 text-emerald-200" />
-                         <p className="text-base font-bold text-white uppercase tracking-tight">{String((b as any).timeSlot || 'ASAP Request')}</p>
+                         <p className="text-base font-bold text-white capitalize tracking-tight">{String((b as any).timeSlot || 'ASAP Request')}</p>
                       </div>
                     </div>
                   </div>
@@ -531,7 +531,7 @@ export default function MyBookings() {
 
                   {(b.notes || b.wasteType) && (
                     <div className="bg-slate-50 dark:bg-slate-800/40 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                       <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                       <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
                          <Info className="w-4 h-4 text-primary" /> Collector Instructions
                        </h4>
                        <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
@@ -544,13 +544,13 @@ export default function MyBookings() {
                     <div className="flex flex-row gap-2.5 pt-4">
                       <button 
                         onClick={(e) => { e.stopPropagation(); handleReschedule(b); }}
-                        className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.1em] shadow-xl shadow-blue-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                        className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] capitalize tracking-[0.1em] shadow-xl shadow-blue-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
                         <CalendarClock className="w-4 h-4" /> Reschedule
                       </button>
                       <button 
                         onClick={(e) => { e.stopPropagation(); handleCancel(b.id); setSelectedBooking(null); }}
-                        className="flex-1 py-4 bg-white dark:bg-slate-800 text-red-600 border border-red-50 dark:border-red-900/20 rounded-2xl font-black text-[10px] uppercase tracking-[0.1em] active:scale-95 transition-all flex items-center justify-center gap-2"
+                        className="flex-1 py-4 bg-white dark:bg-slate-800 text-red-600 border border-red-50 dark:border-red-900/20 rounded-2xl font-black text-[10px] capitalize tracking-[0.1em] active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
                         <XCircle className="w-4 h-4" /> Cancel
                       </button>
@@ -559,7 +559,7 @@ export default function MyBookings() {
                   
                   <button 
                     onClick={() => setSelectedBooking(null)}
-                    className="w-full py-4 text-slate-400 font-bold text-[10px] uppercase tracking-[0.3em] active:opacity-50"
+                    className="w-full py-4 text-slate-400 font-bold text-[10px] capitalize tracking-[0.3em] active:opacity-50"
                   >
                     Close Detail
                   </button>

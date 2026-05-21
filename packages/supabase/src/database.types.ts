@@ -468,6 +468,108 @@ export type Database = {
         }
         Relationships: any[]
       }
+      rfqs: {
+        Row: {
+          id: string
+          buyer_id: string
+          buyer_type: string | null
+          category: string
+          material_grade: string
+          requested_weight: number
+          weight_unit: string | null
+          target_price: number | null
+          pickup_area: string
+          delivery_method: string | null
+          images: string[] | null
+          notes: string | null
+          deadline: string | null
+          status: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          buyer_id: string
+          buyer_type?: string | null
+          category: string
+          material_grade: string
+          requested_weight: number
+          weight_unit?: string | null
+          target_price?: number | null
+          pickup_area: string
+          delivery_method?: string | null
+          images?: string[] | null
+          notes?: string | null
+          deadline?: string | null
+          status?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          buyer_id?: string
+          buyer_type?: string | null
+          category?: string
+          material_grade?: string
+          requested_weight?: number
+          weight_unit?: string | null
+          target_price?: number | null
+          pickup_area?: string
+          delivery_method?: string | null
+          images?: string[] | null
+          notes?: string | null
+          deadline?: string | null
+          status?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: any[]
+      }
+      rfq_offers: {
+        Row: {
+          id: string
+          rfq_id: string
+          seller_id: string
+          buyer_id: string
+          offered_weight: number
+          offered_price: number
+          images: string[] | null
+          notes: string | null
+          earliest_shipping_date: string | null
+          status: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          rfq_id: string
+          seller_id: string
+          buyer_id: string
+          offered_weight: number
+          offered_price: number
+          images?: string[] | null
+          notes?: string | null
+          earliest_shipping_date?: string | null
+          status?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          rfq_id?: string
+          seller_id?: string
+          buyer_id?: string
+          offered_weight?: number
+          offered_price?: number
+          images?: string[] | null
+          notes?: string | null
+          earliest_shipping_date?: string | null
+          status?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: any[]
+      }
       agent_configurations: {
         Row: {
           id: string

@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import type { AgentJob } from '@klinflow/core/stores/agentStore.types';
 import EmptyState from '@klinflow/ui/components/EmptyState';
@@ -45,12 +46,15 @@ export default function AvailableJobs() {
   const fetchCategories = useServiceStore(s => s.fetchCategories);
   const fetchEarnings = useAgentStore(s => s.fetchEarnings);
   const clearJobHistory = useAgentStore(s => s.clearJobHistory);
+  const fetchPrices = usePriceStore(s => s.fetchPrices);
+  const getPriceForMaterial = usePriceStore(s => s.getPriceForMaterial);
 
   useEffect(() => {
     fetchAvailableJobs();
     fetchActiveJobs();
     fetchCategories();
     fetchEarnings();
+    fetchPrices();
   }, []);
 
   const handleAccept = async (job: AgentJob) => {
@@ -93,8 +97,8 @@ export default function AvailableJobs() {
           </button>
           
           <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Missions</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Available Jobs</p>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Missions</h1>
+            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Available Jobs</p>
           </div>
           
           <div className="w-10 flex items-center justify-center">
@@ -108,7 +112,7 @@ export default function AvailableJobs() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex-1 py-3 text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center border-b-2 ${
+              className={`relative flex-1 py-3 text-[10px] font-bold capitalize tracking-widest transition-all flex items-center justify-center border-b-2 ${
                 activeTab === tab.id 
                   ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400' 
                   : 'border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
@@ -162,7 +166,7 @@ export default function AvailableJobs() {
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800">
                             <div className="text-6xl mb-4">{waste?.icon || '📦'}</div>
-                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Asset Visual Unavailable</p>
+                            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">Asset Visual Unavailable</p>
                           </div>
                         )}
 
@@ -179,11 +183,11 @@ export default function AvailableJobs() {
                       <div className="relative -mt-36 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-[1rem] px-3 pt-4 pb-2 space-y-5 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.15)]">
                         <div className="flex items-center justify-between mb-4">
                           <div>
-                            <p className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.2em]">Mission Request</p>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 leading-none">Pickup ID: {job.id.slice(0, 8).toUpperCase()}</p>
+                            <p className="text-[11px] font-black text-indigo-600 capitalize tracking-[0.2em]">Mission Request</p>
+                            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 leading-none">Pickup ID: {job.id.slice(0, 8).toUpperCase()}</p>
                           </div>
                           <div className="text-right">
-                             <div className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-tighter border ${
+                             <div className={`px-3 py-1 rounded-lg text-[10px] font-black capitalize tracking-tighter border ${
                                job.time?.toUpperCase() === 'ASAP' 
                                  ? 'bg-rose-500/10 text-rose-600 border-rose-500/20' 
                                  : 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20'
@@ -197,18 +201,18 @@ export default function AvailableJobs() {
                         <div className="grid grid-cols-3 gap-2">
                           <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
                             <Package className="w-3.5 h-3.5 text-indigo-500 mb-2" />
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Material-Type</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{waste?.label || job.material}</p>
+                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Material-Type</p>
+                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{waste?.label || job.material}</p>
                           </div>
                           <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
                             <User className="w-3.5 h-3.5 text-emerald-500 mb-2" />
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Client's Name</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{job.customerName || job.customer || 'Resident'}</p>
+                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Client's Name</p>
+                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{job.customerName || job.customer || 'Resident'}</p>
                           </div>
                           <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
                             <MapPin className="w-3.5 h-3.5 text-rose-500 mb-2" />
-                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Location</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{job.location}</p>
+                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Location</p>
+                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{job.location}</p>
                           </div>
                         </div>
 
@@ -218,12 +222,12 @@ export default function AvailableJobs() {
                             {/* Payout Amount */}
                             <div className="flex items-center justify-between">
                               <div>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Amount Paid to Client</p>
+                                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Amount Paid to Client</p>
                                 <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                                   <DollarSign className="w-4 h-4" /> KSh {(job.total_price || job.fee || job.pay || 0).toLocaleString()}
                                 </p>
                               </div>
-                              <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-wider border ${
+                              <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black capitalize tracking-wider border ${
                                 (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id)
                                   ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20'
                                   : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/20'
@@ -241,7 +245,7 @@ export default function AvailableJobs() {
                                   <Clock className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                                 </div>
                                 <div>
-                                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Payment Settled</p>
+                                  <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Payment Settled</p>
                                   <p className="text-xs font-black text-slate-900 dark:text-white tracking-tight">
                                     {job.completed_at 
                                       ? new Date(job.completed_at).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
@@ -261,8 +265,8 @@ export default function AvailableJobs() {
                                   <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                                 </div>
                                 <div>
-                                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Verified Weight</p>
-                                  <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{job.actual_weight_kg || job.bags || 0} KG</p>
+                                  <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Verified Weight</p>
+                                  <p className="text-sm font-black text-slate-900 dark:text-white capitalize tracking-tight">{job.actual_weight_kg || 0} KG</p>
                                 </div>
                               </div>
                             </div>
@@ -271,9 +275,9 @@ export default function AvailableJobs() {
                           <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-4 shadow-sm">
                             <div className="flex items-center justify-between">
                               <div>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">EST. Material value</p>
+                                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">EST. Material value</p>
                                 <p className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-                                  <Zap className="w-4 h-4 fill-emerald-500 text-emerald-500" /> KSh {Math.floor((job.actual_weight_kg || job.bags || 0) * 10)}
+                                  <Zap className="w-4 h-4 fill-emerald-500 text-emerald-500" /> KSh {Math.floor((job.actual_weight_kg || job.bags || 0) * getPriceForMaterial(job.material || ''))}
                                 </p>
                               </div>
                             </div>
@@ -286,8 +290,8 @@ export default function AvailableJobs() {
                                   <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                                 </div>
                                 <div>
-                                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">EST. LOAD</p>
-                                  <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{job.actual_weight_kg || job.bags || 0} KG</p>
+                                  <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">EST. LOAD</p>
+                                  <p className="text-sm font-black text-slate-900 dark:text-white capitalize tracking-tight">{job.actual_weight_kg || job.bags || 0} KG</p>
                                 </div>
                               </div>
                             </div>
@@ -297,7 +301,7 @@ export default function AvailableJobs() {
                         {/* Description */}
                         {job.notes && (
                           <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                             <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                             <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
                                <Info className="w-3.5 h-3.5" /> Description
                              </h4>
                              <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
@@ -311,13 +315,13 @@ export default function AvailableJobs() {
                             <>
                               <button 
                                 onClick={() => { rejectJob(job.id); setExpandedId(null); }}
-                                className="flex-[1] py-4 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
+                                className="flex-[1] py-4 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-2xl font-black text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
                               >
                                 <XCircle className="w-4 h-4" /> Dismiss
                               </button>
                               <button 
                                 onClick={() => { handleAccept(job); setExpandedId(null); }}
-                                className="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-indigo-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                className="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs capitalize tracking-widest shadow-xl shadow-indigo-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                               >
                                 <Truck className="w-4 h-4" /> Accept Mission
                               </button>
@@ -325,18 +329,18 @@ export default function AvailableJobs() {
                           ) : activeTab === 'active' ? (
                             <button 
                               onClick={() => navigate(`/jobs/navigate/${job.id}`)}
-                              className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                              className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs capitalize tracking-widest shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                             >
                               <Navigation className="w-4 h-4" /> Start Navigation
                             </button>
                           ) : activeTab === 'completed' ? (
-                            <div className="w-full py-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 border border-emerald-200 dark:border-emerald-500/20">
+                            <div className="w-full py-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl font-black text-xs capitalize tracking-widest flex items-center justify-center gap-2 border border-emerald-200 dark:border-emerald-500/20">
                               <CheckCircle className="w-4 h-4" /> Mission Completed
                             </div>
                           ) : (
                             <button 
                               onClick={() => { restoreJob(job.id); setExpandedId(null); }}
-                              className="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
+                              className="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
                             >
                               <RefreshCw className="w-4 h-4" /> Restore Mission
                             </button>
@@ -374,13 +378,13 @@ export default function AvailableJobs() {
                               {waste?.icon || '📦'}
                             </div>
                             <div className="space-y-1">
-                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
                                 material-type:<span className="text-slate-900 dark:text-white ml-1">{waste?.label || job.material}</span>
                               </p>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
                                 client:<span className="text-slate-900 dark:text-white ml-1">{job.customerName || job.customer || 'Resident'}</span>
                               </p>
-                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
                                 ID: <span className="text-indigo-600 font-mono ml-1">{job.id.slice(0, 8).toUpperCase()}</span>
                               </p>
                             </div>
@@ -391,7 +395,7 @@ export default function AvailableJobs() {
                             }`}>
                               {job.time?.toLowerCase() || 'scheduled'}
                             </span>
-                            <p className="text-[9px] font-semibold text-slate-500 flex items-center justify-end gap-1 uppercase tracking-widest mt-1">
+                            <p className="text-[9px] font-semibold text-slate-500 flex items-center justify-end gap-1 capitalize tracking-widest mt-1">
                               {job.location} <MapPin className="w-2.5 h-2.5 text-slate-400" />
                             </p>
                             <ChevronRight className="w-4 h-4 text-slate-300 mt-1" />
@@ -420,7 +424,7 @@ export default function AvailableJobs() {
                   toast.success('Rejected history cleared');
                 }
               }}
-              className="w-full py-3 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-bold text-xs uppercase tracking-widest border border-rose-200 dark:border-rose-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              className="w-full py-3 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-bold text-xs capitalize tracking-widest border border-rose-200 dark:border-rose-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
               <XCircle className="w-4 h-4" /> Clear History
             </button>

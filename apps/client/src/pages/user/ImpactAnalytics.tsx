@@ -201,7 +201,7 @@ export default function ImpactAnalytics() {
       <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#F8F8FF] dark:bg-slate-900">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Crunching Impact Data...</p>
+          <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Crunching Impact Data...</p>
         </div>
       </div>
     );
@@ -210,14 +210,14 @@ export default function ImpactAnalytics() {
   return (
     <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
             <ArrowLeft className="w-4 h-4 dark:text-white" />
           </button>
           <div>
-            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">Impact Analytics</h1>
-            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Performance Tracking</p>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none mb-1">Impact Analytics</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Performance Tracking</p>
           </div>
         </div>
       </div>
@@ -235,9 +235,9 @@ export default function ImpactAnalytics() {
                     <TrendingUp className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Lifetime Revenue</p>
+                    <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest leading-none">Lifetime Revenue</p>
                     <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none mt-1 flex items-baseline gap-0.5">
-                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mr-0.5 uppercase">KSh</span>
+                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mr-0.5 capitalize">KSh</span>
                       {stats.totalEarnings.toLocaleString()}
                     </h2>
                   </div>
@@ -247,7 +247,7 @@ export default function ImpactAnalytics() {
                 <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-3 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800/50">
                   <Scale className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mb-1" />
                   <span className="text-base font-black text-slate-900 dark:text-white leading-none mt-0.5">{stats.totalWeight}</span>
-                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">KG</span>
+                  <span className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">KG</span>
                 </div>
 
                 {/* 3. Withdrawn (Horizontal 2x1 Card) */}
@@ -256,9 +256,9 @@ export default function ImpactAnalytics() {
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">Withdrawn</p>
+                    <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest leading-none">Withdrawn</p>
                     <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none mt-1 flex items-baseline gap-0.5">
-                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mr-0.5 uppercase">KSh</span>
+                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mr-0.5 capitalize">KSh</span>
                       {stats.totalWithdrawn.toLocaleString()}
                     </h2>
                   </div>
@@ -268,23 +268,23 @@ export default function ImpactAnalytics() {
                 <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-3 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800/50">
                   <Trophy className="w-4 h-4 text-amber-500 mb-1" />
                   <span className="text-base font-black text-slate-900 dark:text-white leading-none mt-0.5">#{stats.globalRank || '—'}</span>
-                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Rank</span>
+                  <span className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Rank</span>
                 </div>
 
                 {/* 5. Metrics Strip (Bottom Row 3x1 Card) */}
                 <div className="col-span-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 grid grid-cols-3 gap-1 border border-slate-100 dark:border-slate-800/50">
                   <div className="text-center">
                     <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.totalPickups}</p>
-                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">Pickups</p>
+                    <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-1.5">Pickups</p>
                   </div>
                   
                   <div className="text-center border-l border-slate-200 dark:border-slate-700">
                     <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{profile?.reward_points || 0}</p>
-                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">GFP</p>
+                    <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-1.5">GFP</p>
                   </div>
 
                   <div className="text-center border-l border-slate-200 dark:border-slate-700">
-                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Most Recycled</p>
+                     <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Most Recycled</p>
                      <p className="text-xs font-black text-slate-900 dark:text-white capitalize truncate max-w-[100px] mx-auto leading-none mt-1">{stats.topMaterial}</p>
                   </div>
                 </div>
@@ -297,7 +297,7 @@ export default function ImpactAnalytics() {
         {/* ── GOAL TRACKING ── */}
         <div className="space-y-4">
           <div className="flex items-center justify-between px-1">
-            <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400 flex items-center gap-2">
+            <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400 flex items-center gap-2">
               <Target className="w-4 h-4 text-primary" /> Goal Targets
             </h3>
           </div>
@@ -306,7 +306,7 @@ export default function ImpactAnalytics() {
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Weekly Target</p>
+                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-0.5">Weekly Target</p>
                   <p className="text-lg font-black dark:text-white tracking-tight">{stats.currentWeekWeight} / {goals.weekly} <span className="text-xs font-bold text-slate-400">KG</span></p>
                 </div>
                 <button 
@@ -324,15 +324,15 @@ export default function ImpactAnalytics() {
                 />
               </div>
               <div className="flex justify-between mt-3">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{Math.round(weeklyProgress)}% Completed</p>
-                {weeklyProgress >= 100 && <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">Goal Reached! 🚀</span>}
+                <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em]">{Math.round(weeklyProgress)}% Completed</p>
+                {weeklyProgress >= 100 && <span className="text-[10px] font-black text-emerald-500 capitalize tracking-[0.2em]">Goal Reached! 🚀</span>}
               </div>
             </div>
 
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Monthly Target</p>
+                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-0.5">Monthly Target</p>
                   <p className="text-lg font-black dark:text-white tracking-tight">{stats.currentMonthWeight} / {goals.monthly} <span className="text-xs font-bold text-slate-400">KG</span></p>
                 </div>
                 <button 
@@ -350,8 +350,8 @@ export default function ImpactAnalytics() {
                 />
               </div>
               <div className="flex justify-between mt-3">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{Math.round(monthlyProgress)}% Completed</p>
-                {monthlyProgress >= 100 && <span className="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em]">Elite Status! 🏆</span>}
+                <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em]">{Math.round(monthlyProgress)}% Completed</p>
+                {monthlyProgress >= 100 && <span className="text-[10px] font-black text-amber-500 capitalize tracking-[0.2em]">Elite Status! 🏆</span>}
               </div>
             </div>
           </div>
@@ -360,12 +360,12 @@ export default function ImpactAnalytics() {
         {/* ── RECYCLING TRENDS (BAR CHART) ── */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400 flex items-center gap-2">
+            <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400 flex items-center gap-2">
               <BarChart className="w-4 h-4 text-indigo-500" /> Weekly Trends
             </h3>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-primary" />
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">KG Recovered</p>
+              <p className="text-[10px] font-black text-slate-400 capitalize tracking-widest">KG Recovered</p>
             </div>
           </div>
 
@@ -389,7 +389,7 @@ export default function ImpactAnalytics() {
                       </div>
                     )}
                   </div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">{dayName}</p>
+                  <p className="text-[10px] font-black text-slate-400 capitalize tracking-tighter">{dayName}</p>
                 </div>
               );
             })}
@@ -400,15 +400,15 @@ export default function ImpactAnalytics() {
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
              <PieChart className="w-5 h-5 text-amber-500 mb-3" />
-             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Most Recycled</p>
+             <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-1">Most Recycled</p>
              <p className="text-base font-black dark:text-white capitalize tracking-tight leading-tight">{stats.topMaterial}</p>
-             <p className="text-[10px] font-black text-emerald-500 mt-2 uppercase tracking-widest">Preferred Partner</p>
+             <p className="text-[10px] font-black text-emerald-500 mt-2 capitalize tracking-widest">Preferred Partner</p>
           </div>
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
              <Trophy className="w-5 h-5 text-indigo-500 mb-3" />
-             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Consistency</p>
+             <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-1">Consistency</p>
              <p className="text-base font-black dark:text-white capitalize tracking-tight leading-tight">{stats.consistencyTier}</p>
-             <p className="text-[10px] font-black text-indigo-500 mt-2 uppercase tracking-widest">Streak: {stats.activeStreak} Days</p>
+             <p className="text-[10px] font-black text-indigo-500 mt-2 capitalize tracking-widest">Streak: {stats.activeStreak} Days</p>
           </div>
         </div>
       </div>
@@ -432,7 +432,7 @@ export default function ImpactAnalytics() {
             >
               <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-8" />
               <h3 className="text-2xl font-black text-slate-900 dark:text-white text-center mb-2 tracking-tight">Set {goalType} Target</h3>
-              <p className="text-xs font-bold text-slate-400 text-center mb-8 uppercase tracking-[0.2em]">KG Goal</p>
+              <p className="text-xs font-bold text-slate-400 text-center mb-8 capitalize tracking-[0.2em]">KG Goal</p>
               
               <div className="grid grid-cols-3 gap-4 mb-8">
                 {[10, 20, 50, 100, 200, 500].map(val => (
@@ -448,7 +448,7 @@ export default function ImpactAnalytics() {
 
               <button 
                 onClick={() => setShowGoalModal(false)}
-                className="w-full py-5 text-slate-400 font-black text-[10px] uppercase tracking-[0.3em]"
+                className="w-full py-5 text-slate-400 font-black text-[10px] capitalize tracking-[0.3em]"
               >
                 Cancel
               </button>

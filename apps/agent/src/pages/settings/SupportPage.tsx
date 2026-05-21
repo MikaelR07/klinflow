@@ -26,8 +26,8 @@ export default function SupportPage() {
             <ArrowLeft className="w-4 h-4 dark:text-white" />
           </button>
           <div>
-            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">Contact Support</h1>
-            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Help & Assistance</p>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none mb-1">Contact Support</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Help & Assistance</p>
           </div>
         </div>
       </div>
@@ -62,12 +62,12 @@ export default function SupportPage() {
            <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-2">Send us a message</h2>
            
            <div>
-             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Subject</label>
+             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 capitalize tracking-wider">Subject</label>
              <input type="text" required value={form.subject} onChange={(e) => setForm({...form, subject: e.target.value})} placeholder="e.g., Missed pickup, Payment issue" className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" />
            </div>
 
            <div>
-             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">How can we help?</label>
+             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 capitalize tracking-wider">How can we help?</label>
              <textarea required rows={4} value={form.message} onChange={(e) => setForm({...form, message: e.target.value})} placeholder="Please describe your issue..." className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm resize-none" />
            </div>
 

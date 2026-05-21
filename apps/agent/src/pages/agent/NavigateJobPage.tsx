@@ -152,7 +152,7 @@ export default function NavigateJobPage() {
 
         <button 
           onClick={() => navigate(-1)} 
-          className="py-3 px-6 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold text-xs uppercase tracking-widest active:scale-95 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700"
+          className="py-3 px-6 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold text-xs capitalize tracking-widest active:scale-95 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700"
         >
           Cancel
         </button>
@@ -221,7 +221,7 @@ export default function NavigateJobPage() {
           className="w-full flex flex-col items-center pb-4 group"
         >
           <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-1 group-hover:bg-primary transition-colors" />
-          <div className="text-xs font-semibold text-slate-300 uppercase tracking-[0.3em] group-hover:text-primary transition-colors">
+          <div className="text-xs font-semibold text-slate-300 capitalize tracking-[0.3em] group-hover:text-primary transition-colors">
             {isExpanded ? 'Slide Down to Map' : 'Slide Up for Details'}
           </div>
         </button>
@@ -230,16 +230,16 @@ export default function NavigateJobPage() {
         <div className="max-w-md mx-auto">
           <div className="flex gap-2 mb-6">
             <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Client</span>
-              <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{activeJob.customerName?.split(' ')[0] || activeJob.customer?.split(' ')[0] || 'Client'}</span>
+              <span className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Client</span>
+              <span className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{activeJob.customerName?.split(' ')[0] || activeJob.customer?.split(' ')[0] || 'Client'}</span>
             </div>
             <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Location</span>
-              <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{activeJob.location}</span>
+              <span className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Location</span>
+              <span className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{activeJob.location}</span>
             </div>
             <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</span>
-              <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate w-full">{activeJob.material}</span>
+              <span className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Material</span>
+              <span className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{activeJob.material}</span>
             </div>
             
             <button 
@@ -250,7 +250,7 @@ export default function NavigateJobPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 mb-6 font-semibold text-xs uppercase tracking-widest">
+          <div className="grid grid-cols-1 gap-3 mb-6 font-semibold text-xs capitalize tracking-widest">
              <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-3">
                 <Clock className="w-4 h-4 text-accent" />
                 <div className="flex flex-col">
@@ -299,7 +299,7 @@ export default function NavigateJobPage() {
 
                 <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100/50 dark:border-blue-800/30 p-4 rounded-2xl flex items-start gap-3">
                   <Navigation className="w-4 h-4 text-blue-500 mt-0.5" />
-                  <p className="text-xs font-semibold text-blue-700/70 dark:text-blue-300/70 leading-relaxed uppercase tracking-tight">
+                  <p className="text-xs font-semibold text-blue-700/70 dark:text-blue-300/70 leading-relaxed capitalize tracking-tight">
                     Map is live. Follow the dashed line to reach the client.
                   </p>
                 </div>
@@ -323,7 +323,7 @@ export default function NavigateJobPage() {
                       if (manualBtn) manualBtn.click();
                     }, 100);
                   }}
-                  className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs uppercase tracking-[0.2em] rounded-2xl active:scale-95 transition-all border border-slate-200 dark:border-slate-800"
+                  className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs capitalize tracking-[0.2em] rounded-2xl active:scale-95 transition-all border border-slate-200 dark:border-slate-800"
                 >
                   Skip Scan & Use Manual Entry
                 </button>

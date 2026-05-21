@@ -81,7 +81,7 @@ export default function RoleSelection() {
               </div>
 
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 tracking-tight">{role.title}</h2>
-              <p className={`text-[10px] font-bold uppercase tracking-[0.2em] ${role.textColor} mb-4`}>{role.subtitle}</p>
+              <p className={`text-[10px] font-bold capitalize tracking-[0.2em] ${role.textColor} mb-4`}>{role.subtitle}</p>
               
               <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 font-medium">
                 {role.description}
@@ -91,7 +91,7 @@ export default function RoleSelection() {
                 {role.benefits.map((benefit, bIdx) => (
                   <div key={bIdx} className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-100 dark:bg-emerald-900 rounded-xl border border-emerald-200 dark:border-emerald-800">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-tight">{benefit}</span>
+                    <span className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 capitalize tracking-tight">{benefit}</span>
                   </div>
                 ))}
               </div>

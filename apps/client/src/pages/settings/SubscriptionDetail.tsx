@@ -22,7 +22,7 @@ export default function SubscriptionDetail() {
   if (!tier) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
-        <p className="font-semibold text-slate-400 uppercase tracking-widest">Plan not found</p>
+        <p className="font-semibold text-slate-400 capitalize tracking-widest">Plan not found</p>
       </div>
     );
   }
@@ -88,7 +88,7 @@ export default function SubscriptionDetail() {
         <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-900 shadow-sm rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
           <ArrowLeft className="w-5 h-5 dark:text-white" />
         </button>
-        <h1 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Plan Details</h1>
+        <h1 className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Plan Details</h1>
       </div>
 
       {/* Hero */}
@@ -99,13 +99,13 @@ export default function SubscriptionDetail() {
       }`}>
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-widest opacity-60">{tier.impactTag}</span>
+            <span className="text-xs font-semibold capitalize tracking-widest opacity-60">{tier.impactTag}</span>
             {tierId === 'premium' && <Crown className="w-3 h-3 text-amber-400 fill-amber-400" />}
           </div>
           <h2 className="text-4xl font-semibold tracking-tight mb-4">{tier.label}</h2>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-semibold">{tier.price === 0 ? 'Free' : `KSh ${tier.price.toLocaleString()}`}</span>
-            <span className="text-xs font-semibold opacity-60 uppercase tracking-tighter">/ Month</span>
+            <span className="text-xs font-semibold opacity-60 capitalize tracking-tighter">/ Month</span>
           </div>
         </div>
         
@@ -126,7 +126,7 @@ export default function SubscriptionDetail() {
 
         {/* Benefits List */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 space-y-4">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">What's Included</p>
+          <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-2">What's Included</p>
           <div className="space-y-4">
             {details.points.map((point: string, i: number) => (
               <div key={i} className="flex items-start gap-4">
@@ -144,7 +144,7 @@ export default function SubscriptionDetail() {
           <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-500/20 rounded-3xl p-6">
             <div className="flex items-center gap-3 mb-2">
               <Zap className="w-5 h-5 text-amber-500 fill-amber-500" />
-              <h4 className="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-widest">Platform ROI</h4>
+              <h4 className="text-xs font-semibold text-amber-700 dark:text-amber-400 capitalize tracking-widest">Platform ROI</h4>
             </div>
             <p className="text-xs font-semibold text-amber-800 dark:text-amber-200/80 leading-relaxed">
               By waiving the platform fee and boosting your GFP rewards, this plan pays for itself if you recycle {tierId === 'standard' ? '40kg' : '100kg'} of plastic monthly.
@@ -157,8 +157,8 @@ export default function SubscriptionDetail() {
           <div className="bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-200 dark:border-indigo-500/20 rounded-3xl p-6 flex items-center gap-4">
             <ShieldCheck className="w-8 h-8 text-indigo-500" />
             <div>
-              <h4 className="text-xs font-semibold text-indigo-700 dark:text-indigo-400 uppercase tracking-widest mb-1">Verified Payment Protection</h4>
-              <p className="text-xs font-semibold text-indigo-800 dark:text-indigo-200/80 uppercase tracking-tight">Your funds and recycling value are protected by the platform at all times until you authorize release.</p>
+              <h4 className="text-xs font-semibold text-indigo-700 dark:text-indigo-400 capitalize tracking-widest mb-1">Verified Payment Protection</h4>
+              <p className="text-xs font-semibold text-indigo-800 dark:text-indigo-200/80 capitalize tracking-tight">Your funds and recycling value are protected by the platform at all times until you authorize release.</p>
             </div>
           </div>
         )}

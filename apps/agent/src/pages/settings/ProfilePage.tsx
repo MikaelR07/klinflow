@@ -60,8 +60,8 @@ export default function ProfilePage() {
             <ArrowLeft className="w-4 h-4 dark:text-white" />
           </button>
           <div>
-            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">My Profile</h1>
-            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Personal Information</p>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none mb-1">My Profile</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Personal Information</p>
           </div>
         </div>
       </div>
@@ -113,9 +113,9 @@ export default function ProfilePage() {
         {/* Active Application Location */}
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
-            <label className="text-xs font-black text-slate-400 dark:text-slate-555 uppercase tracking-[0.2em]">Location Area</label>
+            <label className="text-xs font-black text-slate-400 dark:text-slate-555 capitalize tracking-[0.2em]">Location Area</label>
             {formData.location?.accuracy && (
-              <span className="flex items-center gap-1.5 text-xs font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full uppercase tracking-widest">
+              <span className="flex items-center gap-1.5 text-xs font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full capitalize tracking-widest">
                 <Target className="w-3 h-3" /> Precision {Math.round(formData.location.accuracy)}m
               </span>
             )}

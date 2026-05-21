@@ -21,8 +21,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.png', 'icons/*.png'],
       manifest: {
-        name: 'Klin Agent',
-        short_name: 'Klin Agent',
+        name: 'Klinflow Agent',
+        short_name: 'Klinflow Agent',
         description: 'Klinflow Agent PWA for waste collectors',
         theme_color: '#00A651',
         background_color: '#0f172a',

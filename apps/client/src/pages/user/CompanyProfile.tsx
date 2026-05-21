@@ -53,14 +53,14 @@ export default function CompanyProfile() {
   return (
     <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
             <ArrowLeft className="w-4 h-4 dark:text-white" />
           </button>
           <div>
             <h1 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Company Profile</h1>
-            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.25em]">Partner Details</p>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.25em]">Partner Details</p>
           </div>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default function CompanyProfile() {
               </div>
               <div>
                 <h2 className="text-xl font-bold tracking-tight">{company?.company_name || company?.name || 'Klinflow Partner'}</h2>
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-250 mt-1">
+                <p className="text-xs font-bold capitalize tracking-[0.2em] text-emerald-250 mt-1">
                   {isFleetAdmin ? 'Verified Fleet Company' : 'Independent Agent'}
                 </p>
               </div>
@@ -94,15 +94,15 @@ export default function CompanyProfile() {
                     {company?.rating > 0 ? company.rating.toFixed(1) : 'New'}
                   </span>
                 </div>
-                <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Rating</p>
+                <p className="text-[10px] font-bold text-white/60 capitalize tracking-widest">Rating</p>
               </div>
               <div className="text-center">
                 <p className="text-lg font-bold">{Number(company?.total_pickups || 0)}</p>
-                <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Pickups</p>
+                <p className="text-[10px] font-bold text-white/60 capitalize tracking-widest">Pickups</p>
               </div>
               <div className="text-center">
                 <p className="text-lg font-bold">KSh {logisticsFee}</p>
-                <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Base Fee</p>
+                <p className="text-[10px] font-bold text-white/60 capitalize tracking-widest">Base Fee</p>
               </div>
             </div>
           </div>
@@ -114,24 +114,24 @@ export default function CompanyProfile() {
             <MapPin className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Service Area</p>
+            <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Service Area</p>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">{company?.location?.estate || 'Nairobi Metro'}</p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-semibold text-emerald-600 uppercase tracking-widest">Online</span>
+            <span className="text-xs font-semibold text-emerald-600 capitalize tracking-widest">Online</span>
           </div>
         </div>
 
         {/* Accepted Materials */}
         {materials.length > 0 && (
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Accepted Materials</p>
+            <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Accepted Materials</p>
             <div className="flex flex-wrap gap-2">
               {materials
                 .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
                 .map((m: string) => (
-                  <span key={m} className="px-3 py-1.5 bg-primary/5 border border-primary/15 rounded-full text-xs font-semibold text-primary uppercase tracking-widest">
+                  <span key={m} className="px-3 py-1.5 bg-primary/5 border border-primary/15 rounded-full text-xs font-semibold text-primary capitalize tracking-widest">
                     {(MATERIAL_LABELS as any)[m]}
                   </span>
                 ))}
@@ -141,7 +141,7 @@ export default function CompanyProfile() {
 
         {/* Pricing Card */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Their Pricing</p>
+          <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Their Pricing</p>
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">Base Logistics Fee</span>
             <span className="text-lg font-semibold text-primary">KSh {logisticsFee}</span>

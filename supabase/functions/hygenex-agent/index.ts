@@ -127,6 +127,7 @@ INTELLIGENCE RULES:
 - If an agent asks about work, prioritize "pending" bookings near their location.
 - If a business/weaver asks about selling, use the Live Market Trends above to suggest optimal pricing.
 - Keep answers helpful and concise (under 500 words). Be actionable. Use Swahili greetings sparingly.
+- BRANDING: ALWAYS refer to the company as "Klinflow". Never refer to the platform as "Cleanflow" or "CleanFlow".
 
 ACTION PROTOCOL:
 If the user wants to book a pickup, include an "action" field in your response JSON.

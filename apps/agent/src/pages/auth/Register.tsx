@@ -129,7 +129,7 @@ export default function Register() {
       <div className="min-h-dvh flex flex-col justify-center bg-slate-900 px-4 py-8 animate-in fade-in">
         <div className="max-w-md w-full mx-auto relative z-10 glass p-8 rounded-3xl border border-slate-700 shadow-2xl">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold text-white tracking-widest uppercase">Identity Verification</h2>
+            <h2 className="text-2xl font-semibold text-white tracking-widest capitalize">Identity Verification</h2>
             <p className="text-sm text-slate-400 mt-2">Enter the secure PIN sent to <br/><span className="text-white font-semibold">{formData.phone}</span></p>
           </div>
 
@@ -202,7 +202,7 @@ export default function Register() {
           
           {/* Base Fields */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Full Legal Name</label>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Full Legal Name</label>
             <div className="relative">
               <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
               <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="First Last" className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
@@ -210,7 +210,7 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Email Address</label>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
               <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="agent@klinflow.co.ke" className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
@@ -218,7 +218,7 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Phone Number</label>
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Phone Number</label>
             <div className="relative text-slate-400 group-focus-within:text-primary transition-colors">
               <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5" />
               <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="07XX XXX XXX" className={`w-full pl-11 pr-12 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 text-sm transition-all ${phoneAvailable === false ? 'border-rose-300 ring-rose-100' : ''}`} required />
@@ -230,14 +230,14 @@ export default function Register() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Create PIN</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Create PIN</label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                 <input type="password" name="pin" value={formData.pin} onChange={handleInputChange} placeholder="••••••••" minLength={8} className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 tracking-widest text-sm" required />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Confirm PIN</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Confirm PIN</label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                 <input type="password" name="confirmPin" value={formData.confirmPin} onChange={handleInputChange} placeholder="••••••••" minLength={8} className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 tracking-widest text-sm" required />
@@ -248,7 +248,7 @@ export default function Register() {
           {/* Conditional Agent Fields */}
           <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-4 animate-slide-up">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">National ID Number</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">National ID Number</label>
               <div className="relative">
                 <Hash className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
                 <input type="text" name="idNumber" value={formData.idNumber} onChange={handleInputChange} placeholder="12345678" minLength={8} maxLength={8} className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-secondary/50 text-sm tracking-widest" required />
@@ -257,7 +257,7 @@ export default function Register() {
  
             {formData.agent_account_type === 'company_admin' && (
               <div className="pt-2 animate-slide-up">
-                <label className="block text-xs font-semibold text-primary dark:text-blue-400 mb-1.5 uppercase tracking-wider">Company / Business Name</label>
+                <label className="block text-xs font-semibold text-primary dark:text-blue-400 mb-1.5 capitalize tracking-wider">Company / Business Name</label>
                 <div className="relative">
                   <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
                   <input type="text" name="company_name" value={formData.company_name} onChange={handleInputChange} placeholder="e.g. Nairobi Green Fleets" className="w-full pl-11 pr-4 py-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
@@ -268,10 +268,10 @@ export default function Register() {
 
             {formData.agent_account_type === 'fleet_driver' && (
               <div className="pt-2 animate-slide-up">
-                <label className="block text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1.5 uppercase tracking-wider">Company Invite Code</label>
+                <label className="block text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1.5 capitalize tracking-wider">Company Invite Code</label>
                 <div className="relative">
                   <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-orange-400" />
-                  <input type="text" name="fleet_invite_code" value={formData.fleet_invite_code} onChange={handleInputChange} placeholder="CF-XXXXXX" className="w-full pl-11 pr-4 py-3 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-orange-500/50 text-sm tracking-widest uppercase" required />
+                  <input type="text" name="fleet_invite_code" value={formData.fleet_invite_code} onChange={handleInputChange} placeholder="CF-XXXXXX" className="w-full pl-11 pr-4 py-3 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-orange-500/50 text-sm tracking-widest capitalize" required />
                 </div>
                 <p className="text-xs text-slate-500 mt-1.5 ml-1">Ask your Company Admin for this 6-character code.</p>
               </div>
@@ -279,7 +279,7 @@ export default function Register() {
 
             {(formData.agent_account_type === 'independent' || formData.agent_account_type === 'fleet_driver') && (
               <div className="pt-2 animate-slide-up">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Gender</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Gender</label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
                     { id: 'male', label: 'Male', icon: Mars, color: 'text-blue-500', bg: 'bg-blue-500/10' },
@@ -298,7 +298,7 @@ export default function Register() {
                       <div className={`w-8 h-8 rounded-lg ${g.bg} flex items-center justify-center`}>
                         <g.icon className={`w-4 h-4 ${g.color}`} />
                       </div>
-                      <span className={`text-[11px] font-semibold uppercase tracking-widest ${formData.gender === g.id ? 'text-secondary' : 'text-slate-400'}`}>
+                      <span className={`text-[11px] font-semibold capitalize tracking-widest ${formData.gender === g.id ? 'text-secondary' : 'text-slate-400'}`}>
                         {g.label}
                       </span>
                     </button>

@@ -69,14 +69,14 @@ export default function NotificationsFeed() {
             {notifications.length > 0 && (
               <button 
                 onClick={clearAll}
-                className="text-[10px] font-bold uppercase tracking-widest text-rose-500 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 px-2.5 py-1.5 rounded-lg transition-colors"
+                className="text-[10px] font-bold capitalize tracking-widest text-rose-500 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 px-2.5 py-1.5 rounded-lg transition-colors"
               >
                 Clear
               </button>
             )}
             <button 
               onClick={() => navigate('/settings/notifications')}
-              className="text-[10px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 px-2.5 py-1.5 rounded-lg transition-colors"
+              className="text-[10px] font-bold capitalize tracking-widest text-slate-600 dark:text-slate-300 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 px-2.5 py-1.5 rounded-lg transition-colors"
             >
               Settings
             </button>
@@ -93,7 +93,7 @@ export default function NotificationsFeed() {
                 <div className="flex items-center justify-between mb-0.5 gap-2">
                   <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{n.title}</p>
                   <div className="flex items-center gap-1 shrink-0">
-                    <span className="text-[10px] text-slate-400 font-medium tabular-nums uppercase tracking-wider">
+                    <span className="text-[10px] text-slate-400 font-medium tabular-nums capitalize tracking-wider">
                       {formatRelativeTime(n.createdAt || n.date)}
                     </span>
                   </div>

@@ -83,15 +83,15 @@ export default function SettingsMenu() {
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors pb-24">
       
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800  transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex flex-col">
-            <h1 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Account</h1>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Profile & Settings</p>
+            <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
+            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Profile & Settings</p>
           </div>
           <div className="flex items-center gap-2">
              <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shadow-sm shadow-primary/10">
-                <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">{roleLabel}</p>
+                <p className="text-[10px] font-black text-primary capitalize tracking-[0.2em]">{roleLabel}</p>
              </div>
           </div>
         </div>
@@ -116,10 +116,10 @@ export default function SettingsMenu() {
             </div>
             <div className="space-y-1">
               <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">{profile?.name}</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{profile?.phone}</p>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">{profile?.phone}</p>
               <div className="flex items-center gap-1.5 mt-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Verified Identity</span>
+                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest">Verified Identity</span>
               </div>
             </div>
           </div>
@@ -132,8 +132,8 @@ export default function SettingsMenu() {
                   className="flex flex-col items-center text-center p-3 rounded-xl bg-indigo-600 dark:bg-indigo-700 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent shadow-sm active:scale-95 group"
                >
                   <Award className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                  <p className="text-[9px] font-bold text-indigo-200 uppercase tracking-widest mb-1 leading-none">Identity</p>
-                  <p className="text-xs font-bold text-white uppercase leading-none">Resumé</p>
+                  <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
+                  <p className="text-xs font-bold text-white capitalize leading-none">Klin Resumé</p>
                </button>
              )}
              <button 
@@ -141,23 +141,23 @@ export default function SettingsMenu() {
                 className="flex flex-col items-center text-center p-3 rounded-xl bg-emerald-600 dark:bg-emerald-700 text-white hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-all border border-transparent shadow-sm active:scale-95 group"
              >
                 <TrendingUp className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-emerald-200 uppercase tracking-widest mb-1 leading-none">Activity</p>
-                <p className="text-xs font-bold text-white uppercase leading-none">Analytics</p>
+                <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Activity</p>
+                <p className="text-xs font-bold text-white capitalize leading-none">{isSeller ? 'Market Prices' : 'Analytics'}</p>
              </button>
              <button 
                 onClick={() => navigate('/leaderboard')}
                 className="flex flex-col items-center text-center p-3 rounded-xl bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-all border border-transparent shadow-sm active:scale-95 group"
              >
                 <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-blue-200 uppercase tracking-widest mb-1 leading-none">Ranking</p>
-                <p className="text-xs font-bold text-white uppercase leading-none">Leaderboard</p>
+                <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
+                <p className="text-xs font-bold text-white capitalize leading-none">Leaderboard</p>
              </button>
           </div>
         </div>
  
         {/* ── QUICK ACCESS SECTION ── */}
         <div className="space-y-3">
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-2">Managed Services</p>
+           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Managed Services</p>
            <div className="grid grid-cols-2 gap-3">
               {isSeller ? (
                 <>
@@ -167,7 +167,7 @@ export default function SettingsMenu() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Inventory</p>
-                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">Ledger</p>
+                      <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Ledger</p>
                     </div>
                   </button>
                   <button onClick={() => navigate('/my-offers')} className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
@@ -176,7 +176,7 @@ export default function SettingsMenu() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Trades</p>
-                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">Orders</p>
+                      <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Orders</p>
                     </div>
                   </button>
                 </>
@@ -188,7 +188,7 @@ export default function SettingsMenu() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Bookings</p>
-                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">Pickup Log</p>
+                      <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Pickup Log</p>
                     </div>
                   </button>
                   <button onClick={() => navigate('/impact-hub')} className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
@@ -197,7 +197,7 @@ export default function SettingsMenu() {
                     </div>
                     <div className="min-w-0">
                       <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Impact Hub</p>
-                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider truncate mt-0.5">Green Eco</p>
+                      <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Green Eco</p>
                     </div>
                   </button>
                 </>
@@ -207,7 +207,7 @@ export default function SettingsMenu() {
 
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-2">Intelligence & Design</p>
+          <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
              <div className="p-5 flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -216,7 +216,7 @@ export default function SettingsMenu() {
                    </div>
                    <div className="text-left">
                       <p className="text-sm font-semibold text-slate-900 dark:text-white">HygeneX History</p>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">Save AI Conversations</p>
+                      <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">Save AI Conversations</p>
                    </div>
                 </div>
                 <button 
@@ -249,7 +249,7 @@ export default function SettingsMenu() {
                 </div>
                 <div className="flex-1 text-left">
                   <p className="text-sm font-semibold text-slate-900 dark:text-white">{item.label}</p>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">{item.subtitle}</p>
+                  <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">{item.subtitle}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-300" />
               </button>
@@ -263,14 +263,14 @@ export default function SettingsMenu() {
               await logout();
               navigate('/login', { replace: true });
           }}
-          className="w-full py-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
+          className="w-full py-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
         >
           <LogOut className="w-5 h-5" /> Secure Logout
         </button>
 
         <div className="text-center space-y-1 py-4">
-           <p className="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.5em]">Klinflow Operating System</p>
-           <p className="text-[8px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">V1.0.4 • Kenya Eco-System</p>
+           <p className="text-[10px] font-black text-slate-300 dark:text-slate-700 capitalize tracking-[0.5em]">Klinflow Operating System</p>
+           <p className="text-[8px] font-bold text-slate-400 dark:text-slate-600 capitalize tracking-widest">V1.0.4 • Kenya Eco-System</p>
         </div>
       </main>
 

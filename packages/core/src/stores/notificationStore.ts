@@ -183,7 +183,15 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
                      };
 
                      const isAccepted = accepted.some(mat => {
-                       const matLower = String(mat).toLowerCase();
+                       if (!mat) return false;
+                       let matStr = '';
+                       if (typeof mat === 'string') {
+                         matStr = mat;
+                       } else if (typeof mat === 'object') {
+                         matStr = mat.id || mat.name || '';
+                       }
+                       const matLower = String(matStr).toLowerCase();
+                       if (!matLower) return false;
                        // Direct match
                        if (matLower === wasteLower) return true;
                        // Check if the incoming wasteType is an alias of any accepted material

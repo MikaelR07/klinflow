@@ -26,15 +26,15 @@ export default function SubscriptionPage() {
         >
           <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white uppercase tracking-tight">Your Membership</h1>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white capitalize tracking-tight">Your Membership</h1>
       </div>
 
       {/* Hero Card (Platform Value Focus) */}
       <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
         <div className="relative z-10">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-1">Klinflow Platform Access</p>
+          <p className="text-xs font-semibold capitalize tracking-widest text-primary mb-1">Klinflow Platform Access</p>
           <h2 className="text-2xl font-semibold mb-4 tracking-tight">One Subscription. <br/> Access Every Fleet.</h2>
-          <div className="flex items-center gap-2 text-xs font-semibold bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full w-fit border border-white/10 uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-xs font-semibold bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full w-fit border border-white/10 capitalize tracking-widest">
             <Zap className="w-3 h-3 fill-amber-300 text-amber-300" /> Earn massive multipliers on points and rewards!
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function SubscriptionPage() {
               }`}
             >
               {isImpact && (
-                <div className="absolute top-0 right-6 -translate-y-1/2 bg-amber-400 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg uppercase tracking-widest flex items-center gap-1 ring-4 ring-white dark:ring-slate-900">
+                <div className="absolute top-0 right-6 -translate-y-1/2 bg-amber-400 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg capitalize tracking-widest flex items-center gap-1 ring-4 ring-white dark:ring-slate-900">
                   <Star className="w-2.5 h-2.5 fill-white" /> {tier.impactTag}
                 </div>
               )}
@@ -66,7 +66,7 @@ export default function SubscriptionPage() {
                     {tier.label}
                     {tier.id === 'premium' && <Crown className="w-4 h-4 text-amber-500 fill-amber-500" />}
                   </h3>
-                  <p className="text-xs font-semibold text-primary uppercase tracking-widest">
+                  <p className="text-xs font-semibold text-primary capitalize tracking-widest">
                     {tier.rewardMult}x Point Boost
                   </p>
                 </div>
@@ -74,7 +74,7 @@ export default function SubscriptionPage() {
                   <p className="text-xl font-semibold text-slate-900 dark:text-white leading-none">
                     {tier.price === 0 ? 'Free' : `KSh ${tier.price.toLocaleString()}`}
                   </p>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">Per month</p>
+                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-tighter">Per month</p>
                 </div>
               </div>
 
@@ -92,7 +92,7 @@ export default function SubscriptionPage() {
               <button
                 onClick={() => handleUpgrade(tier.id)}
                 disabled={isCurrent}
-                className={`w-full py-4 rounded-2xl font-semibold text-sm uppercase tracking-widest transition-all ${
+                className={`w-full py-4 rounded-2xl font-semibold text-sm capitalize tracking-widest transition-all ${
                   isCurrent 
                     ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-default' 
                     : 'bg-primary text-white shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95'
@@ -107,15 +107,15 @@ export default function SubscriptionPage() {
 
       {/* Community Impact Footer */}
       <div className="card p-5 bg-slate-50 dark:bg-slate-800/50 border-dashed border-2 border-slate-200 dark:border-slate-700">
-        <h4 className="text-xs font-semibold text-slate-900 dark:text-white uppercase tracking-widest mb-2 flex items-center gap-2">
+        <h4 className="text-xs font-semibold text-slate-900 dark:text-white capitalize tracking-widest mb-2 flex items-center gap-2">
           <Shield className="w-4 h-4 text-primary" /> The Klinflow Promise
         </h4>
-        <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold leading-relaxed uppercase tracking-tight">
+        <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold leading-relaxed capitalize tracking-tight">
           Klinflow is a platform that connects you to independent waste businesses. Your subscription fee helps us build better logistics tools, 
           verify more agents, and provide 24/7 support. 100% of your material value and logistics fees go directly to the service providers.
         </p>
       </div>
-      <p className="text-center text-xs text-slate-400 font-semibold uppercase tracking-widest leading-relaxed px-6 py-6">
+      <p className="text-center text-xs text-slate-400 font-semibold capitalize tracking-widest leading-relaxed px-6 py-6">
         Prices include all waste disposal fees. You can change or cancel your plan at any time.
       </p>
     </div>

@@ -212,8 +212,8 @@ export default function AgentSellStock() {
                     <ImageIcon className="w-6 h-6" />
                   </div>
                   <div className="text-center px-4">
-                    <p className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest">Capture Stock</p>
-                    <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest mt-1">Proof of inventory required</p>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white capitalize tracking-widest">Capture Stock</p>
+                    <p className="text-[10px] font-medium text-slate-400 capitalize tracking-widest mt-1">Proof of inventory required</p>
                   </div>
                 </div>
               )}
@@ -224,11 +224,11 @@ export default function AgentSellStock() {
           <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 space-y-4">
             <div className="flex items-center gap-2">
               <Package className="w-4 h-4 text-indigo-500" />
-              <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Material Identification</h2>
+              <h2 className="text-xs font-bold text-slate-400 capitalize tracking-widest">Material Identification</h2>
             </div>
             
             <div className="space-y-3">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Accepted Categories</label>
+              <label className="block text-[10px] font-bold text-slate-400 capitalize tracking-widest ml-1">Accepted Categories</label>
               <div className="grid grid-cols-2 gap-2">
                 {availableCategories.map((cat) => (
                   <button
@@ -244,7 +244,7 @@ export default function AgentSellStock() {
                     }`}
                   >
                     <span className="text-xl mb-2 block">{cat.icon}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">{cat.label}</span>
+                    <span className="text-[10px] font-bold capitalize tracking-wider text-slate-600 dark:text-slate-300">{cat.label}</span>
                   </button>
                 ))}
               </div>
@@ -252,7 +252,7 @@ export default function AgentSellStock() {
 
             {formData.category && (
               <div className="space-y-2 animate-in slide-in-from-top-2">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Select Grade</label>
+                <label className="block text-[10px] font-bold text-slate-400 capitalize tracking-widest ml-1">Select Grade</label>
                 <div className="relative">
                   <select 
                     value={formData.subcategory}
@@ -278,7 +278,7 @@ export default function AgentSellStock() {
               <div className="w-8 h-8 rounded-lg bg-rose-500 flex items-center justify-center shrink-0">
                 <Info className="w-4 h-4 text-white" />
               </div>
-              <p className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest leading-tight">
+              <p className="text-[10px] font-bold text-rose-600 dark:text-rose-400 capitalize tracking-widest leading-tight">
                 {stepError}
               </p>
             </div>
@@ -286,7 +286,7 @@ export default function AgentSellStock() {
 
           <button 
             onClick={nextStep}
-            className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"
+            className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-xs capitalize tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"
           >
             Specify Quantity <ChevronRight className="w-4 h-4" />
           </button>
@@ -299,13 +299,13 @@ export default function AgentSellStock() {
           <div className="bg-indigo-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-600/20">
             <div className="flex items-center gap-3 mb-4">
               <Warehouse className="w-5 h-5 opacity-60" />
-              <p className="text-xs font-bold uppercase tracking-widest">Verified Yard Balance</p>
+              <p className="text-xs font-bold capitalize tracking-widest">Verified Yard Balance</p>
             </div>
             <div className="flex items-baseline gap-2">
               <h3 className="text-4xl font-black">{yardBalance.toFixed(1)}</h3>
               <span className="text-lg font-bold opacity-60">KG Available</span>
             </div>
-            <p className="text-[10px] font-medium mt-2 opacity-80 uppercase tracking-widest italic">
+            <p className="text-[10px] font-medium mt-2 opacity-80 capitalize tracking-widest italic">
               * Only verified assets from your warehouse can be listed.
             </p>
           </div>
@@ -314,7 +314,7 @@ export default function AgentSellStock() {
             <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
                <div className="flex items-center gap-2 mb-4">
                  <Scale className="w-4 h-4 text-blue-500" />
-                 <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Weight</h2>
+                 <h2 className="text-xs font-bold text-slate-400 capitalize tracking-widest">Weight</h2>
                </div>
                <input 
                  type="number"
@@ -324,12 +324,12 @@ export default function AgentSellStock() {
                  onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
                  className="w-full bg-transparent text-3xl font-bold text-slate-900 dark:text-white focus:outline-none"
                />
-               <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">KG to List</p>
+               <p className="text-[10px] font-bold text-slate-400 capitalize mt-1">KG to List</p>
             </div>
             <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
                <div className="flex items-center gap-2 mb-4">
                  <DollarSign className="w-4 h-4 text-emerald-500" />
-                 <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Price</h2>
+                 <h2 className="text-xs font-bold text-slate-400 capitalize tracking-widest">Price</h2>
                </div>
                <input 
                  type="number"
@@ -338,19 +338,19 @@ export default function AgentSellStock() {
                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                  className="w-full bg-transparent text-3xl font-bold text-slate-900 dark:text-white focus:outline-none"
                />
-               <p className="text-[10px] font-bold text-slate-400 uppercase mt-1">KSh / KG</p>
+               <p className="text-[10px] font-bold text-slate-400 capitalize mt-1">KSh / KG</p>
             </div>
           </div>
 
           <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-500" />
-              <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Trade Settings</h2>
+              <h2 className="text-xs font-bold text-slate-400 capitalize tracking-widest">Trade Settings</h2>
             </div>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Minimum Order Quantity (KG)</label>
+                <label className="block text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-2">Minimum Order Quantity (KG)</label>
                 <input 
                   type="number"
                   value={formData.minOrder}
@@ -359,7 +359,7 @@ export default function AgentSellStock() {
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Batch Description (Optional)</label>
+                <label className="block text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-2">Batch Description (Optional)</label>
                 <textarea 
                   rows={2}
                   value={formData.description}
@@ -374,7 +374,7 @@ export default function AgentSellStock() {
           <button 
             disabled={!formData.weight || !formData.price || parseFloat(formData.weight) > yardBalance}
             onClick={() => setStep(3)}
-            className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30"
+            className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-xs capitalize tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-30"
           >
             Preview Listing <ChevronRight className="w-4 h-4" />
           </button>
@@ -385,16 +385,16 @@ export default function AgentSellStock() {
       {step === 3 && (
         <div className="space-y-6 animate-in slide-in-from-right-4 duration-300 px-4">
           <div className="px-1">
-            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Merchant Card Preview</h2>
+            <h2 className="text-xs font-bold text-slate-400 capitalize tracking-widest mb-4">Merchant Card Preview</h2>
             
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-2xl">
               <div className="aspect-video relative">
                 <img src={formData.imageUrl} className="w-full h-full object-cover" />
-                <div className="absolute top-4 left-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-bold text-white uppercase tracking-widest">
+                <div className="absolute top-4 left-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-bold text-white capitalize tracking-widest">
                   Live Preview
                 </div>
                 <div className="absolute bottom-4 left-4">
-                  <span className="bg-indigo-600 px-3 py-1.5 rounded-lg text-[10px] font-black text-white uppercase tracking-tighter">
+                  <span className="bg-indigo-600 px-3 py-1.5 rounded-lg text-[10px] font-black text-white capitalize tracking-tighter">
                     {formData.subcategory} Lot
                   </span>
                 </div>
@@ -403,23 +403,23 @@ export default function AgentSellStock() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white">{formData.subcategory}</h3>
-                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-widest mt-1 flex items-center gap-1.5">
+                    <p className="text-xs text-slate-400 font-semibold capitalize tracking-widest mt-1 flex items-center gap-1.5">
                       <Scale className="w-3.5 h-3.5" /> {formData.weight} KG Available
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="text-xl font-black text-emerald-600">KSh {formData.price}</p>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">per KG</p>
+                    <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">per KG</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 py-4 border-y border-slate-50 dark:border-slate-800/50 mb-4">
                   <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Value</p>
+                    <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Total Value</p>
                     <p className="text-sm font-bold text-slate-800 dark:text-white">KSh {(parseFloat(formData.weight) * parseFloat(formData.price)).toLocaleString()}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Min Order</p>
+                    <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Min Order</p>
                     <p className="text-sm font-bold text-slate-800 dark:text-white">{formData.minOrder} KG</p>
                   </div>
                 </div>
@@ -437,7 +437,7 @@ export default function AgentSellStock() {
           <button 
             disabled={isSubmitting}
             onClick={handleSubmit}
-            className="w-full py-5 bg-emerald-600 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-xl shadow-emerald-600/30 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+            className="w-full py-5 bg-emerald-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.2em] shadow-xl shadow-emerald-600/30 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
           >
             {isSubmitting ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

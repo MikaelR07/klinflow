@@ -42,8 +42,8 @@ export default function WarehousePage() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <div className="text-left">
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Warehouse Portal</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Manage drop-offs & logistics</p>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Warehouse Portal</h1>
+            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Manage drop-offs & logistics</p>
           </div>
         </div>
       </div>
@@ -59,25 +59,25 @@ export default function WarehousePage() {
                   </div>
                   <div>
                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white leading-none">Current Truck Load</h3>
-                     <p className="text-xs text-slate-400 font-semibold mt-1 uppercase tracking-widest">In Transit to Hub</p>
+                     <p className="text-xs text-slate-400 font-semibold mt-1 capitalize tracking-widest">In Transit to Hub</p>
                   </div>
                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
                <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Live Weight</p>
+                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-1">Live Weight</p>
                   <p className="text-xl font-semibold text-slate-900 dark:text-white">{totalWeight.toFixed(1)} KG</p>
                </div>
                <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Items</p>
+                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-1">Items</p>
                   <p className="text-xl font-semibold text-slate-900 dark:text-white">{assets.length} Units</p>
                </div>
             </div>
 
             <button 
               onClick={handleDispatch}
-              className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-xs uppercase tracking-[0.1em] shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+              className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-xs capitalize tracking-[0.1em] shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center gap-3"
             >
               <Warehouse className="w-5 h-5" />
               NOTIFY HUB OF ARRIVAL
@@ -87,7 +87,7 @@ export default function WarehousePage() {
 
       {/* ── DROP-OFF INSTRUCTIONS ── */}
       <div className="space-y-4">
-         <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest px-1">Drop-off Guide</h2>
+         <h2 className="text-xs font-semibold text-slate-400 capitalize tracking-widest px-1">Drop-off Guide</h2>
          
          <div className="grid gap-3">
             <div className="p-5 bg-slate-100/50 dark:bg-slate-800 rounded-[2rem] flex items-start gap-4">
@@ -116,7 +116,7 @@ export default function WarehousePage() {
       <div className="p-5 bg-primary/5 border border-primary/10 rounded-[2rem] flex items-center justify-between">
          <div className="flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-primary" />
-            <span className="text-xs font-semibold text-primary uppercase tracking-widest">Hub Status: Operational</span>
+            <span className="text-xs font-semibold text-primary capitalize tracking-widest">Hub Status: Operational</span>
          </div>
          <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
       </div>

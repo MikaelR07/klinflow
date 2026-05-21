@@ -58,7 +58,7 @@ export default function WeightVerificationModal() {
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight uppercase">Rate your Experience</h3>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight capitalize">Rate your Experience</h3>
                 <p className="text-sm text-slate-500 mt-2 font-medium">Your agent has completed the collection. How was the service?</p>
               </div>
 
@@ -68,7 +68,7 @@ export default function WeightVerificationModal() {
                     <Scale className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest leading-none">Measured Weight</p>
+                    <p className="text-xs font-bold text-slate-400 capitalize tracking-widest leading-none">Measured Weight</p>
                     <p className="text-lg font-black dark:text-white mt-1">{activeVerificationBooking.actualWeightKg || activeVerificationBooking.weightKg || 0} KG</p>
                   </div>
                 </div>
@@ -91,7 +91,7 @@ export default function WeightVerificationModal() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Comments (Optional)</label>
+                <label className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] ml-1">Comments (Optional)</label>
                 <textarea
                   placeholder="Tell us more about the service..."
                   value={comment}
@@ -103,7 +103,7 @@ export default function WeightVerificationModal() {
               <button
                 onClick={handleRate}
                 disabled={rating === 0 || isProcessing}
-                className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-bold text-sm uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all disabled:opacity-50"
+                className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-bold text-sm capitalize tracking-[0.2em] shadow-xl active:scale-95 transition-all disabled:opacity-50"
               >
                 {isProcessing ? 'Submitting...' : 'Submit Feedback'}
               </button>
@@ -116,13 +116,13 @@ export default function WeightVerificationModal() {
                 <Heart className="w-10 h-10 fill-white" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">All Set!</h3>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white capitalize tracking-tight">All Set!</h3>
                 <p className="text-xs text-slate-400 mt-2 font-semibold">Thank you for helping keep Kenya clean.</p>
               </div>
               
               <button
                 onClick={clearActiveVerification}
-                className="mt-4 px-8 py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                className="mt-4 px-8 py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-bold text-xs capitalize tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
               >
                 Dismiss
               </button>

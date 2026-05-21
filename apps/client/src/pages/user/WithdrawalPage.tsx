@@ -89,14 +89,14 @@ export default function WithdrawalPage() {
         {step === 1 && (
           <div className="space-y-4 animate-slide-up">
             <div className="card p-6 bg-gradient-to-br from-primary to-emerald-700 text-white border-none">
-              <p className="text-xs font-semibold text-emerald-100 uppercase tracking-[0.2em] mb-1">Available for Withdrawal</p>
+              <p className="text-xs font-semibold text-emerald-100 capitalize tracking-[0.2em] mb-1">Available for Withdrawal</p>
               <h2 className="text-4xl font-semibold tracking-tight">KSh {walletBalance.toLocaleString()}</h2>
               <div className="flex items-center gap-2 mt-4 text-xs font-semibold bg-white/10 w-fit px-3 py-1.5 rounded-full">
                 <ShieldCheck className="w-3.5 h-3.5" /> SECURE ESCROW SETTLEMENT
               </div>
             </div>
 
-            <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-widest px-1">Select Method</h3>
+            <h3 className="text-sm font-semibold text-slate-400 capitalize tracking-widest px-1">Select Method</h3>
             <div className="space-y-3">
               {METHODS.map(m => (
                 <button
@@ -128,14 +128,14 @@ export default function WithdrawalPage() {
                     <method.icon className="w-8 h-8" />
                  </div>
                  <div>
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest leading-none mb-1">Withdraw via</p>
+                    <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest leading-none mb-1">Withdraw via</p>
                     <p className="text-xl font-semibold dark:text-white leading-none">{method.name}</p>
                  </div>
               </div>
 
               <div className="space-y-5">
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Amount to Withdraw</label>
+                  <label className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Amount to Withdraw</label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 font-semibold text-slate-400">KSh</span>
                     <input 
@@ -151,12 +151,12 @@ export default function WithdrawalPage() {
                   </div>
                   <div className="flex justify-between px-1">
                     <p className="text-xs font-semibold text-slate-400">Fee: <span className="text-slate-900 dark:text-white">KSh 0.00</span></p>
-                    <button onClick={() => setAmount(walletBalance)} className="text-xs font-semibold text-primary uppercase tracking-widest hover:underline">Withdraw All</button>
+                    <button onClick={() => setAmount(walletBalance)} className="text-xs font-semibold text-primary capitalize tracking-widest hover:underline">Withdraw All</button>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">
+                  <label className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">
                     {method.id === 'bank' ? 'Account Number' : 'Phone Number'}
                   </label>
                   <input 
@@ -173,7 +173,7 @@ export default function WithdrawalPage() {
             <button 
               onClick={handleConfirm}
               disabled={loading || Number(amount) < 100}
-              className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-semibold text-sm uppercase tracking-[0.2em] shadow-2xl active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+              className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-semibold text-sm capitalize tracking-[0.2em] shadow-2xl active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
             >
               {loading ? (
                 <>
@@ -208,13 +208,13 @@ export default function WithdrawalPage() {
              </div>
 
              <div className="card p-6 bg-slate-100 dark:bg-slate-900 border-dashed border-2">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Transaction Reference</p>
+                <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-2">Transaction Reference</p>
                 <p className="font-mono font-semibold dark:text-white">CF-WD-{Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
              </div>
 
              <button 
               onClick={() => navigate('/')}
-              className="w-full py-5 bg-primary text-white rounded-[2rem] font-semibold text-sm uppercase tracking-widest shadow-xl active:scale-[0.98] transition-all"
+              className="w-full py-5 bg-primary text-white rounded-[2rem] font-semibold text-sm capitalize tracking-widest shadow-xl active:scale-[0.98] transition-all"
              >
                Return Home
              </button>

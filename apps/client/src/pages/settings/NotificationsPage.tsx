@@ -55,14 +55,14 @@ export default function NotificationsPage() {
   return (
     <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate('/settings')} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
             <ArrowLeft className="w-4 h-4 dark:text-white" />
           </button>
           <div>
-            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">Notifications</h1>
-            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Preferences & Channels</p>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none mb-1">Notifications</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Preferences & Channels</p>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function NotificationsPage() {
                  <BellRing className="w-5 h-5" />
                </div>
                <div>
-                 <h3 className="text-xs font-bold uppercase tracking-widest text-slate-900 dark:text-white">Device Notifications</h3>
+                 <h3 className="text-xs font-bold capitalize tracking-widest text-slate-900 dark:text-white">Device Notifications</h3>
                  <p className="text-[10px] text-slate-400 font-medium mt-0.5">Alerts when app is closed</p>
                </div>
              </div>
@@ -96,7 +96,7 @@ export default function NotificationsPage() {
                    toast.error('Permission Denied', { description: 'Please enable notifications in your browser settings.' });
                  }
                }}
-               className="w-full py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
+               className="w-full py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold capitalize tracking-widest text-slate-600 dark:text-slate-300 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
              >
                Enable Native Push
              </button>
@@ -131,7 +131,7 @@ export default function NotificationsPage() {
           <button
             onClick={handleSave}
             disabled={isLoading}
-            className="px-12 py-3.5 bg-primary text-white rounded-2xl text-[12px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-70 shadow-lg shadow-primary/20"
+            className="px-12 py-3.5 bg-primary text-white rounded-2xl text-[12px] font-bold capitalize tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-70 shadow-lg shadow-primary/20"
           >
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save Preferences
           </button>

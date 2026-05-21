@@ -45,7 +45,7 @@ function ReviewCard({ review }: { review: any }) {
                   <Star key={s} className={`w-2.5 h-2.5 ${s <= review.rating ? 'fill-primary text-primary' : 'text-slate-200 dark:text-slate-800'}`} />
                 ))}
               </div>
-              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 capitalize tracking-widest">
                 <span>• {review.date}</span>
                 <span className="flex items-center gap-1">
                   <Clock className="w-2.5 h-2.5" />
@@ -58,7 +58,7 @@ function ReviewCard({ review }: { review: any }) {
 
         <div className="flex items-center gap-3">
           <div className="hidden xs:flex px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg">
-             <p className="text-[9px] font-mono text-slate-400 uppercase">#{review.id.slice(0,6)}</p>
+             <p className="text-[9px] font-mono text-slate-400 capitalize">#{review.id.slice(0,6)}</p>
           </div>
           <div className={`p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
              <ChevronDown className="w-4 h-4" />
@@ -89,10 +89,10 @@ function ReviewCard({ review }: { review: any }) {
               <div className="flex items-center gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-white/5">
                 <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg">
                   <Tag className="w-3 h-3 text-slate-400" />
-                  <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{review.wasteType || 'General'}</span>
+                  <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest">{review.wasteType || 'General'}</span>
                 </div>
                 {isPositive && (
-                  <div className="flex items-center gap-1.5 text-[9px] font-bold text-emerald-500 uppercase tracking-widest ml-auto">
+                  <div className="flex items-center gap-1.5 text-[9px] font-bold text-emerald-500 capitalize tracking-widest ml-auto">
                     <Heart className="w-3 h-3 fill-emerald-500" /> Service Champion
                   </div>
                 )}
@@ -159,8 +159,8 @@ export default function ReviewsPage() {
               <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
             </button>
             <div>
-              <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white uppercase">Reviews and Feedback</h1>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 flex items-center gap-1.5 leading-none">
+              <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white capitalize">Reviews and Feedback</h1>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 flex items-center gap-1.5 leading-none">
                 <TrendingUp className="w-3 h-3 text-primary" /> Live Reputation Metrics
               </p>
             </div>
@@ -176,7 +176,7 @@ export default function ReviewsPage() {
             <Award className="w-20 h-20 rotate-12 text-slate-900 dark:text-white" />
           </div>
           <div className="relative z-10">
-            <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1">Global Standing</p>
+            <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-[0.2em] mb-1">Global Standing</p>
             <div className="flex items-baseline gap-1.5">
               <h2 className="text-4xl font-black tracking-tighter">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
               <span className="text-sm font-bold text-slate-300 dark:text-slate-600">/5.0</span>
@@ -191,7 +191,7 @@ export default function ReviewsPage() {
 
         {/* Rating Breakdown */}
         <div className="md:col-span-2 bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 border border-slate-200 dark:border-white/5 shadow-sm space-y-4">
-          <h3 className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Rating Analytics</h3>
+          <h3 className="text-[9px] font-bold text-slate-400 capitalize tracking-[0.2em]">Rating Analytics</h3>
           <div className="space-y-2">
             {stats.breakdown.length > 0 ? stats.breakdown.map((item) => (
               <div key={item.stars} className="flex items-center gap-3">
@@ -220,16 +220,16 @@ export default function ReviewsPage() {
       {/* Reviews List */}
       <div className="space-y-4 pt-4">
         <div className="flex items-center justify-between px-1">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Recent Feedback</h3>
+          <h3 className="text-xs font-bold text-slate-400 capitalize tracking-[0.2em]">Recent Feedback</h3>
           <div className="px-2 py-1 bg-primary/10 rounded-lg">
-            <span className="text-[10px] font-bold text-primary uppercase">{stats.total} reviews</span>
+            <span className="text-[10px] font-bold text-primary capitalize">{stats.total} reviews</span>
           </div>
         </div>
 
         {isLoadingReviews ? (
           <div className="flex flex-col items-center justify-center py-20 opacity-50">
              <Loader2 className="w-8 h-8 animate-spin text-primary mb-2" />
-             <p className="text-[10px] font-bold uppercase tracking-widest">Synchronizing History...</p>
+             <p className="text-[10px] font-bold capitalize tracking-widest">Synchronizing History...</p>
           </div>
         ) : recentReviews.length === 0 ? (
           <EmptyState 

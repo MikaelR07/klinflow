@@ -120,8 +120,8 @@ export default function StaffApplication() {
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div className="flex flex-col">
-              <h1 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Staff Program</h1>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Klinflow Team</p>
+              <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Staff Program</h1>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Klinflow Team</p>
             </div>
           </div>
           <button 
@@ -149,12 +149,12 @@ export default function StaffApplication() {
             </div>
             
             <div className="bg-green-300 rounded-2xl p-2 text-white space-y-2  border border-white/5">
-               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Your Staff ID</p>
+               <p className="text-[10px] font-black capitalize tracking-[0.3em] text-slate-500">Your Staff ID</p>
                <h2 className="text-3xl t-black tracking-tight text-primary">{profile?.fleetId || profile?.fleet_id || 'CF-STAFF-ACTIVE'}</h2>
             </div>
 
             <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 text-left space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-wider text-slate-400">Staff Privileges</h3>
+              <h3 className="text-xs font-black capitalize tracking-wider text-slate-400">Staff Privileges</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-primary" />
@@ -189,12 +189,12 @@ export default function StaffApplication() {
                <button 
                  onClick={forceSync}
                  disabled={isRefreshing}
-                 className="w-full py-4 bg-primary text-white rounded-2xl font-semibold text-xs uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-95 transition-all"
+                 className="w-full py-4 bg-primary text-white rounded-2xl font-semibold text-xs capitalize tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-95 transition-all"
                >
                   <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                   {isRefreshing ? 'Checking...' : 'Check Approval Status'}
                </button>
-               <button onClick={() => navigate('/settings')} className="w-full py-4 bg-slate-50 dark:bg-slate-850 rounded-2xl font-semibold text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+               <button onClick={() => navigate('/settings')} className="w-full py-4 bg-slate-50 dark:bg-slate-850 rounded-2xl font-semibold text-xs capitalize tracking-widest text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                   Return to Settings
                </button>
              </div>
@@ -210,7 +210,7 @@ export default function StaffApplication() {
                  <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30">
                     <Sparkles className="w-5 h-5 text-primary" />
                  </div>
-                 <h2 className="text-xl font-black uppercase tracking-tight leading-none">Klinflow Staff</h2>
+                 <h2 className="text-xl font-black capitalize tracking-tight leading-none">Klinflow Staff</h2>
                  <p className="text-xs text-slate-400 leading-relaxed font-semibold">
                    Upgrade your operator profile to gain exclusive access to corporate logistics orders, fleet operations support, and financial rewards.
                  </p>
@@ -219,7 +219,7 @@ export default function StaffApplication() {
 
             {/* Core Program Benefits */}
             <div className="space-y-4">
-              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 px-1">Program Benefits</h3>
+              <h3 className="text-xs font-black capitalize tracking-[0.2em] text-slate-400 px-1">Program Benefits</h3>
               
               <div className="space-y-3">
                 {benefits.map((benefit, index) => (
@@ -228,7 +228,7 @@ export default function StaffApplication() {
                       {benefit.icon}
                     </div>
                     <div className="space-y-1">
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">{benefit.title}</h4>
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white capitalize tracking-wider">{benefit.title}</h4>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed">{benefit.description}</p>
                     </div>
                   </div>
@@ -248,7 +248,7 @@ export default function StaffApplication() {
                <button 
                  onClick={handleApply}
                  disabled={isSubmitting}
-                 className="w-full py-4.5 bg-slate-900 dark:bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 active:scale-95 transition-all shadow-primary/10"
+                 className="w-full py-4.5 bg-slate-900 dark:bg-primary text-white rounded-2xl font-black text-xs capitalize tracking-widest shadow-xl flex items-center justify-center gap-2 active:scale-95 transition-all shadow-primary/10"
                >
                   {isSubmitting ? (
                     <Loader2 className="w-5 h-5 animate-spin" />

@@ -260,8 +260,8 @@ export default function PostTrade() {
           </button>
           
           <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">New Trade</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Step {step} of 4</p>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">New Trade</h1>
+            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Step {step} of 4</p>
           </div>
           
           <div className="w-11 h-11 flex items-center justify-center">
@@ -360,7 +360,7 @@ export default function PostTrade() {
                           }`}>
                             {cat.icon || '📦'}
                           </div>
-                          <span className={`relative z-10 text-xs font-black uppercase tracking-widest text-center leading-none italic ${
+                          <span className={`relative z-10 text-xs font-black capitalize tracking-widest text-center leading-none italic ${
                             bgImage ? 'text-white' : (isSelected ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white')
                           }`}>
                             {cat.label}
@@ -421,9 +421,9 @@ export default function PostTrade() {
                {/* PHOTO CAPTURE */}
                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight uppercase">Visual Proof <span className="text-xs text-slate-400 ml-1">({photos.length}/4)</span></h3>
+                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight capitalize">Visual Proof <span className="text-xs text-slate-400 ml-1">({photos.length}/4)</span></h3>
                     {photos.length > 0 && (
-                      <button onClick={() => setPhotos([])} className="text-xs font-semibold text-rose-500 uppercase tracking-widest">Clear All</button>
+                      <button onClick={() => setPhotos([])} className="text-xs font-semibold text-rose-500 capitalize tracking-widest">Clear All</button>
                     )}
                   </div>
                   
@@ -462,7 +462,7 @@ export default function PostTrade() {
                         <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
                           <Camera className="w-4 h-4" />
                         </div>
-                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Camera</p>
+                        <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">Camera</p>
                       </button>
 
                       <button 
@@ -482,7 +482,7 @@ export default function PostTrade() {
                         <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/40 rounded-lg flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
                           <Smartphone className="w-4 h-4" />
                         </div>
-                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Gallery</p>
+                        <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">Gallery</p>
                       </button>
                     </div>
                   ) : (
@@ -511,7 +511,7 @@ export default function PostTrade() {
                           <div className="w-8 h-8 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
                             <Camera className="w-4 h-4" />
                           </div>
-                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Add Angle</p>
+                          <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Add Angle</p>
                         </button>
                       )}
                     </div>
@@ -535,7 +535,7 @@ export default function PostTrade() {
                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">Set Your Asking Price</h3>
                      <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Market: KSh {liveRatePerKg}</span>
+                        <span className="text-xs font-semibold text-slate-500 capitalize tracking-widest">Market: KSh {liveRatePerKg}</span>
                      </div>
                   </div>
                   <div className="relative group">
@@ -557,7 +557,7 @@ export default function PostTrade() {
                {/* MATERIAL DESCRIPTION */}
                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                     <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight uppercase tracking-widest">Material Description</h3>
+                     <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight capitalize tracking-widest">Material Description</h3>
                      <span className="text-xs font-semibold text-slate-400">Optional</span>
                   </div>
                   <div className="bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 rounded-2xl p-4 shadow-sm group">
@@ -600,7 +600,7 @@ export default function PostTrade() {
                     </div>
                     <div className="text-center">
                       <p className={`text-xs font-bold leading-tight ${pickupMode === 'pickup' ? 'text-emerald-600' : 'text-slate-900'}`}>Dispatch Agent</p>
-                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5">We come to you</p>
+                      <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest mt-0.5">We come to you</p>
                     </div>
                   </button>
 
@@ -615,7 +615,7 @@ export default function PostTrade() {
                     </div>
                     <div className="text-center">
                       <p className={`text-xs font-bold leading-tight ${pickupMode === 'dropoff' ? 'text-emerald-600' : 'text-slate-900'}`}>Self Drop-off</p>
-                      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5">Bring to a Hub</p>
+                      <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest mt-0.5">Bring to a Hub</p>
                     </div>
                   </button>
                 </div>
@@ -623,19 +623,19 @@ export default function PostTrade() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between px-1">
                     <div className="flex flex-col">
-                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight uppercase tracking-widest">Market Demand</h3>
+                      <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight capitalize tracking-widest">Market Demand</h3>
                       {drillDownCompany && (
                         <div className="flex items-center gap-1 mt-0.5">
-                           <button onClick={() => setDrillDownCompany(null)} className="text-xs font-bold text-indigo-600 uppercase hover:underline">All Agents</button>
+                           <button onClick={() => setDrillDownCompany(null)} className="text-xs font-bold text-indigo-600 capitalize hover:underline">All Agents</button>
                            <span className="text-xs text-slate-400">/</span>
-                           <span className="text-xs font-bold text-slate-500 uppercase">{drillDownCompany.companyName || drillDownCompany.name}</span>
+                           <span className="text-xs font-bold text-slate-500 capitalize">{drillDownCompany.companyName || drillDownCompany.name}</span>
                         </div>
                       )}
                     </div>
                     {liveWeavers?.length > 0 && (
                       <div className="flex items-center gap-1.5 animate-pulse">
                         <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                        <span className="text-xs font-semibold text-indigo-600 uppercase tracking-widest">{liveWeavers.length} Collectors Nearby</span>
+                        <span className="text-xs font-semibold text-indigo-600 capitalize tracking-widest">{liveWeavers.length} Collectors Nearby</span>
                       </div>
                     )}
                   </div>
@@ -652,7 +652,7 @@ export default function PostTrade() {
 <Popup className="compact-popup">
                                  <div className="p-3 text-center">
                                    <h4 className="text-xs font-semibold text-slate-900">{hub.name || hub.companyName}</h4>
-                                   <p className="text-xs text-slate-500 mt-1 uppercase tracking-widest">{hub.hubAddress}</p>
+                                   <p className="text-xs text-slate-500 mt-1 capitalize tracking-widest">{hub.hubAddress}</p>
                                    <p className="text-xs font-semibold text-emerald-500 mt-1">{hub.distance.toFixed(1)}km away</p>
                                  </div>
                                </Popup>
@@ -665,7 +665,7 @@ export default function PostTrade() {
                               // Show only agents belonging to this company
                               liveAgents.filter((a: any) => a.companyId === drillDownCompany.id && !a.isHubActive).map((agent: any) => (
                                 <Marker key={agent.id} position={[agent.location?.latitude || center[0], agent.location?.longitude || center[1]]} {...({ icon: agentIcon(selectedAgent?.id === agent.id) } as any)} eventHandlers={{ click: () => { setSelectedAgent(agent); toast.success(`Fleet Agent Targeted`); }}}>
-                                   <Popup className="compact-popup"><div className="p-1 px-2 min-w-[80px] text-center"><h4 className="text-xs font-semibold text-slate-900 leading-tight">{agent.name || 'Agent'}</h4><div className="flex items-center justify-center gap-0.5 mt-0.5 text-xs font-semibold text-emerald-500 uppercase"><Star className="w-2 h-2 fill-emerald-500" /><span>4.9</span></div></div></Popup>
+                                   <Popup className="compact-popup"><div className="p-1 px-2 min-w-[80px] text-center"><h4 className="text-xs font-semibold text-slate-900 leading-tight">{agent.name || 'Agent'}</h4><div className="flex items-center justify-center gap-0.5 mt-0.5 text-xs font-semibold text-emerald-500 capitalize"><Star className="w-2 h-2 fill-emerald-500" /><span>4.9</span></div></div></Popup>
                                 </Marker>
                               ))
                             ) : (
@@ -697,7 +697,7 @@ export default function PostTrade() {
                                 <Popup className="compact-popup">
                                          <div className="p-1 px-2 min-w-[80px] text-center">
                                            <h4 className="text-xs font-semibold text-slate-900 leading-tight">{isCompany ? (entity.companyName || entity.name) : (entity.name || 'Agent')}</h4>
-                                           <div className="flex items-center justify-center gap-0.5 mt-0.5 text-xs font-semibold text-emerald-500 uppercase">
+                                           <div className="flex items-center justify-center gap-0.5 mt-0.5 text-xs font-semibold text-emerald-500 capitalize">
                                              {isCompany ? <span>VIEW FLEET</span> : <><Star className="w-2 h-2 fill-emerald-500" /><span>4.9</span></>}
                                            </div>
                                          </div>
@@ -713,7 +713,7 @@ export default function PostTrade() {
                                 {/* @ts-ignore */}
                                 <Popup className="compact-popup">
                                   <div className="p-2 text-center">
-                                    <h4 className="text-xs font-semibold text-indigo-600 uppercase tracking-tight">{weaver.businessName || 'Collector'}</h4>
+                                    <h4 className="text-xs font-semibold text-indigo-600 capitalize tracking-tight">{weaver.businessName || 'Collector'}</h4>
                                     <p className="text-xs font-semibold text-slate-400 mt-0.5">READY TO BUY</p>
                                   </div>
                                 </Popup>
@@ -732,14 +732,14 @@ export default function PostTrade() {
                          <div className="w-14 h-14 bg-emerald-500 text-white rounded-3xl flex items-center justify-center shadow-lg"><Check className="w-8 h-8" /></div>
                          <div className="flex-1">
                             <h3 className="text-sm font-semibold dark:text-white">{selectedHub.name || selectedHub.companyName}</h3>
-                            <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mt-1">Drop-off: {selectedHub.hubAddress} ({selectedHub.distance.toFixed(1)}km)🏢</p>
+                            <p className="text-xs font-semibold text-emerald-600 capitalize tracking-widest mt-1">Drop-off: {selectedHub.hubAddress} ({selectedHub.distance.toFixed(1)}km)🏢</p>
                          </div>
                          <button onClick={() => setSelectedHub(null)} className="p-2 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl text-emerald-600 font-semibold text-xs">Change</button>
                       </div>
                     ) : (
                       <div className="p-8 border-2 border-dashed border-emerald-500/20 rounded-2xl text-center bg-emerald-50/10">
                          <MapPin className="w-10 h-10 text-emerald-500 mx-auto mb-3 animate-bounce-slow" />
-                         <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Select the nearest Hub on the map</p>
+                         <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Select the nearest Hub on the map</p>
                       </div>
                     )}
                  </div>
@@ -752,23 +752,23 @@ export default function PostTrade() {
                            <div className="flex-1 min-w-0">
                               <h3 className="text-sm font-semibold text-slate-900 dark:text-white truncate">{selectedAgent.name || 'Agent'}</h3>
                               <div className="flex items-center gap-2 mt-0.5">
-                                <div className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 uppercase">
+                                <div className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 capitalize">
                                   <Star className="w-2.5 h-2.5 fill-emerald-500 text-emerald-500" />
                                   <span>4.9</span>
                                 </div>
-                                <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Targeted</span>
+                                <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Targeted</span>
                               </div>
                            </div>
                            <button 
                              onClick={() => { setSelectedAgent(null); toast('Agent deselected', { icon: '🔄' }); }}
-                             className="p-2 px-3 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl text-emerald-600 font-semibold text-xs uppercase tracking-widest active:scale-95 transition-all"
+                             className="p-2 px-3 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl text-emerald-600 font-semibold text-xs capitalize tracking-widest active:scale-95 transition-all"
                            >
                              Change
                            </button>
                         </motion.div>
                       ) : (
                         <div className="p-4 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-center bg-slate-50/50 dark:bg-slate-900/50">
-                           <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Tap an agent on the map to target (optional)</p>
+                           <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Tap an agent on the map to target (optional)</p>
                         </div>
                       )}
 
@@ -811,11 +811,11 @@ export default function PostTrade() {
                {isManualTime && pickupMode === 'pickup' && (
                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-white/5 grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                       <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Date</span>
+                       <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Date</span>
                        <input type="date" value={customDate} onChange={(e) => setCustomDate(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
                     </div>
                     <div className="space-y-1">
-                       <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Time</span>
+                       <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Time</span>
                        <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
                     </div>
                  </motion.div>
@@ -838,7 +838,7 @@ export default function PostTrade() {
                    </div>
                    <div className="flex-1">
                       <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{wasteType?.label}</h3>
-                      <p className="text-xs font-semibold text-emerald-600 uppercase tracking-widest mt-1">{quantity} KG Stock</p>
+                      <p className="text-xs font-semibold text-emerald-600 capitalize tracking-widest mt-1">{quantity} KG Stock</p>
                    </div>
                 </div>
 
@@ -849,7 +849,7 @@ export default function PostTrade() {
                          {pickupMode === 'pickup' ? <Truck className="w-5 h-5" /> : <Home className="w-5 h-5" />}
                       </div>
                       <div>
-                         <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Collection Method</p>
+                         <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Collection Method</p>
                          <h4 className="text-sm font-semibold text-slate-900 dark:text-white">{pickupMode === 'pickup' ? 'Agent Dispatch' : 'Self Drop-off'}</h4>
                       </div>
                    </div>
@@ -857,22 +857,22 @@ export default function PostTrade() {
                    {pickupMode === 'pickup' ? (
                       <div className="space-y-3">
                          <div className="flex justify-between items-center">
-                            <span className="text-xs font-semibold text-slate-400 uppercase">Target Address</span>
+                            <span className="text-xs font-semibold text-slate-400 capitalize">Target Address</span>
                             <span className="text-xs font-semibold text-slate-900 dark:text-white">{profile?.location?.estate || 'My Location'}</span>
                          </div>
                          <div className="flex justify-between items-center">
-                            <span className="text-xs font-semibold text-slate-400 uppercase">Pickup Time</span>
+                            <span className="text-xs font-semibold text-slate-400 capitalize">Pickup Time</span>
                             <span className="text-xs font-semibold text-emerald-600">{isManualTime ? `${customDate} @ ${customTime}` : 'ASAP (4-12 mins)'}</span>
                          </div>
                       </div>
                    ) : (
                       <div className="space-y-3">
                          <div className="flex justify-between items-center">
-                            <span className="text-xs font-semibold text-slate-400 uppercase">Drop-off Hub</span>
+                            <span className="text-xs font-semibold text-slate-400 capitalize">Drop-off Hub</span>
                             <span className="text-xs font-semibold text-slate-900 dark:text-white">{selectedHub?.name}</span>
                          </div>
                          <div className="flex justify-between items-center">
-                            <span className="text-xs font-semibold text-slate-400 uppercase">Hub Address</span>
+                            <span className="text-xs font-semibold text-slate-400 capitalize">Hub Address</span>
                             <span className="text-xs font-semibold text-slate-500">{selectedHub?.address}</span>
                          </div>
                       </div>
@@ -885,18 +885,18 @@ export default function PostTrade() {
                    <div className="relative z-10 space-y-6">
                       <div className="space-y-4">
                          <div className="flex justify-between items-center text-white">
-                            <span className="text-[10px] font-black uppercase tracking-widest">Gross Value</span>
+                            <span className="text-[10px] font-black capitalize tracking-widest">Gross Value</span>
                             <span className="text-sm font-bold">KSh {assetValue.toLocaleString()}</span>
                          </div>
                          <div className="flex justify-between items-center text-white/90">
-                            <span className="text-[10px] font-black uppercase tracking-widest">Logistics Fee</span>
+                            <span className="text-[10px] font-black capitalize tracking-widest">Logistics Fee</span>
                             <span className="text-sm font-bold">- KSh {pickupMode === 'pickup' ? logisticsFee : 0}</span>
                          </div>
                          <div className="pt-4 border-t border-white/20 flex justify-between items-center">
-                            <span className="text-[10px] font-black text-white uppercase tracking-widest">EST. REVENUE</span>
+                            <span className="text-[10px] font-black text-white capitalize tracking-widest">EST. REVENUE</span>
                             <div className="text-right">
                                <h3 className="text-3xl font-black text-white tracking-tighter">KSh {(assetValue - (pickupMode === 'pickup' ? logisticsFee : 0)).toLocaleString()}</h3>
-                               <p className="text-[10px] font-bold text-white/95 uppercase tracking-widest mt-1.5 flex items-center justify-end gap-1.5">
+                               <p className="text-[10px] font-bold text-white/95 capitalize tracking-widest mt-1.5 flex items-center justify-end gap-1.5">
                                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                                  PAYOUT: AWAITING VERIFICATION
                                </p>
@@ -946,7 +946,7 @@ export default function PostTrade() {
                       <Info className="w-5 h-5 text-amber-600" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-semibold uppercase tracking-widest text-amber-700">Dispatch Notice</h4>
+                      <h4 className="text-xs font-semibold capitalize tracking-widest text-amber-700">Dispatch Notice</h4>
                       <p className="text-[11px] font-medium text-amber-800/70 dark:text-amber-400 leading-relaxed mt-1">
                         A logistics fee of **KSh {logisticsFee}** applies for agent collection to cover fuel and transport costs.
                       </p>
@@ -961,7 +961,7 @@ export default function PostTrade() {
                       <ShieldCheck className="w-5 h-5 text-emerald-600" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-semibold uppercase tracking-widest text-emerald-700">Zero Charges</h4>
+                      <h4 className="text-xs font-semibold capitalize tracking-widest text-emerald-700">Zero Charges</h4>
                       <p className="text-[11px] font-medium text-emerald-800/70 dark:text-amber-400 leading-relaxed mt-1">
                         Self drop-offs are **completely free**. You will receive 100% of your waste value without any deductions.
                       </p>
@@ -984,8 +984,8 @@ export default function PostTrade() {
                       No active agents nearby right now. Please **Schedule for Later** or switch to **Self Drop-off** to finish.
                     </p>
                     <div className="flex gap-2">
-                       <button onClick={() => setPickupMode('dropoff')} className="flex-1 py-2 bg-white dark:bg-slate-800 border border-rose-200 dark:border-rose-900/50 rounded-lg text-xs font-semibold text-rose-600 uppercase tracking-widest">Switch to Drop-off</button>
-                       <button onClick={() => setIsManualTime(true)} className="flex-1 py-2 bg-rose-500 rounded-lg text-xs font-semibold text-white uppercase tracking-widest">Schedule Later</button>
+                       <button onClick={() => setPickupMode('dropoff')} className="flex-1 py-2 bg-white dark:bg-slate-800 border border-rose-200 dark:border-rose-900/50 rounded-lg text-xs font-semibold text-rose-600 capitalize tracking-widest">Switch to Drop-off</button>
+                       <button onClick={() => setIsManualTime(true)} className="flex-1 py-2 bg-rose-500 rounded-lg text-xs font-semibold text-white capitalize tracking-widest">Schedule Later</button>
                     </div>
                   </div>
                 )}
@@ -1028,7 +1028,7 @@ export default function PostTrade() {
                        </>
                      )}
                    </button>
-                   <button onClick={() => setShowEscrowModal(false)} className="w-full text-xs font-semibold text-slate-400 uppercase tracking-widest mt-4">Go Back</button>
+                   <button onClick={() => setShowEscrowModal(false)} className="w-full text-xs font-semibold text-slate-400 capitalize tracking-widest mt-4">Go Back</button>
                 </div>
              </motion.div>
           </div>

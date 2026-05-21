@@ -59,8 +59,8 @@ export default function NotificationsPage() {
             <ArrowLeft className="w-4 h-4 dark:text-white" />
           </button>
           <div>
-            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">Notifications</h1>
-            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Preferences & Channels</p>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none mb-1">Notifications</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Preferences & Channels</p>
           </div>
         </div>
       </div>
@@ -80,8 +80,8 @@ export default function NotificationsPage() {
                  <BellRing className="w-5 h-5" />
                </div>
                <div>
-                 <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-900 dark:text-white">Native System Alerts</h3>
-                 <p className="text-[9px] text-slate-400 font-medium mt-0.5 uppercase">Critical for mission dispatch</p>
+                 <h3 className="text-[10px] font-bold capitalize tracking-widest text-slate-900 dark:text-white">Native System Alerts</h3>
+                 <p className="text-[9px] text-slate-400 font-medium mt-0.5 capitalize">Critical for mission dispatch</p>
                </div>
              </div>
              
@@ -94,7 +94,7 @@ export default function NotificationsPage() {
                    toast.error('Auth Failed', { description: 'Please enable notifications in device settings.' });
                  }
                }}
-               className="w-full py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-[10px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
+               className="w-full py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-[10px] font-bold capitalize tracking-widest text-slate-600 dark:text-slate-300 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
              >
                Enable Native Push
              </button>

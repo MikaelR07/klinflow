@@ -41,8 +41,11 @@ const PostTrade = lazy(() => import('./pages/user/PostTrade'));
 const MyTrades = lazy(() => import('./pages/user/MyTrades'));
 const TrustScoreDetails = lazy(() => import('./pages/user/TrustScoreDetails'));
 const MyOffers = lazy(() => import('./pages/user/MyOffers'));
+const MyRFQOffers = lazy(() => import('./pages/user/MyRFQOffers'));
+const SubmittedQuoteDetailsPage = lazy(() => import('./pages/user/SubmittedQuoteDetailsPage'));
 const MarketplaceInventory = lazy(() => import('./pages/user/MarketplaceInventory'));
 const MarketIntelligenceHub = lazy(() => import('./pages/user/MarketIntelligenceHub'));
+const RFQDetailsPage = lazy(() => import('./pages/user/RFQDetailsPage'));
 const CircularResume = lazy(() => import('./pages/user/CircularResume'));
 const CommunityCollective = lazy(() => import('./pages/user/CommunityCollective'));
 const FinancingHub = lazy(() => import('./pages/user/FinancingHub'));
@@ -195,6 +198,8 @@ export default function App() {
 
         <Route element={<ProtectedLayout />}>
           <Route path="/hygenex" element={<HygeneXPage />} />
+          <Route path="/rfq/:rfqId" element={<RFQDetailsPage />} />
+          <Route path="/my-rfq-offers/:quoteId" element={<SubmittedQuoteDetailsPage />} />
           <Route element={<MobileLayout />}>
             <Route path="/" element={<UserHome />} />
             <Route path="/withdraw" element={<WithdrawalPage />} />
@@ -209,6 +214,7 @@ export default function App() {
             <Route path="/post-trade" element={<PostTrade />} />
             <Route path="/my-trades" element={<MyTrades />} />
             <Route path="/my-offers" element={<MyOffers />} />
+            <Route path="/my-rfq-offers" element={<MyRFQOffers />} />
             <Route path="/inventory" element={<MarketplaceInventory />} />
             <Route path="/trust-score" element={<TrustScoreDetails />} />
             <Route path="/market-pulse" element={<MarketIntelligenceHub />} />

@@ -121,8 +121,8 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">My Wallet</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Money & Stats</p>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">My Wallet</h1>
+            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Money & Stats</p>
           </div>
           <button className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all">
             <Download className="w-4 h-4 text-slate-400" />
@@ -143,11 +143,11 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
                   <Package className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-emerald-300/80 uppercase tracking-widest mb-2.5 leading-none">
+                  <p className="text-[10px] font-black text-emerald-300/80 capitalize tracking-widest mb-2.5 leading-none">
                     Assets Value
                   </p>
                   <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
-                    <span className="text-[10px] font-bold text-emerald-300 block mb-1 uppercase">KSh</span>
+                    <span className="text-[10px] font-bold text-emerald-300 block mb-1 capitalize">KSh</span>
                     {Number(earnings.inventoryValue || 0).toLocaleString()}
                   </h2>
                 </div>
@@ -156,7 +156,7 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
               {/* 2. Rating (1x1) */}
               <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <p className="text-[9px] font-black text-emerald-300/60 uppercase tracking-widest">Rating</p>
+                  <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest">Rating</p>
                   <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                 </div>
                 <h4 className="text-lg font-black text-white leading-none">{Number(profile?.rating ?? 0).toFixed(1)}</h4>
@@ -165,7 +165,7 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
               {/* 3. Points (1x1) */}
               <div className="col-span-1 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <p className="text-[9px] font-black text-emerald-300/60 uppercase tracking-widest">Points</p>
+                  <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest">Points</p>
                   <Zap className="w-3 h-3 text-emerald-400 fill-emerald-400" />
                 </div>
                 <h4 className="text-lg font-black text-emerald-400 leading-none">{profile?.rewardPoints || 0}</h4>
@@ -176,7 +176,7 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
                 <Scale className="w-4 h-4 text-emerald-400" />
                 <div className="mt-1">
                   <h3 className="text-base font-black text-white leading-none">{(earnings.totalKg || 0).toFixed(1)}</h3>
-                  <p className="text-[9px] font-black text-emerald-300/60 uppercase tracking-widest mt-1">Total KGs</p>
+                  <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest mt-1">Total KGs</p>
                 </div>
               </div>
 
@@ -185,7 +185,7 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
                 <Handshake className="w-4 h-4 text-emerald-400" />
                 <div className="mt-1">
                   <h3 className="text-base font-black text-white leading-none">{earnings.marketTrades || 0}</h3>
-                  <p className="text-[9px] font-black text-emerald-300/60 uppercase tracking-widest mt-1">Total Bids</p>
+                  <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest mt-1">Total Bids</p>
                 </div>
               </div>
 
@@ -194,7 +194,7 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
                 <Truck className="w-4 h-4 text-emerald-400" />
                 <div className="mt-1">
                   <h3 className="text-base font-black text-white leading-none">{earnings.totalJobs || 0}</h3>
-                  <p className="text-[9px] font-black text-emerald-300/60 uppercase tracking-widest mt-1">Pickups</p>
+                  <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest mt-1">Pickups</p>
                 </div>
               </div>
 
@@ -207,7 +207,7 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center justify-between mb-6 px-2">
           <div>
-            <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400">Acquisition Targets</h3>
+            <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400">Acquisition Targets</h3>
             <p className="text-lg font-semibold text-slate-900 dark:text-white">Goal Tracker (KG)</p>
           </div>
           <Target className="w-6 h-6 text-emerald-500 opacity-20" />
@@ -219,14 +219,14 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
               <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Weekly Target</span>
               <div className="flex items-center gap-1">
                 <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
-                <span className="text-xs font-semibold text-slate-400 uppercase">/</span>
+                <span className="text-xs font-semibold text-slate-400 capitalize">/</span>
                 <input 
                   type="number" 
                   value={goals.weekly} 
                   onChange={(e) => handleGoalChange('weekly', e.target.value)}
                   className="w-14 bg-transparent text-xs font-semibold text-slate-400 text-right outline-none border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 focus:text-emerald-500 transition-colors"
                 />
-                <span className="text-xs font-semibold text-slate-400 uppercase">KG</span>
+                <span className="text-xs font-semibold text-slate-400 capitalize">KG</span>
               </div>
             </div>
             <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden shadow-inner">
@@ -239,14 +239,14 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
               <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Monthly Target</span>
               <div className="flex items-center gap-1">
                 <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
-                <span className="text-xs font-semibold text-slate-400 uppercase">/</span>
+                <span className="text-xs font-semibold text-slate-400 capitalize">/</span>
                 <input 
                   type="number" 
                   value={goals.monthly} 
                   onChange={(e) => handleGoalChange('monthly', e.target.value)}
                   className="w-14 bg-transparent text-xs font-semibold text-slate-400 text-right outline-none border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 focus:text-emerald-500 transition-colors"
                 />
-                <span className="text-xs font-semibold text-slate-400 uppercase">KG</span>
+                <span className="text-xs font-semibold text-slate-400 capitalize">KG</span>
               </div>
             </div>
             <div className="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden shadow-inner">
@@ -260,8 +260,8 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
       <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center justify-between mb-8 px-2">
           <div>
-            <h3 className="font-semibold text-xs uppercase tracking-widest text-slate-400">Collection Volume</h3>
-            <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">Weekly Recovery</p>
+            <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400">Collection Volume</h3>
+            <p className="text-sm font-black text-slate-900 dark:text-white capitalize tracking-tight">Weekly Recovery</p>
           </div>
           <div className="flex items-center gap-1.5 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
              <ArrowUpRight className="w-3 h-3 text-emerald-500" />
@@ -305,8 +305,8 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Financial Hub</h1>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Fleet Revenue & Liquidity</p>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Financial Hub</h1>
+            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Fleet Revenue & Liquidity</p>
           </div>
           <button className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all">
             <Download className="w-4 h-4 text-slate-400" />
@@ -319,7 +319,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
           <div className="relative bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-[2rem] p-6 shadow-xl shadow-emerald-900/20 overflow-hidden flex flex-col justify-between h-full min-h-[200px]">
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
             <div className="relative z-10">
-              <div className="text-[10px] font-bold text-emerald-200/80 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              <div className="text-[10px] font-bold text-emerald-200/80 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
                 <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center">
                   <Package className="w-3.5 h-3.5" />
                 </div>
@@ -330,7 +330,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
               </h2>
               <div className="mt-4 flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
-                <span className="text-[10px] font-bold text-emerald-200 uppercase tracking-widest">Liquid Assets</span>
+                <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest">Liquid Assets</span>
               </div>
             </div>
           </div>
@@ -339,7 +339,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
         <div className="relative group h-full">
           <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full min-h-[200px] transition-all hover:border-emerald-500/50">
             <div className="relative z-10">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              <div className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
                 <div className="w-6 h-6 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg flex items-center justify-center">
                   <Banknote className="w-3.5 h-3.5 text-emerald-500" />
                 </div>
@@ -357,7 +357,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
           <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full min-h-[200px] transition-all hover:border-amber-500/50">
             <div className="relative z-10 flex items-start justify-between">
               <div className="flex-1">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                <div className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
                   <div className="w-6 h-6 bg-amber-50 dark:bg-amber-500/10 rounded-lg flex items-center justify-center">
                     <Wallet className="w-3.5 h-3.5 text-amber-500" />
                   </div>
@@ -369,11 +369,11 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
               </div>
               <button onClick={handleWithdraw} disabled={isWithdrawing} className="px-4 py-2 bg-amber-500 text-white rounded-xl flex items-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all disabled:opacity-50">
                 {isWithdrawing ? <Clock className="w-4 h-4 animate-spin" /> : <ArrowDownLeft className="w-4 h-4" />}
-                <span className="text-[10px] font-bold uppercase tracking-widest">Withdraw</span>
+                <span className="text-[10px] font-bold capitalize tracking-widest">Withdraw</span>
               </button>
             </div>
             <div className="mt-4 flex items-center gap-1.5">
-              <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">M-Pesa Ready</span>
+              <span className="text-[10px] font-bold text-amber-500 capitalize tracking-widest">M-Pesa Ready</span>
             </div>
           </div>
         </div>
@@ -383,12 +383,12 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
         <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] p-8 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Collection Volume</h3>
+              <h3 className="text-xs font-bold text-slate-400 capitalize tracking-widest">Collection Volume</h3>
               <p className="text-lg font-bold text-slate-900 dark:text-white mt-1">Weekly Fleet Recovery (KG)</p>
             </div>
             <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
                <TrendingUp className="w-3 h-3 text-emerald-500" />
-               <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">{(earnings.thisWeekKg || 0).toFixed(0)} KG</span>
+               <span className="text-[10px] font-bold text-emerald-500 capitalize tracking-widest">{(earnings.thisWeekKg || 0).toFixed(0)} KG</span>
             </div>
           </div>
           <div className="h-[250px] w-full">
@@ -413,13 +413,13 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
 
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] p-8 shadow-sm space-y-8">
           <div>
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Fleet Targets</h3>
+            <h3 className="text-xs font-bold text-slate-400 capitalize tracking-widest mb-1">Fleet Targets</h3>
             <p className="text-lg font-bold text-slate-900 dark:text-white">Active Goals</p>
           </div>
           <div className="space-y-8">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Weekly (KG)</span>
+                <span className="text-xs font-bold text-slate-500 capitalize tracking-widest">Weekly (KG)</span>
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-bold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
                   <span className="text-slate-300">/</span>
@@ -432,7 +432,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
             </div>
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Monthly (KG)</span>
+                <span className="text-xs font-bold text-slate-500 capitalize tracking-widest">Monthly (KG)</span>
                 <div className="flex items-center gap-1.5">
                   <span className="text-sm font-bold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
                   <span className="text-slate-300">/</span>

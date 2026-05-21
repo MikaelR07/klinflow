@@ -14,8 +14,7 @@ import { normalizeKeys } from '@klinflow/core/validation';
 const SCALE_DEFS = [
   { id: 'all', label: 'Any Scale', icon: Truck, description: 'Show all partners' },
   { id: 'standard', label: 'Standard', icon: Truck, description: 'Households & small waste (< 50kg)' },
-  { id: 'bulk', label: 'Bulk', icon: Building2, description: 'Estates & large loads (50kg+)' },
-  { id: 'industrial', label: 'Industrial', icon: Sparkles, description: 'Factories & construction (500kg+)' }
+  { id: 'bulk', label: 'Bulk', icon: Building2, description: 'Estates & large loads (50kg+)' }
 ];
 
 export default function DiscoveryHub() {
@@ -74,7 +73,7 @@ export default function DiscoveryHub() {
   return (
     <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="w-full mx-auto">
           <div className="flex items-center gap-4 mb-4">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
@@ -82,7 +81,7 @@ export default function DiscoveryHub() {
             </button>
             <div>
               <h1 className="text-xl font-semibold dark:text-white tracking-tight leading-none mb-1">Find a Partner</h1>
-              <p className="text-xs font-semibold text-primary uppercase tracking-[0.2em]">Verified Logistics</p>
+              <p className="text-xs font-semibold text-primary capitalize tracking-[0.2em]">Verified Logistics</p>
             </div>
           </div>
 
@@ -124,17 +123,13 @@ export default function DiscoveryHub() {
             >
               {/* Material Filter */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between px-1">
-                  <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                    <Filter className="w-3 h-3" /> Material
-                  </h3>
-                </div>
-                <div className="flex gap-2 overflow-x-auto no-scrollbar">
+               
+                <div className="flex gap-2 overflow-x-auto no-scrollbar pt-4">
                   {materials.map(m => (
                     <button
                       key={m}
                       onClick={() => setActiveMaterial(m)}
-                      className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest whitespace-nowrap transition-all border ${
+                      className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize tracking-widest whitespace-nowrap transition-all border ${
                         activeMaterial === m 
                           ? 'bg-primary border-primary text-white' 
                           : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-100 dark:border-slate-800'
@@ -148,19 +143,21 @@ export default function DiscoveryHub() {
 
               {/* Service Scale (Weight) Filter */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest px-1">Scale</h3>
+                <h3 className="text-xs font-semibold text-slate-400 capitalize tracking-widest px-1">Scale</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {SCALE_DEFS.map(s => (
                     <button
                       key={s.id}
                       onClick={() => setActiveScale(s.id)}
                       className={`p-3 rounded-2xl border text-left transition-all ${
+                        s.id === 'all' ? 'col-span-2' : ''
+                      } ${
                         activeScale === s.id
                           ? 'border-primary bg-primary/5'
                           : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800'
                       }`}
                     >
-                      <p className={`text-xs font-semibold uppercase tracking-tight mb-0.5 ${activeScale === s.id ? 'text-primary' : 'dark:text-white'}`}>
+                      <p className={`text-xs font-semibold capitalize tracking-tight mb-0.5 ${activeScale === s.id ? 'text-primary' : 'dark:text-white'}`}>
                         {s.label}
                       </p>
                       <p className="text-xs font-medium text-slate-400 leading-tight">
@@ -233,7 +230,7 @@ export default function DiscoveryHub() {
                                 <span>{Number(partner.totalPickups || 0)} Pickups</span>
                               </div>
                               <span className="text-xs text-slate-300">•</span>
-                              <span className={`text-xs font-semibold uppercase tracking-widest ${
+                              <span className={`text-xs font-semibold capitalize tracking-widest ${
                                 scale === 'bulk' || scale === 'industrial' ? 'text-indigo-500' : 'text-emerald-500'
                               }`}>
                                  {scale}
@@ -241,7 +238,7 @@ export default function DiscoveryHub() {
                           </div>
                         </div>
                         <div className="text-right shrink-0 ml-2">
-                          <p className="text-xs font-semibold text-slate-400 uppercase leading-none mb-0.5">Fee</p>
+                          <p className="text-xs font-semibold text-slate-400 capitalize leading-none mb-0.5">Fee</p>
                           <p className="text-xs font-semibold text-primary">KSh {logisticsFee}</p>
                         </div>
                       </div>
@@ -277,7 +274,7 @@ export default function DiscoveryHub() {
               </p>
               <button 
                 onClick={() => { setActiveMaterial('all'); setActiveScale('all'); setSearchQuery(''); }}
-                className="mt-6 text-xs font-semibold text-primary uppercase tracking-widest hover:underline"
+                className="mt-6 text-xs font-semibold text-primary capitalize tracking-widest hover:underline"
               >
                 Clear all filters
               </button>
@@ -292,7 +289,7 @@ export default function DiscoveryHub() {
                <Info className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-blue-900 dark:text-blue-400 uppercase tracking-widest mb-1">Choosing the right scale</h4>
+              <h4 className="text-xs font-semibold text-blue-900 dark:text-blue-400 capitalize tracking-widest mb-1">Choosing the right scale</h4>
               <p className="text-xs font-medium text-blue-800/60 dark:text-blue-300/60 leading-relaxed">
                 Standard agents use small vehicles for fast, small pickups. Bulk partners use trucks for estate-wide or industrial recycling.
               </p>

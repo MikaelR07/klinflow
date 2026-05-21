@@ -80,7 +80,12 @@ function ProtectedLayout() {
 export default function App() {
   const fetchNotifications = useNotificationStore(s => s.fetchNotifications);
   const subscribeToRealtime = useNotificationStore(s => s.subscribeToRealtime);
+  const role = useAuthStore(s => s.role);
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
   const userId = useAuthStore(s => s.userId);
+  const isInitializing = useAuthStore(s => s.isInitializing);
+  const initializeAuth = useAuthStore(s => s.initializeAuth);
+  const checkAppRole = useAuthStore(s => s.checkAppRole);
 
   // PWA Installation
   const { isInstallable, triggerInstall } = usePWA();

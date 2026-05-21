@@ -34,7 +34,7 @@ const MerchantPodiumSlot = memo(({ user, height, isFirst, rank }: { user: any, h
 
   return (
     <div className="flex flex-col items-center flex-1">
-      <div className={`${isFirst ? 'w-20 h-20' : 'w-14 h-14'} rounded-[2rem] border-2 ${user ? `${theme.avatar} shadow-xl` : 'border-dashed border-slate-300 dark:border-slate-600'} flex items-center justify-center mb-3 relative overflow-hidden shadow-xl`}>
+      <div className={`${isFirst ? 'w-20 h-20' : 'w-14 h-14'} rounded-[2rem] border-2 ${user ? `${theme.avatar}` : 'border-dashed border-slate-300 dark:border-slate-600'} flex items-center justify-center mb-3 relative overflow-hidden`}>
         {user?.avatar_url ? (
           <img 
             src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 200 : 150 })} 
@@ -48,14 +48,14 @@ const MerchantPodiumSlot = memo(({ user, height, isFirst, rank }: { user: any, h
         )}
         {isFirst && <Crown className={`w-8 h-8 ${user ? 'text-amber-500' : 'text-slate-300'} absolute -top-1 right-0 -rotate-12`} />}
       </div>
-      <div className={`w-full ${user ? `${theme.podium} border` : 'bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700'} rounded-2xl ${height} flex flex-col items-center justify-center relative shadow-2xl transition-all duration-500`}>
+      <div className={`w-full ${user ? `${theme.podium} border` : 'bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700'} rounded-2xl ${height} flex flex-col items-center justify-center relative transition-all duration-500`}>
         {user ? (
           <>
-            <p className={`text-[10px] font-black ${theme.name} uppercase tracking-widest truncate w-20 text-center mt-2`}>{user.name}</p>
+            <p className={`text-[10px] font-black ${theme.name} capitalize tracking-widest truncate w-20 text-center mt-2`}>{user.name}</p>
             <p className={`font-black tracking-tighter ${isFirst ? 'text-sm' : 'text-[10px]'} ${theme.revenue}`}>KSh {user.revenue.toLocaleString()}</p>
           </>
         ) : (
-          <p className="text-[10px] font-black text-slate-300 dark:text-slate-600 uppercase tracking-widest">Open</p>
+          <p className="text-[10px] font-black text-slate-300 dark:text-slate-600 capitalize tracking-widest">Open</p>
         )}
       </div>
     </div>
@@ -64,7 +64,7 @@ const MerchantPodiumSlot = memo(({ user, height, isFirst, rank }: { user: any, h
 
 const PodiumSlot = memo(({ user, height, bgClass, medalClass, isFirst }: { user: any, height: string, bgClass: string, medalClass: string, isFirst: boolean }) => (
   <div className="flex flex-col items-center flex-1">
-    <div className={`${isFirst ? 'w-16 h-16' : 'w-12 h-12'} rounded-full border-2 ${user ? (isFirst ? 'border-amber-400 bg-amber-100' : 'border-slate-300 bg-slate-200 dark:bg-slate-700') : 'border-dashed border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800'} flex items-center justify-center mb-2 relative overflow-hidden shadow-sm`}>
+    <div className={`${isFirst ? 'w-16 h-16' : 'w-12 h-12'} rounded-full border-2 ${user ? (isFirst ? 'border-amber-400 bg-amber-100' : 'border-slate-300 bg-slate-200 dark:bg-slate-700') : 'border-dashed border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800'} flex items-center justify-center mb-2 relative overflow-hidden`}>
       {user?.avatar_url ? (
         <img 
           src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 150 : 100 })} 
@@ -78,7 +78,7 @@ const PodiumSlot = memo(({ user, height, bgClass, medalClass, isFirst }: { user:
       )}
       {isFirst && <Crown className={`w-6 h-6 ${user ? 'text-amber-400' : 'text-slate-300'} absolute -top-5 rotate-12`} />}
     </div>
-    <div className={`w-full ${user ? bgClass : 'bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700'} rounded-t-2xl ${height} flex flex-col items-center justify-center relative shadow-lg transition-all duration-500`}>
+    <div className={`w-full ${user ? bgClass : 'bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700'} rounded-t-2xl ${height} flex flex-col items-center justify-center relative transition-all duration-500`}>
       {!isFirst && user && <Medal className={`w-6 h-6 ${medalClass} absolute -top-3`} />}
       {user ? (
         <>
@@ -86,10 +86,10 @@ const PodiumSlot = memo(({ user, height, bgClass, medalClass, isFirst }: { user:
           <p className={`font-bold ${isFirst ? 'text-base text-amber-600' : 'text-[11px] text-primary'}`}>{user.kg} KG</p>
         </>
       ) : (
-        <p className="text-[10px] font-semibold text-slate-300 dark:bg-slate-600 uppercase tracking-widest">Open</p>
+        <p className="text-[10px] font-semibold text-slate-300 dark:bg-slate-600 capitalize tracking-widest">Open</p>
       )}
       {isFirst && user && (
-        <div className="absolute -bottom-2 bg-amber-400 text-white text-[10px] font-semibold px-4 py-0.5 rounded-full uppercase shadow-md">Hero</div>
+        <div className="absolute -bottom-2 bg-amber-400 text-white text-[10px] font-semibold px-4 py-0.5 rounded-full capitalize">Hero</div>
       )}
     </div>
   </div>
@@ -99,7 +99,7 @@ const SellerListItem = memo(({ user }: { user: any }) => (
   <div 
     className={`p-5 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
       user.isUser
-        ? 'bg-slate-900 dark:bg-slate-900/50 border-emerald-500/30 shadow-2xl relative z-10'
+        ? 'bg-slate-900 dark:bg-slate-900/50 border-emerald-500/30 relative z-10'
         : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5'
     }`}
   >
@@ -119,12 +119,12 @@ const SellerListItem = memo(({ user }: { user: any }) => (
         <p className={`text-sm font-bold ${user.isUser ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
           {user.name} {user.isUser && '(You)'}
         </p>
-        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mt-0.5">Top Merchant</p>
+        <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest mt-0.5">Top Merchant</p>
       </div>
     </div>
     <div className="text-right">
       <p className={`text-sm font-black font-mono ${user.isUser ? 'text-emerald-400' : 'text-emerald-600'}`}>KSh {user.revenue.toLocaleString()}</p>
-      <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Revenue</p>
+      <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">Revenue</p>
     </div>
   </div>
 ));
@@ -133,8 +133,8 @@ const ResidentListItem = memo(({ user }: { user: any }) => (
   <div
     className={`p-6 py-5 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
       user.isUser
-        ? 'bg-primary/10 border-primary/20 scale-[1.02] shadow-lg shadow-primary/5 relative z-10'
-        : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5 shadow-sm'
+        ? 'bg-primary/10 border-primary/20 scale-[1.02] relative z-10'
+        : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5'
     }`}
   >
     <div className="flex items-center gap-5">
@@ -153,7 +153,7 @@ const ResidentListItem = memo(({ user }: { user: any }) => (
         <p className={`text-sm font-bold ${user.isUser ? 'text-primary' : 'text-slate-900 dark:text-white'}`}>
           {user.name} {user.isUser && '(You)'}
         </p>
-        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">{user.kg} KG Collected</p>
+        <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">{user.kg} KG Collected</p>
       </div>
     </div>
     {user.isUser && <Sparkles className="w-4 h-4 text-primary animate-pulse" />}
@@ -213,26 +213,26 @@ function SellerLeaderboard() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
       {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm z-50 transition-colors max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">Market Masters</h1>
-            <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-[0.2em] mt-1">Global Merchant Ranking</p>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Market Masters</h1>
+            <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-[0.2em] mt-1">Global Merchant Ranking</p>
           </div>
         </div>
       </div>
 
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-2">
         {/* Hero Banner */}
-        <div className="bg-gradient-to-br from-emerald-600 to-teal-700 dark:from-slate-900 dark:to-slate-900 p-8 rounded-2xl text-white relative overflow-hidden shadow-2xl border border-emerald-500/20 dark:border-white/5">
+        <div className="bg-gradient-to-br from-emerald-600 to-teal-700 dark:from-slate-900 dark:to-slate-900 p-8 rounded-2xl text-white relative overflow-hidden border border-emerald-500/20 dark:border-white/5">
           <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
           <div className="relative z-10 text-center">
             <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-4" />
             <h2 className="text-2xl font-black mb-2 italic tracking-tighter">Profit Dominance!</h2>
-            <p className="text-[11px] font-semibold text-slate-400 leading-relaxed max-w-[280px] mx-auto uppercase tracking-widest">
+            <p className="text-[11px] font-semibold text-slate-400 leading-relaxed max-w-[280px] mx-auto capitalize tracking-widest">
               Dominate the market to unlock premium buyer access and zero-fee withdrawals! 🚀
             </p>
           </div>
@@ -251,7 +251,7 @@ function SellerLeaderboard() {
             </div>
             <button
               onClick={() => navigate('/post-trade')}
-              className="px-8 py-4 bg-emerald-600 text-white font-semibold text-sm rounded-2xl shadow-xl shadow-emerald-500/30 uppercase tracking-widest active:scale-95 transition-all"
+              className="px-8 py-4 bg-emerald-600 text-white font-semibold text-sm rounded-2xl capitalize tracking-widest active:scale-95 transition-all"
             >
               Post First Trade 📈
             </button>
@@ -286,7 +286,7 @@ function SellerLeaderboard() {
                 <Info className="w-5 h-5 text-emerald-500" />
               </div>
               <div className="flex-1">
-                <h4 className="text-[10px] font-black dark:text-white uppercase tracking-[0.2em] leading-none mb-1">Elite Merchant Status</h4>
+                <h4 className="text-[10px] font-black dark:text-white capitalize tracking-[0.2em] leading-none mb-1">Elite Merchant Status</h4>
                 <p className="text-[11px] font-semibold text-slate-400 leading-relaxed">
                   Rankings are based on <span className="text-emerald-500 font-bold">Net Revenue</span>.
                   Higher ranks get prioritized for bulk marketplace contracts.
@@ -298,7 +298,7 @@ function SellerLeaderboard() {
             {topSellers.length > 3 && (
               <div className="flex flex-col gap-2 pb-24">
                 <div className="flex items-center justify-between mb-2 px-2">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Merchant Directory</span>
+                  <span className="text-[10px] font-black capitalize tracking-widest text-slate-400">Merchant Directory</span>
                 </div>
                 {topSellers.slice(3, visibleCount).map((user) => (
                   <SellerListItem key={user.id} user={user} />
@@ -307,7 +307,7 @@ function SellerLeaderboard() {
                 {topSellers.length > visibleCount && (
                   <button 
                     onClick={() => setVisibleCount(prev => prev + 20)}
-                    className="mt-4 py-4 w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 active:scale-95 transition-all"
+                    className="mt-4 py-4 w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black capitalize tracking-[0.2em] text-slate-400 active:scale-95 transition-all"
                   >
                     Load More Rankings
                   </button>
@@ -379,27 +379,28 @@ export default function Leaderboard() {
   const isEmpty = topUsers.length === 0;
 
   return (
-    <div className="space-y-6">
-
-      {/* Header */}
-      <div className="pt-4 flex items-center gap-4 relative z-20 mb-4">
-        <button onClick={() => navigate(-1)} className="p-3 bg-white dark:bg-slate-900 shadow-sm rounded-2xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
-          <ArrowLeft className="w-5 h-5 dark:text-white" />
-        </button>
-        <div>
-          <h1 className="text-xl font-semibold dark:text-white leading-tight">Champions</h1>
-          <p className="text-[10px] font-semibold text-primary uppercase tracking-widest">Global Leaderboard</p>
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+          </button>
+          <div>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Champions</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em] mt-1">Global Leaderboard</p>
+          </div>
         </div>
       </div>
 
-      <div className="mt-2">
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-2">
         {/* Hero Banner */}
-        <div className="bg-gradient-to-br from-primary to-indigo-600 p-8 rounded-2xl text-white relative overflow-hidden shadow-xl shadow-primary/20">
+        <div className="bg-gradient-to-br from-primary to-indigo-600 p-8 rounded-2xl text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
           <div className="relative z-10 text-center">
             <Crown className="w-12 h-12 text-amber-400 mx-auto mb-4" />
             <h2 className="text-2xl font-semibold mb-2 italic tracking-tighter">Eco-Guardian!</h2>
-            <p className="text-[11px] font-semibold text-white/80 leading-relaxed max-w-[280px] mx-auto uppercase tracking-widest">
+            <p className="text-[11px] font-semibold text-white/80 leading-relaxed max-w-[280px] mx-auto capitalize tracking-widest">
               Every KG you recycle pushes you higher in the global ranks. Top champions win exclusive Klinflow perks! 🎁
             </p>
           </div>
@@ -418,7 +419,7 @@ export default function Leaderboard() {
             </div>
             <button
               onClick={() => navigate('/book-pickup')}
-              className="px-8 py-4 bg-primary text-white font-semibold text-sm rounded-2xl shadow-xl shadow-primary/30 uppercase tracking-widest active:scale-95 transition-all"
+              className="px-8 py-4 bg-primary text-white font-semibold text-sm rounded-2xl capitalize tracking-widest active:scale-95 transition-all"
             >
               Claim the spot 🏆
             </button>
@@ -456,7 +457,7 @@ export default function Leaderboard() {
                 <Info className="w-5 h-5 text-amber-500" />
               </div>
               <div className="flex-1">
-                <h4 className="text-[10px] font-black dark:text-white uppercase tracking-widest leading-none mb-1">How to Rank Up</h4>
+                <h4 className="text-[10px] font-black dark:text-white capitalize tracking-widest leading-none mb-1">How to Rank Up</h4>
                 <p className="text-[11px] font-semibold text-slate-400 leading-relaxed">
                   Rankings are based on your total <span className="text-primary font-bold">GFP Score</span>.
                   Earn 2 points for every KG of recyclables collected.
@@ -467,7 +468,7 @@ export default function Leaderboard() {
             {/* Full List (rank 4+) */}
             {topUsers.length > 3 && (
               <div className="flex flex-col gap-2 pb-20">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2 mb-2">Top Recyclers List</p>
+                <p className="text-[10px] font-black capitalize tracking-widest text-slate-400 px-2 mb-2">Top Recyclers List</p>
                 {topUsers.slice(3, visibleCount).map((user) => (
                   <ResidentListItem key={user.id} user={user} />
                 ))}
@@ -475,7 +476,7 @@ export default function Leaderboard() {
                 {topUsers.length > visibleCount && (
                   <button 
                     onClick={() => setVisibleCount(prev => prev + 20)}
-                    className="mt-4 py-4 w-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 active:scale-95 transition-all"
+                    className="mt-4 py-4 w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black capitalize tracking-[0.2em] text-slate-400 active:scale-95 transition-all"
                   >
                     Load More Rankings
                   </button>

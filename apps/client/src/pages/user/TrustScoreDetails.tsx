@@ -94,15 +94,15 @@ export default function TrustScoreDetails() {
   return (
     <div className="pb-2 px-1.5 animate-fade-in">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800  transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
             </button>
             <div>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-tight">Trust Score</h1>
-              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest flex items-center gap-1">
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Trust Score</h1>
+              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Merchant Integrity
               </p>
             </div>
@@ -115,81 +115,81 @@ export default function TrustScoreDetails() {
 
       <div className="pt-[calc(env(safe-area-inset-top,1rem)+4rem)] space-y-6">
         {/* ── MASTER DASHBOARD CARD ── */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1rem] p-4 shadow-sm">
-          {/* Bento Dashboard Grid */}
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-3">
+          {/* Masonry Dashboard Grid */}
           <div className="grid grid-cols-3 gap-2">
              
              {/* Lifetime Earnings (2-col) */}
-             <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-3 flex items-center gap-3">
-               <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                 <TrendingUp className="w-4 h-4" />
+             <div className="col-span-2 bg-emerald-50 dark:bg-emerald-950 rounded-xl p-3 flex items-center gap-3">
+               <div className="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                 <TrendingUp className="w-4.5 h-4.5" />
                </div>
                <div className="flex-1 min-w-0">
-                 <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-0.5">Lifetime Earnings</p>
-                 <p className="text-base font-black text-slate-900 dark:text-white leading-none tracking-tight">KSh {stats.lifetimeEarnings.toLocaleString()}</p>
+                 <p className="text-[9px] font-bold capitalize tracking-widest text-emerald-700 dark:text-emerald-400 mb-0.5">Lifetime Earnings</p>
+                 <p className="text-base font-black text-emerald-900 dark:text-white leading-none tracking-tight">KSh {stats.lifetimeEarnings.toLocaleString()}</p>
                </div>
              </div>
 
              {/* Total Traded */}
-             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Scale className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 mb-1.5" />
+             <div className="col-span-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Scale className="w-4 h-4 text-slate-500 dark:text-slate-400 mb-1" />
                <p className="text-sm font-black text-slate-900 dark:text-white leading-none tracking-tighter">{stats.totalWeight.toLocaleString()}</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">KG Traded</p>
+               <p className="text-[7px] font-bold capitalize tracking-widest text-slate-500 dark:text-slate-400 mt-0.5">KG Traded</p>
              </div>
 
              {/* Available Balance (2-col) */}
-             <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-3 flex items-center gap-3">
-               <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                 <Wallet className="w-4 h-4" />
+             <div className="col-span-2 bg-slate-100 dark:bg-slate-800 rounded-xl p-3 flex items-center gap-3">
+               <div className="w-9 h-9 rounded-lg bg-slate-700 dark:bg-slate-600 text-white flex items-center justify-center shrink-0">
+                 <Wallet className="w-4.5 h-4.5" />
                </div>
                <div className="flex-1 min-w-0">
-                 <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-0.5">Available Balance</p>
+                 <p className="text-[9px] font-bold capitalize tracking-widest text-slate-500 dark:text-slate-400 mb-0.5">Available Balance</p>
                  <p className="text-sm font-black text-slate-900 dark:text-white leading-none">KSh {walletBalance.toLocaleString()}</p>
                </div>
              </div>
 
              {/* Trades Count */}
-             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Handshake className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 mb-1.5" />
+             <div className="col-span-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Handshake className="w-4 h-4 text-slate-500 dark:text-slate-400 mb-1" />
                <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.tradesCompleted}</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Trades</p>
+               <p className="text-[7px] font-bold capitalize tracking-widest text-slate-500 dark:text-slate-400 mt-0.5">Trades</p>
              </div>
 
              {/* In Escrow (2-col) */}
-             <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-3 flex items-center gap-3">
-               <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                 <Clock className="w-4 h-4" />
+             <div className="col-span-2 bg-slate-100 dark:bg-slate-800 rounded-xl p-3 flex items-center gap-3">
+               <div className="w-9 h-9 rounded-lg bg-slate-700 dark:bg-slate-600 text-white flex items-center justify-center shrink-0">
+                 <Clock className="w-4.5 h-4.5" />
                </div>
                <div className="flex-1 min-w-0">
-                 <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-0.5">In Escrow</p>
+                 <p className="text-[9px] font-bold capitalize tracking-widest text-slate-500 dark:text-slate-400 mb-0.5">In Escrow</p>
                  <p className="text-sm font-black text-slate-900 dark:text-white leading-none">KSh {stats.pendingBalance.toLocaleString()}</p>
                </div>
              </div>
 
              {/* Fulfillment Rate */}
-             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <TrendingUp className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 mb-1.5" />
-               <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.fulfillmentRate}%</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Rate</p>
+             <div className="col-span-1 bg-emerald-50 dark:bg-emerald-950 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+               <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mb-1" />
+               <p className="text-sm font-black text-emerald-900 dark:text-white leading-none">{stats.fulfillmentRate}%</p>
+               <p className="text-[7px] font-bold capitalize tracking-widest text-emerald-700 dark:text-emerald-400 mt-0.5">Rate</p>
              </div>
 
              {/* Bottom row: 3 equal small cards */}
-             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Calendar className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 mb-1.5" />
+             <div className="col-span-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Calendar className="w-4 h-4 text-slate-500 dark:text-slate-400 mb-1" />
                <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.daysTraded}</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Days</p>
+               <p className="text-[7px] font-bold capitalize tracking-widest text-slate-500 dark:text-slate-400 mt-0.5">Days</p>
              </div>
 
-             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Zap className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 mb-1.5" />
+             <div className="col-span-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mb-1" />
                <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.avgResponseTime || '15'}m</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Avg Time</p>
+               <p className="text-[7px] font-bold capitalize tracking-widest text-slate-500 dark:text-slate-400 mt-0.5">Avg Time</p>
              </div>
 
-             <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-100/50 dark:border-slate-800/50 rounded-2xl p-2.5 flex flex-col items-center justify-center text-center">
-               <Sparkles className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 mb-1.5" />
-               <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{score}%</p>
-               <p className="text-[7px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-0.5">Score</p>
+             <div className="col-span-1 bg-emerald-50 dark:bg-emerald-950 rounded-xl p-2.5 flex flex-col items-center justify-center text-center">
+               <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mb-1" />
+               <p className="text-sm font-black text-emerald-900 dark:text-white leading-none">{score}%</p>
+               <p className="text-[7px] font-bold capitalize tracking-widest text-emerald-700 dark:text-emerald-400 mt-0.5">Score</p>
              </div>
           </div>
         </div>
@@ -197,7 +197,7 @@ export default function TrustScoreDetails() {
         {/* ── TRUST SCORE METER CARD ── */}
         <div className="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800/80 shadow-sm">
           <div className="flex justify-center mb-4.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-bold uppercase tracking-widest">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-bold capitalize tracking-widest">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Your Credit Score
             </div>
           </div>
@@ -208,11 +208,11 @@ export default function TrustScoreDetails() {
                 <div>
                    <span className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">{score}%</span>
                    <div className="mt-1">
-                      <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight">Exceptional!</p>
+                      <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-tight">Exceptional!</p>
                       <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 italic">Excellent profile</p>
                    </div>
                 </div>
-                <button className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap">
+                <button className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold capitalize tracking-widest rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap">
                   Apply Loan
                 </button>
              </div>
@@ -262,7 +262,7 @@ export default function TrustScoreDetails() {
                    <div className="flex-1">
                       <div className="flex items-center justify-between">
                          <h4 className="text-xs font-semibold text-slate-900 dark:text-white">{m.label}</h4>
-                         <span className={`text-xs font-semibold uppercase tracking-widest px-2 py-0.5 rounded-lg ${m.status === 'Completed' ? 'bg-emerald-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
+                         <span className={`text-xs font-semibold capitalize tracking-widest px-2 py-0.5 rounded-lg ${m.status === 'Completed' ? 'bg-emerald-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
                            {m.status}
                          </span>
                       </div>
@@ -279,7 +279,7 @@ export default function TrustScoreDetails() {
               <Zap className="w-6 h-6 fill-primary" />
            </div>
            <div>
-              <h4 className="text-xs font-semibold text-primary uppercase tracking-widest">Boost Your Score</h4>
+              <h4 className="text-xs font-semibold text-primary capitalize tracking-widest">Boost Your Score</h4>
               <p className="text-[11px] font-medium text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                 Consistently posting Grade A materials and confirming pickups instantly can boost your score by up to <span className="font-semibold">50 points</span> this month.
               </p>

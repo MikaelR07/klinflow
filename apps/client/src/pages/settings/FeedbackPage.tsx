@@ -61,14 +61,14 @@ export default function FeedbackPage() {
   return (
     <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate('/settings')} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
             <ArrowLeft className="w-4 h-4 dark:text-white" />
           </button>
           <div>
-            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none mb-1">Give Feedback</h1>
-            <p className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Share Your Experience</p>
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none mb-1">Give Feedback</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Share Your Experience</p>
           </div>
         </div>
       </div>
@@ -105,7 +105,7 @@ export default function FeedbackPage() {
         {/* Details Form */}
         <div className="card p-5 space-y-4">
            <div>
-             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Feedback Category</label>
+             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 capitalize tracking-wider">Feedback Category</label>
              <select 
                value={category} 
                onChange={(e) => setCategory(e.target.value)} 
@@ -118,7 +118,7 @@ export default function FeedbackPage() {
            </div>
 
            <div>
-             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Your Thoughts</label>
+             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 capitalize tracking-wider">Your Thoughts</label>
              <textarea 
                required 
                rows={5} 

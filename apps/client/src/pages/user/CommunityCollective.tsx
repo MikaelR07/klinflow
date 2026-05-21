@@ -32,15 +32,15 @@ export default function CommunityCollective() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F9FF] dark:bg-slate-900 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800  transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
             </button>
             <div>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-tight">Collective Hub</h1>
-              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest flex items-center gap-1">
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Collective Hub</h1>
+              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1">
                 <Users className="w-3.5 h-3.5 text-emerald-500" /> {estateName} Sacco
               </p>
             </div>
@@ -62,19 +62,19 @@ export default function CommunityCollective() {
                 🏙️
               </div>
               <div>
-                <h3 className="text-sm font-bold uppercase tracking-tight leading-none mb-1.5">Estate Impact</h3>
-                <p className="text-[10px] font-bold text-emerald-100/80 uppercase tracking-widest leading-none">Power in Unity</p>
+                <h3 className="text-sm font-bold capitalize tracking-tight leading-none mb-1.5">Estate Impact</h3>
+                <p className="text-[10px] font-bold text-emerald-100/80 capitalize tracking-widest leading-none">Power in Unity</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
               <div>
                 <p className="text-xl font-black text-white leading-none mb-1">3,200kg</p>
-                <p className="text-[10px] font-bold text-emerald-200/60 uppercase tracking-widest">Total Recovery</p>
+                <p className="text-[10px] font-bold text-emerald-200/60 capitalize tracking-widest">Total Recovery</p>
               </div>
               <div>
                 <p className="text-xl font-black text-white leading-none mb-1">128</p>
-                <p className="text-[10px] font-bold text-emerald-200/60 uppercase tracking-widest">Active Weavers</p>
+                <p className="text-[10px] font-bold text-emerald-200/60 capitalize tracking-widest">Active Weavers</p>
               </div>
             </div>
           </div>
@@ -83,8 +83,8 @@ export default function CommunityCollective() {
         {/* ── CONSOLIDATION SWARMS (Problem #11) ── */}
         <div className="space-y-4">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Logistics Swarms</h3>
-            <span className="px-2 py-0.5 bg-indigo-500 text-white text-[8px] font-black uppercase rounded-full animate-pulse">Live</span>
+            <h3 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Active Logistics Swarms</h3>
+            <span className="px-2 py-0.5 bg-indigo-500 text-white text-[8px] font-black capitalize rounded-full animate-pulse">Live</span>
           </div>
 
           <div className="space-y-3">
@@ -96,19 +96,19 @@ export default function CommunityCollective() {
                       <Truck className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase leading-none mb-1 tracking-tight">{swarm.material}</h4>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{swarm.estate}</p>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white capitalize leading-none mb-1 tracking-tight">{swarm.material}</h4>
+                      <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">{swarm.estate}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Closing In</p>
-                    <p className="text-xs font-bold text-rose-500 uppercase">{swarm.timeLeft}</p>
+                    <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Closing In</p>
+                    <p className="text-xs font-bold text-rose-500 capitalize">{swarm.timeLeft}</p>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-end">
-                    <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Payload: {swarm.currentWeight} / {swarm.targetWeight} KG</p>
+                    <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest">Payload: {swarm.currentWeight} / {swarm.targetWeight} KG</p>
                     <p className="text-[10px] font-bold text-indigo-600">{Math.round((swarm.currentWeight / swarm.targetWeight) * 100)}%</p>
                   </div>
                   <div className="h-2 w-full bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden border border-slate-100 dark:border-slate-700">
@@ -123,14 +123,14 @@ export default function CommunityCollective() {
                     ))}
                     <div className="w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[8px] font-black">+{swarm.participants}</div>
                   </div>
-                  <button className="px-5 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-lg shadow-indigo-500/20">
+                  <button className="px-5 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-bold capitalize tracking-widest active:scale-95 transition-all shadow-lg shadow-indigo-500/20">
                     Join Swarm
                   </button>
                 </div>
               </div>
             ))}
 
-            <button className="w-full py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
+            <button className="w-full py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 font-bold text-[10px] capitalize tracking-widest flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
               <Plus className="w-4 h-4" /> Start Neighborhood Swarm
             </button>
           </div>
@@ -139,7 +139,7 @@ export default function CommunityCollective() {
         {/* ── COLLECTIVE GOALS ── */}
         <div className="space-y-4">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Collective Missions</h3>
+            <h3 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Collective Missions</h3>
             <Target className="w-4 h-4 text-slate-300" />
           </div>
 
@@ -149,7 +149,7 @@ export default function CommunityCollective() {
               <div className="relative z-10 flex flex-col gap-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1.5">{goal.title}</h4>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight mb-1.5">{goal.title}</h4>
                     <p className="text-xs font-medium text-slate-500 leading-tight italic">{goal.description}</p>
                   </div>
                   <div className="w-10 h-10 bg-amber-50 dark:bg-amber-900/20 rounded-xl flex items-center justify-center">
@@ -159,7 +159,7 @@ export default function CommunityCollective() {
 
                 <div className="space-y-2">
                   <div className="flex justify-between items-end">
-                    <p className="text-[10px] font-bold text-primary uppercase">Community Reward: {goal.reward}</p>
+                    <p className="text-[10px] font-bold text-primary capitalize">Community Reward: {goal.reward}</p>
                     <p className="text-[10px] font-bold text-slate-400">{goal.progress} / {goal.target} KG</p>
                   </div>
                   <div className="h-1.5 w-full bg-slate-50 dark:bg-slate-800 rounded-full overflow-hidden">
@@ -167,7 +167,7 @@ export default function CommunityCollective() {
                   </div>
                 </div>
 
-                <button className="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-[10px] uppercase tracking-widest active:scale-95 transition-all">
+                <button className="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-[10px] capitalize tracking-widest active:scale-95 transition-all">
                   Contribute Stock
                 </button>
               </div>
@@ -182,14 +182,14 @@ export default function CommunityCollective() {
               🤝
             </div>
             <div>
-              <h3 className="text-sm font-bold uppercase tracking-tight leading-none mb-1.5">Formal Recognition</h3>
-              <p className="text-[10px] font-bold text-slate-400/80 uppercase tracking-widest">Institutional Access</p>
+              <h3 className="text-sm font-bold capitalize tracking-tight leading-none mb-1.5">Formal Recognition</h3>
+              <p className="text-[10px] font-bold text-slate-400/80 capitalize tracking-widest">Institutional Access</p>
             </div>
           </div>
           <p className="text-xs font-medium text-slate-400 leading-relaxed italic">
             "Weavers in this collective are eligible for subsidized health insurance and NEMA-certified transport permits through the Sacco program."
           </p>
-          <button className="w-full py-3.5 bg-white text-slate-900 rounded-xl font-bold text-[10px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2">
+          <button className="w-full py-3.5 bg-white text-slate-900 rounded-xl font-bold text-[10px] capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-500" /> Apply for Permits
           </button>
         </div>

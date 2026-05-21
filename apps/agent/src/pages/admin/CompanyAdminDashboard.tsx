@@ -94,7 +94,7 @@ export default function CompanyAdminDashboard() {
                 {isToggling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Power className="w-4 h-4" />}
              </div>
              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 leading-none mb-1">Marketplace</p>
+                <p className="text-[10px] font-bold capitalize tracking-[0.2em] text-emerald-600 dark:text-emerald-400 leading-none mb-1">Marketplace</p>
                 <p className="text-xs font-bold tracking-tight leading-none">{profile.isOnline ? 'Active' : 'Offline'}</p>
              </div>
           </div>
@@ -120,7 +120,7 @@ export default function CompanyAdminDashboard() {
           <div className="relative bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-[2rem] p-6 shadow-xl shadow-emerald-900/20 overflow-hidden flex flex-col justify-between h-full">
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
             <div className="relative z-10">
-              <div className="text-[10px] font-bold text-emerald-200/80 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              <div className="text-[10px] font-bold text-emerald-200/80 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
                 <div className="w-6 h-6 bg-white/10 rounded-lg flex items-center justify-center">
                   <Wallet className="w-3.5 h-3.5" />
                 </div>
@@ -130,7 +130,7 @@ export default function CompanyAdminDashboard() {
                 KSh {earnings.total?.toLocaleString() || 0}
               </h2>
               <div className="mt-4 flex items-center gap-1.5">
-                <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest">Cumulative Volume</span>
+                <span className="text-[10px] font-bold text-emerald-300 capitalize tracking-widest">Cumulative Volume</span>
               </div>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function CompanyAdminDashboard() {
         <div className="relative group perspective-1000 h-full">
           <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full transition-all hover:border-emerald-500/50">
             <div className="relative z-10">
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              <div className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
                 <div className="w-6 h-6 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg flex items-center justify-center">
                   <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
                 </div>
@@ -151,7 +151,7 @@ export default function CompanyAdminDashboard() {
               </h2>
               <div className="mt-4 flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Live Dispatch</span>
+                <span className="text-[10px] font-bold text-emerald-500 capitalize tracking-widest">Live Dispatch</span>
               </div>
             </div>
           </div>
@@ -162,7 +162,7 @@ export default function CompanyAdminDashboard() {
           <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full transition-all hover:border-amber-500/50">
             <div className="relative z-10 flex items-start justify-between">
               <div className="flex-1">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                <div className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
                   <div className="w-6 h-6 bg-amber-50 dark:bg-amber-500/10 rounded-lg flex items-center justify-center">
                     <Zap className="w-3.5 h-3.5 text-amber-500" />
                   </div>
@@ -172,7 +172,7 @@ export default function CompanyAdminDashboard() {
                   KSh {profile.walletBalance?.toLocaleString() || 0}
                 </h2>
                 <div className="mt-4 flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Settlement Ready</span>
+                  <span className="text-[10px] font-bold text-amber-500 capitalize tracking-widest">Settlement Ready</span>
                 </div>
               </div>
 
@@ -181,7 +181,7 @@ export default function CompanyAdminDashboard() {
                 className="px-4 py-2 bg-amber-500 text-white rounded-xl flex items-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all group/btn"
               >
                 <Plus className="w-4 h-4 group-hover/btn:rotate-90 transition-transform" />
-                <span className="text-[10px] font-bold uppercase tracking-widest">Deposit</span>
+                <span className="text-[10px] font-bold capitalize tracking-widest">Deposit</span>
               </button>
             </div>
           </div>
@@ -195,28 +195,28 @@ export default function CompanyAdminDashboard() {
         <div className="lg:col-span-2 bg-slate-100/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-6 flex flex-col justify-between">
           <div className="grid grid-cols-3 gap-8">
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Pickups Today</p>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-2">Pickups Today</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-white leading-none">{earnings.completedToday || 0}</p>
             </div>
             <div className="border-x border-slate-200 dark:border-slate-700 px-8">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Fleet Total</p>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-2">Fleet Total</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-white leading-none">{fleetDrivers.length || 0}</p>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Track Points</p>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-2">Track Points</p>
               <p className="text-2xl font-bold text-emerald-500 leading-none">{profile.rewardPoints || 0}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-8 mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">KG Collected Today</p>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-2">KG Collected Today</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-white leading-none">
                 {(earnings.todayKg || 0).toLocaleString()} <span className="text-sm font-medium text-slate-400">KG</span>
               </p>
             </div>
             <div className="border-l border-slate-200 dark:border-slate-700 pl-8">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Total KG Collected</p>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-2">Total KG Collected</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-white leading-none">
                 {(earnings.totalKg || 0).toLocaleString()} <span className="text-sm font-medium text-slate-400">KG</span>
               </p>
@@ -229,18 +229,18 @@ export default function CompanyAdminDashboard() {
                  <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
                </div>
                <div>
-                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Fleet Rating</p>
+                 <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Fleet Rating</p>
                  <p className="text-sm font-bold text-slate-900 dark:text-white">{profile.rating ? Number(profile.rating).toFixed(1) : 'New'} — Top 5% in {profile.location?.estate || 'Region'}</p>
                </div>
              </div>
-             <button onClick={() => navigate('/reviews')} className="text-[10px] font-bold text-primary uppercase tracking-widest hover:underline">View All Reviews →</button>
+             <button onClick={() => navigate('/reviews')} className="text-[10px] font-bold text-primary capitalize tracking-widest hover:underline">View All Reviews →</button>
           </div>
         </div>
 
         {/* Quick Invite Code */}
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between group hover:border-primary/50 transition-all">
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Onboard Drivers</p>
+            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4">Onboard Drivers</p>
             <h3 className="text-base font-bold text-slate-900 dark:text-white leading-tight">Fleet Invite Code</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
               Share this code to automatically link new drivers to your company dashboard.
@@ -278,12 +278,12 @@ export default function CompanyAdminDashboard() {
              </button>
              <button 
                onClick={() => navigate('/admin/agents')}
-               className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 hover:bg-primary hover:text-white rounded-xl text-xs font-semibold uppercase tracking-widest transition-all group"
+               className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 hover:bg-primary hover:text-white rounded-xl text-xs font-semibold capitalize tracking-widest transition-all group"
              >
                <Users className="w-3.5 h-3.5" />
                <span className="hidden sm:inline">Roster</span>
              </button>
-             <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold uppercase tracking-widest rounded-full border border-emerald-200 dark:border-emerald-900">
+             <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold capitalize tracking-widest rounded-full border border-emerald-200 dark:border-emerald-900">
                {fleetDrivers.filter(d => d.is_online).length} Live
              </span>
           </div>
@@ -292,7 +292,7 @@ export default function CompanyAdminDashboard() {
         {isLoadingFleet ? (
           <div className="flex flex-col items-center justify-center py-10">
             <div className="w-8 h-8 border-4 border-slate-200 border-t-primary rounded-full animate-spin"></div>
-            <p className="text-xs font-semibold text-slate-400 mt-4 uppercase tracking-widest">Scanning Fleet...</p>
+            <p className="text-xs font-semibold text-slate-400 mt-4 capitalize tracking-widest">Scanning Fleet...</p>
           </div>
         ) : fleetDrivers.filter(d => d.is_online).length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
@@ -326,7 +326,7 @@ export default function CompanyAdminDashboard() {
                 
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{driver.name}</p>
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest flex items-center gap-1 mt-0.5">
+                  <p className="text-xs font-semibold text-slate-500 capitalize tracking-widest flex items-center gap-1 mt-0.5">
                     {driver.location?.estate || 'Unknown Sector'}
                   </p>
                   <p className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mt-1">
@@ -368,7 +368,7 @@ export default function CompanyAdminDashboard() {
 
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 px-1">Enter Amount (KSh)</label>
+                  <label className="text-[10px] font-bold capitalize tracking-[0.2em] text-slate-400 px-1">Enter Amount (KSh)</label>
                   <div className="relative">
                     <div className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-slate-400">KSh</div>
                     <input 

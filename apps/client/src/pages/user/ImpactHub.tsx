@@ -139,44 +139,48 @@ export default function ImpactHub() {
 
 
   return (
-    <div className="space-y-6 px-3 pb-10">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <button onClick={() => navigate(-1)} className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div>
-          <h1 className="text-xl font-semibold">GreenFlow Hub</h1>
-          <p className="text-xs text-primary font-semibold uppercase tracking-widest">Sustainability Dashboard</p>
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+      {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+          </button>
+          <div>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">GreenFlow Hub</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em] mt-1">Sustainability Dashboard</p>
+          </div>
         </div>
       </div>
 
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-3 pb-10 space-y-6">
+
       {/* Main Stats Card */}
-      <div className="card bg-gradient-to-br from-primary to-emerald-600 p-6 text-white border-0 shadow-xl shadow-primary/20 overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+      <div className="card bg-gradient-to-br from-primary to-emerald-600 p-6 text-white border-0 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
         
         <div className="flex items-center gap-4 mb-6 relative">
-          <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-4xl shadow-inner">
+          <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl">
             {metrics.icon}
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest opacity-80">Current Rank</p>
+            <p className="text-xs font-semibold capitalize tracking-widest opacity-80">Current Rank</p>
             <h2 className="text-2xl font-semibold">{metrics.tier}</h2>
           </div>
           <div className="ml-auto text-right">
-            <p className="text-xs font-semibold uppercase tracking-widest opacity-80">Impact Score</p>
+            <p className="text-xs font-semibold capitalize tracking-widest opacity-80">Impact Score</p>
             <p className="text-lg font-mono font-semibold">{profile?.rewardPoints || 0} GFP</p>
           </div>
         </div>
 
         <div className="space-y-1.5 relative">
-          <div className="flex justify-between items-end text-xs font-semibold uppercase tracking-widest">
+          <div className="flex justify-between items-end text-xs font-semibold capitalize tracking-widest">
             <span>Progress to {metrics.nextTier}</span>
             <span>{Math.round(metrics.progress)}%</span>
           </div>
           <div className="h-3 w-full bg-black/20 rounded-full overflow-hidden border border-white/10 p-0.5">
             <div 
-              className="h-full bg-white rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+              className="h-full bg-white rounded-full transition-all duration-1000"
               style={{ width: `${metrics.progress}%` }}
             ></div>
           </div>
@@ -188,24 +192,24 @@ export default function ImpactHub() {
 
       {/* Streaks & Quick Stats */}
       <div className="grid grid-cols-2 gap-4">
-        <div className={`card p-4 flex items-center gap-3 ${streak > 0 ? 'border-orange-100 bg-orange-50/30' : 'border-slate-100 bg-slate-50/30'}`}>
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${streak > 0 ? 'bg-orange-100' : 'bg-slate-100'}`}>
-            <Flame className={`w-5 h-5 ${streak > 0 ? 'text-orange-500 fill-orange-500' : 'text-slate-300'}`} />
+        <div className="card p-4 rounded-2xl border-0 flex items-center gap-3 bg-orange-500 text-white">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20">
+            <Flame className="w-5 h-5 text-white fill-white" />
           </div>
           <div>
-            <p className={`text-xs font-semibold uppercase leading-none mb-1 ${streak > 0 ? 'text-orange-600/60' : 'text-slate-400'}`}>Streak</p>
-            <p className={`text-lg font-semibold leading-none ${streak > 0 ? 'text-orange-600' : 'text-slate-400'}`}>
+            <p className="text-[10px] font-bold capitalize leading-none mb-1.5 text-white/70">Streak</p>
+            <p className="text-lg font-semibold leading-none">
               {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'None'}
             </p>
           </div>
         </div>
-        <div className="card p-4 border-blue-100 bg-blue-50/30 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-            <Zap className="w-5 h-5 text-blue-500 fill-blue-500" />
+        <div className="card p-4 rounded-2xl border-0 bg-blue-600 text-white flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+            <Zap className="w-5 h-5 text-white fill-white" />
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase text-blue-600/60 leading-none mb-1">Recovered</p>
-            <p className="text-lg font-semibold text-blue-600 leading-none">{kgRecovered}kg</p>
+            <p className="text-[10px] font-bold capitalize text-white/70 leading-none mb-1.5">Recovered</p>
+            <p className="text-lg font-semibold leading-none">{kgRecovered}kg</p>
           </div>
         </div>
       </div>
@@ -218,7 +222,7 @@ export default function ImpactHub() {
           </h3>
           <button 
             onClick={() => setShowBadgeModal(true)}
-            className="text-xs font-semibold text-primary uppercase tracking-widest flex items-center gap-1 hover:underline"
+            className="text-xs font-semibold text-primary capitalize tracking-widest flex items-center gap-1 hover:underline"
           >
             How to earn <ChevronRight className="w-3 h-3" />
           </button>
@@ -228,12 +232,12 @@ export default function ImpactHub() {
             <div 
               key={badge.id} 
               onClick={() => setShowBadgeModal(true)}
-              className={`card p-3 text-center transition-all cursor-pointer ${!badge.unlocked ? 'grayscale opacity-40' : 'shadow-md border-amber-100 bg-amber-50/10'}`}
+              className={`card p-3 text-center transition-all cursor-pointer ${!badge.unlocked ? 'grayscale opacity-40' : 'border-amber-100 bg-amber-50/10'}`}
             >
               <div className={`text-3xl mb-1.5 ${badge.unlocked ? 'transform hover:scale-110 transition-transform' : ''}`}>
                 {badge.icon}
               </div>
-              <p className="text-xs font-semibold leading-tight uppercase tracking-tighter text-slate-700 dark:text-slate-300">
+              <p className="text-xs font-semibold leading-tight capitalize tracking-tighter text-slate-700 dark:text-slate-300">
                 {badge.name}
               </p>
             </div>
@@ -246,16 +250,16 @@ export default function ImpactHub() {
       {/* Badge Guide Modal */}
       {showBadgeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowBadgeModal(false)} />
-          <div className="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in duration-300">
+          <div className="absolute inset-0 bg-slate-900/60" onClick={() => setShowBadgeModal(false)} />
+          <div className="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in duration-300">
             <div className="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center">
                   <Award className="w-6 h-6 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm uppercase tracking-widest">Badge Guide</h3>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">How to earn badges</p>
+                  <h3 className="font-semibold text-sm capitalize tracking-widest">Badge Guide</h3>
+                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">How to earn badges</p>
                 </div>
               </div>
               <button onClick={() => setShowBadgeModal(false)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl">
@@ -278,7 +282,7 @@ export default function ImpactHub() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h4 className="text-xs font-semibold uppercase tracking-tight">{badge.name}</h4>
+                      <h4 className="text-xs font-semibold capitalize tracking-tight">{badge.name}</h4>
                       {badge.unlocked ? (
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/10" />
                       ) : (
@@ -296,7 +300,7 @@ export default function ImpactHub() {
             <div className="p-6 bg-slate-50 dark:bg-slate-800/50">
               <button 
                 onClick={() => setShowBadgeModal(false)}
-                className="w-full py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-2xl font-semibold text-xs uppercase tracking-widest shadow-xl active:scale-[0.98] transition-all"
+                className="w-full py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.98] transition-all"
               >
                 Got it, Captain!
               </button>
@@ -306,14 +310,14 @@ export default function ImpactHub() {
       )}
 
       {/* Environmental Impact Card (New Addition) */}
-      <div className="card bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden mt-8">
+      <div className="card bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 relative overflow-hidden mt-8">
          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 shadow-inner">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
                <Globe className="w-6 h-6" />
             </div>
             <div>
                <h3 className="text-lg font-bold text-slate-800 dark:text-white leading-tight tracking-tight">Environmental Impact</h3>
-               <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em]">Verified Sustainability Score</p>
+               <p className="text-[10px] text-slate-400 font-black capitalize tracking-[0.2em]">Verified Sustainability Score</p>
             </div>
          </div>
          
@@ -323,7 +327,7 @@ export default function ImpactHub() {
                   <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-600">
                      <TrendingUp className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">CO2 Mitigated</span>
+                  <span className="text-xs font-black text-slate-600 dark:text-slate-400 capitalize tracking-widest">CO2 Mitigated</span>
                </div>
                <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg * 1.5).toFixed(1)} KG</span>
             </div>
@@ -333,15 +337,15 @@ export default function ImpactHub() {
                   <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-600">
                      <Leaf className="w-5 h-5" />
                     </div>
-                    <span className="text-xs font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest">Tree Equivalent</span>
+                    <span className="text-xs font-black text-slate-600 dark:text-slate-400 capitalize tracking-widest">Tree Equivalent</span>
                  </div>
-                 <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg / 20).toFixed(1)} <span className="text-xs font-bold uppercase">Trees</span></span>
+                 <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg / 20).toFixed(1)} <span className="text-xs font-bold capitalize">Trees</span></span>
               </div>
            </div>
         </div>
 
       {/* The Path to Mastery */}
-      <div className="card bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 p-6 rounded-[2.5rem] relative overflow-hidden shadow-xl mt-8">
+      <div className="card bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 p-6 rounded-[2.5rem] relative overflow-hidden mt-8">
         <div className="absolute top-0 right-0 p-4 opacity-10">
           <Sparkles className="w-20 h-20 text-primary" />
         </div>
@@ -353,12 +357,13 @@ export default function ImpactHub() {
           </p>
           <button 
             onClick={() => navigate('/book-pickup')}
-            className="w-full py-4 bg-primary text-white rounded-2xl font-semibold text-xs uppercase tracking-widest shadow-lg shadow-primary/20 active:scale-95 transition-all"
+            className="w-full py-4 bg-primary text-white rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-95 transition-all"
           >
             Level Up Now
           </button>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }

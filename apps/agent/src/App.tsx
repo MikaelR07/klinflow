@@ -29,6 +29,9 @@ const AgentSellStock = lazy(() => import('./pages/agent/AgentSellStock'));
 const Sourcing = lazy(() => import('./pages/agent/Sourcing'));
 const MyTrades = lazy(() => import('./pages/agent/MyTrades'));
 const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
+const CreateRFQPage = lazy(() => import('./pages/agent/CreateRFQPage'));
+const MyRFQs = lazy(() => import('./pages/agent/MyRFQs'));
+const RFQDetailsPage = lazy(() => import('./pages/agent/RFQDetailsPage'));
 
 // Settings Pages
 const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
@@ -51,6 +54,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 const CompanyAdminDashboard = lazy(() => import('./pages/admin/CompanyAdminDashboard'));
 const FleetManagement = lazy(() => import('./pages/admin/FleetManagement'));
 const FleetFinance = lazy(() => import('./pages/admin/FleetFinance'));
+const FleetRFQs = lazy(() => import('./pages/admin/FleetRFQs'));
 
 function MobileLayout() {
   const { availableJobs } = useAgentStore();
@@ -173,6 +177,9 @@ export default function App() {
             <Route path="/warehouse" element={<AgentWarehouse />} />
             <Route path="/warehouse/sell" element={<AgentSellStock />} />
             <Route path="/sourcing" element={<Sourcing />} />
+            <Route path="/rfq/create" element={<CreateRFQPage />} />
+            <Route path="/rfqs" element={<MyRFQs />} />
+            <Route path="/rfqs/:rfqId" element={<RFQDetailsPage />} />
             <Route path="/trades" element={<MyTrades />} />
             <Route path="/earnings" element={<EarningsPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
@@ -181,6 +188,7 @@ export default function App() {
             <Route path="/admin/agents" element={<FleetManagement />} />
             <Route path="/admin/earnings" element={<EarningsPage />} />
             <Route path="/admin/finance" element={<FleetFinance />} />
+            <Route path="/admin/rfqs" element={<FleetRFQs />} />
 
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />

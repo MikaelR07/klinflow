@@ -197,8 +197,16 @@ export const useAgentStore = create<AgentStore>()(
                 'general': ['household_trash', 'mixed', 'general_waste'],
               };
               const wasteLower = String(wasteType).toLowerCase();
-              const isAccepted = accepted.some((mat: string) => {
-                const matLower = String(mat).toLowerCase();
+              const isAccepted = accepted.some((mat: any) => {
+                if (!mat) return false;
+                let matStr = '';
+                if (typeof mat === 'string') {
+                  matStr = mat;
+                } else if (typeof mat === 'object') {
+                  matStr = mat.id || mat.name || '';
+                }
+                const matLower = String(matStr).toLowerCase();
+                if (!matLower) return false;
                 if (matLower === wasteLower) return true;
                 const aliases = MATERIAL_ALIASES[matLower] || [];
                 return aliases.includes(wasteLower);

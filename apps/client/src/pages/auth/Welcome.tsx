@@ -26,7 +26,7 @@ export default function Welcome() {
 
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 mb-6 w-fit">
             <Sparkles className="w-4 h-4 text-emerald-500" />
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">For Homes & Pro-Sellers</span>
+            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest">For Homes & Pro-Sellers</span>
           </div>
 
           <h1 className="text-3xl font-semibold text-slate-900 dark:text-white leading-[0.95] mb-6 tracking-tighter">
@@ -83,7 +83,7 @@ export default function Welcome() {
           
           <div className="flex items-center justify-center gap-2">
             <p className="text-sm text-slate-400 font-medium">Already have an account?</p>
-            <button onClick={() => navigate('/login')} className="text-sm text-emerald-500 font-semibold uppercase tracking-widest">Log In</button>
+            <button onClick={() => navigate('/login')} className="text-sm text-emerald-500 font-semibold capitalize tracking-widest">Log In</button>
           </div>
         </div>
       </motion.div>

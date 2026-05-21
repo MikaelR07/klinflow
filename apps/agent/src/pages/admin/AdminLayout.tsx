@@ -2,7 +2,7 @@ import { Suspense, useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
-import { LayoutDashboard, Users, Settings, LogOut, Menu, X, Truck, DollarSign, Banknote } from 'lucide-react';
+import { LayoutDashboard, Users, Settings, LogOut, Menu, X, Truck, DollarSign, Banknote, Receipt } from 'lucide-react';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 
 export default function AdminLayout() {
@@ -53,6 +53,7 @@ export default function AdminLayout() {
     { name: 'My Agents', path: '/admin/agents', icon: Users },
     { name: 'Earnings', path: '/admin/earnings', icon: DollarSign },
     { name: 'Fund Requests', path: '/admin/finance', icon: Banknote, badge: pendingCount },
+    { name: 'RFQ Requests', path: '/admin/rfqs', icon: Receipt },
     { name: 'Pricing & Services', path: '/settings/configuration', icon: Settings },
     { name: 'System Settings', path: '/settings', icon: Menu },
   ];
@@ -84,7 +85,7 @@ export default function AdminLayout() {
 
         {/* Nav Links */}
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          <p className="px-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-4">Command Center</p>
+          <p className="px-2 text-[10px] font-semibold text-slate-400 capitalize tracking-widest mb-4">Command Center</p>
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
             return (
@@ -120,7 +121,7 @@ export default function AdminLayout() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{profile?.name}</p>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Company Admin</p>
+              <p className="text-xs font-semibold text-slate-500 capitalize tracking-widest">Company Admin</p>
             </div>
           </div>
           <button 

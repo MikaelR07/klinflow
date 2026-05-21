@@ -154,7 +154,10 @@ export default function HygeneXPage() {
 
   const renderMessageText = (text) => {
     if (!text) return '';
-    if (typeof text === 'object') return text.text || JSON.stringify(text);
+    if (typeof text === 'object') {
+      const txt = text.text || JSON.stringify(text);
+      return typeof txt === 'string' ? txt.replace(/cleanflow/gi, 'Klinflow').replace(/CleanFlow/g, 'Klinflow') : txt;
+    }
     
     let cleanText = text;
     if (typeof text === 'string') {
@@ -163,41 +166,46 @@ export default function HygeneXPage() {
         try {
           const parsed = JSON.parse(cleanText);
           if (parsed && typeof parsed === 'object') {
-            return parsed.text || text;
+            cleanText = parsed.text || text;
           }
         } catch (e) {
           // Fallback regex if it's malformed JSON string like {text: "..."}
           const match = cleanText.match(/"?text"?\s*:\s*"([^"]+)"/);
-          if (match && match[1]) return match[1];
-          return text;
+          if (match && match[1]) cleanText = match[1];
         }
       }
     }
+    
+    if (typeof cleanText === 'string') {
+      cleanText = cleanText
+        .replace(/cleanflow/gi, 'Klinflow')
+        .replace(/CleanFlow/g, 'Klinflow');
+    }
+    
     return cleanText;
   };
 
   return (
     <div className="flex flex-col fixed inset-0 bg-white dark:bg-slate-900 text-slate-900 dark:text-white z-50">
-      {/* HEADER: Back Button */}
-      <div className="absolute top-0 left-0 right-0 p-4 z-40 flex items-center gap-3 pt-6">
-        <button 
-          onClick={() => navigate(-1)}
-          className="p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shadow-sm"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div className="flex items-center gap-2">
-           <Brain className="w-5 h-5 text-emerald-500" />
-           <span className="font-semibold text-slate-900 dark:text-white">HygeneX</span>
+      {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 z-50 transition-colors max-w-lg mx-auto">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-500 transition-colors" />
+          </button>
+          <div>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">HygeneX</h1>
+            <p className="text-[10px] font-bold text-emerald-500 capitalize tracking-[0.2em] mt-1">Smart Waste Intelligence</p>
+          </div>
         </div>
       </div>
 
       {/* 1. CHAT ENGINE (FULL WIDTH) */}
-      <div className="flex-1 flex flex-col relative overflow-hidden">
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3rem)] pb-[env(safe-area-inset-bottom,1.5rem)] flex flex-col relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
         
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-10 space-y-10 pt-20 lg:pt-10">
+        <div className="flex-1 overflow-y-auto px-6 py-10 space-y-10">
           <div className="max-w-3xl mx-auto space-y-10">
             {messages.map((msg, idx) => {
               const isAi = msg.role === 'ai';
@@ -237,20 +245,20 @@ export default function HygeneXPage() {
                             <ShieldCheck className="w-5 h-5" />
                           </div>
                           <div>
-                            <div className="text-xs font-semibold uppercase text-emerald-500 tracking-widest">Draft Pickup</div>
+                            <div className="text-xs font-semibold capitalize text-emerald-500 tracking-widest">Draft Pickup</div>
                             <div className="text-xs font-semibold">{msg.metadata.action.payload.waste_type} • {msg.metadata.action.payload.scheduled_date}</div>
                           </div>
                         </div>
                         <button 
                           onClick={() => alert('Booking confirmed in database!')}
-                          className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-semibold uppercase tracking-widest rounded-xl transition-all"
+                          className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-semibold capitalize tracking-widest rounded-xl transition-all"
                         >
                           Confirm & Schedule
                         </button>
                       </motion.div>
                     )}
 
-                    <div className={`text-xs font-semibold uppercase tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
+                    <div className={`text-xs font-semibold capitalize tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </div>
