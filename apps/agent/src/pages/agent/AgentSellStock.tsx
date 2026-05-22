@@ -240,7 +240,7 @@ export default function AgentSellStock() {
                     className={`p-4 rounded-xl border-2 text-left transition-all ${
                       formData.category === cat.id 
                         ? 'border-indigo-500 bg-indigo-500/5' 
-                        : 'border-slate-50 dark:border-slate-900 bg-slate-50 dark:bg-slate-900'
+                        : 'border-slate-50 dark:border-slate-900 bg-slate-50 dark:bg-slate-800'
                     }`}
                   >
                     <span className="text-xl mb-2 block">{cat.icon}</span>
@@ -260,7 +260,7 @@ export default function AgentSellStock() {
                       handleSubcategoryChange(e.target.value);
                       setStepError('');
                     }}
-                    className={`w-full h-14 bg-slate-50 dark:bg-slate-900 border ${!formData.subcategory && stepError ? 'border-rose-500' : 'border-slate-100 dark:border-slate-800'} rounded-xl px-4 text-sm font-bold text-slate-900 dark:text-white appearance-none`}
+                    className={`w-full h-14 bg-slate-50 dark:bg-slate-800 border ${!formData.subcategory && stepError ? 'border-rose-500' : 'border-slate-100 dark:border-slate-800'} rounded-xl px-4 text-sm font-bold text-slate-900 dark:text-white appearance-none`}
                   >
                     <option value="">Select Specific Grade</option>
                     {availableCategories.find(c => c.id === formData.category)?.subcategories.map(s => (
@@ -355,7 +355,7 @@ export default function AgentSellStock() {
                   type="number"
                   value={formData.minOrder}
                   onChange={(e) => setFormData({ ...formData, minOrder: e.target.value })}
-                  className="w-full h-14 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl px-4 text-sm font-bold text-slate-900 dark:text-white"
+                  className="w-full h-14 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl px-4 text-sm font-bold text-slate-900 dark:text-white"
                 />
               </div>
               <div>
@@ -365,7 +365,7 @@ export default function AgentSellStock() {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Describe the quality, baling status, or moisture levels..."
-                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 text-sm font-bold text-slate-900 dark:text-white resize-none"
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl p-4 text-sm font-bold text-slate-900 dark:text-white resize-none"
                 />
               </div>
             </div>
@@ -387,7 +387,7 @@ export default function AgentSellStock() {
           <div className="px-1">
             <h2 className="text-xs font-bold text-slate-400 capitalize tracking-widest mb-4">Merchant Card Preview</h2>
             
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-2xl">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-2xl">
               <div className="aspect-video relative">
                 <img src={formData.imageUrl} className="w-full h-full object-cover" />
                 <div className="absolute top-4 left-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-bold text-white capitalize tracking-widest">

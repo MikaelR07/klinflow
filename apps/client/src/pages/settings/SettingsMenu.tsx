@@ -3,8 +3,8 @@
  * Implements the premium 'Command Center' aesthetic for both Residents and Sellers.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { 
-  User, Bell, ShieldCheck, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle, 
+import {
+  User, Bell, ShieldCheck, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle,
   Brain, Zap, ArrowUpRight, ArrowDownLeft, Package,
   TrendingUp, Globe, BarChart3, Briefcase, Award, History, Building2,
   Users, Star, CreditCard, ChevronDown, CheckCircle2, X, Plus, Info, Trophy
@@ -51,63 +51,63 @@ export default function SettingsMenu() {
   }, [bookings, receivedOrders, isSeller, profile, rewardPoints]);
 
   const secondaryMenu = [
-    { 
-      icon: User, label: 'Profile Settings', subtitle: 'Edit Profile & Location', 
-      path: '/settings/profile', color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10' 
+    {
+      icon: User, label: 'Profile Settings', subtitle: 'Edit Profile & Location',
+      path: '/settings/profile', color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10'
     },
-    { 
-      icon: Bell, label: 'Notifications', subtitle: 'Manage alerts & SMS', 
-      path: '/settings/notifications', color: 'text-amber-600 bg-amber-50 dark:bg-amber-500/10' 
+    {
+      icon: Bell, label: 'Notifications', subtitle: 'Manage alerts & SMS',
+      path: '/settings/notifications', color: 'text-amber-600 bg-amber-50 dark:bg-amber-500/10'
     },
-    { 
-      icon: ShieldCheck, label: 'Privacy and Security', subtitle: 'Passcode & Encryption', 
-      path: '/settings/privacy', color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' 
+    {
+      icon: ShieldCheck, label: 'Privacy and Security', subtitle: 'Passcode & Encryption',
+      path: '/settings/privacy', color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10'
     },
     ...(isSeller ? [
-      { 
-        icon: Building2, label: 'Business Profile', subtitle: 'NEMA & Trade Details', 
-        path: '/settings/profile', color: 'text-blue-600 bg-blue-50 dark:bg-blue-500/10' 
+      {
+        icon: Building2, label: 'Business Profile', subtitle: 'NEMA & Trade Details',
+        path: '/settings/profile', color: 'text-blue-600 bg-blue-50 dark:bg-blue-500/10'
       }
     ] : []),
-    { 
-      icon: HelpCircle, label: 'Support Center', subtitle: 'Help & WhatsApp', 
-      path: '/settings/support', color: 'text-slate-600 bg-slate-50 dark:bg-slate-500/10' 
+    {
+      icon: HelpCircle, label: 'Support Center', subtitle: 'Help & WhatsApp',
+      path: '/settings/support', color: 'text-slate-600 bg-slate-50 dark:bg-slate-500/10'
     },
-    { 
-      icon: MessageCircle, label: 'Give Feedback', subtitle: 'Help us improve', 
-      path: '/settings/feedback', color: 'text-rose-600 bg-rose-50 dark:bg-rose-500/10' 
+    {
+      icon: MessageCircle, label: 'Give Feedback', subtitle: 'Help us improve',
+      path: '/settings/feedback', color: 'text-rose-600 bg-rose-50 dark:bg-rose-500/10'
     },
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors pb-24">
-      
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-24">
+
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800  transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-700  transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
             <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Profile & Settings</p>
           </div>
           <div className="flex items-center gap-2">
-             <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shadow-sm shadow-primary/10">
-                <p className="text-[10px] font-black text-primary capitalize tracking-[0.2em]">{roleLabel}</p>
-             </div>
+            <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shadow-sm shadow-primary/10">
+              <p className="text-[10px] font-black text-primary capitalize tracking-[0.2em]">{roleLabel}</p>
+            </div>
           </div>
         </div>
       </div>
 
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
-        
+
         {/* ── PROFILE BENTO CARD ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-10 -mt-10" />
+        <div className="bg-white dark:bg-slate-900/50 rounded-2xl p-4  dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+
           <div className="flex items-center gap-4 relative z-10">
             <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-4 border-white dark:border-slate-900 shadow-xl overflow-hidden flex items-center justify-center text-3xl">
               {profile?.avatarUrl && !imgError ? (
-                <img 
-                  src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} 
-                  className="w-full h-full object-cover" 
+                <img
+                  src={getThumbnailUrl(profile.avatarUrl, { width: 300 })}
+                  className="w-full h-full object-cover"
                   onError={() => setImgError(true)}
                 />
               ) : (
@@ -123,125 +123,125 @@ export default function SettingsMenu() {
               </div>
             </div>
           </div>
- 
+
           {/* Quick Stats Grid */}
           <div className={`grid ${isSeller ? 'grid-cols-3' : 'grid-cols-2'} gap-3 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800`}>
-             {isSeller && (
-               <button 
-                  onClick={() => navigate('/circular-resume')}
-                  className="flex flex-col items-center text-center p-3 rounded-xl bg-indigo-600 dark:bg-indigo-700 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent shadow-sm active:scale-95 group"
-               >
-                  <Award className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                  <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
-                  <p className="text-xs font-bold text-white capitalize leading-none">Klin Resumé</p>
-               </button>
-             )}
-             <button 
-                onClick={() => navigate(isSeller ? '/market-pulse' : '/analytics')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-emerald-600 dark:bg-emerald-700 text-white hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-all border border-transparent shadow-sm active:scale-95 group"
-             >
-                <TrendingUp className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Activity</p>
-                <p className="text-xs font-bold text-white capitalize leading-none">{isSeller ? 'Market Prices' : 'Analytics'}</p>
-             </button>
-             <button 
-                onClick={() => navigate('/leaderboard')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-all border border-transparent shadow-sm active:scale-95 group"
-             >
-                <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
-                <p className="text-xs font-bold text-white capitalize leading-none">Leaderboard</p>
-             </button>
+            {isSeller && (
+              <button
+                onClick={() => navigate('/circular-resume')}
+                className="flex flex-col items-center text-center p-3 rounded-xl bg-indigo-600 dark:bg-indigo-700 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent shadow-sm active:scale-95 group"
+              >
+                <Award className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
+                <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
+                <p className="text-xs font-bold text-white capitalize leading-none">Klin Resumé</p>
+              </button>
+            )}
+            <button
+              onClick={() => navigate(isSeller ? '/trust-score' : '/Analytics')}
+              className="flex flex-col items-center text-center p-3 rounded-xl bg-emerald-600 dark:bg-emerald-700 text-white hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-all border border-transparent shadow-sm active:scale-95 group"
+            >
+              <TrendingUp className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
+              <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Activity</p>
+              <p className="text-xs font-bold text-white capitalize leading-none">{isSeller ? 'Trust score' : 'Analytics'}</p>
+            </button>
+            <button
+              onClick={() => navigate('/leaderboard')}
+              className="flex flex-col items-center text-center p-3 rounded-xl bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-all border border-transparent shadow-sm active:scale-95 group"
+            >
+              <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
+              <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
+              <p className="text-xs font-bold text-white capitalize leading-none">Leaderboard</p>
+            </button>
           </div>
         </div>
- 
+
         {/* ── QUICK ACCESS SECTION ── */}
-        <div className="space-y-3">
-           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Managed Services</p>
-           <div className="grid grid-cols-2 gap-3">
-              {isSeller ? (
-                <>
-                  <button onClick={() => navigate('/inventory')} className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
-                    <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0">
-                      <Package className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Inventory</p>
-                      <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Ledger</p>
-                    </div>
-                  </button>
-                  <button onClick={() => navigate('/my-offers')} className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-500 shrink-0">
-                      <Briefcase className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Trades</p>
-                      <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Orders</p>
-                    </div>
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button onClick={() => navigate('/my-bookings')} className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
-                      <History className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Bookings</p>
-                      <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Pickup Log</p>
-                    </div>
-                  </button>
-                  <button onClick={() => navigate('/impact-hub')} className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
-                      <Globe className="w-5 h-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Impact Hub</p>
-                      <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Green Eco</p>
-                    </div>
-                  </button>
-                </>
-              )}
-           </div>
+        <div className="space-y-3 bg-white !mt-2 dark:bg-slate-900/50 rounded-2xl p-3 border border-slate-200/50 dark:border-slate-800">
+          <p className="text-[10px] font-black text-slate-600 capitalize tracking-[0.2em] px-2">Managed Services</p>
+          <div className="grid grid-cols-2 gap-3">
+            {isSeller ? (
+              <>
+                <button onClick={() => navigate('/inventory')} className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0">
+                    <Package className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Inventory</p>
+                    <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Ledger</p>
+                  </div>
+                </button>
+                <button onClick={() => navigate('/my-offers')} className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-500 shrink-0">
+                    <Briefcase className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Trades</p>
+                    <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Orders</p>
+                  </div>
+                </button>
+              </>
+            ) : (
+              <>
+                <button onClick={() => navigate('/my-bookings')} className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
+                    <History className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Bookings</p>
+                    <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Pickup Log</p>
+                  </div>
+                </button>
+                <button onClick={() => navigate('/impact-hub')} className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+                    <Globe className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Impact Hub</p>
+                    <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Green Eco</p>
+                  </div>
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
         {/* ── INTELLIGENCE & APPEARANCE ── */}
-        <div className="space-y-3">
+        <div className="space-y-3 ">
           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
-             <div className="p-5 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                   <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
-                      <Brain className="w-5 h-5" />
-                   </div>
-                   <div className="text-left">
-                      <p className="text-sm font-semibold text-slate-900 dark:text-white">HygeneX History</p>
-                      <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">Save AI Conversations</p>
-                   </div>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+            <div className="p-5 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
+                  <Brain className="w-5 h-5" />
                 </div>
-                <button 
-                  onClick={() => {
-                     const newVal = !saveChatHistory;
-                     setSaveChatHistory(newVal);
-                     localStorage.setItem('saveAiChatHistory', newVal.toString());
-                     toast.success(`Chat History ${newVal ? 'Enabled' : 'Disabled'}`);
-                  }}
-                  className={`w-11 h-6 rounded-full p-1 transition-all ${saveChatHistory ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-slate-200 dark:bg-slate-700'}`}
-                >
-                  <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${saveChatHistory ? 'translate-x-5' : 'translate-x-0'}`} />
-                </button>
-             </div>
-             <ThemeToggleRow />
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">HygeneX History</p>
+                  <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">Save AI Conversations</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  const newVal = !saveChatHistory;
+                  setSaveChatHistory(newVal);
+                  localStorage.setItem('saveAiChatHistory', newVal.toString());
+                  toast.success(`Chat History ${newVal ? 'Enabled' : 'Disabled'}`);
+                }}
+                className={`w-11 h-6 rounded-full p-1 transition-all ${saveChatHistory ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-slate-200 dark:bg-slate-700'}`}
+              >
+                <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${saveChatHistory ? 'translate-x-5' : 'translate-x-0'}`} />
+              </button>
+            </div>
+            <ThemeToggleRow />
           </div>
         </div>
 
         {/* ── SECONDARY SETTINGS MENU ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
           <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {secondaryMenu.map((item, i) => (
-              <button 
-                key={i} 
-                onClick={() => navigate(item.path)} 
+              <button
+                key={i}
+                onClick={() => navigate(item.path)}
                 className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.color}`}>
@@ -258,10 +258,10 @@ export default function SettingsMenu() {
         </div>
 
         {/* ── LOGOUT ── */}
-        <button 
+        <button
           onClick={async () => {
-              await logout();
-              navigate('/login', { replace: true });
+            await logout();
+            navigate('/login', { replace: true });
           }}
           className="w-full py-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
         >
@@ -269,8 +269,8 @@ export default function SettingsMenu() {
         </button>
 
         <div className="text-center space-y-1 py-4">
-           <p className="text-[10px] font-black text-slate-300 dark:text-slate-700 capitalize tracking-[0.5em]">Klinflow Operating System</p>
-           <p className="text-[8px] font-bold text-slate-400 dark:text-slate-600 capitalize tracking-widest">V1.0.4 • Kenya Eco-System</p>
+          <p className="text-[10px] font-black text-slate-300 dark:text-slate-700 capitalize tracking-[0.5em]">Klinflow Operating System</p>
+          <p className="text-[8px] font-bold text-slate-400 dark:text-slate-600 capitalize tracking-widest">V1.0.4 • Kenya Eco-System</p>
         </div>
       </main>
 

@@ -32,6 +32,7 @@ const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
 const CreateRFQPage = lazy(() => import('./pages/agent/CreateRFQPage'));
 const MyRFQs = lazy(() => import('./pages/agent/MyRFQs'));
 const RFQDetailsPage = lazy(() => import('./pages/agent/RFQDetailsPage'));
+const ActivePickupsPage = lazy(() => import('./pages/agent/ActivePickupsPage'));
 
 // Settings Pages
 const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
@@ -55,12 +56,14 @@ const CompanyAdminDashboard = lazy(() => import('./pages/admin/CompanyAdminDashb
 const FleetManagement = lazy(() => import('./pages/admin/FleetManagement'));
 const FleetFinance = lazy(() => import('./pages/admin/FleetFinance'));
 const FleetRFQs = lazy(() => import('./pages/admin/FleetRFQs'));
+const DispatchDashboard = lazy(() => import('./pages/admin/DispatchDashboard'));
+const FleetDriverPickups = lazy(() => import('./pages/agent/FleetDriverPickups'));
 
 function MobileLayout() {
   const { availableJobs } = useAgentStore();
   const { listings, fetchListings } = useMarketplaceStore();
   const { profile } = useAuthStore();
-  
+
   const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
 
   useEffect(() => { fetchListings(); }, []);
@@ -74,21 +77,31 @@ function MobileLayout() {
   ];
 
   return (
-    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-900">
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-800">
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] pb-[calc(env(safe-area-inset-bottom,0px)+6rem)] px-1">
         <Suspense fallback={<LoadingScreen message="Loading..." />}>
           <Outlet />
         </Suspense>
       </div>
-      <div className="fixed bottom-0 left-0 right-0 z-[100] max-w-lg mx-auto pb-[env(safe-area-inset-bottom,0px)] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800">
+      <div className="fixed bottom-0 left-0 right-0 z-[100] max-w-lg mx-auto pb-[env(safe-area-inset-bottom,0px)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800">
         <BottomNav items={AGENT_NAV} />
       </div>
     </div>
   );
 }
 
+import PendingApproval from './pages/agent/PendingApproval';
+
 function DynamicRoleLayout() {
   const { profile } = useAuthStore();
+  
+  const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
+  const hasCompany = !!(profile as any)?.company_id;
+
+  if (isFleetDriver && !hasCompany) {
+    return <PendingApproval />;
+  }
+
   if (profile?.agentAccountType === 'company_admin') {
     return <AdminLayout />;
   }
@@ -160,7 +173,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-900 transition-colors duration-200">
+    <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
       <Routes>
         <Route path="/welcome" element={isAuthenticated ? <Navigate to="/" replace /> : <Welcome />} />
         <Route path="/role-selection" element={isAuthenticated ? <Navigate to="/" replace /> : <RoleSelection />} />
@@ -180,15 +193,20 @@ export default function App() {
             <Route path="/rfq/create" element={<CreateRFQPage />} />
             <Route path="/rfqs" element={<MyRFQs />} />
             <Route path="/rfqs/:rfqId" element={<RFQDetailsPage />} />
+            <Route path="/pickups" element={<ActivePickupsPage />} />
             <Route path="/trades" element={<MyTrades />} />
             <Route path="/earnings" element={<EarningsPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/notifications" element={<NotificationsFeed />} />
-            
+
             <Route path="/admin/agents" element={<FleetManagement />} />
             <Route path="/admin/earnings" element={<EarningsPage />} />
             <Route path="/admin/finance" element={<FleetFinance />} />
             <Route path="/admin/rfqs" element={<FleetRFQs />} />
+            <Route path="/admin/dispatch" element={<DispatchDashboard />} />
+
+            {/* Driver Routes */}
+            <Route path="/driver/pickups" element={<FleetDriverPickups />} />
 
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />
@@ -206,8 +224,8 @@ export default function App() {
         </Route>
       </Routes>
 
-      <PWAInstallModal 
-        isOpen={showInstallModal} 
+      <PWAInstallModal
+        isOpen={showInstallModal}
         onClose={() => setShowInstallModal(false)}
         onInstall={() => {
           setShowInstallModal(false);

@@ -35,7 +35,7 @@ export default function Header() {
   }, [location]);
 
   const productLinks = [
-    { name: 'Resident / Seller App', desc: 'Household waste & B2B listings', path: '/products/client', icon: User, color: 'text-emerald-500' },
+    { name: 'Resident / Seller App', desc: 'Household waste & B2B listings', path: '/products/client', icon: User, color: 'text-primary' },
     { name: 'Agent Terminal', desc: 'Mission control for collectors', path: '/products/agent', icon: Truck, color: 'text-blue-500' },
     { name: 'Fleet Manager', desc: 'Admin dashboard for company owners', path: '/products/fleet', icon: Building2, color: 'text-indigo-500' },
     { name: 'Hub Logistics', desc: 'Intake and processing system', path: '/products/hub', icon: Warehouse, color: 'text-rose-500' },
@@ -50,10 +50,10 @@ export default function Header() {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled || mobileMenuOpen ? (isDarkMode ? 'bg-slate-900/95 border-white/5' : 'bg-white/95 border-slate-200') + ' backdrop-blur-xl border-b py-4' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled || mobileMenuOpen ? (isDarkMode ? 'bg-surface-950/95 border-white/5' : 'bg-white/95 border-slate-200') + ' backdrop-blur-xl border-b py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
             <Leaf className="w-6 h-6 text-white" />
           </div>
           <span className={`text-xl font-bold tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Klinflow</span>
@@ -78,7 +78,7 @@ export default function Header() {
                   exit={{ opacity: 0, y: 10 }}
                   onMouseEnter={() => setProductsOpen(true)}
                   onMouseLeave={() => setProductsOpen(false)}
-                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] p-4 rounded-2xl border shadow-2xl ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-100'}`}
+                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] p-4 rounded-2xl border shadow-2xl ${isDarkMode ? 'bg-surface-950 border-white/5' : 'bg-white border-slate-100'}`}
                 >
                   <div className="grid grid-cols-2 gap-2">
                     {productLinks.map((link) => (
@@ -104,7 +104,7 @@ export default function Header() {
           <Link to="/marketplace" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Marketplace</Link>
           
           <div className="flex items-center gap-4 ml-4">
-            <button onClick={toggleTheme} className={`p-2.5 rounded-full transition-colors ${isDarkMode ? 'bg-slate-800 text-yellow-400 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}>
+            <button onClick={toggleTheme} className={`p-2.5 rounded-full transition-colors ${isDarkMode ? 'bg-surface-800 text-yellow-400 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}>
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
           </div>
@@ -128,7 +128,7 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className={`md:hidden overflow-hidden border-b ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200'}`}
+            className={`md:hidden overflow-hidden border-b ${isDarkMode ? 'bg-surface-950 border-white/5' : 'bg-white border-slate-200'}`}
           >
             <div className="p-6 space-y-8">
               <div className="grid gap-6">
@@ -148,10 +148,10 @@ export default function Header() {
               
               <div className={`flex flex-col gap-3 pt-8 border-t ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
                 <Link to="/system" className={`px-5 py-3.5 rounded-xl border text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
-                  System Architecture <ChevronRight className="w-4 h-4 text-emerald-500" />
+                  System Architecture <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
                 <Link to="/marketplace" className={`px-5 py-3.5 rounded-xl border text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
-                  B2B Marketplace <ChevronRight className="w-4 h-4 text-emerald-500" />
+                  B2B Marketplace <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
               </div>
             </div>

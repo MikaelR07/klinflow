@@ -149,16 +149,7 @@ export default function FleetFinance() {
 
   return (
     <div className="space-y-6 animate-fade-in pb-20">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button onClick={() => navigate(-1)} className="p-2.5 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-white/5">
-          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-        </button>
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Fleet Finance</h1>
-          <p className="text-xs text-slate-500 font-medium capitalize tracking-widest mt-0.5">Fund Requests & Disbursement</p>
-        </div>
-      </div>
+      {/* No Header needed - Sidebar handles navigation */}
 
       {/* Company Wallet Summary */}
       <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-[1.5rem] p-6 text-white relative overflow-hidden shadow-xl">
@@ -190,7 +181,7 @@ export default function FleetFinance() {
             <p className="text-[10px] font-bold capitalize tracking-widest">Loading...</p>
           </div>
         ) : requests.length === 0 ? (
-          <div className="bg-white dark:bg-slate-900 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl py-14 text-center space-y-3">
+          <div className="bg-white dark:bg-slate-800 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl py-14 text-center space-y-3">
             <div className="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto opacity-40">
               <ShieldCheck className="w-6 h-6 text-slate-400" />
             </div>
@@ -211,7 +202,7 @@ export default function FleetFinance() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -30 }}
-                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden"
+                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-2xl shadow-sm overflow-hidden"
                   >
                     {/* Collapsed Row */}
                     <button 

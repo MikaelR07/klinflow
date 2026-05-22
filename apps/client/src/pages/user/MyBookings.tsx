@@ -88,11 +88,10 @@ const to24h = (time12: string) => {
 };
 
 const BookingCounter = ({ count, active }: { count: number, active: boolean }) => (
-  <span className={`ml-1.5 px-1.5 py-0.5 text-xs font-semibold rounded-full transition-all ${
-    active 
-      ? 'bg-primary text-white scale-110 shadow-sm shadow-primary/30' 
-      : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
-  }`}>
+  <span className={`ml-1.5 px-1.5 py-0.5 text-xs font-semibold rounded-full transition-all ${active
+    ? 'bg-primary text-white scale-110 shadow-sm shadow-primary/30'
+    : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+    }`}>
     {count}
   </span>
 );
@@ -102,7 +101,7 @@ export default function MyBookings() {
   const { bookings, fetchBookings, cancelBooking, rescheduleBooking, clearBookingHistory } = useBookingStore();
   const [activeTab, setActiveTab] = useState('Upcoming');
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
-  
+
   // Reschedule Modal State
   const [reschedulingBooking, setReschedulingBooking] = useState<any>(null);
   const [newDate, setNewDate] = useState(new Date().toLocaleDateString('en-CA'));
@@ -127,7 +126,7 @@ export default function MyBookings() {
     if (activeTab === 'Upcoming') {
       return ['pending', 'confirmed', 'scheduled', 'in-progress', 'assigned', 'arrived', 'picked_up'].includes(b.status);
     }
-    
+
     // Privacy Clearing Logic (Timestamp Approach)
     const clearedAtStr = activeTab === 'Completed' ? profile?.completedClearedAt : profile?.cancelledClearedAt;
     let clearedAt = 0;
@@ -141,19 +140,19 @@ export default function MyBookings() {
     if (activeTab === 'Completed') {
       return b.status === 'completed' && bookingTime > clearedAt;
     }
-    
+
     if (activeTab === 'Cancelled') {
       return b.status === 'cancelled' && bookingTime > clearedAt;
     }
-    
+
     return true;
   });
 
   const handleCancel = (id: string) => {
     cancelBooking(id);
     setActiveTab('Cancelled');
-    toast.success('Booking Cancelled', { 
-      description: `Pickup ${id} has been moved to history.` 
+    toast.success('Booking Cancelled', {
+      description: `Pickup ${id} has been moved to history.`
     });
   };
 
@@ -173,10 +172,10 @@ export default function MyBookings() {
         notes: reschedulingBooking.notes,
         phone: reschedulingBooking.phone
       });
-      
+
       if (result.success) {
-        toast.success('Pickup Rescheduled!', { 
-          description: `Your pickup is now set for ${newDate} at ${newTime}.` 
+        toast.success('Pickup Rescheduled!', {
+          description: `Your pickup is now set for ${newDate} at ${newTime}.`
         });
         setReschedulingBooking(null);
         fetchBookings(); // Refresh list
@@ -194,8 +193,8 @@ export default function MyBookings() {
     try {
       await clearBookingHistory(type);
       const label = type === 'completed' ? 'Completed' : 'Cancelled';
-      toast.success(`${label} History Cleared`, { 
-        description: 'Past reports have been hidden from your view.' 
+      toast.success(`${label} History Cleared`, {
+        description: 'Past reports have been hidden from your view.'
       });
     } catch (err) {
       toast.error('Clear failed');
@@ -203,20 +202,20 @@ export default function MyBookings() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="w-full mx-auto space-y-4">
           <div className="flex items-center justify-between">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
               <ArrowLeft className="w-4 h-4 dark:text-white" />
             </button>
-            
+
             <div className="text-center">
               <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
               <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup History</p>
             </div>
-            
+
             <div className="w-10" /> {/* Spacer */}
           </div>
 
@@ -230,7 +229,7 @@ export default function MyBookings() {
                 if (tab === 'Upcoming') {
                   return ['pending', 'confirmed', 'scheduled', 'in-progress', 'assigned', 'arrived', 'picked_up'].includes(b.status);
                 }
-                
+
                 const clearedAtStr = tab === 'Completed' ? profile?.completedClearedAt : profile?.cancelledClearedAt;
                 let clearedAt = 0;
                 if (clearedAtStr) {
@@ -244,16 +243,15 @@ export default function MyBookings() {
                 if (tab === 'Cancelled') return b.status === 'cancelled' && bookingTime > clearedAt;
                 return false;
               }).length;
-              
+
               return (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-2 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${
-                    activeTab === tab 
-                      ? 'bg-white dark:bg-slate-700 shadow-sm text-primary dark:text-white' 
-                      : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
-                  }`}
+                  className={`flex-1 py-2 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${activeTab === tab
+                    ? 'bg-white dark:bg-slate-700 shadow-sm text-primary dark:text-white'
+                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+                    }`}
                 >
                   {tab}
                   <BookingCounter count={tabCount} active={activeTab === tab} />
@@ -266,81 +264,82 @@ export default function MyBookings() {
 
       <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+6rem)] px-0 relative max-w-lg mx-auto w-full space-y-4">
 
-      {filteredBookings.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center px-4">
-          <Package className="w-12 h-12 text-slate-300 dark:text-slate-600 mb-4" />
-          <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">{`No ${activeTab.toLowerCase()} bookings`}</p>
-          <p className="text-xs font-medium text-slate-400">
-            {activeTab === 'Upcoming' ? "Book your first pickup to get started!" : 
-             activeTab === 'Completed' ? "No completed bookings made yet." : 
-             "Your cancelled history will appear here."}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-1">
-          {(activeTab === 'Cancelled' || activeTab === 'Completed') && (
-            <div className="flex justify-end mb-2 px-4">
-              <button 
-                onClick={() => handleClearHistory(activeTab.toLowerCase())}
-                className="text-xs font-bold text-rose-600 hover:underline px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg flex items-center gap-2"
-              >
-                clear
-              </button>
-            </div>
-          )}
-          {filteredBookings.map((b: any) => {
-            const wasteTypeVal = b.wasteType;
-            const waste = categories.find((w: any) => w.slug === wasteTypeVal) || 
-                          categories.find((w: any) => w.id === wasteTypeVal);
-            const status = (statusConfig as any)[b.status] || statusConfig.pending;
-            const displayDate = b.status === 'completed'
-              ? new Date((b as any).createdAt).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })
-              : b.date;
-            
-            return (
-              <div 
-                key={b.id} 
-                className="w-full bg-white dark:bg-slate-900 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-800/80 hover:shadow-lg transition-all overflow-hidden"
-              >
-                {/* Clickable Header */}
-                <div 
-                  className="p-4 cursor-pointer active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
-                  onClick={() => setSelectedBooking(b)}
+        {filteredBookings.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center px-4">
+            <Package className="w-12 h-12 text-slate-300 dark:text-slate-600 mb-4" />
+            <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">{`No ${activeTab.toLowerCase()} bookings`}</p>
+            <p className="text-xs font-medium text-slate-400">
+              {activeTab === 'Upcoming' ? "Book your first pickup to get started!" :
+                activeTab === 'Completed' ? "No completed bookings made yet." :
+                  "Your cancelled history will appear here."}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-1">
+            {(activeTab === 'Cancelled' || activeTab === 'Completed') && (
+              <div className="flex justify-end mb-2 px-4">
+                <button
+                  onClick={() => handleClearHistory(activeTab.toLowerCase())}
+                  className="text-xs font-bold text-rose-600 hover:underline px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg flex items-center gap-2"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shadow-inner border border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
-                        {b.photoUrl ? (
-                          <img src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" loading="lazy" />
-                        ) : (
-                          waste?.icon || '📦'
-                        )}
+                  clear
+                </button>
+              </div>
+            )}
+            {filteredBookings.map((b: any) => {
+              const wasteTypeVal = b.wasteType;
+              const waste = categories.find((w: any) => w.slug === wasteTypeVal) ||
+                categories.find((w: any) => w.id === wasteTypeVal);
+              const status = (statusConfig as any)[b.status] || statusConfig.pending;
+              const displayDate = b.status === 'completed'
+                ? new Date((b as any).createdAt).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })
+                : b.date;
+
+              return (
+                <div
+                  key={b.id}
+                  className="w-full bg-white dark:bg-slate-900/50 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-800/80 hover:shadow-lg transition-all overflow-hidden"
+                >
+                  {/* Clickable Header */}
+                  <div
+                    className="p-4 cursor-pointer active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
+                    onClick={() => setSelectedBooking(b)}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shadow-inner border border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
+                          {b.photoUrl ? (
+                            <img src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" loading="lazy" />
+                          ) : (
+                            waste?.icon || '📦'
+                          )}
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
+                            material-type:<span className="text-slate-900 dark:text-white">{waste?.label || wasteTypeVal}</span>
+                          </p>
+                          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
+                            ID: <span className="text-primary font-mono">{b.id.slice(0, 8).toUpperCase()}</span>
+                          </p>
+                          <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1.5">
+                            <MapPin className="w-3 h-3 text-slate-400" /> {b.estate}
+                          </p>
+                        </div>
                       </div>
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
-                          material-type:<span className="text-slate-900 dark:text-white">{waste?.label || wasteTypeVal}</span>
-                        </p>
-                        <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
-                          ID: <span className="text-primary font-mono">{b.id.slice(0, 8).toUpperCase()}</span>
-                        </p>
-                        <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1.5">
-                          <MapPin className="w-3 h-3 text-slate-400" /> {b.estate}
-                        </p>
+                      <div className="text-right flex flex-col items-end gap-1.5">
+                        <span className={`text-[10px] font-black tracking-widest px-2 py-0.5 rounded-lg ${status.color}`}>
+                          {status.label}
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-slate-300 -rotate-90" />
                       </div>
-                    </div>
-                    <div className="text-right flex flex-col items-end gap-1.5">
-                      <span className={`text-[10px] font-black tracking-widest px-2 py-0.5 rounded-lg ${status.color}`}>
-                        {status.label}
-                      </span>
-                      <ChevronDown className="w-4 h-4 text-slate-300 -rotate-90" />
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {/* ── RESCHEDULE MODAL ── */}
       <AnimatePresence>
@@ -355,7 +354,7 @@ export default function MyBookings() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl space-y-8"
+              className="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl space-y-8"
             >
               <div className="text-center space-y-2">
                 <div className="w-16 h-16 bg-blue-50 dark:bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -368,7 +367,7 @@ export default function MyBookings() {
               <div className="space-y-4">
                 <div className="space-y-3">
                   <label className="text-[10px] font-bold text-slate-400 capitalize tracking-widest px-1">New Date</label>
-                  <input 
+                  <input
                     type="date"
                     value={newDate}
                     onChange={(e) => setNewDate(e.target.value)}
@@ -382,11 +381,10 @@ export default function MyBookings() {
                       <button
                         key={slot.id}
                         onClick={() => setNewTime(slot.value)}
-                        className={`py-3 rounded-xl text-[10px] font-black capitalize transition-all ${
-                          newTime === slot.value 
-                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' 
-                            : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
-                        }`}
+                        className={`py-3 rounded-xl text-[10px] font-black capitalize transition-all ${newTime === slot.value
+                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
+                          : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
+                          }`}
                       >
                         {slot.label.split(' ')[0]}
                       </button>
@@ -396,13 +394,13 @@ export default function MyBookings() {
               </div>
 
               <div className="flex gap-3 pt-4">
-                <button 
+                <button
                   onClick={() => setReschedulingBooking(null)}
                   className="flex-1 py-4 text-slate-400 font-bold text-[10px] capitalize tracking-widest active:opacity-50"
                 >
                   Cancel
                 </button>
-                <button 
+                <button
                   disabled={isSubmitting}
                   onClick={handleRescheduleSubmit}
                   className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] capitalize tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all disabled:opacity-50"
@@ -420,21 +418,21 @@ export default function MyBookings() {
         {selectedBooking && (() => {
           const b = selectedBooking;
           const wasteTypeVal = String(b.wasteType || '');
-          const waste = categories.find((w: any) => w.slug === wasteTypeVal) || 
-                        categories.find((w: any) => w.id === wasteTypeVal);
+          const waste = categories.find((w: any) => w.slug === wasteTypeVal) ||
+            categories.find((w: any) => w.id === wasteTypeVal);
           const status = (statusConfig as any)[b.status] || { label: String(b.status || ''), color: 'bg-slate-100 text-slate-600', icon: Info };
-          
+
           return (
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-0 z-[1000] bg-white dark:bg-slate-900 flex flex-col"
+              className="fixed inset-0 z-[1000] bg-white dark:bg-slate-800 flex flex-col"
             >
-              <div className="bg-white dark:bg-slate-900 pt-[env(safe-area-inset-top,0px)] border-b border-slate-100 dark:border-slate-800">
+              <div className="bg-white dark:bg-slate-800 pt-[env(safe-area-inset-top,0px)] border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center justify-between px-4 py-3">
-                  <button 
+                  <button
                     onClick={() => setSelectedBooking(null)}
                     className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-90 transition-all text-slate-600 dark:text-white"
                   >
@@ -448,9 +446,9 @@ export default function MyBookings() {
               <div className="flex-1 overflow-y-auto no-scrollbar">
                 <div className="w-full aspect-[4/5] bg-slate-900 relative overflow-hidden">
                   {b.photoUrl ? (
-                    <img 
-                      src={getThumbnailUrl(b.photoUrl, { width: 800 })} 
-                      className="w-full h-full object-cover" 
+                    <img
+                      src={getThumbnailUrl(b.photoUrl, { width: 800 })}
+                      className="w-full h-full object-cover"
                       alt="Material pickup"
                     />
                   ) : (
@@ -461,7 +459,7 @@ export default function MyBookings() {
                   )}
                 </div>
 
-                <div className="relative -mt-24 bg-white dark:bg-slate-900 rounded-t-[1rem] px-4 pt-6 pb-24 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
+                <div className="relative -mt-24 bg-white dark:bg-slate-800 rounded-t-[1rem] px-4 pt-6 pb-24 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
                   <div className="inline-flex items-center px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl">
                     <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest">pickup id: <span className="text-slate-900 dark:text-white font-mono">{String(b.id || '').slice(0, 8).toUpperCase()}</span></p>
                   </div>
@@ -486,7 +484,7 @@ export default function MyBookings() {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 rounded-[2rem] shadow-xl shadow-emerald-600/10 space-y-6 relative overflow-hidden">
+                  <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 rounded-[2rem]  space-y-6 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
                     <div className="flex items-center justify-between relative z-10">
                       <div className="space-y-1">
@@ -500,25 +498,25 @@ export default function MyBookings() {
                         ) : (
                           <div className="flex flex-col gap-1">
                             <p className="text-xl font-black text-white tracking-tighter flex items-center gap-2 leading-none">
-                               <Zap className="w-4 h-4 fill-emerald-300" /> Awaiting Verification
+                              <Zap className="w-4 h-4 fill-emerald-300" /> Awaiting Verification
                             </p>
                           </div>
                         )}
                       </div>
                       <div className="text-right">
-                         <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest mb-2">Est. Weight</p>
-                         <div className="flex items-center gap-2 justify-end">
-                            <Scale className="w-4 h-4 text-emerald-200" />
-                            <p className="text-lg font-black text-white capitalize leading-none">{b.actualWeightKg || b.bags || 0} KG</p>
-                         </div>
+                        <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest mb-2">Est. Weight</p>
+                        <div className="flex items-center gap-2 justify-end">
+                          <Scale className="w-4 h-4 text-emerald-200" />
+                          <p className="text-lg font-black text-white capitalize leading-none">{b.actualWeightKg || b.bags || 0} KG</p>
+                        </div>
                       </div>
                     </div>
                     <div className="h-px bg-white/10 relative z-10" />
                     <div className="space-y-2 relative z-10">
                       <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest">Scheduled Slot</p>
                       <div className="flex items-center gap-3">
-                         <Clock className="w-4 h-4 text-emerald-200" />
-                         <p className="text-base font-bold text-white capitalize tracking-tight">{String((b as any).timeSlot || 'ASAP Request')}</p>
+                        <Clock className="w-4 h-4 text-emerald-200" />
+                        <p className="text-base font-bold text-white capitalize tracking-tight">{String((b as any).timeSlot || 'ASAP Request')}</p>
                       </div>
                     </div>
                   </div>
@@ -531,24 +529,24 @@ export default function MyBookings() {
 
                   {(b.notes || b.wasteType) && (
                     <div className="bg-slate-50 dark:bg-slate-800/40 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                       <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
-                         <Info className="w-4 h-4 text-primary" /> Collector Instructions
-                       </h4>
-                       <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
-                         "{String(b.notes || `Please collect ${waste?.label || wasteTypeVal} from ${b.estate || 'location'}. Standard verification applies.`)}"
-                       </p>
+                      <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
+                        <Info className="w-4 h-4 text-primary" /> Collector Instructions
+                      </h4>
+                      <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
+                        "{String(b.notes || `Please collect ${waste?.label || wasteTypeVal} from ${b.estate || 'location'}. Standard verification applies.`)}"
+                      </p>
                     </div>
                   )}
 
                   {activeTab === 'Upcoming' && (
                     <div className="flex flex-row gap-2.5 pt-4">
-                      <button 
+                      <button
                         onClick={(e) => { e.stopPropagation(); handleReschedule(b); }}
                         className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] capitalize tracking-[0.1em] shadow-xl shadow-blue-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
                         <CalendarClock className="w-4 h-4" /> Reschedule
                       </button>
-                      <button 
+                      <button
                         onClick={(e) => { e.stopPropagation(); handleCancel(b.id); setSelectedBooking(null); }}
                         className="flex-1 py-4 bg-white dark:bg-slate-800 text-red-600 border border-red-50 dark:border-red-900/20 rounded-2xl font-black text-[10px] capitalize tracking-[0.1em] active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
@@ -556,8 +554,8 @@ export default function MyBookings() {
                       </button>
                     </div>
                   )}
-                  
-                  <button 
+
+                  <button
                     onClick={() => setSelectedBooking(null)}
                     className="w-full py-4 text-slate-400 font-bold text-[10px] capitalize tracking-[0.3em] active:opacity-50"
                   >
@@ -570,6 +568,5 @@ export default function MyBookings() {
         })()}
       </AnimatePresence>
     </div>
-  </div>
   );
 }

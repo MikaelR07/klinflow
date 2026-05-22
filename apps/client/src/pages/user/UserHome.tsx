@@ -4,7 +4,7 @@
  */
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { 
+import {
   Bell, MapPin, Zap, Wallet, Truck, Recycle, TrendingUp,
   ArrowRight, Star, ChevronRight, Trophy, Building2,
   Users, ShieldCheck, X, Sparkles, Search, Brain
@@ -56,7 +56,7 @@ export default function UserHome() {
       subscribeToProfileChanges(profile.id);
       // Realtime subscription handled globally by App.tsx
     }
-    
+
     // Check if prompt was dismissed
     const dismissed = localStorage.getItem('push_prompt_dismissed');
     if (!dismissed && typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
@@ -64,7 +64,7 @@ export default function UserHome() {
     }
 
     // NOTE: Do NOT call cleanupNotifications() or cleanupBookings() here — it destroys the global subscription
-    return () => {};
+    return () => { };
   }, [profile?.id, role]);
 
   // Fetch dynamic global rank
@@ -115,11 +115,11 @@ export default function UserHome() {
   };
 
   const handleWithdraw = () => {
-    if (walletBalance < 100) { 
+    if (walletBalance < 100) {
       toast.warning(`You need KSh ${100 - walletBalance} more to withdraw.`, {
         description: 'Klinflow requires a minimum of KSh 100 for settlement processing.'
-      }); 
-      return; 
+      });
+      return;
     }
     navigate('/withdraw');
   };
@@ -134,7 +134,7 @@ export default function UserHome() {
   }, [bookings]);
 
   const { totalPickups, kgRecovered, treesSaved, co2OffsetTonnes } = metrics;  // 1kg = 1.2kg CO2, divide by 1000 for tonnes
-  
+
   const getImpactLevel = (count: number) => {
     if (count >= 50) return { label: 'Climate Guardian', icon: '🏆', color: 'text-indigo-600 bg-indigo-50 border-indigo-100' };
     if (count >= 20) return { label: 'Eco Warrior', icon: '🛡️', color: 'text-emerald-600 bg-emerald-50 border-emerald-100' };
@@ -161,7 +161,7 @@ export default function UserHome() {
     <div className="space-y-6 px-1.5">
 
       {/* ── PUSH ENROLLMENT MODAL ── */}
-      <PushNotificationModal 
+      <PushNotificationModal
         isOpen={showPushPrompt}
         onClose={() => setShowPushPrompt(false)}
       />
@@ -169,7 +169,7 @@ export default function UserHome() {
       {/* ── TOP NAV & HERO ── */}
       <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
         {/* Header Section - Edge to Edge - DYNAMIC STICKY */}
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800 ">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
@@ -186,12 +186,12 @@ export default function UserHome() {
                 <h1 className="text-xl font-normal italic tracking-tight text-slate-900 dark:text-white leading-tight">
                   Hello {(profile?.fullName || profile?.name || 'Resident').split(' ')[0]}👋
                 </h1>
-                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 w-fit">
-                  <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'Nairobi'}
+                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                  <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'searching...'}
                 </div>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => navigate('/notifications')}
               className="relative w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
             >
@@ -206,126 +206,146 @@ export default function UserHome() {
         </div>
 
         {/* Wallet Hero */}
-        <div className="bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl p-5 shadow-lg gpu-layer">
-        <div className="flex flex-col gap-6 relative z-10">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="text-[11px] font-semibold text-emerald-200/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
-                <Wallet className="w-3 h-3" /> Wallet Balance
-              </p>
-              <h2 className="text-4xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
-                KSh {walletBalance.toLocaleString()}
-              </h2>
-              <div className="flex items-center gap-2 mt-3">
-                <button 
-                  onClick={() => navigate('/impact-hub')}
-                  className="flex items-center gap-1.5 bg-white text-emerald-800 hover:bg-slate-50 dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-white px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
-                >
-                  ⚡ {rewardPoints} GFP
-                </button>
+        <div className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl p-5 shadow-lg gpu-layer">
+          <div className="flex flex-col gap-6 relative z-10">
+            <div className="flex items-end justify-between">
+              <div>
+                <p className="text-[11px] font-semibold text-emerald-200/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                  <Wallet className="w-3 h-3" /> Wallet Balance
+                </p>
+                <h2 className="text-2xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
+                  KSh {walletBalance.toLocaleString()}
+                </h2>
+                <div className="flex items-center gap-2 mt-3">
+                  <button
+                    onClick={() => navigate('/impact-hub')}
+                    className="flex items-center gap-1.5 bg-white text-emerald-800 hover:bg-slate-50 dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-white px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
+                  >
+                    {rewardPoints} GFP
+                  </button>
+                </div>
+              </div>
+
+              <button
+                onClick={handleWithdraw}
+                className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest active:scale-95 transition-all mb-1"
+              >
+                Withdraw
+              </button>
+            </div>
+
+            <div className="flex items-center pt-5 border-t border-white/10 px-1">
+              <div className="flex items-center gap-10 justify-between sm:gap-10">
+                <div>
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Pickups</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
+                </div>
+                <div className="px-4 sm:px-6 border-x border-white/10">
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Recovered</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">CO2 Offset</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
+                </div>
               </div>
             </div>
-            
-            <button 
-              onClick={handleWithdraw}
-              className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest active:scale-95 transition-all mb-1"
-            >
-              Withdraw
+          </div>
+        </div>
+
+        {/* Subscription Tier Card Hidden for Launch */}
+        <div className="bg-white dark:bg-slate-900/50 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2">
+
+          {/* Quick Actions */}
+          <div className="grid grid-cols-3 gap-2.5">
+            <button onClick={() => navigate('/book-pickup')}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
+              <div className="w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center ">
+                <Truck className="w-6 h-6" />
+              </div>
+              <div className="text-center">
+                <p className="text-[8px] font-semibold text-primary capitalize tracking-widest mb-0.5">Book Now</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Pickup</p>
+              </div>
+            </button>
+
+            <button onClick={() => navigate('/my-bookings')}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
+              <div className="w-12 h-12 bg-indigo-500 text-white rounded-xl flex items-center justify-center ">
+                <Recycle className="w-6 h-6" />
+              </div>
+              <div className="text-center">
+                <p className="text-[8px] font-semibold text-indigo-600 capitalize tracking-widest mb-0.5">Track</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Bookings</p>
+              </div>
+            </button>
+
+            <button onClick={() => navigate('/analytics')}
+              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
+              <div className="w-12 h-12 bg-emerald-500 text-white rounded-xl flex items-center justify-center ">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <div className="text-center">
+                <p className="text-[8px] font-semibold text-emerald-600 capitalize tracking-widest mb-0.5">Stats</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
+              </div>
             </button>
           </div>
-          
-          <div className="flex items-center pt-5 border-t border-white/10 px-1">
-            <div className="flex items-center gap-6 sm:gap-10">
+          {/* Discovery Entry Point */}
+          <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+
+            <div className="relative z-10">
+              <h3 className="text-base font-semibold dark:text-white mb-1">Ready to recycle?</h3>
+              <p className="text-xs font-semibold text-slate-400 mb-4">Find a verified collection partner near you</p>
+              <button
+                onClick={() => navigate('/discovery')}
+                className="w-full py-3 bg-emerald-600 text-white rounded-2xl font-semibold text-xs capitalize tracking-widest  flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+              >
+                <Search className="w-3.5 h-3.5" />
+                Find a Partner
+              </button>
+            </div>
+          </div>
+          {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
+          <div
+            onClick={() => navigate('/market-pulse')}
+            className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[4rem] group-hover:bg-emerald-500/10 transition-colors" />
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+                <TrendingUp className="w-5 h-5" />
+              </div>
               <div>
-                <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Pickups</p>
-                <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
+                <p className="text-[9px] font-bold text-slate-500 capitalize tracking-widest flex items-center gap-1.5">
+                  View Material Prices in the Market
+                </p>
               </div>
-              <div className="px-4 sm:px-6 border-x border-white/10">
-                <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Recovered</p>
-                <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
-              </div>
-              <div>
-                <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">CO2 Offset</p>
-                <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
-              </div>
+            </div>
+            <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+              <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Subscription Tier Card Hidden for Launch */}
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-3 gap-2.5">
-        <button onClick={() => navigate('/book-pickup')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-          <div className="w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-            <Truck className="w-6 h-6" />
-          </div>
-          <div className="text-center">
-            <p className="text-[8px] font-semibold text-primary capitalize tracking-widest mb-0.5">Book Now</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Pickup</p>
-          </div>
-        </button>
-
-        <button onClick={() => navigate('/my-bookings')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-          <div className="w-12 h-12 bg-indigo-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-            <Recycle className="w-6 h-6" />
-          </div>
-          <div className="text-center">
-            <p className="text-[8px] font-semibold text-indigo-600 capitalize tracking-widest mb-0.5">Track</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Bookings</p>
-          </div>
-        </button>
-
-        <button onClick={() => navigate('/analytics')}
-          className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-          <div className="w-12 h-12 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-            <TrendingUp className="w-6 h-6" />
-          </div>
-          <div className="text-center">
-            <p className="text-[8px] font-semibold text-emerald-600 capitalize tracking-widest mb-0.5">Stats</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
-          </div>
-        </button>
-
-      </div>
-      </div>
-
-      {/* Discovery Entry Point */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
-        <div className="relative z-10">
-          <h3 className="text-base font-semibold dark:text-white mb-1">Ready to recycle?</h3>
-          <p className="text-xs font-semibold text-slate-400 mb-4">Find a verified collection partner near you</p>
-          <button 
-            onClick={() => navigate('/discovery')}
-            className="w-full py-3 bg-primary text-white rounded-2xl font-semibold text-xs capitalize tracking-widest shadow-lg shadow-primary/30 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
-          >
-            <Search className="w-3.5 h-3.5" />
-            Find a Partner
-          </button>
-        </div>
-      </div>
-
-
       {/* Recent Activity Section */}
-      <div className="bg-slate-100/30 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900/40 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800">
         <div className="flex items-center justify-between mb-6 px-1">
-          <h3 className="font-semibold text-[11px] capitalize tracking-widest text-slate-400">Activity Hub</h3>
-          <button 
+          <h3 className="font-semibold text-[11px] capitalize tracking-widest text-slate-600">Activity Hub</h3>
+          <button
             onClick={() => {
               setIsActivityCleared(true);
               localStorage.setItem(`activity_cleared_${profile?.id}`, 'true');
               toast.info("Activity Feed Cleared");
-            }} 
+            }}
             className="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-[9px] font-semibold text-slate-500 dark:text-slate-400 capitalize tracking-widest rounded-lg hover:bg-red-50 hover:text-red-500 transition-all"
           >
             Clear
           </button>
         </div>
-        
+
         <div className="space-y-6">
           {!isActivityCleared && bookings.length > 0 ? (() => {
             const active = bookings.filter((b: any) => ['pending', 'accepted', 'in_progress'].includes(b.status));
@@ -347,17 +367,16 @@ export default function UserHome() {
                   </div>
                 </div>
                 <div className="text-right flex flex-col items-end gap-1">
-                  <p className={`text-[11px] font-semibold capitalize tracking-widest ${
-                    booking.status === 'completed' ? 'text-primary' : 
-                    booking.status === 'cancelled' ? 'text-rose-500' : 
-                    'text-amber-500'
-                  }`}>
+                  <p className={`text-[11px] font-semibold capitalize tracking-widest ${booking.status === 'completed' ? 'text-primary' :
+                    booking.status === 'cancelled' ? 'text-rose-500' :
+                      'text-amber-500'
+                    }`}>
                     {booking.status.replace('_', ' ')}
                   </p>
-                  
+
                   {/* Action Button for Finalizing */}
                   {booking.status === 'picked_up' && (
-                    <button 
+                    <button
                       onClick={(e) => { e.stopPropagation(); handleOpenVerification(booking); }}
                       className="px-2 py-1 bg-primary text-[8px] font-semibold text-white capitalize tracking-widest rounded-lg shadow-lg shadow-primary/20 active:scale-90 transition-all flex items-center gap-1"
                     >
@@ -369,7 +388,7 @@ export default function UserHome() {
             ));
           })() : (
             <div className="text-center py-6">
-              <p className="text-[10px] font-semibold text-slate-300 capitalize tracking-widest">{isActivityCleared ? 'Activity Cleared' : 'No recent pickups'}</p>
+              <p className="text-[10px] font-semibold text-slate-600 capitalize tracking-widest">{isActivityCleared ? 'Activity Cleared' : 'No recent pickups'}</p>
               {!isActivityCleared && <button onClick={() => navigate('/discovery')} className="text-[9px] font-semibold text-primary capitalize tracking-widest mt-2 underline">Start Recycling →</button>}
             </div>
           )}

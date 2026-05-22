@@ -212,7 +212,7 @@ export default function AgentWarehouse() {
     <div className="space-y-6 pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)]">
       
       {/* ── HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -249,17 +249,17 @@ export default function AgentWarehouse() {
             </div>
 
             <div className="grid grid-cols-3 gap-2">
-               <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm">
+               <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl shadow-sm">
                   <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-widest mb-1">Value</p>
                   <p className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">KSh {totalEstimatedValue.toLocaleString()}</p>
                </div>
                
-               <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm">
+               <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl shadow-sm">
                   <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-widest mb-1">Weight</p>
                   <p className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">{totalWeight.toFixed(1)} KG</p>
                </div>
 
-               <div className="p-3 bg-slate-50 dark:bg-slate-900 rounded-xl shadow-sm">
+               <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl shadow-sm">
                   <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-widest mb-1">Assets</p>
                   <p className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">{realAssets.length}</p>
                </div>
@@ -306,7 +306,7 @@ export default function AgentWarehouse() {
                <button 
                  onClick={handleTransferInventory}
                  disabled={isTransferring || realAssets.length === 0}
-                 className="mt-3 w-full py-3 bg-slate-50 dark:bg-slate-900 rounded-xl font-bold text-[10px] capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 text-slate-900 dark:text-white disabled:opacity-50"
+                 className="mt-3 w-full py-3 bg-slate-50 dark:bg-slate-800 rounded-xl font-bold text-[10px] capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 text-slate-900 dark:text-white disabled:opacity-50"
                >
                  <CheckCircle2 className="w-4 h-4" />
                  Receive Fleet Cargo
@@ -316,7 +316,7 @@ export default function AgentWarehouse() {
       </div>
 
       {/* ── CONSOLIDATION GOAL (PHASE 2) ── */}
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center justify-between mb-4">
            <div>
               <h3 className="text-xs font-black text-slate-400 capitalize tracking-widest leading-none mb-1">Dispatch Goal</h3>
@@ -356,7 +356,7 @@ export default function AgentWarehouse() {
         ) : (
           <div className="space-y-3">
             {realAssets.map(asset => (
-              <div key={asset.id} className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all shadow-sm group">
+              <div key={asset.id} className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all shadow-sm group">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-lg">
@@ -382,7 +382,7 @@ export default function AgentWarehouse() {
       </div>
 
       {/* ── MATERIAL SALES (WEAVER CLAIMS) ── */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm mt-8">
+      <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm mt-8">
         <div className="flex items-center justify-between mb-8 px-2">
           <div>
             <h3 className="font-semibold text-sm text-slate-900 dark:text-white">Material Sales</h3>

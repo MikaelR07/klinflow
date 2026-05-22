@@ -27,9 +27,9 @@ export default function SupportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate('/settings')} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
             <ArrowLeft className="w-4 h-4 dark:text-white" />
@@ -45,7 +45,7 @@ export default function SupportPage() {
 
         {/* Quick Contact Buttons */}
         <div className="grid grid-cols-2 gap-3">
-           <a href={`tel:${supportPhone}`} className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-primary transition-all flex flex-col items-center justify-center gap-3 text-center shadow-sm">
+           <a href={`tel:${supportPhone}`} className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 hover:border-primary transition-all flex flex-col items-center justify-center gap-3 text-center shadow-sm">
              <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center">
                <PhoneCall className="w-6 h-6" />
              </div>
@@ -55,7 +55,7 @@ export default function SupportPage() {
              </div>
            </a>
 
-           <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-[#25D366] transition-all flex flex-col items-center justify-center gap-3 text-center shadow-sm">
+           <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noreferrer" className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 hover:border-[#25D366] transition-all flex flex-col items-center justify-center gap-3 text-center shadow-sm">
              <div className="w-12 h-12 bg-[#25D366]/10 text-[#25D366] rounded-full flex items-center justify-center">
                <MessageCircle className="w-6 h-6" />
              </div>
@@ -72,12 +72,12 @@ export default function SupportPage() {
            
            <div>
              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 capitalize tracking-wider">Subject</label>
-             <input type="text" required value={form.subject} onChange={(e) => setForm({...form, subject: e.target.value})} placeholder="e.g., Missed pickup, Payment issue" className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" />
+             <input type="text" required value={form.subject} onChange={(e) => setForm({...form, subject: e.target.value})} placeholder="e.g., Missed pickup, Payment issue" className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" />
            </div>
 
            <div>
              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 capitalize tracking-wider">How can we help?</label>
-             <textarea required rows={4} value={form.message} onChange={(e) => setForm({...form, message: e.target.value})} placeholder="Please describe your issue..." className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm resize-none" />
+             <textarea required rows={4} value={form.message} onChange={(e) => setForm({...form, message: e.target.value})} placeholder="Please describe your issue..." className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm resize-none" />
            </div>
 
            <button type="submit" disabled={isLoading} className="w-full py-4 bg-slate-900 dark:bg-primary text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">

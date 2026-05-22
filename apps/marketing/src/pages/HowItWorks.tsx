@@ -51,9 +51,9 @@ export default function HowItWorks() {
       <section className="relative py-16 md:py-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl mb-12 md:mb-32">
-            <h1 className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
               The Mechanics of <br className="hidden sm:block" />
-              <span className="text-emerald-500 italic">Circular Scale.</span>
+              <span className="text-primary italic">Circular Scale.</span>
             </h1>
             <p className={`text-base md:text-xl font-medium leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
               Klinflow isn't just an app—it's a high-precision protocol for waste valuation, collection, and settlement. Explore the three pillars of our infrastructure.
@@ -67,7 +67,7 @@ export default function HowItWorks() {
                   <div className={`w-16 h-16 rounded-2xl bg-${spec.color}-500/10 text-${spec.color}-500 flex items-center justify-center mb-8`}>
                     <spec.icon className="w-8 h-8" />
                   </div>
-                  <h2 className={`text-2xl sm:text-3xl md:text-5xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{spec.title}</h2>
+                  <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{spec.title}</h2>
                   <p className="text-base md:text-lg text-slate-500 font-medium mb-12">{spec.desc}</p>
                   
                   <div className="space-y-10">
@@ -83,7 +83,7 @@ export default function HowItWorks() {
                   </div>
                 </div>
 
-                <div className={`relative aspect-video sm:aspect-square rounded-2xl bg-slate-900 border border-white/5 overflow-hidden group ${i % 2 !== 0 ? 'lg:order-1' : ''}`}>
+                <div className={`relative aspect-video sm:aspect-square rounded-2xl bg-surface-950 border border-white/5 overflow-hidden group ${i % 2 !== 0 ? 'lg:order-1' : ''}`}>
                   <div className={`absolute inset-0 bg-gradient-to-br from-${spec.color}-500/20 to-transparent`} />
                   <div className="absolute inset-0 flex items-center justify-center">
                     {/* Placeholder for complex SVG diagrams */}
@@ -107,16 +107,16 @@ export default function HowItWorks() {
 
       {/* ── TECHNICAL CTA ────────────────────────────────────────────────── */}
       <section className="py-16 md:py-32 px-6">
-        <div className={`max-w-7xl mx-auto p-8 md:p-20 rounded-2xl relative overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
+        <div className={`max-w-7xl mx-auto p-8 md:p-20 rounded-2xl relative overflow-hidden ${isDarkMode ? 'bg-surface-950' : 'bg-slate-50'}`}>
            <div className="absolute top-0 right-0 p-12 opacity-[0.03]">
               <BarChart3 className="w-64 h-64" />
            </div>
            <div className="max-w-2xl relative z-10">
-              <h2 className={`text-2xl sm:text-3xl md:text-5xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Ready for a <br className="hidden sm:block" />Technical Deep Dive?</h2>
+              <h2 className={`text-3xl md:text-4xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Ready for a <br className="hidden sm:block" />Technical Deep Dive?</h2>
               <p className="text-lg text-slate-500 font-medium mb-10 leading-relaxed">
                 Download our comprehensive system whitepaper for a full audit of our smart-contract payouts, AI grading logic, and logistics algorithms.
               </p>
-              <button className="px-10 py-5 bg-emerald-500 text-white font-bold rounded-2xl shadow-xl shadow-emerald-500/20 flex items-center gap-3 hover:bg-emerald-400 transition-all active:scale-95">
+              <button className="px-10 py-5 bg-primary text-white font-bold rounded-2xl shadow-xl shadow-emerald-500/20 flex items-center gap-3 hover:bg-primary transition-all active:scale-95">
                 Download Whitepaper <ArrowRight className="w-5 h-5" />
               </button>
            </div>

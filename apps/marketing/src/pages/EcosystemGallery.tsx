@@ -73,17 +73,17 @@ export default function EcosystemGallery() {
 
   return (
     <Layout>
-      <div className={`min-h-screen pt-24 md:pt-32 pb-20 md:pb-40 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
+      <div className={`min-h-screen pt-24 md:pt-32 pb-20 md:pb-40 ${isDarkMode ? 'bg-surface-950' : 'bg-slate-50'}`}>
         <div className="max-w-7xl mx-auto px-6">
           
-          <Link to="/" className="inline-flex items-center gap-2 text-emerald-500 font-bold uppercase tracking-widest text-xs mb-8 hover:translate-x-[-4px] transition-transform">
+          <Link to="/" className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs mb-8 hover:translate-x-[-4px] transition-transform">
             <ChevronLeft className="w-4 h-4" /> Back to Home
           </Link>
 
           <div className="max-w-3xl mb-24">
             <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
               The Product <br className="hidden sm:block" />
-              <span className="text-emerald-500 italic">Suite.</span>
+              <span className="text-primary italic">Suite.</span>
             </h1>
             <p className={`text-base md:text-xl font-medium leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
               Explore the technical infrastructure defining the next generation of circular recovery. From household intake to industrial settlement.
@@ -103,7 +103,7 @@ export default function EcosystemGallery() {
                 <div 
                   onClick={() => setSelectedImage(shot)}
                   className={`group relative rounded-2xl border overflow-hidden cursor-pointer transition-all duration-500 ${
-                    isDarkMode ? 'border-white/5 bg-slate-900' : 'border-slate-200 bg-white shadow-xl hover:shadow-2xl'
+                    isDarkMode ? 'border-white/5 bg-surface-950' : 'border-slate-200 bg-white shadow-xl hover:shadow-2xl'
                   }`}
                 >
                   <div className="absolute top-6 left-6 z-10 flex items-center gap-2">
@@ -123,7 +123,7 @@ export default function EcosystemGallery() {
                     <h4 className="text-xl font-bold text-white mb-2">{shot.title}</h4>
                     <p className="text-xs text-slate-300 font-medium leading-relaxed mb-6">{shot.desc}</p>
                     <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center">
+                       <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center">
                           <Search className="w-5 h-5" />
                        </div>
                        <span className="text-xs font-bold text-white uppercase tracking-widest">Enlarge Preview</span>
@@ -139,7 +139,7 @@ export default function EcosystemGallery() {
       {/* LIGHTBOX MODAL */}
       {selectedImage && (
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/98 backdrop-blur-2xl p-6"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-950/98 backdrop-blur-2xl p-6"
           onClick={() => setSelectedImage(null)}
         >
           <motion.div 
@@ -154,7 +154,7 @@ export default function EcosystemGallery() {
             />
             
             <div className="mt-6 text-center max-w-xl px-4">
-               <span className="text-xs font-black text-emerald-500 uppercase tracking-[0.3em] mb-2 block">{selectedImage.category}</span>
+               <span className="text-xs font-black text-primary uppercase tracking-[0.3em] mb-2 block">{selectedImage.category}</span>
                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 tracking-tighter">{selectedImage.title}</h3>
                <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed">{selectedImage.desc}</p>
             </div>

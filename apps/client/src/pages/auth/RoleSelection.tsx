@@ -35,13 +35,13 @@ export default function RoleSelection() {
   ];
 
   return (
-    <div className="flex flex-col min-h-dvh max-w-lg mx-auto px-6 py-10 relative overflow-hidden">
+    <div className="flex flex-col dark:bg-slate-900 min-h-dvh max-w-lg mx-auto px-6 py-10 relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
 
       <header className="relative z-10 pt-8 mb-12">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 text-slate-400 mb-8 shadow-sm"
         >
@@ -66,7 +66,7 @@ export default function RoleSelection() {
             onClick={() => navigate(`/register?type=${role.id}`)}
             className="w-full text-left group relative active:scale-[0.99] transition-all gpu-layer"
           >
-            <div className="relative bg-[#FFFFFF] dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 rounded-[2.5rem] p-8 transition-all active:bg-slate-100 dark:active:bg-slate-800 overflow-hidden">
+            <div className="relative bg-[#FFFFFF] dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 rounded-[2.5rem] p-8 transition-all active:bg-slate-100 dark:active:bg-slate-800 overflow-hidden">
               <div className="flex items-start justify-between mb-6">
                 <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.iconColor} border ${role.borderColor} shadow-inner`}>
                   <role.icon className="w-8 h-8" />
@@ -82,7 +82,7 @@ export default function RoleSelection() {
 
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 tracking-tight">{role.title}</h2>
               <p className={`text-[10px] font-bold capitalize tracking-[0.2em] ${role.textColor} mb-4`}>{role.subtitle}</p>
-              
+
               <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 font-medium">
                 {role.description}
               </p>

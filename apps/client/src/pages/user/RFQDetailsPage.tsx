@@ -101,6 +101,21 @@ export default function RFQDetailsPage() {
           if (offerData) {
             setExistingOfferId(offerData.id);
           }
+
+          // If RFQ is fulfilled, check if this seller won the bid
+          if (data.status === 'fulfilled') {
+            const { data: fulfillmentData } = await supabase
+              .from('fulfillment_orders')
+              .select('id')
+              .eq('rfq_id', rfqId)
+              .eq('seller_id', profile.id)
+              .maybeSingle();
+
+            if (fulfillmentData) {
+              navigate(`/fulfillment/${fulfillmentData.id}`, { replace: true });
+              return; // Stop loading the rest of the page
+            }
+          }
         }
       } catch (err: any) {
         console.error('Failed to fetch RFQ:', err);
@@ -225,7 +240,7 @@ export default function RFQDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="flex flex-col min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-800">
         <div className="w-8 h-8 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin" />
       </div>
     );
@@ -233,7 +248,7 @@ export default function RFQDetailsPage() {
 
   if (!rfq) {
     return (
-      <div className="flex flex-col min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-900 p-4 text-center">
+      <div className="flex flex-col min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-800 p-4 text-center">
         <h2 className="text-lg font-bold text-slate-900 dark:text-white">RFQ Not Found</h2>
         <button onClick={() => navigate(-1)} className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-xl">Go Back</button>
       </div>
@@ -241,7 +256,7 @@ export default function RFQDetailsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-900 pb-12 transition-colors">
+    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-12 transition-colors">
       <div
         className="relative h-[350px] w-full overflow-hidden border-b border-slate-200 dark:border-slate-800 shadow-sm bg-slate-900"
       >
@@ -346,7 +361,7 @@ export default function RFQDetailsPage() {
 
           <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
             <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Offers Submitted</span>
-            <span className="px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/40 text-slate-850 dark:text-slate-200 font-black text-[10px]">
+            <span className="px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800/40 text-slate-850 dark:text-slate-200 font-black text-[10px]">
               {rfq.offersSubmitted} proposal{rfq.offersSubmitted !== 1 ? 's' : ''}
             </span>
           </div>
@@ -364,7 +379,7 @@ export default function RFQDetailsPage() {
             <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-800/50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h4 className="text-sm font-black text-emerald-900 dark:text-emerald-400 uppercase tracking-wider">Offer Already Submitted</h4>
+            <h4 className="text-sm font-black text-emerald-900 dark:text-emerald-400 uppercase tracking-wider">Offer Has Been Submitted</h4>
             <p className="text-xs text-emerald-700/80 dark:text-emerald-500/80 font-semibold mb-4 leading-relaxed">
               Your quote has been successfully sent to the buyer. You can track its status in your Submitted Quotes dashboard.
             </p>
@@ -391,7 +406,7 @@ export default function RFQDetailsPage() {
                     value={bidPrice}
                     onChange={(e) => setBidPrice(e.target.value)}
                     placeholder="e.g. 28"
-                    className="w-full pl-4 pr-16 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full pl-4 pr-16 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">KSh/kg</span>
@@ -406,7 +421,7 @@ export default function RFQDetailsPage() {
                     value={availableQty}
                     onChange={(e) => setAvailableQty(e.target.value)}
                     placeholder="e.g. 500"
-                    className="w-full pl-4 pr-12 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full pl-4 pr-12 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">kg</span>
@@ -420,7 +435,7 @@ export default function RFQDetailsPage() {
                     type="date"
                     value={shippingDate}
                     onChange={(e) => setShippingDate(e.target.value)}
-                    className="w-full px-4 py-3 text-[13px] font-black rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full px-4 py-3 text-[13px] font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
                 </div>
@@ -430,7 +445,7 @@ export default function RFQDetailsPage() {
                     type="time"
                     value={shippingTime}
                     onChange={(e) => setShippingTime(e.target.value)}
-                    className="w-full px-4 py-3 text-[13px] font-black rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full px-4 py-3 text-[13px] font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
                 </div>
@@ -443,7 +458,7 @@ export default function RFQDetailsPage() {
                 </div>
                 <div className="grid grid-cols-4 gap-2.5">
                   {proofImages.length < 4 && (
-                    <label className="aspect-square rounded-2xl bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 transition-colors">
+                    <label className="aspect-square rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 transition-colors">
                       <Camera className="w-5 h-5 text-slate-400" />
                       <span className="text-[8px] font-black text-slate-400 uppercase mt-1">Upload</span>
                       <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" multiple />

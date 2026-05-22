@@ -93,7 +93,7 @@ export default function SubmittedQuoteDetailsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-900 pb-12 transition-colors">
+    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-12 transition-colors">
       {/* ── IMAGE PREVIEW AT THE TOP (EDGE-TO-EDGE & TOP-COVERED) ── */}
       <div 
         className="relative h-[350px] w-full overflow-hidden border-b border-slate-200 dark:border-slate-800 shadow-sm bg-slate-900"
@@ -219,7 +219,7 @@ export default function SubmittedQuoteDetailsPage() {
           {quote.message && (
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Attached Message</p>
-              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800/40 flex items-start gap-2">
+              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800/40 flex items-start gap-2">
                 <MessageSquare className="w-4 h-4 text-slate-400 shrink-0 mt-px" />
                 <p className="text-xs text-slate-600 dark:text-slate-300 italic leading-relaxed">{quote.message}</p>
               </div>

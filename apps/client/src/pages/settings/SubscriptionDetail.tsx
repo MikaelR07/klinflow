@@ -21,7 +21,7 @@ export default function SubscriptionDetail() {
 
   if (!tier) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-800">
         <p className="font-semibold text-slate-400 capitalize tracking-widest">Plan not found</p>
       </div>
     );
@@ -82,10 +82,10 @@ export default function SubscriptionDetail() {
   const details = (expandedDetails as any)[tierId || 'lite'] || expandedDetails.lite;
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900 pb-32 px-2">
+    <div className="bg-slate-50 dark:bg-slate-800 pb-32 px-2">
       {/* Header */}
       <div className="p-6 flex items-center gap-4">
-        <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-900 shadow-sm rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
+        <button onClick={() => navigate(-1)} className="p-2 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
           <ArrowLeft className="w-5 h-5 dark:text-white" />
         </button>
         <h1 className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Plan Details</h1>
@@ -95,7 +95,7 @@ export default function SubscriptionDetail() {
       <div className={`mx-4 rounded-3xl p-8 relative overflow-hidden shadow-2xl ${
         tierId === 'premium' ? 'bg-slate-900 text-white' : 
         tierId === 'standard' ? 'bg-primary text-white' : 
-        'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800'
+        'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800'
       }`}>
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
@@ -125,7 +125,7 @@ export default function SubscriptionDetail() {
         </div>
 
         {/* Benefits List */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 space-y-4">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 space-y-4">
           <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-2">What's Included</p>
           <div className="space-y-4">
             {details.points.map((point: string, i: number) => (

@@ -37,23 +37,23 @@ export default function CompanyProfile() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-900">
+      <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-800">
         <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
 
   const config = (Array.isArray(company?.agent_configurations) ? company.agent_configurations[0] : company?.agent_configurations) || {};
-  const materials = config.accepted_materials?.length > 0 
-    ? config.accepted_materials 
+  const materials = config.accepted_materials?.length > 0
+    ? config.accepted_materials
     : (company?.service_profile?.categories?.filter((c: any) => c.enabled).map((c: any) => c.name) || []);
   const logisticsFee = config.base_logistics_fee ?? company?.service_profile?.base_logistics_fee ?? 0;
   const isFleetAdmin = company?.role === 'admin';
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
             <ArrowLeft className="w-4 h-4 dark:text-white" />
@@ -67,7 +67,7 @@ export default function CompanyProfile() {
 
       <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-26 px-1.5 space-y-4">
         {/* Hero */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-teal-600 to-indigo-700 dark:from-slate-800 dark:via-slate-850 dark:to-slate-900 p-6 text-white shadow-xl">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-teal-600 to-blue-700 dark:from-slate-800 dark:via-slate-850 dark:to-slate-900 p-6 text-white shadow-xl">
           <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-[80px] -mr-16 -mt-16" />
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-4">
@@ -109,7 +109,7 @@ export default function CompanyProfile() {
         </div>
 
         {/* Location */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 flex items-center gap-4 shadow-sm">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 flex items-center gap-4 shadow-sm">
           <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
             <MapPin className="w-5 h-5 text-primary" />
           </div>
@@ -125,7 +125,7 @@ export default function CompanyProfile() {
 
         {/* Accepted Materials */}
         {materials.length > 0 && (
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
             <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Accepted Materials</p>
             <div className="flex flex-wrap gap-2">
               {materials
@@ -140,7 +140,7 @@ export default function CompanyProfile() {
         )}
 
         {/* Pricing Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
           <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Their Pricing</p>
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">Base Logistics Fee</span>

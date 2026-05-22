@@ -178,9 +178,9 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors">
         <div className="max-w-lg mx-auto space-y-2.5">
           <div className="flex items-center justify-between">
             <button onClick={() => navigate(-1)} className="w-8 h-8 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
@@ -243,7 +243,7 @@ export default function MyTrades() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed top-0 left-0 right-0 bottom-[64px] z-[50] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-10"
+              className="fixed top-0 left-0 right-0 bottom-[64px] z-[50] bg-[#F2F3F4] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-10"
             >
               {(() => {
                 const b = bookings.find((x: any) => x.id === expandedId) as any;
@@ -274,7 +274,7 @@ export default function MyTrades() {
                       </button>
                     </div>
 
-                    <div className="bg-[#F2F3F4] dark:bg-slate-900 px-4 pt-8 pb-10 space-y-3 rounded-t-3xl -mt-22 relative z-10">
+                    <div className="bg-[#F2F3F4] dark:bg-slate-800 px-4 pt-8 pb-10 space-y-3 rounded-t-3xl -mt-22 relative z-10">
                       <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-4 shadow-sm">
                         <div className="flex items-start justify-between gap-2 border-b border-slate-100 dark:border-slate-700/50 pb-4">
                           <div>
@@ -288,7 +288,7 @@ export default function MyTrades() {
                           </div>
                           <div className="text-right">
                             <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Trade ID</p>
-                            <p className="text-xs font-bold text-slate-900 dark:text-white font-mono bg-slate-50 dark:bg-slate-900/50 px-2 py-1 rounded-lg">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
+                            <p className="text-xs font-bold text-slate-900 dark:text-white font-mono bg-slate-50 dark:bg-slate-800/50 px-2 py-1 rounded-lg">CF-{b.id?.slice(0, 8).toUpperCase()}</p>
                           </div>
                         </div>
 
@@ -376,7 +376,7 @@ export default function MyTrades() {
                     {/* ── SETTLED TAB: Dropdown accordion card ── */}
                     if (activeTab === 'Settled') {
                       return (
-                        <div key={b.id} className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 overflow-hidden">
+                        <div key={b.id} className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-800 overflow-hidden">
                           {/* Header row - always visible */}
                           <button
                             onClick={() => setExpandedSettledId(isSettledOpen ? null : b.id)}
@@ -444,7 +444,7 @@ export default function MyTrades() {
 
                     {/* ── ACTIVE / CANCELLED TAB: Original card ── */}
                     return (
-                      <div key={b.id} className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 overflow-hidden transition-all">
+                      <div key={b.id} className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-800 overflow-hidden transition-all">
                         <button 
                           onClick={() => setExpandedId(b.id)}
                           className="w-full py-3 px-3.5 flex items-center gap-3 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
@@ -509,7 +509,7 @@ export default function MyTrades() {
               initial={{ y: "100%" }} 
               animate={{ y: 0 }} 
               exit={{ y: "100%" }} 
-              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-t-[2.5rem] rounded-b-2xl p-8 pb-10 shadow-2xl"
+              className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-t-[2.5rem] rounded-b-2xl p-8 pb-10 shadow-2xl"
             >
               <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-6" />
               

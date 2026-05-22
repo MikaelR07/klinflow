@@ -126,13 +126,15 @@ INTELLIGENCE RULES:
 - If a user asks about rewards, explain how they can earn more by better segregation.
 - If an agent asks about work, prioritize "pending" bookings near their location.
 - If a business/weaver asks about selling, use the Live Market Trends above to suggest optimal pricing.
-- Keep answers helpful and concise (under 500 words). Be actionable. Use Swahili greetings sparingly.
-- BRANDING: ALWAYS refer to the company as "Klinflow". Never refer to the platform as "Cleanflow" or "CleanFlow".
+- Keep answers helpful and concise. Be actionable. Use Swahili greetings sparingly.
+- BRANDING: ALWAYS refer to the company as "Klinflow". Never say "Cleanflow" or "CleanFlow".
+- Respond in plain conversational text, like a helpful assistant. Do NOT wrap your reply in JSON.
 
-ACTION PROTOCOL:
-If the user wants to book a pickup, include an "action" field in your response JSON.
-Example: { "text": "Sure, I've drafted a PET Plastic pickup for tomorrow...", "action": { "type": "BOOK_PICKUP", "payload": { "waste_type": "plastic", "scheduled_date": "2024-05-04" } } }
-Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.`;
+ACTION PROTOCOL (EXCEPTION):
+ONLY if the user explicitly wants to book a pickup, respond with a JSON object instead of plain text.
+Format: { "text": "Sure, I've drafted a PET Plastic pickup for tomorrow...", "action": { "type": "BOOK_PICKUP", "payload": { "waste_type": "plastic", "scheduled_date": "2024-05-04" } } }
+Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.
+For all other requests, just reply in plain conversational text.`;
 
     const userMessage = payload?.message || payload?.userMessage || 'Hello';
     console.log('[AI Version] Running Engine V6 (Actions enabled)'); 
@@ -145,9 +147,8 @@ Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.`;
       body: JSON.stringify({
         contents: [{ role: 'user', parts: [{ text: `${systemContext}\n\nUser: ${userMessage}` }] }],
         generationConfig: { 
-          maxOutputTokens: 1000, 
-          temperature: 0.7,
-          response_mime_type: "application/json" 
+          maxOutputTokens: 1500, 
+          temperature: 0.7
         }
       })
     });
@@ -159,29 +160,24 @@ Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.`;
     }
 
     const geminiData = await geminiRes.json();
-    let rawOutput = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "{\"text\":\"I'm processing too much data.\"}";
+    let rawOutput = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "I'm here to help! Could you rephrase your question?";
     
-    // Clean potential markdown blocks
+    // Clean potential markdown code fences
     rawOutput = rawOutput.replace(/```json/g, '').replace(/```/g, '').trim();
 
-    let parsed;
-    try {
-      parsed = JSON.parse(rawOutput);
-    } catch (e) {
-      console.error('[JSON Parse Error]', rawOutput);
-      // Fallback if AI fails to give valid JSON
-      parsed = { text: rawOutput.slice(0, 200) };
-    }
+    // Gemini might return JSON only when an action is triggered — handle both cases
+    let aiResponse = rawOutput;
+    let actionPayload = null;
 
-    let aiResponse = parsed.text || "I understand. How else can I help?";
-    
-    // Safety check: if aiResponse itself is a stringified object, parse it again
-    if (typeof aiResponse === 'string' && aiResponse.trim().startsWith('{')) {
+    if (rawOutput.startsWith('{')) {
       try {
-        const nested = JSON.parse(aiResponse);
-        if (nested.text) aiResponse = nested.text;
+        const parsed = JSON.parse(rawOutput);
+        aiResponse = parsed.text || rawOutput;
+        actionPayload = parsed.action || null;
       } catch (e) {
-        // Not JSON, keep as is
+        // Not valid JSON — treat the whole thing as plain text
+        console.warn('[HygeneX] Raw output looked like JSON but failed to parse, using as plain text.');
+        aiResponse = rawOutput;
       }
     }
 
@@ -197,7 +193,7 @@ Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.`;
         user_id: userId, 
         role: 'ai', 
         text: aiResponse,
-        metadata: parsed.action ? { action: parsed.action } : null,
+        metadata: actionPayload ? { action: actionPayload } : null,
         created_at: createdAt
       })
       .then(({ error }) => {
@@ -209,7 +205,7 @@ Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.`;
       role: 'ai', 
       text: aiResponse, 
       created_at: createdAt,
-      metadata: parsed.action ? { action: parsed.action } : null 
+      metadata: actionPayload ? { action: actionPayload } : null 
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

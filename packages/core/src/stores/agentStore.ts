@@ -93,9 +93,9 @@ export const useAgentStore = create<AgentStore>()(
         .from('agent_configurations')
         .select('*')
         .eq('agent_id', targetAgentId)
-        .single();
+        .maybeSingle();
         
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error) throw error;
       set({ agentConfig: data as AgentConfiguration | null });
     } catch (err) {
       console.error('[AgentStore] Error fetching config:', err);

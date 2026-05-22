@@ -49,9 +49,9 @@ export default function PrivacySecurityPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="flex items-center gap-4">
           <button onClick={() => { authStage === 'pin' ? setAuthStage('view') : navigate('/settings') }} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
             <ArrowLeft className="w-4 h-4 dark:text-white" />
@@ -98,15 +98,15 @@ export default function PrivacySecurityPage() {
         <form onSubmit={handleChangePin} className="card p-5 space-y-5 animate-slide-up border-t-4 border-t-blue-500">
            <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1.5 capitalize tracking-wider">Current Password</label>
-              <input type="password" required minLength={8} value={pins.current} onChange={(e) => setPins({...pins, current: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50" placeholder="••••••••" />
+              <input type="password" required minLength={8} value={pins.current} onChange={(e) => setPins({...pins, current: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50" placeholder="••••••••" />
            </div>
            <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1.5 capitalize tracking-wider">New Password</label>
-              <input type="password" required minLength={8} value={pins.new} onChange={(e) => setPins({...pins, new: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50" placeholder="Minimum 8 characters" />
+              <input type="password" required minLength={8} value={pins.new} onChange={(e) => setPins({...pins, new: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50" placeholder="Minimum 8 characters" />
            </div>
            <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1.5 capitalize tracking-wider">Confirm New Password</label>
-              <input type="password" required minLength={8} value={pins.confirm} onChange={(e) => setPins({...pins, confirm: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50" placeholder="Repeat new password" />
+              <input type="password" required minLength={8} value={pins.confirm} onChange={(e) => setPins({...pins, confirm: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50" placeholder="Repeat new password" />
            </div>
 
            <button type="submit" disabled={isLoading} className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-2">
@@ -118,7 +118,7 @@ export default function PrivacySecurityPage() {
       {/* ── DELETE MODAL ────────────────────────────────────────── */}
       {showDeleteModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-6">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-[320px] rounded-[28px] overflow-hidden shadow-2xl animate-scale-in border border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-slate-800 w-full max-w-[320px] rounded-[28px] overflow-hidden shadow-2xl animate-scale-in border border-slate-100 dark:border-slate-800">
             <div className="bg-rose-500 p-6 flex flex-col items-center gap-3 text-white">
               <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
                 <Trash2 className="w-7 h-7 text-white" />

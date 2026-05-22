@@ -47,7 +47,7 @@ export default function Login() {
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
       <div className="max-w-md w-full mx-auto animate-slide-up">
-        
+
         {/* Branding */}
         <div className="text-center mb-10">
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
@@ -77,7 +77,7 @@ export default function Login() {
                   placeholder="07XX XXX XXX"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-medium focus:ring-2 text-base focus:ring-secondary/50 focus:border-secondary transition-colors placeholder:font-normal"
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-medium focus:ring-2 text-base focus:ring-secondary/50 focus:border-secondary transition-colors placeholder:font-normal"
                   required
                 />
               </div>
@@ -100,7 +100,7 @@ export default function Login() {
                   minLength={8}
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
-                  className="w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-medium focus:ring-2 text-base focus:ring-secondary/50 focus:border-secondary transition-colors tracking-widest placeholder:font-normal placeholder:tracking-normal"
+                  className="w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-medium focus:ring-2 text-base focus:ring-secondary/50 focus:border-secondary transition-colors tracking-widest placeholder:font-normal placeholder:tracking-normal"
                   required
                 />
                 <button

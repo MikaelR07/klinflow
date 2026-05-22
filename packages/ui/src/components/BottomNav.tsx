@@ -19,7 +19,7 @@ interface BottomNavProps {
 
 export default function BottomNav({ items }: BottomNavProps) {
   return (
-    <nav className="shrink-0 z-50 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200/60 dark:border-slate-800/60 safe-bottom lg:hidden">
+    <nav className="shrink-0 z-50 bg-white/95 dark:bg-slate-800 border-t border-slate-200/60 dark:border-slate-900/60 safe-bottom lg:hidden">
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-2">
         {items.map((item) => (
           <NavLink
@@ -27,10 +27,9 @@ export default function BottomNav({ items }: BottomNavProps) {
             to={item.path}
             id={`nav-${item.label.toLowerCase().replace(/\s/g, '-')}`}
             className={({ isActive }) =>
-              `flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all min-w-[56px] ${
-                isActive
-                  ? 'text-primary font-semibold'
-                  : 'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300'
+              `flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-all min-w-[56px] ${isActive
+                ? 'text-primary font-semibold'
+                : 'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300'
               }`
             }
           >

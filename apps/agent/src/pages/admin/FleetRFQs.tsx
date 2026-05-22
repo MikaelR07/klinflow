@@ -33,7 +33,7 @@ export default function FleetRFQs() {
 
     const fetchRFQs = async () => {
       if (!profile?.id) return;
-      
+
       const { data, error } = await supabase
         .from('rfqs')
         .select(`*, rfq_offers(count)`)
@@ -63,14 +63,14 @@ export default function FleetRFQs() {
     // 2. Realtime listener for offers
     if (profile?.id) {
       const channel = supabase.channel('my_incoming_offers')
-        .on('postgres_changes', { 
-            event: 'INSERT', 
-            schema: 'public', 
-            table: 'rfq_offers',
-            filter: `buyer_id=eq.${profile.id}` 
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'rfq_offers',
+          filter: `buyer_id=eq.${profile.id}`
         }, (payload) => {
-            toast.info('New Bid Received!', { description: 'A seller has sent a proposal for your RFQ.' });
-            fetchRFQs();
+          toast.info('New Bid Received!', { description: 'A seller has sent a proposal for your RFQ.' });
+          fetchRFQs();
         })
         .subscribe();
 
@@ -83,7 +83,7 @@ export default function FleetRFQs() {
   // RFQ Submission state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [images, setImages] = useState<{file: File, url: string}[]>([]);
+  const [images, setImages] = useState<{ file: File, url: string }[]>([]);
   const [formData, setFormData] = useState({
     category: '',
     materialName: '',
@@ -145,8 +145,8 @@ export default function FleetRFQs() {
 
   const filteredRFQs = rfqs.filter(rfq => {
     const matchesFilter = rfq.status === filter;
-    const matchesSearch = rfq.material.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          rfq.location.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = rfq.material.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      rfq.location.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -169,16 +169,16 @@ export default function FleetRFQs() {
     setIsSubmitting(true);
     try {
       const uploadedUrls: string[] = [];
-      
+
       for (const img of images) {
         const compressed = await compressImage(img.file, { maxWidth: 1024, quality: 0.7 });
         const fileExt = compressed.name.split('.').pop() || 'jpg';
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
         const filePath = `${profile?.id}/${fileName}`;
-        
+
         const { error: uploadError } = await supabase.storage.from('rfq-images').upload(filePath, compressed);
         if (uploadError) throw uploadError;
-        
+
         const { data: { publicUrl } } = supabase.storage.from('rfq-images').getPublicUrl(filePath);
         uploadedUrls.push(publicUrl);
       }
@@ -210,7 +210,7 @@ export default function FleetRFQs() {
         deadline: isNaN(deadlineDateObj.getTime()) ? null : deadlineDateObj.toISOString(),
         status: 'open'
       };
-      
+
       const { data: insertData, error: insertError } = await supabase.from('rfqs').insert(insertPayload).select();
 
       if (insertError) throw insertError;
@@ -363,7 +363,7 @@ export default function FleetRFQs() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50/50 dark:bg-slate-750/30">
+                <tr className="bg-slate-50/50 dark:bg-slate-950/30">
                   <th className="p-6 text-xs font-semibold text-slate-400 capitalize tracking-widest">Material Grade</th>
                   <th className="p-6 text-xs font-semibold text-slate-400 capitalize tracking-widest">Location</th>
                   <th className="p-6 text-xs font-semibold text-slate-400 capitalize tracking-widest">Requested Weight</th>
@@ -481,7 +481,7 @@ export default function FleetRFQs() {
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value, materialName: '' })}
-                      className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
+                      className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
                       required
                     >
                       <option value="">Select Category</option>
@@ -503,7 +503,7 @@ export default function FleetRFQs() {
                           const price = customRates[selectedSub] || customRates[formData.category] || '';
                           setFormData({ ...formData, materialName: selectedSub, price: price ? String(price) : '' });
                         }}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       >
                         <option value="">Select Material Type</option>
@@ -533,7 +533,7 @@ export default function FleetRFQs() {
                         placeholder="e.g. 1500"
                         value={formData.weight}
                         onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                     </div>
@@ -549,7 +549,7 @@ export default function FleetRFQs() {
                         placeholder="e.g. 25"
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                     </div>
@@ -567,7 +567,7 @@ export default function FleetRFQs() {
                         placeholder="e.g. Kasarani, Nairobi"
                         value={formData.pickupArea}
                         onChange={(e) => setFormData({ ...formData, pickupArea: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                     </div>
@@ -580,33 +580,30 @@ export default function FleetRFQs() {
                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, deliveryMethod: 'agent_pickup' })}
-                        className={`h-12 text-sm font-bold rounded-xl border transition-all ${
-                          formData.deliveryMethod === 'agent_pickup'
-                            ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
-                        }`}
+                        className={`h-12 text-sm font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'agent_pickup'
+                          ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                          }`}
                       >
                         We Pick Up
                       </button>
                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, deliveryMethod: 'self_drop' })}
-                        className={`h-12 text-sm font-bold rounded-xl border transition-all ${
-                          formData.deliveryMethod === 'self_drop'
-                            ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
-                        }`}
+                        className={`h-12 text-sm font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'self_drop'
+                          ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                          }`}
                       >
                         You Drop Off
                       </button>
                       <button
                         type="button"
                         onClick={() => setFormData({ ...formData, deliveryMethod: 'flexible' })}
-                        className={`h-12 text-sm font-bold rounded-xl border transition-all ${
-                          formData.deliveryMethod === 'flexible'
-                            ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
-                        }`}
+                        className={`h-12 text-sm font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'flexible'
+                          ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                          }`}
                       >
                         Flexible
                       </button>
@@ -621,14 +618,14 @@ export default function FleetRFQs() {
                         type="date"
                         value={formData.deadlineDate}
                         onChange={(e) => setFormData({ ...formData, deadlineDate: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                       <input
                         type="time"
                         value={formData.deadlineTime}
                         onChange={(e) => setFormData({ ...formData, deadlineTime: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                     </div>
@@ -658,7 +655,7 @@ export default function FleetRFQs() {
                       </div>
                     ))}
                     {images.length < 3 && (
-                      <label className="aspect-square rounded-xl border border-dashed border-slate-250 dark:border-slate-700 hover:border-amber-500/50 hover:bg-slate-50/50 dark:hover:bg-slate-850/50 transition-all flex flex-col items-center justify-center cursor-pointer bg-slate-50/20 dark:bg-slate-900 group">
+                      <label className="aspect-square rounded-xl border border-dashed border-slate-250 dark:border-slate-700 hover:border-amber-500/50 hover:bg-slate-50/50 dark:hover:bg-slate-850/50 transition-all flex flex-col items-center justify-center cursor-pointer bg-slate-50/20 dark:bg-slate-800 group">
                         <Plus className="w-4 h-4 text-slate-400 group-hover:scale-110 transition-transform" />
                         <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">Add Photo</span>
                         <input type="file" accept="image/*" multiple onChange={handleImageChange} className="hidden" />
@@ -675,7 +672,7 @@ export default function FleetRFQs() {
                     placeholder="Provide details about purity, sorting (baled vs loose), pickup logistics..."
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm font-semibold text-slate-900 dark:text-white resize-none"
+                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm font-semibold text-slate-900 dark:text-white resize-none"
                   />
                 </div>
 

@@ -10,7 +10,7 @@ import { toast } from 'sonner';
 export default function CompanyAdminDashboard() {
   const navigate = useNavigate();
   const { logout, profile, fetchProfile, subscribeToProfileChanges, toggleOnline, depositToWallet } = useAuthStore();
-  
+
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [depositAmount, setDepositAmount] = useState('');
   const [isDepositing, setIsDepositing] = useState(false);
@@ -26,7 +26,7 @@ export default function CompanyAdminDashboard() {
     fetchProfile(); // Ensure profile stats like rewardPoints are completely fresh
     fetchEarnings();
     fetchFleetDrivers();
-    
+
     if (profile?.id) {
       subscribeToProfileChanges(profile.id);
     }
@@ -53,7 +53,7 @@ export default function CompanyAdminDashboard() {
       setIsToggling(false);
     }
   };
-  
+
   const handleDeposit = async () => {
     const amount = parseFloat(depositAmount);
     if (!amount || amount <= 0) {
@@ -79,7 +79,7 @@ export default function CompanyAdminDashboard() {
 
   return (
     <div className="space-y-6 animate-fade-in pb-10">
-      
+
       {/* ── HEADER & MASTER TOGGLE ── */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
@@ -88,33 +88,31 @@ export default function CompanyAdminDashboard() {
         </div>
 
         {/* Marketplace Visibility Toggle */}
-        <div className="w-full md:w-auto bg-white dark:bg-slate-900 text-slate-900 dark:text-white p-3 px-5 rounded-2xl flex items-center justify-between md:justify-start gap-6 shadow-xl shadow-slate-900/5 dark:shadow-slate-900/20 border border-slate-200 dark:border-white/5 transition-colors">
+        <div className="w-full md:w-auto bg-white dark:bg-slate-800 text-slate-900 dark:text-white p-3 px-5 rounded-2xl flex items-center justify-between md:justify-start gap-6 shadow-xl shadow-slate-900/5 dark:shadow-slate-900/20 border border-slate-200 dark:border-white/5 transition-colors">
           <div className="flex items-center gap-3">
-             <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/40 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'}`}>
-                {isToggling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Power className="w-4 h-4" />}
-             </div>
-             <div>
-                <p className="text-[10px] font-bold capitalize tracking-[0.2em] text-emerald-600 dark:text-emerald-400 leading-none mb-1">Marketplace</p>
-                <p className="text-xs font-bold tracking-tight leading-none">{profile.isOnline ? 'Active' : 'Offline'}</p>
-             </div>
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/40 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'}`}>
+              {isToggling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Power className="w-4 h-4" />}
+            </div>
+            <div>
+              <p className="text-[10px] font-bold capitalize tracking-[0.2em] text-emerald-600 dark:text-emerald-400 leading-none mb-1">Marketplace</p>
+              <p className="text-xs font-bold tracking-tight leading-none">{profile.isOnline ? 'Active' : 'Offline'}</p>
+            </div>
           </div>
-          <button 
+          <button
             onClick={handleToggle}
             disabled={isToggling}
-            className={`relative w-14 h-8 rounded-full transition-all duration-300 ${
-              profile.isOnline ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-white/10'
-            }`}
+            className={`relative w-14 h-8 rounded-full transition-all duration-300 ${profile.isOnline ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-white/10'
+              }`}
           >
-            <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 shadow-sm ${
-              profile.isOnline ? 'left-7' : 'left-1'
-            }`} />
+            <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 shadow-sm ${profile.isOnline ? 'left-7' : 'left-1'
+              }`} />
           </button>
         </div>
       </div>
 
       {/* ── TOP FINANCIAL METRICS ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
         {/* Total Company Payout */}
         <div className="relative group perspective-1000 h-full">
           <div className="relative bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-[2rem] p-6 shadow-xl shadow-emerald-900/20 overflow-hidden flex flex-col justify-between h-full">
@@ -176,7 +174,7 @@ export default function CompanyAdminDashboard() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => setShowDepositModal(true)}
                 className="px-4 py-2 bg-amber-500 text-white rounded-xl flex items-center gap-2 shadow-lg shadow-amber-500/20 active:scale-95 transition-all group/btn"
               >
@@ -190,7 +188,7 @@ export default function CompanyAdminDashboard() {
 
       {/* ── OPERATIONAL METRICS & INVITE ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
+
         {/* Fleet Performance Summary */}
         <div className="lg:col-span-2 bg-slate-100/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-6 flex flex-col justify-between">
           <div className="grid grid-cols-3 gap-8">
@@ -222,18 +220,18 @@ export default function CompanyAdminDashboard() {
               </p>
             </div>
           </div>
-          
+
           <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
-             <div className="flex items-center gap-3">
-               <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 rounded-xl flex items-center justify-center">
-                 <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-               </div>
-               <div>
-                 <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Fleet Rating</p>
-                 <p className="text-sm font-bold text-slate-900 dark:text-white">{profile.rating ? Number(profile.rating).toFixed(1) : 'New'} — Top 5% in {profile.location?.estate || 'Region'}</p>
-               </div>
-             </div>
-             <button onClick={() => navigate('/reviews')} className="text-[10px] font-bold text-primary capitalize tracking-widest hover:underline">View All Reviews →</button>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 rounded-xl flex items-center justify-center">
+                <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Fleet Rating</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-white">{profile.rating ? Number(profile.rating).toFixed(1) : 'New'} — Top 5% in {profile.location?.estate || 'Region'}</p>
+              </div>
+            </div>
+            <button onClick={() => navigate('/reviews')} className="text-[10px] font-bold text-primary capitalize tracking-widest hover:underline">View All Reviews →</button>
           </div>
         </div>
 
@@ -247,9 +245,9 @@ export default function CompanyAdminDashboard() {
             </p>
           </div>
 
-          <button 
+          <button
             onClick={handleCopyCode}
-            className="mt-6 w-full bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 rounded-2xl p-4 flex items-center justify-between group transition-all"
+            className="mt-6 w-full bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 rounded-2xl p-4 flex items-center justify-between group transition-all"
           >
             <span className="text-xl font-bold tracking-[0.2em] text-slate-900 dark:text-white">
               {profile?.fleetInviteCode || '------'}
@@ -269,23 +267,23 @@ export default function CompanyAdminDashboard() {
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Active drivers on the road</p>
           </div>
           <div className="flex items-center gap-4">
-             <button 
-               onClick={() => fetchFleetDrivers()}
-               className="p-2.5 bg-slate-100 dark:bg-slate-700/50 hover:bg-primary hover:text-white rounded-xl transition-all"
-               title="Refresh Roster"
-             >
-                <RefreshCw className={`w-4 h-4 ${isLoadingFleet ? 'animate-spin' : ''}`} />
-             </button>
-             <button 
-               onClick={() => navigate('/admin/agents')}
-               className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 hover:bg-primary hover:text-white rounded-xl text-xs font-semibold capitalize tracking-widest transition-all group"
-             >
-               <Users className="w-3.5 h-3.5" />
-               <span className="hidden sm:inline">Roster</span>
-             </button>
-             <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold capitalize tracking-widest rounded-full border border-emerald-200 dark:border-emerald-900">
-               {fleetDrivers.filter(d => d.is_online).length} Live
-             </span>
+            <button
+              onClick={() => fetchFleetDrivers()}
+              className="p-2.5 bg-slate-100 dark:bg-slate-700/50 hover:bg-primary hover:text-white rounded-xl transition-all"
+              title="Refresh Roster"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoadingFleet ? 'animate-spin' : ''}`} />
+            </button>
+            <button
+              onClick={() => navigate('/admin/agents')}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 hover:bg-primary hover:text-white rounded-xl text-xs font-semibold capitalize tracking-widest transition-all group"
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Roster</span>
+            </button>
+            <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold capitalize tracking-widest rounded-full border border-emerald-200 dark:border-emerald-900">
+              {fleetDrivers.filter(d => d.is_online).length} Live
+            </span>
           </div>
         </div>
 
@@ -296,7 +294,7 @@ export default function CompanyAdminDashboard() {
           </div>
         ) : fleetDrivers.filter(d => d.is_online).length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <div className="w-16 h-16 bg-slate-50 dark:bg-slate-900 rounded-full flex items-center justify-center mb-4 border border-slate-100 dark:border-slate-800">
+            <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 border border-slate-100 dark:border-slate-800">
               <Users className="w-8 h-8 text-slate-300 dark:text-slate-600" />
             </div>
             <h4 className="text-sm font-semibold text-slate-900 dark:text-white">No Active Drivers</h4>
@@ -307,14 +305,14 @@ export default function CompanyAdminDashboard() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {fleetDrivers.filter(d => d.is_online).map((driver) => (
-              <div key={driver.id} className="p-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center gap-4 hover:border-emerald-200 transition-colors group shadow-sm">
+              <div key={driver.id} className="p-4 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center gap-4 hover:border-emerald-200 transition-colors group shadow-sm">
                 <div className="relative">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-semibold border-2 shadow-sm overflow-hidden bg-emerald-100 text-emerald-700 border-emerald-500`}>
                     {driver.avatar_url ? (
-                      <img 
-                        src={getThumbnailUrl(driver.avatar_url, { width: 200 })} 
+                      <img
+                        src={getThumbnailUrl(driver.avatar_url, { width: 200 })}
                         loading="lazy"
-                        alt={driver.name} 
+                        alt={driver.name}
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -323,7 +321,7 @@ export default function CompanyAdminDashboard() {
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full animate-pulse" />
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{driver.name}</p>
                   <p className="text-xs font-semibold text-slate-500 capitalize tracking-widest flex items-center gap-1 mt-0.5">
@@ -343,22 +341,22 @@ export default function CompanyAdminDashboard() {
       <AnimatePresence>
         {showDepositModal && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowDepositModal(false)}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 border border-slate-100 dark:border-slate-800"
+              className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 border border-slate-100 dark:border-slate-800"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">Wallet Deposit</h3>
-                <button 
+                <button
                   onClick={() => setShowDepositModal(false)}
                   className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center"
                 >
@@ -371,7 +369,7 @@ export default function CompanyAdminDashboard() {
                   <label className="text-[10px] font-bold capitalize tracking-[0.2em] text-slate-400 px-1">Enter Amount (KSh)</label>
                   <div className="relative">
                     <div className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-slate-400">KSh</div>
-                    <input 
+                    <input
                       type="number"
                       autoFocus
                       value={depositAmount}
@@ -382,7 +380,7 @@ export default function CompanyAdminDashboard() {
                   </div>
                 </div>
 
-                <button 
+                <button
                   disabled={isDepositing || !depositAmount}
                   onClick={handleDeposit}
                   className="w-full h-16 bg-amber-500 text-white rounded-2xl font-bold text-lg shadow-xl shadow-amber-500/20 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2"

@@ -138,7 +138,7 @@ export default function NavigateJobPage() {
 
   if (!activeJob) {
     return (
-      <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 items-center justify-center p-6 text-center">
+      <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-800 items-center justify-center p-6 text-center">
         <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-center mb-6">
           <Navigation className="w-6 h-6 text-emerald-600 dark:text-emerald-400 animate-pulse" />
         </div>
@@ -168,7 +168,7 @@ export default function NavigateJobPage() {
       <div className="absolute top-4 left-4 right-4 z-[1000] flex items-center justify-between pointer-events-none">
         <button 
           onClick={() => navigate(-1)} 
-          className="p-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-2xl shadow-xl pointer-events-auto border border-slate-200 dark:border-slate-800 active:scale-95 transition-all"
+          className="p-3 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-xl pointer-events-auto border border-slate-200 dark:border-slate-800 active:scale-95 transition-all"
         >
           <ArrowLeft className="w-5 h-5 text-slate-700 dark:text-slate-200" />
         </button>
@@ -213,7 +213,7 @@ export default function NavigateJobPage() {
           // If swiped up hard or past threshold
           if (info.offset.y < -50) setIsExpanded(true);
         }}
-        className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] rounded-t-[3.5rem] p-6 pb-32 cursor-grab active:cursor-grabbing"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-800 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] rounded-t-[3.5rem] p-6 pb-32 cursor-grab active:cursor-grabbing"
       >
         {/* Interaction Handle */}
         <button 

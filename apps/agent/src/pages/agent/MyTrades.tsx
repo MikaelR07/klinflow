@@ -120,9 +120,9 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="max-w-lg mx-auto">
           {/* Header row */}
           <div className="flex items-center justify-between mb-3">
@@ -177,7 +177,7 @@ export default function MyTrades() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] bg-white dark:bg-slate-900 overflow-y-auto overflow-x-hidden no-scrollbar pb-24"
+                className="fixed inset-0 z-[9999] bg-white dark:bg-slate-800 overflow-y-auto overflow-x-hidden no-scrollbar pb-24"
               >
                 {(() => {
                   const trade = activeTrades.find(t => t.id === expandedId);
@@ -207,7 +207,7 @@ export default function MyTrades() {
                       </div>
 
                       {/* Content Sheet (Overlaps Image) */}
-                      <div className="relative -mt-36 bg-white dark:bg-slate-900 rounded-t-2xl px-3 pt-6 pb-2 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
+                      <div className="relative -mt-36 bg-white dark:bg-slate-800 rounded-t-2xl px-3 pt-6 pb-2 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <p className="text-[10px] font-black text-emerald-600 capitalize tracking-[0.2em]">Active Marketplace Trade</p>
@@ -313,7 +313,7 @@ export default function MyTrades() {
                   ))
                 ) : activeTrades.length === 0 ? (
                   <div className="py-20 text-center">
-                    <div className="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-4 text-slate-300">
+                    <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center mx-auto mb-4 text-slate-300">
                       <TrendingUp className="w-10 h-10" />
                     </div>
                     <h3 className="text-sm font-semibold text-slate-400 capitalize tracking-widest">No accepted trades</h3>
@@ -326,7 +326,7 @@ export default function MyTrades() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="bg-white dark:bg-slate-900 -mx-3 border-b border-slate-200 dark:border-slate-800 overflow-hidden transition-all"
+                      className="bg-white dark:bg-slate-800 -mx-3 border-b border-slate-200 dark:border-slate-800 overflow-hidden transition-all"
                     >
                       <button 
                         onClick={() => setExpandedId(trade.id)}

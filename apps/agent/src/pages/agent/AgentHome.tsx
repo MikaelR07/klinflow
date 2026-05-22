@@ -3,16 +3,16 @@
  */
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Power, 
-  TrendingUp, 
-  Target, 
-  Star, 
-  ChevronRight, 
-  Sparkles, 
-  Bell, 
-  MapPin, 
-  Loader2, 
+import {
+  Power,
+  TrendingUp,
+  Target,
+  Star,
+  ChevronRight,
+  Sparkles,
+  Bell,
+  MapPin,
+  Loader2,
   Zap,
   Wallet,
   Truck,
@@ -24,6 +24,7 @@ import {
   Warehouse,
   X,
   Package,
+  PackageCheck,
   Brain,
   Handshake,
   Receipt
@@ -129,11 +130,11 @@ export default function AgentHome() {
   useEffect(() => {
     // Only pulse location for mobile agents (drivers/independents)
     // We now allow company_admins to also pulse if they are acting as their own driver
-    const isMobileAgent = profile?.agentAccountType === 'fleet_driver' || 
-                          profile?.agentAccountType === 'independent' || 
-                          profile?.agentAccountType === 'company_admin' ||
-                          profile?.agentAccountType === 'owner';
-    
+    const isMobileAgent = profile?.agentAccountType === 'fleet_driver' ||
+      profile?.agentAccountType === 'independent' ||
+      profile?.agentAccountType === 'company_admin' ||
+      profile?.agentAccountType === 'owner';
+
     if (!profile.isOnline || !isMobileAgent) return;
 
     if (navigator.geolocation) {
@@ -151,8 +152,8 @@ export default function AgentHome() {
         } else {
           console.error('GPS Watch Error:', err);
         }
-      }, { 
-        enableHighAccuracy: true, 
+      }, {
+        enableHighAccuracy: true,
         maximumAge: 0,      // Force fresh GPS lock, don't use old cached Nairobi data
         timeout: 15000     // Give it 15s to get a real satellite lock
       });
@@ -185,12 +186,12 @@ export default function AgentHome() {
             error: 'GPS error. Using last known location.',
           });
         } catch (err) {
-          coords = null; 
+          coords = null;
         }
       }
 
       await toggleOnline(coords);
-      
+
       if (isGoingOnline) {
         fetchAvailableJobs();
         toast.success('You are now Online! 👋', { description: 'Ready to receive missions.' });
@@ -216,8 +217,8 @@ export default function AgentHome() {
     setIsWithdrawing(true);
     try {
       await withdrawRewards(balance);
-      toast.success("M-Pesa Withdrawal Success! 💸", { 
-        description: `KSh ${balance.toLocaleString()} has been sent to your registered phone.` 
+      toast.success("M-Pesa Withdrawal Success! 💸", {
+        description: `KSh ${balance.toLocaleString()} has been sent to your registered phone.`
       });
     } catch (err) {
       toast.error("Withdrawal Failed");
@@ -228,15 +229,15 @@ export default function AgentHome() {
 
   return (
     <div className="space-y-6 px-1">
-      
-      <PushNotificationModal 
+
+      <PushNotificationModal
         isOpen={showPushPrompt}
         onClose={() => setShowPushPrompt(false)}
       />
       {/* ── TOP NAV & CORE CONTROLS ── */}
       <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
         {/* Header Section - Edge to Edge - FIXED TOPNAV */}
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700 shadow-sm">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
@@ -251,13 +252,13 @@ export default function AgentHome() {
               </div>
               <div>
                 <h1 className="text-xl font-normal italic tracking-tight text-slate-900 dark:text-white leading-tight">Hello {profile.name.split(' ')[0]}👋</h1>
-                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
                   <MapPin className="w-3 h-3" /> {profile.location?.estate || profile.estate || 'searching...'}
                 </div>
               </div>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => navigate('/notifications')}
               className="relative w-11 h-11 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
             >
@@ -270,69 +271,64 @@ export default function AgentHome() {
             </button>
           </div>
         </div>
-        
-        {/* ── CORE CONTROLS GROUP ── */}
-        <div className="space-y-3">
-          {/* ── AGENT ONLINE STATUS TOGGLE (Unified Logic) ── */}
-          {(!(profile?.agentAccountType === 'company_admin' || profile?.companyName || profile?.fleetInviteCode)) ? (
-            <div className="w-full p-2 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-150 dark:border-slate-800/30 flex items-center justify-between shadow-none">
-              <div className="flex items-center gap-4 relative z-10">
-                <div className={`w-12 h-12 rounded-3xl flex items-center justify-center transition-colors ${
-                  profile.isOnline ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-slate-200/50 dark:bg-slate-800 text-slate-400'
-                }`}>
-                  {isToggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-5 h-5" />}
-                </div>
-                <div className="text-left">
-                  <p className="text-[10px] font-black capitalize tracking-[0.2em] leading-none mb-1.5 text-primary">System Status</p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">
-                    {profile.isOnline ? 'Active Radar' : 'Offline'}
-                  </p>
-                </div>
-              </div>
-              <button 
-                onClick={handleToggle}
-                disabled={isToggling}
-                className={`relative w-16 h-9 rounded-full transition-all duration-300 ${
-                  profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-slate-300 dark:bg-slate-700'
-                }`}
-              >
-                <div className={`absolute top-1 w-7 h-7 bg-white rounded-full transition-all duration-300 shadow-sm ${
-                  profile.isOnline ? 'left-[32px]' : 'left-[4px]'
-                }`} />
-              </button>
-            </div>
-          ) : (
-            <div className="w-full p-1 rounded-3xl bg-slate-50 dark:bg-slate-800/30 border border-slate-150 dark:border-slate-800/30 flex items-center justify-between shadow-none text-slate-900 dark:text-white">
-              <div className="flex items-center gap-4 relative z-10">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
-                  profile.isOnline ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-slate-200/50 dark:bg-slate-800 text-slate-400'
-                }`}>
-                  {isToggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-5 h-5" />}
-                </div>
-                <div className="text-left">
-                  <p className="text-[10px] font-black capitalize tracking-[0.2em] leading-none mb-1.5 text-primary">Company Control</p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">{profile.isOnline ? 'Radar Active' : 'System Offline'}</p>
-                </div>
-              </div>
-              <button 
-                onClick={handleToggle}
-                disabled={isToggling}
-                className={`relative w-16 h-9 rounded-full transition-all duration-300 ${
-                  profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-slate-300 dark:bg-slate-700'
-                }`}
-              >
-                <div className={`absolute top-1 w-7 h-7 bg-white rounded-full transition-all duration-300 shadow-sm ${
-                  profile.isOnline ? 'left-[32px]' : 'left-[4px]'
-                }`} />
-              </button>
-            </div>
-          )}
 
+        <div className="bg-white dark:bg-slate-900/50 rounded-[1rem] p-1 border border-slate-200/60 dark:border-slate-700 space-y-4">
+          {/* ── CORE CONTROLS GROUP ── */}
+          <div className="space-y-3">
+            {/* ── AGENT ONLINE STATUS TOGGLE (Unified Logic) ── */}
+            {(!(profile?.agentAccountType === 'company_admin' || profile?.companyName || profile?.fleetInviteCode)) ? (
+              <div className="w-full bg-white p-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 flex items-center justify-between shadow-none">
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className={`w-12 h-12 rounded-3xl flex items-center justify-center transition-colors ${profile.isOnline ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-slate-200/50 dark:bg-slate-900 text-slate-400'
+                    }`}>
+                    {isToggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-5 h-5" />}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] font-black capitalize tracking-[0.2em] leading-none mb-1.5 text-primary">System Status</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">
+                      {profile.isOnline ? 'Online' : 'Offline'}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleToggle}
+                  disabled={isToggling}
+                  className={`relative w-16 h-9 rounded-full transition-all duration-300 ${profile.isOnline ? 'bg-emerald-500 ' : 'bg-slate-300 dark:bg-slate-900'
+                    }`}
+                >
+                  <div className={`absolute top-1 w-7 h-7 bg-white rounded-full transition-all duration-300 shadow-sm ${profile.isOnline ? 'left-[32px]' : 'left-[4px]'
+                    }`} />
+                </button>
+              </div>
+            ) : (
+              <div className="w-full p-1 rounded-3xl bg-slate-50 dark:bg-slate-800/30 border border-slate-150 dark:border-slate-800/30 flex items-center justify-between shadow-none text-slate-900 dark:text-white">
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${profile.isOnline ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-slate-200/50 dark:bg-slate-800 text-slate-400'
+                    }`}>
+                    {isToggling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Power className="w-5 h-5" />}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] font-black capitalize tracking-[0.2em] leading-none mb-1.5 text-primary">Company Control</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{profile.isOnline ? 'Radar Active' : 'System Offline'}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleToggle}
+                  disabled={isToggling}
+                  className={`relative w-16 h-9 rounded-full transition-all duration-300 ${profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/30' : 'bg-slate-300 dark:bg-slate-700'
+                    }`}
+                >
+                  <div className={`absolute top-1 w-7 h-7 bg-white rounded-full transition-all duration-300 shadow-sm ${profile.isOnline ? 'left-[32px]' : 'left-[4px]'
+                    }`} />
+                </button>
+              </div>
+            )}
+          </div>
           {/* ── QUICK ACTION MATRIX ── */}
           <div className="grid grid-cols-4 gap-1.5">
             <button
               onClick={() => navigate('/jobs')}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-sm group"
+              className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-sm group"
             >
               <div className="relative">
                 {availableJobs.length > 0 && (
@@ -349,10 +345,10 @@ export default function AgentHome() {
                 <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight">Open Jobs</p>
               </div>
             </button>
-            
+
             <button
               onClick={() => navigate('/trades')}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-sm group"
+              className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-sm group"
             >
               <div className="relative">
                 {acceptedTradesCount > 0 && (
@@ -366,13 +362,13 @@ export default function AgentHome() {
               </div>
               <div className="text-center">
                 <p className="text-[7px] font-semibold text-emerald-600 capitalize tracking-widest mb-0.5">Market</p>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight whitespace-nowrap">Bids</p>
+                <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight whitespace-nowrap">Accepted Bids</p>
               </div>
             </button>
 
             <button
               onClick={() => navigate('/rfqs')}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-sm group"
+              className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-sm group"
             >
               <div className="w-10 h-10 bg-amber-500 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Receipt className="w-5 h-5" />
@@ -385,7 +381,7 @@ export default function AgentHome() {
 
             <button
               onClick={() => navigate('/earnings')}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-sm group"
+              className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-sm group"
             >
               <div className="w-10 h-10 bg-indigo-500 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
                 <TrendingUp className="w-5 h-5" />
@@ -399,114 +395,132 @@ export default function AgentHome() {
         </div>
       </div>
 
-        {/* ── AGENT HERO CARD: COMMAND CENTER ── */}
-        <div className="relative group !mt-2.5">
-          <div className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 rounded-[1rem] p-3 overflow-hidden shadow-none transition-all duration-500">
-            
-            <div className="relative z-10">
-              <div className="grid grid-cols-5 gap-3">
-                
-                {/* 1. Main Stock Value (Bento Anchor - 3x2) */}
-                <div className="col-span-3 row-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
-                    <Package className="w-6 h-6" />
+      {/* ── AGENT HERO CARD: COMMAND CENTER ── */}
+      <div className="relative group !mt-2.5">
+        <div className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 rounded-[1rem] p-3 overflow-hidden shadow-none transition-all duration-500">
+
+          <div className="relative z-10">
+            <div className="grid grid-cols-5 gap-3">
+
+              {/* 1. Main Stock Value (Bento Anchor - 3x2) */}
+              <div className="col-span-3 row-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
+                <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+                  <Package className="w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-100/90 capitalize tracking-widest mb-2.5 leading-none">
+                    Assets Value
+                  </p>
+                  <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
+                    <span className="text-[10px] font-bold text-slate-200 block mb-1 capitalize">KSh</span>
+                    {earnings.inventoryValue?.toLocaleString() || 0}
+                  </h2>
+                </div>
+              </div>
+
+              {/* 2. Rating (2x1) */}
+              <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest">Rating</p>
+                  <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                </div>
+                <h4 className="text-lg font-black text-white leading-none">
+                  {profile?.rating !== undefined && profile?.rating !== null && profile?.rating !== 0 ? Number(profile.rating).toFixed(1) : '0.0'}
+                </h4>
+              </div>
+
+              {/* 3. Points (2x1) */}
+              <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
+                <div className="flex items-center justify-between">
+                  <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest">Points</p>
+                  <Zap className="w-3 h-3 text-emerald-400 fill-emerald-400" />
+                </div>
+                <h4 className="text-lg font-black text-emerald-400 leading-none">{profile.rewardPoints || 0}</h4>
+              </div>
+
+              {/* 4. Accepted Bids (2x1) */}
+              <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
+                <Handshake className="w-4 h-4 text-emerald-400" />
+                <div className="mt-1">
+                  <h3 className="text-base font-black text-white leading-none">{acceptedTradesCount || 0}</h3>
+                  <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest mt-1">Accepted Bids</p>
+                </div>
+              </div>
+
+              {/* 5. Pickups Today (3x1 Base) */}
+              <div className="col-span-3 bg-emerald-950/40 rounded-2xl p-4 flex items-center justify-between px-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-800/40 flex items-center justify-center">
+                    <Truck className="w-4 h-4 text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-slate-100/90 capitalize tracking-widest mb-2.5 leading-none">
-                      Assets Value
-                    </p>
-                    <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
-                      <span className="text-[10px] font-bold text-slate-200 block mb-1 capitalize">KSh</span>
-                      {earnings.inventoryValue?.toLocaleString() || 0}
-                    </h2>
+                    <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest">Pickups Today</p>
+                    <h3 className="text-base font-black text-white leading-none mt-1">{earnings.completedToday || 0}</h3>
                   </div>
                 </div>
-
-                {/* 2. Rating (2x1) */}
-                <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
-                  <div className="flex items-center justify-between">
-                    <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest">Rating</p>
-                    <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
-                  </div>
-                  <h4 className="text-lg font-black text-white leading-none">
-                    {profile?.rating !== undefined && profile?.rating !== null && profile?.rating !== 0 ? Number(profile.rating).toFixed(1) : '0.0'}
-                  </h4>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center">
+                  <TrendingUp className="w-3 h-3 text-emerald-400" />
                 </div>
-
-                {/* 3. Points (2x1) */}
-                <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
-                  <div className="flex items-center justify-between">
-                    <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest">Points</p>
-                    <Zap className="w-3 h-3 text-emerald-400 fill-emerald-400" />
-                  </div>
-                  <h4 className="text-lg font-black text-emerald-400 leading-none">{profile.rewardPoints || 0}</h4>
-                </div>
-
-                {/* 4. Accepted Bids (2x1) */}
-                <div className="col-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
-                  <Handshake className="w-4 h-4 text-emerald-400" />
-                  <div className="mt-1">
-                    <h3 className="text-base font-black text-white leading-none">{acceptedTradesCount || 0}</h3>
-                    <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest mt-1">Bids</p>
-                  </div>
-                </div>
-
-                {/* 5. Pickups Today (3x1 Base) */}
-                <div className="col-span-3 bg-emerald-950/40 rounded-2xl p-4 flex items-center justify-between px-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-800/40 flex items-center justify-center">
-                      <Truck className="w-4 h-4 text-emerald-400" />
-                    </div>
-                    <div>
-                      <p className="text-[9px] font-black text-emerald-300/60 capitalize tracking-widest">Pickups Today</p>
-                      <h3 className="text-base font-black text-white leading-none mt-1">{earnings.completedToday || 0}</h3>
-                    </div>
-                  </div>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-3 h-3 text-emerald-400" />
-                  </div>
-                </div>
-
               </div>
+
             </div>
           </div>
         </div>
+      </div>
 
-      {/* ── CREATE RFQ CTA ── */}
-      <button
-        onClick={() => navigate('/rfq/create')}
-        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex items-center gap-4 hover:shadow-md transition-all active:scale-[0.98] group shadow-sm !mt-3"
-      >
-        <div className="w-12 h-12 bg-amber-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform shrink-0">
-          <Receipt className="w-5 h-5 text-white" />
-        </div>
-        <div className="text-left flex-1 min-w-0">
-          <p className="text-[10px] font-black text-amber-500 capitalize tracking-[0.2em] leading-none mb-1.5">Request for Quotes</p>
-          <p className="text-sm font-bold text-slate-900 dark:text-white">Broadcast RFQ</p>
-          <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-widest mt-0.5">Sourcing Materials from Sellers</p>
-        </div>
-        <ChevronRight className="w-4 h-4 text-slate-300" />
-      </button>
 
-      {/* ── ROUTE OPTIMIZER CTA ── */}
-      <button
-        onClick={() => navigate('/routes')}
-        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex items-center gap-4 hover:shadow-md transition-all active:scale-[0.98] group shadow-sm !mt-2.5"
-      >
-        <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
-          <Navigation className="w-5 h-5 text-white" />
-        </div>
-        <div className="text-left flex-1 min-w-0">
-          <p className="text-[10px] font-black text-blue-600 dark:text-blue-400 capitalize tracking-[0.2em] leading-none mb-1.5">Route Optimizer</p>
-          <p className="text-sm font-bold text-slate-900 dark:text-white">Logistics Terminal</p>
-          <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-widest mt-0.5">Live Multi-Stop Tracking</p>
-        </div>
-        <ChevronRight className="w-4 h-4 text-slate-300" />
-      </button>
+      <div className="bg-white dark:bg-slate-900/50 !mt-3 rounded-[1rem] p-1 border border-slate-200/60 dark:border-slate-700  space-y-4">
+        {/* ── ACTIVE PICKUPS CTA ── */}
+        <button
+          onClick={() => navigate('/pickups')}
+          className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex items-center gap-4 hover:shadow-md transition-all active:scale-[0.98] group shadow-sm "
+        >
+          <div className="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center  group-hover:scale-105 transition-transform shrink-0">
+            <PackageCheck className="w-5 h-5 text-white" />
+          </div>
+          <div className="text-left flex-1 min-w-0">
+            <p className="text-[10px] font-black text-emerald-500 capitalize tracking-[0.2em] leading-none mb-1.5">Fulfillment Orders</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-white">Active Pickups</p>
+            <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-widest mt-0.5">Verify and Collect Materials</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-slate-300" />
+        </button>
 
+        {/* ── CREATE RFQ CTA ── */}
+        <button
+          onClick={() => navigate('/rfq/create')}
+          className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex items-center gap-4 hover:shadow-md transition-all active:scale-[0.98] group shadow-sm !mt-3"
+        >
+          <div className="w-12 h-12 bg-amber-500 text-white rounded-2xl flex items-center justify-center  group-hover:scale-105 transition-transform shrink-0">
+            <Receipt className="w-5 h-5 text-white" />
+          </div>
+          <div className="text-left flex-1 min-w-0">
+            <p className="text-[10px] font-black text-amber-500 capitalize tracking-[0.2em] leading-none mb-1.5">Request for Materials</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-white">Broadcast RFQ</p>
+            <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-widest mt-0.5">Sourcing Materials from Sellers</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-slate-300" />
+        </button>
+
+        {/* ── ROUTE OPTIMIZER CTA ── */}
+        <button
+          onClick={() => navigate('/routes')}
+          className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex items-center gap-4 hover:shadow-md transition-all active:scale-[0.98] group shadow-sm !mt-2.5"
+        >
+          <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center  group-hover:scale-105 transition-transform shrink-0">
+            <Navigation className="w-5 h-5 text-white" />
+          </div>
+          <div className="text-left flex-1 min-w-0">
+            <p className="text-[10px] font-black text-blue-600 dark:text-blue-400 capitalize tracking-[0.2em] leading-none mb-1.5">Route Optimizer</p>
+            <p className="text-sm font-bold text-slate-900 dark:text-white">Logistics Terminal</p>
+            <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-widest mt-0.5">Live Multi-Stop Tracking</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-slate-300" />
+        </button>
+      </div>
       {/* ── HYGENEX AGENT COACH ── */}
       {currentInsight && (
-        <div className="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-[1rem] p-6 text-white relative overflow-hidden shadow-xl shadow-blue-500/10">
+        <div className="bg-gradient-to-br from-indigo-600 to-blue-700 !mt-3 rounded-[1rem] p-6 text-white relative overflow-hidden shadow-xl shadow-blue-500/10">
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-4">
               <span className="bg-white/20 px-2 py-0.5 rounded-lg text-xs font-semibold capitalize tracking-widest">Agent Insights</span>
@@ -517,13 +531,13 @@ export default function AgentHome() {
               {currentInsight.message || "High demand detected in your sector. Stay online for bonus multipliers."}
             </p>
             <div className="flex gap-3">
-              <button 
+              <button
                 onClick={() => navigate(currentInsight.target || '/jobs')}
                 className="flex-1 py-4 bg-white text-indigo-700 rounded-2xl font-semibold text-xs capitalize tracking-widest shadow-lg active:scale-[0.98] transition-all"
               >
                 {currentInsight.action || 'View Details'}
               </button>
-              <button 
+              <button
                 onClick={nextInsight}
                 className="px-6 py-4 bg-white/10 text-white rounded-2xl font-semibold text-xs capitalize tracking-widest border border-white/20 active:scale-[0.98] transition-all"
               >
@@ -535,7 +549,7 @@ export default function AgentHome() {
       )}
 
       {/* ── MISSION HISTORY ── */}
-      <div className="bg-slate-100/30 dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900/40 rounded-2xl p-6 !mt-3 border border-slate-200/50 dark:border-slate-700">
         <div className="flex items-center justify-between mb-6 px-1">
           <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400">Mission History</h3>
           {jobHistory.length > 0 && (
@@ -547,7 +561,7 @@ export default function AgentHome() {
             </button>
           )}
         </div>
-        
+
         <div className="space-y-6">
           {jobHistory.slice(0, 4).map((item, i) => {
             const isCompleted = item.status === 'completed';
@@ -555,8 +569,8 @@ export default function AgentHome() {
             const pillColor = isCompleted
               ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
               : isCancelled
-              ? 'bg-red-100 text-red-600 dark:bg-red-500/10 dark:text-red-400'
-              : 'bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400';
+                ? 'bg-red-100 text-red-600 dark:bg-red-500/10 dark:text-red-400'
+                : 'bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400';
             const statusLabel = {
               completed: 'Completed',
               cancelled: 'Cancelled',
@@ -584,7 +598,7 @@ export default function AgentHome() {
               </div>
             );
           })}
-          
+
           {jobHistory.length === 0 && (
             <div className="text-center py-4">
               <p className="text-xs text-slate-400 font-semibold capitalize tracking-widest">No Past Missions Yet</p>
@@ -597,9 +611,9 @@ export default function AgentHome() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => navigate('/hygenex')}
-        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center shadow-2xl shadow-emerald-500/50 z-50 border-4 border-white dark:border-slate-800"
+        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center  z-50 border-4 border-white dark:border-slate-800"
       >
-        <div className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-20" />
+        <div className="absolute inset-0 rounded-full bg-emerald-500  opacity-20" />
         <Brain className="w-6 h-6 text-white" />
       </motion.button>
     </div>

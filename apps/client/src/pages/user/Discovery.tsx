@@ -71,9 +71,9 @@ export default function DiscoveryHub() {
   }, [partners, activeMaterial, activeScale, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="w-full mx-auto">
           <div className="flex items-center gap-4 mb-4">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
@@ -194,7 +194,7 @@ export default function DiscoveryHub() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   onClick={() => navigate(`/company/${partner.id}`)}
-                  className="w-full bg-white dark:bg-slate-900 p-4 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-800/80 active:scale-[0.99] transition-all group text-left"
+                  className="w-full bg-white dark:bg-slate-800 p-4 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-800/80 active:scale-[0.99] transition-all group text-left"
                 >
                   <div className="flex gap-4">
                     {/* Avatar/Icon */}
@@ -264,7 +264,7 @@ export default function DiscoveryHub() {
               );
             })
           ) : (
-            <div className="mx-4 text-center py-24 bg-white dark:bg-slate-900 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
+            <div className="mx-4 text-center py-24 bg-white dark:bg-slate-800 rounded-[3rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
               <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Search className="w-8 h-8 text-slate-200" />
               </div>

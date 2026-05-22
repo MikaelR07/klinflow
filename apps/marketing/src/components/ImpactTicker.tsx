@@ -7,7 +7,7 @@ export default function ImpactTicker() {
 
   // Simulated live events
   const mockEvents = [
-    { type: 'verify', msg: "Verified: 24kg PET in Westlands", icon: CheckCircle2, color: "text-emerald-500" },
+    { type: 'verify', msg: "Verified: 24kg PET in Westlands", icon: CheckCircle2, color: "text-primary" },
     { type: 'match', msg: "Matched: Asset #802 claimed by Weaver", icon: Target, color: "text-indigo-500" },
     { type: 'value', msg: "Market Pulse: HDPE prices up +2.1%", icon: TrendingUp, color: "text-blue-500" },
     { type: 'impact', msg: "Total Impact: 12.4 Tons Recycled Today", icon: Zap, color: "text-amber-500" },
@@ -32,7 +32,7 @@ export default function ImpactTicker() {
           initial={{ y: 20, opacity: 0, scale: 0.9 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: -20, opacity: 0, scale: 0.9 }}
-          className="bg-slate-900/90 dark:bg-black/80 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 min-w-[320px] pointer-events-auto"
+          className="bg-surface-950/90 dark:bg-black/80 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 min-w-[320px] pointer-events-auto"
         >
           {current && (
             <>
@@ -46,8 +46,8 @@ export default function ImpactTicker() {
             </>
           )}
           <div className="flex items-center gap-1.5 ml-4">
-             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-             <span className="text-xs font-semibold text-emerald-500 uppercase tracking-widest">Live</span>
+             <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+             <span className="text-xs font-semibold text-primary uppercase tracking-widest">Live</span>
           </div>
         </motion.div>
       </AnimatePresence>

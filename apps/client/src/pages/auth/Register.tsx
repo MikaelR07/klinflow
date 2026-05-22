@@ -187,7 +187,7 @@ export default function Register() {
                   value={formData.name} 
                   onChange={handleInputChange} 
                   placeholder="Full Legal Name" 
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
                   required 
                 />
               </div>
@@ -200,7 +200,7 @@ export default function Register() {
                   value={formData.email} 
                   onChange={handleInputChange} 
                   placeholder="Email Address" 
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
                   required 
                 />
               </div>
@@ -213,7 +213,7 @@ export default function Register() {
                   value={formData.phone} 
                   onChange={handleInputChange} 
                   placeholder="Phone Number (07... / 01...)" 
-                  className={`w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-900 border rounded-2xl text-sm font-semibold tracking-widest focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all ${
+                  className={`w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-800 border rounded-2xl text-sm font-semibold tracking-widest focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all ${
                     phoneAvailable === false ? 'border-rose-300 ring-rose-100' : 'border-slate-200 dark:border-slate-800'
                   }`} 
                   required 
@@ -248,7 +248,7 @@ export default function Register() {
                   className={`flex items-center justify-center gap-3 p-3 rounded-2xl border-2 transition-all active:scale-95 ${
                     formData.gender === g.id 
                       ? 'border-primary bg-primary/5' 
-                      : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900'
+                      : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800'
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-xl ${g.bg} flex items-center justify-center`}>
@@ -280,7 +280,7 @@ export default function Register() {
                   value={formData.pin} 
                   onChange={handleInputChange} 
                   placeholder="Passcode" 
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
                   required 
                 />
               </div>
@@ -292,7 +292,7 @@ export default function Register() {
                   value={formData.confirmPin} 
                   onChange={handleInputChange} 
                   placeholder="Confirm" 
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
                   required 
                 />
               </div>
@@ -334,7 +334,7 @@ export default function Register() {
       {/* ── VERIFICATION OVERLAY ────────────────────────────────────── */}
       {isVerifying && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="max-w-sm w-full bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in zoom-in slide-in-from-bottom-8 duration-500 ease-out">
+          <div className="max-w-sm w-full bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in zoom-in slide-in-from-bottom-8 duration-500 ease-out">
             <button 
               onClick={() => setIsVerifying(false)}
               className="absolute right-6 top-6 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors"
@@ -364,7 +364,7 @@ export default function Register() {
                   value={formData.otp} 
                   onChange={(e) => setFormData(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
                   placeholder="000000" 
-                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200" 
+                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200" 
                 />
                 <div className="flex flex-col items-center mt-4 space-y-3">
                   <p className="text-xs font-semibold text-slate-400 capitalize tracking-[0.2em]">Code sent via SMS to your phone</p>

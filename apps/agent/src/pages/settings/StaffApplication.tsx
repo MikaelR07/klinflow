@@ -8,12 +8,15 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
 
+import CompanyStaffRequests from './CompanyStaffRequests';
+
 export default function StaffApplication() {
   const navigate = useNavigate();
   const { profile, updateProfile, userId } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   
+  const isCompanyAdmin = profile?.agentAccountType === 'company_admin' || profile?.agent_account_type === 'company_admin';
   const isStaff = profile?.isStaff === true || profile?.is_staff === true;
   const hasFleetId = !!(profile?.fleetId || profile?.fleet_id);
   const isVerified = isStaff || hasFleetId;
@@ -111,17 +114,17 @@ export default function StaffApplication() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors pb-24">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-24">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-850 text-slate-500 transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div className="flex flex-col">
-              <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Staff Program</h1>
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Klinflow Team</p>
+              <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">{isCompanyAdmin ? 'Fleet Drivers' : 'Staff Program'}</h1>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">{isCompanyAdmin ? 'Driver Approvals' : 'Klinflow Team'}</p>
             </div>
           </div>
           <button 
@@ -137,7 +140,9 @@ export default function StaffApplication() {
 
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)] px-4 max-w-lg mx-auto w-full space-y-6 mt-4">
         
-        {isVerified ? (
+        {isCompanyAdmin ? (
+           <CompanyStaffRequests />
+        ) : isVerified ? (
           // ── VERIFIED STAFF VIEW ──
           <div className="space-y-6 animate-fade-in text-center py-6">
             <div className="w-24 h-24 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto shadow-xl shadow-primary/10">
@@ -153,7 +158,7 @@ export default function StaffApplication() {
                <h2 className="text-3xl t-black tracking-tight text-primary">{profile?.fleetId || profile?.fleet_id || 'CF-STAFF-ACTIVE'}</h2>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 text-left space-y-4">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 text-left space-y-4">
               <h3 className="text-xs font-black capitalize tracking-wider text-slate-400">Staff Privileges</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
@@ -175,7 +180,7 @@ export default function StaffApplication() {
           </div>
         ) : isPending ? (
           // ── PENDING STATE VIEW ──
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 border border-slate-100 dark:border-slate-800 text-center space-y-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-800 text-center space-y-6 shadow-sm">
              <div className="w-16 h-16 bg-amber-50 dark:bg-amber-950/20 rounded-2xl flex items-center justify-center mx-auto text-amber-500 animate-pulse">
                 <Briefcase className="w-8 h-8" />
              </div>
@@ -223,7 +228,7 @@ export default function StaffApplication() {
               
               <div className="space-y-3">
                 {benefits.map((benefit, index) => (
-                  <div key={index} className="bg-white dark:bg-slate-900 p-4.5 rounded-2xl border border-slate-100 dark:border-slate-800 flex gap-4 shadow-sm">
+                  <div key={index} className="bg-white dark:bg-slate-800 p-4.5 rounded-2xl border border-slate-100 dark:border-slate-800 flex gap-4 shadow-sm">
                     <div className={`w-10 h-10 rounded-xl ${benefit.bg} flex items-center justify-center shrink-0`}>
                       {benefit.icon}
                     </div>
@@ -237,7 +242,7 @@ export default function StaffApplication() {
             </div>
 
             {/* Verification Consent & Action Button */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm space-y-5">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm space-y-5">
                <div className="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 flex gap-3 items-center">
                   <ShieldAlert className="w-5 h-5 text-orange-500 shrink-0" />
                   <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-450 leading-tight">

@@ -15,7 +15,7 @@ export default function GlassMockup({ color = 'emerald', icon: Icon, isDarkMode 
   };
 
   const accentColors = {
-    emerald: 'bg-emerald-500',
+    emerald: 'bg-primary',
     blue: 'bg-blue-500',
     indigo: 'bg-indigo-500',
     rose: 'bg-rose-500',
@@ -28,18 +28,9 @@ export default function GlassMockup({ color = 'emerald', icon: Icon, isDarkMode 
           ? 'bg-white/5 border-white/5' 
           : 'bg-slate-50 border-slate-200'
       }`}>
-        {/* Animated Background Gradient */}
-        <motion.div 
-          animate={{ 
-            rotate: [0, 360],
-            scale: [1, 1.1, 1]
-          }}
-          transition={{ 
-            duration: 20, 
-            repeat: Infinity, 
-            ease: "linear" 
-          }}
-          className={`absolute inset-0 bg-gradient-to-br ${colors[color]} blur-3xl opacity-50`}
+        {/* Clean Static Background Gradient */}
+        <div 
+          className={`absolute inset-0 bg-gradient-to-br ${colors[color]} opacity-10`}
         />
 
         {/* Inner Glass Card */}
@@ -47,10 +38,10 @@ export default function GlassMockup({ color = 'emerald', icon: Icon, isDarkMode 
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className={`relative w-32 h-32 md:w-48 md:h-48 rounded-[2rem] md:rounded-[3rem] backdrop-blur-xl flex items-center justify-center shadow-2xl border ${
+          className={`relative w-32 h-32 md:w-48 md:h-48 rounded-[2rem] md:rounded-[3rem] flex items-center justify-center shadow-sm border ${
             isDarkMode 
-              ? 'bg-white/10 border-white/20' 
-              : 'bg-white/40 border-white/60'
+              ? 'bg-surface-900 border-white/10' 
+              : 'bg-white border-slate-200'
           }`}
         >
           <div className={`w-16 h-16 md:w-24 md:h-24 rounded-2xl md:rounded-[2rem] ${accentColors[color]} flex items-center justify-center text-white shadow-xl`}>
@@ -69,11 +60,11 @@ export default function GlassMockup({ color = 'emerald', icon: Icon, isDarkMode 
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         className={`absolute -top-6 -right-6 p-4 rounded-2xl backdrop-blur-md border shadow-xl ${
           isDarkMode 
-            ? 'bg-slate-900/80 border-white/10 text-white' 
+            ? 'bg-surface-950/80 border-white/10 text-white' 
             : 'bg-white/80 border-slate-200 text-slate-900'
         }`}
       >
-        <div className="text-xs font-black uppercase tracking-widest text-emerald-500 mb-1">Status</div>
+        <div className="text-xs font-black uppercase tracking-widest text-primary mb-1">Status</div>
         <div className="text-xs font-bold">Encrypted Ledger</div>
       </motion.div>
     </div>

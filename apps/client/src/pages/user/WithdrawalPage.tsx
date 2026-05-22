@@ -60,7 +60,7 @@ export default function WithdrawalPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-2 px-1 rounded-3xl mb-6 shadow-sm">
+      <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 p-2 px-1 rounded-3xl mb-6 shadow-sm">
         <div className="max-w-md mx-auto flex items-center gap-4">
           <button onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors">
             <ArrowLeft className="w-5 h-5 text-slate-500" />
@@ -122,7 +122,7 @@ export default function WithdrawalPage() {
 
         {step === 2 && method && (
           <div className="space-y-6 animate-slide-up">
-            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
+            <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
               <div className="flex items-center gap-4 mb-8">
                  <div className={`w-14 h-14 ${method.bg} ${method.color} rounded-3xl flex items-center justify-center`}>
                     <method.icon className="w-8 h-8" />
@@ -207,7 +207,7 @@ export default function WithdrawalPage() {
                </p>
              </div>
 
-             <div className="card p-6 bg-slate-100 dark:bg-slate-900 border-dashed border-2">
+             <div className="card p-6 bg-slate-100 dark:bg-slate-800 border-dashed border-2">
                 <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-2">Transaction Reference</p>
                 <p className="font-mono font-semibold dark:text-white">CF-WD-{Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
              </div>

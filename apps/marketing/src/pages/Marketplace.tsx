@@ -15,7 +15,7 @@ export default function Marketplace() {
       {/* ── HERO SECTION ─────────────────────────────────────────── */}
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`} />
+          <div className={`absolute inset-0 ${isDarkMode ? 'bg-surface-950' : 'bg-slate-50'}`} />
           <div className={`absolute top-0 right-0 w-[600px] h-[600px] bg-teal-500/10 blur-[120px] rounded-full`} />
         </div>
 
@@ -25,7 +25,7 @@ export default function Marketplace() {
               <div className="inline-flex items-center gap-2 text-teal-500 font-bold uppercase tracking-widest text-xs mb-6">
                 <ShoppingBag className="w-4 h-4" /> The B2B Settlement Layer
               </div>
-              <h1 className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+              <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                 The Real-Time Marketplace for <br className="hidden sm:block" />
                 <span className="text-teal-500 italic">Verified Circular Assets.</span>
               </h1>
@@ -43,7 +43,7 @@ export default function Marketplace() {
             </div>
 
             <div className="order-1 lg:order-2">
-              <div className="rounded-2xl overflow-hidden border border-white/5 shadow-2xl relative bg-slate-900">
+              <div className="rounded-2xl overflow-hidden border border-white/5 shadow-2xl relative bg-surface-950">
                 <img src="/grid/business-home.webp" alt="Marketplace Terminal: Industrial Exchange" loading="lazy" className="w-full h-auto" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
               </div>
@@ -53,7 +53,7 @@ export default function Marketplace() {
       </section>
 
       {/* ── TRADING ROLES ─────────────────────────────────────────── */}
-      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-900' : 'bg-white'}`}>
+      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-surface-950' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12">
             {[
@@ -72,7 +72,7 @@ export default function Marketplace() {
             ].map((role) => (
               <div 
                 key={role.title}
-                className={`p-8 md:p-12 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-900 border-white/5 hover:border-teal-500/20' : 'bg-slate-50 border-slate-100 hover:border-teal-500/20 shadow-lg'}`}
+                className={`p-8 md:p-12 rounded-2xl border transition-all ${isDarkMode ? 'bg-surface-950 border-white/5 hover:border-teal-500/20' : 'bg-slate-50 border-slate-100 hover:border-teal-500/20 shadow-lg'}`}
               >
                 <div className={`w-16 h-16 rounded-2xl bg-${role.color}-500/10 text-${role.color}-500 flex items-center justify-center mb-8`}>
                   <role.icon className="w-8 h-8" />
@@ -89,11 +89,11 @@ export default function Marketplace() {
       </section>
 
       {/* ── B2B MECHANICS ─────────────────────────────────────────── */}
-      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`}>
+      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-surface-950' : 'bg-slate-50'}`}>
         <div className="max-w-7xl mx-auto">
            <div className="text-center mb-24">
               <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-teal-500 mb-6">Built-In Liquidity</h2>
-              <h3 className={`text-2xl sm:text-3xl md:text-5xl font-bold tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>The Settlement Layer.</h3>
+              <h3 className={`text-3xl md:text-4xl font-bold tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>The Settlement Layer.</h3>
            </div>
 
            <div className="grid md:grid-cols-3 gap-8">
@@ -127,10 +127,10 @@ export default function Marketplace() {
       </section>
 
       {/* ── MARKET DATA VISUALIZATION ─────────────────────────────────────────── */}
-      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-slate-900' : 'bg-white'}`}>
+      <section className={`py-16 md:py-32 px-6 ${isDarkMode ? 'bg-surface-950' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
            <div className="order-2 lg:order-1">
-              <div className="p-10 rounded-2xl bg-slate-900 border border-white/5 relative overflow-hidden">
+              <div className="p-10 rounded-2xl bg-surface-950 border border-white/5 relative overflow-hidden">
                  <div className="flex items-center justify-between mb-10">
                     <div className="flex items-center gap-3">
                        <Activity className="w-5 h-5 text-teal-500" />
@@ -150,7 +150,7 @@ export default function Marketplace() {
                           <p className="text-sm font-bold text-white">{item.label}</p>
                           <div className="flex items-center gap-4">
                              <p className="text-sm font-mono text-slate-300">{item.price}</p>
-                             <p className={`text-xs font-bold ${item.change.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{item.change}</p>
+                             <p className={`text-xs font-bold ${item.change.startsWith('+') ? 'text-primary' : 'text-rose-500'}`}>{item.change}</p>
                           </div>
                        </div>
                     ))}
@@ -165,7 +165,7 @@ export default function Marketplace() {
 
            <div className="order-1 lg:order-2">
               <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-teal-500 mb-6">Real-Time Trading</h2>
-              <h3 className={`text-2xl sm:text-3xl md:text-5xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>The Exchange for <br className="hidden sm:block" />Circular Materials.</h3>
+              <h3 className={`text-3xl md:text-4xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>The Exchange for <br className="hidden sm:block" />Circular Materials.</h3>
               <p className={`text-lg font-medium leading-relaxed mb-12 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                  We have digitized the entire supply chain, allowing industrial buyers to procure thousands of kilograms of verified materials with a single click. No more brokers, no more friction.
               </p>

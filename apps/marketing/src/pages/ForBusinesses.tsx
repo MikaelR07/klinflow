@@ -13,13 +13,13 @@ export default function ForBusinesses() {
     <Layout>
       <section className="relative pt-24 md:pt-32 pb-16 md:pb-32 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className={`absolute inset-0 ${isDarkMode ? 'bg-slate-900' : 'bg-slate-50'}`} />
-          <div className={`absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[100px] rounded-full`} />
+          <div className={`absolute inset-0 ${isDarkMode ? 'bg-surface-950' : 'bg-slate-50'}`} />
+          <div className={`absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[120px] opacity-30 rounded-full`} />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10 text-center">
           <div className="max-w-3xl mx-auto mb-20">
-            <h1 className={`text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+            <h1 className={`text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                Industrial-Scale <br className="hidden sm:block" />
                <span className="text-indigo-500 italic">Procurement.</span>
             </h1>
@@ -34,7 +34,7 @@ export default function ForBusinesses() {
                 { title: 'B2B Settlement', desc: 'Secure your trades with automated escrow and instant industrial settlement protocols designed for high-volume commerce.', icon: Layers },
                 { title: 'Supply Intelligence', desc: 'Track material availability, price shifts, and collection hotspots to optimize your procurement strategy.', icon: BarChart3 },
              ].map((item, i) => (
-                <div key={i} className={`p-10 rounded-2xl border ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-100 shadow-xl'}`}>
+                <div key={i} className={`p-10 rounded-2xl border ${isDarkMode ? 'bg-surface-950 border-white/5' : 'bg-white border-slate-100 shadow-xl'}`}>
                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center mb-8">
                       <item.icon className="w-6 h-6" />
                    </div>
@@ -48,7 +48,7 @@ export default function ForBusinesses() {
 
       <section className="py-16 md:py-32 px-6">
          <div className={`max-w-5xl mx-auto p-8 md:p-20 rounded-2xl text-center bg-indigo-600`}>
-            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tighter mb-8 text-white">Scale Your Supply.</h2>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-8 text-white">Scale Your Supply.</h2>
             <button className="px-10 py-5 bg-white text-indigo-600 font-bold rounded-2xl shadow-2xl hover:scale-105 transition-all">
                Speak to Enterprise Sales
             </button>

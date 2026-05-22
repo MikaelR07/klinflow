@@ -49,6 +49,7 @@ const RFQDetailsPage = lazy(() => import('./pages/user/RFQDetailsPage'));
 const CircularResume = lazy(() => import('./pages/user/CircularResume'));
 const CommunityCollective = lazy(() => import('./pages/user/CommunityCollective'));
 const FinancingHub = lazy(() => import('./pages/user/FinancingHub'));
+const FulfillmentTrackingPage = lazy(() => import('./pages/user/FulfillmentTrackingPage'));
 
 // Settings Pages
 const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
@@ -93,13 +94,13 @@ function MobileLayout() {
   ];
 
   return (
-    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-900">
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-800">
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] pb-[calc(env(safe-area-inset-bottom,0px)+6rem)] px-1">
         <Suspense fallback={<LoadingScreen message="Loading..." />}>
           <Outlet />
         </Suspense>
       </div>
-      <div className="fixed bottom-0 left-0 right-0 z-[100] max-w-lg mx-auto pb-[env(safe-area-inset-bottom,0px)] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800">
+      <div className="fixed bottom-0 left-0 right-0 z-[100] max-w-lg mx-auto pb-[env(safe-area-inset-bottom,0px)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800">
         <BottomNav items={isSeller ? sellerNav : residentNav} />
       </div>
     </div>
@@ -187,7 +188,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-900 transition-colors duration-200">
+    <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
 
 
       <Routes>
@@ -199,6 +200,7 @@ export default function App() {
         <Route element={<ProtectedLayout />}>
           <Route path="/hygenex" element={<HygeneXPage />} />
           <Route path="/rfq/:rfqId" element={<RFQDetailsPage />} />
+          <Route path="/fulfillment/:id" element={<FulfillmentTrackingPage />} />
           <Route path="/my-rfq-offers/:quoteId" element={<SubmittedQuoteDetailsPage />} />
           <Route element={<MobileLayout />}>
             <Route path="/" element={<UserHome />} />

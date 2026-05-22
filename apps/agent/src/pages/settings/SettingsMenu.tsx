@@ -1,7 +1,7 @@
-import { 
-  User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle, 
-  Truck, BadgeCheck, Clock, DollarSign, Brain, Settings, 
-  Wallet, ArrowUpRight, ArrowDownLeft, History, Package, 
+import {
+  User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle,
+  Truck, BadgeCheck, Clock, DollarSign, Brain, Settings,
+  Wallet, ArrowUpRight, ArrowDownLeft, History, Package,
   Search, Briefcase, Star, CreditCard, ShieldCheck, HelpCircle, X, Loader2, Zap, Sun, Moon
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -23,7 +23,7 @@ export default function SettingsMenu() {
 
   const [companyBalance, setCompanyBalance] = useState<number | null>(null);
   const [isLoadingBalance, setIsLoadingBalance] = useState(false);
-  
+
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [depositAmount, setDepositAmount] = useState('');
@@ -148,35 +148,37 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors pb-24">
-      {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
-          <div className="flex flex-col">
-            <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
-            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Profile & Settings</p>
-          </div>
-          <div className="flex items-center gap-2">
-             <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shadow-sm shadow-primary/10">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-24">
+      {/* FIXED TOP NAV */}
+      {!isCompanyOwner && (
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
+          <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
+            <div className="flex flex-col">
+              <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
+              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Profile & Settings</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shadow-sm shadow-primary/10">
                 <p className="text-[10px] font-black text-primary capitalize tracking-[0.2em]">{agentTypeLabel}</p>
-             </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
+      <main className={`flex-1 ${isCompanyOwner ? 'pt-8' : 'pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)]'} pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5`}>
         {/* ── HERO BENTO CARD ── */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white mb-6 group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 dark:bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32 transition-transform group-hover:scale-110 duration-700" />
-          
+
           <div className="relative z-10 space-y-2.5">
             {/* Profile Section */}
             <div className="flex items-center gap-4 group/profile cursor-pointer" onClick={() => navigate('/settings/profile')}>
               <div className="relative shrink-0">
                 <div className="w-14 h-14 rounded-full bg-slate-50 dark:bg-slate-800 border-2 border-white shadow-md flex items-center justify-center overflow-hidden transition-transform group-hover/profile:scale-105">
                   {(profile?.avatarUrl || profile?.avatar) && !imgError ? (
-                    <img 
-                      src={getThumbnailUrl((profile.avatarUrl || profile.avatar)!, { width: 150 })} 
+                    <img
+                      src={getThumbnailUrl((profile.avatarUrl || profile.avatar)!, { width: 150 })}
                       className="w-full h-full object-cover"
                       onError={() => setImgError(true)}
                     />
@@ -190,12 +192,12 @@ export default function SettingsMenu() {
                   </div>
                 )}
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <h2 className="text-base font-black text-white leading-tight truncate">
                   {profile?.name || 'Klinflow Agent'}
                 </h2>
-                <button 
+                <button
                   onClick={(e) => { e.stopPropagation(); navigate('/settings/profile'); }}
                   className="flex items-center gap-1 mt-1 text-emerald-250 font-bold text-[9px] capitalize tracking-[0.2em] hover:text-white transition-colors"
                 >
@@ -220,7 +222,7 @@ export default function SettingsMenu() {
                   </div>
                 )}
               </div>
-              
+
               <div className="space-y-0.5">
                 <p className="text-3xl font-black tracking-tighter text-white">
                   <span className="text-lg font-medium opacity-80 mr-1.5">KSh</span>
@@ -231,7 +233,7 @@ export default function SettingsMenu() {
               <div className="flex gap-3 mt-5">
                 {!isFleetDriver ? (
                   <>
-                    <button 
+                    <button
                       onClick={() => setShowDepositModal(true)}
                       className="flex-1 bg-white text-emerald-700 dark:text-slate-900 h-12 rounded-xl font-bold text-xs capitalize tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md hover:bg-slate-50"
                     >
@@ -243,7 +245,7 @@ export default function SettingsMenu() {
                   </>
                 ) : (
                   <>
-                    <button 
+                    <button
                       onClick={() => setShowRequestModal(true)}
                       className="flex-1 bg-white text-emerald-700 dark:text-slate-900 h-12 rounded-xl font-bold text-xs capitalize tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md hover:bg-slate-50"
                     >
@@ -267,7 +269,7 @@ export default function SettingsMenu() {
           </div>
           <div className="grid grid-cols-4 gap-4">
             {quickActions.map((action, i) => (
-              <button 
+              <button
                 key={i}
                 onClick={() => navigate(action.path)}
                 className="flex flex-col items-center gap-3 active:scale-90 transition-all"
@@ -280,41 +282,41 @@ export default function SettingsMenu() {
             ))}
           </div>
         </div>
-        
+
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3 mb-10">
           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
-          <div className="bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
-             <div className="p-5 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                   <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
-                      <Brain className="w-5 h-5" />
-                   </div>
-                   <div className="text-left">
-                      <p className="text-sm font-semibold text-slate-900 dark:text-white">HygeneX History</p>
-                      <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">Save AI Conversations</p>
-                   </div>
+          <div className="bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+            <div className="p-5 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
+                  <Brain className="w-5 h-5" />
                 </div>
-                <button 
-                  onClick={() => {
-                     const newVal = !saveChatHistory;
-                     setSaveChatHistory(newVal);
-                     localStorage.setItem('saveAiChatHistory', newVal.toString());
-                     toast.success(`Chat History ${newVal ? 'Enabled' : 'Disabled'}`);
-                  }}
-                  className={`w-11 h-6 rounded-full p-1 transition-all ${saveChatHistory ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-slate-200 dark:bg-slate-700'}`}
-                >
-                  <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${saveChatHistory ? 'translate-x-5' : 'translate-x-0'}`} />
-                </button>
-             </div>
-             <ThemeToggleRow />
+                <div className="text-left">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">HygeneX History</p>
+                  <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">Save AI Conversations</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  const newVal = !saveChatHistory;
+                  setSaveChatHistory(newVal);
+                  localStorage.setItem('saveAiChatHistory', newVal.toString());
+                  toast.success(`Chat History ${newVal ? 'Enabled' : 'Disabled'}`);
+                }}
+                className={`w-11 h-6 rounded-full p-1 transition-all ${saveChatHistory ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-slate-200 dark:bg-slate-700'}`}
+              >
+                <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${saveChatHistory ? 'translate-x-5' : 'translate-x-0'}`} />
+              </button>
+            </div>
+            <ThemeToggleRow />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm mb-6">
+        <div className="bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm mb-6">
           <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {secondaryMenu.map((item, i) => (
-              <button 
+              <button
                 key={i}
                 onClick={() => navigate(item.path)}
                 className="w-full flex items-center justify-between p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
@@ -324,8 +326,8 @@ export default function SettingsMenu() {
                     <item.icon className="w-5 h-5" />
                   </div>
                   <div className="text-left">
-                     <p className="text-sm font-semibold text-slate-900 dark:text-white">{item.label}</p>
-                     <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">{item.subtitle}</p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">{item.label}</p>
+                    <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">{item.subtitle}</p>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-300 group-hover:translate-x-1 transition-transform" />
@@ -336,7 +338,7 @@ export default function SettingsMenu() {
 
         {/* ── LOGOUT ── */}
         <div className="flex justify-center mb-8">
-          <button 
+          <button
             onClick={async () => {
               await logout();
               toast.success('Logged Out');
@@ -358,22 +360,22 @@ export default function SettingsMenu() {
       <AnimatePresence>
         {showDepositModal && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowDepositModal(false)}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 border border-slate-100 dark:border-slate-800"
+              className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 border border-slate-100 dark:border-slate-800"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold dark:text-white">Wallet Deposit</h3>
-                <button 
+                <button
                   onClick={() => setShowDepositModal(false)}
                   className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center"
                 >
@@ -386,7 +388,7 @@ export default function SettingsMenu() {
                   <label className="text-[10px] font-bold capitalize tracking-[0.2em] text-slate-400 px-1">Enter Amount (KSh)</label>
                   <div className="relative">
                     <div className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-slate-400">KSh</div>
-                    <input 
+                    <input
                       type="number"
                       autoFocus
                       value={depositAmount}
@@ -397,7 +399,7 @@ export default function SettingsMenu() {
                   </div>
                 </div>
 
-                <button 
+                <button
                   disabled={isDepositing || !depositAmount}
                   onClick={handleDeposit}
                   className="w-full h-16 bg-primary text-white rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2"
@@ -418,22 +420,22 @@ export default function SettingsMenu() {
       <AnimatePresence>
         {showRequestModal && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowRequestModal(false)}
               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             />
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 border border-slate-100 dark:border-slate-800"
+              className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 border border-slate-100 dark:border-slate-800"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold dark:text-white">Request Funds</h3>
-                <button 
+                <button
                   onClick={() => setShowRequestModal(false)}
                   className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center"
                 >
@@ -446,7 +448,7 @@ export default function SettingsMenu() {
                   <label className="text-[10px] font-bold capitalize tracking-[0.2em] text-slate-400 px-1">Amount Requested (KSh)</label>
                   <div className="relative">
                     <div className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-slate-400">KSh</div>
-                    <input 
+                    <input
                       type="number"
                       autoFocus
                       value={requestAmount}
@@ -459,7 +461,7 @@ export default function SettingsMenu() {
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold capitalize tracking-[0.2em] text-slate-400 px-1">Reason / Purpose</label>
-                  <textarea 
+                  <textarea
                     value={requestReason}
                     onChange={(e) => setRequestReason(e.target.value)}
                     placeholder="e.g. Buying HDPE from residents"
@@ -467,7 +469,7 @@ export default function SettingsMenu() {
                   />
                 </div>
 
-                <button 
+                <button
                   disabled={isRequesting || !requestAmount}
                   onClick={handleRequestFunds}
                   className="w-full h-16 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-emerald-600/20 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2"

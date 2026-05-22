@@ -145,16 +145,16 @@ export default function CreateRFQPage() {
     setIsSubmitting(true);
     try {
       const uploadedUrls: string[] = [];
-      
+
       for (const img of images) {
         const compressed = await compressImage(img.file, { maxWidth: 1024, quality: 0.7 });
         const fileExt = compressed.name.split('.').pop() || 'jpg';
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
         const filePath = `${profile?.id}/${fileName}`;
-        
+
         const { error: uploadError } = await supabase.storage.from('rfq-images').upload(filePath, compressed);
         if (uploadError) throw uploadError;
-        
+
         const { data: { publicUrl } } = supabase.storage.from('rfq-images').getPublicUrl(filePath);
         uploadedUrls.push(publicUrl);
       }
@@ -229,7 +229,7 @@ export default function CreateRFQPage() {
     <div className="space-y-4 pb-5 max-w-md mx-auto">
 
       {/* ── FIXED TOPNAV FOR BROADCAST ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-md mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800/80 transition-colors">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-md mx-auto bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800/80 transition-colors">
         <div className="px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => {
@@ -280,7 +280,7 @@ export default function CreateRFQPage() {
             className="space-y-6 px-1.5"
           >
             {/* Category selection */}
-            <div className="bg-slate-50/80 dark:bg-slate-800/80 p-5 rounded-2xl border border-slate-150 dark:border-slate-700/50 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
               <div className="flex items-center gap-2 border-b border-slate-50 dark:border-slate-750 pb-3">
                 <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
                   <Package className="w-4 h-4" />
@@ -301,10 +301,10 @@ export default function CreateRFQPage() {
                       }}
                       className={`px-2 py-3.5 rounded-xl border text-center transition-all relative overflow-hidden ${isSelected
                         ? 'border-amber-500 bg-amber-500/5 shadow-sm shadow-amber-500/5'
-                        : 'border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-850'
+                        : 'border-slate-400 dark:border-slate-100 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-850'
                         }`}
                     >
-                      <span className="text-[10px] font-bold text-slate-700 dark:text-slate-350 leading-tight">{cat.label}</span>
+                      <span className="text-[10px] font-bold text-slate-300 dark:text-slate-350 leading-tight">{cat.label}</span>
                       {isSelected && (
                         <div className="absolute top-1 right-1 w-3 h-3 rounded-full bg-amber-500 flex items-center justify-center">
                           <CheckCircle2 className="w-2 h-2 text-white" />
@@ -326,7 +326,7 @@ export default function CreateRFQPage() {
                         setFormData({ ...formData, materialName: e.target.value });
                         setStepError('');
                       }}
-                      className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-750 rounded-xl px-4 pr-10 text-xs font-bold text-slate-800 dark:text-white appearance-none focus:border-amber-500 outline-none transition-colors cursor-pointer"
+                      className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-150 dark:border-slate-750 rounded-xl px-4 pr-10 text-xs font-bold text-slate-800 dark:text-white appearance-none focus:border-amber-500 outline-none transition-colors cursor-pointer"
                     >
                       <option value="">— Select a type —</option>
                       {subcategories.map(sub => (
@@ -350,7 +350,7 @@ export default function CreateRFQPage() {
                       setFormData({ ...formData, materialName: e.target.value });
                       setStepError('');
                     }}
-                    className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-750 rounded-xl px-4 text-xs font-bold text-slate-800 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                    className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-150 dark:border-slate-750 rounded-xl px-4 text-xs font-bold text-slate-800 dark:text-white focus:border-amber-500 outline-none transition-colors"
                   />
                 </div>
               )}
@@ -379,7 +379,7 @@ export default function CreateRFQPage() {
                   </div>
                 ))}
                 {images.length < 3 && (
-                  <label className="aspect-square rounded-xl border border-dashed border-slate-250 dark:border-slate-700 hover:border-amber-500/50 hover:bg-slate-50/50 dark:hover:bg-slate-850/50 transition-all flex flex-col items-center justify-center cursor-pointer bg-slate-50/20 dark:bg-slate-900 group">
+                  <label className="aspect-square rounded-xl border border-dashed border-slate-250 dark:border-slate-700 hover:border-amber-500/50 hover:bg-slate-50/50 dark:hover:bg-slate-850/50 transition-all flex flex-col items-center justify-center cursor-pointer bg-slate-50/20 dark:bg-slate-800 group">
                     <Plus className="w-4 h-4 text-slate-400 group-hover:scale-110 transition-transform" />
                     <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">Add Photo</span>
                     <input type="file" accept="image/*" multiple onChange={handleImageChange} className="hidden" />
@@ -400,7 +400,7 @@ export default function CreateRFQPage() {
             <div className="flex justify-center">
               <button
                 onClick={handleNext}
-                className="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-sm tracking-widest shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center gap-2"
+                className="px-8 py-4 bg-emerald-600 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-sm tracking-widest shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center gap-2"
               >
                 Specify Logistics & Price <ChevronRight className="w-4 h-4" />
               </button>
@@ -506,7 +506,7 @@ export default function CreateRFQPage() {
                       setFormData({ ...formData, pickupArea: e.target.value });
                       setStepError('');
                     }}
-                    className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-750 rounded-xl px-4 text-xs font-bold text-slate-800 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                    className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-150 dark:border-slate-750 rounded-xl px-4 text-xs font-bold text-slate-800 dark:text-white focus:border-amber-500 outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -518,33 +518,30 @@ export default function CreateRFQPage() {
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, deliveryMethod: 'agent_pickup' })}
-                    className={`h-10 text-xs font-bold rounded-xl border transition-all ${
-                      formData.deliveryMethod === 'agent_pickup'
-                        ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
-                    }`}
+                    className={`h-10 text-xs font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'agent_pickup'
+                      ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                      }`}
                   >
                     We Pick Up
                   </button>
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, deliveryMethod: 'self_drop' })}
-                    className={`h-10 text-xs font-bold rounded-xl border transition-all ${
-                      formData.deliveryMethod === 'self_drop'
-                        ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
-                    }`}
+                    className={`h-10 text-xs font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'self_drop'
+                      ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                      }`}
                   >
                     You Drop Off
                   </button>
                   <button
                     type="button"
                     onClick={() => setFormData({ ...formData, deliveryMethod: 'flexible' })}
-                    className={`h-10 text-xs font-bold rounded-xl border transition-all ${
-                      formData.deliveryMethod === 'flexible'
-                        ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
-                    }`}
+                    className={`h-10 text-xs font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'flexible'
+                      ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                      }`}
                   >
                     Flexible
                   </button>
@@ -571,7 +568,7 @@ export default function CreateRFQPage() {
                       setFormData({ ...formData, deadlineDate: e.target.value });
                       setStepError('');
                     }}
-                    className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-750 rounded-xl px-4 text-xs font-bold text-slate-800 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                    className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-150 dark:border-slate-750 rounded-xl px-4 text-xs font-bold text-slate-800 dark:text-white focus:border-amber-500 outline-none transition-colors"
                   />
                 </div>
                 <div className="space-y-1">
@@ -583,7 +580,7 @@ export default function CreateRFQPage() {
                       setFormData({ ...formData, deadlineTime: e.target.value });
                       setStepError('');
                     }}
-                    className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-750 rounded-xl px-4 text-xs font-bold text-slate-800 dark:text-white focus:border-amber-500 outline-none transition-colors"
+                    className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-150 dark:border-slate-750 rounded-xl px-4 text-xs font-bold text-slate-800 dark:text-white focus:border-amber-500 outline-none transition-colors"
                     required
                   />
                 </div>
@@ -598,7 +595,7 @@ export default function CreateRFQPage() {
                 placeholder="Detail package requirements, sorting preferences, or payment terms..."
                 value={formData.notes}
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-150 dark:border-slate-750 rounded-xl p-3.5 text-xs font-bold text-slate-800 dark:text-white resize-none focus:border-amber-500 outline-none transition-colors"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-150 dark:border-slate-750 rounded-xl p-3.5 text-xs font-bold text-slate-800 dark:text-white resize-none focus:border-amber-500 outline-none transition-colors"
               />
             </div>
 
@@ -614,7 +611,7 @@ export default function CreateRFQPage() {
             <div className="flex justify-center">
               <button
                 onClick={handleNext}
-                className="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-sm tracking-widest shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center gap-2"
+                className="px-8 py-4 bg-emerald-600 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-sm tracking-widest shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center gap-2"
               >
                 Review Sourcing Request <ChevronRight className="w-4 h-4" />
               </button>
@@ -648,7 +645,7 @@ export default function CreateRFQPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="aspect-[4/3] bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl flex flex-col items-center justify-center text-slate-400 border border-slate-150 dark:border-slate-750 shadow-sm">
+                  <div className="aspect-[4/3] bg-slate-50/50 dark:bg-slate-800/50 rounded-2xl flex flex-col items-center justify-center text-slate-400 border border-slate-150 dark:border-slate-750 shadow-sm">
                     <ImageIcon className="w-8 h-8 mb-1.5 opacity-30" />
                     <span className="text-[9px] font-black uppercase tracking-widest opacity-50">No sample photo provided</span>
                   </div>
@@ -673,7 +670,7 @@ export default function CreateRFQPage() {
                   </div>
 
                   {/* Volume Grid Subcard */}
-                  <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl grid grid-cols-2 gap-3 text-xs shadow-sm">
+                  <div className="bg-white dark:bg-slate-800 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl grid grid-cols-2 gap-3 text-xs shadow-sm">
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Volume Wanted</p>
                       <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{formData.weight} KG</p>
@@ -687,7 +684,7 @@ export default function CreateRFQPage() {
                   </div>
 
                   {/* Deadline Subcard */}
-                  <div className="flex justify-between items-center text-xs bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm">
+                  <div className="flex justify-between items-center text-xs bg-white dark:bg-slate-800 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
                         <Clock className="w-4 h-4" />
@@ -700,7 +697,7 @@ export default function CreateRFQPage() {
                   </div>
 
                   {formData.notes && (
-                    <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm space-y-1.5">
+                    <div className="bg-white dark:bg-slate-800 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm space-y-1.5">
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Specifications & Notes</p>
                       <p className="text-xs text-slate-600 dark:text-slate-350 italic font-medium">
                         "{formData.notes}"
@@ -723,7 +720,7 @@ export default function CreateRFQPage() {
               <button
                 disabled={isSubmitting}
                 onClick={handleSubmit}
-                className="px-10 py-4 bg-emerald-600 text-white rounded-2xl font-bold text-sm tracking-widest shadow-lg shadow-emerald-500/20 hover:shadow-xl hover:bg-emerald-700 active:scale-95 disabled:opacity-50 transition-all flex items-center gap-2.5"
+                className="px-10 py-4 bg-emerald-600 text-white rounded-2xl font-bold text-sm tracking-widest  hover:shadow-xl hover:bg-emerald-700 active:scale-95 disabled:opacity-50 transition-all flex items-center gap-2.5"
               >
                 {isSubmitting ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

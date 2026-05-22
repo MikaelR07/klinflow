@@ -2,7 +2,7 @@ import { Suspense, useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
-import { LayoutDashboard, Users, Settings, LogOut, Menu, X, Truck, DollarSign, Banknote, Receipt } from 'lucide-react';
+import { LayoutDashboard, Users, Settings, LogOut, Menu, X, Truck, DollarSign, Banknote, Receipt, PackageCheck, UserPlus } from 'lucide-react';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 
 export default function AdminLayout() {
@@ -11,6 +11,7 @@ export default function AdminLayout() {
   const { logout, profile } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
+  const [pendingDriverCount, setPendingDriverCount] = useState(0);
 
   // Fetch pending fund requests count + real-time updates
   useEffect(() => {
@@ -43,8 +44,36 @@ export default function AdminLayout() {
       })
       .subscribe();
 
+    // Also fetch pending driver join requests
+    const fetchDriverCount = async () => {
+      const { count: driverCount, error: driverError } = await supabase
+        .from('company_join_requests')
+        .select('*', { count: 'exact', head: true })
+        .eq('company_id', profile.id)
+        .eq('status', 'pending');
+
+      if (!driverError && driverCount !== null) {
+        setPendingDriverCount(driverCount);
+      }
+    };
+
+    fetchDriverCount();
+
+    const driverChannel = supabase
+      .channel('admin-driver-requests-badge')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'company_join_requests',
+        filter: `company_id=eq.${profile.id}`
+      }, () => {
+        fetchDriverCount();
+      })
+      .subscribe();
+
     return () => {
       supabase.removeChannel(channel);
+      supabase.removeChannel(driverChannel);
     };
   }, [profile?.id]);
 
@@ -52,8 +81,10 @@ export default function AdminLayout() {
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'My Agents', path: '/admin/agents', icon: Users },
     { name: 'Earnings', path: '/admin/earnings', icon: DollarSign },
+    { name: 'Driver Requests', path: '/settings/staff-application', icon: UserPlus, badge: pendingDriverCount },
     { name: 'Fund Requests', path: '/admin/finance', icon: Banknote, badge: pendingCount },
     { name: 'RFQ Requests', path: '/admin/rfqs', icon: Receipt },
+    { name: 'Dispatch', path: '/admin/dispatch', icon: PackageCheck },
     { name: 'Pricing & Services', path: '/settings/configuration', icon: Settings },
     { name: 'System Settings', path: '/settings', icon: Menu },
   ];
@@ -62,8 +93,8 @@ export default function AdminLayout() {
     <div className="flex min-h-dvh">
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden" 
+        <div
+          className="fixed inset-0 bg-slate-900/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -95,11 +126,10 @@ export default function AdminLayout() {
                   navigate(item.path);
                   setSidebarOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                  isActive 
-                    ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${isActive
+                  ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}
               >
                 <item.icon className="w-5 h-5" />
                 <span className="flex-1 text-left">{item.name}</span>
@@ -124,7 +154,7 @@ export default function AdminLayout() {
               <p className="text-xs font-semibold text-slate-500 capitalize tracking-widest">Company Admin</p>
             </div>
           </div>
-          <button 
+          <button
             onClick={logout}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all"
           >
@@ -135,10 +165,10 @@ export default function AdminLayout() {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 h-dvh overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-dvh overflow-hidden ">
         {/* Mobile Header */}
         <div className="lg:hidden h-16 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center px-4 gap-4 shrink-0">
-          <button 
+          <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 -ml-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors relative"
           >
@@ -153,7 +183,7 @@ export default function AdminLayout() {
         </div>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-900 p-4 lg:p-8">
+        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-800 p-4 lg:p-8">
           <div className="max-w-6xl mx-auto">
             <Suspense fallback={<LoadingScreen message="Loading Dashboard..." />}>
               <Outlet />

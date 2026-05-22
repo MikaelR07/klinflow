@@ -15,6 +15,8 @@ export * from './stores/assetStore';
 export * from './stores/priceStore';
 export * from './stores/serviceStore';
 export * from './stores/settingsStore';
+export * from './stores/fulfillmentStore.types';
+export * from './stores/fulfillmentStore';
 export * from './lib/hygenexAgent';
 export * from './lib/supabaseClient';
 export * from './lib/storage';

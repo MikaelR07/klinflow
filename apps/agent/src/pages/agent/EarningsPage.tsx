@@ -91,6 +91,7 @@ export default function EarningsPage() {
       goals={goals} 
       handleGoalChange={handleGoalChange} 
       jobHistory={jobHistory} 
+      isChartReady={isChartReady}
     />;
   }
 
@@ -103,6 +104,7 @@ export default function EarningsPage() {
     goals={goals} 
     handleGoalChange={handleGoalChange} 
     jobHistory={jobHistory} 
+    isChartReady={isChartReady}
   />;
 }
 
@@ -110,12 +112,12 @@ export default function EarningsPage() {
  * ── INDIVIDUAL AGENT / FLEET DRIVER VIEW ──
  * EXACT RESTORATION OF THE ORIGINAL JSX VERSION
  */
-function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdrawing, goals, handleGoalChange }: any) {
+function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdrawing, goals, handleGoalChange, isChartReady }: any) {
   return (
     <div className="space-y-6 animate-fade-in pb-24 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
       
       {/* ── HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -204,7 +206,7 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
       </div>
 
       {/* ── ACQUISITION GOALS ── */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center justify-between mb-6 px-2">
           <div>
             <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400">Acquisition Targets</h3>
@@ -257,7 +259,7 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
       </div>
 
       {/* ── WEEKLY PERFORMANCE GRAPH ── */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center justify-between mb-8 px-2">
           <div>
             <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400">Collection Volume</h3>
@@ -270,22 +272,24 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
         </div>
         
         <div className="w-full h-[220px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={earnings.weeklyData || []} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" opacity={0.1} />
-              <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold', fill: '#94a3b8' }} dy={10} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold', fill: '#94a3b8' }} tickFormatter={(v) => `${v}kg`} />
-              <Tooltip cursor={{ fill: '#f8fafc' }} content={({ active, payload }) => active && payload && (
-                <div className="bg-slate-900 text-white px-3 py-2 rounded-xl text-xs font-semibold shadow-2xl">{payload[0].value.toFixed(1)} KG</div>
-              )} />
-              <Bar dataKey="weight" radius={[8, 8, 8, 8]} barSize={24}>
-                {(earnings.weeklyData || []).map((_entry: any, index: number) => {
-                  const todayIndex = (new Date().getDay() + 6) % 7; 
-                  return <Cell key={`cell-${index}`} fill={index === todayIndex ? '#10b981' : '#e2e8f0'} />;
-                })}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          {isChartReady && (
+            <ResponsiveContainer width="100%" height="100%" minHeight={1}>
+              <BarChart data={earnings.weeklyData || []} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" opacity={0.1} />
+                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold', fill: '#94a3b8' }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold', fill: '#94a3b8' }} tickFormatter={(v) => `${v}kg`} />
+                <Tooltip cursor={{ fill: '#f8fafc' }} content={({ active, payload }) => active && payload && (
+                  <div className="bg-slate-900 text-white px-3 py-2 rounded-xl text-xs font-semibold shadow-2xl">{payload[0].value.toFixed(1)} KG</div>
+                )} />
+                <Bar dataKey="weight" radius={[8, 8, 8, 8]} barSize={24}>
+                  {(earnings.weeklyData || []).map((_entry: any, index: number) => {
+                    const todayIndex = (new Date().getDay() + 6) % 7; 
+                    return <Cell key={`cell-${index}`} fill={index === todayIndex ? '#10b981' : '#e2e8f0'} />;
+                  })}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
     </div>
@@ -296,10 +300,10 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
  * ── COMPANY OWNER VIEW ──
  * Focuses on fleet-wide financial liquidity and stock value.
  */
-function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing, goals, handleGoalChange, jobHistory }: any) {
+function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing, goals, handleGoalChange, jobHistory, isChartReady }: any) {
   return (
     <div className="space-y-8 animate-fade-in pb-20 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -337,7 +341,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
         </div>
 
         <div className="relative group h-full">
-          <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full min-h-[200px] transition-all hover:border-emerald-500/50">
+          <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full min-h-[200px] transition-all hover:border-emerald-500/50">
             <div className="relative z-10">
               <div className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
                 <div className="w-6 h-6 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg flex items-center justify-center">
@@ -354,7 +358,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
         </div>
 
         <div className="relative group h-full">
-          <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full min-h-[200px] transition-all hover:border-amber-500/50">
+          <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full min-h-[200px] transition-all hover:border-amber-500/50">
             <div className="relative z-10 flex items-start justify-between">
               <div className="flex-1">
                 <div className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
@@ -380,7 +384,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] p-8 shadow-sm">
+        <div className="lg:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[2rem] p-8 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h3 className="text-xs font-bold text-slate-400 capitalize tracking-widest">Collection Volume</h3>
@@ -392,26 +396,28 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
             </div>
           </div>
           <div className="h-[250px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={earnings.weeklyData || []} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" opacity={0.1} />
-                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold', fill: '#94a3b8' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold', fill: '#94a3b8' }} tickFormatter={(v) => `${v}kg`} />
-                <Tooltip cursor={{ fill: 'rgba(148, 163, 184, 0.05)' }} content={({ active, payload }) => active && payload && (
-                  <div className="bg-slate-900 text-white px-4 py-2 rounded-2xl text-xs font-bold">{payload[0].value.toFixed(1)} KG</div>
-                )} />
-                <Bar dataKey="weight" radius={[6, 6, 6, 6]} barSize={32}>
-                  {(earnings.weeklyData || []).map((entry: any, index: number) => {
-                    const todayIndex = (new Date().getDay() + 6) % 7; 
-                    return <Cell key={`cell-${index}`} fill={index === todayIndex ? '#10b981' : '#334155'} />;
-                  })}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            {isChartReady && (
+              <ResponsiveContainer width="100%" height="100%" minHeight={1}>
+                <BarChart data={earnings.weeklyData || []} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" opacity={0.1} />
+                  <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold', fill: '#94a3b8' }} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 'bold', fill: '#94a3b8' }} tickFormatter={(v) => `${v}kg`} />
+                  <Tooltip cursor={{ fill: 'rgba(148, 163, 184, 0.05)' }} content={({ active, payload }) => active && payload && (
+                    <div className="bg-slate-900 text-white px-4 py-2 rounded-2xl text-xs font-bold">{payload[0].value.toFixed(1)} KG</div>
+                  )} />
+                  <Bar dataKey="weight" radius={[6, 6, 6, 6]} barSize={32}>
+                    {(earnings.weeklyData || []).map((entry: any, index: number) => {
+                      const todayIndex = (new Date().getDay() + 6) % 7; 
+                      return <Cell key={`cell-${index}`} fill={index === todayIndex ? '#10b981' : '#334155'} />;
+                    })}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[2rem] p-8 shadow-sm space-y-8">
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[2rem] p-8 shadow-sm space-y-8">
           <div>
             <h3 className="text-xs font-bold text-slate-400 capitalize tracking-widest mb-1">Fleet Targets</h3>
             <p className="text-lg font-bold text-slate-900 dark:text-white">Active Goals</p>

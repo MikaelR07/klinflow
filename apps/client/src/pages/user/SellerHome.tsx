@@ -3,17 +3,17 @@
  */
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Bell, 
-  MapPin, 
-  Zap, 
-  Wallet, 
-  Clock, 
-  Trash2, 
-  Plus, 
-  Sparkles, 
-  History, 
-  Leaf, 
+import {
+  Bell,
+  MapPin,
+  Zap,
+  Wallet,
+  Clock,
+  Trash2,
+  Plus,
+  Sparkles,
+  History,
+  Leaf,
   TrendingUp,
   Truck,
   Recycle,
@@ -45,43 +45,6 @@ import { SkeletonCard } from '@klinflow/ui/components/Skeletons';
 import PushNotificationModal from '@klinflow/ui/components/PushNotificationModal';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 import { toast } from 'sonner';
-
-// ── OPTIMIZED CREDIT METER COMPONENT ──────────────────────────────
-const CreditRateMeter = ({ score = 0 }) => {
-  // Map 0-100 score to -90 to 90 degrees
-  const rotation = (score / 100) * 180 - 90;
-  
-  return (
-    <div className="relative w-40 h-22 sm:w-52 sm:h-32 flex flex-col items-center justify-end overflow-visible">
-      <svg className="w-full h-full overflow-visible" viewBox="0 0 100 55">
-        {/* Exact segments from Trust Score Page */}
-        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="0" />
-        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f97316" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-21.5" />
-        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#eab308" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-43" />
-        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#4ade80" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-64.5" />
-        <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-86" />
-        
-        {/* Inner track decoration */}
-        <path d="M 18 50 A 32 32 0 0 1 82 50" stroke="currentColor" className="text-slate-900 dark:text-white" strokeOpacity="0.1" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
-        
-        {/* Active Needle */}
-        <g 
-          className="transition-transform duration-1000 ease-out origin-[50px_50px]"
-          style={{ transform: `rotate(${rotation}deg)` }}
-        >
-          <line
-            x1="50" y1="50" x2="50" y2="22"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            className="text-white"
-          />
-          <circle cx="50" cy="50" r="4" fill="currentColor" className="text-white" />
-        </g>
-      </svg>
-    </div>
-  );
-};
 
 // ── SMART NAMING GUARD (REGEX + DICTIONARY) ───────────────────────
 const formatMaterial = (text: string | null) => {
@@ -116,7 +79,6 @@ export default function SellerHome() {
 
   const receivedOrders = useMarketplaceStore(s => s.receivedOrders);
   const fetchReceivedOrders = useMarketplaceStore(s => s.fetchReceivedOrders);
-  const getCalculatedScore = useMarketplaceStore(s => s.getCalculatedScore);
   const receivedOffers = useMarketplaceStore(s => s.receivedOffers);
   const fetchIncomingOffers = useMarketplaceStore(s => s.fetchIncomingOffers);
   const myListings = useMarketplaceStore(s => s.myListings);
@@ -140,17 +102,15 @@ export default function SellerHome() {
     fetchReceivedOrders();
     fetchIncomingOffers();
     fetchMyActivity();
-    
+
     if (profile?.id) {
       fetchNotifications(profile.id, role);
       subscribeToProfileChanges(profile.id);
       // Realtime subscription handled globally by App.tsx
     }
 
-    return () => {};
+    return () => { };
   }, [profile?.id, role]);
-
-  const score = getCalculatedScore(receivedOrders, profile);
 
   useEffect(() => {
     // Show prompt if user hasn't allowed/denied notifications yet
@@ -177,7 +137,7 @@ export default function SellerHome() {
 
   const handleClearHistory = async () => {
     if (!profile?.id) return;
-    
+
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -195,9 +155,9 @@ export default function SellerHome() {
 
   // ── MERCHANT METRICS (Marketplace Centric) ──
   const marketplaceBookings = bookings.filter((b: any) => b.booking_type === 'marketplace' || b.booking_type === 'marketplace_pickup');
-  
+
   const totalDeals = marketplaceBookings.filter(b => b.status === 'completed').length;
-  
+
   const totalSoldKg = marketplaceBookings
     .filter(b => b.status === 'completed')
     .reduce((acc, b: any) => acc + (parseFloat(String(b.actualWeightKg || b.weightKg || 0)) || 0), 0);
@@ -233,16 +193,16 @@ export default function SellerHome() {
 
   return (
     <div className="space-y-6 px-1.5 pb-2">
-      
+
       {/* ── PUSH ENROLLMENT MODAL ── */}
-      <PushNotificationModal 
+      <PushNotificationModal
         isOpen={showPushPrompt}
         onClose={handleDismissPush}
       />
-      
+
       {/* ── TOP NAV & HERO ── */}
       <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800 ">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900/50 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
@@ -259,12 +219,12 @@ export default function SellerHome() {
                 <h1 className="text-xl font-normal italic tracking-tight text-slate-900 dark:text-white leading-tight">
                   Hello {(profile?.fullName || profile?.name || 'Merchant').split(' ')[0]}👋
                 </h1>
-                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-2.5 py-0.5 rounded-full border border-primary/20 w-fit">
-                  <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'Nairobi'}
+                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                  <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'searching...'}
                 </div>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => navigate('/notifications')}
               className="relative w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
             >
@@ -279,267 +239,267 @@ export default function SellerHome() {
         </div>
 
 
-      {/* ── REVENUE HERO CARD ── */}
-      <div className="relative group">
-        <div className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl p-5 shadow-sm border border-emerald-800/20 dark:border-white/5 overflow-hidden">
-          <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
-          <div className="flex flex-col gap-5">
-            <div className="grid grid-cols-2 w-full gap-0">
-              <div className="flex-1 min-w-0 border-r border-white/20 pr-4">
-                <div className="flex items-center gap-1.5 mb-3">
-                  <Wallet className="w-3.5 h-3.5 text-white/70 shrink-0" />
-                  <span className="text-[12px] font-semibold text-white/70 uppercase tracking-widest truncate">Seller Wallet</span>
+        {/* ── REVENUE HERO CARD ── */}
+        <div className="relative group">
+          <div className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl   p-5  shadow-lg gpu-layer relative overflow-hidden">
+            <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
+            <div className="flex flex-col gap-6 relative z-10">
+              <div className="flex items-end justify-between">
+                <div>
+                  <p className="text-[11px] font-semibold text-emerald-100/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                    <Wallet className="w-3 h-3" /> Seller Wallet
+                  </p>
+                  <h2 className="text-2xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
+                    KSh {walletBalance.toLocaleString()}
+                  </h2>
+                  <div className="flex items-center gap-2 mt-3">
+                    <button
+                      disabled
+                      className="flex items-center gap-1.5 bg-emerald-500/50 text-emerald-800  dark:bg-emerald-700 dark:hover:bg-emerald-400 dark:text-white px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
+                    >
+                      {rewardPoints} GFP
+                    </button>
+                  </div>
                 </div>
-                
-                <h2 className="text-2xl sm:text-3xl font-semibold text-white tracking-tighter leading-tight mb-4">
-                  KSh {walletBalance.toLocaleString()}
-                </h2>
 
-                <button 
+                <button
                   onClick={() => navigate('/withdraw')}
-                  className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-7 py-3 rounded-xl text-[12px] font-bold uppercase tracking-widest active:scale-95 transition-all"
+                  className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest active:scale-95 transition-all mb-1"
                 >
                   Withdraw
                 </button>
               </div>
 
-              {/* Credit Meter Column */}
-              <div className="flex flex-col items-center justify-center gap-1 pl-4">
-                <CreditRateMeter score={score} />
-                <p className="text-[10px] font-bold text-white/50 capitalize tracking-widest">Credit Rate</p>
-              </div>
-            </div>
+              {/* Stats row */}
+              <div className="pt-5 border-t border-white/20">
+                <div className="flex items-center justify-between sm:justify-start sm:gap-16 px-1">
 
-            {/* Stats row */}
-            <div className="pt-5 border-t border-white/20">
-              <div className="flex items-center justify-between sm:justify-start sm:gap-16 px-1">
-                
-                <div className="flex flex-col items-center gap-1">
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalDeals}</p>
-                  <div className="flex items-center gap-1.5">
-                    <Handshake className="w-3.5 h-3.5 text-white/60" />
-                    <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Deals</p>
+                  <div className="flex flex-col items-center gap-1">
+                    <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalDeals}</p>
+                    <div className="flex items-center gap-1.5">
+                      <Handshake className="w-3.5 h-3.5 text-white/60" />
+                      <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Deals</p>
+                    </div>
                   </div>
-                </div>
 
-                {/* Independent Divider */}
-                <div className="w-px h-8 bg-white/20" />
+                  {/* Independent Divider */}
+                  <div className="w-px h-8 bg-white/20" />
 
-                <div className="flex flex-col items-center gap-1">
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalSoldKg}kg</p>
-                  <div className="flex items-center gap-1.5">
-                    <Scale className="w-3.5 h-3.5 text-white/60" />
-                    <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Sold KG</p>
+                  <div className="flex flex-col items-center gap-1">
+                    <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalSoldKg}kg</p>
+                    <div className="flex items-center gap-1.5">
+                      <Scale className="w-3.5 h-3.5 text-white/60" />
+                      <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Sold KG</p>
+                    </div>
                   </div>
-                </div>
 
-                {/* Independent Divider */}
-                <div className="w-px h-8 bg-white/20" />
+                  {/* Independent Divider */}
+                  <div className="w-px h-8 bg-white/20" />
 
-                <div className="flex flex-col items-center gap-1">
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
-                  <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-white/60" />
-                    <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Pending</p>
+                  <div className="flex flex-col items-center gap-1">
+                    <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-white/60" />
+                      <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Pending</p>
+                    </div>
                   </div>
+
                 </div>
-
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
-      <div className="grid grid-cols-4 gap-2">
-        <button
-          onClick={() => navigate('/post-trade')}
-          className="bg-emerald-600 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
-        >
-          <div className="absolute top-0 right-0 w-8 h-8 bg-white/10 rounded-bl-2xl rounded-tr-2xl" />
-          <div className="w-10 h-10 bg-white/20 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
-            <Plus className="w-5 h-5" />
-          </div>
-          <div className="text-center mt-auto">
-            <p className="text-[9px] font-semibold text-white capitalize tracking-widest leading-none">Sell</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => navigate('/inventory')}
-          className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
-        >
-          <div className="relative">
-            {myListings.filter((l: any) => l.status === 'active').length > 0 && (
-              <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
-                <span className="text-[8px] font-semibold text-white">{myListings.filter((l: any) => l.status === 'active').length}</span>
+        {/* ── ACTIONS & INSIGHTS WRAPPER ── */}
+        <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
+          {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
+          <div className="grid grid-cols-4 gap-2">
+            <button
+              onClick={() => navigate('/post-trade')}
+              className="bg-emerald-600 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
+            >
+              <div className="absolute top-0 right-0 w-8 h-8 bg-white/10 rounded-bl-2xl rounded-tr-2xl" />
+              <div className="w-10 h-10 bg-white/20 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                <Plus className="w-5 h-5" />
               </div>
-            )}
-            <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 text-blue-500 group-hover:text-blue-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-              <Package className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-center mt-auto">
-            <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Listings</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => navigate('/my-offers')}
-          className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
-        >
-          <div className="relative">
-            {receivedOffers.filter((o: any) => o.status === 'pending').length > 0 && (
-              <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
-                <span className="text-[8px] font-semibold text-white">{receivedOffers.filter((o: any) => o.status === 'pending').length}</span>
+              <div className="text-center mt-auto">
+                <p className="text-[9px] font-semibold text-white capitalize tracking-widest leading-none">Sell</p>
               </div>
-            )}
-            <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 group-hover:text-indigo-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-              <Handshake className="w-5 h-5" />
-            </div>
-          </div>
-          <div className="text-center mt-auto">
-            <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Offers</p>
-          </div>
-        </button>
+            </button>
 
-        <button
-          onClick={() => navigate('/my-rfq-offers')}
-          className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
-        >
-          <div className="relative">
-            <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 text-amber-500 group-hover:text-amber-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-              <Receipt className="w-5 h-5" />
-            </div>
-            {/* Accepted Quotes Badge */}
-            <div className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-[1.5px] border-white dark:border-slate-900 z-10 shadow-sm">
-              1
-            </div>
-          </div>
-          <div className="text-center mt-auto">
-            <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Quotes</p>
-          </div>
-        </button>
-      </div>
+            <button
+              onClick={() => navigate('/inventory')}
+              className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+            >
+              <div className="relative">
+                {myListings.filter((l: any) => l.status === 'active').length > 0 && (
+                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
+                    <span className="text-[8px] font-semibold text-white">{myListings.filter((l: any) => l.status === 'active').length}</span>
+                  </div>
+                )}
+                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 text-blue-500 group-hover:text-blue-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+                  <Package className="w-5 h-5" />
+                </div>
+              </div>
+              <div className="text-center mt-auto">
+                <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Listings</p>
+              </div>
+            </button>
 
-      {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
-      <div 
-        onClick={() => navigate('/market-pulse')}
-        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all shadow-sm relative overflow-hidden"
-      >
-        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[4rem] group-hover:bg-emerald-500/10 transition-colors" />
-        <div className="flex items-center gap-4 relative z-10">
-          <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-600 shadow-inner">
-            <TrendingUp className="w-6 h-6" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1.5">Market Pulse</h3>
-            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest flex items-center gap-2">
-              <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" /> Live Price Ticker & RFQs
-            </p>
-          </div>
-        </div>
-        <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
-          <ArrowRight className="w-4 h-4" />
-        </div>
-      </div>
+            <button
+              onClick={() => navigate('/my-offers')}
+              className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+            >
+              <div className="relative">
+                {receivedOffers.filter((o: any) => o.status === 'pending').length > 0 && (
+                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
+                    <span className="text-[8px] font-semibold text-white">{receivedOffers.filter((o: any) => o.status === 'pending').length}</span>
+                  </div>
+                )}
+                <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 group-hover:text-indigo-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+                  <Handshake className="w-5 h-5" />
+                </div>
+              </div>
+              <div className="text-center mt-auto">
+                <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Offers</p>
+              </div>
+            </button>
 
-      {/* ── MY RFQ QUOTES (NEW OS LAYER) ── */}
-      <div 
-        onClick={() => navigate('/my-rfq-offers')}
-        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all shadow-sm relative overflow-hidden"
-      >
-        <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-[4rem] group-hover:bg-amber-500/10 transition-colors" />
-        <div className="flex items-center gap-4 relative z-10">
-          <div className="w-12 h-12 bg-amber-50 dark:bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 shadow-inner">
-            <Receipt className="w-6 h-6" />
+            <button
+              onClick={() => navigate('/my-rfq-offers')}
+              className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+            >
+              <div className="relative">
+                <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 text-amber-500 group-hover:text-amber-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+                  <Receipt className="w-5 h-5" />
+                </div>
+                {/* Accepted Quotes Badge */}
+                <div className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-[1.5px] border-white dark:border-slate-900 z-10 shadow-sm">
+                  1
+                </div>
+              </div>
+              <div className="text-center mt-auto">
+                <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Quotes</p>
+              </div>
+            </button>
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1.5">Submitted Quotes</h3>
-            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest flex items-center gap-2">
-              Track Your RFQ Pipeline
-            </p>
-          </div>
-        </div>
-        <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl group-hover:bg-amber-500 group-hover:text-white transition-all relative z-10">
-          <ArrowRight className="w-4 h-4" />
-        </div>
-      </div>
 
-      {/* ── COMMUNITY COLLECTIVE (NEW OS LAYER) ── */}
-      <div 
-        onClick={() => navigate('/community-collective')}
-        className="bg-indigo-600 dark:bg-slate-900 border border-indigo-700 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all shadow-lg relative overflow-hidden"
-      >
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-white/10 transition-colors" />
-        <div className="flex items-center gap-4 relative z-10">
-          <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shadow-inner">
-            <Users className="w-6 h-6" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-white capitalize tracking-tight leading-none mb-1.5">Collective Hub</h3>
-            <p className="text-[10px] font-bold text-indigo-100/60 capitalize tracking-widest flex items-center gap-2 italic">
-              Join Swarms & Group Missions
-            </p>
-          </div>
-        </div>
-        <div className="p-2 bg-white/10 rounded-xl text-white group-hover:bg-white group-hover:text-indigo-600 transition-all relative z-10">
-          <ArrowRight className="w-4 h-4" />
-        </div>
-      </div>
+          {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
+          <div
+            onClick={() => navigate('/market-pulse')}
+            className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+          >
 
-      </div> {/* End space-y-3 */}
-
-      {/* ── TRUST SCORE & LEADERBOARD GROUP ── */}
-      <div className="space-y-2">
-        {/* ── FINANCIAL TRUST SCORE ── */}
-        <div 
-          onClick={() => navigate('/trust-score')}
-          className="bg-gradient-to-r from-emerald-500/5 to-transparent border border-emerald-500/20 rounded-2xl p-4 flex flex-col gap-3 group transition-all active:scale-[0.98] cursor-pointer relative"
-        >
-          <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[4rem] rounded-tr-2xl" />
-          
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 bg-emerald-50 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0 shadow-sm border border-emerald-100 dark:border-emerald-500/30">
-                <ShieldCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+                <TrendingUp className="w-5 h-5" />
               </div>
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 capitalize tracking-widest leading-none">Trust Score</p>
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] font-semibold text-slate-500 capitalize tracking-widest">Know Your Eligibility</span>
-                </div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
+                <p className="text-[9px] font-bold text-slate-500 capitalize tracking-widest flex items-center gap-1.5">
+                  View Material Prices in the Market
+                </p>
               </div>
             </div>
-            
-            <div className="flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest">Check Rate</span>
-              <ChevronRight className="w-4 h-4 text-emerald-500/50 group-hover:text-emerald-500 transition-colors" />
+            <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+              <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </div>
 
-          <div className="relative z-10 pt-2.5 border-t border-emerald-500/10 mt-1">
-            <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-relaxed">
-              Tracks market reliability and performance history. High scores unlock platform rewards and loans.
-            </p>
+          {/* ── MY RFQ QUOTES (NEW OS LAYER) ── */}
+          <div
+            onClick={() => navigate('/my-rfq-offers')}
+            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all shadow-sm relative overflow-hidden"
+          >
+
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-12 h-12 bg-amber-50 dark:bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 shadow-inner">
+                <Receipt className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1.5">Submitted RFQ Proposals</h3>
+                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest flex items-center gap-2">
+                  Track Requests to Buyers
+                </p>
+              </div>
+            </div>
+            <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl group-hover:bg-amber-500 group-hover:text-white transition-all relative z-10">
+              <ArrowRight className="w-4 h-4" />
+            </div>
           </div>
+
+          {/* ── COMMUNITY COLLECTIVE (NEW OS LAYER) ── */}
+          <div
+            onClick={() => navigate('/community-collective')}
+            className="bg-indigo-600 dark:bg-slate-800 border border-indigo-700 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+          >
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shadow-inner">
+                <Users className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white capitalize tracking-tight leading-none mb-1.5">Collective Hub</h3>
+                <p className="text-[10px] font-bold text-indigo-100/60 capitalize tracking-widest flex items-center gap-2 italic">
+                  Join Swarms & Group Missions
+                </p>
+              </div>
+            </div>
+            <div className="p-2 bg-white/10 rounded-xl text-white group-hover:bg-white group-hover:text-indigo-600 transition-all relative z-10">
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          </div>
+          {/* End space-y-3 */}
         </div>
 
 
+
+
+        {/* ── TRUST SCORE & LEADERBOARD GROUP ── */}
+        {/* <div className="space-y-2">
+            <div
+              onClick={() => navigate('/trust-score')}
+              className="bg-gradient-to-r from-emerald-500/5 to-transparent border border-emerald-500/20 rounded-2xl p-4 flex flex-col gap-3 group transition-all active:scale-[0.98] cursor-pointer relative"
+            >
+              <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[4rem] rounded-tr-2xl" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-11 h-11 bg-emerald-50 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0 shadow-sm border border-emerald-100 dark:border-emerald-500/30">
+                    <ShieldCheck className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 capitalize tracking-widest leading-none">Trust Score</p>
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[11px] font-semibold text-slate-500 capitalize tracking-widest">Know Your Eligibility</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                  <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest">Check Rate</span>
+                  <ChevronRight className="w-4 h-4 text-emerald-500/50 group-hover:text-emerald-500 transition-colors" />
+                </div>
+              </div>
+
+              <div className="relative z-10 pt-2.5 border-t border-emerald-500/10 mt-1">
+                <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Tracks market reliability and performance history. High scores unlock platform rewards and loans.
+                </p>
+              </div>
+            </div>
+          </div> */}
+
       </div>
-
-
-
       {/* ── RECENT ACTIVITY (BASE RECORD) ── */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200/50 dark:border-slate-800">
+      <div className="bg-slate-200 dark:bg-slate-900/50 !mt-2 rounded-2xl p-5 border border-slate-200/50 dark:border-slate-800">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="font-semibold text-sm capitalize tracking-widest text-slate-400 px-1">Recent Activity</h3>
+          <h3 className="font-semibold text-sm capitalize tracking-widest text-slate-600 px-1">Recent Activity</h3>
           <div className="flex items-center gap-3">
             {recentBookings.length > 0 && (
-              <button 
+              <button
                 onClick={handleClearHistory}
                 className="text-[11px] font-semibold text-slate-400 hover:text-red-500 capitalize tracking-widest transition-colors"
               >
@@ -549,7 +509,7 @@ export default function SellerHome() {
             <History className="w-4 h-4 text-slate-300" />
           </div>
         </div>
-        
+
         <div className="space-y-6">
           {recentBookings.map((item: any, i) => (
             <div key={i} className="flex items-center justify-between group px-1">
@@ -565,10 +525,9 @@ export default function SellerHome() {
                 </div>
               </div>
               <div className="text-right">
-                <p className={`text-[11px] font-semibold capitalize tracking-widest ${
-                  item.status === 'completed' ? 'text-emerald-600' : 
+                <p className={`text-[11px] font-semibold capitalize tracking-widest ${item.status === 'completed' ? 'text-emerald-600' :
                   item.status === 'pending_clearance' ? 'text-rose-500' : 'text-amber-600'
-                }`}>
+                  }`}>
                   {item.status === 'pending_clearance' ? 'Held for Clearance' : item.status}
                 </p>
                 {item.status === 'completed' && (
@@ -580,10 +539,10 @@ export default function SellerHome() {
               </div>
             </div>
           ))}
-          
+
           {recentBookings.length === 0 && (
             <div className="text-center py-4">
-              <p className="text-xs text-slate-400 font-semibold capitalize tracking-widest">No Activity Yet</p>
+              <p className="text-xs text-slate-600 font-semibold capitalize tracking-widest">No Activity Yet</p>
             </div>
           )}
         </div>

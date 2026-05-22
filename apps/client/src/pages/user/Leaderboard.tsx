@@ -99,8 +99,8 @@ const SellerListItem = memo(({ user }: { user: any }) => (
   <div 
     className={`p-5 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
       user.isUser
-        ? 'bg-slate-900 dark:bg-slate-900/50 border-emerald-500/30 relative z-10'
-        : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5'
+        ? 'bg-slate-900 dark:bg-slate-800/50 border-emerald-500/30 relative z-10'
+        : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'
     }`}
   >
     <div className="flex items-center gap-5">
@@ -134,7 +134,7 @@ const ResidentListItem = memo(({ user }: { user: any }) => (
     className={`p-6 py-5 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
       user.isUser
         ? 'bg-primary/10 border-primary/20 scale-[1.02] relative z-10'
-        : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5'
+        : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'
     }`}
   >
     <div className="flex items-center gap-5">
@@ -211,9 +211,9 @@ function SellerLeaderboard() {
   const isEmpty = topSellers.length === 0;
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
@@ -281,7 +281,7 @@ function SellerLeaderboard() {
             </div>
 
             {/* Explanation Card */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-white/5 p-5 flex items-start gap-4 mb-8">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-white/5 p-5 flex items-start gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
                 <Info className="w-5 h-5 text-emerald-500" />
               </div>
@@ -379,9 +379,9 @@ export default function Leaderboard() {
   const isEmpty = topUsers.length === 0;
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -452,7 +452,7 @@ export default function Leaderboard() {
             </div>
 
             {/* Explanation Card */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-white/5 p-5 flex items-start gap-4 mb-8">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-white/5 p-5 flex items-start gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center shrink-0">
                 <Info className="w-5 h-5 text-amber-500" />
               </div>

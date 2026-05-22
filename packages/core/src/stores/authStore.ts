@@ -575,7 +575,8 @@ export const useAuthStore = create<AuthState>()(
 
         if (role === ROLES.AGENT && agent_account_type) {
            profileInsert.agent_account_type = agent_account_type;
-           if (companyId) profileInsert.company_id = companyId;
+           // If they are a company admin, their profile stands alone. 
+           // If they are a fleet driver, they must be approved. DO NOT set company_id yet.
         }
 
         if (role === ROLES.BUSINESS) {
@@ -590,6 +591,28 @@ export const useAuthStore = create<AuthState>()(
           .insert([profileInsert]);
 
         if (profileError) throw profileError;
+
+        // If fleet driver, insert into company_join_requests
+        if (role === ROLES.AGENT && agent_account_type === 'fleet_driver' && companyId) {
+           const { error: requestError } = await supabase
+             .from('company_join_requests')
+             .insert([{
+                driver_id: user.id,
+                company_id: companyId,
+                status: 'pending'
+             }]);
+           
+           if (requestError) console.error("Error creating join request:", requestError);
+           
+           // Notify admin
+           await supabase.from('notifications').insert([{
+             target_user: companyId,
+             title: 'New Fleet Driver Request',
+             body: `${name} has requested to join your fleet.`,
+             type: 'info',
+             is_read: false
+           }]);
+        }
 
         await get().fetchProfile();
         return true;

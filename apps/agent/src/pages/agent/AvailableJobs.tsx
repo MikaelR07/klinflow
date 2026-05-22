@@ -88,9 +88,9 @@ export default function AvailableJobs() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto pb-3">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -148,7 +148,7 @@ export default function AvailableJobs() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-24"
+                className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-24"
               >
                 {(() => {
                   const job = currentJobs.find(j => j.id === expandedId);
@@ -180,7 +180,7 @@ export default function AvailableJobs() {
                       </div>
 
                       {/* Content Sheet */}
-                      <div className="relative -mt-36 bg-[#F2F3F4] dark:bg-slate-900 rounded-t-[1rem] px-3 pt-4 pb-2 space-y-5 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.15)]">
+                      <div className="relative -mt-36 bg-[#F2F3F4] dark:bg-slate-800 rounded-t-[1rem] px-3 pt-4 pb-2 space-y-5 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.15)]">
                         <div className="flex items-center justify-between mb-4">
                           <div>
                             <p className="text-[11px] font-black text-indigo-600 capitalize tracking-[0.2em]">Mission Request</p>
@@ -366,7 +366,7 @@ export default function AvailableJobs() {
                   return (
                     <div 
                       key={job.id} 
-                      className="bg-white dark:bg-slate-900 border-y border-slate-100 dark:border-slate-800 hover:shadow-lg transition-all shadow-sm overflow-hidden"
+                      className="bg-white dark:bg-slate-800 border-y border-slate-100 dark:border-slate-800 hover:shadow-lg transition-all shadow-sm overflow-hidden"
                     >
                       <button 
                         className="w-full p-4 text-left active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"

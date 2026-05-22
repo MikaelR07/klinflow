@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, Clock, Scale, Coins, CheckCircle2, XCircle, 
-  MapPin, Package, MessageSquare, ShieldCheck 
+import {
+  ArrowLeft, Clock, Scale, Coins, CheckCircle2, XCircle,
+  MapPin, Package, MessageSquare, ShieldCheck
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -114,40 +114,40 @@ export default function RFQDetailsPage() {
   }, [rfqId]);
 
   const handleAcceptBid = async (bidId: string, sellerName: string) => {
-    // Accept the selected offer in DB
-    const { error: acceptError } = await supabase
-      .from('rfq_offers')
-      .update({ status: 'accepted' })
-      .eq('id', bidId);
+    try {
+      // Call the atomic RPC — this accepts the offer, rejects others,
+      // marks the RFQ fulfilled, generates a verification code,
+      // and creates the fulfillment_order in one transaction.
+      const { data: fulfillmentId, error } = await supabase
+        .rpc('accept_rfq_offer_v2', {
+          p_offer_id: bidId,
+          p_delivery_method: 'agent_pickup', // default per user preference
+          p_pickup_address: rfq.location || null,
+          p_dropoff_address: null
+        });
 
-    if (acceptError) {
-      toast.error('Failed to accept offer');
-      return;
+      if (error) {
+        console.error('RPC error:', error);
+        toast.error(error.message || 'Failed to accept offer');
+        return;
+      }
+
+      // Optimistic local update
+      setRfq((prev: any) => ({
+        ...prev,
+        status: 'accepted',
+        bids: prev.bids.map((b: any) =>
+          b.id === bidId ? { ...b, status: 'accepted' } : { ...b, status: 'declined' }
+        )
+      }));
+      toast.success(`Accepted quote from ${sellerName}! Fulfillment order created 🤝`);
+
+      // Navigate to the active pickups page after a short delay
+      setTimeout(() => navigate('/pickups'), 1500);
+    } catch (err: any) {
+      console.error('Accept bid error:', err);
+      toast.error('Something went wrong accepting this offer');
     }
-
-    // Reject all other pending offers for this RFQ
-    await supabase
-      .from('rfq_offers')
-      .update({ status: 'rejected' })
-      .eq('rfq_id', rfqId)
-      .neq('id', bidId)
-      .eq('status', 'pending');
-
-    // Mark the RFQ itself as fulfilled
-    await supabase
-      .from('rfqs')
-      .update({ status: 'fulfilled' })
-      .eq('id', rfqId);
-
-    // Optimistic local update
-    setRfq((prev: any) => ({
-      ...prev,
-      status: 'accepted',
-      bids: prev.bids.map((b: any) =>
-        b.id === bidId ? { ...b, status: 'accepted' } : { ...b, status: 'declined' }
-      )
-    }));
-    toast.success(`Accepted quote from ${sellerName}! 🤝`);
   };
 
   const handleDeclineBid = async (bidId: string, sellerName: string) => {
@@ -207,9 +207,9 @@ export default function RFQDetailsPage() {
   const StatusIcon = statusConfig.icon;
 
   return (
-    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-900 pb-16 transition-colors">
+    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-16 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
           <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-amber-500 transition-colors" />
@@ -223,25 +223,25 @@ export default function RFQDetailsPage() {
         </div>
       </div>
 
-      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
+      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
         {/* ── IMAGE CAROUSEL ── */}
         {rfq.images && rfq.images.length > 0 && (
           <div className="relative h-[250px] w-full overflow-hidden rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm bg-slate-900">
-            <div 
+            <div
               onScroll={handleScroll}
               className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
             >
               {rfq.images.map((url: string, index: number) => (
                 <div key={index} className="w-full h-full shrink-0 snap-center">
-                  <img 
-                    src={url} 
+                  <img
+                    src={url}
                     alt={`${rfq.material} sample ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
               ))}
             </div>
-            
+
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
 
             {rfq.images.length > 1 && (
@@ -254,11 +254,10 @@ export default function RFQDetailsPage() {
             {rfq.images.length > 1 && (
               <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
                 {rfq.images.map((_: any, index: number) => (
-                  <div 
-                    key={index} 
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'
-                    }`}
+                  <div
+                    key={index}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'
+                      }`}
                   />
                 ))}
               </div>
@@ -267,7 +266,7 @@ export default function RFQDetailsPage() {
         )}
 
         {/* ── RFQ SPECIFICATIONS CARD ── */}
-        <div className="bg-white dark:bg-slate-850 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Requested</p>
@@ -327,7 +326,7 @@ export default function RFQDetailsPage() {
           )}
 
           {rfq.status === 'pending' && (
-            <button 
+            <button
               onClick={handleCancelRFQ}
               className="w-full mt-2 py-3.5 bg-rose-50 dark:bg-rose-900/10 text-rose-600 hover:bg-rose-100/50 dark:hover:bg-rose-950/20 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
             >
@@ -339,118 +338,117 @@ export default function RFQDetailsPage() {
         {/* ── SELLER BIDS / RESPONSES SECTION ── */}
         {rfq.status === 'pending' && (
           <div className="space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
-              Seller Responses ({rfq.bids.length})
-            </h3>
-            {rfq.status === 'pending' && (
-              <span className="flex items-center gap-1.5 text-[9px] font-bold text-emerald-500 uppercase tracking-widest">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                Live Bidding
-              </span>
-            )}
-          </div>
+            <div className="flex items-center justify-between px-1">
+              <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                Seller Responses ({rfq.bids.length})
+              </h3>
+              {rfq.status === 'pending' && (
+                <span className="flex items-center gap-1.5 text-[9px] font-bold text-emerald-500 uppercase tracking-widest">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 " />
+                  Live Bidding
+                </span>
+              )}
+            </div>
 
-          <AnimatePresence>
-            {rfq.bids.length === 0 ? (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="bg-white dark:bg-slate-850 border border-slate-150 dark:border-slate-800/50 rounded-3xl p-8 text-center"
-              >
-                <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center mx-auto mb-3 animate-pulse">
-                  <Clock className="w-6 h-6 text-slate-400" />
-                </div>
-                <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                  Waiting for Seller Bids
-                </h4>
-                <p className="text-[10px] text-slate-400 leading-normal max-w-[220px] mx-auto font-medium">
-                  We have broadcasted this request. Nearby verified sellers will receive notifications to bid.
-                </p>
-              </motion.div>
-            ) : (
-              rfq.bids.map((bid) => {
-                const isAccepted = bid.status === 'accepted';
-                const isDeclined = bid.status === 'declined';
-                
-                return (
-                  <motion.div
-                    key={bid.id}
-                    layout
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={`bg-white dark:bg-slate-850 border rounded-3xl p-5 space-y-4 transition-all duration-300 ${
-                      isAccepted 
-                        ? 'border-emerald-500 shadow-lg shadow-emerald-500/5' 
-                        : isDeclined 
-                        ? 'opacity-50 border-slate-200 dark:border-slate-850'
-                        : 'border-slate-150 dark:border-slate-800/40 shadow-sm'
-                    }`}
-                  >
-                    {/* Seller details & Quoted price */}
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <h4 className="text-sm font-black text-slate-900 dark:text-white capitalize">
-                            {bid.sellerName}
-                          </h4>
-                          <span className="text-[9px] font-bold text-amber-500 flex items-center gap-0.5">
-                            ★ {bid.sellerRating}
-                          </span>
+            <AnimatePresence>
+              {rfq.bids.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800/50 rounded-3xl p-8 text-center"
+                >
+                  <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 animate-pulse">
+                    <Clock className="w-6 h-6 text-slate-400" />
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
+                    Waiting for Seller Bids
+                  </h4>
+                  <p className="text-[10px] text-slate-400 leading-normal max-w-[220px] mx-auto font-medium">
+                    We have broadcasted this request. Nearby verified sellers will receive notifications to bid.
+                  </p>
+                </motion.div>
+              ) : (
+                rfq.bids.map((bid) => {
+                  const isAccepted = bid.status === 'accepted';
+                  const isDeclined = bid.status === 'declined';
+
+                  return (
+                    <motion.div
+                      key={bid.id}
+                      layout
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`bg-white dark:bg-slate-900 border rounded-3xl p-5 space-y-4 transition-all duration-300 ${isAccepted
+                        ? 'border-emerald-500 shadow-lg shadow-emerald-500/5'
+                        : isDeclined
+                          ? 'opacity-50 border-slate-200 dark:border-slate-850'
+                          : 'border-slate-150 dark:border-slate-800/40 shadow-sm'
+                        }`}
+                    >
+                      {/* Seller details & Quoted price */}
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <h4 className="text-sm font-black text-slate-900 dark:text-white capitalize">
+                              {bid.sellerName}
+                            </h4>
+                            <span className="text-[9px] font-bold text-amber-500 flex items-center gap-0.5">
+                              ★ {bid.sellerRating}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-widest mt-0.5">
+                            Offering: {bid.quantity}
+                          </p>
                         </div>
-                        <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-widest mt-0.5">
-                          Offering: {bid.quantity}
-                        </p>
+                        <div className="text-right">
+                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quoted Price</p>
+                          <p className="text-base font-black text-emerald-600 leading-none">
+                            KSh {bid.price}<span className="text-[9px] text-emerald-600/70">/kg</span>
+                          </p>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quoted Price</p>
-                        <p className="text-base font-black text-emerald-600 leading-none">
-                          KSh {bid.price}<span className="text-[9px] text-emerald-600/70">/kg</span>
-                        </p>
-                      </div>
-                    </div>
 
-                    {bid.message && (
-                      <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 flex items-start gap-2">
-                        <MessageSquare className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                        <p className="text-xs text-slate-650 dark:text-slate-350 italic">"{bid.message}"</p>
-                      </div>
-                    )}
+                      {bid.message && (
+                        <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-800 flex items-start gap-2">
+                          <MessageSquare className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                          <p className="text-xs text-slate-650 dark:text-slate-350 italic">"{bid.message}"</p>
+                        </div>
+                      )}
 
-                    {/* Actions */}
-                    {rfq.status === 'pending' && bid.status === 'pending' && (
-                      <div className="flex gap-2.5 pt-1">
-                        <button
-                          onClick={() => handleDeclineBid(bid.id, bid.sellerName)}
-                          className="flex-1 py-3 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs uppercase tracking-widest border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950 active:scale-98 transition-all"
-                        >
-                          Decline
-                        </button>
-                        <button
-                          onClick={() => handleAcceptBid(bid.id, bid.sellerName)}
-                          className="flex-1 py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md shadow-emerald-500/10 hover:bg-emerald-700 active:scale-98 transition-all flex items-center justify-center gap-1.5"
-                        >
-                          <CheckCircle2 className="w-4 h-4" /> Accept Offer
-                        </button>
-                      </div>
-                    )}
+                      {/* Actions */}
+                      {rfq.status === 'pending' && bid.status === 'pending' && (
+                        <div className="flex gap-2.5 pt-1">
+                          <button
+                            onClick={() => handleDeclineBid(bid.id, bid.sellerName)}
+                            className="flex-1 py-3 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs uppercase tracking-widest border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950 active:scale-98 transition-all"
+                          >
+                            Decline
+                          </button>
+                          <button
+                            onClick={() => handleAcceptBid(bid.id, bid.sellerName)}
+                            className="flex-1 py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md shadow-emerald-500/10 hover:bg-emerald-700 active:scale-98 transition-all flex items-center justify-center gap-1.5"
+                          >
+                            <CheckCircle2 className="w-4 h-4" /> Accept Offer
+                          </button>
+                        </div>
+                      )}
 
-                    {isAccepted && (
-                      <div className="flex items-center gap-2 p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-650 dark:text-emerald-450 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-[10px] font-black uppercase tracking-widest justify-center">
-                        <ShieldCheck className="w-4 h-4" /> Accepted Offer • Trade Initiated
-                      </div>
-                    )}
+                      {isAccepted && (
+                        <div className="flex items-center gap-2 p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-650 dark:text-emerald-450 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-[10px] font-black uppercase tracking-widest justify-center">
+                          <ShieldCheck className="w-4 h-4" /> Accepted Offer • Trade Initiated
+                        </div>
+                      )}
 
-                    {isDeclined && (
-                      <div className="text-center p-2.5 bg-rose-50 dark:bg-rose-950/10 text-rose-500 rounded-xl text-[9px] font-bold uppercase tracking-widest">
-                        Quote Declined
-                      </div>
-                    )}
-                  </motion.div>
-                );
-              })
-            )}
-          </AnimatePresence>
+                      {isDeclined && (
+                        <div className="text-center p-2.5 bg-rose-50 dark:bg-rose-950/10 text-rose-500 rounded-xl text-[9px] font-bold uppercase tracking-widest">
+                          Quote Declined
+                        </div>
+                      )}
+                    </motion.div>
+                  );
+                })
+              )}
+            </AnimatePresence>
           </div>
         )}
       </div>

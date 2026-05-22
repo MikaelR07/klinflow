@@ -12,7 +12,7 @@ function ReviewCard({ review }: { review: any }) {
   const isPositive = review.rating >= 4;
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[1.5rem] shadow-sm hover:shadow-md transition-all overflow-hidden group">
+    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[1.5rem] shadow-sm hover:shadow-md transition-all overflow-hidden group">
       {/* Header - Always Visible */}
       <div 
         onClick={() => setIsExpanded(!isExpanded)}
@@ -149,7 +149,7 @@ export default function ReviewsPage() {
   return (
     <div className="space-y-6 animate-fade-in pb-20">
       {/* Sticky Top Nav */}
-      <div className="sticky top-0 z-50 -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+      <div className="sticky top-0 z-50 -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-4 max-w-lg mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button 
@@ -171,7 +171,7 @@ export default function ReviewsPage() {
       {/* Analytics Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {/* Main Rating Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 relative overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-slate-800 rounded-[1.5rem] p-6 text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 relative overflow-hidden shadow-sm">
           <div className="absolute top-0 right-0 p-6 opacity-10 dark:opacity-5">
             <Award className="w-20 h-20 rotate-12 text-slate-900 dark:text-white" />
           </div>
@@ -190,7 +190,7 @@ export default function ReviewsPage() {
         </div>
 
         {/* Rating Breakdown */}
-        <div className="md:col-span-2 bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 border border-slate-200 dark:border-white/5 shadow-sm space-y-4">
+        <div className="md:col-span-2 bg-white dark:bg-slate-800 rounded-[1.5rem] p-6 border border-slate-200 dark:border-white/5 shadow-sm space-y-4">
           <h3 className="text-[9px] font-bold text-slate-400 capitalize tracking-[0.2em]">Rating Analytics</h3>
           <div className="space-y-2">
             {stats.breakdown.length > 0 ? stats.breakdown.map((item) => (

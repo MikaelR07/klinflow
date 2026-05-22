@@ -70,9 +70,9 @@ export default function FinancingHub() {
   const totalVolume = 642; 
   
   const [selectedLoan, setSelectedLoan] = useState<any>(null);  return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button onClick={() => navigate(-1)} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
@@ -91,7 +91,7 @@ export default function FinancingHub() {
 
       <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)] pb-24 px-1.5 space-y-6 max-w-lg mx-auto">
         {/* ── REPUTATION SNAPSHOT ── */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 text-slate-900 dark:text-white shadow-sm relative overflow-hidden">
+        <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 text-slate-900 dark:text-white shadow-sm relative overflow-hidden">
            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10" />
            <div className="flex items-center justify-between relative z-10">
               <div className="space-y-1">
@@ -127,8 +127,8 @@ export default function FinancingHub() {
                   onClick={() => isUnlocked && setSelectedLoan(loan)}
                   className={`p-5 rounded-2xl border-2 transition-all relative overflow-hidden group ${
                     isUnlocked 
-                      ? 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 active:scale-[0.98]' 
-                      : 'bg-slate-100/50 dark:bg-slate-900/40 border-transparent opacity-60'
+                      ? 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800 active:scale-[0.98]' 
+                      : 'bg-slate-100/50 dark:bg-slate-800/40 border-transparent opacity-60'
                   }`}
                 >
                   {!isUnlocked && (
@@ -206,7 +206,7 @@ export default function FinancingHub() {
                initial={{ y: '100%' }} 
                animate={{ y: 0 }} 
                exit={{ y: '100%' }}
-               className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-[2.5rem] p-8 pb-12 shadow-2xl z-10"
+               className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-t-[2.5rem] p-8 pb-12 shadow-2xl z-10"
              >
                 <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto mb-8" />
                 

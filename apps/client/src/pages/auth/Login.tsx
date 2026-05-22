@@ -43,13 +43,13 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col justify-center min-h-dvh max-w-lg mx-auto px-6 py-10 relative overflow-hidden">
+    <div className="flex flex-col dark:bg-slate-900 justify-center min-h-dvh max-w-lg mx-auto px-6 py-10 relative overflow-hidden">
       {/* Background Decor (Matched to Welcome Page) */}
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
 
       <div className="max-w-md w-full mx-auto relative z-10 animate-slide-up">
-        
+
         {/* Branding */}
         <div className="text-center mb-10">
           <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
@@ -80,7 +80,7 @@ export default function Login() {
                     placeholder="07XX XXX XXX / 01XX..."
                     value={phone}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-semibold tracking-widest focus:ring-4 text-base focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                    className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-semibold tracking-widest focus:ring-4 text-base focus:ring-primary/10 focus:border-primary transition-all outline-none"
                     required
                   />
                 </div>
@@ -102,7 +102,7 @@ export default function Login() {
                     placeholder="8+ characters"
                     value={pin}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPin(e.target.value)}
-                    className="w-full pl-12 pr-12 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary transition-all outline-none"
+                    className="w-full pl-12 pr-12 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary transition-all outline-none"
                     required
                   />
                   <button

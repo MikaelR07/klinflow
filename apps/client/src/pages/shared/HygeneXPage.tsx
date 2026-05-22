@@ -26,7 +26,7 @@ function useVoiceRecognition() {
 
   const stopListening = () => {
     if (recognitionRef.current && isListeningRef.current) {
-      try { recognitionRef.current.stop(); } catch(e) {}
+      try { recognitionRef.current.stop(); } catch (e) { }
     }
     setIsListening(false);
     isListeningRef.current = false;
@@ -46,18 +46,18 @@ function useVoiceRecognition() {
       }, 2000);
       return;
     }
-    
+
     try {
       const recognition = new SpeechRecognition();
       recognitionRef.current = recognition;
       recognition.continuous = false;
       recognition.interimResults = true;
-      
+
       recognition.onstart = () => {
         setIsListening(true);
         isListeningRef.current = true;
       };
-      
+
       recognition.onresult = (event: any) => {
         let text = '';
         for (let i = 0; i < event.results.length; ++i) {
@@ -65,18 +65,18 @@ function useVoiceRecognition() {
         }
         onResult(text);
       };
-      
+
       recognition.onerror = (e: any) => {
         console.error("Speech error:", e.error);
         setIsListening(false);
         isListeningRef.current = false;
       };
-      
+
       recognition.onend = () => {
         setIsListening(false);
         isListeningRef.current = false;
       };
-      
+
       recognition.start();
     } catch (err) {
       console.error("Speech API error:", err);
@@ -84,7 +84,7 @@ function useVoiceRecognition() {
       isListeningRef.current = false;
     }
   };
-  
+
   return { isListening, startListening, stopListening };
 }
 
@@ -120,7 +120,7 @@ export default function HygeneXPage() {
   const { messages, isTyping, metrics, initChat, stopChat, sendMessage } = useHygenexStore();
   const [inputText, setInputText] = useState("");
   const chatBottomRef = useRef<HTMLDivElement>(null);
-  
+
   const { isListening, startListening, stopListening } = useVoiceRecognition();
 
   const navigate = useNavigate();
@@ -155,48 +155,41 @@ export default function HygeneXPage() {
 
   const renderMessageText = (text: any) => {
     if (!text) return '';
+
+    // If it's already an object (shouldn't happen, but guard it)
     if (typeof text === 'object') {
-      const txt = text.text || JSON.stringify(text);
-      return typeof txt === 'string' ? txt.replace(/cleanflow/gi, 'Klinflow').replace(/CleanFlow/g, 'Klinflow') : txt;
+      return String(text.text || JSON.stringify(text));
     }
-    
-    let cleanText = text;
-    if (typeof text === 'string') {
-      cleanText = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-      if (cleanText.startsWith('{')) {
-        try {
-          const parsed = JSON.parse(cleanText);
-          if (parsed && typeof parsed === 'object') {
-            cleanText = parsed.text || text;
-          }
-        } catch (e) {
-          // Fallback regex if it's malformed JSON string like {text: "..."}
-          const match = cleanText.match(/"?text"?\s*:\s*"([^"]+)"/);
-          if (match && match[1]) cleanText = match[1];
-        }
+
+    let result = String(text).replace(/```json/gi, '').replace(/```/g, '').trim();
+
+    // Only try JSON parsing if the response looks like a JSON action object
+    // (this only happens when Gemini triggers a BOOK_PICKUP action)
+    if (result.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(result);
+        if (parsed?.text) result = parsed.text;
+      } catch {
+        // Not valid JSON — use the raw text as-is
       }
     }
-    
-    if (typeof cleanText === 'string') {
-      cleanText = cleanText
-        .replace(/cleanflow/gi, 'Klinflow')
-        .replace(/CleanFlow/g, 'Klinflow');
-    }
-    
-    return cleanText;
+
+    return result
+      .replace(/cleanflow/gi, 'Klinflow')
+      .replace(/CleanFlow/g, 'Klinflow');
   };
 
   return (
-    <div className="flex flex-col fixed inset-0 bg-white dark:bg-slate-900 text-slate-900 dark:text-white z-50">
+    <div className="flex flex-col fixed inset-0 bg-white dark:bg-slate-800 text-slate-900 dark:text-white z-50">
       {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 z-50 transition-colors max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 z-50 transition-colors max-w-lg mx-auto">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-500 transition-colors" />
           </button>
           <div>
             <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">HygeneX</h1>
-            <p className="text-[10px] font-bold text-emerald-500 capitalize tracking-[0.2em] mt-1">Smart Waste Intelligence</p>
+            <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-[0.2em] mt-1">Smart Waste Intelligence</p>
           </div>
         </div>
       </div>
@@ -204,39 +197,37 @@ export default function HygeneXPage() {
       {/* 1. CHAT ENGINE (FULL WIDTH) */}
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3rem)] pb-[env(safe-area-inset-bottom,1.5rem)] flex flex-col relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-        
+
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-6 py-10 space-y-10">
           <div className="max-w-3xl mx-auto space-y-10">
             {messages.map((msg: any, idx: number) => {
               const isAi = msg.role === 'ai';
               return (
-                <motion.div 
+                <motion.div
                   key={idx}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={`flex gap-6 ${isAi ? '' : 'flex-row-reverse'}`}
                 >
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
-                    isAi 
-                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' 
-                      : 'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
-                  }`}>
+                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${isAi
+                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'
+                    : 'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                    }`}>
                     {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
                   </div>
-                  
+
                   <div className="flex flex-col gap-2 max-w-[85%]">
-                    <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${
-                      isAi 
-                        ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-none shadow-sm' 
-                        : 'bg-primary border-primary text-white font-medium rounded-tr-none shadow-lg shadow-primary/20'
-                    }`}>
+                    <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${isAi
+                      ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-none shadow-sm'
+                      : 'bg-primary border-primary text-white font-medium rounded-tr-none shadow-lg shadow-primary/20'
+                      }`}>
                       {renderMessageText(msg.text)}
                     </div>
 
                     {/* AI ACTION CARD: BOOKING */}
                     {isAi && msg.metadata?.action?.type === 'BOOK_PICKUP' && (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 space-y-3"
@@ -250,7 +241,7 @@ export default function HygeneXPage() {
                             <div className="text-xs font-semibold">{msg.metadata.action.payload.wasteType} • {msg.metadata.action.payload.scheduled_date}</div>
                           </div>
                         </div>
-                        <button 
+                        <button
                           onClick={() => alert('Booking confirmed in database!')}
                           className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-semibold capitalize tracking-widest rounded-xl transition-all"
                         >
@@ -266,7 +257,7 @@ export default function HygeneXPage() {
                 </motion.div>
               );
             })}
-            
+
             {isTyping && (
               <div className="flex gap-4">
                 <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
@@ -287,7 +278,7 @@ export default function HygeneXPage() {
       </div>
 
       <div className="shrink-0 w-full z-30 px-4 pb-8 lg:pb-10 pt-4 bg-transparent">
-        <div className="w-full max-w-4xl mx-auto bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] shadow-2xl overflow-hidden">
+        <div className="w-full max-w-4xl mx-auto bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[1rem]  overflow-hidden">
           <div className="relative flex items-end">
             <textarea
               value={inputText}
@@ -297,22 +288,20 @@ export default function HygeneXPage() {
               className="w-full bg-transparent border-none py-5 pl-16 pr-16 text-base md:text-lg text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-0 resize-none min-h-[72px] max-h-[150px]"
               rows={1}
             />
-            
-            <button 
+
+            <button
               onClick={toggleMic}
-              className={`absolute left-3 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all z-20 ${
-                isListening ? 'bg-emerald-500 text-white animate-pulse shadow-lg shadow-emerald-500/50 scale-105' : 'text-slate-400 dark:text-slate-500 hover:text-emerald-500 bg-slate-50 dark:bg-white/5'
-              }`}
+              className={`absolute left-3 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all z-20 ${isListening ? 'bg-emerald-500 text-white animate-pulse shadow-lg shadow-emerald-500/50 scale-105' : 'text-slate-400 dark:text-slate-500 hover:text-emerald-500 bg-slate-50 dark:bg-white/5'
+                }`}
             >
               {isListening ? <StopCircle className="w-5 h-5 md:w-6 md:h-6" /> : <Mic className="w-5 h-5 md:w-6 md:h-6" />}
             </button>
 
-            <button 
+            <button
               onClick={handleSend}
               disabled={!inputText.trim()}
-              className={`absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all ${
-                inputText.trim() ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' : 'text-slate-300 dark:text-slate-700 pointer-events-none'
-              }`}
+              className={`absolute right-3 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all ${inputText.trim() ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/40' : 'text-slate-300 dark:text-slate-700 pointer-events-none'
+                }`}
             >
               <Send className="w-5 h-5 md:w-6 md:h-6" />
             </button>

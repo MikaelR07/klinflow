@@ -354,7 +354,7 @@ export default function BookPickup() {
       {/* ── HEADER (DYNAMIC STICKY) ── */}
       <div className={`sticky top-0 z-[100] -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] transition-all duration-300 pt-[calc(env(safe-area-inset-top,1.5rem)+0.5rem)] pb-3 px-5 border-b ${
         scrolled 
-          ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-sm' 
+          ? 'bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-sm' 
           : 'bg-transparent border-transparent'
       }`}>
          <div className="flex items-center justify-between">
@@ -465,7 +465,7 @@ export default function BookPickup() {
                                   } : {}}
                                 >
                                   {!bgImage && <div className="absolute top-0 right-0 w-12 h-12 bg-primary/5 rounded-bl-3xl -mr-4 -mt-4 group-hover:bg-primary/10 transition-colors" />}
-                                  <div className={`w-10 h-10 ${bgImage ? 'bg-white/10 backdrop-blur-md' : 'bg-slate-50 dark:bg-slate-900/50'} rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform`}>
+                                  <div className={`w-10 h-10 ${bgImage ? 'bg-white/10 backdrop-blur-md' : 'bg-slate-50 dark:bg-slate-800/50'} rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform`}>
                                     {cat.icon || '📦'}
                                   </div>
                                   <span className={`text-xs font-black capitalize tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
@@ -489,7 +489,7 @@ export default function BookPickup() {
                       )}
                     </div>
                   ) : (
-                    <div className="bg-white dark:bg-slate-900/50 p-4 rounded-[28px] border border-primary/20 relative shadow-sm flex items-center gap-4">
+                    <div className="bg-white dark:bg-slate-800/50 p-4 rounded-[28px] border border-primary/20 relative shadow-sm flex items-center gap-4">
                        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-xl text-white">{wasteType.icon}</div>
                        <div className="flex-1">
                           <h3 className="text-xs font-semibold dark:text-white leading-none">{wasteType.label}</h3>
@@ -513,7 +513,7 @@ export default function BookPickup() {
                          className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary" 
                        />
                        <div className="flex items-center gap-4">
-                         <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 rounded-[14px] bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center text-xl font-semibold dark:text-white active:scale-95 transition-transform shrink-0">-</button>
+                         <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 rounded-[14px] bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-xl font-semibold dark:text-white active:scale-95 transition-transform shrink-0">-</button>
                          <div className="flex-1 text-center relative group">
                             <input 
                               type="number" 
@@ -681,7 +681,7 @@ export default function BookPickup() {
 
                   {/* Active Selection Cards */}
                    {(selectedAgent || selectedCompanyId) && (
-                     <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl border border-primary/20 shadow-xl mt-3 animate-slide-up">
+                     <div className="bg-white dark:bg-slate-800 p-3.5 rounded-2xl border border-primary/20 shadow-xl mt-3 animate-slide-up">
                         <div className="flex items-center justify-between gap-3">
                            <div className="flex items-center gap-3">
                               <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-lg">
@@ -746,7 +746,7 @@ export default function BookPickup() {
                   )}
 
                   {/* Preferred Agent Search */}
-                  <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mt-3.5">
+                  <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mt-3.5">
                      <h2 className="text-[10px] font-semibold capitalize tracking-widest text-slate-400 mb-2.5">Search by Name or Invite Code (Optional)</h2>
                      <input 
                        type="text" 
@@ -807,7 +807,7 @@ export default function BookPickup() {
                         onClick={() => setIsManualTime(true)} 
                         className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${isManualTime ? 'bg-slate-900 dark:bg-slate-700 border-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border-dashed border-slate-200 dark:border-white/10'}`}
                       >
-                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${isManualTime ? 'bg-white/10' : 'bg-slate-50 dark:bg-slate-900'}`}>
+                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${isManualTime ? 'bg-white/10' : 'bg-slate-50 dark:bg-slate-800'}`}>
                           <Clock className={`w-5 h-5 ${isManualTime ? 'text-primary' : 'text-slate-400'}`} />
                         </div>
                         <div className="flex-1">
@@ -832,11 +832,11 @@ export default function BookPickup() {
                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-800 p-6 rounded-[2.5rem] border border-slate-100 dark:border-white/5 grid grid-cols-2 gap-4">
                     <div className="space-y-1">
                        <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Date</span>
-                       <input type="date" value={customDate} onChange={(e) => setCustomDate(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
+                       <input type="date" value={customDate} onChange={(e) => setCustomDate(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
                     </div>
                     <div className="space-y-1">
                        <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Time</span>
-                       <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
+                       <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
                     </div>
                  </motion.div>
                )}
@@ -846,7 +846,7 @@ export default function BookPickup() {
           {step === 3 && (
             <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 pb-6">
                <h2 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight italic px-2">Marketplace Summary</h2>
-               <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-0">
+               <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-0">
                   <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Pickup Breakdown</p>
                   
                   {/* Material Info */}
@@ -889,7 +889,7 @@ export default function BookPickup() {
                   </div>
                 </div>
 
-                <div className="p-8 rounded-3xl text-center relative overflow-hidden shadow-2xl transition-all bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 mt-6">
+                <div className="p-8 rounded-3xl text-center relative overflow-hidden shadow-2xl transition-all bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 mt-6">
                   <div className="absolute top-0 right-0 p-4 opacity-5"><Scale className="w-24 h-24" /></div>
                   <div className="space-y-6">
                     <p className="text-xs font-semibold capitalize tracking-[0.3em] text-primary mb-4">Direct Verification</p>
@@ -921,7 +921,7 @@ export default function BookPickup() {
         {showEscrowModal && (
           <div className="fixed inset-0 z-[100] flex items-end justify-center p-4 pb-28">
              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowEscrowModal(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
-             <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[3rem] p-8 pb-10 shadow-2xl overflow-hidden">
+             <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-[3rem] p-8 pb-10 shadow-2xl overflow-hidden">
                 <div className="relative space-y-6">
                    <div className="w-16 h-16 bg-primary/10 rounded-[2rem] flex items-center justify-center">
                       {preselectedCompanyName ? <span className="text-3xl">🏢</span> : <CheckCircle2 className="w-8 h-8 text-primary" />}

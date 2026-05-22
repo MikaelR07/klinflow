@@ -80,10 +80,10 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
-        <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors">
+        <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors">
           <div className="max-w-lg mx-auto space-y-2.5">
             <div className="flex items-center justify-between">
               <button onClick={() => navigate(-1)} className="w-8 h-8 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
@@ -127,7 +127,7 @@ export default function MarketplaceInventory() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-900 overflow-y-auto no-scrollbar pb-24"
+            className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-24"
           >
             
             {/* Edge-to-Edge Hero Image */}
@@ -169,7 +169,7 @@ export default function MarketplaceInventory() {
             </div>
 
             {/* Content Sheet (Overlaps Image) */}
-            <div className="bg-[#F2F3F4] dark:bg-slate-900 px-2 pt-4 pb-2 space-y-4 rounded-t-xl -mt-16 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+            <div className="bg-[#F2F3F4] dark:bg-slate-800 px-2 pt-4 pb-2 space-y-4 rounded-t-xl -mt-16 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
               
                 {/* Unified Listing Detail Card */}
                 <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
@@ -273,7 +273,7 @@ export default function MarketplaceInventory() {
                   return (
                   <div 
                     onClick={() => setSelectedId(listing.id)}
-                    className="bg-white dark:bg-slate-900 py-4 px-4 shadow-sm border-b border-slate-100 dark:border-slate-800 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
+                    className="bg-white dark:bg-slate-800 py-4 px-4 shadow-sm border-b border-slate-100 dark:border-slate-800 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-20 h-20 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
@@ -337,7 +337,7 @@ export default function MarketplaceInventory() {
       {showDeleteModal && (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 animate-fade-in">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setShowDeleteModal(false)} />
-          <div className="relative w-full max-w-[300px] bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden animate-slide-up border border-slate-100 dark:border-slate-800">
+          <div className="relative w-full max-w-[300px] bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl overflow-hidden animate-slide-up border border-slate-100 dark:border-slate-800">
             <div className="h-24 bg-rose-500 flex items-center justify-center relative">
               <div className="w-14 h-14 bg-white rounded-2xl shadow-xl flex items-center justify-center">
                 <Trash2 className="w-7 h-7 text-rose-500" />

@@ -30,9 +30,9 @@ export default function CommunityCollective() {
   const estateName = profile?.location?.estate || profile?.estate || 'Nairobi';
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F9FF] dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col min-h-screen bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800  transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800  transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
@@ -89,7 +89,7 @@ export default function CommunityCollective() {
 
           <div className="space-y-3">
             {ACTIVE_SWARMS.map((swarm) => (
-              <div key={swarm.id} className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
+              <div key={swarm.id} className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-600">
@@ -130,7 +130,7 @@ export default function CommunityCollective() {
               </div>
             ))}
 
-            <button className="w-full py-4 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 font-bold text-[10px] capitalize tracking-widest flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
+            <button className="w-full py-4 bg-white dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-slate-400 font-bold text-[10px] capitalize tracking-widest flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
               <Plus className="w-4 h-4" /> Start Neighborhood Swarm
             </button>
           </div>
@@ -144,7 +144,7 @@ export default function CommunityCollective() {
           </div>
 
           {COLLECTIVE_GOALS.map((goal) => (
-            <div key={goal.id} className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
+            <div key={goal.id} className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
               <div className="relative z-10 flex flex-col gap-4">
                 <div className="flex items-start justify-between">
