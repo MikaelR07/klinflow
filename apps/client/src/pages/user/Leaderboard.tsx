@@ -9,19 +9,19 @@ import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 
 const MerchantPodiumSlot = memo(({ user, height, isFirst, rank }: { user: any, height: string, isFirst: boolean, rank: number }) => {
   const getRankTheme = () => {
-    if (rank === 1) return { 
+    if (rank === 1) return {
       podium: 'bg-gradient-to-b from-amber-400 to-amber-600 border-amber-300 shadow-amber-500/40',
       avatar: 'border-amber-400 bg-amber-50',
       name: 'text-amber-950',
       revenue: 'text-white'
     };
-    if (rank === 2) return { 
+    if (rank === 2) return {
       podium: 'bg-gradient-to-b from-slate-200 to-slate-400 dark:from-slate-700 dark:to-slate-800 border-slate-300 dark:border-slate-600 shadow-slate-500/20',
       avatar: 'border-slate-300 bg-slate-50 dark:bg-slate-800',
       name: 'text-slate-900 dark:text-slate-200',
       revenue: 'text-slate-900 dark:text-white'
     };
-    if (rank === 3) return { 
+    if (rank === 3) return {
       podium: 'bg-gradient-to-b from-emerald-400 to-emerald-600 border-emerald-300 shadow-emerald-500/20',
       avatar: 'border-emerald-300 bg-emerald-50 dark:bg-emerald-800',
       name: 'text-emerald-950 dark:text-emerald-100',
@@ -36,9 +36,9 @@ const MerchantPodiumSlot = memo(({ user, height, isFirst, rank }: { user: any, h
     <div className="flex flex-col items-center flex-1">
       <div className={`${isFirst ? 'w-20 h-20' : 'w-14 h-14'} rounded-[2rem] border-2 ${user ? `${theme.avatar}` : 'border-dashed border-slate-300 dark:border-slate-600'} flex items-center justify-center mb-3 relative overflow-hidden`}>
         {user?.avatar_url ? (
-          <img 
-            src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 200 : 150 })} 
-            className="w-full h-full object-cover" 
+          <img
+            src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 200 : 150 })}
+            className="w-full h-full object-cover"
             alt={user.name}
             loading={isFirst ? "eager" : "lazy"}
             fetchPriority={isFirst ? "high" : "auto"}
@@ -66,9 +66,9 @@ const PodiumSlot = memo(({ user, height, bgClass, medalClass, isFirst }: { user:
   <div className="flex flex-col items-center flex-1">
     <div className={`${isFirst ? 'w-16 h-16' : 'w-12 h-12'} rounded-full border-2 ${user ? (isFirst ? 'border-amber-400 bg-amber-100' : 'border-slate-300 bg-slate-200 dark:bg-slate-700') : 'border-dashed border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800'} flex items-center justify-center mb-2 relative overflow-hidden`}>
       {user?.avatar_url ? (
-        <img 
-          src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 150 : 100 })} 
-          className="w-full h-full object-cover" 
+        <img
+          src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 150 : 100 })}
+          className="w-full h-full object-cover"
           alt={user.name}
           loading={isFirst ? "eager" : "lazy"}
           fetchPriority={isFirst ? "high" : "auto"}
@@ -96,20 +96,19 @@ const PodiumSlot = memo(({ user, height, bgClass, medalClass, isFirst }: { user:
 ));
 
 const SellerListItem = memo(({ user }: { user: any }) => (
-  <div 
-    className={`p-5 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
-      user.isUser
-        ? 'bg-slate-900 dark:bg-slate-800/50 border-emerald-500/30 relative z-10'
-        : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'
-    }`}
+  <div
+    className={`p-5 rounded-2xl border flex items-center justify-between transition-all duration-300 ${user.isUser
+      ? 'bg-slate-900 dark:bg-slate-800/50 border-emerald-500/30 relative z-10'
+      : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'
+      }`}
   >
     <div className="flex items-center gap-5">
       <span className={`text-xs font-black w-6 ${user.isUser ? 'text-emerald-400' : 'text-slate-400'}`}>#{user.rank}</span>
       <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg overflow-hidden border border-slate-100 dark:border-white/5">
         {user.avatar_url ? (
-          <img 
-            src={getThumbnailUrl(user.avatar_url, { width: 100 })} 
-            className="w-full h-full object-cover" 
+          <img
+            src={getThumbnailUrl(user.avatar_url, { width: 100 })}
+            className="w-full h-full object-cover"
             alt={user.name}
             loading="lazy"
           />
@@ -131,19 +130,18 @@ const SellerListItem = memo(({ user }: { user: any }) => (
 
 const ResidentListItem = memo(({ user }: { user: any }) => (
   <div
-    className={`p-6 py-5 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
-      user.isUser
-        ? 'bg-primary/10 border-primary/20 scale-[1.02] relative z-10'
-        : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'
-    }`}
+    className={`p-6 py-5 rounded-2xl border flex items-center justify-between transition-all duration-300 ${user.isUser
+      ? 'bg-primary/10 border-primary/20 scale-[1.02] relative z-10'
+      : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'
+      }`}
   >
     <div className="flex items-center gap-5">
       <span className={`text-xs font-black w-6 ${user.isUser ? 'text-primary' : 'text-slate-400'}`}>#{user.rank}</span>
       <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg overflow-hidden border border-slate-100 dark:border-white/5">
         {user.avatar_url ? (
-          <img 
-            src={getThumbnailUrl(user.avatar_url, { width: 100 })} 
-            className="w-full h-full object-cover" 
+          <img
+            src={getThumbnailUrl(user.avatar_url, { width: 100 })}
+            className="w-full h-full object-cover"
             alt={user.name}
             loading="lazy"
           />
@@ -232,7 +230,7 @@ function SellerLeaderboard() {
           <div className="relative z-10 text-center">
             <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-4" />
             <h2 className="text-2xl font-black mb-2 italic tracking-tighter">Profit Dominance!</h2>
-            <p className="text-[11px] font-semibold text-slate-400 leading-relaxed max-w-[280px] mx-auto capitalize tracking-widest">
+            <p className="text-[11px] font-semibold text-slate-100 leading-relaxed max-w-[280px] mx-auto capitalize tracking-widest">
               Dominate the market to unlock premium buyer access and zero-fee withdrawals! 🚀
             </p>
           </div>
@@ -303,9 +301,9 @@ function SellerLeaderboard() {
                 {topSellers.slice(3, visibleCount).map((user) => (
                   <SellerListItem key={user.id} user={user} />
                 ))}
-                
+
                 {topSellers.length > visibleCount && (
-                  <button 
+                  <button
                     onClick={() => setVisibleCount(prev => prev + 20)}
                     className="mt-4 py-4 w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black capitalize tracking-[0.2em] text-slate-400 active:scale-95 transition-all"
                   >
@@ -325,7 +323,7 @@ export default function Leaderboard() {
   const navigate = useNavigate();
   const profileId = useAuthStore(s => (s as any).profile?.id);
   const profileRole = useAuthStore(s => (s as any).profile?.role);
-  
+
   if (profileRole === 'seller') {
     return <SellerLeaderboard />;
   }
@@ -474,7 +472,7 @@ export default function Leaderboard() {
                 ))}
 
                 {topUsers.length > visibleCount && (
-                  <button 
+                  <button
                     onClick={() => setVisibleCount(prev => prev + 20)}
                     className="mt-4 py-4 w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl text-[10px] font-black capitalize tracking-[0.2em] text-slate-400 active:scale-95 transition-all"
                   >

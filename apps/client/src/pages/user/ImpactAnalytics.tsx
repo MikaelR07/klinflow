@@ -293,94 +293,71 @@ export default function ImpactAnalytics() {
       <div className="space-y-6 pb-2 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
         {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
         <div className="relative -mt-2 px-1">
-          <div className="bg-white dark:bg-slate-900/70 border border-slate-100 dark:border-slate-800 rounded-[1rem] p-2">
+          <div className="bg-cyan-800 dark:bg-slate-900/70 border border-slate-100 dark:border-slate-800 rounded-[1rem] p-2">
             <div>
-              <div className="grid grid-cols-3 gap-3">
-                {/* 1. Primary: Lifetime Revenue (Horizontal 2x1 Card) */}
-                <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 border border-slate-100 dark:border-slate-800/50">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                    <TrendingUp className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest leading-none">
-                      Lifetime Revenue
-                    </p>
-                    <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none mt-1 flex items-baseline gap-0.5">
-                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mr-0.5 capitalize">
-                        KSh
-                      </span>
-                      {stats.totalEarnings.toLocaleString()}
-                    </h2>
-                  </div>
+              <div className="grid grid-cols-2 gap-2">
+                {/* 1. Lifetime Revenue */}
+                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-100 dark:border-slate-700/50">
+                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-2 flex items-center gap-1.5">
+                    <TrendingUp className="w-3.5 h-3.5 text-emerald-500" /> Lifetime Revenue
+                  </p>
+                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
+                    <span className="text-[10px] font-bold text-slate-400">KSh</span>
+                    {stats.totalEarnings.toLocaleString()}
+                  </h2>
                 </div>
 
-                {/* 2. Recyclables Recovered (1x1 Square Card) */}
-                <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-3 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800/50">
-                  <Scale className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mb-1" />
-                  <span className="text-base font-black text-slate-900 dark:text-white leading-none mt-0.5">
+                {/* 2. Recyclables Recovered */}
+                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-100 dark:border-slate-700/50">
+                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-2 flex items-center gap-1.5">
+                    <Scale className="w-3.5 h-3.5 text-emerald-500" /> Total Weight
+                  </p>
+                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
                     {stats.totalWeight}
-                  </span>
-                  <span className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">
-                    KG
-                  </span>
+                    <span className="text-[10px] font-bold text-slate-400">KG</span>
+                  </h2>
                 </div>
 
-                {/* 3. Withdrawn (Horizontal 2x1 Card) */}
-                <div className="col-span-2 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 flex items-center gap-3 border border-slate-100 dark:border-slate-800/50">
-                  <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-                    <Sparkles className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest leading-none">
-                      Withdrawn
-                    </p>
-                    <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none mt-1 flex items-baseline gap-0.5">
-                      <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 block mr-0.5 capitalize">
-                        KSh
-                      </span>
-                      {stats.totalWithdrawn.toLocaleString()}
-                    </h2>
-                  </div>
+                {/* 3. Withdrawn */}
+                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-100 dark:border-slate-700/50">
+                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-2 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" /> Withdrawn
+                  </p>
+                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
+                    <span className="text-[10px] font-bold text-slate-400">KSh</span>
+                    {stats.totalWithdrawn.toLocaleString()}
+                  </h2>
                 </div>
 
-                {/* 4. Global Rank (1x1 Square Card) */}
-                <div className="col-span-1 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-3 flex flex-col items-center justify-center border border-slate-100 dark:border-slate-800/50">
-                  <Trophy className="w-4 h-4 text-amber-500 mb-1" />
-                  <span className="text-base font-black text-slate-900 dark:text-white leading-none mt-0.5">
+                {/* 4. Global Rank */}
+                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-100 dark:border-slate-700/50">
+                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-2 flex items-center gap-1.5">
+                    <Trophy className="w-3.5 h-3.5 text-amber-500" /> Global Rank
+                  </p>
+                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                     #{stats.globalRank || "—"}
-                  </span>
-                  <span className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">
-                    Rank
-                  </span>
+                  </h2>
                 </div>
 
-                {/* 5. Metrics Strip (Bottom Row 3x1 Card) */}
-                <div className="col-span-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 grid grid-cols-3 gap-1 border border-slate-100 dark:border-slate-800/50">
-                  <div className="text-center">
-                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none">
-                      {stats.totalPickups}
-                    </p>
-                    <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-1.5">
-                      Pickups
-                    </p>
+                {/* 5. Metrics Strip */}
+                <div className="col-span-2 bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex items-center justify-between border border-slate-100 dark:border-slate-700/50 px-6">
+                  <div className="flex flex-col items-center">
+                    <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-1.5"> Total Pickups</p>
+                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.totalPickups}</p>
                   </div>
 
-                  <div className="text-center border-l border-slate-200 dark:border-slate-700">
-                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none">
-                      {profile?.reward_points || 0}
-                    </p>
-                    <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-1.5">
-                      GFP
-                    </p>
+                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
+
+                  <div className="flex flex-col items-center">
+                    <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-1.5"> Total GFP</p>
+                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{profile?.reward_points || 0}</p>
                   </div>
 
-                  <div className="text-center border-l border-slate-200 dark:border-slate-700">
-                    <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">
-                      Most Recycled
-                    </p>
-                    <p className="text-xs font-black text-slate-900 dark:text-white capitalize truncate max-w-[100px] mx-auto leading-none mt-1">
-                      {stats.topMaterial}
-                    </p>
+                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
+
+                  <div className="flex flex-col items-center">
+                    <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-1.5">Most Recycled</p>
+                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none capitalize truncate max-w-[80px]">{stats.topMaterial}</p>
                   </div>
                 </div>
               </div>
@@ -480,7 +457,7 @@ export default function ImpactAnalytics() {
         </div>
 
         {/* ── RECYCLING TRENDS (BAR CHART) ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div className="bg-cyan-900 dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400 flex items-center gap-2">
               <BarChart className="w-4 h-4 text-indigo-500" /> Weekly Trends

@@ -202,7 +202,7 @@ export default function SellerHome() {
 
       {/* ── TOP NAV & HERO ── */}
       <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900/50 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900 ">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
@@ -219,7 +219,7 @@ export default function SellerHome() {
                 <h1 className="text-xl font-normal italic tracking-tight text-slate-900 dark:text-white leading-tight">
                   Hello {(profile?.fullName || profile?.name || 'Merchant').split(' ')[0]}👋
                 </h1>
-                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                <div className="flex items-center gap-1.5  text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
                   <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'searching...'}
                 </div>
               </div>
@@ -241,44 +241,37 @@ export default function SellerHome() {
 
         {/* ── REVENUE HERO CARD ── */}
         <div className="relative group">
-          <div className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl   p-5  shadow-lg gpu-layer relative overflow-hidden">
+          <div className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800  rounded-2xl   p-5  gpu-layer relative overflow-hidden">
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
             <div className="flex flex-col gap-6 relative z-10">
               <div className="flex items-end justify-between">
                 <div>
-                  <p className="text-[11px] font-semibold text-emerald-100/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                  <p className="text-[12px] font-semibold text-emerald-200/90 capitalise tracking-widest mb-1.5 flex items-center gap-1.5">
                     <Wallet className="w-3 h-3" /> Seller Wallet
                   </p>
-                  <h2 className="text-2xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
+                  <h2 className="text-3xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
                     KSh {walletBalance.toLocaleString()}
                   </h2>
-                  <div className="flex items-center gap-2 mt-3">
-                    <button
-                      disabled
-                      className="flex items-center gap-1.5 bg-emerald-500/50 text-emerald-800  dark:bg-emerald-700 dark:hover:bg-emerald-400 dark:text-white px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
-                    >
-                      {rewardPoints} GFP
-                    </button>
-                  </div>
+
                 </div>
 
                 <button
                   onClick={() => navigate('/withdraw')}
-                  className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest active:scale-95 transition-all mb-1"
+                  className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold capitalise tracking-widest active:scale-95 transition-all "
                 >
                   Withdraw
                 </button>
               </div>
 
               {/* Stats row */}
-              <div className="pt-5 border-t border-white/20">
+              <div className="pt-5 border-t border-white/30">
                 <div className="flex items-center justify-between sm:justify-start sm:gap-16 px-1">
 
                   <div className="flex flex-col items-center gap-1">
                     <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalDeals}</p>
                     <div className="flex items-center gap-1.5">
-                      <Handshake className="w-3.5 h-3.5 text-white/60" />
-                      <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Deals</p>
+                      <Handshake className="w-3.5 h-3.5 text-emerald-300" />
+                      <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest">Deals</p>
                     </div>
                   </div>
 
@@ -288,8 +281,8 @@ export default function SellerHome() {
                   <div className="flex flex-col items-center gap-1">
                     <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalSoldKg}kg</p>
                     <div className="flex items-center gap-1.5">
-                      <Scale className="w-3.5 h-3.5 text-white/60" />
-                      <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Sold KG</p>
+                      <Scale className="w-3.5 h-3.5 text-emerald-300" />
+                      <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest">Sold KG</p>
                     </div>
                   </div>
 
@@ -299,8 +292,8 @@ export default function SellerHome() {
                   <div className="flex flex-col items-center gap-1">
                     <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
                     <div className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-white/60" />
-                      <p className="text-[10px] font-semibold text-white/60 capitalize tracking-widest">Pending</p>
+                      <Clock className="w-3.5 h-3.5 text-emerald-300" />
+                      <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest">Pending</p>
                     </div>
                   </div>
 
@@ -310,16 +303,19 @@ export default function SellerHome() {
           </div>
         </div>
 
-        {/* ── ACTIONS & INSIGHTS WRAPPER ── */}
-        <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
+
+        <div className="bg-white dark:bg-slate-900/50 !mt-1 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
+          <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1 ">
+            Quick Actions
+          </p>
           {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-2 ">
             <button
               onClick={() => navigate('/post-trade')}
               className="bg-emerald-600 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
             >
-              <div className="absolute top-0 right-0 w-8 h-8 bg-white/10 rounded-bl-2xl rounded-tr-2xl" />
-              <div className="w-10 h-10 bg-white/20 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+
+              <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
                 <Plus className="w-5 h-5" />
               </div>
               <div className="text-center mt-auto">
@@ -383,11 +379,17 @@ export default function SellerHome() {
               </div>
             </button>
           </div>
+        </div>
 
+        {/* ── ACTIONS & INSIGHTS WRAPPER ── */}
+        <div className="bg-white dark:bg-slate-900/50 !mt-1 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
+          <p className="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide px-1 ">
+            Business Tools
+          </p>
           {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
           <div
             onClick={() => navigate('/market-pulse')}
-            className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+            className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
           >
 
             <div className="flex items-center gap-4 relative z-10">
@@ -494,9 +496,9 @@ export default function SellerHome() {
 
       </div>
       {/* ── RECENT ACTIVITY (BASE RECORD) ── */}
-      <div className="bg-slate-200 dark:bg-slate-900/50 !mt-2 rounded-2xl p-5 border border-slate-200/50 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-2xl p-5 border border-slate-200/50 dark:border-slate-800">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="font-semibold text-sm capitalize tracking-widest text-slate-600 px-1">Recent Activity</h3>
+          <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400">Recent Activity</h3>
           <div className="flex items-center gap-3">
             {recentBookings.length > 0 && (
               <button
@@ -548,6 +550,6 @@ export default function SellerHome() {
         </div>
       </div>
 
-    </div>
+    </div >
   );
 }

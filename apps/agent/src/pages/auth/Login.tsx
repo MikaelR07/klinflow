@@ -30,7 +30,7 @@ export default function Login() {
       toast.success('Agent Login Successful', { description: 'Ready for pickups.' });
       navigate('/', { replace: true });
     } catch (err) {
-      toast.error('Login Failed', { description: err.message || 'Check your agent credentials.' });
+      toast.error('Login Failed', { description: err.message || 'Unknown error.' });
     } finally {
       setIsLoading(false);
     }

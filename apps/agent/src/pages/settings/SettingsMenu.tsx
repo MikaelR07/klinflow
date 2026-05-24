@@ -2,7 +2,7 @@ import {
   User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle,
   Truck, BadgeCheck, Clock, DollarSign, Brain, Settings,
   Wallet, ArrowUpRight, ArrowDownLeft, History, Package,
-  Search, Briefcase, Star, CreditCard, ShieldCheck, HelpCircle, X, Loader2, Zap, Sun, Moon
+  Search, Briefcase, Star, ShieldCheck, HelpCircle, X, Loader2, Zap, BarChart3
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -132,9 +132,9 @@ export default function SettingsMenu() {
   ];
 
   const quickActions = [
-    { label: 'Earnings', icon: DollarSign, path: '/earnings', color: 'bg-emerald-500' },
+    { label: 'Dashboard', icon: BarChart3, path: '/earnings', color: 'bg-emerald-500' },
     { label: 'Warehouse', icon: Package, path: '/warehouse', color: 'bg-indigo-500' },
-    { label: 'Pricing', icon: Settings, path: '/settings/configuration', color: 'bg-slate-900' },
+    { label: 'Pricing', icon: Settings, path: '/settings/configuration', color: 'bg-blue-500' },
     { label: 'Reviews', icon: Star, path: '/reviews', color: 'bg-amber-500' },
   ];
 

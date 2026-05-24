@@ -1,6 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { Home, Briefcase, Brain, Wallet, MoreHorizontal, Package, Search } from 'lucide-react';
+import { Home, Briefcase, Brain, Wallet, MoreHorizontal, Package, Store } from 'lucide-react';
 
 // Shared Packages
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -33,6 +33,7 @@ const CreateRFQPage = lazy(() => import('./pages/agent/CreateRFQPage'));
 const MyRFQs = lazy(() => import('./pages/agent/MyRFQs'));
 const RFQDetailsPage = lazy(() => import('./pages/agent/RFQDetailsPage'));
 const ActivePickupsPage = lazy(() => import('./pages/agent/ActivePickupsPage'));
+const MarketPulse = lazy(() => import('./pages/agent/MarketPulse'));
 
 // Settings Pages
 const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
@@ -72,7 +73,7 @@ function MobileLayout() {
     { path: '/', icon: Home, label: 'Home' },
     { path: '/jobs', icon: Briefcase, label: 'Jobs', badge: availableJobs.length, badgeColor: 'bg-blue-500 shadow-sm shadow-blue-500/30' },
     { path: '/warehouse', icon: Package, label: 'Warehouse' },
-    { path: '/sourcing', icon: Search, label: 'MarketPlace', badge: listings.length, badgeColor: 'bg-emerald-500 shadow-sm shadow-emerald-500/30' },
+    { path: '/sourcing', icon: Store, label: 'MarketPlace', badge: listings.length, badgeColor: 'bg-emerald-500 shadow-sm shadow-emerald-500/30' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 
@@ -94,9 +95,9 @@ import PendingApproval from './pages/agent/PendingApproval';
 
 function DynamicRoleLayout() {
   const { profile } = useAuthStore();
-  
+
   const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
-  const hasCompany = !!(profile as any)?.company_id;
+  const hasCompany = !!profile?.companyId;
 
   if (isFleetDriver && !hasCompany) {
     return <PendingApproval />;
@@ -140,13 +141,13 @@ export default function App() {
   }, [isInstallable]);
 
   useEffect(() => {
+    checkAppRole('agent');
     initializeAuth();
   }, []);
 
   // 1. Stable, global Notification real-time subscription (Decoupled from online/offline job toggles)
   useEffect(() => {
     if (isAuthenticated && userId) {
-      checkAppRole('agent');
       fetchNotifications(userId, role);
       subscribeToRealtime(userId, role, profile?.agentAccountType || undefined);
       fetchAgentConfig(); // Ensure agent config is loaded globally on login
@@ -190,6 +191,7 @@ export default function App() {
             <Route path="/warehouse" element={<AgentWarehouse />} />
             <Route path="/warehouse/sell" element={<AgentSellStock />} />
             <Route path="/sourcing" element={<Sourcing />} />
+            <Route path="/market-pulse" element={<MarketPulse />} />
             <Route path="/rfq/create" element={<CreateRFQPage />} />
             <Route path="/rfqs" element={<MyRFQs />} />
             <Route path="/rfqs/:rfqId" element={<RFQDetailsPage />} />

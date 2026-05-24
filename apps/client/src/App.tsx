@@ -121,6 +121,7 @@ export default function App() {
   const userId = useAuthStore(s => s.userId);
   const isInitializing = useAuthStore(s => s.isInitializing);
   const initializeAuth = useAuthStore(s => s.initializeAuth);
+  const checkAppRole = useAuthStore(s => s.checkAppRole);
 
   const fetchNotifications = useNotificationStore(s => s.fetchNotifications);
   const subscribeToRealtime = useNotificationStore(s => s.subscribeToRealtime);
@@ -149,6 +150,7 @@ export default function App() {
   }, [isInstallable]);
 
   useEffect(() => {
+    checkAppRole('client');
     initializeAuth();
     fetchConfig();
     return () => {
@@ -181,7 +183,7 @@ export default function App() {
         supabase.removeChannel(offerSub);
       }
     };
-  }, [isAuthenticated, userId, role]);
+  }, [isAuthenticated, userId, role, checkAppRole]);
 
   if (isInitializing) {
     return <LoadingScreen message="Securing Session..." />;

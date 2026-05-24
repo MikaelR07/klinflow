@@ -14,16 +14,16 @@ function ReviewCard({ review }: { review: any }) {
   return (
     <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[1.5rem] shadow-sm hover:shadow-md transition-all overflow-hidden group">
       {/* Header - Always Visible */}
-      <div 
+      <div
         onClick={() => setIsExpanded(!isExpanded)}
         className="p-5 cursor-pointer select-none flex items-center justify-between"
       >
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700">
             {review.customerAvatar ? (
-              <img 
-                src={getThumbnailUrl(review.customerAvatar, { width: 100 })} 
-                className="w-full h-full object-cover" 
+              <img
+                src={getThumbnailUrl(review.customerAvatar, { width: 100 })}
+                className="w-full h-full object-cover"
                 alt=""
               />
             ) : (
@@ -37,7 +37,7 @@ function ReviewCard({ review }: { review: any }) {
               <div className={`w-4 h-4 rounded-md flex items-center justify-center ${isPositive ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
                 {isPositive ? <Check className="w-2.5 h-2.5" /> : <AlertCircle className="w-2.5 h-2.5" />}
               </div>
-              <h4 className="text-sm font-black text-slate-900 dark:text-white tracking-tight leading-tight">{review.customerName}</h4>
+              <h4 className="text-sm font-black text-slate-800 dark:text-white tracking-tight leading-tight">{review.customerName}</h4>
             </div>
             <div className="flex items-center gap-2 mt-1">
               <div className="flex gap-0.5">
@@ -58,10 +58,10 @@ function ReviewCard({ review }: { review: any }) {
 
         <div className="flex items-center gap-3">
           <div className="hidden xs:flex px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg">
-             <p className="text-[9px] font-mono text-slate-400 capitalize">#{review.id.slice(0,6)}</p>
+            <p className="text-[9px] font-mono text-slate-400 capitalize">#{review.id.slice(0, 6)}</p>
           </div>
           <div className={`p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-             <ChevronDown className="w-4 h-4" />
+            <ChevronDown className="w-4 h-4" />
           </div>
         </div>
       </div>
@@ -86,17 +86,7 @@ function ReviewCard({ review }: { review: any }) {
                 )}
               </div>
 
-              <div className="flex items-center gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-white/5">
-                <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg">
-                  <Tag className="w-3 h-3 text-slate-400" />
-                  <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest">{review.wasteType || 'General'}</span>
-                </div>
-                {isPositive && (
-                  <div className="flex items-center gap-1.5 text-[9px] font-bold text-emerald-500 capitalize tracking-widest ml-auto">
-                    <Heart className="w-3 h-3 fill-emerald-500" /> Service Champion
-                  </div>
-                )}
-              </div>
+
             </div>
           </motion.div>
         )}
@@ -108,12 +98,12 @@ function ReviewCard({ review }: { review: any }) {
 export default function ReviewsPage() {
   const navigate = useNavigate();
   const { profile } = useAuthStore();
-  const { 
-    recentReviews, 
-    fetchReviews, 
-    isLoadingReviews, 
-    subscribeToReviews, 
-    cleanupReviews 
+  const {
+    recentReviews,
+    fetchReviews,
+    isLoadingReviews,
+    subscribeToReviews,
+    cleanupReviews
   } = useAgentStore();
 
   useEffect(() => {
@@ -125,10 +115,10 @@ export default function ReviewsPage() {
   const stats = useMemo(() => {
     const total = recentReviews.length;
     if (total === 0) return { breakdown: [], total: 0, average: 0 };
-    
+
     const counts = [0, 0, 0, 0, 0]; // 5, 4, 3, 2, 1
     let sum = 0;
-    
+
     recentReviews.forEach(r => {
       const idx = Math.max(0, 5 - Math.round(r.rating));
       counts[idx]++;
@@ -147,21 +137,21 @@ export default function ReviewsPage() {
   }, [recentReviews]);
 
   return (
-    <div className="space-y-6 animate-fade-in pb-20">
+    <div className="space-y-6 px-1.5 animate-fade-in pb-20">
       {/* Sticky Top Nav */}
       <div className="sticky top-0 z-50 -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-4 max-w-lg mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button 
-              onClick={() => navigate(-1)} 
-              className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all"
+            <button
+              onClick={() => navigate(-1)}
+              className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center  active:scale-95 transition-all"
             >
               <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
             </button>
             <div>
               <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white capitalize">Reviews and Feedback</h1>
               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 flex items-center gap-1.5 leading-none">
-                <TrendingUp className="w-3 h-3 text-primary" /> Live Reputation Metrics
+                <TrendingUp className="w-3 h-3 text-primary" /> Live Feedback reports
               </p>
             </div>
           </div>
@@ -169,16 +159,16 @@ export default function ReviewsPage() {
       </div>
 
       {/* Analytics Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 !mt-2">
         {/* Main Rating Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-[1.5rem] p-6 text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 relative overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-slate-800 rounded-[1.5rem] p-6 text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 relative overflow-hidden ">
           <div className="absolute top-0 right-0 p-6 opacity-10 dark:opacity-5">
             <Award className="w-20 h-20 rotate-12 text-slate-900 dark:text-white" />
           </div>
           <div className="relative z-10">
-            <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-[0.2em] mb-1">Global Standing</p>
+            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-[0.2em] mb-1">Agent Rating</p>
             <div className="flex items-baseline gap-1.5">
-              <h2 className="text-4xl font-black tracking-tighter">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
+              <h2 className="text-3xl font-black tracking-tighter">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
               <span className="text-sm font-bold text-slate-300 dark:text-slate-600">/5.0</span>
             </div>
             <div className="flex gap-0.5 mt-2">
@@ -190,22 +180,22 @@ export default function ReviewsPage() {
         </div>
 
         {/* Rating Breakdown */}
-        <div className="md:col-span-2 bg-white dark:bg-slate-800 rounded-[1.5rem] p-6 border border-slate-200 dark:border-white/5 shadow-sm space-y-4">
+        <div className="md:col-span-2 bg-white dark:bg-slate-800 rounded-[1.5rem] p-6 border border-slate-200 dark:border-white/5  space-y-4">
           <h3 className="text-[9px] font-bold text-slate-400 capitalize tracking-[0.2em]">Rating Analytics</h3>
           <div className="space-y-2">
             {stats.breakdown.length > 0 ? stats.breakdown.map((item) => (
               <div key={item.stars} className="flex items-center gap-3">
                 <span className="text-[9px] font-bold text-slate-400 w-3">{item.stars}★</span>
                 <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-primary rounded-full transition-all duration-1000" 
+                  <div
+                    className="h-full bg-primary rounded-full transition-all duration-1000"
                     style={{ width: `${item.percentage}%` }}
                   />
                 </div>
                 <span className="text-[9px] font-bold text-slate-500 w-6 text-right">{Math.round(item.percentage)}%</span>
               </div>
             )) : (
-              [5,4,3,2,1].map(s => (
+              [5, 4, 3, 2, 1].map(s => (
                 <div key={s} className="flex items-center gap-3 opacity-20">
                   <span className="text-[9px] font-bold text-slate-400 w-3">{s}★</span>
                   <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full" />
@@ -228,13 +218,13 @@ export default function ReviewsPage() {
 
         {isLoadingReviews ? (
           <div className="flex flex-col items-center justify-center py-20 opacity-50">
-             <Loader2 className="w-8 h-8 animate-spin text-primary mb-2" />
-             <p className="text-[10px] font-bold capitalize tracking-widest">Synchronizing History...</p>
+            <Loader2 className="w-8 h-8 animate-spin text-primary mb-2" />
+            <p className="text-[10px] font-bold capitalize tracking-widest">Loading History...</p>
           </div>
         ) : recentReviews.length === 0 ? (
-          <EmptyState 
+          <EmptyState
             icon={MessageSquare}
-            title="Clean Slate"
+            title="No Reviews"
             subtitle="Complete more missions to start receiving feedback from the community."
           />
         ) : (

@@ -26,12 +26,12 @@ export default function Login() {
 
     setIsLoading(true);
     try {
-      // Allow any role to log in from the client app (Residents and Sellers)
-      await login(phone, pin, undefined);
+      // Enforce client roles to prevent cross-app login success
+      await login(phone, pin, [ROLES.USER, 'resident', 'seller']);
       toast.success('Welcome back');
       navigate('/', { replace: true });
     } catch (err) {
-      toast.error('Access Denied', { description: err instanceof Error ? err.message : 'Unknown error' });
+      toast.error('Login Failed', { description: err instanceof Error ? err.message : 'Unknown error' });
     } finally {
       setIsLoading(false);
     }

@@ -4,15 +4,15 @@
  * Restored the individual view to match the previously working JSX version.
  */
 import { useEffect, useState } from 'react';
-import { 
-  TrendingUp, 
-  Wallet, 
-  Target, 
-  Star, 
-  Sparkles, 
-  Calendar, 
-  Package, 
-  ShieldCheck, 
+import {
+  TrendingUp,
+  Wallet,
+  Target,
+  Star,
+  Sparkles,
+  Calendar,
+  Package,
+  ShieldCheck,
   Clock,
   ArrowLeft,
   ArrowUpRight,
@@ -82,28 +82,28 @@ export default function EarningsPage() {
   };
 
   if (isOwner) {
-    return <OwnerView 
-      navigate={navigate} 
-      earnings={earnings} 
-      profile={profile} 
-      handleWithdraw={handleWithdraw} 
-      isWithdrawing={isWithdrawing} 
-      goals={goals} 
-      handleGoalChange={handleGoalChange} 
-      jobHistory={jobHistory} 
+    return <OwnerView
+      navigate={navigate}
+      earnings={earnings}
+      profile={profile}
+      handleWithdraw={handleWithdraw}
+      isWithdrawing={isWithdrawing}
+      goals={goals}
+      handleGoalChange={handleGoalChange}
+      jobHistory={jobHistory}
       isChartReady={isChartReady}
     />;
   }
 
-  return <IndividualView 
-    navigate={navigate} 
-    earnings={earnings} 
-    profile={profile} 
-    handleWithdraw={handleWithdraw} 
-    isWithdrawing={isWithdrawing} 
-    goals={goals} 
-    handleGoalChange={handleGoalChange} 
-    jobHistory={jobHistory} 
+  return <IndividualView
+    navigate={navigate}
+    earnings={earnings}
+    profile={profile}
+    handleWithdraw={handleWithdraw}
+    isWithdrawing={isWithdrawing}
+    goals={goals}
+    handleGoalChange={handleGoalChange}
+    jobHistory={jobHistory}
     isChartReady={isChartReady}
   />;
 }
@@ -114,8 +114,8 @@ export default function EarningsPage() {
  */
 function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdrawing, goals, handleGoalChange, isChartReady }: any) {
   return (
-    <div className="space-y-6 animate-fade-in pb-24 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
-      
+    <div className="space-y-6 animate-fade-in pb-24 pt-[calc(env(safe-area-inset-top,1rem)+2rem)]">
+
       {/* ── HEADER ── */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
@@ -123,8 +123,8 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
           </button>
           <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">My Wallet</h1>
-            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Money & Stats</p>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Dashboard</h1>
+            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Performance Overview</p>
           </div>
           <button className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all">
             <Download className="w-4 h-4 text-slate-400" />
@@ -134,25 +134,27 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
 
       {/* ── DASHBOARD HERO: PERFORMANCE HUD ── */}
       <div className="relative group px-1">
-        <div className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 rounded-[1rem] p-3 overflow-hidden shadow-2xl transition-all duration-500">
-          
+        <div className="relative bg-gradient-to-br from-emerald-700 to-emerald-900 rounded-[1rem] p-3 overflow-hidden  transition-all duration-500">
+
           <div className="relative z-10">
             <div className="grid grid-cols-3 gap-3">
-              
+
               {/* 1. Main Stock Value (Bento Anchor - 2x2) */}
               <div className="col-span-2 row-span-2 bg-emerald-950/40 rounded-2xl p-4 flex flex-col justify-between">
-                <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
-                  <Package className="w-6 h-6" />
-                </div>
+
                 <div>
-                  <p className="text-[10px] font-black text-emerald-300/80 capitalize tracking-widest mb-2.5 leading-none">
-                    Assets Value
+                  <p className="text-[12px] font-black text-emerald-300/80 uppercase tracking-widest mb-2.5 leading-none">
+                    Total Stock Value
                   </p>
-                  <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
-                    <span className="text-[10px] font-bold text-emerald-300 block mb-1 capitalize">KSh</span>
-                    {Number(earnings.inventoryValue || 0).toLocaleString()}
-                  </h2>
+                  <div className="flex items-baseline gap-1 mb-2">
+                    <span className="text-2xl font-bold text-emerald-400">KSh</span>
+                    <h2 className="text-2xl font-black text-white">{(profile?.walletBalance || 0).toLocaleString()}</h2>
+                  </div>
+                  <div className="bg-emerald-500/20 text-emerald-100 text-[9px] font-black px-2 py-1 rounded-full w-fit tracking-wide">
+                    ↑ 12% from last week
+                  </div>
                 </div>
+
               </div>
 
               {/* 2. Rating (1x1) */}
@@ -222,9 +224,9 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
               <div className="flex items-center gap-1">
                 <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
                 <span className="text-xs font-semibold text-slate-400 capitalize">/</span>
-                <input 
-                  type="number" 
-                  value={goals.weekly} 
+                <input
+                  type="number"
+                  value={goals.weekly}
                   onChange={(e) => handleGoalChange('weekly', e.target.value)}
                   className="w-14 bg-transparent text-xs font-semibold text-slate-400 text-right outline-none border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 focus:text-emerald-500 transition-colors"
                 />
@@ -242,9 +244,9 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
               <div className="flex items-center gap-1">
                 <span className="text-xs font-semibold text-emerald-500">{(earnings.totalKg || 0).toFixed(0)}</span>
                 <span className="text-xs font-semibold text-slate-400 capitalize">/</span>
-                <input 
-                  type="number" 
-                  value={goals.monthly} 
+                <input
+                  type="number"
+                  value={goals.monthly}
                   onChange={(e) => handleGoalChange('monthly', e.target.value)}
                   className="w-14 bg-transparent text-xs font-semibold text-slate-400 text-right outline-none border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 focus:text-emerald-500 transition-colors"
                 />
@@ -266,30 +268,96 @@ function IndividualView({ navigate, earnings, profile, handleWithdraw, isWithdra
             <p className="text-sm font-black text-slate-900 dark:text-white capitalize tracking-tight">Weekly Recovery</p>
           </div>
           <div className="flex items-center gap-1.5 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-             <ArrowUpRight className="w-3 h-3 text-emerald-500" />
-             <span className="text-xs font-semibold text-emerald-500">{(earnings.thisWeekKg || 0).toFixed(0)} KG This Week</span>
+            <ArrowUpRight className="w-3 h-3 text-emerald-500" />
+            <span className="text-xs font-semibold text-emerald-500">{(earnings.thisWeekKg || 0).toFixed(0)} KG This Week</span>
           </div>
         </div>
-        
-        <div className="w-full h-[220px]">
-          {isChartReady && (
-            <ResponsiveContainer width="100%" height="100%" minHeight={1}>
-              <BarChart data={earnings.weeklyData || []} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" opacity={0.1} />
-                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold', fill: '#94a3b8' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold', fill: '#94a3b8' }} tickFormatter={(v) => `${v}kg`} />
-                <Tooltip cursor={{ fill: '#f8fafc' }} content={({ active, payload }) => active && payload && (
-                  <div className="bg-slate-900 text-white px-3 py-2 rounded-xl text-xs font-semibold shadow-2xl">{payload[0].value.toFixed(1)} KG</div>
-                )} />
-                <Bar dataKey="weight" radius={[8, 8, 8, 8]} barSize={24}>
-                  {(earnings.weeklyData || []).map((_entry: any, index: number) => {
-                    const todayIndex = (new Date().getDay() + 6) % 7; 
-                    return <Cell key={`cell-${index}`} fill={index === todayIndex ? '#10b981' : '#e2e8f0'} />;
-                  })}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          )}
+
+        <div className="w-full mt-4">
+          {earnings?.weeklyData?.length > 0 && (() => {
+            const weeklyData = earnings.weeklyData;
+
+            const maxWeight = Math.max(
+              ...weeklyData.map((item: any) => item.weight),
+              1
+            );
+
+            const todayIndex = (new Date().getDay() + 6) % 7;
+
+            return (
+              <div className="flex items-end justify-between gap-3 h-[190px] px-1">
+                {weeklyData.map((item: any, index: number) => {
+                  const barHeight =
+                    (item.weight / maxWeight) * 120;
+
+                  const isToday = index === todayIndex;
+
+                  return (
+                    <div
+                      key={item.day}
+                      className="flex flex-col items-center flex-1 group"
+                    >
+                      {/* Chart Area */}
+                      <div className="relative flex items-end h-[130px]">
+
+                        {/* Tooltip */}
+                        <div className="
+                  absolute
+                  -top-8
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-all
+                  duration-300
+                  bg-slate-900
+                  text-white
+                  text-[10px]
+                  font-semibold
+                  px-2.5
+                  py-1
+                  rounded-lg
+                  shadow-xl
+                  pointer-events-none
+                  whitespace-nowrap
+                ">
+                          {item.weight.toFixed(1)} KG
+                        </div>
+
+                        {/* Bar */}
+                        <div
+                          className={`
+                    w-7
+                    rounded-[14px]
+                    transition-all
+                    duration-700
+                    ease-out
+                    shadow-sm
+                    ${isToday
+                              ? "bg-emerald-500 shadow-emerald-200"
+                              : "bg-slate-200"
+                            }
+                  `}
+                          style={{
+                            height: `${barHeight}px`,
+                            minHeight: "14px",
+                          }}
+                        />
+                      </div>
+
+                      {/* Day Label */}
+                      <p className="
+                text-[11px]
+                font-medium
+                text-slate-400
+                mt-3
+              ">
+                        {item.day}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
       </div>
     </div>
@@ -391,8 +459,8 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
               <p className="text-lg font-bold text-slate-900 dark:text-white mt-1">Weekly Fleet Recovery (KG)</p>
             </div>
             <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-               <TrendingUp className="w-3 h-3 text-emerald-500" />
-               <span className="text-[10px] font-bold text-emerald-500 capitalize tracking-widest">{(earnings.thisWeekKg || 0).toFixed(0)} KG</span>
+              <TrendingUp className="w-3 h-3 text-emerald-500" />
+              <span className="text-[10px] font-bold text-emerald-500 capitalize tracking-widest">{(earnings.thisWeekKg || 0).toFixed(0)} KG</span>
             </div>
           </div>
           <div className="h-[250px] w-full">
@@ -407,7 +475,7 @@ function OwnerView({ navigate, earnings, profile, handleWithdraw, isWithdrawing,
                   )} />
                   <Bar dataKey="weight" radius={[6, 6, 6, 6]} barSize={32}>
                     {(earnings.weeklyData || []).map((entry: any, index: number) => {
-                      const todayIndex = (new Date().getDay() + 6) % 7; 
+                      const todayIndex = (new Date().getDay() + 6) % 7;
                       return <Cell key={`cell-${index}`} fill={index === todayIndex ? '#10b981' : '#334155'} />;
                     })}
                   </Bar>

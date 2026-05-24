@@ -622,7 +622,7 @@ export const useAuthStore = create<AuthState>()(
 
 
       
-      login: async (phone: string, pin: string, forcedRole?: UserRole) => {
+      login: async (phone: string, pin: string, forcedRole?: UserRole | string | string[]) => {
         const email = phoneToEmail(phone);
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password: pin });
         if (authError) throw new Error('Invalid credentials.');
@@ -630,12 +630,18 @@ export const useAuthStore = create<AuthState>()(
         const { data: profileData, error: profileError } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
           if (profileError || !profileData) {
             await supabase.auth.signOut();
-            throw new Error('Access Denied: Profile not found. Please register.');
+            throw new Error('This user account does not exist.');
           }
 
-          if (forcedRole && (profileData as ProfileRow).role !== forcedRole) {
-            await supabase.auth.signOut();
-            throw new Error(`Access Denied: This account is registered as a ${(profileData as ProfileRow).role}. Please use the correct Klinflow app.`);
+          if (forcedRole) {
+            const isRoleValid = Array.isArray(forcedRole) 
+              ? forcedRole.includes((profileData as ProfileRow).role)
+              : (profileData as ProfileRow).role === forcedRole;
+
+            if (!isRoleValid) {
+              await supabase.auth.signOut();
+              throw new Error('This user account does not exist.');
+            }
           }
           
         const uiProfile = get()._mapProfile(profileData as ProfileRow);

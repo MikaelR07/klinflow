@@ -82,19 +82,19 @@ export default function CircularResume() {
       <main className="flex-1 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-24 max-w-lg mx-auto w-full space-y-4">
 
         {/* ── THE PROFESSIONAL ID CARD ── */}
-        <div className="bg-white dark:bg-slate-800 rounded-[2rem] p-5 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+        <div className="bg-white dark:bg-slate-900/50 rounded-[1rem] p-5 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
 
 
           <div className="flex flex-col items-center text-center relative z-10 space-y-3">
             <div className="relative">
-              <div className="w-20 h-20 rounded-full border-4 border-white dark:border-slate-800 shadow-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-3xl">
+              <div className="w-20 h-20 rounded-full border-1 border-white dark:border-slate-800  overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-3xl">
                 {profile?.avatarUrl ? (
                   <img src={profile.avatarUrl} className="w-full h-full object-cover" />
                 ) : (
                   profile?.avatar || '👤'
                 )}
               </div>
-              <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white p-1 rounded-full border-4 border-white dark:border-slate-900 shadow-lg">
+              <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white p-1 rounded-full border-1 border-white dark:border-slate-900 shadow-lg">
                 <BadgeCheck className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -174,7 +174,7 @@ export default function CircularResume() {
                 <Zap className="w-5 h-5 fill-current" />
               </div>
               <div>
-                <h3 className="text-[11px] font-black capitalize tracking-widest leading-tight">Unlock Equipment Financing</h3>
+                <h3 className="text-[11px] text-slate-50 capitalize tracking-widest leading-tight">Unlock Equipment Financing</h3>
                 <p className="text-[9px] font-bold text-indigo-100 capitalize tracking-widest opacity-80 mt-0.5">Based on your Trust Score</p>
               </div>
             </div>

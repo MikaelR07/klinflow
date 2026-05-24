@@ -186,7 +186,7 @@ export default function UserHome() {
                 <h1 className="text-xl font-normal italic tracking-tight text-slate-900 dark:text-white leading-tight">
                   Hello {(profile?.fullName || profile?.name || 'Resident').split(' ')[0]}👋
                 </h1>
-                <div className="flex items-center gap-1.5 mt-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                <div className="flex items-center gap-1.5  text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
                   <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'searching...'}
                 </div>
               </div>
@@ -206,46 +206,53 @@ export default function UserHome() {
         </div>
 
         {/* Wallet Hero */}
-        <div className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 rounded-2xl p-5 shadow-lg gpu-layer">
+        <div className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800  rounded-2xl p-5 gpu-layer">
           <div className="flex flex-col gap-6 relative z-10">
             <div className="flex items-end justify-between">
               <div>
-                <p className="text-[11px] font-semibold text-emerald-200/80 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                <p className="text-[12px] font-semibold text-emerald-200/90 Capitalise tracking-widest mb-1.5 flex items-center gap-1.5">
                   <Wallet className="w-3 h-3" /> Wallet Balance
                 </p>
-                <h2 className="text-2xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
+                <h2 className="text-3xl sm:text-5xl font-semibold  text-white tracking-tighter leading-none">
                   KSh {walletBalance.toLocaleString()}
                 </h2>
-                <div className="flex items-center gap-2 mt-3">
-                  <button
-                    onClick={() => navigate('/impact-hub')}
-                    className="flex items-center gap-1.5 bg-white text-emerald-800 hover:bg-slate-50 dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-white px-3 py-1 rounded-lg text-[11px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
-                  >
-                    {rewardPoints} GFP
-                  </button>
-                </div>
+
               </div>
 
               <button
                 onClick={handleWithdraw}
-                className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest active:scale-95 transition-all mb-1"
+                className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold Capitalise tracking-widest active:scale-95 transition-all "
               >
                 Withdraw
               </button>
             </div>
 
-            <div className="flex items-center pt-5 border-t border-white/10 px-1">
-              <div className="flex items-center gap-10 justify-between sm:gap-10">
-                <div>
+            <div className="pt-4 border-t border-white/30 px-1">
+              <div className="flex items-center justify-between w-full">
+
+                <div onClick={() => navigate('/impact-hub')} className="flex flex-col cursor-pointer">
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">GFP</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{rewardPoints}</p>
+                </div>
+
+                <div className="w-px h-8 bg-white/30" />
+
+                <div className="flex flex-col">
                   <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Pickups</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
                 </div>
-                <div className="px-4 sm:px-6 border-x border-white/10">
+
+                <div className="w-px h-8 bg-white/30" />
+
+                <div className="flex flex-col">
                   <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Recovered</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
                 </div>
-                <div>
-                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">CO2 Offset</p>
+
+                <div className="w-px h-8 bg-white/30" />
+
+                <div className="flex flex-col">
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Offset</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
                 </div>
               </div>
@@ -254,7 +261,7 @@ export default function UserHome() {
         </div>
 
         {/* Subscription Tier Card Hidden for Launch */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2">
+        <div className="bg-white dark:bg-slate-900/50 !mt-3 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2">
 
           {/* Quick Actions */}
           <div className="grid grid-cols-3 gap-2.5">
@@ -264,7 +271,7 @@ export default function UserHome() {
                 <Truck className="w-6 h-6" />
               </div>
               <div className="text-center">
-                <p className="text-[8px] font-semibold text-primary capitalize tracking-widest mb-0.5">Book Now</p>
+                <p className="text-[9px] font-semibold text-primary capitalize tracking-widest mb-0.5">Book Now</p>
                 <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Pickup</p>
               </div>
             </button>
@@ -275,7 +282,7 @@ export default function UserHome() {
                 <Recycle className="w-6 h-6" />
               </div>
               <div className="text-center">
-                <p className="text-[8px] font-semibold text-indigo-600 capitalize tracking-widest mb-0.5">Track</p>
+                <p className="text-[9px] font-semibold text-indigo-600 capitalize tracking-widest mb-0.5">Track</p>
                 <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Bookings</p>
               </div>
             </button>
@@ -286,7 +293,7 @@ export default function UserHome() {
                 <TrendingUp className="w-6 h-6" />
               </div>
               <div className="text-center">
-                <p className="text-[8px] font-semibold text-emerald-600 capitalize tracking-widest mb-0.5">Stats</p>
+                <p className="text-[9px] font-semibold text-emerald-600 capitalize tracking-widest mb-0.5">Stats</p>
                 <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
               </div>
             </button>
@@ -299,7 +306,7 @@ export default function UserHome() {
               <p className="text-xs font-semibold text-slate-400 mb-4">Find a verified collection partner near you</p>
               <button
                 onClick={() => navigate('/discovery')}
-                className="w-full py-3 bg-emerald-600 text-white rounded-2xl font-semibold text-xs capitalize tracking-widest  flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+                className="w-full py-3 bg-primary text-white rounded-2xl font-semibold text-xs capitalize tracking-widest  flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
               >
                 <Search className="w-3.5 h-3.5" />
                 Find a Partner
@@ -309,16 +316,15 @@ export default function UserHome() {
           {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
           <div
             onClick={() => navigate('/market-pulse')}
-            className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+            className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-bl-[4rem] group-hover:bg-emerald-500/10 transition-colors" />
             <div className="flex items-center gap-4 relative z-10">
               <div className="w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
                 <TrendingUp className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
-                <p className="text-[9px] font-bold text-slate-500 capitalize tracking-widest flex items-center gap-1.5">
+                <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest flex items-center gap-1.5">
                   View Material Prices in the Market
                 </p>
               </div>
@@ -329,18 +335,38 @@ export default function UserHome() {
           </div>
         </div>
       </div>
+      {/* ── LEADERBOARD RANKING ── */}
+      <div
+        onClick={() => navigate('/leaderboard')}
+        className="bg-blue-700  !mt-2 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+      >
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="w-10 h-10   rounded-xl flex items-center justify-center text-emerald-600 ">
+            <Trophy className="w-8 h-8" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-slate-100 dark:text-white capitalize tracking-tight leading-none mb-1">Eco Leaderboard</h3>
+            <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest flex items-center gap-1.5">
+              View Your Rank in the Ecosystem
+            </p>
+          </div>
+        </div>
+        <div className="p-1.5 text-white  rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+          <ArrowRight className="w-3.5 h-3.5" />
+        </div>
+      </div>
 
       {/* Recent Activity Section */}
-      <div className="bg-white dark:bg-slate-900/40 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900/40 !mt-3 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800">
         <div className="flex items-center justify-between mb-6 px-1">
-          <h3 className="font-semibold text-[11px] capitalize tracking-widest text-slate-600">Activity Hub</h3>
+          <h3 className="font-semibold text-[12px] capitalize tracking-widest text-slate-600">Activity Hub</h3>
           <button
             onClick={() => {
               setIsActivityCleared(true);
               localStorage.setItem(`activity_cleared_${profile?.id}`, 'true');
               toast.info("Activity Feed Cleared");
             }}
-            className="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-[9px] font-semibold text-slate-500 dark:text-slate-400 capitalize tracking-widest rounded-lg hover:bg-red-50 hover:text-red-500 transition-all"
+            className="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 capitalize tracking-widest rounded-lg hover:bg-red-50 hover:text-red-500 transition-all"
           >
             Clear
           </button>
@@ -400,7 +426,7 @@ export default function UserHome() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => navigate('/hygenex')}
-        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 border-4 border-white dark:border-slate-800"
+        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 border-1 border-white dark:border-slate-800"
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
         <Brain className="w-6 h-6 text-white" />

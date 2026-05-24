@@ -148,10 +148,10 @@ const ACTIONABLE_INSIGHTS = [
 
 // MOCK_RFQS removed, using real data from Supabase
 
-export default function MarketIntelligenceHub() {
+export default function MarketPulse() {
   const navigate = useNavigate();
   const profile = useAuthStore(s => (s as any).profile);
-  const isSeller = profile?.role === 'seller';
+
   const prices = usePriceStore(s => s.prices);
   const fetchPrices = usePriceStore(s => s.fetchPrices);
   const [activeTab, setActiveTab] = useState('prices');
@@ -313,7 +313,7 @@ export default function MarketIntelligenceHub() {
         <div className="flex px-4 pb-3 gap-1.5 overflow-x-auto no-scrollbar">
           {([
             { id: 'prices', label: 'Prices', icon: TrendingUp },
-            isSeller ? { id: 'rfqs', label: 'Requests', icon: Handshake } : null,
+
             { id: 'trends', label: 'AI Trends', icon: Sparkles },
             { id: 'tips', label: 'Insights', icon: Zap },
           ].filter(Boolean) as Array<{ id: string, label: string, icon: any }>).map(tab => (

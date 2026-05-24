@@ -100,10 +100,10 @@ export default function SettingsMenu() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
 
         {/* ── PROFILE BENTO CARD ── */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-2xl p-4  dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+        <div className="bg-cyan-800 dark:bg-slate-900/50 rounded-2xl p-4  dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
 
           <div className="flex items-center gap-4 relative z-10">
-            <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-4 border-white dark:border-slate-900 shadow-xl overflow-hidden flex items-center justify-center text-3xl">
+            <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-1 border-white dark:border-slate-900  overflow-hidden flex items-center justify-center text-3xl">
               {profile?.avatarUrl && !imgError ? (
                 <img
                   src={getThumbnailUrl(profile.avatarUrl, { width: 300 })}
@@ -115,11 +115,11 @@ export default function SettingsMenu() {
               )}
             </div>
             <div className="space-y-1">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">{profile?.name}</h2>
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">{profile?.phone}</p>
+              <h2 className="text-lg text-white font-bold text-slate-900  dark:text-white leading-tight">{profile?.name}</h2>
+              <p className="text-[11px] font-bold text-slate-400 capitalize tracking-widest">{profile?.phone}</p>
               <div className="flex items-center gap-1.5 mt-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest">Verified Identity</span>
+                <span className="text-[9px] font-bold text-slate-100 dark:text-emerald-400 capitalize tracking-widest">Verified Identity</span>
               </div>
             </div>
           </div>
@@ -129,7 +129,7 @@ export default function SettingsMenu() {
             {isSeller && (
               <button
                 onClick={() => navigate('/circular-resume')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-indigo-600 dark:bg-indigo-700 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent shadow-sm active:scale-95 group"
+                className="flex flex-col items-center text-center p-3 rounded-xl bg-indigo-600 dark:bg-indigo-700 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent  active:scale-95 group"
               >
                 <Award className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
                 <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
@@ -138,15 +138,15 @@ export default function SettingsMenu() {
             )}
             <button
               onClick={() => navigate(isSeller ? '/trust-score' : '/Analytics')}
-              className="flex flex-col items-center text-center p-3 rounded-xl bg-emerald-600 dark:bg-emerald-700 text-white hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-all border border-transparent shadow-sm active:scale-95 group"
+              className="flex flex-col items-center text-center p-3 rounded-xl bg-emerald-600 dark:bg-emerald-700 text-white hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-all border border-transparent  active:scale-95 group"
             >
               <TrendingUp className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-              <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Activity</p>
+              <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Dashboard</p>
               <p className="text-xs font-bold text-white capitalize leading-none">{isSeller ? 'Trust score' : 'Analytics'}</p>
             </button>
             <button
               onClick={() => navigate('/leaderboard')}
-              className="flex flex-col items-center text-center p-3 rounded-xl bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-all border border-transparent shadow-sm active:scale-95 group"
+              className="flex flex-col items-center text-center p-3 rounded-xl bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-all border border-transparent  active:scale-95 group"
             >
               <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
               <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
@@ -196,8 +196,8 @@ export default function SettingsMenu() {
                     <Globe className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Impact Hub</p>
-                    <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Green Eco</p>
+                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Green Hub</p>
+                    <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Impact Tracker</p>
                   </div>
                 </button>
               </>
@@ -263,9 +263,9 @@ export default function SettingsMenu() {
             await logout();
             navigate('/login', { replace: true });
           }}
-          className="w-full py-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
+          className=" mx-auto p-8 py-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
         >
-          <LogOut className="w-5 h-5" /> Secure Logout
+          <LogOut className="w-5 h-5" /> Logout
         </button>
 
         <div className="text-center space-y-1 py-4">
