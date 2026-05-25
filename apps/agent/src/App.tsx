@@ -33,6 +33,8 @@ const CreateRFQPage = lazy(() => import('./pages/agent/CreateRFQPage'));
 const MyRFQs = lazy(() => import('./pages/agent/MyRFQs'));
 const RFQDetailsPage = lazy(() => import('./pages/agent/RFQDetailsPage'));
 const ActivePickupsPage = lazy(() => import('./pages/agent/ActivePickupsPage'));
+const ActivePickupDetailsPage = lazy(() => import('./pages/agent/ActivePickupDetailsPage'));
+const NavigatePickupPage = lazy(() => import('./pages/agent/NavigatePickupPage'));
 const MarketPulse = lazy(() => import('./pages/agent/MarketPulse'));
 
 // Settings Pages
@@ -58,7 +60,7 @@ const FleetManagement = lazy(() => import('./pages/admin/FleetManagement'));
 const FleetFinance = lazy(() => import('./pages/admin/FleetFinance'));
 const FleetRFQs = lazy(() => import('./pages/admin/FleetRFQs'));
 const DispatchDashboard = lazy(() => import('./pages/admin/DispatchDashboard'));
-const FleetDriverPickups = lazy(() => import('./pages/agent/FleetDriverPickups'));
+
 
 function MobileLayout() {
   const { availableJobs } = useAgentStore();
@@ -196,6 +198,8 @@ export default function App() {
             <Route path="/rfqs" element={<MyRFQs />} />
             <Route path="/rfqs/:rfqId" element={<RFQDetailsPage />} />
             <Route path="/pickups" element={<ActivePickupsPage />} />
+            <Route path="/pickups/navigate/:id" element={<NavigatePickupPage />} />
+            <Route path="/pickups/:id" element={<ActivePickupDetailsPage />} />
             <Route path="/trades" element={<MyTrades />} />
             <Route path="/earnings" element={<EarningsPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
@@ -207,8 +211,7 @@ export default function App() {
             <Route path="/admin/rfqs" element={<FleetRFQs />} />
             <Route path="/admin/dispatch" element={<DispatchDashboard />} />
 
-            {/* Driver Routes */}
-            <Route path="/driver/pickups" element={<FleetDriverPickups />} />
+
 
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />

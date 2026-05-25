@@ -14,7 +14,7 @@ import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
 export default function MyRFQOffers() {
   const navigate = useNavigate();
   const profile = useAuthStore(s => s.profile);
-  const [filter, setFilter] = useState<'pending' | 'accepted' | 'declined'>('pending');
+  const [filter, setFilter] = useState<'pending' | 'accepted' | 'completed' | 'declined'>('pending');
   const [quotes, setQuotes] = useState<any[]>([]);
 
   useEffect(() => {
@@ -27,24 +27,34 @@ export default function MyRFQOffers() {
           rfq:rfqs(
             material_grade, category, pickup_area, target_price,
             buyer:profiles!buyer_id(company_name, name)
-          )
+          ),
+          fulfillment_orders(status)
         `)
         .eq('seller_id', profile.id)
         .order('created_at', { ascending: false });
 
       if (data) {
-        const mapped = data.map((o: any) => ({
-          id: o.id,
-          rfqId: o.rfq_id,
-          company: o.rfq?.buyer?.company_name || o.rfq?.buyer?.name || 'Unknown Buyer',
-          material: getSubcategoryLabel(o.rfq?.category, o.rfq?.material_grade) || o.rfq?.material_grade,
-          location: o.rfq?.pickup_area || '',
-          quantity: `${o.offered_weight}kg`,
-          quotedPrice: o.offered_price,
-          status: o.status,
-          submittedAt: new Date(o.created_at).toLocaleString(),
-          clientTargetPrice: o.rfq?.target_price || 0,
-        }));
+        const mapped = data.map((o: any) => {
+          let computedStatus = o.status;
+          if (computedStatus === 'accepted' && o.fulfillment_orders?.[0]) {
+             const fulfillmentStatus = o.fulfillment_orders[0].status;
+             if (['completed', 'pickup_completed', 'delivered'].includes(fulfillmentStatus)) {
+                computedStatus = 'completed';
+             }
+          }
+          return {
+            id: o.id,
+            rfqId: o.rfq_id,
+            company: o.rfq?.buyer?.company_name || o.rfq?.buyer?.name || 'Unknown Buyer',
+            material: getSubcategoryLabel(o.rfq?.category, o.rfq?.material_grade) || o.rfq?.material_grade,
+            location: o.rfq?.pickup_area || '',
+            quantity: `${o.offered_weight}kg`,
+            quotedPrice: o.offered_price,
+            status: computedStatus,
+            submittedAt: new Date(o.created_at).toLocaleString(),
+            clientTargetPrice: o.rfq?.target_price || 0,
+          };
+        });
         setQuotes(mapped);
       }
     };
@@ -88,7 +98,7 @@ export default function MyRFQOffers() {
 
         {/* Status Filters */}
         <div className="flex px-4 pb-3 gap-1.5 overflow-x-auto no-scrollbar">
-          {(['pending', 'accepted', 'declined'] as const).map((statusOption) => {
+          {(['pending', 'accepted', 'completed', 'declined'] as const).map((statusOption) => {
             const count = quotes.filter(q => q.status === statusOption).length;
             
             return (
@@ -136,8 +146,9 @@ export default function MyRFQOffers() {
               const statusConfig = {
                 pending: { icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10', border: 'border-amber-200 dark:border-amber-500/20', label: 'Pending Review' },
                 accepted: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Offer Accepted' },
+                completed: { icon: CheckCircle2, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10', border: 'border-blue-200 dark:border-blue-500/20', label: 'Completed' },
                 declined: { icon: XCircle, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10', border: 'border-rose-200 dark:border-rose-500/20', label: 'Offer Declined' },
-              }[quote.status as 'pending' | 'accepted' | 'declined'];
+              }[quote.status as 'pending' | 'accepted' | 'completed' | 'declined'];
 
               const StatusIcon = statusConfig.icon;
 

@@ -34,7 +34,7 @@ export default function FulfillmentTrackingPage() {
       try {
         const { data, error } = await supabase
           .from('fulfillment_orders')
-          .select('*, rfq:rfqs(*), proposal:rfq_offers(*)')
+          .select('*, rfq:rfqs(*), proposal:rfq_offers(*), buyer:profiles!fulfillment_orders_buyer_id_fkey(company_name, name, phone), agent:profiles!fulfillment_orders_assigned_agent_id_fkey(name, phone)')
           .eq('id', id)
           .single();
           
@@ -87,7 +87,7 @@ export default function FulfillmentTrackingPage() {
   const isCompleted = ['completed', 'pickup_completed', 'in_transit', 'delivered'].includes(order.status);
   
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-800 pb-20">
+    <div className="min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-20 px-1.5 transition-colors">
       {/* HEADER */}
       <div className="sticky top-0 z-30 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 flex items-center gap-3">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl active:bg-slate-100 dark:active:bg-slate-800 transition-colors">
@@ -129,32 +129,70 @@ export default function FulfillmentTrackingPage() {
         )}
 
         {/* Timeline */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
-          <h3 className="text-lg font-black text-slate-900 dark:text-white mb-6">Status Timeline</h3>
-          
-          <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[15px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-slate-700 before:to-transparent">
-            {STATUS_STEPS.map((step, idx) => {
-              const isActive = idx === currentStepIndex;
-              const isPast = idx < currentStepIndex || isCompleted;
-              
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-800/40 shadow-sm">
+          <div className="flex items-center justify-between mb-5">
+            <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+              <Navigation className="w-4 h-4" /> Live Progress
+            </h3>
+            <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
+              isCompleted ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' :
+              currentStepIndex >= 0 ? 'text-blue-600 bg-blue-50 dark:bg-blue-500/10' :
+              'text-slate-400 bg-slate-50 dark:bg-slate-800'
+            }`}>
+              {STATUS_STEPS[currentStepIndex]?.label || 'Completed'}
+            </span>
+          </div>
+
+          {/* Row 1: Steps 1-4 */}
+          <div className="flex items-start relative mb-6">
+            {STATUS_STEPS.slice(0, 4).map((step, i) => {
+              const isPast = i < currentStepIndex || isCompleted;
+              const isCurrent = i === currentStepIndex;
               return (
-                <div key={step.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                  <div className={`flex items-center justify-center w-8 h-8 rounded-full border-4 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 ${
-                    isActive ? 'bg-emerald-500 border-emerald-100 dark:border-emerald-900 text-white' : 
-                    isPast ? 'bg-emerald-500 border-white dark:border-slate-800 text-white' : 
-                    'bg-slate-100 dark:bg-slate-800 border-white dark:border-slate-800 text-slate-300 dark:text-slate-600'
+                <div key={step.id} className="flex flex-col items-center flex-1 relative">
+                  {i < 3 && (
+                    <div className={`absolute top-2.5 left-[50%] w-full h-[2px] ${isPast ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'}`} style={{ zIndex: 0 }} />
+                  )}
+                  <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 mb-2 relative z-10 ${
+                    isPast ? 'bg-emerald-500 border-emerald-500' : 
+                    isCurrent ? 'bg-white border-blue-500 dark:bg-slate-900 shadow-[0_0_0_4px_rgba(59,130,246,0.2)]' : 
+                    'bg-white border-slate-300 dark:bg-slate-900 dark:border-slate-700'
+                  }`} />
+                  <p className={`text-[9px] font-bold text-center uppercase tracking-wider leading-tight px-1 ${
+                    isPast ? 'text-slate-900 dark:text-white' :
+                    isCurrent ? 'text-blue-600 dark:text-blue-400' :
+                    'text-slate-400'
                   }`}>
-                    {isPast ? <CheckCircle2 className="w-4 h-4" /> : <div className="w-2 h-2 rounded-full bg-current" />}
-                  </div>
-                  
-                  <div className={`w-[calc(100%-3rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border ${
-                    isActive ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20' : 
-                    'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700'
+                    {step.label}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Row 2: Steps 5-7 */}
+          <div className="flex items-start relative">
+            {STATUS_STEPS.slice(4).map((step, i) => {
+              const realIdx = i + 4;
+              const isPast = realIdx < currentStepIndex || isCompleted;
+              const isCurrent = realIdx === currentStepIndex;
+              return (
+                <div key={step.id} className="flex flex-col items-center flex-1 relative">
+                  {i < 2 && (
+                    <div className={`absolute top-2.5 left-[50%] w-full h-[2px] ${isPast ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'}`} style={{ zIndex: 0 }} />
+                  )}
+                  <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 mb-2 relative z-10 ${
+                    isPast ? 'bg-emerald-500 border-emerald-500' : 
+                    isCurrent ? 'bg-white border-blue-500 dark:bg-slate-900 shadow-[0_0_0_4px_rgba(59,130,246,0.2)]' : 
+                    'bg-white border-slate-300 dark:bg-slate-900 dark:border-slate-700'
+                  }`} />
+                  <p className={`text-[9px] font-bold text-center uppercase tracking-wider leading-tight px-1 ${
+                    isPast ? 'text-slate-900 dark:text-white' :
+                    isCurrent ? 'text-blue-600 dark:text-blue-400' :
+                    'text-slate-400'
                   }`}>
-                    <h4 className={`font-bold text-sm ${isActive ? 'text-emerald-700 dark:text-emerald-400' : isPast ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500'}`}>
-                      {step.label}
-                    </h4>
-                  </div>
+                    {step.label}
+                  </p>
                 </div>
               );
             })}
@@ -162,40 +200,69 @@ export default function FulfillmentTrackingPage() {
         </div>
 
         {/* Order Details */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
-          <h3 className="font-bold text-slate-900 dark:text-white">Logistics Details</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5">
+          <h3 className="text-[11px] uppercase tracking-wider font-black text-slate-400">Logistics Details</h3>
           
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center shrink-0">
-              <MapPin className="w-5 h-5 text-slate-500" />
+          <div className="flex items-start justify-between pb-4 border-b border-slate-100 dark:border-slate-800/60">
+            <div>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Accepted By</p>
+              <p className="text-sm font-black text-slate-900 dark:text-white capitalize">
+                {(order as any).buyer?.company_name || (order as any).buyer?.name || 'Company Name'}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Company Contact</p>
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{(order as any).buyer?.phone || 'Not provided'}</p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3 pb-4 border-b border-slate-100 dark:border-slate-800/60">
+            <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700">
+              <MapPin className="w-4 h-4 text-emerald-500" />
             </div>
             <div>
-              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Pickup Address</p>
-              <p className="font-medium text-slate-900 dark:text-white mt-1">{order.pickup_address || 'TBD'}</p>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Pickup Address</p>
+              <p className="text-xs font-black text-slate-900 dark:text-white mt-1 capitalize">{order.pickup_address || 'TBD'}</p>
             </div>
           </div>
 
           {order.scheduled_date && (
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center shrink-0">
-                <Clock className="w-5 h-5 text-slate-500" />
+            <div className="flex items-start gap-3 pb-4 border-b border-slate-100 dark:border-slate-800/60">
+              <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700">
+                <Clock className="w-4 h-4 text-emerald-500" />
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Schedule</p>
-                <p className="font-medium text-slate-900 dark:text-white mt-1">{format(new Date(order.scheduled_date), 'PPP')}</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Schedule</p>
+                <p className="text-xs font-black text-slate-900 dark:text-white mt-1">{format(new Date(order.scheduled_date), 'PPP')}</p>
               </div>
             </div>
           )}
-        </div>
 
-        {/* Contact Actions */}
-        <div className="grid grid-cols-2 gap-3">
-          <button className="flex items-center justify-center gap-2 py-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold active:scale-95 transition-all">
-            <MessageSquare className="w-5 h-5" /> Chat
-          </button>
-          <button className="flex items-center justify-center gap-2 py-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold active:scale-95 transition-all">
-            <Phone className="w-5 h-5" /> Call Agent
-          </button>
+          <div>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3">Assigned Fleet Agent</p>
+            <div className="bg-slate-50 dark:bg-slate-900/30 rounded-xl p-4 border border-slate-100 dark:border-slate-800/50 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-black text-slate-900 dark:text-white">{(order as any).agent?.name || 'Pending Assignment'}</p>
+                <p className="text-xs font-semibold text-slate-500 mt-0.5">{(order as any).agent?.phone || 'Awaiting contact'}</p>
+              </div>
+              
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => window.location.href = `tel:${(order as any).agent?.phone || ''}`}
+                  disabled={!(order as any).agent?.phone}
+                  className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center disabled:opacity-50 active:scale-95 transition-all"
+                >
+                  <Phone className="w-4 h-4" />
+                </button>
+                <button 
+                  disabled={!(order as any).agent}
+                  className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center disabled:opacity-50 active:scale-95 transition-all"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

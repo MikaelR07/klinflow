@@ -46,6 +46,7 @@ import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import PushNotificationModal from '@klinflow/ui/components/PushNotificationModal';
 import { toast } from 'sonner';
+import { formatDistanceToNow } from 'date-fns';
 
 
 
@@ -91,14 +92,65 @@ export default function AgentHome() {
   const [isDepositing, setIsDepositing] = useState(false);
   const [isRequesting, setIsRequesting] = useState(false);
 
+  const [lastSynced, setLastSynced] = useState<Date>(new Date());
+  const [performanceChange, setPerformanceChange] = useState<number>(0);
+  const [activePickup, setActivePickup] = useState<any>(null);
 
   useEffect(() => {
-    fetchProfile();
-    fetchEarnings();
-    if (profile?.agentAccountType === 'fleet_driver' && profile?.companyId) {
-      fetchCompanyBalance();
-    }
-  }, []);
+    const fetchDynamicData = async () => {
+      fetchProfile();
+      fetchEarnings();
+      if (profile?.agentAccountType === 'fleet_driver' && profile?.companyId) {
+        fetchCompanyBalance();
+      }
+
+      if (!profile?.id) return;
+
+      // Fetch Performance Change (Yesterday vs Today)
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+
+      const startOfYesterday = new Date(startOfToday);
+      startOfYesterday.setDate(startOfYesterday.getDate() - 1);
+
+      const { data: perfData } = await supabase
+        .from('fulfillment_orders')
+        .select('created_at')
+        .eq('status', 'completed')
+        .or(`assigned_agent_id.eq.${profile.id},buyer_id.eq.${profile.id}`);
+
+      if (perfData) {
+        const todayCount = perfData.filter(d => new Date(d.created_at) >= startOfToday).length;
+        const yesterdayCount = perfData.filter(d => {
+          const dTime = new Date(d.created_at);
+          return dTime >= startOfYesterday && dTime < startOfToday;
+        }).length;
+
+        if (yesterdayCount === 0) setPerformanceChange(todayCount > 0 ? 100 : 0);
+        else setPerformanceChange(((todayCount - yesterdayCount) / yesterdayCount) * 100);
+      }
+
+      // Fetch Active Pickup Quote
+      const { data: pickupData } = await supabase
+        .from('fulfillment_orders')
+        .select(`
+          id, status, pickup_address, created_at,
+          rfq:rfqs(category)
+        `)
+        .eq('assigned_agent_id', profile.id)
+        .not('status', 'in', '("completed","cancelled")')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (pickupData) setActivePickup(pickupData);
+      else setActivePickup(null);
+
+      setLastSynced(new Date());
+    };
+
+    fetchDynamicData();
+  }, [profile?.id, profile?.agentAccountType, profile?.companyId]);
 
   const handleDeposit = async () => {
     const amount = parseFloat(depositAmount);
@@ -387,7 +439,7 @@ export default function AgentHome() {
                     </p>
 
                     <p className="text-[10px] text-slate-500 mt-0.5">
-                      Last sync: 2 minutes ago
+                      Last sync: {formatDistanceToNow(lastSynced, { addSuffix: true })}
                     </p>
                   </div>
                 </div>
@@ -436,133 +488,197 @@ export default function AgentHome() {
             <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mb-2 px-1 mt-2">
               Quick Actions
             </p>
+
             <div className="grid grid-cols-4 gap-1.5">
+
               <button
                 onClick={() => navigate('/jobs')}
-                className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+                className="min-w-0 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
               >
-                <div className="w-10 h-10 bg-blue-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 shrink-0 bg-blue-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Briefcase className="w-5 h-5" />
                 </div>
-                <p className="text-[9px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 whitespace-nowrap">View Jobs</p>
+
+                <p className="text-[9px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
+                  View Jobs
+                </p>
               </button>
 
               <button
                 onClick={() => navigate('/trades')}
-                className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+                className="min-w-0 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
               >
-                <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 shrink-0 bg-emerald-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Handshake className="w-5 h-5" />
                 </div>
-                <p className="text-[9px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 whitespace-nowrap">Accepted Bids</p>
+
+                <p className="text-[9px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
+                  Accepted Bids
+                </p>
               </button>
 
               <button
                 onClick={() => navigate('/rfqs')}
-                className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+                className="min-w-0 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
               >
-                <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 shrink-0 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Receipt className="w-5 h-5" />
                 </div>
-                <p className="text-[9px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 whitespace-nowrap">Incoming Quotes</p>
+
+                <p className="text-[9px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
+                  Incoming Quotes
+                </p>
               </button>
+
               <button
                 onClick={() => navigate('/rfq/create')}
-                className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+                className="min-w-0 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
               >
-                <div className="w-10 h-10 bg-amber-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 shrink-0 bg-amber-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <PlusSquare className="w-5 h-5" />
                 </div>
-                <p className="text-[9px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 whitespace-nowrap">Create RFQ</p>
+
+                <p className="text-[9px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
+                  Create RFQ
+                </p>
               </button>
+
             </div>
           </div>
         </div>
       </div>
 
-
-
-
       {/* ── PERFORMANCE CARD ── */}
-      <div className="relative group !mt-2.5">
-        <div className="relative bg-gradient-to-br from-[#064e3b] to-[#022c22] dark:from-emerald-900 dark:to-slate-900 rounded-[1rem] p-3 overflow-hidden shadow-none transition-all duration-500">
+      <div className="relative !mt-2.5">
+        <div className="relative bg-gradient-to-br from-[#064e3b] to-[#022c22] dark:from-emerald-900 dark:to-slate-900 rounded-2xl p-3 shadow-none">
 
-          <div className="flex justify-between items-start mb-4">
-            <div className='pl-2'>
-              <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">Assets Value</p>
-              <div className="flex items-baseline gap-1 mb-2">
-                <span className="text-xl font-bold text-emerald-400">KSh</span>
-                <h2 className="text-xl font-black text-white">{earnings?.today}</h2>
+          {/* TOP SECTION */}
+          <div className="flex items-start justify-between gap-3 mb-4">
+
+            {/* LEFT */}
+            <div className="flex-1 min-w-0 pl-1">
+              <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
+                Assets Value
+              </p>
+
+              <div className="flex items-baseline gap-1 mb-2 min-w-0">
+                <span className="text-lg sm:text-xl font-bold text-emerald-400 shrink-0">
+                  KSh
+                </span>
+
+                <h2 className="text-lg sm:text-xl font-black text-white truncate">
+                  {earnings?.today}
+                </h2>
               </div>
-              <div className="bg-emerald-500/20 text-emerald-100 text-[9px] font-black px-2 py-1 rounded-md w-fit tracking-wide">
-                ↑ 12% from yesterday
+
+              <div className="bg-emerald-500/20 text-emerald-100 text-[9px] font-black px-2 py-1 rounded-md inline-flex max-w-full">
+                {performanceChange >= 0 ? `↑ ${performanceChange.toFixed(0)}% from yesterday` : `↓ ${Math.abs(performanceChange).toFixed(0)}% from yesterday`}
               </div>
             </div>
-            <div className="w-px h-20 bg-white/30" />
-            <div className="flex flex-col items-end text-right pr-2">
-              <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">Wallet Balance</p>
-              <div className="flex items-baseline gap-1 mb-2">
-                <span className="text-xl font-bold text-emerald-400">KSh</span>
-                <h2 className="text-xl font-black text-white">{(profile?.walletBalance || 0).toLocaleString()}</h2>
+
+            {/* DIVIDER */}
+            <div className="w-px self-stretch bg-white/20" />
+
+            {/* RIGHT */}
+            <div className="flex-1 min-w-0 flex flex-col items-end text-right pr-1">
+              <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
+                Wallet Balance
+              </p>
+
+              <div className="flex items-baseline justify-end gap-1 mb-2 min-w-0 w-full">
+                <span className="text-lg sm:text-xl font-bold text-emerald-400 shrink-0">
+                  KSh
+                </span>
+
+                <h2 className="text-lg sm:text-xl font-black text-white truncate">
+                  {(profile?.walletBalance || 0).toLocaleString()}
+                </h2>
               </div>
-              <div className="flex gap-3 ">
+
+              <div className="w-full flex justify-end">
                 {!isFleetDriver ? (
-                  <>
-                    <button
-                      onClick={() => setShowDepositModal(true)}
-                      className="flex-1 bg-white text-emerald-700 px-5 py-3   dark:text-slate-900 h-12 rounded-xl font-bold text-xs capitalize tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md hover:bg-slate-50"
-                    >
-                      Deposit
-                    </button>
-
-                  </>
+                  <button
+                    onClick={() => setShowDepositModal(true)}
+                    className="bg-white text-emerald-700 dark:text-slate-900 px-6 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
+                  >
+                    Deposit
+                  </button>
                 ) : (
-                  <>
-                    <button
-                      onClick={() => setShowRequestModal(true)}
-                      className="flex-1 bg-white text-emerald-700 px-5 dark:text-slate-900 py-2 rounded-xl font-bold text-xs capitalize tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all  hover:bg-slate-50"
-                    >
-                      Deposit
-                    </button>
-
-                  </>
+                  <button
+                    onClick={() => setShowRequestModal(true)}
+                    className="bg-white text-emerald-700 dark:text-slate-900 px-6 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
+                  >
+                    Deposit
+                  </button>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-1 ">
-            <div className="bg-emerald-950/40 border border-emerald-800/30 rounded-xl p-2.5 flex flex-col justify-between h-20">
-              <Handshake className="w-4 h-4 text-emerald-400" />
+          {/* STATS GRID */}
+          <div className="grid grid-cols-4 gap-2">
+
+            <div className="bg-emerald-950/40 rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
+              <Handshake className="w-4 h-4 text-emerald-400 shrink-0" />
+
               <div>
-                <h4 className="text-base font-black text-white leading-none mb-1">{acceptedTradesCount || 0}</h4>
-                <p className="text-[8px] font-bold text-emerald-100/60 leading-tight">Accepted Bids<br />Today</p>
+                <h4 className="text-sm font-black text-white leading-none mb-1 truncate">
+                  {acceptedTradesCount || 0}
+                </h4>
+
+                <p className="text-[9px] font-bold text-emerald-100/60 leading-tight">
+                  Accepted Bids
+
+                </p>
               </div>
             </div>
 
-            <div className="bg-emerald-950/40 border border-emerald-800/30 rounded-xl p-2.5 flex flex-col justify-between h-20">
-              <Truck className="w-4 h-4 text-emerald-400" />
+            <div className="bg-emerald-950/40 rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
+              <Truck className="w-4 h-4 text-emerald-400 shrink-0" />
+
               <div>
-                <h4 className="text-base font-black text-white leading-none mb-1">{earnings?.completedToday || 0}</h4>
-                <p className="text-[8px] font-bold text-emerald-100/60 leading-tight">Pickups<br />Today</p>
+                <h4 className="text-sm font-black text-white leading-none mb-1 truncate">
+                  {earnings?.completedToday || 0}
+                </h4>
+
+                <p className="text-[9px] font-bold text-emerald-100/60 leading-tight">
+                  Pickups
+
+                </p>
               </div>
             </div>
 
-            <div className="bg-emerald-950/40 border border-emerald-800/30 rounded-xl p-2.5 flex flex-col justify-between h-20">
-              <Star className="w-4 h-4 text-amber-400" />
+            <div className="bg-emerald-950/40 rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
+              <Star className="w-4 h-4 text-amber-400 shrink-0" />
+
               <div>
-                <h4 className="text-base font-black text-white leading-none mb-1">{profile?.rating ? Number(profile.rating).toFixed(1) : '4.0'}</h4>
-                <p className="text-[8px] font-bold text-emerald-100/60 leading-tight">Rating<br />Overall</p>
+                <h4 className="text-sm font-black text-white leading-none mb-1 truncate">
+                  {profile?.rating
+                    ? Number(profile.rating).toFixed(1)
+                    : "4.0"}
+                </h4>
+
+                <p className="text-[9px] font-bold text-emerald-100/60 leading-tight">
+                  Rating
+
+                </p>
               </div>
             </div>
 
-            <div className="bg-emerald-950/40 border border-emerald-800/30 rounded-xl p-2.5 flex flex-col justify-between h-20">
-              <Zap className="w-4 h-4 text-blue-400" />
+            <div className="bg-emerald-950/40 rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
+              <Zap className="w-4 h-4 text-blue-400 shrink-0" />
+
               <div>
-                <h4 className="text-base font-black text-white leading-none mb-1">{profile?.rewardPoints || 0}</h4>
-                <p className="text-[8px] font-bold text-emerald-100/60 leading-tight">Points<br />Available</p>
+                <h4 className="text-sm font-black text-white leading-none mb-1 truncate">
+                  {profile?.rewardPoints || 0}
+                </h4>
+
+                <p className="text-[9px] font-bold text-emerald-100/60 leading-tight">
+                  Points
+                </p>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -585,31 +701,37 @@ export default function AgentHome() {
             <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors" />
           </button>
         </div>
-        <button onClick={() => navigate('/pickups')} className="w-full bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all mb-1">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
-              <Package className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <div className="text-left">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">Pickup #PK-2024-015</h4>
-              <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5">Verify and collect materials</p>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400">
-                  <MapPin className="w-3 h-3" /> Starehe
-                </div>
-                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400">
-                  <Clock className="w-3 h-3" /> Today, 2:00 PM
+        {activePickup ? (
+          <button onClick={() => navigate(`/pickups`)} className="w-full bg-slate-100 dark:bg-slate-800/40 border border-slate-300 dark:border-slate-800 rounded-xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all mb-1">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
+                <Package className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="text-left">
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">Pickup #{activePickup.id.slice(0, 8).toUpperCase()}</h4>
+                <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 capitalize">{activePickup.rfq?.category || 'Collect materials'}</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 truncate max-w-[100px]">
+                    <MapPin className="w-3 h-3 shrink-0" /> {activePickup.pickup_address || 'TBD'}
+                  </div>
+                  <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 shrink-0">
+                    <Clock className="w-3 h-3 shrink-0" /> {new Date(activePickup.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col items-end gap-2 shrink-0">
-            <div className="bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded text-[9px] font-bold">
-              In Progress
+            <div className="flex flex-col items-end gap-2 shrink-0">
+              <div className="bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded text-[9px] font-bold capitalize">
+                {activePickup.status.replace(/_/g, ' ')}
+              </div>
+              <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-500 group-hover:text-emerald-500" />
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-500 group-hover:text-emerald-500" />
+          </button>
+        ) : (
+          <div className="w-full bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-5 flex items-center justify-center mb-1">
+            <p className="text-xs text-slate-400 font-medium">No active pickups assigned yet</p>
           </div>
-        </button>
+        )}
 
 
         <button

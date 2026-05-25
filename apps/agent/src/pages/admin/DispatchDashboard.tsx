@@ -3,20 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Clock, ArrowRight, CheckCircle2, UserPlus, Truck, ShieldCheck, X, Phone } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useFulfillmentStore } from '@klinflow/core/stores/fulfillmentStore';
+import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { FulfillmentOrder } from '@klinflow/core/stores/fulfillmentStore.types';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
-// Simplified mock of fleet drivers - ideally fetched from your user store for the company
-const MOCK_DRIVERS = [
-  { id: '111', name: 'James Omondi', status: 'available', distance: '2km' },
-  { id: '222', name: 'Peter Kamau', status: 'on_route', distance: '5km' },
-  { id: '333', name: 'John Doe', status: 'available', distance: '1km' }
-];
-
 export default function DispatchDashboard() {
   const { profile } = useAuthStore();
   const { dispatchQueue, fetchDispatchQueue, assignDriver, isLoading } = useFulfillmentStore();
+  const { fleetDrivers, fetchFleetDrivers } = useAgentStore();
+  const { addNotification } = useNotificationStore();
+  
   const [selectedOrder, setSelectedOrder] = useState<FulfillmentOrder | null>(null);
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [isAssigning, setIsAssigning] = useState(false);
@@ -24,8 +22,9 @@ export default function DispatchDashboard() {
   useEffect(() => {
     if (profile?.id) {
       fetchDispatchQueue(profile.id);
+      fetchFleetDrivers();
     }
-  }, [profile?.id, fetchDispatchQueue]);
+  }, [profile?.id, fetchDispatchQueue, fetchFleetDrivers]);
 
   const handleOpenAssign = (order: FulfillmentOrder) => {
     setSelectedOrder(order);
@@ -37,6 +36,16 @@ export default function DispatchDashboard() {
     setIsAssigning(true);
     try {
       await assignDriver(selectedOrder.id, profile.id, driverId);
+      
+      // Send amber notification toast to the fleet driver
+      await addNotification(
+        'New Pickup Assigned!',
+        'A new pickup has been dispatched to your active route.',
+        'warning',
+        'agent',
+        driverId
+      );
+
       toast.success('Driver assigned successfully!');
       setIsAssignModalOpen(false);
     } catch (err: any) {
@@ -45,6 +54,8 @@ export default function DispatchDashboard() {
       setIsAssigning(false);
     }
   };
+
+  const onlineDrivers = fleetDrivers.filter(driver => driver.is_online);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-800 pb-20">
@@ -125,9 +136,9 @@ export default function DispatchDashboard() {
               initial={{ opacity: 0, y: 100, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 100, scale: 0.95 }}
-              className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
             >
-              <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-100 dark:border-slate-800 shrink-0">
                 <div>
                   <h2 className="text-xl font-black text-slate-900 dark:text-white">Assign Driver</h2>
                   <p className="text-xs font-bold text-slate-500">Select an available driver for this pickup</p>
@@ -140,26 +151,35 @@ export default function DispatchDashboard() {
                 </button>
               </div>
 
-              <div className="p-4 max-h-[60vh] overflow-y-auto space-y-3">
-                {MOCK_DRIVERS.map(driver => (
-                  <button 
-                    key={driver.id}
-                    onClick={() => handleAssignDriver(driver.id)}
-                    disabled={isAssigning}
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex items-center justify-between hover:border-emerald-500 transition-colors text-left"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-                        <Truck className="w-5 h-5 text-slate-500" />
+              <div className="p-4 overflow-y-auto space-y-3">
+                {onlineDrivers.length === 0 ? (
+                  <div className="p-6 text-center text-slate-500">
+                    <Truck className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p className="font-bold text-sm">No drivers online</p>
+                    <p className="text-xs">Your fleet drivers must go online in their app.</p>
+                  </div>
+                ) : (
+                  onlineDrivers.map(driver => (
+                    <button 
+                      key={driver.id}
+                      onClick={() => handleAssignDriver(driver.id)}
+                      disabled={isAssigning}
+                      className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 flex items-center justify-between hover:border-emerald-500 transition-colors text-left"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center relative">
+                          <Truck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                          <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-800" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-slate-900 dark:text-white">{driver.name}</p>
+                          <p className="text-[10px] uppercase tracking-widest font-bold text-emerald-500">Available • Fleet Driver</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-bold text-slate-900 dark:text-white">{driver.name}</p>
-                        <p className="text-[10px] uppercase tracking-widest font-bold text-emerald-500">{driver.status} • {driver.distance}</p>
-                      </div>
-                    </div>
-                    <ArrowRight className="w-5 h-5 text-slate-400" />
-                  </button>
-                ))}
+                      <ArrowRight className="w-5 h-5 text-slate-400" />
+                    </button>
+                  ))
+                )}
               </div>
             </motion.div>
           </div>

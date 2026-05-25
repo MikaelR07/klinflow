@@ -16,93 +16,7 @@ import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
-const COMMODITY_TRENDS = [
-  { id: 'pet', label: 'PET Plastic', price: 22, change: '+5.4%', trend: 'up', demand: 'High', supply: 'Moderate', topBuyer: 'EcoPlast Industries', region: 'Nairobi', category: 'Plastic' },
-  { id: 'hdpe', label: 'HDPE Plastic', price: 18, change: '-2.1%', trend: 'down', demand: 'Stable', supply: 'High', topBuyer: 'KenPoly Manufacturers', region: 'Western', category: 'Plastic' },
-  { id: 'alu', label: 'Aluminium', price: 45, change: '+12.0%', trend: 'up', demand: 'Critical', supply: 'Low', topBuyer: 'Devki Steel & Alloys', region: 'Nairobi', category: 'Metal' },
-  { id: 'copper', label: 'Copper', price: 120, change: '+1.5%', trend: 'up', demand: 'High', supply: 'Critically Low', topBuyer: 'Nairobi Metal Refiners', region: 'Coast', category: 'Metal' },
-  { id: 'paper', label: 'Cardboard', price: 8, change: '0%', trend: 'stable', demand: 'Low', supply: 'Abundant', topBuyer: 'Chandaria Paper Mills', region: 'Western', category: 'Paper' },
-];
-
-const AI_TRENDS_SECTIONS = [
-  {
-    title: "Rising Prices",
-    tagline: "Materials that are selling for more money",
-    color: "emerald",
-    items: [
-      {
-        material: "Copper Scrap",
-        status: "Selling for more this week",
-        text: "Copper prices are trending upward due to lower supply.",
-        badge: "+ KSh 6.20/kg"
-      },
-      {
-        material: "Hard Plastic (HDPE)",
-        status: "Higher demand in factories",
-        text: "Factories are paying more for hard plastic bottles and containers this week.",
-        badge: "+ KSh 3.10/kg"
-      }
-    ]
-  },
-  {
-    title: "Regional Hotspots",
-    tagline: "Places where buyers are looking to buy now",
-    color: "indigo",
-    items: [
-      {
-        material: "Clear PET Bottles",
-        status: "High demand in Eastlands",
-        text: "PET bottle demand has increased 22% in Eastlands this week.",
-        badge: "Eastlands"
-      },
-      {
-        material: "Organic Waste",
-        status: "More buyers in Western",
-        text: "Compost makers and organic hubs in Western are actively buying waste.",
-        badge: "Western"
-      }
-    ]
-  },
-  {
-    title: "Most Wanted Today",
-    tagline: "What buyers are searching for on the hub",
-    color: "amber",
-    items: [
-      {
-        material: "Clean Cardboard",
-        status: "Highly popular today",
-        text: "Industrial Area recyclers are actively buying clean cardboard.",
-        badge: "Cardboard"
-      },
-      {
-        material: "Aluminum Soda Cans",
-        status: "Very high interest",
-        text: "Local recycling centers are looking for soda and beverage cans.",
-        badge: "Soda Cans"
-      }
-    ]
-  },
-  {
-    title: "Quick Price Jumps",
-    tagline: "Sudden changes in normal buying prices",
-    color: "rose",
-    items: [
-      {
-        material: "Soft Plastic Wraps (LDPE)",
-        status: "Price jumped recently",
-        text: "Plastic wrap rates went up because packaging companies need sheets.",
-        badge: "+ KSh 4.50/kg"
-      },
-      {
-        material: "Electronic Boards (E-Waste)",
-        status: "Big payout increase",
-        text: "Electronic scrap buyers are offering a much higher payout this week.",
-        badge: "+ KSh 45.00/kg"
-      }
-    ]
-  }
-];
-
+// COMMODITY_TRENDS and AI_TRENDS_SECTIONS are now fetched dynamically via RPC.
 const ACTIONABLE_INSIGHTS = [
   {
     category: 'Market Alert',
@@ -165,6 +79,7 @@ export default function MarketPulse() {
   const [selectedUrgency, setSelectedUrgency] = useState('All');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [rfqsList, setRfqsList] = useState<any[]>([]);
+  const [marketData, setMarketData] = useState<any>({ commodity_trends: [], ai_trends: [] });
 
   const fetchRFQs = async () => {
     try {
@@ -216,9 +131,21 @@ export default function MarketPulse() {
     }
   };
 
+  const fetchIntelligence = async () => {
+    try {
+      const { data, error } = await supabase.rpc('get_market_intelligence');
+      if (!error && data) {
+        setMarketData(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch market intelligence:', err);
+    }
+  };
+
   useEffect(() => {
     fetchPrices();
     fetchRFQs();
+    fetchIntelligence();
 
     const channel = supabase.channel('public:rfqs-feed')
       .on(
@@ -229,6 +156,7 @@ export default function MarketPulse() {
             toast.success('New Market Request!', { description: 'A buyer just posted a new material request.' });
           }
           fetchRFQs();
+          fetchIntelligence();
         }
       )
       .on(
@@ -236,6 +164,7 @@ export default function MarketPulse() {
         { event: '*', schema: 'public', table: 'rfq_offers' },
         () => {
           fetchRFQs();
+          fetchIntelligence();
         }
       )
       .subscribe();
@@ -246,7 +175,8 @@ export default function MarketPulse() {
   }, []);
 
   // Filtered Lists
-  const filteredTrends = COMMODITY_TRENDS.filter(item => {
+  const commodityTrends = marketData?.commodity_trends || [];
+  const filteredTrends = commodityTrends.filter((item: any) => {
     const matchesSearch = item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.topBuyer.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRegion = selectedRegion === 'All' || item.region === selectedRegion;
@@ -692,7 +622,7 @@ export default function MarketPulse() {
 
               {/* Sections list */}
               <div className="space-y-4">
-                {AI_TRENDS_SECTIONS.map((section, idx) => {
+                {marketData.ai_trends?.map((section: any, idx: number) => {
                   const accentColorClass =
                     section.color === 'emerald' ? 'text-emerald-500 border-emerald-500/20 bg-emerald-500/5' :
                       section.color === 'indigo' ? 'text-indigo-500 border-indigo-500/20 bg-indigo-500/5' :

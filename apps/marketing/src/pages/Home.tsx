@@ -206,6 +206,17 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── SHOWCASE BANNER ────────────────────────────────────────────── */}
+      <section className={`w-full relative z-10 px-4 md:px-6 -mt-10 md:-mt-20 mb-16 md:mb-32 flex justify-center`}>
+        <div className={`max-w-7xl w-full rounded-[2rem] border overflow-hidden relative shadow-2xl ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`}>
+          <img
+            src="/landing-page/banner3.webp"
+            alt="Klinflow Platform Showcase"
+            className="w-full h-auto object-cover"
+          />
+        </div>
+      </section>
+
       {/* ── STRATEGIC VISION ────────────────────────────────────── */}
       <section
         id="vision"

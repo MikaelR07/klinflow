@@ -4,6 +4,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
+  BarChart3,
   Bell,
   MapPin,
   Zap,
@@ -304,7 +305,7 @@ export default function SellerHome() {
         </div>
 
 
-        <div className="bg-white dark:bg-slate-900/50 !mt-1 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
           <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1 ">
             Quick Actions
           </p>
@@ -312,20 +313,20 @@ export default function SellerHome() {
           <div className="grid grid-cols-4 gap-2 ">
             <button
               onClick={() => navigate('/post-trade')}
-              className="bg-emerald-600 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
+              className=" dark:bg-slate-900 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
             >
 
-              <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
-                <Plus className="w-5 h-5" />
+              <div className="w-10 h-10 bg-emerald-600 dark:bg-slate-800 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+                <Plus className="w-5 h-5 text-white" />
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[9px] font-semibold text-white capitalize tracking-widest leading-none">Sell</p>
+                <p className="text-[9px] font-semibold capitalize tracking-widest leading-none">Sell</p>
               </div>
             </button>
 
             <button
               onClick={() => navigate('/inventory')}
-              className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+              className="dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
             >
               <div className="relative">
                 {myListings.filter((l: any) => l.status === 'active').length > 0 && (
@@ -333,18 +334,18 @@ export default function SellerHome() {
                     <span className="text-[8px] font-semibold text-white">{myListings.filter((l: any) => l.status === 'active').length}</span>
                   </div>
                 )}
-                <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 text-blue-500 group-hover:text-blue-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-                  <Package className="w-5 h-5" />
+                <div className="w-10 h-10 bg-indigo-600 dark:bg-slate-800 text-blue-500 group-hover:text-blue-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+                  <Package className="w-5 h-5 text-white" />
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Listings</p>
+                <p className="text-[9px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Listings</p>
               </div>
             </button>
 
             <button
               onClick={() => navigate('/my-offers')}
-              className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+              className=" dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
             >
               <div className="relative">
                 {receivedOffers.filter((o: any) => o.status === 'pending').length > 0 && (
@@ -352,22 +353,22 @@ export default function SellerHome() {
                     <span className="text-[8px] font-semibold text-white">{receivedOffers.filter((o: any) => o.status === 'pending').length}</span>
                   </div>
                 )}
-                <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 group-hover:text-indigo-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-                  <Handshake className="w-5 h-5" />
+                <div className="w-10 h-10 bg-blue-600  dark:bg-slate-800 text-indigo-500 group-hover:text-indigo-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+                  <Handshake className="w-5 h-5 text-white" />
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Offers</p>
+                <p className="text-[9px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Offers</p>
               </div>
             </button>
 
             <button
               onClick={() => navigate('/my-rfq-offers')}
-              className="bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+              className=" dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
             >
               <div className="relative">
-                <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 text-amber-500 group-hover:text-amber-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-                  <Receipt className="w-5 h-5" />
+                <div className="w-10 h-10 bg-amber-500 dark:bg-slate-800  text-amber-500 group-hover:text-amber-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+                  <Receipt className="w-5 h-5 text-white" />
                 </div>
                 {/* Accepted Quotes Badge */}
                 <div className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-[1.5px] border-white dark:border-slate-900 z-10 shadow-sm">
@@ -375,36 +376,36 @@ export default function SellerHome() {
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[9px] font-semibold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Quotes</p>
+                <p className="text-[9px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Quotes</p>
               </div>
             </button>
           </div>
         </div>
 
         {/* ── ACTIONS & INSIGHTS WRAPPER ── */}
-        <div className="bg-white dark:bg-slate-900/50 !mt-1 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
           <p className="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide px-1 ">
             Business Tools
           </p>
           {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
           <div
             onClick={() => navigate('/market-pulse')}
-            className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+            className="bg-gradient-to-r from-emerald-600 to-emerald-900 dark:bg-gradient-to-r from-emerald-600 to-emerald-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
           >
 
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
-                <TrendingUp className="w-5 h-5" />
+              <div className="w-10 h-10 bg-emerald-600 dark:bg-emerald-900 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+                <BarChart3 className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
-                <p className="text-[9px] font-bold text-slate-500 capitalize tracking-widest flex items-center gap-1.5">
+                <h3 className="text-sm font-bold text-slate-50 dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
+                <p className="text-[9px] font-bold text-slate-200 capitalize tracking-widest flex items-center gap-1.5">
                   View Material Prices in the Market
                 </p>
               </div>
             </div>
-            <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
-              <ArrowRight className="w-3.5 h-3.5" />
+            <div className="p-1.5 bg-emerald-900 dark:bg-emerald-900 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+              <ArrowRight className="w-3.5 h-3.5 text-white" />
             </div>
           </div>
 
@@ -433,7 +434,7 @@ export default function SellerHome() {
           {/* ── COMMUNITY COLLECTIVE (NEW OS LAYER) ── */}
           <div
             onClick={() => navigate('/community-collective')}
-            className="bg-indigo-600 dark:bg-slate-800 border border-indigo-700 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+            className="bg-gradient-to-br from-emerald-600 via-teal-700 to-green-700 dark:bg-gradient-to-br from-emerald-600 via-teal-700 to-green-700 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
           >
             <div className="flex items-center gap-4 relative z-10">
               <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shadow-inner">
@@ -441,7 +442,7 @@ export default function SellerHome() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white capitalize tracking-tight leading-none mb-1.5">Collective Hub</h3>
-                <p className="text-[10px] font-bold text-indigo-100/60 capitalize tracking-widest flex items-center gap-2 italic">
+                <p className="text-[10px] font-bold text-slate-100/80 capitalize tracking-widest flex items-center gap-2 italic">
                   Join Swarms & Group Missions
                 </p>
               </div>

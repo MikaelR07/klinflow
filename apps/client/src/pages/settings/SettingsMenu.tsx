@@ -7,7 +7,9 @@ import {
   User, Bell, ShieldCheck, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle,
   Brain, Zap, ArrowUpRight, ArrowDownLeft, Package,
   TrendingUp, Globe, BarChart3, Briefcase, Award, History, Building2,
-  Users, Star, CreditCard, ChevronDown, CheckCircle2, X, Plus, Info, Trophy
+  Users, Star, CreditCard, ChevronDown, CheckCircle2, X, Plus, Info, Trophy,
+  IdCard,
+  ChartBar
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -100,7 +102,7 @@ export default function SettingsMenu() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
 
         {/* ── PROFILE BENTO CARD ── */}
-        <div className="bg-cyan-800 dark:bg-slate-900/50 rounded-2xl p-4  dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+        <div className="bg-gradient-to-r from-slate-600 to-slate-800   rounded-2xl p-4  dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
 
           <div className="flex items-center gap-4 relative z-10">
             <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-1 border-white dark:border-slate-900  overflow-hidden flex items-center justify-center text-3xl">
@@ -115,8 +117,8 @@ export default function SettingsMenu() {
               )}
             </div>
             <div className="space-y-1">
-              <h2 className="text-lg text-white font-bold text-slate-900  dark:text-white leading-tight">{profile?.name}</h2>
-              <p className="text-[11px] font-bold text-slate-400 capitalize tracking-widest">{profile?.phone}</p>
+              <h2 className="text-lg  font-bold text-slate-200  dark:text-white leading-tight">{profile?.name}</h2>
+              <p className="text-[11px] font-bold text-emerald-500 capitalize tracking-widest">{profile?.phone}</p>
               <div className="flex items-center gap-1.5 mt-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                 <span className="text-[9px] font-bold text-slate-100 dark:text-emerald-400 capitalize tracking-widest">Verified Identity</span>
@@ -125,28 +127,28 @@ export default function SettingsMenu() {
           </div>
 
           {/* Quick Stats Grid */}
-          <div className={`grid ${isSeller ? 'grid-cols-3' : 'grid-cols-2'} gap-3 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800`}>
+          <div className={`grid ${isSeller ? 'grid-cols-3' : 'grid-cols-2'} gap-3 mt-4 pt-6 border-t border-slate-100 dark:border-slate-800`}>
             {isSeller && (
               <button
                 onClick={() => navigate('/circular-resume')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-indigo-600 dark:bg-indigo-700 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent  active:scale-95 group"
+                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 dark:bg-slate-600 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent  active:scale-95 group"
               >
-                <Award className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
+                <IdCard className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
                 <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
                 <p className="text-xs font-bold text-white capitalize leading-none">Klin Resumé</p>
               </button>
             )}
             <button
               onClick={() => navigate(isSeller ? '/trust-score' : '/Analytics')}
-              className="flex flex-col items-center text-center p-3 rounded-xl bg-emerald-600 dark:bg-emerald-700 text-white hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-all border border-transparent  active:scale-95 group"
+              className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 dark:bg-slate-600 text-white hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-all border border-transparent  active:scale-95 group"
             >
-              <TrendingUp className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
+              <ChartBar className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
               <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Dashboard</p>
               <p className="text-xs font-bold text-white capitalize leading-none">{isSeller ? 'Trust score' : 'Analytics'}</p>
             </button>
             <button
               onClick={() => navigate('/leaderboard')}
-              className="flex flex-col items-center text-center p-3 rounded-xl bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-all border border-transparent  active:scale-95 group"
+              className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 dark:bg-slate-600 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-all border border-transparent  active:scale-95 group"
             >
               <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
               <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
@@ -156,27 +158,27 @@ export default function SettingsMenu() {
         </div>
 
         {/* ── QUICK ACCESS SECTION ── */}
-        <div className="space-y-3 bg-white !mt-2 dark:bg-slate-900/50 rounded-2xl p-3 border border-slate-200/50 dark:border-slate-800">
-          <p className="text-[10px] font-black text-slate-600 capitalize tracking-[0.2em] px-2">Managed Services</p>
+        <div className="space-y-3 bg-gradient-to-r from-slate-600 to-slate-800 !mt-2   rounded-2xl p-3 border border-slate-200/50 dark:border-slate-800">
+          <p className="text-[10px] font-black text-slate-200 capitalize tracking-[0.2em] px-2">Managed Services</p>
           <div className="grid grid-cols-2 gap-3">
             {isSeller ? (
               <>
-                <button onClick={() => navigate('/inventory')} className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                <button onClick={() => navigate('/inventory')} className="bg-slate-600 dark:bg-slate-800 p-3 rounded-2xl  dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
                   <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0">
                     <Package className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Inventory</p>
-                    <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Ledger</p>
+                    <p className="text-xs font-semibold text-slate-200 dark:text-white truncate leading-tight">Inventory</p>
+                    <p className="text-[9px] text-slate-300 font-bold capitalize tracking-wider truncate mt-0.5">Ledger</p>
                   </div>
                 </button>
-                <button onClick={() => navigate('/my-offers')} className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                <button onClick={() => navigate('/my-offers')} className="bg-slate-600 dark:bg-slate-800 p-3 rounded-2xl  dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
                   <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-500 shrink-0">
                     <Briefcase className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate leading-tight">Trades</p>
-                    <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Orders</p>
+                    <p className="text-xs font-semibold text-slate-200 dark:text-white truncate leading-tight">Trades</p>
+                    <p className="text-[9px] text-slate-300 font-bold capitalize tracking-wider truncate mt-0.5">Orders</p>
                   </div>
                 </button>
               </>

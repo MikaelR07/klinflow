@@ -235,7 +235,22 @@ export default function SubmittedQuoteDetailsPage() {
           </div>
 
           {quote.status === 'accepted' && (
-            <button className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+            <button 
+              onClick={async () => {
+                const { data } = await supabase
+                  .from('fulfillment_orders')
+                  .select('id')
+                  .eq('proposal_id', quoteId)
+                  .maybeSingle();
+                
+                if (data?.id) {
+                  navigate(`/fulfillment/${data.id}`);
+                } else {
+                  toast.error("Delivery schedule is still being generated.");
+                }
+              }}
+              className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
               View Delivery Schedule
             </button>
           )}

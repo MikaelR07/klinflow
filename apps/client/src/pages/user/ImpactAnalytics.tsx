@@ -293,74 +293,149 @@ export default function ImpactAnalytics() {
       <div className="space-y-6 pb-2 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
         {/* ── IMPACT HERO CARD: COMMAND CENTER ── */}
         <div className="relative -mt-2 px-1">
-          <div className="bg-cyan-800 dark:bg-slate-900/70 border border-slate-100 dark:border-slate-800 rounded-[1rem] p-2">
-            <div>
-              <div className="grid grid-cols-2 gap-2">
-                {/* 1. Lifetime Revenue */}
-                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-100 dark:border-slate-700/50">
-                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                    <TrendingUp className="w-3.5 h-3.5 text-emerald-500" /> Lifetime Revenue
-                  </p>
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                    <span className="text-[10px] font-bold text-slate-400">KSh</span>
-                    {stats.totalEarnings.toLocaleString()}
-                  </h2>
-                </div>
+          <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-2.5">
 
-                {/* 2. Recyclables Recovered */}
-                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-100 dark:border-slate-700/50">
-                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                    <Scale className="w-3.5 h-3.5 text-emerald-500" /> Total Weight
-                  </p>
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                    {stats.totalWeight}
-                    <span className="text-[10px] font-bold text-slate-400">KG</span>
-                  </h2>
-                </div>
+            <div className="space-y-2.5">
 
-                {/* 3. Withdrawn */}
-                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-100 dark:border-slate-700/50">
-                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-indigo-500" /> Withdrawn
-                  </p>
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                    <span className="text-[10px] font-bold text-slate-400">KSh</span>
-                    {stats.totalWithdrawn.toLocaleString()}
-                  </h2>
-                </div>
+              {/* ── HERO METRICS ── */}
+              <div className="grid grid-cols-2 gap-2.5">
 
-                {/* 4. Global Rank */}
-                <div className="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-100 dark:border-slate-700/50">
-                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                    <Trophy className="w-3.5 h-3.5 text-amber-500" /> Global Rank
-                  </p>
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                    #{stats.globalRank || "—"}
-                  </h2>
-                </div>
+                {/* Lifetime Revenue */}
+                <div className="rounded-3xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[140px] flex flex-col justify-between">
 
-                {/* 5. Metrics Strip */}
-                <div className="col-span-2 bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 flex items-center justify-between border border-slate-100 dark:border-slate-700/50 px-6">
-                  <div className="flex flex-col items-center">
-                    <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-1.5"> Total Pickups</p>
-                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.totalPickups}</p>
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-emerald-500" />
                   </div>
 
-                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
+                  <div className="space-y-2 min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      Lifetime Revenue
+                    </p>
 
-                  <div className="flex flex-col items-center">
-                    <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-1.5"> Total GFP</p>
-                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{profile?.reward_points || 0}</p>
+                    <div className="flex items-end gap-1 min-w-0">
+                      <span className="text-xs font-bold text-slate-400 mb-1 shrink-0">
+                        KSh
+                      </span>
+
+                      <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-none truncate">
+                        {stats.totalEarnings.toLocaleString()}
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Total Weight */}
+                <div className="rounded-3xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[140px] flex flex-col justify-between">
+
+                  <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 flex items-center justify-center">
+                    <Scale className="w-5 h-5 text-cyan-500" />
                   </div>
 
-                  <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
+                  <div className="space-y-2 min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      Total Weight
+                    </p>
 
-                  <div className="flex flex-col items-center">
-                    <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mb-1.5">Most Recycled</p>
-                    <p className="text-sm font-black text-slate-900 dark:text-white leading-none capitalize truncate max-w-[80px]">{stats.topMaterial}</p>
+                    <div className="flex items-end gap-1 min-w-0">
+                      <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-none truncate">
+                        {stats.totalWeight}
+                      </h2>
+
+                      <span className="text-xs font-bold text-slate-400 mb-1 shrink-0">
+                        KG
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* ── SECONDARY METRICS ── */}
+              <div className="grid grid-cols-2 gap-2.5">
+
+                {/* Withdrawn */}
+                <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[115px] flex flex-col justify-between">
+
+                  <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-indigo-500" />
+                  </div>
+
+                  <div className="space-y-1.5 min-w-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      Withdrawn
+                    </p>
+
+                    <div className="flex items-end gap-1 min-w-0">
+                      <span className="text-[11px] font-bold text-slate-400 mb-0.5 shrink-0">
+                        KSh
+                      </span>
+
+                      <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
+                        {stats.totalWithdrawn.toLocaleString()}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Global Rank */}
+                <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[115px] flex flex-col justify-between">
+
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                    <Trophy className="w-4 h-4 text-amber-500" />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      Global Rank
+                    </p>
+
+                    <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none">
+                      #{stats.globalRank || "—"}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── INSIGHTS STRIP ── */}
+              <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 px-2 py-4">
+
+                <div className="grid grid-cols-3">
+
+                  {/* Pickups */}
+                  <div className="flex flex-col items-center justify-center px-2 min-w-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1 text-center">
+                      Pickups
+                    </p>
+
+                    <p className="text-sm font-black text-slate-900 dark:text-white truncate">
+                      {stats.totalPickups}
+                    </p>
+                  </div>
+
+                  {/* GFP */}
+                  <div className="flex flex-col items-center justify-center border-x border-slate-200 dark:border-slate-700 px-2 min-w-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1 text-center">
+                      GFP Points
+                    </p>
+
+                    <p className="text-sm font-black text-slate-900 dark:text-white truncate">
+                      {profile?.reward_points || 0}
+                    </p>
+                  </div>
+
+                  {/* Most Recycled */}
+                  <div className="flex flex-col items-center justify-center px-2 min-w-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1 text-center">
+                      Top Material
+                    </p>
+
+                    <p className="text-sm font-black text-slate-900 dark:text-white truncate max-w-full capitalize">
+                      {stats.topMaterial}
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

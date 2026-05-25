@@ -84,6 +84,7 @@ export default function AdminLayout() {
     { name: 'Driver Requests', path: '/settings/staff-application', icon: UserPlus, badge: pendingDriverCount },
     { name: 'Fund Requests', path: '/admin/finance', icon: Banknote, badge: pendingCount },
     { name: 'RFQ Requests', path: '/admin/rfqs', icon: Receipt },
+    { name: 'Active RFQ Pickups', path: '/pickups', icon: Truck },
     { name: 'Dispatch', path: '/admin/dispatch', icon: PackageCheck },
     { name: 'Pricing & Services', path: '/settings/configuration', icon: Settings },
     { name: 'System Settings', path: '/settings', icon: Menu },

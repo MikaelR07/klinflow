@@ -24,6 +24,9 @@ interface ServiceStore {
   toggleCategory: (id: string, isActive: boolean) => Promise<{ success: boolean; error?: any }>;
   addCategory: (category: Partial<ServiceCategory>) => Promise<{ success: boolean; data?: ServiceCategory; error?: any }>;
   deleteCategory: (id: string) => Promise<{ success: boolean; error?: any }>;
+  addMaterialPrice: (materialName: string, category: string, pricePerKg: number) => Promise<{ success: boolean; error?: any }>;
+  updateMaterialPrice: (id: string, updates: { material_name?: string; price_per_kg?: number }) => Promise<{ success: boolean; error?: any }>;
+  deleteMaterialPrice: (id: string) => Promise<{ success: boolean; error?: any }>;
 }
 
 const DEFAULT_CATEGORIES: ServiceCategory[] = [
@@ -192,6 +195,59 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
       return { success: true };
     } catch (error) {
       console.error('Error deleting category:', error);
+      return { success: false, error };
+    }
+  },
+
+  addMaterialPrice: async (materialName, category, pricePerKg) => {
+    try {
+      const { data, error } = await supabase
+        .from('material_prices')
+        .insert({ material_name: materialName, category, price_per_kg: pricePerKg })
+        .select()
+        .single();
+
+      if (error) throw error;
+      set(state => ({ materialPrices: [...state.materialPrices, data] }));
+      return { success: true };
+    } catch (error) {
+      console.error('Error adding material price:', error);
+      return { success: false, error };
+    }
+  },
+
+  updateMaterialPrice: async (id, updates) => {
+    try {
+      const { error } = await supabase
+        .from('material_prices')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', id);
+
+      if (error) throw error;
+      set(state => ({
+        materialPrices: state.materialPrices.map(m => m.id === id ? { ...m, ...updates } : m)
+      }));
+      return { success: true };
+    } catch (error) {
+      console.error('Error updating material price:', error);
+      return { success: false, error };
+    }
+  },
+
+  deleteMaterialPrice: async (id) => {
+    try {
+      const { error } = await supabase
+        .from('material_prices')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      set(state => ({
+        materialPrices: state.materialPrices.filter(m => m.id !== id)
+      }));
+      return { success: true };
+    } catch (error) {
+      console.error('Error deleting material price:', error);
       return { success: false, error };
     }
   }

@@ -246,7 +246,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
               if (isMission || finalNotif.type === 'success' || finalNotif.type === 'reward') {
                 toast.success(finalNotif.title, toastOptions);
               } else if (finalNotif.type === 'warning') {
-                toast.error(finalNotif.title, toastOptions);
+                toast.warning(finalNotif.title, toastOptions);
               } else {
                 toast(finalNotif.title, { ...toastOptions, icon: '🔔' });
               }

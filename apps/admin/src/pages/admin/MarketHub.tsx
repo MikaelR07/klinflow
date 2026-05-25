@@ -17,7 +17,9 @@ export default function MarketHub() {
   const { config, fetchConfig, updateConfig } = useSystemStore();
   const { 
     allCategories, fetchAllCategories, addCategory, 
-    updateCategory, toggleCategory, deleteCategory 
+    updateCategory, toggleCategory, deleteCategory,
+    materialPrices, fetchMaterialPrices,
+    addMaterialPrice, updateMaterialPrice, deleteMaterialPrice
   } = useServiceStore();
   const { stats, refreshDashboardStats } = useAdminStore();
   
@@ -42,10 +44,20 @@ export default function MarketHub() {
   const [deletingCategory, setDeletingCategory] = useState(null);
   const [deletingMaterial, setDeletingMaterial] = useState(null);
 
+  // Inline subcategory rows for new category creation
+  const [newCatMaterials, setNewCatMaterials] = useState<{ name: string; price: string }[]>([]);
+
+  // Inline editing for materials in edit modal
+  const [editingMatId, setEditingMatId] = useState<string | null>(null);
+  const [editMatName, setEditMatName] = useState('');
+  const [editMatPrice, setEditMatPrice] = useState('');
+  const [newEditMat, setNewEditMat] = useState({ name: '', price: '' });
+
   useEffect(() => {
     fetchPrices();
     fetchConfig();
     fetchAllCategories();
+    fetchMaterialPrices();
     refreshDashboardStats();
   }, []);
 
@@ -53,10 +65,18 @@ export default function MarketHub() {
     if (!newCat.label.trim()) return toast.error('Category name required');
     const result = await addCategory(newCat);
     if (result.success) {
+      // Save any subcategories that were added inline
+      for (const mat of newCatMaterials) {
+        if (mat.name.trim() && mat.price) {
+          await addMaterialPrice(mat.name.trim(), newCat.label, parseFloat(mat.price));
+        }
+      }
       toast.success('Category Added');
       setShowAddCategory(false);
       setNewCat({ label: '', icon: '📦', description: '', image_url: '' });
+      setNewCatMaterials([]);
       await fetchAllCategories();
+      await fetchMaterialPrices();
     }
   };
 
@@ -339,6 +359,57 @@ export default function MarketHub() {
               )}
             </div>
 
+            {/* Subcategories / Materials */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Subcategories / Materials</label>
+                <button
+                  type="button"
+                  onClick={() => setNewCatMaterials(prev => [...prev, { name: '', price: '' }])}
+                  className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 uppercase tracking-widest hover:text-indigo-700"
+                >
+                  <Plus className="w-3 h-3" /> Add Material
+                </button>
+              </div>
+              {newCatMaterials.length === 0 && (
+                <div className="text-center py-3 bg-white dark:bg-slate-900 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                  <p className="text-[10px] text-slate-400 font-medium">No materials added yet. Click "Add Material" above.</p>
+                </div>
+              )}
+              {newCatMaterials.map((mat, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <input
+                    placeholder="Material name (e.g. PET Plastic)"
+                    value={mat.name}
+                    onChange={(e) => {
+                      const updated = [...newCatMaterials];
+                      updated[idx].name = e.target.value;
+                      setNewCatMaterials(updated);
+                    }}
+                    className="flex-1 px-3 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold outline-none"
+                  />
+                  <input
+                    placeholder="KSh/kg"
+                    type="number"
+                    value={mat.price}
+                    onChange={(e) => {
+                      const updated = [...newCatMaterials];
+                      updated[idx].price = e.target.value;
+                      setNewCatMaterials(updated);
+                    }}
+                    className="w-24 px-3 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold outline-none text-right"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setNewCatMaterials(prev => prev.filter((_, i) => i !== idx))}
+                    className="p-2 text-slate-300 hover:text-rose-500 transition-colors"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
             <button 
               onClick={handleAddCategory}
               className="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold text-xs uppercase tracking-widest hover:bg-indigo-700 transition-colors"
@@ -396,6 +467,29 @@ export default function MarketHub() {
                   </button>
                 </div>
               </div>
+              
+              {/* Nested Subcategories (Materials & Prices) */}
+              {cat.is_active && (
+                <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Tracked Materials</p>
+                  {materialPrices.filter(m => m.category === cat.label).length > 0 ? (
+                    materialPrices
+                      .filter(m => m.category === cat.label)
+                      .map((mat, i) => (
+                        <div key={i} className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                          <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{mat.material_name}</span>
+                          <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-lg">
+                            KSh {mat.price_per_kg} / kg
+                          </span>
+                        </div>
+                      ))
+                  ) : (
+                    <div className="text-center py-3 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                      <p className="text-[10px] text-slate-400 font-medium">No materials defined yet</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -564,8 +658,115 @@ export default function MarketHub() {
                 )}
               </div>
 
+              {/* Materials & Prices in Edit Modal */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Materials & Prices</label>
+                </div>
+                {materialPrices.filter(m => m.category === (editCatData as any).label).length > 0 ? (
+                  <div className="space-y-2">
+                    {materialPrices
+                      .filter(m => m.category === (editCatData as any).label)
+                      .map((mat) => (
+                        <div key={mat.id} className="flex items-center gap-2">
+                          {editingMatId === mat.id ? (
+                            <>
+                              <input
+                                value={editMatName}
+                                onChange={(e) => setEditMatName(e.target.value)}
+                                className="flex-1 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-indigo-300 dark:border-indigo-600 rounded-xl text-xs font-semibold outline-none"
+                              />
+                              <input
+                                type="number"
+                                value={editMatPrice}
+                                onChange={(e) => setEditMatPrice(e.target.value)}
+                                className="w-24 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-indigo-300 dark:border-indigo-600 rounded-xl text-xs font-semibold outline-none text-right"
+                              />
+                              <button
+                                onClick={async () => {
+                                  const updates: any = {};
+                                  if (editMatName.trim()) updates.material_name = editMatName.trim();
+                                  if (editMatPrice) updates.price_per_kg = parseFloat(editMatPrice);
+                                  const res = await updateMaterialPrice(mat.id, updates);
+                                  if (res.success) {
+                                    toast.success('Material updated');
+                                    setEditingMatId(null);
+                                  }
+                                }}
+                                className="p-2 text-emerald-500 hover:text-emerald-600 transition-colors"
+                              >
+                                <Save className="w-3.5 h-3.5" />
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <span className="flex-1 text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">{mat.material_name}</span>
+                              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-lg">
+                                KSh {mat.price_per_kg}/kg
+                              </span>
+                              <button
+                                onClick={() => {
+                                  setEditingMatId(mat.id);
+                                  setEditMatName(mat.material_name);
+                                  setEditMatPrice(mat.price_per_kg.toString());
+                                }}
+                                className="p-1.5 text-slate-300 hover:text-indigo-500 transition-colors"
+                              >
+                                <Edit2 className="w-3 h-3" />
+                              </button>
+                              <button
+                                onClick={async () => {
+                                  const res = await deleteMaterialPrice(mat.id);
+                                  if (res.success) toast.success('Material removed');
+                                }}
+                                className="p-1.5 text-slate-300 hover:text-rose-500 transition-colors"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-3 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                    <p className="text-[10px] text-slate-400 font-medium">No materials defined for this category yet.</p>
+                  </div>
+                )}
+
+                {/* Add new material row */}
+                <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <input
+                    placeholder="New material name"
+                    value={newEditMat.name}
+                    onChange={(e) => setNewEditMat(prev => ({ ...prev, name: e.target.value }))}
+                    className="flex-1 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold outline-none"
+                  />
+                  <input
+                    placeholder="KSh/kg"
+                    type="number"
+                    value={newEditMat.price}
+                    onChange={(e) => setNewEditMat(prev => ({ ...prev, price: e.target.value }))}
+                    className="w-24 px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold outline-none text-right"
+                  />
+                  <button
+                    onClick={async () => {
+                      if (!newEditMat.name.trim() || !newEditMat.price) return toast.error('Name and price required');
+                      const res = await addMaterialPrice(newEditMat.name.trim(), (editCatData as any).label, parseFloat(newEditMat.price));
+                      if (res.success) {
+                        toast.success('Material added');
+                        setNewEditMat({ name: '', price: '' });
+                      }
+                    }}
+                    className="p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
               <div className="flex gap-3">
-                <button onClick={() => setEditingCatId(null)} className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold text-[11px] uppercase tracking-widest">Cancel</button>
+                <button onClick={() => { setEditingCatId(null); setEditingMatId(null); setNewEditMat({ name: '', price: '' }); }} className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold text-[11px] uppercase tracking-widest">Cancel</button>
                 <button onClick={() => handleUpdateCategory(editingCatId)} className="flex-1 py-4 bg-indigo-600 text-white rounded-2xl font-semibold text-[11px] uppercase tracking-widest">Save Changes</button>
               </div>
            </div>

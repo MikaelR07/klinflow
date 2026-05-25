@@ -130,6 +130,13 @@ export const useFulfillmentStore = create<FulfillmentStore>((set, get) => ({
       });
       if (error) throw error;
 
+      // Set assigned_agent_id so the driver's Active Pickups page can find this order
+      const { error: updateErr } = await supabase
+        .from('fulfillment_orders')
+        .update({ assigned_agent_id: driverId })
+        .eq('id', fulfillmentId);
+      if (updateErr) throw updateErr;
+
       await get().updateFulfillmentStatus(fulfillmentId, 'agent_assigned', `Assigned to driver ${driverId}`);
     } catch (err: any) {
       set({ error: err.message });

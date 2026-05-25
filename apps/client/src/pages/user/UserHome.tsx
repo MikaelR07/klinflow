@@ -7,7 +7,10 @@ import { motion } from 'framer-motion';
 import {
   Bell, MapPin, Zap, Wallet, Truck, Recycle, TrendingUp,
   ArrowRight, Star, ChevronRight, Trophy, Building2,
-  Users, ShieldCheck, X, Sparkles, Search, Brain
+  Users, ShieldCheck, X, Sparkles, Search, Brain,
+  BarChart2,
+  BarChart2Icon,
+  BarChart3Icon
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -290,7 +293,7 @@ export default function UserHome() {
             <button onClick={() => navigate('/analytics')}
               className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
               <div className="w-12 h-12 bg-emerald-500 text-white rounded-xl flex items-center justify-center ">
-                <TrendingUp className="w-6 h-6" />
+                <BarChart2 className="w-6 h-6" />
               </div>
               <div className="text-center">
                 <p className="text-[9px] font-semibold text-emerald-600 capitalize tracking-widest mb-0.5">Stats</p>
@@ -313,46 +316,50 @@ export default function UserHome() {
               </button>
             </div>
           </div>
-          {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
-          <div
-            onClick={() => navigate('/market-pulse')}
-            className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
-          >
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
-                <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest flex items-center gap-1.5">
-                  View Material Prices in the Market
-                </p>
-              </div>
-            </div>
-            <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
-              <ArrowRight className="w-3.5 h-3.5" />
-            </div>
-          </div>
+
         </div>
       </div>
-      {/* ── LEADERBOARD RANKING ── */}
-      <div
-        onClick={() => navigate('/leaderboard')}
-        className="bg-blue-700  !mt-2 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
-      >
-        <div className="flex items-center gap-4 relative z-10">
-          <div className="w-10 h-10   rounded-xl flex items-center justify-center text-emerald-600 ">
-            <Trophy className="w-8 h-8" />
+
+      <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2">
+        {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
+        <div
+          onClick={() => navigate('/market-pulse')}
+          className="bg-gradient-to-r from-emerald-500 to-emerald-900 dark:bg-gradient-to-br from-emerald-800 via-teal-700 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+        >
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="w-10 h-10  rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+              <BarChart3Icon className="w-5 h-5 text-white " />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
+              <p className="text-[10px] font-bold text-slate-200 capitalize tracking-widest flex items-center gap-1.5">
+                View Material Prices in the Market
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-100 dark:text-white capitalize tracking-tight leading-none mb-1">Eco Leaderboard</h3>
-            <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest flex items-center gap-1.5">
-              View Your Rank in the Ecosystem
-            </p>
+          <div className="p-1. text-white  rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+            <ArrowRight className="w-3.5 h-3.5" />
           </div>
         </div>
-        <div className="p-1.5 text-white  rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
-          <ArrowRight className="w-3.5 h-3.5" />
+        {/* ── LEADERBOARD RANKING ── */}
+        <div
+          onClick={() => navigate('/leaderboard')}
+          className="bg-gradient-to-r from-blue-600 to-violet-600 !mt-3 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+        >
+          <div className="flex items-center gap-4 relative z-10">
+            <div className="w-10 h-10   rounded-xl flex items-center justify-center text-emerald-600 ">
+              <Trophy className="w-8 h-8 text-white " />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white  dark:text-white capitalize tracking-tight leading-none mb-1">Eco Leaderboard</h3>
+              <p className="text-[10px] font-bold text-slate-200 capitalize tracking-widest flex items-center gap-1.5">
+                View Your Rank in the Ecosystem
+              </p>
+            </div>
+          </div>
+          <div className="p-1.5 text-white  rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
         </div>
       </div>
 

@@ -115,105 +115,209 @@ export default function TrustScoreDetails() {
 
       <div className="pt-[calc(env(safe-area-inset-top,1rem)+4rem)] space-y-6">
         {/* ── MASTER DASHBOARD CARD ── */}
-        <div className="bg-cyan-800 dark:bg-slate-800 rounded-2xl p-3">
-          <div className="grid grid-cols-2 gap-2">
+        <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-2.5">
+
+          <div className="grid grid-cols-2 gap-2.5">
+
             {/* 1. Lifetime Earnings */}
-            <div className="dark:bg-slate-800 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-400 dark:border-slate-700/50">
-              <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-emerald-500" /> Lifetime Earnings
-              </p>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                <span className="text-[10px] font-bold text-slate-100">KSh</span>
-                {stats.lifetimeEarnings.toLocaleString()}
-              </h2>
+            <div className="rounded-3xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[140px] flex flex-col justify-between">
+
+              <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
+                <TrendingUp className="w-5 h-5 text-emerald-500" />
+              </div>
+
+              <div className="space-y-2 min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Lifetime Earnings
+                </p>
+
+                <div className="flex items-end gap-1 min-w-0">
+                  <span className="text-xs font-bold text-slate-400 mb-1 shrink-0">
+                    KSh
+                  </span>
+
+                  <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-none truncate">
+                    {stats.lifetimeEarnings.toLocaleString()}
+                  </h2>
+                </div>
+              </div>
             </div>
 
             {/* 2. Available Balance */}
-            <div className="dark:bg-slate-800 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-400 dark:border-slate-700/50">
-              <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                <Wallet className="w-3.5 h-3.5 text-blue-500" /> Available Balance
-              </p>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                <span className="text-[10px] font-bold text-slate-100">KSh</span>
-                {walletBalance.toLocaleString()}
-              </h2>
+            <div className="rounded-3xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[140px] flex flex-col justify-between">
+
+              <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
+                <Wallet className="w-5 h-5 text-blue-500" />
+              </div>
+
+              <div className="space-y-2 min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Available Balance
+                </p>
+
+                <div className="flex items-end gap-1 min-w-0">
+                  <span className="text-xs font-bold text-slate-400 mb-1 shrink-0">
+                    KSh
+                  </span>
+
+                  <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-none truncate">
+                    {walletBalance.toLocaleString()}
+                  </h2>
+                </div>
+              </div>
             </div>
 
             {/* 3. In Escrow */}
-            <div className="dark:bg-slate-800 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-400 dark:border-slate-700/50">
-              <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-amber-500" /> In Escrow
-              </p>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                <span className="text-[10px] font-bold text-slate-100">KSh</span>
-                {stats.pendingBalance.toLocaleString()}
-              </h2>
+            <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[118px] flex flex-col justify-between">
+
+              <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                <Clock className="w-4 h-4 text-amber-500" />
+              </div>
+
+              <div className="space-y-1.5 min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  In Escrow
+                </p>
+
+                <div className="flex items-end gap-1 min-w-0">
+                  <span className="text-[11px] font-bold text-slate-400 mb-0.5 shrink-0">
+                    KSh
+                  </span>
+
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
+                    {stats.pendingBalance.toLocaleString()}
+                  </h3>
+                </div>
+              </div>
             </div>
 
             {/* 4. Total Traded */}
-            <div className="dark:bg-slate-800 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-400 dark:border-slate-700/50">
-              <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                <Scale className="w-3.5 h-3.5 text-indigo-500" /> Total Traded
-              </p>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                {stats.totalWeight.toLocaleString()}
-                <span className="text-[10px] font-bold text-slate-100">KG</span>
-              </h2>
-            </div>
+            <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[118px] flex flex-col justify-between">
 
-            {/* 5. Trades Count */}
-            <div className="dark:bg-slate-800 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-400 dark:border-slate-700/50">
-              <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                <Handshake className="w-3.5 h-3.5 text-purple-500" /> Total Trades
-              </p>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                {stats.tradesCompleted}
-              </h2>
-            </div>
-
-            {/* 6. Fulfillment Rate */}
-            <div className="dark:bg-slate-800 dark:bg-slate-800/60 rounded-2xl p-4 flex flex-col justify-center border border-slate-400 dark:border-slate-700/50">
-              <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-2 flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-emerald-500" /> Fulfillment
-              </p>
-              <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none flex items-baseline gap-1">
-                {stats.fulfillmentRate}
-                <span className="text-[10px] font-bold text-slate-100">%</span>
-              </h2>
-            </div>
-
-            {/* 7. Bottom Strip */}
-            <div className="col-span-2 dark:bg-slate-800 dark:bg-slate-800/60 rounded-2xl p-4 flex items-center justify-between border border-slate-400 dark:border-slate-700/50 px-6">
-              <div className="flex flex-col items-center">
-                <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-1.5 flex items-center gap-1">
-                  <Calendar className="w-3 h-3 text-slate-400" /> Days
-                </p>
-                <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.daysTraded}</p>
+              <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                <Scale className="w-4 h-4 text-indigo-500" />
               </div>
 
-              <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
-
-              <div className="flex flex-col items-center">
-                <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-1.5 flex items-center gap-1">
-                  <Zap className="w-3 h-3 text-slate-400" /> Avg Time
+              <div className="space-y-1.5 min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Total Traded
                 </p>
-                <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{stats.avgResponseTime || '15'}m</p>
-              </div>
 
-              <div className="w-px h-6 bg-slate-200 dark:bg-slate-700" />
+                <div className="flex items-end gap-1 min-w-0">
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
+                    {stats.totalWeight.toLocaleString()}
+                  </h3>
 
-              <div className="flex flex-col items-center">
-                <p className="text-[10px] font-bold text-slate-100 capitalize tracking-widest mb-1.5 flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-slate-400" /> Score
-                </p>
-                <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{score}%</p>
+                  <span className="text-[11px] font-bold text-slate-400 mb-0.5 shrink-0">
+                    KG
+                  </span>
+                </div>
               </div>
             </div>
+
+            {/* 5. Total Trades */}
+            <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[118px] flex flex-col justify-between">
+
+              <div className="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                <Handshake className="w-4 h-4 text-purple-500" />
+              </div>
+
+              <div className="space-y-1.5 min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Total Trades
+                </p>
+
+                <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
+                  {stats.tradesCompleted}
+                </h3>
+              </div>
+            </div>
+
+            {/* 6. Fulfillment */}
+            <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[118px] flex flex-col justify-between">
+
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                <TrendingUp className="w-4 h-4 text-emerald-500" />
+              </div>
+
+              <div className="space-y-1.5 min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  Fulfillment
+                </p>
+
+                <div className="flex items-end gap-1 min-w-0">
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
+                    {stats.fulfillmentRate}
+                  </h3>
+
+                  <span className="text-[11px] font-bold text-slate-400 mb-0.5 shrink-0">
+                    %
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* ── PERFORMANCE STRIP ── */}
+            <div className="col-span-2 rounded-2xl bg-slate-50 dark:bg-slate-800 px-2 py-4">
+
+              <div className="grid grid-cols-3">
+
+                {/* Days */}
+                <div className="flex flex-col items-center justify-center px-2 min-w-0">
+
+                  <div className="flex items-center gap-1 mb-1">
+                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
+
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      Days
+                    </p>
+                  </div>
+
+                  <p className="text-sm font-black text-slate-900 dark:text-white truncate">
+                    {stats.daysTraded}
+                  </p>
+                </div>
+
+                {/* Avg Time */}
+                <div className="flex flex-col items-center justify-center border-x border-slate-200 dark:border-slate-700 px-2 min-w-0">
+
+                  <div className="flex items-center gap-1 mb-1">
+                    <Zap className="w-3.5 h-3.5 text-slate-400" />
+
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      Avg Time
+                    </p>
+                  </div>
+
+                  <p className="text-sm font-black text-slate-900 dark:text-white truncate">
+                    {stats.avgResponseTime || '15'}m
+                  </p>
+                </div>
+
+                {/* Score */}
+                <div className="flex flex-col items-center justify-center px-2 min-w-0">
+
+                  <div className="flex items-center gap-1 mb-1">
+                    <Sparkles className="w-3.5 h-3.5 text-slate-400" />
+
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      Score
+                    </p>
+                  </div>
+
+                  <p className="text-sm font-black text-slate-900 dark:text-white truncate">
+                    {score}%
+                  </p>
+                </div>
+
+              </div>
+            </div>
+
           </div>
         </div>
 
         {/* ── TRUST SCORE METER CARD ── */}
-        <div className="bg-white dark:bg-slate-800 !mt-2 p-5 rounded-3xl border border-slate-100 dark:border-slate-800/80 ">
+        <div className="bg-white dark:bg-slate-900 !mt-2 p-5 rounded-3xl border border-slate-100 dark:border-slate-800/80 ">
           <div className="flex justify-center mb-4.5">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[11px] font-bold capitalize tracking-widest">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Your Credit Score
