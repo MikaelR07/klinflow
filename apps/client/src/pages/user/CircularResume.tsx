@@ -13,6 +13,8 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 
 export default function CircularResume() {
   const navigate = useNavigate();
@@ -89,7 +91,7 @@ export default function CircularResume() {
             <div className="relative">
               <div className="w-20 h-20 rounded-full border-1 border-white dark:border-slate-800  overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-3xl">
                 {profile?.avatarUrl ? (
-                  <img src={profile.avatarUrl} className="w-full h-full object-cover" />
+                  <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 200 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                 ) : (
                   profile?.avatar || '👤'
                 )}

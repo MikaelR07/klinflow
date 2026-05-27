@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, PackageCheck, MapPin, Phone, Truck, ShieldCheck, Clock, CheckCircle2, Eye, Info, Navigation, Activity } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
+import { OptimizedImage } from '@klinflow/ui';
 import { format } from 'date-fns';
 
 const STATUS_PIPELINE = [
@@ -292,7 +293,7 @@ export default function ActivePickupDetailsPage() {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
                 {order.agent.avatar_url ? (
-                  <img src={order.agent.avatar_url} alt="Agent" className="w-full h-full object-cover" />
+                  <OptimizedImage src={order.agent.avatar_url} alt="Agent" className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                 ) : (
                   '👤'
                 )}

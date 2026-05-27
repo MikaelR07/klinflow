@@ -7,6 +7,8 @@ import {
   Sparkles,
   Briefcase,
   TrendingUp,
+  Store,
+  CreditCard,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -46,7 +48,7 @@ export default function Welcome() {
           {/* Feature Highlights */}
           <div className="grid grid-cols-1 gap-8 mb-12">
             <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 shadow-xl shadow-emerald-500/5 flex items-center justify-center text-emerald-500 shrink-0 border border-slate-100 dark:border-slate-700">
+              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-emerald-500 shrink-0 border border-slate-100 dark:border-slate-700">
                 <Brain className="w-7 h-7" />
               </div>
               <div>
@@ -62,8 +64,8 @@ export default function Welcome() {
             </div>
 
             <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 shadow-xl shadow-blue-500/5 flex items-center justify-center text-blue-500 shrink-0 border border-slate-100 dark:border-slate-700">
-                <TrendingUp className="w-7 h-7" />
+              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-blue-500 shrink-0 border border-slate-100 dark:border-slate-700">
+                <Store className="w-7 h-7" />
               </div>
               <div>
                 <p className="font-semibold text-slate-900 dark:text-white text-base">
@@ -78,7 +80,7 @@ export default function Welcome() {
             </div>
 
             <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 shadow-xl shadow-amber-500/5 flex items-center justify-center text-amber-500 shrink-0 border border-slate-100 dark:border-slate-700">
+              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 shadow-xl  flex items-center justify-center text-amber-500 shrink-0 border border-slate-100 dark:border-slate-700">
                 <Truck className="w-7 h-7" />
               </div>
               <div>
@@ -94,8 +96,8 @@ export default function Welcome() {
             </div>
 
             <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 shadow-xl shadow-orange-500/5 flex items-center justify-center text-orange-500 shrink-0 border border-slate-100 dark:border-slate-700">
-                <Zap className="w-7 h-7" />
+              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-orange-500 shrink-0 border border-slate-100 dark:border-slate-700">
+                <CreditCard className="w-7 h-7" />
               </div>
               <div>
                 <p className="font-semibold text-slate-900 dark:text-white text-base">

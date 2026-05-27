@@ -19,6 +19,7 @@ import NEMAReportModal from '@klinflow/ui/components/NEMAReportModal';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 import PWAInstallModal from '@klinflow/ui/components/PWAInstallModal';
 import { Toaster, toast } from 'sonner';
+import { OfflineBanner } from '@klinflow/ui';
 
 // Components
 import WeightVerificationModal from './components/user/WeightVerificationModal';
@@ -35,6 +36,8 @@ const WithdrawalPage = lazy(() => import('./pages/user/WithdrawalPage'));
 const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
 const CompanyProfile = lazy(() => import('./pages/user/CompanyProfile'));
 const ImpactAnalytics = lazy(() => import('./pages/user/ImpactAnalytics'));
+const ResidentWallet = lazy(() => import('./pages/user/ResidentWallet'));
+const SellerWallet = lazy(() => import('./pages/user/SellerWallet'));
 
 // Seller Pages
 const PostTrade = lazy(() => import('./pages/user/PostTrade'));
@@ -191,6 +194,7 @@ export default function App() {
 
   return (
     <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
+      <OfflineBanner />
 
 
       <Routes>
@@ -207,6 +211,8 @@ export default function App() {
           <Route element={<MobileLayout />}>
             <Route path="/" element={<UserHome />} />
             <Route path="/withdraw" element={<WithdrawalPage />} />
+            <Route path="/resident-wallet" element={<ResidentWallet />} />
+            <Route path="/seller-wallet" element={<SellerWallet />} />
             <Route path="/discovery" element={<DiscoveryHub />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/book-pickup" element={<BookPickup />} />

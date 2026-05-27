@@ -15,6 +15,7 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import type { AgentJob } from '@klinflow/core/stores/agentStore.types';
 import EmptyState from '@klinflow/ui/components/EmptyState';
 import { SkeletonCard } from '@klinflow/ui/components/Skeletons';
@@ -162,7 +163,7 @@ export default function AvailableJobs() {
                       {/* Edge-to-Edge Hero Image */}
                       <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 relative overflow-hidden shadow-xl">
                         {photoUrl ? (
-                          <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
+                          <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800">
                             <div className="text-6xl mb-4">{waste?.icon || '📦'}</div>

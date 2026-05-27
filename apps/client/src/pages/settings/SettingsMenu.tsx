@@ -9,7 +9,8 @@ import {
   TrendingUp, Globe, BarChart3, Briefcase, Award, History, Building2,
   Users, Star, CreditCard, ChevronDown, CheckCircle2, X, Plus, Info, Trophy,
   IdCard,
-  ChartBar
+  ChartBar,
+  BarChart2
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -85,7 +86,7 @@ export default function SettingsMenu() {
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-24">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-700  transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600  transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
@@ -102,7 +103,7 @@ export default function SettingsMenu() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
 
         {/* ── PROFILE BENTO CARD ── */}
-        <div className="bg-gradient-to-r from-slate-600 to-slate-800   rounded-2xl p-4  dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+        <div className="bg-gradient-to-t from-slate-600 to-slate-800    rounded-2xl p-4  dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
 
           <div className="flex items-center gap-4 relative z-10">
             <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-1 border-white dark:border-slate-900  overflow-hidden flex items-center justify-center text-3xl">
@@ -131,7 +132,7 @@ export default function SettingsMenu() {
             {isSeller && (
               <button
                 onClick={() => navigate('/circular-resume')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 dark:bg-slate-600 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent  active:scale-95 group"
+                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 dark:bg-slate-00 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all border border-transparent  active:scale-95 group"
               >
                 <IdCard className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
                 <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
@@ -142,7 +143,7 @@ export default function SettingsMenu() {
               onClick={() => navigate(isSeller ? '/trust-score' : '/Analytics')}
               className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 dark:bg-slate-600 text-white hover:bg-emerald-700 dark:hover:bg-emerald-600 transition-all border border-transparent  active:scale-95 group"
             >
-              <ChartBar className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
+              <BarChart2 className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
               <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Dashboard</p>
               <p className="text-xs font-bold text-white capitalize leading-none">{isSeller ? 'Trust score' : 'Analytics'}</p>
             </button>
@@ -158,7 +159,7 @@ export default function SettingsMenu() {
         </div>
 
         {/* ── QUICK ACCESS SECTION ── */}
-        <div className="space-y-3 bg-gradient-to-r from-slate-600 to-slate-800 !mt-2   rounded-2xl p-3 border border-slate-200/50 dark:border-slate-800">
+        <div className="space-y-3 bg-slate-600  !mt-2 rounded-2xl p-3 border border-slate-200/50 dark:border-slate-800">
           <p className="text-[10px] font-black text-slate-200 capitalize tracking-[0.2em] px-2">Managed Services</p>
           <div className="grid grid-cols-2 gap-3">
             {isSeller ? (
@@ -184,7 +185,7 @@ export default function SettingsMenu() {
               </>
             ) : (
               <>
-                <button onClick={() => navigate('/my-bookings')} className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                <button onClick={() => navigate('/my-bookings')} className="bg-slate-600 dark:bg-slate-600 p-3 rounded-2xl shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
                     <History className="w-5 h-5" />
                   </div>
@@ -193,7 +194,7 @@ export default function SettingsMenu() {
                     <p className="text-[9px] text-slate-400 font-bold capitalize tracking-wider truncate mt-0.5">Pickup Log</p>
                   </div>
                 </button>
-                <button onClick={() => navigate('/impact-hub')} className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                <button onClick={() => navigate('/impact-hub')} className=" dark:bg-slate-600 p-3 rounded-2xl  shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
                     <Globe className="w-5 h-5" />
                   </div>
@@ -212,7 +213,7 @@ export default function SettingsMenu() {
           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="p-5 flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 ">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
                   <Brain className="w-5 h-5" />
                 </div>
@@ -228,7 +229,7 @@ export default function SettingsMenu() {
                   localStorage.setItem('saveAiChatHistory', newVal.toString());
                   toast.success(`Chat History ${newVal ? 'Enabled' : 'Disabled'}`);
                 }}
-                className={`w-11 h-6 rounded-full p-1 transition-all ${saveChatHistory ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-slate-200 dark:bg-slate-700'}`}
+                className={`w-11 h-6 rounded-full p-1 transition-all ${saveChatHistory ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-slate-200 dark:bg-slate-900'}`}
               >
                 <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${saveChatHistory ? 'translate-x-5' : 'translate-x-0'}`} />
               </button>

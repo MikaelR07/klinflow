@@ -11,7 +11,8 @@ import {
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@klinflow/supabase';
-import { compressImage } from '@klinflow/core/utils/imageUtils';
+import { compressImage, getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 
 const getSubcategoryLabel = (catId: string, subId: string) => {
   const cat = WASTE_CATEGORIES.find(c => c.id === catId);
@@ -644,7 +645,7 @@ export default function FleetRFQs() {
                   <div className="grid grid-cols-3 gap-2.5 pt-1">
                     {images.map((img, idx) => (
                       <div key={idx} className="aspect-square relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 group">
-                        <img src={img.url} className="w-full h-full object-cover" alt="sample" />
+                        <OptimizedImage src={img.url} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt="sample" />
                         <button
                           type="button"
                           onClick={() => removeImage(idx)}

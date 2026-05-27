@@ -42,6 +42,7 @@ import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { SkeletonCard } from '@klinflow/ui/components/Skeletons';
 import PushNotificationModal from '@klinflow/ui/components/PushNotificationModal';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
@@ -84,6 +85,8 @@ export default function SellerHome() {
   const fetchIncomingOffers = useMarketplaceStore(s => s.fetchIncomingOffers);
   const myListings = useMarketplaceStore(s => s.myListings);
   const fetchMyActivity = useMarketplaceStore(s => s.fetchMyActivity);
+  const sentOffers = useMarketplaceStore(s => s.sentOffers);
+  const fetchSentOffers = useMarketplaceStore(s => s.fetchSentOffers);
 
   // NOTE: Realtime subscription is managed globally in App.tsx — do NOT subscribe/cleanup here
   const getUnreadCount = useNotificationStore(s => s.getUnreadCount);
@@ -103,6 +106,7 @@ export default function SellerHome() {
     fetchReceivedOrders();
     fetchIncomingOffers();
     fetchMyActivity();
+    fetchSentOffers();
 
     if (profile?.id) {
       fetchNotifications(profile.id, role);
@@ -203,14 +207,14 @@ export default function SellerHome() {
 
       {/* ── TOP NAV & HERO ── */}
       <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700 ">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-600 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
               <div className="shrink-0">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
                   {profile?.avatarUrl ? (
-                    <img src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" />
+                    <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                   ) : (
                     (profile as any)?.avatar || '👤'
                   )}
@@ -242,12 +246,12 @@ export default function SellerHome() {
 
         {/* ── REVENUE HERO CARD ── */}
         <div className="relative group">
-          <div className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800  rounded-2xl   p-5  gpu-layer relative overflow-hidden">
+          <div className="bg-gradient-to-b from-primary to-emerald-600 to-emerald-800  rounded-2xl   p-5  gpu-layer relative overflow-hidden">
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
             <div className="flex flex-col gap-6 relative z-10">
               <div className="flex items-end justify-between">
                 <div>
-                  <p className="text-[12px] font-semibold text-emerald-200/90 capitalise tracking-widest mb-1.5 flex items-center gap-1.5">
+                  <p className="text-[12px] font-semibold text-emerald-100/90 capitalise tracking-widest mb-1.5 flex items-center gap-1.5">
                     <Wallet className="w-3 h-3" /> Seller Wallet
                   </p>
                   <h2 className="text-3xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
@@ -272,7 +276,7 @@ export default function SellerHome() {
                     <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalDeals}</p>
                     <div className="flex items-center gap-1.5">
                       <Handshake className="w-3.5 h-3.5 text-emerald-300" />
-                      <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest">Deals</p>
+                      <p className="text-[10px] font-semibold text-emerald-200 capitalize tracking-widest">Deals</p>
                     </div>
                   </div>
 
@@ -313,20 +317,20 @@ export default function SellerHome() {
           <div className="grid grid-cols-4 gap-2 ">
             <button
               onClick={() => navigate('/post-trade')}
-              className=" dark:bg-slate-900 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
+              className="  dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative"
             >
 
-              <div className="w-10 h-10 bg-emerald-600 dark:bg-slate-800 text-white rounded-xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 bg-emerald-600 dark:bg-slate-800 text-white rounded-xl flex items-center justify-center  group-hover:scale-110 transition-transform">
                 <Plus className="w-5 h-5 text-white" />
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[9px] font-semibold capitalize tracking-widest leading-none">Sell</p>
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none">Sell</p>
               </div>
             </button>
 
             <button
               onClick={() => navigate('/inventory')}
-              className="dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+              className="dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
             >
               <div className="relative">
                 {myListings.filter((l: any) => l.status === 'active').length > 0 && (
@@ -334,18 +338,18 @@ export default function SellerHome() {
                     <span className="text-[8px] font-semibold text-white">{myListings.filter((l: any) => l.status === 'active').length}</span>
                   </div>
                 )}
-                <div className="w-10 h-10 bg-indigo-600 dark:bg-slate-800 text-blue-500 group-hover:text-blue-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+                <div className="w-10 h-10 bg-indigo-600 dark:bg-slate-800 text-blue-500 group-hover:text-blue-600 rounded-xl flex items-center justify-center  transition-colors">
                   <Package className="w-5 h-5 text-white" />
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[9px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Listings</p>
+                <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Listings</p>
               </div>
             </button>
 
             <button
               onClick={() => navigate('/my-offers')}
-              className=" dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+              className=" dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
             >
               <div className="relative">
                 {receivedOffers.filter((o: any) => o.status === 'pending').length > 0 && (
@@ -353,34 +357,33 @@ export default function SellerHome() {
                     <span className="text-[8px] font-semibold text-white">{receivedOffers.filter((o: any) => o.status === 'pending').length}</span>
                   </div>
                 )}
-                <div className="w-10 h-10 bg-blue-600  dark:bg-slate-800 text-indigo-500 group-hover:text-indigo-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
+                <div className="w-10 h-10 bg-blue-600  dark:bg-slate-800 text-indigo-500 group-hover:text-indigo-600 rounded-xl flex items-center justify-center  transition-colors">
                   <Handshake className="w-5 h-5 text-white" />
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[9px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Offers</p>
+                <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Offers</p>
               </div>
             </button>
 
             <button
-              onClick={() => navigate('/my-rfq-offers')}
-              className=" dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
+              onClick={() => navigate('/seller-wallet')}
+              className=" dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
             >
               <div className="relative">
-                <div className="w-10 h-10 bg-amber-500 dark:bg-slate-800  text-amber-500 group-hover:text-amber-600 rounded-xl flex items-center justify-center shadow-inner transition-colors">
-                  <Receipt className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 bg-amber-500 dark:bg-slate-800  text-amber-500 group-hover:text-amber-600 rounded-xl flex items-center justify-center  transition-colors">
+                  <Wallet className="w-6 h-6 text-white dark:text-white" />
                 </div>
-                {/* Accepted Quotes Badge */}
-                <div className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-[1.5px] border-white dark:border-slate-900 z-10 shadow-sm">
-                  1
-                </div>
+
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[9px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Quotes</p>
+                <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Wallet</p>
               </div>
             </button>
           </div>
         </div>
+
+
 
         {/* ── ACTIONS & INSIGHTS WRAPPER ── */}
         <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
@@ -390,11 +393,11 @@ export default function SellerHome() {
           {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
           <div
             onClick={() => navigate('/market-pulse')}
-            className="bg-gradient-to-r from-emerald-600 to-emerald-900 dark:bg-gradient-to-r from-emerald-600 to-emerald-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+            className="bg-gradient-to-br from-primary to-emerald-800 to-emerald-600  border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
           >
 
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-10 h-10 bg-emerald-600 dark:bg-emerald-900 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
                 <BarChart3 className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -404,7 +407,7 @@ export default function SellerHome() {
                 </p>
               </div>
             </div>
-            <div className="p-1.5 bg-emerald-900 dark:bg-emerald-900 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+            <div className="p-1.5 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
               <ArrowRight className="w-3.5 h-3.5 text-white" />
             </div>
           </div>
@@ -426,6 +429,12 @@ export default function SellerHome() {
                 </p>
               </div>
             </div>
+            {/* Accepted Quotes Badge */}
+            {/* {sentOffers.filter((o: any) => o.status === 'accepted').length > 0 && (
+                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
+                    <span className="text-[8px] font-semibold text-white">{sentOffers.filter((o: any) => o.status === 'accepted').length}</span>
+                  </div>
+                )} */}
             <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl group-hover:bg-amber-500 group-hover:text-white transition-all relative z-10">
               <ArrowRight className="w-4 h-4" />
             </div>
@@ -434,7 +443,7 @@ export default function SellerHome() {
           {/* ── COMMUNITY COLLECTIVE (NEW OS LAYER) ── */}
           <div
             onClick={() => navigate('/community-collective')}
-            className="bg-gradient-to-br from-emerald-600 via-teal-700 to-green-700 dark:bg-gradient-to-br from-emerald-600 via-teal-700 to-green-700 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+            className="bg-gradient-to-br from-blue-600 via-emerald-600 to-primary  dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
           >
             <div className="flex items-center gap-4 relative z-10">
               <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shadow-inner">
@@ -442,7 +451,7 @@ export default function SellerHome() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white capitalize tracking-tight leading-none mb-1.5">Collective Hub</h3>
-                <p className="text-[10px] font-bold text-slate-100/80 capitalize tracking-widest flex items-center gap-2 italic">
+                <p className="text-[10px] font-bold text-slate-50 capitalize tracking-widest flex items-center gap-2 italic">
                   Join Swarms & Group Missions
                 </p>
               </div>

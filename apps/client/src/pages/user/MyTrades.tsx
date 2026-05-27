@@ -13,6 +13,7 @@ import { useBookingStore } from '@klinflow/core/stores/bookingStore';
 import { WASTE_TYPES } from '@klinflow/core/data/mockData';
 import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import EmptyState from '@klinflow/ui/components/EmptyState';
 import { toast } from 'sonner';
 
@@ -257,7 +258,7 @@ export default function MyTrades() {
                       {(() => {
                         const photoUrl = b?.photoUrl;
                         return photoUrl ? (
-                          <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
+                          <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800">
                             <div className="text-6xl mb-3">{waste?.icon || '♻️'}</div>

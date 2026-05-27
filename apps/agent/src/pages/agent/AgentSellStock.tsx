@@ -19,7 +19,8 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
 import { supabase } from '@klinflow/supabase';
-import { compressImage } from '@klinflow/core/utils/imageUtils';
+import { compressImage, getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { toast } from 'sonner';
 
 export default function AgentSellStock() {
@@ -205,7 +206,7 @@ export default function AgentSellStock() {
           <div className="relative group">
             <label className={`block w-full aspect-video rounded-2xl bg-white dark:bg-slate-800 border-2 border-dashed ${!formData.imageUrl && stepError ? 'border-rose-500 bg-rose-500/5' : 'border-slate-200 dark:border-slate-700'} overflow-hidden cursor-pointer hover:border-indigo-500/50 transition-all shadow-sm`}>
               {formData.imageUrl ? (
-                <img src={formData.imageUrl} className="w-full h-full object-cover" alt="Preview" />
+                <OptimizedImage src={formData.imageUrl} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt="Preview" />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center gap-3">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${!formData.imageUrl && stepError ? 'bg-rose-500/10 text-rose-500' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600'}`}>
@@ -389,7 +390,7 @@ export default function AgentSellStock() {
             
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-2xl">
               <div className="aspect-video relative">
-                <img src={formData.imageUrl} className="w-full h-full object-cover" />
+                <OptimizedImage src={formData.imageUrl} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                 <div className="absolute top-4 left-4 px-3 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-bold text-white capitalize tracking-widest">
                   Live Preview
                 </div>

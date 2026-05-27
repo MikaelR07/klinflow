@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Truck, Briefcase, ArrowRight, Brain, Zap, ShieldCheck, Navigation, UserCheck } from 'lucide-react';
+import { OptimizedImage } from '@klinflow/ui';
 
 export default function RoleSelection() {
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ export default function RoleSelection() {
                 <div className="flex -space-x-2">
                   {[1, 2, 3].map(i => (
                     <div key={i} className="w-6 h-6 rounded-full border-2 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-700 overflow-hidden">
-                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${role.id}${i}`} alt="user" />
+                      <OptimizedImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${role.id}${i}`} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt="user" />
                     </div>
                   ))}
                 </div>

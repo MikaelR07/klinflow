@@ -5,6 +5,7 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { ROLES } from '@klinflow/constants';
 import { toast } from 'sonner';
 import LocationSelector from '@klinflow/ui/components/LocationSelector';
+import { OptimizedImage } from '@klinflow/ui';
 
 export default function ProfilePage() {
   const { profile, role, updateProfile, uploadAvatar } = useAuthStore();
@@ -72,10 +73,11 @@ export default function ProfilePage() {
           <div className="relative group">
             <div className="w-28 h-28 rounded-full border-[6px] border-white dark:border-slate-800 shadow-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center relative">
               {profile?.avatarUrl || profile?.avatar ? (
-                <img 
+                <OptimizedImage 
                   src={profile.avatarUrl || profile.avatar || ''} 
                   alt="Profile" 
                   className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" 
+                  wrapperClassName="w-full h-full"
                 />
               ) : (
                 <div className="text-4xl text-slate-300 dark:text-slate-700 font-black">

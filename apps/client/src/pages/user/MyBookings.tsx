@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import AssetJourney from '@klinflow/ui/components/AssetJourney';
 import { toast } from 'sonner';
@@ -309,7 +310,7 @@ export default function MyBookings() {
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shadow-inner border border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
                           {b.photoUrl ? (
-                            <img src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" loading="lazy" />
+                            <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                           ) : (
                             waste?.icon || '📦'
                           )}
@@ -446,9 +447,10 @@ export default function MyBookings() {
               <div className="flex-1 overflow-y-auto no-scrollbar">
                 <div className="w-full aspect-[4/5] bg-slate-900 relative overflow-hidden">
                   {b.photoUrl ? (
-                    <img
+                    <OptimizedImage
                       src={getThumbnailUrl(b.photoUrl, { width: 800 })}
                       className="w-full h-full object-cover"
+                      wrapperClassName="w-full h-full"
                       alt="Material pickup"
                     />
                   ) : (

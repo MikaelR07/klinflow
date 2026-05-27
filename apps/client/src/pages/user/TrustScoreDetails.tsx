@@ -7,7 +7,8 @@ import {
   ShieldCheck, Star, TrendingUp, ShieldAlert,
   ArrowLeft, Info, Zap, CheckCircle2, Award,
   Users, BarChart3, Heart, Scale, AlertTriangle, PackageCheck, Wallet, Sparkles,
-  Clock, Handshake, Calendar
+  Clock, Handshake, Calendar,
+  SparklesIcon, ChevronRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -92,321 +93,249 @@ export default function TrustScoreDetails() {
   ];
 
   return (
-    <div className="pb-2 px-1.5 animate-fade-in">
+    <div className="pb-8 min-h-screen bg-slate-50 dark:bg-slate-800 animate-fade-in relative z-10">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800  transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
-            <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
-              <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-slate-50/90 dark:bg-slate-800 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-2 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors">
+              <ArrowLeft className="w-6 h-6" />
             </button>
             <div>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Trust Score</h1>
-              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Merchant Integrity
-              </p>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+                Trust Score
+
+              </h1>
             </div>
           </div>
-          <button className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 active:scale-95 transition-all">
-            <Info className="w-5 h-5" />
-          </button>
         </div>
       </div>
 
-      <div className="pt-[calc(env(safe-area-inset-top,1rem)+4rem)] space-y-6">
-        {/* ── MASTER DASHBOARD CARD ── */}
-        <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-2.5">
+      <div className="pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)] px-1.5 space-y-4">
 
-          <div className="grid grid-cols-2 gap-2.5">
 
-            {/* 1. Lifetime Earnings */}
-            <div className="rounded-3xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[140px] flex flex-col justify-between">
 
-              <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-emerald-500" />
+        {/* ── HERO CARD ── */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-[1rem] p-5 border border-slate-200 dark:border-slate-700/50 ">
+          <div className="flex items-center justify-between gap-4">
+
+            {/* Left: Text Details */}
+            <div className="flex-1">
+
+              <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg text-[10px] font-bold mb-3">
+                <Star className="w-3.5 h-3.5" /> Excellent Standing
               </div>
-
-              <div className="space-y-2 min-w-0">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Lifetime Earnings
-                </p>
-
-                <div className="flex items-end gap-1 min-w-0">
-                  <span className="text-xs font-bold text-slate-400 mb-1 shrink-0">
-                    KSh
-                  </span>
-
-                  <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-none truncate">
-                    {stats.lifetimeEarnings.toLocaleString()}
-                  </h2>
-                </div>
-              </div>
-            </div>
-
-            {/* 2. Available Balance */}
-            <div className="rounded-3xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[140px] flex flex-col justify-between">
-
-              <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
-                <Wallet className="w-5 h-5 text-blue-500" />
-              </div>
-
-              <div className="space-y-2 min-w-0">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Available Balance
-                </p>
-
-                <div className="flex items-end gap-1 min-w-0">
-                  <span className="text-xs font-bold text-slate-400 mb-1 shrink-0">
-                    KSh
-                  </span>
-
-                  <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-none truncate">
-                    {walletBalance.toLocaleString()}
-                  </h2>
-                </div>
-              </div>
-            </div>
-
-            {/* 3. In Escrow */}
-            <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[118px] flex flex-col justify-between">
-
-              <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                <Clock className="w-4 h-4 text-amber-500" />
-              </div>
-
-              <div className="space-y-1.5 min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  In Escrow
-                </p>
-
-                <div className="flex items-end gap-1 min-w-0">
-                  <span className="text-[11px] font-bold text-slate-400 mb-0.5 shrink-0">
-                    KSh
-                  </span>
-
-                  <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
-                    {stats.pendingBalance.toLocaleString()}
-                  </h3>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. Total Traded */}
-            <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[118px] flex flex-col justify-between">
-
-              <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-                <Scale className="w-4 h-4 text-indigo-500" />
-              </div>
-
-              <div className="space-y-1.5 min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Total Traded
-                </p>
-
-                <div className="flex items-end gap-1 min-w-0">
-                  <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
-                    {stats.totalWeight.toLocaleString()}
-                  </h3>
-
-                  <span className="text-[11px] font-bold text-slate-400 mb-0.5 shrink-0">
-                    KG
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* 5. Total Trades */}
-            <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[118px] flex flex-col justify-between">
-
-              <div className="w-9 h-9 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                <Handshake className="w-4 h-4 text-purple-500" />
-              </div>
-
-              <div className="space-y-1.5 min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Total Trades
-                </p>
-
-                <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
-                  {stats.tradesCompleted}
-                </h3>
-              </div>
-            </div>
-
-            {/* 6. Fulfillment */}
-            <div className="rounded-2xl bg-slate-50 dark:bg-slate-800 p-4 min-h-[118px] flex flex-col justify-between">
-
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-200 leading-relaxed">
+                You're a trusted Collection partner in Klinflow Ecosystem.
+              </p>
+              <div className="mt-4 flex items-center gap-1.5">
                 <TrendingUp className="w-4 h-4 text-emerald-500" />
-              </div>
-
-              <div className="space-y-1.5 min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Fulfillment
-                </p>
-
-                <div className="flex items-end gap-1 min-w-0">
-                  <h3 className="text-lg font-black text-slate-900 dark:text-white leading-none truncate">
-                    {stats.fulfillmentRate}
-                  </h3>
-
-                  <span className="text-[11px] font-bold text-slate-400 mb-0.5 shrink-0">
-                    %
-                  </span>
-                </div>
+                <span className="text-[11px] font-bold text-green-500">8 pts</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-200">from last month</span>
               </div>
             </div>
 
-            {/* ── PERFORMANCE STRIP ── */}
-            <div className="col-span-2 rounded-2xl bg-slate-50 dark:bg-slate-800 px-2 py-4">
-
-              <div className="grid grid-cols-3">
-
-                {/* Days */}
-                <div className="flex flex-col items-center justify-center px-2 min-w-0">
-
-                  <div className="flex items-center gap-1 mb-1">
-                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
-
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                      Days
-                    </p>
-                  </div>
-
-                  <p className="text-sm font-black text-slate-900 dark:text-white truncate">
-                    {stats.daysTraded}
-                  </p>
-                </div>
-
-                {/* Avg Time */}
-                <div className="flex flex-col items-center justify-center border-x border-slate-200 dark:border-slate-700 px-2 min-w-0">
-
-                  <div className="flex items-center gap-1 mb-1">
-                    <Zap className="w-3.5 h-3.5 text-slate-400" />
-
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                      Avg Time
-                    </p>
-                  </div>
-
-                  <p className="text-sm font-black text-slate-900 dark:text-white truncate">
-                    {stats.avgResponseTime || '15'}m
-                  </p>
-                </div>
-
-                {/* Score */}
-                <div className="flex flex-col items-center justify-center px-2 min-w-0">
-
-                  <div className="flex items-center gap-1 mb-1">
-                    <Sparkles className="w-3.5 h-3.5 text-slate-400" />
-
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                      Score
-                    </p>
-                  </div>
-
-                  <p className="text-sm font-black text-slate-900 dark:text-white truncate">
-                    {score}%
-                  </p>
-                </div>
-
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* ── TRUST SCORE METER CARD ── */}
-        <div className="bg-white dark:bg-slate-900 !mt-2 p-5 rounded-3xl border border-slate-100 dark:border-slate-800/80 ">
-          <div className="flex justify-center mb-4.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[11px] font-bold capitalize tracking-widest">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Your Credit Score
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6 w-full">
-            {/* Info & Action Left */}
-            <div className="flex-1 space-y-4">
-              <div>
-                <span className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">{score}%</span>
-                <div className="mt-1">
-                  <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-tight">Exceptional!</p>
-                  <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 italic">Excellent profile</p>
-                </div>
-              </div>
-              <button className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold capitalize tracking-widest rounded-xl transition-all shadow-md active:scale-95 whitespace-nowrap">
-                Apply Loan
-              </button>
-            </div>
-
-            {/* Gauge Right - Expanded to fill more space */}
-            <div className="flex-[1.4] relative aspect-[2/1]">
-              <svg className="absolute inset-0 w-full h-full overflow-visible" viewBox="0 0 100 55">
-                <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f43f5e" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="0" />
-                <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#f97316" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-21.5" />
-                <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#eab308" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-43" />
-                <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#4ade80" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-64.5" />
-                <path d="M 10 50 A 40 40 0 0 1 90 50" pathLength="100" fill="transparent" stroke="#10b981" strokeWidth="4" strokeLinecap="round" strokeDasharray="14 100" strokeDashoffset="-86" />
-
-                <path d="M 18 50 A 32 32 0 0 1 82 50" stroke="currentColor" className="text-slate-100 dark:text-slate-800" strokeOpacity="0.5" strokeWidth="0.5" fill="none" strokeDasharray="2 4" />
-
-                <g
-                  className="transition-transform duration-1000 ease-out origin-[50px_50px]"
-                  style={{ transform: `rotate(${(score / 100) * 180 - 90}deg)` }}
-                >
-                  <line
-                    x1="50" y1="50" x2="50" y2="22"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    className="text-emerald-500"
-                  />
-                </g>
-                <circle cx="50" cy="50" r="4" fill="currentColor" className="text-emerald-500" />
+            {/* Right: Circle Gauge */}
+            <div className="relative w-32 h-32 shrink-0">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                {/* Background track */}
+                <circle cx="50" cy="50" r="44" fill="transparent" stroke="currentColor" className="text-slate-100 dark:text-slate-800" strokeWidth="3" />
+                {/* Progress arc */}
+                <circle
+                  cx="50" cy="50" r="44"
+                  fill="transparent"
+                  stroke="#10b926ff"
+                  strokeWidth="3.5"
+                  strokeDasharray="276.46"
+                  strokeDashoffset={276.46 - (276.46 * score) / 100}
+                  strokeLinecap="round"
+                  className="transition-all duration-1000 ease-out"
+                />
               </svg>
+              {/* Score Inside */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">{score}</span>
+                <span className="text-[10px] font-bold text-slate-400 mt-1">/100</span>
+              </div>
+            </div>
+
+          </div>
+
+          <button className="w-full mt-6 py-3.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/80 dark:hover:bg-slate-700 rounded-xl flex items-center justify-center gap-2 text-xs font-bold text-green-600 dark:text-green-500 transition-colors border border-slate-200 dark:border-slate-700/50">
+            View Score History <TrendingUp className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* ── FINANCING ELIGIBILITY ── */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-[1rem] p-5 border border-slate-200 dark:border-slate-700/50  relative overflow-hidden">
+
+
+          <div className="relative z-10">
+            <div className="flex items-center gap-1.5 mb-5">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Financing Eligibility</h3>
+              <Info className="w-4 h-4 text-slate-400" />
+            </div>
+
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <p className="text-[10px] text-slate-500 dark:text-slate-200 mb-1 font-medium">Eligible Amount</p>
+                <h2 className="text-3xl font-black text-emerald-500 dark:text-green-500 tracking-tight mb-2">KES 15,000</h2>
+                <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 dark:text-green-500 rounded-md text-[10px] font-bold">
+                  <CheckCircle2 className="w-3 h-3" /> High approval chance
+                </div>
+              </div>
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center border border-emerald-200 dark:border-slate-700">
+                <Wallet className="w-8 h-8 text-emerald-600 dark:text-emerald-500" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 mb-6 pt-5 border-t border-slate-100  dark:border-slate-600">
+              <div>
+                <p className="text-[9px] text-slate-500 dark:text-slate-300 mb-1 font-medium">Risk Level</p>
+                <p className="text-[11px] font-bold text-emerald-500 dark:text-emerald-500 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Low
+                </p>
+              </div>
+              <div>
+                <p className="text-[9px] text-slate-500 dark:text-slate-300 mb-1 font-medium">Repayment Confidence</p>
+                <p className="text-[11px] font-bold text-emerald-500 dark:text-emerald-500">96%</p>
+              </div>
+              <div>
+                <p className="text-[9px] text-slate-500 dark:text-slate-300 mb-1 font-medium">Next Review</p>
+                <p className="text-[11px] font-bold text-slate-900 dark:text-white">12 Jun 2025</p>
+              </div>
+            </div>
+
+            <button className="w-full py-3.5 bg-green-600  text-white rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-colors  active:scale-[0.98]">
+              Request Financing <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* ── PERFORMANCE INSIGHTS ── */}
+        <div>
+          <div className="flex items-center justify-between mb-2 px-1">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Performance Insights</h3>
+            <button className="text-[10px] font-semibold text-slate-600 dark:text-slate-400 flex items-center gap-1 bg-white dark:bg-[#151e32] px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800">
+              This Month <ChevronRight className="w-3 h-3 rotate-90" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            {/* Fulfillment */}
+            <div className="bg-white dark:bg-slate-900/60 rounded-xl p-4 border border-slate-200 dark:border-slate-700/50 ">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 rounded-md bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
+                </div>
+                <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300">Fulfillment Rate</span>
+              </div>
+              <h4 className="text-2xl font-black text-slate-900 dark:text-white leading-none mb-1">{stats.fulfillmentRate}%</h4>
+              <p className="text-[9px] font-bold text-emerald-500 dark:text-emerald-500 mb-2.5">Excellent</p>
+              <p className="text-[9px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <TrendingUp className="w-3 h-3 text-emerald-500" /> <span className="text-emerald-500 dark:text-emerald-500">+4%</span> from last month
+              </p>
+            </div>
+
+            {/* Avg Response */}
+            <div className="bg-white dark:bg-slate-900/60 rounded-xl p-4 border border-slate-200 dark:border-slate-700/50 ">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 rounded-md bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+                  <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
+                </div>
+                <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300">Avg. Response Time</span>
+              </div>
+              <h4 className="text-2xl font-black text-slate-900 dark:text-white leading-none mb-1">{stats.avgResponseTime}m</h4>
+              <p className="text-[9px] font-bold text-emerald-500 dark:text-emerald-500 mb-2.5">Excellent</p>
+              <p className="text-[9px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <TrendingUp className="w-3 h-3 text-emerald-500 rotate-180" /> <span className="text-emerald-500 dark:text-emerald-500">-6m</span> improvement
+              </p>
+            </div>
+
+            {/* Total Volume */}
+            <div className="bg-white dark:bg-slate-900/60 rounded-xl p-4 border border-slate-200 dark:border-slate-700/50 ">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 rounded-md bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+                  <Scale className="w-3.5 h-3.5 text-blue-600 dark:text-blue-500" />
+                </div>
+                <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300">Total Volume</span>
+              </div>
+              <div className="flex items-baseline gap-1 mb-3.5">
+                <h4 className="text-2xl font-black text-slate-900 dark:text-white leading-none">{(stats.totalWeight / 1000).toFixed(1)}</h4>
+                <span className="text-xs font-semibold text-slate-500">Ton</span>
+              </div>
+              <p className="text-[9px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <TrendingUp className="w-3 h-3 text-emerald-500" /> <span className="text-emerald-500 dark:text-emerald-500">+18%</span> from last month
+              </p>
+            </div>
+
+            {/* Total Trades */}
+            <div className="bg-white dark:bg-slate-900/60 rounded-xl p-4 border border-slate-200 dark:border-slate-700/50 ">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 rounded-md bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center">
+                  <Handshake className="w-3.5 h-3.5 text-purple-600 dark:text-purple-500" />
+                </div>
+                <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-300">Total Trades</span>
+              </div>
+              <h4 className="text-2xl font-black text-slate-900 dark:text-white leading-none mb-3.5">{stats.tradesCompleted}</h4>
+              <p className="text-[9px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <TrendingUp className="w-3 h-3 text-emerald-500" /> <span className="text-emerald-500 dark:text-emerald-500">+11%</span> from last month
+              </p>
             </div>
           </div>
         </div>
 
+        {/* ── TRUST MILESTONES (HORIZONTAL) ── */}
+        <div className="bg-white dark:bg-slate-900/60 p-5 rounded-xl border border-slate-200 dark:border-slate-700/50 ">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Trust Milestones</h3>
+            <button className="text-[10px] font-bold text-emerald-600 dark:text-emerald-500 flex items-center gap-1">
+              See all <ChevronRight className="w-3 h-3" />
+            </button>
+          </div>
 
+          <div className="relative flex justify-between items-start px-2">
+            {/* Connecting Line Base */}
+            <div className="absolute left-6 right-6 top-4 h-0.5 bg-slate-100 dark:bg-slate-800 z-0">
+              {/* Connecting Line Active (2/3 filled) */}
+              <div className="h-full bg-emerald-500 w-[66%]" />
+            </div>
 
-        {/* ── HUSTLE MILESTONES ── */}
-        <div className="space-y-4">
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-            <Award className="w-4 h-4 text-amber-500" /> Merchant Milestones
-          </h2>
-          <div className="space-y-3">
-            {milestones.map((m, i) => (
-              <div key={i} className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center gap-4 group">
-                <div className={`w-12 h-12 rounded-2xl ${m.status === 'Completed' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'} flex items-center justify-center shrink-0`}>
-                  <m.icon className="w-6 h-6" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-semibold text-slate-900 dark:text-white">{m.label}</h4>
-                    <span className={`text-xs font-semibold capitalize tracking-widest px-2 py-0.5 rounded-lg ${m.status === 'Completed' ? 'bg-emerald-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
-                      {m.status}
-                    </span>
-                  </div>
-                  <p className="text-xs font-medium text-slate-400 mt-1 leading-relaxed">{m.desc}</p>
-                </div>
+            {/* Node 1 */}
+            <div className="relative z-10 flex flex-col items-center gap-2 w-16">
+              <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center border-4 border-white dark:border-slate-800">
+                <CheckCircle2 className="w-4 h-4 text-white" />
               </div>
-            ))}
+              <div className="text-center">
+                <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight">Identity Verified</p>
+                <p className="text-[8px] font-semibold text-emerald-600 dark:text-emerald-500 mt-0.5">Completed</p>
+              </div>
+            </div>
+
+            {/* Node 2 */}
+            <div className="relative z-10 flex flex-col items-center gap-2 w-16">
+              <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center border-4 border-white dark:border-slate-800">
+                <CheckCircle2 className="w-4 h-4 text-white" />
+              </div>
+              <div className="text-center">
+                <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight">Reliable Partner</p>
+                <p className="text-[8px] font-semibold text-emerald-600 dark:text-emerald-500 mt-0.5">Completed</p>
+              </div>
+            </div>
+
+            {/* Node 3 */}
+            <div className="relative z-10 flex flex-col items-center gap-2 w-16">
+              <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center border-4 border-white dark:border-slate-800 text-slate-400">
+                <Star className="w-3.5 h-3.5" />
+              </div>
+              <div className="text-center">
+                <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight">Financing Eligible</p>
+                <p className="text-[8px] font-medium text-slate-500 mt-0.5">In Progress</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ── IMPROVEMENT TIP ── */}
-        <div className="bg-primary/5 dark:bg-primary/10 p-6 rounded-2xl border border-primary/10 flex gap-4">
-          <div className="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center text-primary shadow-sm shrink-0">
-            <Zap className="w-6 h-6 fill-primary" />
-          </div>
-          <div>
-            <h4 className="text-xs font-semibold text-primary capitalize tracking-widest">Boost Your Score</h4>
-            <p className="text-[11px] font-medium text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-              Consistently posting Grade A materials and confirming pickups instantly can boost your score by up to <span className="font-semibold">50 points</span> this month.
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

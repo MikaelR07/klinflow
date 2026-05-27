@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 
 // ── SUB-COMPONENTS (DEFINED OUTSIDE TO PREVENT RE-MOUNTS) ─────────────────────────
 
@@ -36,12 +37,11 @@ const MerchantPodiumSlot = memo(({ user, height, isFirst, rank }: { user: any, h
     <div className="flex flex-col items-center flex-1">
       <div className={`${isFirst ? 'w-20 h-20' : 'w-14 h-14'} rounded-[2rem] border-2 ${user ? `${theme.avatar}` : 'border-dashed border-slate-300 dark:border-slate-600'} flex items-center justify-center mb-3 relative overflow-hidden`}>
         {user?.avatar_url ? (
-          <img
+          <OptimizedImage
             src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 200 : 150 })}
             className="w-full h-full object-cover"
+            wrapperClassName="w-full h-full"
             alt={user.name}
-            loading={isFirst ? "eager" : "lazy"}
-            fetchPriority={isFirst ? "high" : "auto"}
           />
         ) : (
           <span className="text-xl">{user ? '👤' : '—'}</span>
@@ -66,12 +66,11 @@ const PodiumSlot = memo(({ user, height, bgClass, medalClass, isFirst }: { user:
   <div className="flex flex-col items-center flex-1">
     <div className={`${isFirst ? 'w-16 h-16' : 'w-12 h-12'} rounded-full border-2 ${user ? (isFirst ? 'border-amber-400 bg-amber-100' : 'border-slate-300 bg-slate-200 dark:bg-slate-700') : 'border-dashed border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800'} flex items-center justify-center mb-2 relative overflow-hidden`}>
       {user?.avatar_url ? (
-        <img
+        <OptimizedImage
           src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 150 : 100 })}
           className="w-full h-full object-cover"
+          wrapperClassName="w-full h-full"
           alt={user.name}
-          loading={isFirst ? "eager" : "lazy"}
-          fetchPriority={isFirst ? "high" : "auto"}
         />
       ) : (
         <span className="text-lg">{user ? '👤' : '—'}</span>
@@ -106,11 +105,11 @@ const SellerListItem = memo(({ user }: { user: any }) => (
       <span className={`text-xs font-black w-6 ${user.isUser ? 'text-emerald-400' : 'text-slate-400'}`}>#{user.rank}</span>
       <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg overflow-hidden border border-slate-100 dark:border-white/5">
         {user.avatar_url ? (
-          <img
+          <OptimizedImage
             src={getThumbnailUrl(user.avatar_url, { width: 100 })}
             className="w-full h-full object-cover"
+            wrapperClassName="w-full h-full"
             alt={user.name}
-            loading="lazy"
           />
         ) : '👤'}
       </div>
@@ -139,11 +138,11 @@ const ResidentListItem = memo(({ user }: { user: any }) => (
       <span className={`text-xs font-black w-6 ${user.isUser ? 'text-primary' : 'text-slate-400'}`}>#{user.rank}</span>
       <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg overflow-hidden border border-slate-100 dark:border-white/5">
         {user.avatar_url ? (
-          <img
+          <OptimizedImage
             src={getThumbnailUrl(user.avatar_url, { width: 100 })}
             className="w-full h-full object-cover"
+            wrapperClassName="w-full h-full"
             alt={user.name}
-            loading="lazy"
           />
         ) : '👤'}
       </div>
@@ -393,7 +392,7 @@ export default function Leaderboard() {
 
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-2">
         {/* Hero Banner */}
-        <div className="bg-gradient-to-br from-primary to-indigo-600 p-8 rounded-2xl text-white relative overflow-hidden">
+        <div className="bg-gradient-to-br from-primary  to-emerald-800 p-8 rounded-2xl text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
           <div className="relative z-10 text-center">
             <Crown className="w-12 h-12 text-amber-400 mx-auto mb-4" />

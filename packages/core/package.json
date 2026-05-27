@@ -13,6 +13,8 @@
     "./validation/*": "./src/validation/*.ts",
     "./lib/*": "./src/lib/*.ts",
     "./data/*": "./src/data/*.ts",
+    "./offline": "./src/offline/index.ts",
+    "./offline/*": "./src/offline/*.ts",
     "./src/*": "./src/*"
   },
   "dependencies": {

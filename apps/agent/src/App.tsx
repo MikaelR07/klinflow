@@ -16,6 +16,7 @@ import PWAInstallModal from '@klinflow/ui/components/PWAInstallModal';
 import ProtectedRoute from '@klinflow/ui/components/ProtectedRoute';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 import { Toaster } from 'sonner';
+import { OfflineBanner } from '@klinflow/ui';
 
 // LAZY LOADED PAGES
 const AgentHome = lazy(() => import('./pages/agent/AgentHome'));
@@ -177,6 +178,7 @@ export default function App() {
 
   return (
     <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
+      <OfflineBanner />
       <Routes>
         <Route path="/welcome" element={isAuthenticated ? <Navigate to="/" replace /> : <Welcome />} />
         <Route path="/role-selection" element={isAuthenticated ? <Navigate to="/" replace /> : <RoleSelection />} />

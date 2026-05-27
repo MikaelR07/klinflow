@@ -1,3 +1,4 @@
+import { OptimizedImage } from "@klinflow/ui";
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Clock, Scale, Coins, Truck, CheckCircle2, XCircle, MapPin, Package, MessageSquare } from 'lucide-react';
@@ -105,10 +106,11 @@ export default function SubmittedQuoteDetailsPage() {
           >
             {quote.imageUrls.map((url: string, index: number) => (
               <div key={index} className="w-full h-full shrink-0 snap-center">
-                <img 
+                <OptimizedImage 
                   src={url} 
                   alt={`${quote.material} view ${index + 1}`}
                   className="w-full h-full object-cover"
+                  wrapperClassName="w-full h-full"
                 />
               </div>
             ))}

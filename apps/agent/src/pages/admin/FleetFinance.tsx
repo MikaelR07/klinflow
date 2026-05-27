@@ -20,6 +20,7 @@ import { supabase } from '@klinflow/supabase';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { OptimizedImage } from '@klinflow/ui';
 
 const playNotificationSound = () => {
   try {
@@ -211,9 +212,10 @@ export default function FleetFinance() {
                     >
                       <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center flex-shrink-0 overflow-hidden border border-slate-200 dark:border-slate-700">
                         {req.driver_avatar ? (
-                          <img 
+                          <OptimizedImage 
                             src={req.driver_avatar} 
                             className="w-full h-full object-cover" 
+                            wrapperClassName="w-full h-full"
                             onError={(e) => {
                               (e.target as any).src = "https://ui-avatars.com/api/?name=" + encodeURIComponent(req.driver_name) + "&background=random";
                             }}

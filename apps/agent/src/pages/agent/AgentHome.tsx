@@ -44,6 +44,7 @@ import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { useAssetStore } from '@klinflow/core/stores/assetStore';
 import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import PushNotificationModal from '@klinflow/ui/components/PushNotificationModal';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
@@ -138,10 +139,10 @@ export default function AgentHome() {
           rfq:rfqs(category)
         `)
         .eq('assigned_agent_id', profile.id)
-        .not('status', 'in', '("completed","cancelled")')
+        .not('status', 'in', '(completed,cancelled)')
         .order('created_at', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (pickupData) setActivePickup(pickupData);
       else setActivePickup(null);
@@ -378,7 +379,7 @@ export default function AgentHome() {
               <div className="shrink-0">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
                   {profile?.avatarUrl ? (
-                    <img src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" />
+                    <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                   ) : (
                     profile?.avatar || '👤'
                   )}
@@ -550,7 +551,7 @@ export default function AgentHome() {
 
       {/* ── PERFORMANCE CARD ── */}
       <div className="relative !mt-2.5">
-        <div className="relative bg-gradient-to-br from-[#064e3b] to-[#022c22] dark:from-emerald-900 dark:to-slate-900 rounded-2xl p-3 shadow-none">
+        <div className="relative bg-gradient-to-br from-[#064e3b] to-primary dark:from-emerald-900 dark:to-primary rounded-2xl p-3 shadow-none">
 
           {/* TOP SECTION */}
           <div className="flex items-start justify-between gap-3 mb-4">
@@ -736,17 +737,17 @@ export default function AgentHome() {
 
         <button
           onClick={() => navigate('/routes')}
-          className="w-full bg-emerald-700 !mt-3 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all"
+          className="w-full bg-emerald-700 !mt-3 dark:bg-gradient-to-br from-primary to-[#064e3b] border border-slate-100 dark:border-slate-800 rounded-xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all"
         >
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-500/20 rounded-xl flex items-center justify-center shrink-0">
-              <Navigation className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-500/50 rounded-xl flex items-center justify-center shrink-0">
+              <Navigation className="w-5 h-5 text-blue-600 dark:text-white" />
             </div>
             <div className="text-left flex-1 min-w-0">
-              <p className="text-[10px] font-semibold text-white dark:text-blue-400 tracking-wide leading-none mb-1">
+              <p className="text-[14px] font-semibold text-white dark:text-blue-100 tracking-wide leading-none mb-1">
                 Route Optimizer
-              </p>              <p className="text-xs font-bold text-amber-300 dark:text-white">Logistics Terminal</p>
-              <p className="text-[10px] text-slate-50 dark:text-slate-400 font-medium mt-0.5">Live Multi-Stop Tracking</p>
+              </p>              <p className="text-[10px] font-bold text-amber-300 dark:text-slate-100/80">Logistics Terminal</p>
+              <p className="text-[10px] text-slate-50 dark:text-slate-300 font-medium mt-0.5">Live Multi-Stop Tracking</p>
             </div>
           </div>
           <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-500 group-hover:text-blue-500" />
@@ -759,8 +760,8 @@ export default function AgentHome() {
         >
 
           <div className="flex items-center gap-4 relative z-10">
-            <div className="w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
-              <TrendingUp className="w-5 h-5" />
+            <div className="w-10 h-10 bg-indigo-600   rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
+              <BarChart2 className="w-5 h-5 text-white" />
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-100 dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
@@ -769,8 +770,8 @@ export default function AgentHome() {
               </p>
             </div>
           </div>
-          <div className="p-1.5 bg-white dark:bg-slate-800 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
-            <ArrowRight className="w-3.5 h-3.5" />
+          <div className="p-1.5  rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
+            <ArrowRight className="w-3.5 h-3.5 text-white" />
           </div>
         </div>
       </div>

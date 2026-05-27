@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { idbStorage } from '../offline';
 import { supabase } from '../lib/supabaseClient';
 import { FulfillmentOrder, DeliveryAssignment } from './fulfillmentStore.types';
 
@@ -18,7 +20,9 @@ interface FulfillmentStore {
   subscribeToFulfillments: (userId: string) => () => void;
 }
 
-export const useFulfillmentStore = create<FulfillmentStore>((set, get) => ({
+export const useFulfillmentStore = create<FulfillmentStore>()(
+  persist(
+    (set, get) => ({
   activeFulfillments: [],
   dispatchQueue: [],
   fleetAssignments: [],
@@ -38,7 +42,7 @@ export const useFulfillmentStore = create<FulfillmentStore>((set, get) => ({
       }
 
       const { data, error } = await query
-        .not('status', 'in', '("completed","cancelled")')
+        .not('status', 'in', '(completed,cancelled)')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -221,4 +225,15 @@ export const useFulfillmentStore = create<FulfillmentStore>((set, get) => ({
       supabase.removeChannel(channel);
     };
   }
-}));
+}),
+    {
+      name: 'fulfillment-store',
+      storage: idbStorage,
+      partialize: (state) => ({
+        activeFulfillments: state.activeFulfillments.slice(0, 100),
+        dispatchQueue: state.dispatchQueue.slice(0, 100),
+        fleetAssignments: state.fleetAssignments.slice(0, 100)
+      })
+    }
+  )
+);

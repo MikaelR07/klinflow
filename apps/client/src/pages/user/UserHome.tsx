@@ -18,6 +18,7 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 
 import { toast } from 'sonner';
 import PushNotificationModal from '@klinflow/ui/components/PushNotificationModal';
@@ -172,14 +173,14 @@ export default function UserHome() {
       {/* ── TOP NAV & HERO ── */}
       <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
         {/* Header Section - Edge to Edge - DYNAMIC STICKY */}
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700 ">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-600 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
               <div className="shrink-0">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
                   {profile?.avatarUrl ? (
-                    <img src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" />
+                    <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                   ) : (
                     profile?.avatarUrl || '👤'
                   )}
@@ -267,39 +268,51 @@ export default function UserHome() {
         <div className="bg-white dark:bg-slate-900/50 !mt-3 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2">
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-3 gap-2.5">
+          <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1 ">
+            Quick Actions
+          </p>
+          <div className="grid grid-cols-4 gap-2">
             <button onClick={() => navigate('/book-pickup')}
-              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-              <div className="w-12 h-12 bg-primary text-white rounded-xl flex items-center justify-center ">
-                <Truck className="w-6 h-6" />
+              className="dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative">
+              <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Truck className="w-5 h-5" />
               </div>
-              <div className="text-center">
-                <p className="text-[9px] font-semibold text-primary capitalize tracking-widest mb-0.5">Book Now</p>
-                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Pickup</p>
+              <div className="text-center mt-auto">
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">Pickup</p>
               </div>
             </button>
 
             <button onClick={() => navigate('/my-bookings')}
-              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-              <div className="w-12 h-12 bg-indigo-500 text-white rounded-xl flex items-center justify-center ">
-                <Recycle className="w-6 h-6" />
+              className="dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative">
+              <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Recycle className="w-5 h-5" />
               </div>
-              <div className="text-center">
-                <p className="text-[9px] font-semibold text-indigo-600 capitalize tracking-widest mb-0.5">Track</p>
-                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Bookings</p>
+              <div className="text-center mt-auto">
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">Bookings</p>
               </div>
             </button>
 
-            <button onClick={() => navigate('/analytics')}
-              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl p-3.5 flex flex-col items-center gap-2.5 active:scale-[0.98] transition-all shadow-sm gpu-layer">
-              <div className="w-12 h-12 bg-emerald-500 text-white rounded-xl flex items-center justify-center ">
-                <BarChart2 className="w-6 h-6" />
+            <button onClick={() => navigate('/Analytics')}
+              className="dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative">
+              <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <BarChart2Icon className="w-5 h-5" />
               </div>
-              <div className="text-center">
-                <p className="text-[9px] font-semibold text-emerald-600 capitalize tracking-widest mb-0.5">Stats</p>
-                <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Dashboard</p>
+              <div className="text-center mt-auto">
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">Dashboard</p>
               </div>
             </button>
+
+            <button onClick={() => navigate('/resident-wallet')}
+              className="dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative">
+              <div className="w-10 h-10 bg-amber-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Wallet className="w-5 h-5" />
+              </div>
+              <div className="text-center mt-auto">
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">Wallet</p>
+              </div>
+            </button>
+
+
           </div>
           {/* Discovery Entry Point */}
           <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
@@ -324,7 +337,7 @@ export default function UserHome() {
         {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
         <div
           onClick={() => navigate('/market-pulse')}
-          className="bg-gradient-to-r from-emerald-500 to-emerald-900 dark:bg-gradient-to-br from-emerald-800 via-teal-700 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+          className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800  border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
         >
           <div className="flex items-center gap-4 relative z-10">
             <div className="w-10 h-10  rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
@@ -344,7 +357,7 @@ export default function UserHome() {
         {/* ── LEADERBOARD RANKING ── */}
         <div
           onClick={() => navigate('/leaderboard')}
-          className="bg-gradient-to-r from-blue-600 to-violet-600 !mt-3 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
+          className="bg-gradient-to-r from-blue-600 to-green-600 !mt-3 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
         >
           <div className="flex items-center gap-4 relative z-10">
             <div className="w-10 h-10   rounded-xl flex items-center justify-center text-emerald-600 ">

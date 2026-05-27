@@ -1,16 +1,16 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  Flame, 
-  Trophy, 
-  Medal, 
-  Zap, 
-  Leaf, 
-  Loader2, 
-  Info, 
-  X, 
-  CheckCircle2, 
+import {
+  ArrowLeft,
+  Flame,
+  Trophy,
+  Medal,
+  Zap,
+  Leaf,
+  Loader2,
+  Info,
+  X,
+  CheckCircle2,
   Lock,
   ChevronRight,
   TrendingUp,
@@ -66,13 +66,13 @@ function calculateStreak(bookings: Booking[]) {
   });
 
   const sortedWeeks = [...weeks].sort().reverse();
-  
+
   // Count consecutive weeks from the most recent
   let streak = 0;
   const now = new Date();
   now.setDate(now.getDate() - now.getDay());
   const currentWeek = now.toISOString().slice(0, 10);
-  
+
   // Check if the most recent week is this week or last week
   if (sortedWeeks[0] !== currentWeek) {
     const lastWeek = new Date(now);
@@ -112,7 +112,7 @@ export default function ImpactHub() {
   const badgeStats = useMemo(() => {
     const completed = bookings.filter(b => b.status === 'completed');
     const wasteTypes = completed.map(b => (b.wasteType || '').toLowerCase());
-    
+
     return {
       totalPickups: completed.length,
       gfp: profile?.rewardPoints || 0,
@@ -155,215 +155,214 @@ export default function ImpactHub() {
 
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-3 pb-10 space-y-6">
 
-      {/* Main Stats Card */}
-      <div className="card bg-gradient-to-br from-primary to-emerald-600 p-6 text-white border-0 overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
-        
-        <div className="flex items-center gap-4 mb-6 relative">
-          <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl">
-            {metrics.icon}
-          </div>
-          <div>
-            <p className="text-xs font-semibold capitalize tracking-widest opacity-80">Current Rank</p>
-            <h2 className="text-2xl font-semibold">{metrics.tier}</h2>
-          </div>
-          <div className="ml-auto text-right">
-            <p className="text-xs font-semibold capitalize tracking-widest opacity-80">Impact Score</p>
-            <p className="text-lg font-mono font-semibold">{profile?.rewardPoints || 0} GFP</p>
-          </div>
-        </div>
+        {/* Main Stats Card */}
+        <div className="card bg-gradient-to-br from-primary to-emerald-600 p-6 text-white border-0 overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
 
-        <div className="space-y-1.5 relative">
-          <div className="flex justify-between items-end text-xs font-semibold capitalize tracking-widest">
-            <span>Progress to {metrics.nextTier}</span>
-            <span>{Math.round(metrics.progress)}%</span>
+          <div className="flex items-center gap-4 mb-6 relative">
+            <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl">
+              {metrics.icon}
+            </div>
+            <div>
+              <p className="text-xs font-semibold capitalize tracking-widest opacity-80">Current Rank</p>
+              <h2 className="text-2xl font-semibold">{metrics.tier}</h2>
+            </div>
+            <div className="ml-auto text-right">
+              <p className="text-xs font-semibold capitalize tracking-widest opacity-80">Impact Score</p>
+              <p className="text-lg font-mono font-semibold">{profile?.rewardPoints || 0} GFP</p>
+            </div>
           </div>
-          <div className="h-3 w-full bg-black/20 rounded-full overflow-hidden border border-white/10 p-0.5">
-            <div 
-              className="h-full bg-white rounded-full transition-all duration-1000"
-              style={{ width: `${metrics.progress}%` }}
-            ></div>
-          </div>
-          <p className="text-xs font-semibold text-center opacity-70 italic mt-1">
-            Your recycling efforts have recovered {kgRecovered}kg of waste from landfills
-          </p>
-        </div>
-      </div>
 
-      {/* Streaks & Quick Stats */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="card p-4 rounded-2xl border-0 flex items-center gap-3 bg-orange-500 text-white">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20">
-            <Flame className="w-5 h-5 text-white fill-white" />
-          </div>
-          <div>
-            <p className="text-[10px] font-bold capitalize leading-none mb-1.5 text-white/70">Streak</p>
-            <p className="text-lg font-semibold leading-none">
-              {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'None'}
+          <div className="space-y-1.5 relative">
+            <div className="flex justify-between items-end text-xs font-semibold capitalize tracking-widest">
+              <span>Progress to {metrics.nextTier}</span>
+              <span>{Math.round(metrics.progress)}%</span>
+            </div>
+            <div className="h-3 w-full bg-black/20 rounded-full overflow-hidden border border-white/10 p-0.5">
+              <div
+                className="h-full bg-white rounded-full transition-all duration-1000"
+                style={{ width: `${metrics.progress}%` }}
+              ></div>
+            </div>
+            <p className="text-xs font-semibold text-center opacity-70 italic mt-1">
+              Your recycling efforts have recovered {kgRecovered}kg of waste from landfills
             </p>
           </div>
         </div>
-        <div className="card p-4 rounded-2xl border-0 bg-blue-600 text-white flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-            <Zap className="w-5 h-5 text-white fill-white" />
-          </div>
-          <div>
-            <p className="text-[10px] font-bold capitalize text-white/70 leading-none mb-1.5">Recovered</p>
-            <p className="text-lg font-semibold leading-none">{kgRecovered}kg</p>
-          </div>
-        </div>
-      </div>
 
-      {/* Badges Showcase */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="font-extrabold flex items-center gap-2">
-            <Medal className="w-4 h-4 text-amber-500" /> Badges
-          </h3>
-          <button 
-            onClick={() => setShowBadgeModal(true)}
-            className="text-xs font-semibold text-primary capitalize tracking-widest flex items-center gap-1 hover:underline"
-          >
-            How to earn <ChevronRight className="w-3 h-3" />
-          </button>
-        </div>
-        <div className="grid grid-cols-3 gap-3">
-          {badges.map(badge => (
-            <div 
-              key={badge.id} 
-              onClick={() => setShowBadgeModal(true)}
-              className={`card p-3 text-center transition-all cursor-pointer ${!badge.unlocked ? 'grayscale opacity-40' : 'border-amber-100 bg-amber-50/10'}`}
-            >
-              <div className={`text-3xl mb-1.5 ${badge.unlocked ? 'transform hover:scale-110 transition-transform' : ''}`}>
-                {badge.icon}
-              </div>
-              <p className="text-xs font-semibold leading-tight capitalize tracking-tighter text-slate-700 dark:text-slate-300">
-                {badge.name}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-
-
-      {/* Badge Guide Modal */}
-      {showBadgeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-900/60" onClick={() => setShowBadgeModal(false)} />
-          <div className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in duration-300">
-            <div className="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center">
-                  <Award className="w-6 h-6 text-amber-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm capitalize tracking-widest">Badge Guide</h3>
-                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">How to earn badges</p>
-                </div>
-              </div>
-              <button onClick={() => setShowBadgeModal(false)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl">
-                <X className="w-5 h-5 text-slate-400" />
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-              {badges.map(badge => (
-                <div 
-                  key={badge.id}
-                  className={`p-4 rounded-3xl border flex items-center gap-4 transition-all ${
-                    badge.unlocked 
-                    ? 'bg-emerald-50/50 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-800/30' 
-                    : 'bg-slate-50 dark:bg-slate-800/30 border-slate-100 dark:border-slate-800'
-                  }`}
-                >
-                  <div className={`text-3xl ${!badge.unlocked && 'grayscale opacity-50'}`}>
-                    {badge.icon}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-xs font-semibold capitalize tracking-tight">{badge.name}</h4>
-                      {badge.unlocked ? (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/10" />
-                      ) : (
-                        <Lock className="w-3 h-3 text-slate-300" />
-                      )}
-                    </div>
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                      {badge.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-6 bg-slate-50 dark:bg-slate-800/50">
-              <button 
-                onClick={() => setShowBadgeModal(false)}
-                className="w-full py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.98] transition-all"
-              >
-                Got it, Captain!
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Environmental Impact Card (New Addition) */}
-      <div className="card bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 relative overflow-hidden mt-8">
-         <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
-               <Globe className="w-6 h-6" />
+        {/* Streaks & Quick Stats */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="card p-4 rounded-2xl border-0 flex items-center gap-3 bg-orange-500 text-white">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20">
+              <Flame className="w-5 h-5 text-white fill-white" />
             </div>
             <div>
-               <h3 className="text-lg font-bold text-slate-800 dark:text-white leading-tight tracking-tight">Environmental Impact</h3>
-               <p className="text-[10px] text-slate-400 font-black capitalize tracking-[0.2em]">Verified Sustainability Score</p>
+              <p className="text-[10px] font-bold capitalize leading-none mb-1.5 text-white/70">Streak</p>
+              <p className="text-lg font-semibold leading-none">
+                {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'None'}
+              </p>
             </div>
-         </div>
-         
-         <div className="grid grid-cols-1 gap-6">
-            <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
-               <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-600">
-                     <TrendingUp className="w-5 h-5" />
-                  </div>
-                  <span className="text-xs font-black text-slate-600 dark:text-slate-400 capitalize tracking-widest">CO2 Mitigated</span>
-               </div>
-               <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg * 1.5).toFixed(1)} KG</span>
+          </div>
+          <div className="card p-4 rounded-2xl border-0 bg-blue-600 text-white flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+              <Zap className="w-5 h-5 text-white fill-white" />
             </div>
+            <div>
+              <p className="text-[10px] font-bold capitalize text-white/70 leading-none mb-1.5">Recovered</p>
+              <p className="text-lg font-semibold leading-none">{kgRecovered}kg</p>
+            </div>
+          </div>
+        </div>
 
-            <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
-               <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-600">
-                     <Leaf className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-black text-slate-600 dark:text-slate-400 capitalize tracking-widest">Tree Equivalent</span>
-                 </div>
-                 <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg / 20).toFixed(1)} <span className="text-xs font-bold capitalize">Trees</span></span>
+        {/* Badges Showcase */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-extrabold flex items-center gap-2">
+              <Medal className="w-4 h-4 text-amber-500" /> Badges
+            </h3>
+            <button
+              onClick={() => setShowBadgeModal(true)}
+              className="text-xs font-semibold text-primary capitalize tracking-widest flex items-center gap-1 hover:underline"
+            >
+              How to earn <ChevronRight className="w-3 h-3" />
+            </button>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            {badges.map(badge => (
+              <div
+                key={badge.id}
+                onClick={() => setShowBadgeModal(true)}
+                className={`card p-3 text-center transition-all cursor-pointer ${!badge.unlocked ? 'grayscale opacity-40' : 'border-amber-100 bg-amber-50/10'}`}
+              >
+                <div className={`text-3xl mb-1.5 ${badge.unlocked ? 'transform hover:scale-110 transition-transform' : ''}`}>
+                  {badge.icon}
+                </div>
+                <p className="text-xs font-semibold leading-tight capitalize tracking-tighter text-slate-700 dark:text-slate-300">
+                  {badge.name}
+                </p>
               </div>
-           </div>
+            ))}
+          </div>
         </div>
 
-      {/* The Path to Mastery */}
-      <div className="card bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 p-6 rounded-[2.5rem] relative overflow-hidden mt-8">
-        <div className="absolute top-0 right-0 p-4 opacity-10">
-          <Sparkles className="w-20 h-20 text-primary" />
+
+
+        {/* Badge Guide Modal */}
+        {showBadgeModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center pb-20 p-2">
+            <div className="absolute inset-0 bg-slate-900/60" onClick={() => setShowBadgeModal(false)} />
+            <div className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in duration-300">
+              <div className="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center">
+                    <Award className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm capitalize tracking-widest">Badge Guide</h3>
+                    <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">How to earn badges</p>
+                  </div>
+                </div>
+                <button onClick={() => setShowBadgeModal(false)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl">
+                  <X className="w-5 h-5 text-slate-400" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                {badges.map(badge => (
+                  <div
+                    key={badge.id}
+                    className={`p-4 rounded-3xl border flex items-center gap-4 transition-all ${badge.unlocked
+                      ? 'bg-emerald-50/50 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-800/30'
+                      : 'bg-slate-50 dark:bg-slate-800/30 border-slate-100 dark:border-slate-800'
+                      }`}
+                  >
+                    <div className={`text-3xl ${!badge.unlocked && 'grayscale opacity-50'}`}>
+                      {badge.icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-xs font-semibold capitalize tracking-tight">{badge.name}</h4>
+                        {badge.unlocked ? (
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/10" />
+                        ) : (
+                          <Lock className="w-3 h-3 text-slate-300" />
+                        )}
+                      </div>
+                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
+                        {badge.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-6 bg-slate-50 dark:bg-slate-800/50">
+                <button
+                  onClick={() => setShowBadgeModal(false)}
+                  className="w-full py-4 bg-green-600 dark:bg-slate-700 text-white rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.98] transition-all"
+                >
+                  Got it, Captain!
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Environmental Impact Card (New Addition) */}
+        <div className="card bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 relative overflow-hidden mt-8">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+              <Globe className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-800 dark:text-white leading-tight tracking-tight">Environmental Impact</h3>
+              <p className="text-[10px] text-slate-400 font-black capitalize tracking-[0.2em]">Verified Sustainability Score</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6">
+            <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-600">
+                  <TrendingUp className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-black text-slate-600 dark:text-slate-400 capitalize tracking-widest">CO2 Mitigated</span>
+              </div>
+              <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg * 1.5).toFixed(1)} KG</span>
+            </div>
+
+            <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-600">
+                  <Leaf className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-black text-slate-600 dark:text-slate-400 capitalize tracking-widest">Tree Equivalent</span>
+              </div>
+              <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg / 20).toFixed(1)} <span className="text-xs font-bold capitalize">Trees</span></span>
+            </div>
+          </div>
         </div>
-        <div className="relative z-10">
-          <h3 className="text-lg font-semibold tracking-tight mb-2">The Path to Mastery 🏆</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
-            You've unlocked <span className="text-primary font-semibold">{unlockedCount} of {badges.length}</span> badges. 
-            Keep recycling to become a <span className="text-slate-900 dark:text-white font-semibold italic">Certified Sustainability Hero</span> and unlock exclusive M-Pesa reward multipliers!
-          </p>
-          <button 
-            onClick={() => navigate('/book-pickup')}
-            className="w-full py-4 bg-primary text-white rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-95 transition-all"
-          >
-            Level Up Now
-          </button>
+
+        {/* The Path to Mastery */}
+        <div className="card bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 p-6 rounded-[2.5rem] relative overflow-hidden mt-8">
+          <div className="absolute top-0 right-0 p-4 opacity-10">
+            <Sparkles className="w-20 h-20 text-primary" />
+          </div>
+          <div className="relative z-10">
+            <h3 className="text-lg font-semibold tracking-tight mb-2">The Path to Mastery 🏆</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+              You've unlocked <span className="text-primary font-semibold">{unlockedCount} of {badges.length}</span> badges.
+              Keep recycling to become a <span className="text-slate-900 dark:text-white font-semibold italic">Certified Sustainability Hero</span> and unlock exclusive M-Pesa reward multipliers!
+            </p>
+            <button
+              onClick={() => navigate('/book-pickup')}
+              className="w-full py-4 bg-primary text-white rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-95 transition-all"
+            >
+              Level Up Now
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
 }

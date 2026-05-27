@@ -11,6 +11,7 @@ import {
 import { supabase } from '@klinflow/supabase';
 import { MATERIAL_LABELS } from '@klinflow/core/data/wasteDefinitions';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { toast } from 'sonner';
 
 export default function CompanyProfile() {
@@ -73,7 +74,7 @@ export default function CompanyProfile() {
             <div className="flex items-center gap-4 mb-4">
               <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-3xl shadow-sm shrink-0 relative overflow-hidden">
                 {company?.avatarUrl || company?.avatar_url ? (
-                  <img src={getThumbnailUrl(company.avatarUrl || company.avatar_url, { width: 150 })} className="w-full h-full object-cover" loading="lazy" />
+                  <OptimizedImage src={getThumbnailUrl(company.avatarUrl || company.avatar_url, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                 ) : (
                   isFleetAdmin ? '🏢' : '🚛'
                 )}

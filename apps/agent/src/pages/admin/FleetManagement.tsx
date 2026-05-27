@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { Users, Search, Filter, Mail, Phone, MoreVertical, ShieldCheck, UserMinus, UserPlus, Copy, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -136,7 +137,7 @@ export default function FleetManagement() {
                             agent.is_online ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-slate-50 border-slate-100 text-slate-400'
                           }`}>
                             {agent.avatar_url ? (
-                              <img src={getThumbnailUrl(agent.avatar_url, { width: 150 })} className="w-full h-full object-cover" />
+                              <OptimizedImage src={getThumbnailUrl(agent.avatar_url, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                             ) : (
                               agent.name.charAt(0).toUpperCase()
                             )}

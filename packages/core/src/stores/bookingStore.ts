@@ -2,6 +2,8 @@
  * bookingStore.ts — Logistics & Pickup Management
  */
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { idbStorage } from '../offline';
 import { toast } from 'sonner';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from './authStore';
@@ -19,7 +21,9 @@ import {
   safeParseOrNull
 } from '../validation';
 
-export const useBookingStore = create<BookingStore>((set, get) => ({
+export const useBookingStore = create<BookingStore>()(
+  persist(
+    (set, get) => ({
   bookings: [],
   liveAgents: [],
   aiSuggestions: [],
@@ -332,4 +336,13 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
       throw err;
     }
   }
-}));
+}),
+    {
+      name: 'booking-store',
+      storage: idbStorage,
+      partialize: (state) => ({
+        bookings: state.bookings.slice(0, 100), // Keep 100 recent
+      })
+    }
+  )
+);

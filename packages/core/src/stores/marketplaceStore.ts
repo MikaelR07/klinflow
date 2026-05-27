@@ -2,6 +2,8 @@
  * marketplaceStore.ts — B2B Circular Economy Marketplace State
  */
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { idbStorage } from '../offline';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from './authStore';
 import { useNotificationStore } from './notificationStore';
@@ -22,7 +24,9 @@ import {
   safeParseOrNull
 } from '../validation';
 
-export const useMarketplaceStore = create<MarketplaceStore>((set, get) => ({
+export const useMarketplaceStore = create<MarketplaceStore>()(
+  persist(
+    (set, get) => ({
   listings: [],
   myListings: [],
   myOrders: [],
@@ -717,4 +721,18 @@ export const useMarketplaceStore = create<MarketplaceStore>((set, get) => ({
 
     return channel;
   }
-}));
+}),
+    {
+      name: 'marketplace-store',
+      storage: idbStorage,
+      partialize: (state) => ({
+        listings: state.listings.slice(0, 100),
+        myListings: state.myListings.slice(0, 50),
+        myOrders: state.myOrders.slice(0, 50),
+        receivedOrders: state.receivedOrders.slice(0, 50),
+        receivedOffers: state.receivedOffers.slice(0, 50),
+        sentOffers: state.sentOffers.slice(0, 50)
+      })
+    }
+  )
+);

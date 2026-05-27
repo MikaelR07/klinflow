@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import EmptyState from '@klinflow/ui/components/EmptyState';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 import { toast } from 'sonner';
@@ -146,7 +147,7 @@ export default function MarketplaceInventory() {
                   {((selectedListing?.photoUrls && selectedListing.photoUrls.length > 0) ? selectedListing.photoUrls : [selectedListing?.photoUrl]).map((imgUrl, idx) => (
                     <div key={idx} className="flex-none w-full h-full snap-start">
                       {imgUrl ? (
-                        <img src={getThumbnailUrl(imgUrl, { width: 800 })} loading="lazy" className="w-full h-full object-cover" alt={`${selectedListing.material} - View ${idx + 1}`} />
+                        <OptimizedImage src={getThumbnailUrl(imgUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={`${selectedListing.material} - View ${idx + 1}`} />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
                           <Package className="w-20 h-20 text-slate-200" />
@@ -276,7 +277,7 @@ export default function MarketplaceInventory() {
                         <div className="flex items-center gap-4">
                           <div className="w-20 h-20 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
                             {listing.photoUrl ? (
-                              <img src={getThumbnailUrl(listing.photoUrl, { width: 150 })} loading="lazy" className="w-full h-full object-cover" />
+                              <OptimizedImage src={getThumbnailUrl(listing.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                             ) : (
                               <Package className="w-6 h-6 text-slate-200" />
                             )}

@@ -11,6 +11,7 @@ import {
   ShieldCheck, Info
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { OptimizedImage } from '@klinflow/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -61,7 +62,7 @@ export default function CommunityCollective() {
             <div className="absolute inset-0 bg-gradient-to-r from-[#0b3c2d] via-[#0b3c2d]/50 to-transparent z-10" />
             {/* Vertical fade to blend seamlessly into the bottom stats area */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0b3c2d]/40 to-[#0b3c2d] z-10" />
-            <img src="/vectors/community.webp" alt="Community" className="w-full h-full object-cover object-right-top mix-blend-screen opacity-90 relative z-0" />
+            <OptimizedImage src="/vectors/community.webp" alt="Community" className="w-full h-full object-cover object-right-top mix-blend-screen opacity-90 relative z-0" wrapperClassName="absolute inset-0 z-0" />
           </div>
 
           <div className="relative z-10 space-y-5">
@@ -136,7 +137,7 @@ export default function CommunityCollective() {
                   <div className="flex items-center gap-2.5">
                     <div className="flex -space-x-2">
                       {[1, 2, 3].map((i) => (
-                        <img key={i} src={`https://i.pravatar.cc/100?img=${i + 10}`} className="w-7 h-7 rounded-full border-2 border-white object-cover" alt="avatar" />
+                        <OptimizedImage key={i} src={`https://i.pravatar.cc/100?img=${i + 10}`} className="w-7 h-7 rounded-full border-2 border-white object-cover" wrapperClassName="w-7 h-7 rounded-full" alt="avatar" />
                       ))}
                     </div>
                     <p className="text-[10px] font-bold text-slate-400">+{swarm.participants} members</p>
@@ -202,7 +203,7 @@ export default function CommunityCollective() {
                 <div className="flex items-center gap-2.5">
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4].map((i) => (
-                      <img key={i} src={`https://i.pravatar.cc/100?img=${i + 20}`} className="w-7 h-7 rounded-full border-2 border-white object-cover" alt="avatar" />
+                      <OptimizedImage key={i} src={`https://i.pravatar.cc/100?img=${i + 20}`} className="w-7 h-7 rounded-full border-2 border-white object-cover" wrapperClassName="w-7 h-7 rounded-full" alt="avatar" />
                     ))}
                   </div>
                   <p className="text-[10px] font-bold text-slate-400">128 members contributing</p>

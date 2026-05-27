@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@klinflow/supabase';
 import { MATERIAL_LABELS, WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { normalizeKeys } from '@klinflow/core/validation';
 
 const SCALE_DEFS = [
@@ -203,7 +204,7 @@ export default function DiscoveryHub() {
                         isCompany ? 'bg-indigo-50 dark:bg-indigo-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30'
                       }`}>
                         {partner.avatarUrl ? (
-                          <img src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" loading="lazy" />
+                          <OptimizedImage src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
                           isCompany ? '🏢' : '🚛'
                         )}

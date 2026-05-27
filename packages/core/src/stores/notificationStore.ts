@@ -2,6 +2,8 @@
  * notificationStore.ts — Klinflow KE Cross-App Notifications (Supabase)
  */
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { idbStorage } from '../offline';
 import { supabase } from '../lib/supabaseClient';
 import { useAuthStore } from './authStore';
 import { toast } from 'sonner';
@@ -32,7 +34,9 @@ const parseSerializedMetadata = (n: any) => {
   return n;
 };
 
-export const useNotificationStore = create<NotificationStore>((set, get) => ({
+export const useNotificationStore = create<NotificationStore>()(
+  persist(
+    (set, get) => ({
   notifications: [],
   subscription: null,
   userId: null,
@@ -397,4 +401,13 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     }
     return outputArray;
   }
-}));
+}),
+    {
+      name: 'notification-store',
+      storage: idbStorage,
+      partialize: (state) => ({
+        notifications: state.notifications.slice(0, 100)
+      })
+    }
+  )
+);

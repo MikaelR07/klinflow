@@ -22,7 +22,8 @@ import { WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@klinflow/supabase';
-import { compressImage } from '@klinflow/core/utils/imageUtils';
+import { compressImage, getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 
 export default function CreateRFQPage() {
   const navigate = useNavigate();
@@ -368,7 +369,7 @@ export default function CreateRFQPage() {
               <div className="grid grid-cols-3 gap-2.5 pt-1">
                 {images.map((img, idx) => (
                   <div key={idx} className="aspect-square relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 group">
-                    <img src={img.url} className="w-full h-full object-cover" alt="sample" />
+                    <OptimizedImage src={img.url} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt="sample" />
                     <button
                       type="button"
                       onClick={() => removeImage(idx)}
@@ -637,7 +638,7 @@ export default function CreateRFQPage() {
                   <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-2" style={{ scrollbarWidth: 'none' }}>
                     {images.map((img, idx) => (
                       <div key={idx} className="aspect-[4/3] w-full shrink-0 relative bg-slate-950 rounded-2xl overflow-hidden shadow-sm snap-start">
-                        <img src={img.url} className="w-full h-full object-cover opacity-90" alt={`Preview ${idx + 1}`} />
+                        <OptimizedImage src={img.url} className="w-full h-full object-cover opacity-90" wrapperClassName="w-full h-full" alt={`Preview ${idx + 1}`} />
                         <div className="absolute top-3 left-3 px-2.5 py-1 bg-black/50 backdrop-blur-md rounded-lg text-[9px] font-black text-white capitalize tracking-widest border border-white/10">
                           Sample Image {idx + 1} of {images.length}
                         </div>

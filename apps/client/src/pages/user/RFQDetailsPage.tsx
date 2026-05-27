@@ -1,3 +1,4 @@
+import { OptimizedImage } from "@klinflow/ui";
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Clock, Scale, Coins, Truck, Camera, Trash2, CheckCircle2 } from 'lucide-react';
@@ -466,7 +467,7 @@ export default function RFQDetailsPage() {
                   )}
                   {proofImages.map((src, index) => (
                     <div key={index} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 dark:border-slate-800">
-                      <img src={src} alt={`Proof ${index}`} className="w-full h-full object-cover" />
+                      <OptimizedImage src={src} alt={`Proof ${index}`} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                       <button
                         type="button"
                         onClick={() => removeImage(index)}

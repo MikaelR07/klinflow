@@ -23,6 +23,8 @@ import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { useSystemStore } from '@klinflow/core/stores/systemStore';
 import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { supabase } from '@klinflow/supabase';
+import { OptimizedImage } from '@klinflow/ui';
 import { uploadFile } from '@klinflow/core/lib/storage';
 import { MATERIAL_TYPES } from '@klinflow/core/stores/assetStore';
 import { compressImage } from '@klinflow/core/utils/imageUtils';
@@ -545,9 +547,10 @@ export default function BookPickup() {
                     <div className="relative group">
                       {photo ? (
                         <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-primary shadow-xl">
-                          <img 
+                          <OptimizedImage 
                             src={typeof photo === 'string' ? photo : URL.createObjectURL(photo)} 
                             className="w-full h-full object-cover" 
+                            wrapperClassName="w-full h-full"
                           />
                           <button 
                             onClick={() => setPhoto(null)}

@@ -13,6 +13,7 @@ import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { toast } from 'sonner';
 import { Virtuoso } from 'react-virtuoso';
 
@@ -228,7 +229,7 @@ export default function Sourcing() {
                    {(selectedListing.photos?.length > 0 ? selectedListing.photos : [selectedListing.photoUrl || selectedListing.photo]).map((imgUrl, idx) => (
                      <div key={idx} className="flex-none w-full h-full snap-start">
                        {imgUrl ? (
-                         <img src={getThumbnailUrl(imgUrl, { width: 800 })} className="w-full h-full object-cover" alt={`${selectedListing.material} - View ${idx + 1}`} />
+                         <OptimizedImage src={getThumbnailUrl(imgUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={`${selectedListing.material} - View ${idx + 1}`} />
                        ) : (
                          <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
                             <Package className="w-20 h-20 text-slate-200 dark:text-slate-700" />
@@ -452,7 +453,7 @@ export default function Sourcing() {
                       <div className="flex gap-3">
                         <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
                           {(listing.photoUrl || listing.photo) ? (
-                            <img src={getThumbnailUrl(listing.photoUrl || listing.photo, { width: 150 })} loading="lazy" alt={listing.material} className="w-full h-full object-cover" />
+                            <OptimizedImage src={getThumbnailUrl(listing.photoUrl || listing.photo, { width: 150 })} alt={listing.material} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                           ) : (
                             <Package className="w-5 h-5 text-slate-200" />
                           )}

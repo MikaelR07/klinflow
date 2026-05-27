@@ -4,6 +4,7 @@ import { ArrowLeft, Loader2, Save, Camera, Target, Move } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { ROLES } from '@klinflow/constants';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { toast } from 'sonner';
 import LocationSelector from '@klinflow/ui/components/LocationSelector';
 
@@ -76,7 +77,7 @@ export default function ProfilePage() {
         <div className="relative group">
           <div className="w-24 h-24 rounded-full border-4 border-white dark:border-slate-800 shadow-xl overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-4xl">
             {profile?.avatar_url ? (
-              <img src={getThumbnailUrl(profile.avatar_url, { width: 200 })} className="w-full h-full object-cover" />
+              <OptimizedImage src={getThumbnailUrl(profile.avatar_url, { width: 200 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
             ) : (
               profile?.avatar || '👤'
             )}

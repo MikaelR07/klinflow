@@ -10,6 +10,7 @@ import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { OptimizedImage } from '@klinflow/ui';
 import { toast } from 'sonner';
 import type { Database } from '@klinflow/supabase';
 
@@ -189,7 +190,7 @@ export default function MyTrades() {
                       {/* Edge-to-Edge Hero Image */}
                       <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-900 relative overflow-hidden shadow-xl">
                         {photoUrl ? (
-                          <img src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" />
+                          <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
                           <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800">
                             <div className="text-6xl mb-4">{getMaterialEmoji(trade.waste_type || trade.listing?.material || '')}</div>
