@@ -96,10 +96,10 @@ export default function GoalDetails() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)] pb-32 max-w-lg mx-auto w-full px-4 space-y-5">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)] pb-32 max-w-lg mx-auto w-full px-1.5 space-y-5">
 
         {/* Progress Hero Card */}
-        <div className="bg-gradient-to-br from-[#0b3c2d] to-emerald-800 rounded-2xl p-6 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-br from-primary to-emerald-700 rounded-2xl p-6 text-white relative overflow-hidden">
           <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/5 rounded-full" />
           <div className="absolute -right-2 -bottom-6 w-24 h-24 bg-white/5 rounded-full" />
 
@@ -107,7 +107,7 @@ export default function GoalDetails() {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[9px] font-bold text-emerald-200 uppercase tracking-widest mb-1">Community Goal</p>
-                <h2 className="text-2xl font-black tracking-tight">{goal.title}</h2>
+                <h2 className="text-2xl text-white tracking-tight">{goal.title}</h2>
               </div>
               <div className="relative w-[72px] h-[72px] flex items-center justify-center shrink-0">
                 <svg className="w-full h-full transform -rotate-90">

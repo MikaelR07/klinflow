@@ -464,7 +464,7 @@ export default function AgentHome() {
 
       {/* ── PERFORMANCE CARD ── */}
       <div className="relative !mt-2.5">
-        <div className="relative bg-gradient-to-tr from-[#064e3b] to-primary dark:from-emerald-900 dark:to-primary rounded-2xl p-3 shadow-none">
+        <div className="relative bg-gradient-to-br from-primary to-[#064e3b] dark:from-emerald-900 dark:to-primary rounded-2xl p-3 shadow-none">
 
           {/* TOP SECTION */}
           <div className="flex items-start justify-between gap-3 mb-4">

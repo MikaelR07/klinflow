@@ -35,19 +35,19 @@ export default function RoleSelection() {
   ];
 
   return (
-    <div className="flex flex-col dark:bg-slate-900 min-h-dvh max-w-lg mx-auto px-6 py-10 relative overflow-hidden">
+    <div className="flex flex-col dark:bg-slate-900 min-h-dvh max-w-lg mx-auto px-2 py-4 relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
 
-      <header className="relative z-10 pt-8 mb-12">
+      <header className="relative z-10 pt-2 mb-6">
         <button
           onClick={() => navigate(-1)}
-          className="p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 text-slate-400 mb-8 shadow-sm"
+          className="p-2 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 text-slate-400 mb-4 shadow-sm"
         >
           <ArrowRight className="w-5 h-5 rotate-180" />
         </button>
-        <h1 className="text-4xl font-semibold text-slate-900 dark:text-white leading-tight tracking-tighter">
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-tight tracking-tighter">
           Choose Your <br />
           <span className="text-emerald-500">Klinflow Path</span>
         </h1>
@@ -66,24 +66,13 @@ export default function RoleSelection() {
             onClick={() => navigate(`/register?type=${role.id}`)}
             className="w-full text-left group relative active:scale-[0.99] transition-all gpu-layer"
           >
-            <div className="relative bg-[#FFFFFF] dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 rounded-[2.5rem] p-8 transition-all active:bg-slate-100 dark:active:bg-slate-800 overflow-hidden">
-              <div className="flex items-start justify-between mb-6">
-                <div className={`w-16 h-16 rounded-2xl ${role.bgColor} flex items-center justify-center ${role.iconColor} border ${role.borderColor} shadow-inner`}>
-                  <role.icon className="w-8 h-8" />
-                </div>
-                <div className="flex -space-x-2.5">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="w-9 h-9 rounded-full border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-700 overflow-hidden shadow-sm">
-                      <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${role.id}${i}`} alt="user" className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div className="relative bg-[#FFFFFF] dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 rounded-[1.5rem] p-5 transition-all active:bg-slate-100 dark:active:bg-slate-800 overflow-hidden">
 
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 tracking-tight">{role.title}</h2>
-              <p className={`text-[10px] font-bold capitalize tracking-[0.2em] ${role.textColor} mb-4`}>{role.subtitle}</p>
 
-              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 font-medium">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-1 tracking-tight">{role.title}</h2>
+              <p className={`text-[10px] font-bold capitalize tracking-[0.2em] ${role.textColor} mb-2`}>{role.subtitle}</p>
+
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-4 font-medium">
                 {role.description}
               </p>
 
@@ -105,8 +94,8 @@ export default function RoleSelection() {
       </div>
 
       <footer className="py-8 text-center relative z-10">
-        <p className="text-xs text-slate-400 font-medium">
-          Powered by <span className="text-emerald-500 font-semibold">HygeneX AI</span> Neural Network
+        <p className="text-xs text-slate-400 font-semibold">
+          Klin <span className="text-emerald-500 font-semibold">Flow</span>
         </p>
       </footer>
     </div>

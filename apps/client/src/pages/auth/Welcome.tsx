@@ -10,7 +10,7 @@ export default function Welcome() {
   };
 
   return (
-    <div className="flex flex-col dark:bg-slate-900 min-h-dvh max-w-lg mx-auto px-6 py-10 relative overflow-hidden">
+    <div className="flex flex-col dark:bg-slate-900 h-[100dvh] fixed inset-0 w-full max-w-lg mx-auto px-6 py-6 sm:py-10 relative overflow-hidden overscroll-none">
       {/* Background Decor */}
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
@@ -24,22 +24,22 @@ export default function Welcome() {
         <div className="flex-1 flex flex-col justify-center relative z-10">
 
 
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 mb-6 w-fit">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 mb-4 sm:mb-6 w-fit">
             <Users className="w-4 h-4 text-emerald-500" />
             <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest">For Homes & Pro-Sellers</span>
           </div>
 
-          <h1 className="text-3xl font-semibold text-slate-900 dark:text-white leading-[0.95] mb-6 tracking-tighter">
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white leading-[0.95] mb-4 sm:mb-6 tracking-tighter">
             Recyclables into <span className="text-emerald-500 italic">Assets.</span> <br />
             AI-Powered.
           </h1>
 
-          <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-sm mb-10 leading-relaxed">
+          <p className="text-sm sm:text-lg text-slate-500 dark:text-slate-400 font-medium max-w-sm mb-6 sm:mb-10 leading-relaxed">
             Klinflow is an AI-driven "Waste-as-Asset" ecosystem. We turn your recyclables into Money while powering a Whole network of sustainable collectors.
           </p>
 
           {/* Feature Highlights */}
-          <div className="grid grid-cols-1 gap-8 mb-12">
+          <div className="grid grid-cols-1 gap-4 sm:gap-8 mb-6 sm:mb-12">
             <div className="flex gap-4 group">
               <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-emerald-500 shrink-0 border border-slate-100 dark:border-slate-700">
                 <Brain className="w-7 h-7" />
@@ -73,10 +73,10 @@ export default function Welcome() {
         </div>
 
         {/* Footer Actions */}
-        <div className="relative z-10 pb-8 space-y-4">
+        <div className="relative z-10 pb-4 sm:pb-8 space-y-4">
           <button
             onClick={startRecycling}
-            className="w-full py-5 bg-emerald-600 text-white rounded-[2rem] font-semibold text-base shadow-2xl shadow-emerald-600/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+            className="w-full py-4 sm:py-5 bg-emerald-600 text-white rounded-[2rem] font-semibold text-base shadow-2xl shadow-emerald-600/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
           >
             Join the Movement <ArrowRight className="w-5 h-5" />
           </button>
