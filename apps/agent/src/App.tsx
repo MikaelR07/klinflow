@@ -37,6 +37,7 @@ const ActivePickupsPage = lazy(() => import('./pages/agent/ActivePickupsPage'));
 const ActivePickupDetailsPage = lazy(() => import('./pages/agent/ActivePickupDetailsPage'));
 const NavigatePickupPage = lazy(() => import('./pages/agent/NavigatePickupPage'));
 const MarketPulse = lazy(() => import('./pages/agent/MarketPulse'));
+const DepositPage = lazy(() => import('./pages/agent/DepositPage'));
 
 // Settings Pages
 const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
@@ -204,6 +205,7 @@ export default function App() {
             <Route path="/pickups/:id" element={<ActivePickupDetailsPage />} />
             <Route path="/trades" element={<MyTrades />} />
             <Route path="/earnings" element={<EarningsPage />} />
+            <Route path="/deposit" element={<DepositPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/notifications" element={<NotificationsFeed />} />
 

@@ -19,7 +19,7 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.js',
       registerType: 'autoUpdate',
-      includeAssets: ['logo.png', 'icons/*.png'],
+      includeAssets: ['logo.png', 'icons/*.png', 'agent-logo.webp'],
       manifest: {
         name: 'Klinflow Agent',
         short_name: 'Klinflow Agent',
@@ -31,15 +31,9 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/icons/icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            src: '/icons/icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
+            src: '/agent-logo.webp',
+            sizes: '192x192 512x512',
+            type: 'image/webp',
             purpose: 'any maskable'
           }
         ]

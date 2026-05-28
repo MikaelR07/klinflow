@@ -54,10 +54,8 @@ import { formatDistanceToNow } from 'date-fns';
 export default function AgentHome() {
   const profile = useAuthStore(s => s.profile);
   const toggleOnline = useAuthStore(s => s.toggleOnline);
-  const withdrawRewards = useAuthStore(s => s.withdrawRewards);
   const subscribeToProfileChanges = useAuthStore(s => s.subscribeToProfileChanges);
   const fetchProfile = useAuthStore(s => s.fetchProfile);
-  const depositToWallet = useAuthStore(s => s.depositToWallet);
 
   const earnings = useAgentStore(s => s.earnings);
   const coachInsights = useAgentStore(s => s.coachInsights);
@@ -82,16 +80,7 @@ export default function AgentHome() {
   const navigate = useNavigate();
 
   const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
-  const [companyBalance, setCompanyBalance] = useState<number | null>(null);
-  const [isLoadingBalance, setIsLoadingBalance] = useState(false);
 
-  const [showDepositModal, setShowDepositModal] = useState(false);
-  const [showRequestModal, setShowRequestModal] = useState(false);
-  const [depositAmount, setDepositAmount] = useState('');
-  const [requestAmount, setRequestAmount] = useState('');
-  const [requestReason, setRequestReason] = useState('');
-  const [isDepositing, setIsDepositing] = useState(false);
-  const [isRequesting, setIsRequesting] = useState(false);
 
   const [lastSynced, setLastSynced] = useState<Date>(new Date());
   const [performanceChange, setPerformanceChange] = useState<number>(0);
@@ -101,9 +90,6 @@ export default function AgentHome() {
     const fetchDynamicData = async () => {
       fetchProfile();
       fetchEarnings();
-      if (profile?.agentAccountType === 'fleet_driver' && profile?.companyId) {
-        fetchCompanyBalance();
-      }
 
       if (!profile?.id) return;
 
@@ -153,80 +139,7 @@ export default function AgentHome() {
     fetchDynamicData();
   }, [profile?.id, profile?.agentAccountType, profile?.companyId]);
 
-  const handleDeposit = async () => {
-    const amount = parseFloat(depositAmount);
-    if (!amount || amount <= 0) {
-      toast.error('Invalid Amount', { description: 'Please enter a positive amount to deposit.' });
-      return;
-    }
 
-    setIsDepositing(true);
-    try {
-      await depositToWallet(amount);
-      toast.success('Deposit Successful! 💸', { description: `KSh ${amount.toLocaleString()} added to your wallet.` });
-      setShowDepositModal(false);
-      setDepositAmount('');
-      if (profile?.agentAccountType === 'fleet_driver') fetchCompanyBalance();
-    } catch (err) {
-      toast.error('Deposit Failed', { description: err.message });
-    } finally {
-      setIsDepositing(false);
-    }
-  };
-
-  const handleRequestFunds = async () => {
-    const amount = parseFloat(requestAmount);
-    if (!amount || amount <= 0) {
-      toast.error('Invalid Amount');
-      return;
-    }
-
-    if (!profile?.id || !profile?.companyId) {
-      toast.error('Identity Error', { description: 'Your profile information is not fully loaded. Please refresh.' });
-      return;
-    }
-
-    setIsRequesting(true);
-    try {
-      const { error } = await supabase.from('fund_requests').insert([{
-        driver_id: profile?.id,
-        company_id: profile?.companyId,
-        amount,
-        reason: requestReason,
-        status: 'pending'
-      }]);
-
-      if (error) throw error;
-
-      toast.success('Request Sent! 📩', { description: 'Your company owner has been notified.' });
-      setShowRequestModal(false);
-      setRequestAmount('');
-      setRequestReason('');
-    } catch (err) {
-      toast.error('Request Failed', { description: err.message });
-    } finally {
-      setIsRequesting(false);
-    }
-  };
-
-  const fetchCompanyBalance = async () => {
-    if (!profile?.companyId) return;
-    setIsLoadingBalance(true);
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('wallet_balance')
-        .eq('id', profile.companyId)
-        .single();
-      if (!error && data) {
-        setCompanyBalance(data.wallet_balance);
-      }
-    } catch (err) {
-      console.error('Failed to fetch company balance:', err);
-    } finally {
-      setIsLoadingBalance(false);
-    }
-  };
 
 
   const unreadCount = getUnreadCount();
@@ -370,9 +283,9 @@ export default function AgentHome() {
         onClose={() => setShowPushPrompt(false)}
       />
       {/* ── TOP NAV & CORE CONTROLS ── */}
-      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
+      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
         {/* Header Section - Edge to Edge - FIXED TOPNAV */}
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
@@ -386,7 +299,7 @@ export default function AgentHome() {
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-normal italic tracking-tight text-slate-900 dark:text-white leading-tight">Hello {profile?.name?.split(' ')[0]}👋</h1>
+                <h1 className="text-lg font-normal  tracking-tight text-slate-900 dark:text-white leading-tight">Hello {profile?.name?.split(' ')[0]}👋</h1>
                 <div className="flex items-center gap-1.5  text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
                   <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'searching...'}
                 </div>
@@ -551,7 +464,7 @@ export default function AgentHome() {
 
       {/* ── PERFORMANCE CARD ── */}
       <div className="relative !mt-2.5">
-        <div className="relative bg-gradient-to-br from-[#064e3b] to-primary dark:from-emerald-900 dark:to-primary rounded-2xl p-3 shadow-none">
+        <div className="relative bg-gradient-to-tr from-[#064e3b] to-primary dark:from-emerald-900 dark:to-primary rounded-2xl p-3 shadow-none">
 
           {/* TOP SECTION */}
           <div className="flex items-start justify-between gap-3 mb-4">
@@ -597,21 +510,12 @@ export default function AgentHome() {
               </div>
 
               <div className="w-full flex justify-end">
-                {!isFleetDriver ? (
-                  <button
-                    onClick={() => setShowDepositModal(true)}
-                    className="bg-white text-emerald-700 dark:text-slate-900 px-6 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
-                  >
-                    Deposit
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setShowRequestModal(true)}
-                    className="bg-white text-emerald-700 dark:text-slate-900 px-6 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
-                  >
-                    Deposit
-                  </button>
-                )}
+                <button
+                  onClick={() => navigate('/deposit')}
+                  className="bg-white text-emerald-700 dark:text-slate-900 px-6 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
+                >
+                  Deposit
+                </button>
               </div>
             </div>
           </div>
@@ -838,131 +742,8 @@ export default function AgentHome() {
         </div>
       </div>
 
-      {/* ── DEPOSIT MODAL ── */}
-      <AnimatePresence>
-        {showDepositModal && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowDepositModal(false)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 border border-slate-100 dark:border-slate-800"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold dark:text-white">Wallet Deposit</h3>
-                <button
-                  onClick={() => setShowDepositModal(false)}
-                  className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center"
-                >
-                  <X className="w-5 h-5 text-slate-500" />
-                </button>
-              </div>
 
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold capitalize tracking-[0.2em] text-slate-400 px-1">Enter Amount (KSh)</label>
-                  <div className="relative">
-                    <div className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-slate-400">KSh</div>
-                    <input
-                      type="number"
-                      autoFocus
-                      value={depositAmount}
-                      onChange={(e) => setDepositAmount(e.target.value)}
-                      placeholder="0.00"
-                      className="w-full h-16 pl-16 pr-5 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none focus:ring-2 focus:ring-primary text-2xl font-bold dark:text-white"
-                    />
-                  </div>
-                </div>
 
-                <button
-                  disabled={isDepositing || !depositAmount}
-                  onClick={handleDeposit}
-                  className="w-full h-16 bg-primary text-white rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2"
-                >
-                  {isDepositing ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Confirm Deposit'}
-                </button>
-
-                <p className="text-[10px] text-center text-slate-400 font-medium">
-                  Secured by Klinflow Payment Gateway
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* ── REQUEST FUNDS MODAL ── */}
-      <AnimatePresence>
-        {showRequestModal && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowRequestModal(false)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden p-8 border border-slate-100 dark:border-slate-800"
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold dark:text-white">Request Funds</h3>
-                <button
-                  onClick={() => setShowRequestModal(false)}
-                  className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center"
-                >
-                  <X className="w-5 h-5 text-slate-500" />
-                </button>
-              </div>
-
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold capitalize tracking-[0.2em] text-slate-400 px-1">Amount Requested (KSh)</label>
-                  <div className="relative">
-                    <div className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-slate-400">KSh</div>
-                    <input
-                      type="number"
-                      autoFocus
-                      value={requestAmount}
-                      onChange={(e) => setRequestAmount(e.target.value)}
-                      placeholder="0.00"
-                      className="w-full h-16 pl-16 pr-5 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none focus:ring-2 focus:ring-primary text-2xl font-bold dark:text-white"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold capitalize tracking-[0.2em] text-slate-400 px-1">Reason / Purpose</label>
-                  <textarea
-                    value={requestReason}
-                    onChange={(e) => setRequestReason(e.target.value)}
-                    placeholder="e.g. Buying HDPE from residents"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none focus:ring-2 focus:ring-primary text-sm font-medium dark:text-white min-h-[100px] resize-none"
-                  />
-                </div>
-
-                <button
-                  disabled={isRequesting || !requestAmount}
-                  onClick={handleRequestFunds}
-                  className="w-full h-16 bg-emerald-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-emerald-600/20 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 flex items-center justify-center gap-2"
-                >
-                  {isRequesting ? <Loader2 className="w-6 h-6 animate-spin" /> : 'Send Request'}
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
 
       {/* Floating AI Voice Assistant */}

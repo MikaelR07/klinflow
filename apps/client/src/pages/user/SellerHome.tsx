@@ -221,7 +221,7 @@ export default function SellerHome() {
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-normal italic tracking-tight text-slate-900 dark:text-white leading-tight">
+                <h1 className="text-lg font-normal  tracking-tight text-slate-900 dark:text-white leading-tight">
                   Hello {(profile?.fullName || profile?.name || 'Merchant').split(' ')[0]}👋
                 </h1>
                 <div className="flex items-center gap-1.5  text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
