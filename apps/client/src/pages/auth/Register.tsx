@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { 
-  Recycle, User, Phone, Lock, ChevronRight, MapPin, 
+import {
+  Recycle, User, Phone, Lock, ChevronRight, MapPin,
   Loader2, ArrowLeft, ShieldCheck, Mail, Sparkles, Star,
   Fingerprint, Shield, X, ShoppingBag, Home as HomeIcon,
   Venus, Mars, UserCircle
@@ -28,7 +28,7 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [phoneAvailable, setPhoneAvailable] = useState<boolean | null>(null);
-  
+
   const navigate = useNavigate();
   const { register, checkAvailability, sendOtp, verifyOtp } = useAuthStore();
 
@@ -53,7 +53,7 @@ export default function Register() {
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
+
     // 1. Full Name Validation (Alpha-only + space)
     if (name === 'name') {
       const clean = value.replace(/[^a-zA-Z\s]/g, ''); // Numbers/symbols blocked
@@ -65,7 +65,7 @@ export default function Register() {
     if (name === 'phone') {
       const clean = value.replace(/\D/g, '').slice(0, 10);
       setFormData(prev => ({ ...prev, [name]: clean }));
-      
+
       if (clean.length === 10) {
         const available = await checkAvailability(clean);
         setPhoneAvailable(available);
@@ -74,7 +74,7 @@ export default function Register() {
       }
       return;
     }
-    
+
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -117,9 +117,9 @@ export default function Register() {
       navigate('/', { replace: true });
     } catch (err: any) {
       console.error('Registration Final Error:', err);
-      toast.error('Registration Blocked', { 
+      toast.error('Registration Blocked', {
         description: `Error: ${err.message || 'Unknown Failure'}. Please check your Supabase dashboard or contact support if this persists.`,
-        duration: 10000 
+        duration: 10000
       });
       if (err.message && (err.message.includes('Incorrect') || err.message.includes('expired'))) {
         setFormData(prev => ({ ...prev, otp: '' }));
@@ -133,14 +133,41 @@ export default function Register() {
 
 
 
+  // ── OTP TIMER LOGIC ──────────────────────────────────────────────
+  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
+
+  useEffect(() => {
+    if (isVerifying && timeLeft > 0) {
+      const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isVerifying, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const handleResendOTP = async () => {
+    if (timeLeft > 0) return;
+    try {
+      await sendOtp(formData.phone);
+      setTimeLeft(600); // Reset timer to 10 mins
+      toast.success('Code Resent', { description: 'A new OTP has been sent to your phone.' });
+    } catch (err) {
+      toast.error('Resend Failed', { description: err instanceof Error ? err.message : 'Unknown error' });
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center min-h-dvh max-w-lg mx-auto px-6 py-10 relative overflow-hidden">
       {/* Background Decor (Matched to Welcome Page) */}
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
-      
+
       <div className="max-w-md w-full mx-auto relative z-10 animate-fade-in">
-        
+
         {/* Header */}
         <div className="flex flex-col items-center mb-10">
           <div className="w-full flex items-center justify-between mb-6">
@@ -152,25 +179,25 @@ export default function Register() {
 
         <div className="mb-10 text-center sm:text-left">
           <div className="flex items-center gap-3 mb-2 justify-center sm:justify-start">
-             <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
-               {formData.role === 'seller' ? 'Seller Enrollment' : 'Join the Ecosystem'}
-             </h1>
-             {formData.role === 'seller' && (
-               <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
-                 <span className="text-xs font-semibold text-blue-500 capitalize tracking-widest">Pro Mode</span>
-               </div>
-             )}
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-white tracking-tighter">
+              {formData.role === 'seller' ? 'Seller Enrollment' : 'Join the Ecosystem'}
+            </h1>
+            {formData.role === 'seller' && (
+              <div className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
+                <span className="text-xs font-semibold text-blue-500 capitalize tracking-widest">Pro Mode</span>
+              </div>
+            )}
           </div>
           <p className={`text-xs ${formData.role === 'seller' ? 'text-blue-500' : 'text-emerald-500'} font-semibold capitalize tracking-widest flex items-center gap-2 justify-center sm:justify-start`}>
-             <Sparkles className="w-3 h-3" /> {formData.role === 'seller' ? 'Trade Waste as a High-Value Asset' : 'Convenience & Community Rewards'}
+            <Sparkles className="w-3 h-3" /> {formData.role === 'seller' ? 'Trade Waste as a High-Value Asset' : 'Convenience & Community Rewards'}
           </p>
         </div>
 
         {/* Global Registration Form */}
-        <form onSubmit={initiateRegistration} className="space-y-6">
-          
+        <form onSubmit={initiateRegistration} className="space-y-4">
+
           {/* Section 1: Identity */}
-          <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5">
+          <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800  shadow-slate-200/40 dark:shadow-none space-y-5">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -181,42 +208,41 @@ export default function Register() {
             <div className="space-y-4">
               <div className="relative group">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-                <input 
-                  type="text" 
-                  name="name" 
-                  value={formData.name} 
-                  onChange={handleInputChange} 
-                  placeholder="Full Legal Name" 
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
-                  required 
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Full Legal Name"
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all"
+                  required
                 />
               </div>
 
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-                <input 
-                  type="email" 
-                  name="email" 
-                  value={formData.email} 
-                  onChange={handleInputChange} 
-                  placeholder="Email Address" 
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
-                  required 
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="Email Address"
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all"
+                  required
                 />
               </div>
 
               <div className="relative group">
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-                <input 
-                  type="tel" 
-                  name="phone" 
-                  value={formData.phone} 
-                  onChange={handleInputChange} 
-                  placeholder="Phone Number (07... / 01...)" 
-                  className={`w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-800 border rounded-2xl text-sm font-semibold tracking-widest focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all ${
-                    phoneAvailable === false ? 'border-rose-300 ring-rose-100' : 'border-slate-200 dark:border-slate-800'
-                  }`} 
-                  required 
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="Phone Number (07... / 01...)"
+                  className={`w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-800 border rounded-2xl text-sm font-semibold tracking-widest focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all ${phoneAvailable === false ? 'border-rose-300 ring-rose-100' : 'border-slate-200 dark:border-slate-800'
+                    }`}
+                  required
                 />
                 {phoneAvailable === true && (
                   <ShieldCheck className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500 animate-in fade-in zoom-in" />
@@ -245,11 +271,10 @@ export default function Register() {
                   key={g.id}
                   type="button"
                   onClick={() => setFormData(prev => ({ ...prev, gender: g.id }))}
-                  className={`flex items-center justify-center gap-3 p-3 rounded-2xl border-2 transition-all active:scale-95 ${
-                    formData.gender === g.id 
-                      ? 'border-primary bg-primary/5' 
-                      : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800'
-                  }`}
+                  className={`flex items-center justify-center gap-3 p-3 rounded-2xl border-2 transition-all active:scale-95 ${formData.gender === g.id
+                    ? 'border-primary bg-primary/5'
+                    : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800'
+                    }`}
                 >
                   <div className={`w-8 h-8 rounded-xl ${g.bg} flex items-center justify-center`}>
                     <g.icon className={`w-4 h-4 ${g.color}`} />
@@ -274,26 +299,26 @@ export default function Register() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="relative group">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-                <input 
-                  type="password" 
-                  name="pin" 
-                  value={formData.pin} 
-                  onChange={handleInputChange} 
-                  placeholder="Passcode" 
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
-                  required 
+                <input
+                  type="password"
+                  name="pin"
+                  value={formData.pin}
+                  onChange={handleInputChange}
+                  placeholder="Passcode"
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all"
+                  required
                 />
               </div>
               <div className="relative group">
                 <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-                <input 
-                  type="password" 
-                  name="confirmPin" 
-                  value={formData.confirmPin} 
-                  onChange={handleInputChange} 
-                  placeholder="Confirm" 
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all" 
-                  required 
+                <input
+                  type="password"
+                  name="confirmPin"
+                  value={formData.confirmPin}
+                  onChange={handleInputChange}
+                  placeholder="Confirm"
+                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-medium focus:ring-4 text-base focus:ring-primary/10 focus:border-primary outline-none transition-all"
+                  required
                 />
               </div>
             </div>
@@ -301,7 +326,7 @@ export default function Register() {
 
           {/* Section 3: Location */}
           <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 ">
               <div className="w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
               </div>
@@ -309,9 +334,9 @@ export default function Register() {
             </div>
 
             <div className="min-h-[140px]">
-              <LocationSelector 
-                value={formData.location} 
-                onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))} 
+              <LocationSelector
+                value={formData.location}
+                onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))}
               />
             </div>
           </div>
@@ -321,13 +346,13 @@ export default function Register() {
             disabled={isLoading}
             className="w-full py-5 bg-gradient-to-r from-primary to-green-600 text-white rounded-[1.5rem] font-semibold text-[13px] capitalize tracking-[0.2em] shadow-2xl shadow-primary/30 hover:shadow-primary/40 active:scale-[0.98] transition-all flex justify-center items-center gap-3 disabled:opacity-50 mt-4 group"
           >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Initiate Protocol <Sparkles className="w-5 h-5 group-hover:animate-spin" /></>}
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Register <Sparkles className="w-5 h-5 group-hover:animate-spin" /></>}
           </button>
         </form>
 
         <p className="text-center text-xs font-semibold capitalize tracking-widest text-slate-400 mt-10">
           Already part of the network? {' '}
-          <Link to="/login" className="text-primary hover:underline underline-offset-4">Authenticate Instead</Link>
+          <Link to="/login" className="text-primary hover:underline underline-offset-4">login </Link>
         </p>
       </div>
 
@@ -335,7 +360,7 @@ export default function Register() {
       {isVerifying && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
           <div className="max-w-sm w-full bg-white dark:bg-slate-800 rounded-[2.5rem] p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in zoom-in slide-in-from-bottom-8 duration-500 ease-out">
-            <button 
+            <button
               onClick={() => setIsVerifying(false)}
               className="absolute right-6 top-6 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors"
             >
@@ -346,7 +371,7 @@ export default function Register() {
               <div className="w-56 h-auto bg-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-2 text-primary">
                 <ShieldCheck className="w-10 h-10" />
               </div>
-              
+
               <div>
                 <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Verify Phone</h3>
                 <p className="text-sm text-slate-500 font-medium mt-2">
@@ -356,29 +381,32 @@ export default function Register() {
               </div>
 
               <div className="relative group">
-                <input 
+                <input
                   autoFocus
                   autoComplete="one-time-code"
                   type="text"
                   inputMode="numeric"
-                  value={formData.otp} 
+                  value={formData.otp}
                   onChange={(e) => setFormData(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
-                  placeholder="000000" 
-                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200" 
+                  placeholder="000000"
+                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-800/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-primary outline-none transition-all placeholder:text-slate-200"
                 />
-                <div className="flex flex-col items-center mt-4 space-y-3">
-                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-[0.2em]">Code sent via SMS to your phone</p>
-                  <button 
+                <div className="flex flex-col items-center mt-5 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs font-semibold text-slate-400 capitalize tracking-[0.2em]">Expires in:</p>
+                    <span className={`text-sm font-bold tracking-widest ${timeLeft < 60 ? 'text-rose-500' : 'text-primary'}`}>
+                      {formatTime(timeLeft)}
+                    </span>
+                  </div>
+
+                  <button
                     type="button"
-                    onClick={async () => {
-                      try {
-                        await sendOtp(formData.phone);
-                        toast.success('Code Resent', { description: 'A new OTP has been sent to your phone.' });
-                      } catch (err) {
-                        toast.error('Resend Failed', { description: err instanceof Error ? err.message : 'Unknown error' });
-                      }
-                    }}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary rounded-full text-xs font-semibold capitalize tracking-widest transition-all"
+                    disabled={timeLeft > 0}
+                    onClick={handleResendOTP}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold capitalize tracking-widest transition-all ${timeLeft > 0
+                      ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed opacity-50'
+                      : 'bg-primary/10 text-primary hover:bg-primary/20 cursor-pointer'
+                      }`}
                   >
                     Resend Code
                   </button>
@@ -392,7 +420,7 @@ export default function Register() {
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Apply Protocol'}
               </button>
-              
+
 
             </div>
           </div>

@@ -514,6 +514,18 @@ export const useAuthStore = create<AuthState>()(
         return data;
       },
 
+      resetPin: async (phone: string, otp: string, newPin: string) => {
+        const { data, error } = await supabase.functions.invoke('reset-pin', {
+          body: { phone, otp, newPin }
+        });
+
+        if (error || !data?.success) {
+          throw new Error(error?.message || data?.error || 'Failed to reset PIN. Please try again.');
+        }
+
+        return data;
+      },
+
       register: async (userData: any) => {
         const { name, phone, email: userEmail, pin, location, role, businessType, specializations, agent_account_type, fleet_invite_code, company_name, gender } = userData;
         const email = phoneToEmail(phone);
