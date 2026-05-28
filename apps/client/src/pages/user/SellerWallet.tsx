@@ -124,10 +124,10 @@ export default function SellerWallet() {
           {/* Redeem Rewards */}
           <button
             onClick={() => {
-              if (rewardPoints < 50) {
-                toast.warning('You need at least 50 points to redeem rewards.');
+              if (rewardPoints < 100) {
+                toast.warning('You need at least 100 points to redeem rewards.');
               } else {
-                toast.info('Redeem coming soon!');
+                navigate('/redeem-gfp');
               }
             }}
             className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-colors"
@@ -140,7 +140,7 @@ export default function SellerWallet() {
 
           {/* Transfer Points */}
           <button
-            onClick={() => toast.info('Transfer coming soon!')}
+            onClick={() => navigate('/transfer-gfp')}
             className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-colors"
           >
             <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">

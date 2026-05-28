@@ -253,7 +253,7 @@ export default function PostTrade() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -292,7 +292,7 @@ export default function PostTrade() {
                     placeholder="Search waste categories (e.g. plastic, metal)..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-slate-100 dark:bg-slate-800 p-4 pl-11 pr-10 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs font-semibold dark:text-white outline-none focus:border-emerald-500/50 focus:ring-2 ring-emerald-500/20 transition-all shadow-sm"
+                    className="w-full bg-slate-100 dark:bg-slate-900/70 p-4 pl-11 pr-10 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs font-semibold dark:text-white outline-none focus:border-emerald-500/50 focus:ring-2 ring-emerald-500/20 transition-all shadow-sm"
                   />
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
                     <Search className="w-4 h-4" />
@@ -307,7 +307,7 @@ export default function PostTrade() {
                   )}
                 </div>
 
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">Select Material Type</h3>
+                <h3 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">Select Material Type</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {categories.filter(cat =>
                     (cat.label || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -381,7 +381,7 @@ export default function PostTrade() {
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">Est. Weight (KG)</h3>
                   <div className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-semibold">{quantity} KG</div>
                 </div>
-                <div className="bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-900 p-4 rounded-[1.25rem] space-y-4">
+                <div className="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-800 p-4 rounded-[1.25rem] space-y-4">
                   <input
                     type="range"
                     min="1"
@@ -389,7 +389,7 @@ export default function PostTrade() {
                     step="0.5"
                     value={quantity || 1}
                     onChange={(e) => setQuantity(parseFloat(e.target.value))}
-                    className="w-full h-1 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                    className="w-full h-1 bg-slate-200 dark:bg-slate-900/70 rounded-lg appearance-none cursor-pointer accent-green-600"
                   />
                   <div className="relative group">
                     <input
@@ -397,7 +397,7 @@ export default function PostTrade() {
                       value={quantity || ''}
                       onChange={(e) => setQuantity(e.target.value)}
                       placeholder="12.5"
-                      className="w-full bg-slate-50 dark:bg-slate-800 p-3 rounded-xl text-base font-semibold dark:text-white outline-none focus:border-emerald-500 transition-all text-center"
+                      className="w-full bg-slate-50 dark:bg-slate-900/70 p-3 rounded-xl text-base font-semibold dark:text-white outline-none focus:border-emerald-500 transition-all text-center"
                     />
                   </div>
                 </div>
@@ -411,7 +411,7 @@ export default function PostTrade() {
           {step === 2 && (
             <motion.div key="p2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8 pb-12">
               <div className="space-y-1">
-                <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Valuation</h2>
+                <h2 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">Valuation</h2>
                 <p className="text-sm font-medium text-slate-500 leading-tight">Provide proof and set your asking price.</p>
               </div>
 
@@ -454,7 +454,7 @@ export default function PostTrade() {
                         };
                         input.click();
                       }}
-                      className="flex-1 h-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1.5 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-800 shadow-sm"
+                      className="flex-1 h-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1.5 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900/70"
                     >
                       <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/40 rounded-lg flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
                         <Camera className="w-4 h-4" />
@@ -474,7 +474,7 @@ export default function PostTrade() {
                         };
                         input.click();
                       }}
-                      className="flex-1 h-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1.5 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-800 shadow-sm"
+                      className="flex-1 h-24 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1.5 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors group bg-white dark:bg-slate-900/70"
                     >
                       <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/40 rounded-lg flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
                         <Smartphone className="w-4 h-4" />
@@ -545,7 +545,7 @@ export default function PostTrade() {
                       setCustomPricePerKg(val === '' ? null : parseFloat(val));
                     }}
                     placeholder={String(liveRatePerKg)}
-                    className="w-full bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-800 p-5 rounded-2xl text-lg font-semibold dark:text-white outline-none focus:border-emerald-500 transition-all px-16 text-center"
+                    className="w-full bg-white dark:bg-slate-900/70 border-2 border-slate-100 dark:border-slate-800 p-5 rounded-2xl text-lg font-semibold dark:text-white outline-none focus:border-emerald-500 transition-all px-16 text-center"
                   />
                   <div className="absolute right-5 top-1/2 -translate-y-1/2 text-sm font-semibold text-slate-400">/ KG</div>
                 </div>
@@ -557,7 +557,7 @@ export default function PostTrade() {
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight capitalize tracking-widest">Material Description</h3>
                   <span className="text-xs font-semibold text-slate-400">Optional</span>
                 </div>
-                <div className="bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-800 rounded-2xl p-4 shadow-sm group">
+                <div className="bg-white dark:bg-slate-900/70 border-2 border-slate-100 dark:border-slate-800 rounded-2xl p-4 shadow-sm group">
                   <div className="flex items-start gap-3">
                     <FileText className="w-5 h-5 text-slate-400 mt-1" />
                     <textarea
@@ -565,7 +565,7 @@ export default function PostTrade() {
                       value={customDescription}
                       onChange={(e) => setCustomDescription(e.target.value)}
                       placeholder="Tell the buyer and agent more about the quality or collection specifics..."
-                      className="w-full bg-transparent text-sm font-semibold text-slate-700 dark:text-white outline-none placeholder:text-slate-300 resize-none"
+                      className="w-full bg-transparent text-sm ] text-slate-700 dark:text-white outline-none placeholder:text-slate-300 placeholder:text-[11px] resize-none"
                     />
                   </div>
                 </div>
@@ -581,7 +581,7 @@ export default function PostTrade() {
           {step === 3 && (
             <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 pb-12">
               <div className="space-y-1">
-                <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Collection Method</h2>
+                <h2 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">Collection Method</h2>
                 <p className="text-sm font-medium text-slate-500 leading-tight">How would you like to get your materials to us?</p>
               </div>
 
@@ -634,7 +634,7 @@ export default function PostTrade() {
                     </div>
                   )}
                 </div>
-                <div className="h-64 -mx-3.5 w-auto rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 relative shadow-sm group">
+                <div className="h-64 -mx-3.5 w-auto rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 relative  group">
                   <MapContainer center={center as [number, number]} zoom={13} zoomControl={false} className="h-full w-full z-0">
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <ChangeView center={center as [number, number]} />
@@ -772,7 +772,7 @@ export default function PostTrade() {
                   {/* ASAP BUTTON */}
                   <button
                     onClick={() => { selectTime({ time: 'ASAP', type: 'any', discount: 0, label: 'Agents available' }); setIsManualTime(false); }}
-                    className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-emerald-600 border-primary shadow-xl shadow-primary/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'}`}
+                    className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-primary border-primary ' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'}`}
                   >
                     <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-white/20' : 'bg-emerald-600/10'}`}>
                       <Zap className={`w-5 h-5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-emerald-600'}`} />
@@ -789,7 +789,7 @@ export default function PostTrade() {
                   {/* SCHEDULE LATER */}
                   <button
                     onClick={() => setIsManualTime(true)}
-                    className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${isManualTime ? 'bg-slate-900 dark:bg-slate-700 border-slate-900 shadow-xl' : 'bg-white dark:bg-slate-800 border-dashed border-slate-200 dark:border-white/10'}`}
+                    className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${isManualTime ? 'bg-slate-900 dark:bg-slate-700 border-slate-900 ' : 'bg-white dark:bg-slate-800 border-dashed border-slate-200 dark:border-white/10'}`}
                   >
                     <div className={`w-14 h-14 rounded-3xl flex items-center justify-center shrink-0 ${isManualTime ? 'bg-white/10' : 'bg-slate-50 dark:bg-slate-800'}`}>
                       <Clock className={`w-5 h-5 ${isManualTime ? 'text-emerald-600' : 'text-slate-400'}`} />
@@ -809,11 +809,11 @@ export default function PostTrade() {
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-white/5 grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Date</span>
-                    <input type="date" value={customDate} onChange={(e) => setCustomDate(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
+                    <input type="date" value={customDate} onChange={(e) => setCustomDate(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900/70 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
                   </div>
                   <div className="space-y-1">
                     <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Time</span>
-                    <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
+                    <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-900/70 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
                   </div>
                 </motion.div>
               )}
@@ -824,12 +824,12 @@ export default function PostTrade() {
           {step === 4 && (
             <motion.div key="p4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 pb-12">
               <div className="space-y-1">
-                <h2 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">Post Summary</h2>
+                <h2 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">Post Summary</h2>
                 <p className="text-sm font-medium text-slate-500 leading-tight">Review your trade details before confirming.</p>
               </div>
 
               {/* ── MATERIAL PREVIEW ── */}
-              <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 flex items-center gap-6">
+              <div className="bg-white dark:bg-slate-900/70 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 flex items-center gap-6">
                 <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-4xl shadow-inner">
                   {wasteType?.icon || '📦'}
                 </div>
@@ -840,7 +840,7 @@ export default function PostTrade() {
               </div>
 
               {/* ── LOGISTICS SUMMARY (CONTEXTUAL) ── */}
-              <div className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 space-y-4">
+              <div className="bg-white dark:bg-slate-900/70 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 space-y-4">
                 <div className="flex items-center gap-3 pb-4 border-b border-slate-50 dark:border-slate-800">
                   <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${pickupMode === 'pickup' ? 'bg-amber-100 text-amber-600' : 'bg-emerald-100 text-emerald-600'}`}>
                     {pickupMode === 'pickup' ? <Truck className="w-5 h-5" /> : <Home className="w-5 h-5" />}
@@ -877,7 +877,7 @@ export default function PostTrade() {
               </div>
 
               {/* ── FINANCIAL BREAKDOWN ── */}
-              <div className="bg-emerald-600 dark:bg-emerald-700 rounded-[2rem] p-8 relative overflow-hidden shadow-2xl border border-white/20">
+              <div className="bg-emerald-600 dark:bg-primary rounded-[2rem] p-8 relative overflow-hidden shadow-2xl border border-white/20">
                 <div className="absolute -top-16 -right-16 w-56 h-56 bg-white/20 rounded-full blur-3xl" />
                 <div className="relative z-10 space-y-6">
                   <div className="space-y-4">
@@ -894,7 +894,7 @@ export default function PostTrade() {
                       <div className="text-right">
                         <h3 className="text-3xl font-black text-white tracking-tighter">KSh {(assetValue - (pickupMode === 'pickup' ? logisticsFee : 0)).toLocaleString()}</h3>
                         <p className="text-[10px] font-bold text-white/95 capitalize tracking-widest mt-1.5 flex items-center justify-end gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+
                           PAYOUT: AWAITING VERIFICATION
                         </p>
                       </div>
@@ -917,7 +917,7 @@ export default function PostTrade() {
                 (step === 3 && pickupMode === 'dropoff' && !selectedHub)
               }
               onClick={() => setStep(step + 1)}
-              className="w-full p-5 bg-emerald-700 text-white rounded-2xl font-semibold text-sm active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30"
+              className="w-full p-5 bg-primary text-white rounded-2xl font-semibold text-sm active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30"
             >
               <span>CONTINUE</span>
               <ChevronRight className="w-5 h-5" />
@@ -926,7 +926,7 @@ export default function PostTrade() {
             <button
               disabled={isSubmitting}
               onClick={() => initialMode === 'sell' ? handleBook() : setShowEscrowModal(true)}
-              className="w-full p-5 bg-emerald-700 text-white rounded-2xl font-semibold text-sm shadow-xl shadow-emerald-900/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+              className="w-full p-5 bg-primary text-white rounded-2xl font-semibold text-sm shadow-xl shadow-emerald-900/20 active:scale-95 transition-all flex items-center justify-center gap-3"
             >
               <span>CONFIRM TRADE</span>
               <ChevronRight className="w-5 h-5" />

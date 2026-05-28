@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, MapPin, Star, Building2, Truck, 
+import {
+  Search, MapPin, Star, Building2, Truck,
   ArrowLeft, SlidersHorizontal, ShieldCheck, X,
   Sparkles, Filter, ChevronRight, Scale, Info, Package
 } from 'lucide-react';
@@ -42,7 +42,7 @@ export default function DiscoveryHub() {
           .in('role', ['agent', 'admin'])
           .in('agent_account_type', ['independent', 'company_admin'])
           .eq('is_online', true);
-        
+
         if (error) throw error;
         const normalized = (data as any[]).map(p => normalizeKeys(p));
         setPartners(normalized);
@@ -63,10 +63,10 @@ export default function DiscoveryHub() {
 
       const matchMaterial = activeMaterial === 'all' || acceptedMaterials.includes(activeMaterial);
       const matchScale = activeScale === 'all' || scale === activeScale;
-      const matchSearch = !searchQuery || 
+      const matchSearch = !searchQuery ||
         p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.companyName?.toLowerCase().includes(searchQuery.toLowerCase());
-      
+
       return matchMaterial && matchScale && matchSearch;
     });
   }, [partners, activeMaterial, activeScale, searchQuery]);
@@ -74,36 +74,35 @@ export default function DiscoveryHub() {
   return (
     <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
         <div className="w-full mx-auto">
           <div className="flex items-center gap-4 mb-4">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
               <ArrowLeft className="w-4 h-4 dark:text-white" />
             </button>
             <div>
-              <h1 className="text-xl font-semibold dark:text-white tracking-tight leading-none mb-1">Find a Partner</h1>
-              <p className="text-xs font-semibold text-primary capitalize tracking-[0.2em]">Verified Logistics</p>
+              <h1 className="text-sm font-bold dark:text-white tracking-tight leading-none mb-1">Find a Partner</h1>
+              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Verified Logistics</p>
             </div>
           </div>
 
           <div className="flex gap-2">
             <div className="relative flex-1 group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-primary transition-colors" />
-              <input 
+              <input
                 type="text"
                 placeholder="Search partners..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-100/50 dark:bg-slate-800/50 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-primary/20 rounded-2xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
+                className="w-full bg-slate-100/50 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-primary/20 rounded-2xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
               />
             </div>
-            <button 
+            <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${
-                showFilters || activeMaterial !== 'all' || activeScale !== 'all'
-                ? 'bg-primary text-white shadow-lg shadow-primary/30' 
-                : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-500'
-              }`}
+              className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${showFilters || activeMaterial !== 'all' || activeScale !== 'all'
+                ? 'bg-primary text-white '
+                : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 text-slate-500'
+                }`}
             >
               <SlidersHorizontal className="w-4 h-4" />
             </button>
@@ -112,11 +111,11 @@ export default function DiscoveryHub() {
       </div>
 
       <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+5.75rem)] pb-6 px-0 space-y-6">
-        
+
         {/* ── EXPANDABLE FILTERS ── */}
         <AnimatePresence>
           {showFilters && (
-            <motion.div 
+            <motion.div
               initial={{ height: 0, opacity: 0, marginBottom: 0 }}
               animate={{ height: 'auto', opacity: 1, marginBottom: 24 }}
               exit={{ height: 0, opacity: 0, marginBottom: 0 }}
@@ -124,17 +123,16 @@ export default function DiscoveryHub() {
             >
               {/* Material Filter */}
               <div className="space-y-2">
-               
+
                 <div className="flex gap-2 overflow-x-auto no-scrollbar pt-4">
                   {materials.map(m => (
                     <button
                       key={m}
                       onClick={() => setActiveMaterial(m)}
-                      className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize tracking-widest whitespace-nowrap transition-all border ${
-                        activeMaterial === m 
-                          ? 'bg-primary border-primary text-white' 
-                          : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-100 dark:border-slate-800'
-                      }`}
+                      className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize tracking-widest whitespace-nowrap transition-all border ${activeMaterial === m
+                        ? 'bg-primary border-primary text-white'
+                        : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-100 dark:border-slate-800'
+                        }`}
                     >
                       {m === 'all' ? 'All' : ((MATERIAL_LABELS as any)[m] || m)}
                     </button>
@@ -150,13 +148,11 @@ export default function DiscoveryHub() {
                     <button
                       key={s.id}
                       onClick={() => setActiveScale(s.id)}
-                      className={`p-3 rounded-2xl border text-left transition-all ${
-                        s.id === 'all' ? 'col-span-2' : ''
-                      } ${
-                        activeScale === s.id
+                      className={`p-3 rounded-2xl border text-left transition-all ${s.id === 'all' ? 'col-span-2' : ''
+                        } ${activeScale === s.id
                           ? 'border-primary bg-primary/5'
                           : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800'
-                      }`}
+                        }`}
                     >
                       <p className={`text-xs font-semibold capitalize tracking-tight mb-0.5 ${activeScale === s.id ? 'text-primary' : 'dark:text-white'}`}>
                         {s.label}
@@ -195,14 +191,13 @@ export default function DiscoveryHub() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   onClick={() => navigate(`/company/${partner.id}`)}
-                  className="w-full bg-white dark:bg-slate-800 p-4 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-800/80 active:scale-[0.99] transition-all group text-left"
+                  className="w-full bg-white dark:bg-slate-800 p-4 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-900/50 active:scale-[0.99] transition-all group text-left"
                 >
                   <div className="flex gap-4">
                     {/* Avatar/Icon */}
                     <div className="relative shrink-0">
-                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-inner relative overflow-hidden ${
-                        isCompany ? 'bg-indigo-50 dark:bg-indigo-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30'
-                      }`}>
+                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-50 dark:bg-indigo-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30'
+                        }`}>
                         {partner.avatarUrl ? (
                           <OptimizedImage src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
@@ -221,21 +216,20 @@ export default function DiscoveryHub() {
                             {partner.role === 'admin' && <ShieldCheck className="w-3.5 h-3.5 text-primary fill-primary/10" />}
                           </div>
                           <div className="flex items-center gap-2">
-                             <div className="flex items-center gap-0.5 text-amber-500">
-                               <Star className="w-2.5 h-2.5 fill-current" />
-                               <span className="text-xs font-semibold">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
-                             </div>
-                              <span className="text-xs text-slate-300">•</span>
-                              <div className="flex items-center gap-1 text-xs font-semibold text-slate-500">
-                                <Package className="w-2.5 h-2.5" />
-                                <span>{Number(partner.totalPickups || 0)} Pickups</span>
-                              </div>
-                              <span className="text-xs text-slate-300">•</span>
-                              <span className={`text-xs font-semibold capitalize tracking-widest ${
-                                scale === 'bulk' || scale === 'industrial' ? 'text-indigo-500' : 'text-emerald-500'
+                            <div className="flex items-center gap-0.5 text-amber-500">
+                              <Star className="w-2.5 h-2.5 fill-current" />
+                              <span className="text-xs font-semibold">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
+                            </div>
+                            <span className="text-xs text-slate-300">•</span>
+                            <div className="flex items-center gap-1 text-xs font-semibold text-slate-500">
+                              <Package className="w-2.5 h-2.5" />
+                              <span>{Number(partner.totalPickups || 0)} Pickups</span>
+                            </div>
+                            <span className="text-xs text-slate-300">•</span>
+                            <span className={`text-xs font-semibold capitalize tracking-widest ${scale === 'bulk' || scale === 'industrial' ? 'text-indigo-500' : 'text-emerald-500'
                               }`}>
-                                 {scale}
-                              </span>
+                              {scale}
+                            </span>
                           </div>
                         </div>
                         <div className="text-right shrink-0 ml-2">
@@ -273,7 +267,7 @@ export default function DiscoveryHub() {
               <p className="text-xs font-medium text-slate-400 max-w-[200px] mx-auto leading-relaxed">
                 We couldn't find any partners matching your current filters.
               </p>
-              <button 
+              <button
                 onClick={() => { setActiveMaterial('all'); setActiveScale('all'); setSearchQuery(''); }}
                 className="mt-6 text-xs font-semibold text-primary capitalize tracking-widest hover:underline"
               >
@@ -285,13 +279,13 @@ export default function DiscoveryHub() {
 
         {/* ── INFO BOX ── */}
         <div className="px-4">
-          <div className="bg-blue-50/50 dark:bg-blue-900/10 p-6 rounded-[2.5rem] border border-blue-100/50 dark:border-blue-800/30 flex items-start gap-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-500  p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
             <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center shrink-0">
-               <Info className="w-5 h-5 text-blue-600" />
+              <Info className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-blue-900 dark:text-blue-400 capitalize tracking-widest mb-1">Choosing the right scale</h4>
-              <p className="text-xs font-medium text-blue-800/60 dark:text-blue-300/60 leading-relaxed">
+              <h4 className="text-xs font-semibold text-white dark:text-blue-400 capitalize tracking-widest mb-1">Choosing the right scale</h4>
+              <p className="text-xs font-medium text-white dark:text-white leading-relaxed">
                 Standard agents use small vehicles for fast, small pickups. Bulk partners use trucks for estate-wide or industrial recycling.
               </p>
             </div>

@@ -5,84 +5,109 @@ interface LoadingScreenProps {
   message?: string;
 }
 
-export const LoadingScreen = ({ message = "Syncing with Klinflow..." }: LoadingScreenProps) => {
+export const LoadingScreen = ({
+  message = "Loading...",
+}: LoadingScreenProps) => {
   return (
-    <div className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center animate-fade-in overflow-hidden">
+    <div
+      className="fixed inset-0 z-[9999] overflow-hidden flex flex-col items-center justify-center"
+      style={{ background: 'linear-gradient(to bottom right, hsl(153, 100%, 33%), #059669, #065f46)' }}
+    >
 
-      {/* Background Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[120px] animate-pulse" />
+      {/* Subtle Intersecting Circles in Background */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 dark:opacity-10">
+        <div className="absolute w-[300px] h-[300px] rounded-full border border-white translate-y-[-100px]" />
+        <div className="absolute w-[350px] h-[350px] rounded-full border border-white translate-y-[100px]" />
+      </div>
 
-      <div className="relative flex flex-col items-center">
-        {/* Floating Icon Container */}
-        <div className="relative w-28 h-28 flex items-center justify-center animate-bounce-slow">
+      {/* Noise texture for depth */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+          backgroundSize: "24px 24px",
+        }}
+      />
 
-          {/* Outer Ring Pulse */}
-          <div className="absolute inset-0 rounded-[2.5rem] border-2 border-primary/20 animate-ping [animation-duration:3s]" />
-          <div className="absolute inset-2 rounded-[2rem] border-2 border-primary/40 animate-ping [animation-duration:2s]" />
+      <div className="relative z-10 flex flex-col items-center w-full px-6 -mt-16">
 
-          {/* Main Icon Card */}
-          <div className="relative w-20 h-20 bg-white dark:bg-slate-900 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-none border border-slate-200/50 dark:border-slate-800 flex items-center justify-center z-10 overflow-hidden group">
+        {/* Minimalist Floating Loader */}
+        <div className="relative flex items-center justify-center w-40 h-40 mb-12">
+          {/* Rotating Ring */}
+          <div className="absolute w-full h-full rounded-full border border-white/10" />
+          <div className="absolute w-full h-full rounded-full border-t-2 border-white/80 border-r-2 border-transparent border-b-2 border-transparent border-l-2 border-transparent animate-spin-slow" />
 
-            {/* Animated Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-50" />
-
-            {/* The Icon */}
-            <Recycle
-              className="w-10 h-10 text-primary animate-pulse"
-              strokeWidth={2.5}
-            />
-
-            {/* Liquid Wave Effect at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary/20 animate-pulse" />
-          </div>
+          {/* Inner Logo */}
+          <img
+            src="/vectors/client-app-logo.webp"
+            alt="Client App Logo"
+            className="absolute z-10 w-[140px] h-[140px] object-contain animate-icon-float"
+          />
         </div>
 
-        {/* Loading Text */}
-        <div className="mt-12 text-center space-y-3 z-10">
-          <div className="flex flex-col items-center">
-            <h2 className="text-sm font-black tracking-[0.4em] text-slate-900 dark:text-white uppercase mb-1">
-              {message}
-            </h2>
-            <p className="text-xs font-bold text-primary animate-pulse tracking-widest uppercase">
-              Sustainomics AI Active
-            </p>
-          </div>
+        {/* High-Ranking Branding */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          <span className="text-[28px] uppercase tracking-[0.2em] text-white/90 font-bold drop-shadow-sm">
+            Klinflow
+          </span>
+          <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+        </div>
 
-          {/* Progress Bar Placeholder */}
-          <div className="w-48 h-1 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mx-auto">
-            <div className="h-full bg-primary w-1/2 rounded-full animate-progress-indefinite" />
-          </div>
+        {/* New Tagline */}
+        <p className="text-sm font-medium text-white/80 tracking-wide mb-8">
+          Collecting.Connecting.Cleaning
+        </p>
+
+        {/* Loading Indicator */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-2 h-2 rounded-full bg-white animate-bounce-dot [animation-delay:0ms]" />
+          <div className="w-2 h-2 rounded-full bg-white animate-bounce-dot [animation-delay:150ms]" />
+          <div className="w-2 h-2 rounded-full bg-white animate-bounce-dot [animation-delay:300ms]" />
         </div>
       </div>
 
-      {/* Footer Branding */}
-      <div className="absolute bottom-12 flex flex-col items-center gap-1 opacity-40">
-        <div className="flex items-center gap-2 mb-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-          <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400">Klinflow Syst</p>
-          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-        </div>
-        <p className="text-xs font-bold text-slate-400 dark:text-slate-500">OPTIMIZING CIRCULAR ECONOMY</p>
+      {/* Bottom Text */}
+      <div className="absolute bottom-12 left-0 right-0 flex justify-center w-full px-6 text-center">
+        <p className="text-xs font-semibold text-white/60 tracking-widest uppercase">
+          AI Powered Informal weaver Network
+        </p>
       </div>
 
-      {/* Add Custom Keyframes if not in CSS */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @keyframes progress-indefinite {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(200%); }
-        }
-        .animate-progress-indefinite {
-          animation: progress-indefinite 2s infinite linear;
-        }
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        .animate-bounce-slow {
-          animation: bounce-slow 3s infinite ease-in-out;
-        }
-      `}} />
+      {/* Animations */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes spin-slow {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+            }
+            .animate-spin-slow {
+              animation: spin-slow 3s linear infinite;
+            }
+            @keyframes icon-float {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-8px); }
+            }
+            .animate-icon-float {
+              animation: icon-float 2.5s ease-in-out infinite;
+            }
+            @keyframes bounce-dot {
+              0%, 80%, 100% {
+                transform: scale(0.7);
+                opacity: 0.4;
+              }
+              40% {
+                transform: scale(1);
+                opacity: 1;
+              }
+            }
+            .animate-bounce-dot {
+              animation: bounce-dot 1.4s infinite ease-in-out;
+            }
+          `,
+        }}
+      />
     </div>
   );
 };
@@ -92,6 +117,9 @@ interface SpinnerProps {
   color?: string;
 }
 
-export const Spinner = ({ className = "w-6 h-6", color = "text-primary" }: SpinnerProps) => (
+export const Spinner = ({
+  className = "w-6 h-6",
+  color = "text-primary",
+}: SpinnerProps) => (
   <Recycle className={`${className} ${color} animate-spin-slow`} />
 );

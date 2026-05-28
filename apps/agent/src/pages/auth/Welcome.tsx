@@ -19,7 +19,7 @@ export default function Welcome() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col p-4 overflow-hidden relative">
       {/* Background Decor */}
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-green-500/10 rounded-full blur-3xl" />
 
       <motion.div
         initial={{ opacity: 0, x: -20 }}

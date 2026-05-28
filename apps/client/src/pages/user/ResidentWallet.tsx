@@ -25,9 +25,17 @@ export default function ResidentWallet() {
   const [balanceVisible, setBalanceVisible] = useState(true);
 
   // Derived metrics
+  const now = new Date();
+  const currentMonthStart = useMemo(() => new Date(now.getFullYear(), now.getMonth(), 1), []);
+
   const completedBookings = useMemo(() =>
     bookings.filter((b: any) => b.status === 'completed'),
     [bookings]
+  );
+
+  const thisMonthPickups = useMemo(() =>
+    completedBookings.filter((b: any) => new Date(b.completedAt || b.updatedAt || b.createdAt) >= currentMonthStart),
+    [completedBookings, currentMonthStart]
   );
 
   const totalPickups = completedBookings.length;
@@ -36,15 +44,34 @@ export default function ResidentWallet() {
     [bookings]
   );
 
-  const kgRecovered = useMemo(() =>
-    completedBookings.reduce((sum: number, b: any) => sum + (Number(b.actualWeightKg) || Number(b.weightKg) || 0), 0),
-    [completedBookings]
+  const kgRecoveredThisMonth = useMemo(() =>
+    thisMonthPickups.reduce((sum: number, b: any) => sum + (Number(b.actualWeightKg) || Number(b.weightKg) || 0), 0),
+    [thisMonthPickups]
   );
 
-  const totalEarned = useMemo(() =>
-    completedBookings.reduce((sum: number, b: any) => sum + (Number(b.payout) || Number(b.agreedPrice) || 0), 0),
-    [completedBookings]
+  const totalEarnedThisMonth = useMemo(() =>
+    thisMonthPickups.reduce((sum: number, b: any) => sum + (Number(b.payout) || Number(b.agreedPrice) || 0), 0),
+    [thisMonthPickups]
   );
+
+  const sparklineData = useMemo(() => {
+    const days = 10;
+    const data = new Array(days).fill(0);
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+
+    completedBookings.forEach((b: any) => {
+      const date = new Date(b.completedAt || b.updatedAt || b.createdAt);
+      const diffTime = today.getTime() - date.getTime();
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays >= 0 && diffDays < days) {
+        data[days - 1 - diffDays] += (Number(b.payout) || Number(b.agreedPrice) || 0);
+      }
+    });
+
+    const max = Math.max(...data, 1);
+    return data.map(val => Math.max((val / max) * 100, 5));
+  }, [completedBookings]);
 
   // Transactions derived from bookings
   const transactions = useMemo(() => {
@@ -148,7 +175,7 @@ export default function ResidentWallet() {
               </div>
               <div>
                 <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-0.5">Recycled This Month</p>
-                <p className="text-sm font-black text-white leading-none">{kgRecovered} kg</p>
+                <p className="text-sm font-black text-white leading-none">{kgRecoveredThisMonth} kg</p>
                 <p className="text-[8px] font-semibold text-emerald-300/60 mt-0.5">Great job! 💪</p>
               </div>
             </div>
@@ -179,10 +206,10 @@ export default function ResidentWallet() {
           {/* Redeem Rewards */}
           <button
             onClick={() => {
-              if (rewardPoints < 50) {
+              if (rewardPoints < 0) {
                 toast.warning('You need at least 50 GFP to redeem rewards.');
               } else {
-                toast.info('Redeem coming soon!', { description: 'Points redemption will be available shortly.' });
+                navigate('/redeem-gfp');
               }
             }}
             className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
@@ -195,7 +222,7 @@ export default function ResidentWallet() {
 
           {/* Transfer Points */}
           <button
-            onClick={() => toast.info('Transfer coming soon!', { description: 'Point transfers will be available shortly.' })}
+            onClick={() => navigate('/transfer-gfp')}
             className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
           >
             <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -218,14 +245,13 @@ export default function ResidentWallet() {
       </motion.div>
 
       {/* ── RECYCLING REWARDS ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
-        className="mx-1 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-4 "
-      >
+      <div className="mx-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4">
+
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Recycling Rewards</h3>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+            Recycling Rewards
+          </h3>
+
           <button
             onClick={() => navigate('/impact-hub')}
             className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
@@ -235,128 +261,193 @@ export default function ResidentWallet() {
         </div>
 
         <div className="flex items-center gap-4">
+
           {/* Left side — Message */}
-          <div className="flex items-start gap-3 flex-1">
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+
             <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20">
               <span className="text-xl">{impact.icon}</span>
             </div>
-            <div>
-              <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">
-                {totalPickups > 0 ? "You're doing amazing!" : "Start your journey!"}
+
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5 truncate">
+                {thisMonthPickups.length > 0
+                  ? "You're doing amazing!"
+                  : "Start your journey!"}
               </p>
+
               <p className="text-[10px] font-medium text-slate-400 leading-snug">
-                {totalPickups > 0
-                  ? `You recycled ${kgRecovered}kg this month. Keep going!`
+                {thisMonthPickups.length > 0
+                  ? `You recycled ${kgRecoveredThisMonth}kg this month. Keep going!`
                   : 'Complete your first pickup to start earning rewards.'}
               </p>
             </div>
+
           </div>
 
           {/* Right side — Level */}
           <div className="text-right shrink-0">
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Level {impact.level}</p>
-            <p className="text-sm font-black text-slate-900 dark:text-white leading-tight">{impact.label}</p>
-            {/* Progress bar */}
-            <div className="w-24 h-2 bg-slate-100 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${progressPercent}%` }}
-                transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
-                className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
-              />
-            </div>
-            <p className="text-[8px] font-bold text-slate-400 mt-1">{rewardPoints}/{impact.nextThreshold} pts</p>
-          </div>
-        </div>
-      </motion.div>
 
-      {/* ── SAVINGS + PICKUP SUMMARY (Side by Side) ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-        className="mx-1 grid grid-cols-2 gap-3"
-      >
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+              Level {impact.level}
+            </p>
+
+            <p className="text-sm font-black text-slate-900 dark:text-white leading-tight">
+              {impact.label}
+            </p>
+
+            {/* Static Progress Bar */}
+            <div className="w-24 h-2 bg-slate-400 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
+
+              <div
+                style={{ width: `${progressPercent}%` }}
+                className="h-full bg-gradient-to-r from-emerald-500 to-green-400 rounded-full"
+              />
+
+            </div>
+
+            <p className="text-[8px] font-bold text-slate-400 mt-1">
+              {rewardPoints}/{impact.nextThreshold} pts
+            </p>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* ── SAVINGS + PICKUP SUMMARY ── */}
+      <div className="mx-1 grid grid-cols-2 gap-3">
+
         {/* Savings This Month */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-4 ">
-          <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">Savings This Month</h4>
-          <p className="text-[9px] font-semibold text-slate-400 mb-3">Money earned by recycling</p>
-          <p className="text-xl font-black text-slate-900 dark:text-white mb-1.5">
-            KES {totalEarned.toLocaleString()}.00
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4">
+
+          <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">
+            Savings This Month
+          </h4>
+
+          <p className="text-[9px] font-semibold text-slate-400 mb-3">
+            Money earned by recycling
           </p>
+
+          <p className="text-xl font-black text-slate-900 dark:text-white mb-1.5">
+            KES {totalEarnedThisMonth.toLocaleString()}.00
+          </p>
+
           <div className="flex items-center gap-1.5">
-            <TrendingUp className="w-3 h-3 text-emerald-500" />
+            <TrendingUp className="w-3 h-3 text-emerald-500 shrink-0" />
+
             <p className="text-[9px] font-bold text-emerald-500">
-              {totalPickups > 0 ? `${totalPickups} pickups completed` : 'Start recycling to earn'}
+              {thisMonthPickups.length > 0
+                ? `${thisMonthPickups.length} pickups completed this month`
+                : 'Start recycling to earn'}
             </p>
           </div>
-          {/* Mini sparkline decoration */}
+
+          {/* Dynamic Sparkline */}
           <div className="mt-3 h-8 flex items-end gap-0.5">
-            {[30, 45, 25, 60, 40, 70, 55, 80, 65, 90].map((h, i) => (
-              <motion.div
+
+            {sparklineData.map((h, i) => (
+              <div
                 key={i}
-                initial={{ height: 0 }}
-                animate={{ height: `${h}%` }}
-                transition={{ duration: 0.6, delay: 0.4 + i * 0.05 }}
-                className="flex-1 bg-primary dark:bg-primary rounded-sm min-h-[2px]"
+                style={{ height: `${h}%` }}
+                className="flex-1 bg-primary rounded-sm min-h-[2px] transition-all duration-500"
               />
             ))}
+
           </div>
+
         </div>
 
         {/* Pickup Summary */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-4 ">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4">
+
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-xs font-bold text-slate-900 dark:text-white">Pickup Summary</h4>
-            <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">This Month</span>
+            <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+              Pickup Summary
+            </h4>
+
+            <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">
+              This Month
+            </span>
           </div>
 
           <div className="space-y-3.5">
+
             <div className="flex items-center justify-between">
+
               <div className="flex items-center gap-2.5">
-                <Package className="w-4 h-4 text-blue-500" />
-                <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Total Pickups</p>
+                <Package className="w-4 h-4 text-blue-500 shrink-0" />
+
+                <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                  Total Pickups
+                </p>
               </div>
-              <p className="text-sm font-black text-slate-900 dark:text-white">{totalPickups}</p>
+
+              <p className="text-sm font-black text-slate-900 dark:text-white">
+                {totalPickups}
+              </p>
+
             </div>
 
             <div className="h-px bg-slate-100 dark:bg-slate-800" />
 
             <div className="flex items-center justify-between">
+
               <div className="flex items-center gap-2.5">
-                <Clock className="w-4 h-4 text-amber-500" />
-                <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Upcoming</p>
+                <Clock className="w-4 h-4 text-amber-500 shrink-0" />
+
+                <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                  Upcoming
+                </p>
               </div>
-              <p className="text-sm font-black text-slate-900 dark:text-white">{upcomingPickups}</p>
+
+              <p className="text-sm font-black text-slate-900 dark:text-white">
+                {upcomingPickups}
+              </p>
+
             </div>
 
             <div className="h-px bg-slate-100 dark:bg-slate-800" />
 
             <div className="flex items-center justify-between">
+
               <div className="flex items-center gap-2.5">
-                <CheckCircle className="w-4 h-4 text-emerald-500" />
-                <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">Completed</p>
+                <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
+
+                <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                  Completed
+                </p>
               </div>
-              <p className="text-sm font-black text-slate-900 dark:text-white">{completedBookings.length}</p>
+
+              <p className="text-sm font-black text-slate-900 dark:text-white">
+                {completedBookings.length}
+              </p>
+
             </div>
+
           </div>
+
         </div>
-      </motion.div>
+
+      </div>
 
       {/* ── RECENT TRANSACTIONS ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.25 }}
-        className="mx-1 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800  overflow-hidden"
-      >
+      <div className="mx-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+
         <div className="p-4 pb-2">
+
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Recent Transactions</h3>
+
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              Recent Transactions
+            </h3>
+
             <button className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
               View all
             </button>
+
           </div>
+
         </div>
 
         <div className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -427,7 +518,7 @@ export default function ResidentWallet() {
             )}
           </AnimatePresence>
         </div>
-      </motion.div>
+      </div>
 
       {/* ── SECURITY FOOTER ── */}
       <motion.div
@@ -441,6 +532,6 @@ export default function ResidentWallet() {
           Secured by Klinflow Escrow
         </p>
       </motion.div>
-    </div>
+    </div >
   );
 }

@@ -54,13 +54,13 @@ export default function CompanyProfile() {
   return (
     <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-900/60 ">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
             <ArrowLeft className="w-4 h-4 dark:text-white" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Company Profile</h1>
+            <h1 className="text-sm font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Company Profile</h1>
             <p className="text-[10px] font-bold text-primary capitalize tracking-[0.25em]">Partner Details</p>
           </div>
         </div>
@@ -68,11 +68,19 @@ export default function CompanyProfile() {
 
       <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-26 px-1.5 space-y-4">
         {/* Hero */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-teal-600 to-blue-700 dark:from-slate-800 dark:via-slate-850 dark:to-slate-900 p-6 text-white shadow-xl">
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary to-emerald-800  p-6 text-white shadow-xl">
           <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-[80px] -mr-16 -mt-16" />
+          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-emerald-800  px-2.5 py-1 rounded-full z-20">
+
+            <div className={`w-2 h-2 rounded-full ${company?.is_online ? 'bg-emerald-400 animate-pulse' : 'bg-slate-300'}`} />
+            <span className="text-[10px] font-bold text-white capitalize tracking-widest">
+              {company?.is_online ? 'Online' : 'Offline'}
+            </span>
+          </div>
+
           <div className="relative z-10">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-3xl shadow-sm shrink-0 relative overflow-hidden">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-800 dark:bg-slate-800  dark:border-slate-700 flex items-center justify-center text-3xl  shrink-0 relative overflow-hidden">
                 {company?.avatarUrl || company?.avatar_url ? (
                   <OptimizedImage src={getThumbnailUrl(company.avatarUrl || company.avatar_url, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                 ) : (
@@ -80,15 +88,15 @@ export default function CompanyProfile() {
                 )}
               </div>
               <div>
-                <h2 className="text-xl font-bold tracking-tight">{company?.company_name || company?.name || 'Klinflow Partner'}</h2>
-                <p className="text-xs font-bold capitalize tracking-[0.2em] text-emerald-250 mt-1">
+                <h2 className="text-base text-slate-100 font-bold tracking-tight">{company?.company_name || company?.name || 'Klinflow Partner'}</h2>
+                <p className="text-[10px]  capitalize tracking-[0.2em] text-emerald-400 mt-1">
                   {isFleetAdmin ? 'Verified Fleet Company' : 'Independent Agent'}
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-3 pt-4 border-t border-white/15">
-              <div className="text-center">
+              <div className="text-center ">
                 <div className="flex items-center justify-center gap-1 mb-1">
                   <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                   <span className="text-lg font-bold">
@@ -99,7 +107,7 @@ export default function CompanyProfile() {
               </div>
               <div className="text-center">
                 <p className="text-lg font-bold">{Number(company?.total_pickups || 0)}</p>
-                <p className="text-[10px] font-bold text-white/60 capitalize tracking-widest">Pickups</p>
+                <p className="text-[10px] font-bold text-white/60 capitalize tracking-widest">Total Pickups</p>
               </div>
               <div className="text-center">
                 <p className="text-lg font-bold">KSh {logisticsFee}</p>
@@ -110,29 +118,25 @@ export default function CompanyProfile() {
         </div>
 
         {/* Location */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 flex items-center gap-4 shadow-sm">
-          <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+        <div className="bg-white dark:bg-slate-900/50 rounded-xl p-5 border border-slate-100 dark:border-slate-800 flex items-center gap-4 shadow-sm">
+          <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
             <MapPin className="w-5 h-5 text-primary" />
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Service Area</p>
-            <p className="text-sm font-semibold text-slate-900 dark:text-white">{company?.location?.estate || 'Nairobi Metro'}</p>
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-semibold text-emerald-600 capitalize tracking-widest">Online</span>
+            <p className="text-sm  text-slate-900 dark:text-white">{company?.location?.estate || 'Nairobi Metro'}</p>
           </div>
         </div>
 
         {/* Accepted Materials */}
         {materials.length > 0 && (
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
-            <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Accepted Materials</p>
+          <div className="bg-white dark:bg-slate-900/50 rounded-xl p-5 border border-slate-100 dark:border-slate-800 ">
+            <p className="text-xs font-semibold text-slate-400 dark:text-slate-100 capitalize tracking-widest mb-2">Accepted Materials</p>
             <div className="flex flex-wrap gap-2">
               {materials
                 .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
                 .map((m: string) => (
-                  <span key={m} className="px-3 py-1.5 bg-primary/5 border border-primary/15 rounded-full text-xs font-semibold text-primary capitalize tracking-widest">
+                  <span key={m} className="px-3 py-1.5 bg-primary/5 border border-primary/15 rounded-full text-xs  text-primary capitalize tracking-widest">
                     {(MATERIAL_LABELS as any)[m]}
                   </span>
                 ))}
@@ -141,7 +145,7 @@ export default function CompanyProfile() {
         )}
 
         {/* Pricing Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-slate-900/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800 ">
           <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Their Pricing</p>
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">Base Logistics Fee</span>
@@ -156,7 +160,7 @@ export default function CompanyProfile() {
         <motion.button
           whileTap={{ scale: 0.97 }}
           onClick={() => navigate(`/book-pickup?agentId=${agentId}&companyName=${encodeURIComponent(company?.company_name || company?.name || '')}`)}
-          className="w-full p-5 bg-primary text-white rounded-2xl font-semibold text-sm shadow-2xl shadow-primary/40 flex items-center justify-center gap-3"
+          className="w-full p-5 bg-primary text-white rounded-2xl font-semibold text-sm  flex items-center justify-center gap-3"
         >
           <Truck className="w-5 h-5" />
           Book {isFleetAdmin ? (company?.company_name || company?.name) : 'This Agent'}

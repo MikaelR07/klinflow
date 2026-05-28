@@ -173,7 +173,7 @@ export default function UserHome() {
       {/* ── TOP NAV & HERO ── */}
       <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
         {/* Header Section - Edge to Edge - DYNAMIC STICKY */}
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-600 ">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
@@ -265,73 +265,96 @@ export default function UserHome() {
         </div>
 
         {/* Subscription Tier Card Hidden for Launch */}
-        <div className="bg-white dark:bg-slate-900/50 !mt-3 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2">
+        <div className="bg-white dark:bg-slate-900/60 mt-3 rounded-[1rem] p-2 border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
 
           {/* Quick Actions */}
-          <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1 ">
+          <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1">
             Quick Actions
           </p>
+
           <div className="grid grid-cols-4 gap-2">
-            <button onClick={() => navigate('/book-pickup')}
-              className="dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative">
-              <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+
+            <button
+              onClick={() => navigate('/book-pickup')}
+              className="rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700 flex-col items-center gap-2 relative"
+            >
+              <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center">
                 <Truck className="w-5 h-5" />
               </div>
+
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">Pickup</p>
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">
+                  Pickup
+                </p>
               </div>
             </button>
 
-            <button onClick={() => navigate('/my-bookings')}
-              className="dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative">
-              <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+            <button
+              onClick={() => navigate('/my-bookings')}
+              className="rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700 flex-col items-center gap-2 relative"
+            >
+              <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center">
                 <Recycle className="w-5 h-5" />
               </div>
+
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">Bookings</p>
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">
+                  Bookings
+                </p>
               </div>
             </button>
 
-            <button onClick={() => navigate('/Analytics')}
-              className="dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative">
-              <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+            <button
+              onClick={() => navigate('/Analytics')}
+              className="rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700 flex-col items-center gap-2 relative"
+            >
+              <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center">
                 <BarChart2Icon className="w-5 h-5" />
               </div>
+
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">Dashboard</p>
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">
+                  Dashboard
+                </p>
               </div>
             </button>
 
-            <button onClick={() => navigate('/resident-wallet')}
-              className="dark:bg-slate-900 rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700/50 flex-col items-center gap-2 active:scale-[0.98] transition-all group relative">
-              <div className="w-10 h-10 bg-amber-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+            <button
+              onClick={() => navigate('/resident-wallet')}
+              className="rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700 flex-col items-center gap-2 relative"
+            >
+              <div className="w-10 h-10 bg-amber-500 text-white rounded-xl flex items-center justify-center">
                 <Wallet className="w-5 h-5" />
               </div>
+
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">Wallet</p>
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">
+                  Wallet
+                </p>
               </div>
             </button>
-
-
           </div>
-          {/* Discovery Entry Point */}
-          <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-sm relative overflow-hidden group">
 
-            <div className="relative z-10">
-              <h3 className="text-base font-semibold dark:text-white mb-1">Ready to recycle?</h3>
-              <p className="text-xs font-semibold text-slate-400 mb-4">Find a verified collection partner near you</p>
-              <button
-                onClick={() => navigate('/discovery')}
-                className="w-full py-3 bg-primary text-white rounded-2xl font-semibold text-xs capitalize tracking-widest  flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
-              >
-                <Search className="w-3.5 h-3.5" />
-                Find a Partner
-              </button>
-            </div>
-          </div>
 
         </div>
       </div>
+
+      {/* Discovery Entry Point */}
+      <div className="bg-slate-50 !mt-1 dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-100 dark:border-slate-800  relative overflow-hidden group">
+
+        <div className="relative z-10">
+          <h3 className="text-base font-semibold dark:text-white mb-1">Ready to recycle?</h3>
+          <p className="text-xs font-semibold text-slate-400 mb-4">Find a verified collection partner near you</p>
+          <button
+            onClick={() => navigate('/discovery')}
+            className="w-full py-3 bg-primary text-white rounded-xl font-semibold text-xs capitalize tracking-widest  flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+          >
+            <Search className="w-3.5 h-3.5" />
+            Find a Partner
+          </button>
+        </div>
+      </div>
+
 
       <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-2">
         {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}

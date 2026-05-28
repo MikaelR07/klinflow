@@ -16,3 +16,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+
+// Remove the HTML splash screen only AFTER React has painted.
+// Double rAF ensures the browser has committed at least one frame
+// with the React LoadingScreen visible before we remove the HTML one.
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    const loader = document.getElementById("initial-loader");
+    if (loader) {
+      loader.remove();
+    }
+  });
+});

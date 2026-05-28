@@ -61,10 +61,10 @@ export default function Login() {
         </div>
 
         {/* Login Form */}
-        <div className="glass p-8 sm:p-10 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none transition-all">
+        <div className="glass p-8 sm:p-10 rounded-[2.5rem] border border-slate-200 dark:border-slate-800  dark:shadow-none transition-all">
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-slate-800 dark:text-white pb-1 tracking-tight">System Access</h2>
+              <h2 className="text-xl font-semibold text-slate-800 dark:text-white pb-1 tracking-tight">Login</h2>
               <div className="w-8 h-1 bg-primary mx-auto rounded-full" />
             </div>
 
@@ -119,7 +119,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 mt-4 bg-primary hover:bg-primary-dark text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-primary/20 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group"
+              className="w-full py-4 mt-4 bg-primary hover:bg-primary-dark text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em]  transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed group"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

@@ -406,7 +406,7 @@ export default function ImpactAnalytics() {
             <div className="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center mb-1">
               <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
             </div>
-            <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400">Revenue</p>
+            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">Revenue</p>
             <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">KSh {stats.totalEarnings.toLocaleString()}</p>
 
           </div>
@@ -415,7 +415,7 @@ export default function ImpactAnalytics() {
             <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mb-1">
               <Trophy className="w-3.5 h-3.5 text-blue-600 dark:text-blue-500" />
             </div>
-            <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400">Global Rank</p>
+            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">Global Rank</p>
             <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">#{stats.globalRank || '—'}</p>
 
           </div>
@@ -424,7 +424,7 @@ export default function ImpactAnalytics() {
             <div className="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center mb-1">
               <Truck className="w-3.5 h-3.5 text-purple-600 dark:text-purple-500" />
             </div>
-            <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400">Total Pickups</p>
+            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">Total Pickups</p>
             <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{stats.totalPickups}</p>
 
           </div>
@@ -433,7 +433,7 @@ export default function ImpactAnalytics() {
             <div className="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center mb-1">
               <Star className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
             </div>
-            <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400">GFP Points</p>
+            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">GFP Points</p>
             <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{profile?.reward_points?.toLocaleString() || 0}</p>
 
           </div>
@@ -443,9 +443,7 @@ export default function ImpactAnalytics() {
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">Your Goals</h3>
-            <button className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors">
-              View all <ChevronRight className="w-3 h-3" />
-            </button>
+
           </div>
 
           <div className="grid grid-cols-2 gap-1">
@@ -576,7 +574,6 @@ export default function ImpactAnalytics() {
               View all <ChevronRight className="w-3 h-3" />
             </button>
           </div>
-
           <div className="grid grid-cols-4 gap-2">
             <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 bg-white dark:bg-slate-900 rounded-2xl p-2.5 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 ${stats.totalPickups >= 1 ? '' : 'opacity-50 grayscale'}`}>
               <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl rotate-45 flex items-center justify-center border border-emerald-100 dark:border-emerald-500/20">
@@ -627,7 +624,7 @@ export default function ImpactAnalytics() {
       {/* ── GOAL EDIT MODAL ── */}
       <AnimatePresence>
         {showGoalModal && (
-          <div className="fixed inset-0 z-[100] flex items-end justify-center ">
+          <div className="fixed inset-0 z-[100] flex items-end justify-center pb-16">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -639,7 +636,7 @@ export default function ImpactAnalytics() {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-t-[2rem] p-6 sm:p-8 shadow-2xl border-t border-slate-200 dark:border-slate-800"
+              className="relative w-full max-w-md  bg-white dark:bg-slate-800 rounded-t-[2rem] p-4  sm:p-8 border-t border-slate-200 dark:border-slate-800"
             >
               <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6" />
 
@@ -662,7 +659,7 @@ export default function ImpactAnalytics() {
                     <button
                       key={val}
                       onClick={() => handleUpdateGoal(val)}
-                      className={`relative py-4 rounded-2xl border flex flex-col items-center justify-center transition-all active:scale-95 overflow-hidden ${isCurrent ? 'bg-emerald-500 border-emerald-500 text-white shadow-md' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-emerald-500/50 hover:bg-emerald-50 dark:hover:bg-emerald-500/10'}`}
+                      className={`relative py-4 rounded-2xl border flex flex-col items-center justify-center transition-all active:scale-95 overflow-hidden ${isCurrent ? 'bg-emerald-500 border-emerald-500 text-white shadow-md' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-emerald-500/50 hover:bg-emerald-50 dark:hover:bg-emerald-500/10'}`}
                     >
                       <span className="text-xl font-black leading-none mb-1">{val}</span>
                       <span className={`text-[10px] font-bold tracking-wider ${isCurrent ? 'text-emerald-100' : 'text-slate-400'}`}>KG</span>
@@ -673,7 +670,7 @@ export default function ImpactAnalytics() {
 
               <button
                 onClick={() => setShowGoalModal(false)}
-                className="w-full py-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                className="w-full py-3.5 rounded-xl bg-amber-600 dark:bg-amber-600 text-sm font-bold text-white dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
               >
                 Cancel
               </button>

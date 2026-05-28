@@ -38,6 +38,8 @@ const CompanyProfile = lazy(() => import('./pages/user/CompanyProfile'));
 const ImpactAnalytics = lazy(() => import('./pages/user/ImpactAnalytics'));
 const ResidentWallet = lazy(() => import('./pages/user/ResidentWallet'));
 const SellerWallet = lazy(() => import('./pages/user/SellerWallet'));
+const RedeemGFP = lazy(() => import('./pages/user/RedeemGFP'));
+const TransferGFP = lazy(() => import('./pages/user/TransferGFP'));
 
 // Seller Pages
 const PostTrade = lazy(() => import('./pages/user/PostTrade'));
@@ -51,6 +53,12 @@ const MarketIntelligenceHub = lazy(() => import('./pages/user/MarketIntelligence
 const RFQDetailsPage = lazy(() => import('./pages/user/RFQDetailsPage'));
 const CircularResume = lazy(() => import('./pages/user/CircularResume'));
 const CommunityCollective = lazy(() => import('./pages/user/CommunityCollective'));
+const CreateSwarm = lazy(() => import('./pages/user/CreateSwarm'));
+const EditSwarm = lazy(() => import('./pages/user/EditSwarm'));
+const JoinSwarm = lazy(() => import('./pages/user/JoinSwarm'));
+const CreateGoal = lazy(() => import('./pages/user/CreateGoal'));
+const SwarmDetails = lazy(() => import('./pages/user/SwarmDetails'));
+const GoalDetails = lazy(() => import('./pages/user/GoalDetails'));
 const FinancingHub = lazy(() => import('./pages/user/FinancingHub'));
 const FulfillmentTrackingPage = lazy(() => import('./pages/user/FulfillmentTrackingPage'));
 
@@ -213,6 +221,8 @@ export default function App() {
             <Route path="/withdraw" element={<WithdrawalPage />} />
             <Route path="/resident-wallet" element={<ResidentWallet />} />
             <Route path="/seller-wallet" element={<SellerWallet />} />
+            <Route path="/redeem-gfp" element={<RedeemGFP />} />
+            <Route path="/transfer-gfp" element={<TransferGFP />} />
             <Route path="/discovery" element={<DiscoveryHub />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/book-pickup" element={<BookPickup />} />
@@ -230,6 +240,12 @@ export default function App() {
             <Route path="/market-pulse" element={<MarketIntelligenceHub />} />
             <Route path="/circular-resume" element={<CircularResume />} />
             <Route path="/community-collective" element={<ProtectedRoute><CommunityCollective /></ProtectedRoute>} />
+            <Route path="/community-collective/swarm/create" element={<ProtectedRoute><CreateSwarm /></ProtectedRoute>} />
+            <Route path="/community-collective/swarm/:id/edit" element={<ProtectedRoute><EditSwarm /></ProtectedRoute>} />
+            <Route path="/community-collective/swarm/:id/join" element={<ProtectedRoute><JoinSwarm /></ProtectedRoute>} />
+            <Route path="/community-collective/goal/create" element={<ProtectedRoute><CreateGoal /></ProtectedRoute>} />
+            <Route path="/community-collective/swarm/:id" element={<ProtectedRoute><SwarmDetails /></ProtectedRoute>} />
+            <Route path="/community-collective/goal/:id" element={<ProtectedRoute><GoalDetails /></ProtectedRoute>} />
             <Route path="/financing" element={<ProtectedRoute><FinancingHub /></ProtectedRoute>} />
             <Route path="/notifications" element={<NotificationsFeed />} />
             

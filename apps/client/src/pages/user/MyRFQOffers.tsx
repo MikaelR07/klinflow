@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ArrowLeft, Clock, CheckCircle2, XCircle, 
+import {
+  ArrowLeft, Clock, CheckCircle2, XCircle,
   Building2, MapPin, Scale, MessageSquare, ArrowRight, Package, Receipt
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -37,10 +37,10 @@ export default function MyRFQOffers() {
         const mapped = data.map((o: any) => {
           let computedStatus = o.status;
           if (computedStatus === 'accepted' && o.fulfillment_orders?.[0]) {
-             const fulfillmentStatus = o.fulfillment_orders[0].status;
-             if (['completed', 'pickup_completed', 'delivered'].includes(fulfillmentStatus)) {
-                computedStatus = 'completed';
-             }
+            const fulfillmentStatus = o.fulfillment_orders[0].status;
+            if (['completed', 'pickup_completed', 'delivered'].includes(fulfillmentStatus)) {
+              computedStatus = 'completed';
+            }
           }
           return {
             id: o.id,
@@ -63,13 +63,13 @@ export default function MyRFQOffers() {
 
     if (profile?.id) {
       const channel = supabase.channel('my_rfq_offers')
-        .on('postgres_changes', { 
-            event: '*', 
-            schema: 'public', 
-            table: 'rfq_offers',
-            filter: `seller_id=eq.${profile.id}` 
+        .on('postgres_changes', {
+          event: '*',
+          schema: 'public',
+          table: 'rfq_offers',
+          filter: `seller_id=eq.${profile.id}`
         }, () => {
-            fetchOffers();
+          fetchOffers();
         })
         .subscribe();
       return () => { supabase.removeChannel(channel); };
@@ -82,7 +82,7 @@ export default function MyRFQOffers() {
     <div className="flex flex-col min-h-screen bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
@@ -100,23 +100,21 @@ export default function MyRFQOffers() {
         <div className="flex px-4 pb-3 gap-1.5 overflow-x-auto no-scrollbar">
           {(['pending', 'accepted', 'completed', 'declined'] as const).map((statusOption) => {
             const count = quotes.filter(q => q.status === statusOption).length;
-            
+
             return (
               <button
                 key={statusOption}
                 onClick={() => setFilter(statusOption)}
-                className={`flex-1 py-2 px-1 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shrink-0 ${
-                  filter === statusOption 
-                    ? 'bg-primary text-white border-transparent shadow-md shadow-primary/20' 
-                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-                }`}
+                className={`flex-1 py-2 px-1 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shrink-0 ${filter === statusOption
+                  ? 'bg-primary text-white border-transparent '
+                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                  }`}
               >
                 <span>{statusOption}</span>
-                <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${
-                  filter === statusOption
-                    ? 'bg-white/25 text-white'
-                    : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
-                }`}>
+                <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${filter === statusOption
+                  ? 'bg-white/25 text-white'
+                  : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                  }`}>
                   {count}
                 </span>
               </button>
@@ -129,7 +127,7 @@ export default function MyRFQOffers() {
       <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 space-y-px pt-[calc(env(safe-area-inset-top,1rem)+5.85rem)] bg-slate-100 dark:bg-slate-800">
         <AnimatePresence>
           {filteredQuotes.length === 0 ? (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -163,9 +161,8 @@ export default function MyRFQOffers() {
                   className="bg-white dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group"
                 >
                   {/* Status accent bar on left edge */}
-                  <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-                    quote.status === 'accepted' ? 'bg-emerald-500' : quote.status === 'declined' ? 'bg-rose-500' : 'bg-amber-500'
-                  }`} />
+                  <div className={`absolute left-0 top-0 bottom-0 w-1 ${quote.status === 'accepted' ? 'bg-emerald-500' : quote.status === 'declined' ? 'bg-rose-500' : 'bg-amber-500'
+                    }`} />
 
                   <div className="pl-5 pr-4 py-3">
                     {/* Row 1: Material Name + Status Badge */}

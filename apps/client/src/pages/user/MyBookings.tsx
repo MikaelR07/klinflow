@@ -205,7 +205,7 @@ export default function MyBookings() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
         <div className="w-full mx-auto space-y-4">
           <div className="flex items-center justify-between">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
@@ -250,7 +250,7 @@ export default function MyBookings() {
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`flex-1 py-2 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${activeTab === tab
-                    ? 'bg-white dark:bg-slate-700 shadow-sm text-primary dark:text-white'
+                    ? 'bg-primary dark:bg-primary text-white dark:text-white'
                     : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
                     }`}
                 >

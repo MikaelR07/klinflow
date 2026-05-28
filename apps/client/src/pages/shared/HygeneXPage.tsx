@@ -182,7 +182,7 @@ export default function HygeneXPage() {
   return (
     <div className="flex flex-col fixed inset-0 bg-white dark:bg-slate-800 text-slate-900 dark:text-white z-50">
       {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 z-50 transition-colors max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-900/70 z-50 transition-colors max-w-lg mx-auto">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-500 transition-colors" />
@@ -212,15 +212,15 @@ export default function HygeneXPage() {
                 >
                   <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${isAi
                     ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'
-                    : 'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
+                    : 'bg-slate-200 dark:bg-primary border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
                     }`}>
                     {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
                   </div>
 
                   <div className="flex flex-col gap-2 max-w-[85%]">
                     <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${isAi
-                      ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-none shadow-sm'
-                      : 'bg-primary border-primary text-white font-medium rounded-tr-none shadow-lg shadow-primary/20'
+                      ? 'bg-white dark:bg-primary border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-none '
+                      : 'bg-primary border-primary text-white font-medium rounded-tr-none '
                       }`}>
                       {renderMessageText(msg.text)}
                     </div>
@@ -278,7 +278,7 @@ export default function HygeneXPage() {
       </div>
 
       <div className="shrink-0 w-full z-30 px-4 pb-8 lg:pb-10 pt-4 bg-transparent">
-        <div className="w-full max-w-4xl mx-auto bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[1rem]  overflow-hidden">
+        <div className="w-full max-w-4xl mx-auto bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-[1rem]  overflow-hidden">
           <div className="relative flex items-end">
             <textarea
               value={inputText}

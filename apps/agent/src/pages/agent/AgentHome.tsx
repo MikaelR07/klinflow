@@ -372,7 +372,7 @@ export default function AgentHome() {
       {/* ── TOP NAV & CORE CONTROLS ── */}
       <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
         {/* Header Section - Edge to Edge - FIXED TOPNAV */}
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700 shadow-sm">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}

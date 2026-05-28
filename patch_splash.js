@@ -1,28 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="description" content="Klinflow Business — B2B Recycling Marketplace & AI Logistics" />
-    <meta name="theme-color" content="#00A651" />
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="CF Business">
-    <link rel="icon" type="image/png" href="/app-icon.png" />
-    <link rel="apple-touch-icon" href="/app-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <title>Klinflow Business</title>
-  
-<style>
+const fs = require('fs');
+
+const apps = ['agent', 'hub', 'business', 'admin'];
+
+const styleBlock = `
+  <style>
     html,
     body {
       margin: 0;
       padding: 0;
-      background: #065f46;
-      /* Fallback matching emerald-800 */
+      background: #065f46; /* Fallback matching emerald-800 */
     }
 
     #initial-loader {
@@ -198,35 +184,28 @@
     }
 
     @keyframes icon-float {
-
-      0%,
-      100% {
+      0%, 100% {
         transform: translateY(0px);
       }
-
       50% {
         transform: translateY(-8px);
       }
     }
 
     @keyframes bounce {
-
-      0%,
-      80%,
-      100% {
+      0%, 80%, 100% {
         transform: scale(0.7);
         opacity: 0.4;
       }
-
       40% {
         transform: scale(1);
         opacity: 1;
       }
     }
   </style>
-</head>
-  <body class="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100">
-    <div id="initial-loader">
+`;
+
+const loaderDiv = `  <div id="initial-loader">
     <div class="loader-bg-circles">
       <div class="loader-circle-1"></div>
       <div class="loader-circle-2"></div>
@@ -237,28 +216,68 @@
         <div class="loader-ring-spin"></div>
         <img src="/vectors/client-app-logo.webp" alt="Client App Logo" class="loader-inner-logo" />
       </div>
-
+      
       <div class="loader-brand">
         <div class="loader-dot"></div>
         <span class="loader-brand-text">Klinflow</span>
         <div class="loader-dot"></div>
       </div>
-
+      
       <p class="loader-tagline">Collecting.Connecting.Cleaning</p>
-
+      
       <div class="loader-bouncing-dots">
         <div class="bounce-dot"></div>
         <div class="bounce-dot"></div>
         <div class="bounce-dot"></div>
       </div>
     </div>
-
+    
     <div class="loader-footer">
       <p class="loader-footer-text">AI Powered Informal weaver Network</p>
     </div>
-  </div>
+  </div>`;
 
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+const removalLogic = `
+// Remove the HTML splash screen only AFTER React has painted.
+// Double rAF ensures the browser has committed at least one frame
+// with the React LoadingScreen visible before we remove the HTML one.
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    const loader = document.getElementById("initial-loader");
+    if (loader) {
+      loader.remove();
+    }
+  });
+});
+`;
+
+for (const app of apps) {
+  const indexPath = \`/home/mikael/Desktop/Coding/Klinflow/apps/\${app}/index.html\`;
+  let indexHtml = fs.readFileSync(indexPath, 'utf8');
+
+  // Insert style before </head> if not already there
+  if (!indexHtml.includes('#initial-loader {')) {
+    indexHtml = indexHtml.replace('</head>', styleBlock + '\n</head>');
+  }
+
+  // Insert loader before <div id="root"> if not already there
+  if (!indexHtml.includes('<div id="initial-loader">')) {
+    // Some apps use id="root" or class="..." <div id="root">
+    indexHtml = indexHtml.replace('<div id="root">', loaderDiv + '\n    <div id="root">');
+  }
+  
+  fs.writeFileSync(indexPath, indexHtml);
+
+  // Update main.tsx
+  const mainPath = \`/home/mikael/Desktop/Coding/Klinflow/apps/\${app}/src/main.tsx\`;
+  let mainTsx = fs.readFileSync(mainPath, 'utf8');
+
+  // append removal logic if not already there
+  if (!mainTsx.includes('document.getElementById("initial-loader")')) {
+    mainTsx += '\n' + removalLogic;
+  }
+  
+  fs.writeFileSync(mainPath, mainTsx);
+  
+  console.log('Patched ' + app);
+}

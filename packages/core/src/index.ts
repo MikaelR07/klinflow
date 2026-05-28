@@ -28,3 +28,4 @@ export * from './data/wasteDefinitions';
 export * from './hooks/usePWA';
 export * from './utils/imageUtils';
 export * from './validation';
+export * from './stores/collectiveStore';

@@ -84,7 +84,7 @@ export default function MarketplaceInventory() {
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
-        <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700  z-50 transition-colors">
+        <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)]  px-4 border-b border-slate-200 dark:border-slate-600/60  z-50 transition-colors">
           <div className="max-w-lg mx-auto space-y-2.5">
             <div className="flex items-center justify-between">
               <button onClick={() => navigate(-1)} className="w-8 h-8 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
@@ -92,7 +92,7 @@ export default function MarketplaceInventory() {
               </button>
 
               <div className="text-center">
-                <h1 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Inventory</h1>
+                <h1 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Inventory</h1>
                 <p className="text-[9px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-0.5">What You have listed for sale</p>
               </div>
 
@@ -106,7 +106,7 @@ export default function MarketplaceInventory() {
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 ${activeTab === tab
-                    ? 'bg-white dark:bg-slate-700 shadow-sm text-emerald-600 dark:text-emerald-400 font-black'
+                    ? 'bg-primary dark:bg-primary shadow-sm text-white dark:text-white font-black'
                     : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                 >
