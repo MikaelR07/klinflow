@@ -165,19 +165,20 @@ export default function EditSwarm() {
           <div className="grid grid-cols-2 gap-4">
             {categories.map((cat) => {
               const isSelected = material === cat.label;
-              const imageMap = {
-                'paper': '/material-categories/boxes.webp',
-                'plastic': '/material-categories/plastic.webp',
-                'ewaste': '/material-categories/E-waste.webp',
-                'metal': '/material-categories/metal.webp',
-                'organic': '/material-categories/organic-waste.webp',
-                'general': '/material-categories/general-waste.webp',
-                'recyclable': '/material-categories/recyclables.webp',
-                'glass': '/material-categories/glasses.webp',
-                'appliances': '/material-categories/bulky-item.webp',
-                'bulky': '/material-categories/bulky-sofas.webp',
-              };
-              const bgImage = (imageMap as any)[cat.slug || cat.id];
+              const identifier = (cat.slug || cat.id || '').toLowerCase();
+              let bgImage = cat.image_url;
+              if (!bgImage) {
+                if (identifier.includes('paper') || identifier.includes('cardboard') || identifier.includes('box')) bgImage = '/material-categories/boxes.webp';
+                else if (identifier.includes('plastic')) bgImage = '/material-categories/plastic.webp';
+                else if (identifier.includes('ewaste') || identifier.includes('e-waste') || identifier.includes('electronic')) bgImage = '/material-categories/E-waste.webp';
+                else if (identifier.includes('metal')) bgImage = '/material-categories/metal.webp';
+                else if (identifier.includes('organic') || identifier.includes('food')) bgImage = '/material-categories/organic-waste.webp';
+                else if (identifier.includes('general') || identifier.includes('trash')) bgImage = '/material-categories/general-waste.webp';
+                else if (identifier.includes('glass')) bgImage = '/material-categories/glasses.webp';
+                else if (identifier.includes('appliance')) bgImage = '/material-categories/bulky-item.webp';
+                else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
+                else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
+              }
 
               return (
                 <button

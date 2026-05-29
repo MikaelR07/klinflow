@@ -205,47 +205,103 @@ export default function SellerWallet() {
 
       {/* ── CHARTS SECTION ── */}
       <div className="mx-1 grid grid-cols-2 gap-2">
+
         {/* Earnings Overview */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-4 flex flex-col">
+        <div
+          className="
+      bg-white
+      dark:bg-slate-900
+      rounded-2xl
+      border
+      border-slate-200
+      dark:border-slate-800
+      p-4
+      flex
+      flex-col
+      overflow-hidden
+      transform-gpu
+    "
+        >
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-xs font-bold text-slate-900 dark:text-white">Earnings Overview</h4>
-            <span className="text-[8px] font-bold text-slate-400 uppercase">This Month</span>
+            <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+              Earnings Overview
+            </h4>
+
+            <span className="text-[10px] font-bold text-slate-400 uppercase">
+              This Month
+            </span>
           </div>
-          <p className="text-lg font-black text-slate-900 dark:text-white mb-1">
-            KES 56,430.00
+
+          <p className="text-lg font-black text-slate-900 dark:text-white mb-1 leading-none truncate">
+            KES 23,030
           </p>
+
           <div className="flex items-center gap-1.5 mb-4">
-            <TrendingUp className="w-3 h-3 text-[#c2ed7d]" />
-            <p className="text-[9px] font-bold text-[#c2ed7d]">23% vs last month</p>
+            <TrendingUp className="w-3 h-3 text-[#c2ed7d] shrink-0" />
+
+            <p className="text-[10px] font-bold text-[#84cc16] dark:text-[#c2ed7d] truncate">
+              23% vs last month
+            </p>
           </div>
-
-
         </div>
 
         {/* Top Material Sold */}
-        <div className="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-4">
-          <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-4">Top Material Sold</h4>
+        <div
+          className="
+      bg-white
+      dark:bg-slate-900
+      rounded-2xl
+      border
+      border-slate-200
+      dark:border-slate-800
+      p-4
+      overflow-hidden
+      transform-gpu
+    "
+        >
+          <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-4">
+            Top Material Sold
+          </h4>
 
           <div className="flex items-center gap-3">
-
-
             <div className="flex-1 space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] font-medium text-slate-300">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-sm bg-[#c2ed7d]" /> Plastic</div>
-                <span>45%</span>
+
+              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="w-2 h-2 rounded-sm bg-[#c2ed7d] shrink-0" />
+                  <span className="truncate">Plastic</span>
+                </div>
+
+                <span className="shrink-0">45%</span>
               </div>
-              <div className="flex items-center justify-between text-[11px] font-medium text-slate-300">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-sm bg-[#65a30d]" /> Cardboard</div>
-                <span>25%</span>
+
+              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="w-2 h-2 rounded-sm bg-[#65a30d] shrink-0" />
+                  <span className="truncate">Cardboard</span>
+                </div>
+
+                <span className="shrink-0">25%</span>
               </div>
-              <div className="flex items-center justify-between text-[11px] font-medium text-slate-300">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-sm bg-slate-600" /> Aluminum</div>
-                <span>15%</span>
+
+              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="w-2 h-2 rounded-sm bg-slate-600 shrink-0" />
+                  <span className="truncate">Aluminum</span>
+                </div>
+
+                <span className="shrink-0">15%</span>
               </div>
-              <div className="flex items-center justify-between text-[11px] font-medium text-slate-300">
-                <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-sm bg-slate-500" /> Paper</div>
-                <span>10%</span>
+
+              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="w-2 h-2 rounded-sm bg-slate-500 shrink-0" />
+                  <span className="truncate">Paper</span>
+                </div>
+
+                <span className="shrink-0">10%</span>
               </div>
+
             </div>
           </div>
         </div>

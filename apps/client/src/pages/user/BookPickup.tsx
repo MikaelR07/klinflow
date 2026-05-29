@@ -354,7 +354,7 @@ export default function BookPickup() {
     <div className="space-y-6 pb-12">
 
       {/* ── HEADER (FIXED TOP NAV) ── */}
-      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-5 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-900/50">
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-5 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-900/70">
         <div className="flex items-center justify-between">
           <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="p-2.5 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
             <ArrowLeft className="w-5 h-5 dark:text-white" />
@@ -428,19 +428,20 @@ export default function BookPickup() {
                             if (!isABulky && isBBulky) return -1;
                             return 0;
                           }).map((cat) => {
-                            const imageMap = {
-                              'ewaste': '/material-categories/E-waste.webp',
-                              'metal': '/material-categories/metal.webp',
-                              'organic': '/material-categories/organic-waste.webp',
-                              'general': '/material-categories/general-waste.webp',
-                              'recyclable': '/material-categories/recyclables.webp',
-                              'glass': '/material-categories/glasses.webp',
-                              'appliances': '/material-categories/bulky-item.webp',
-                              'bulky': '/material-categories/bulky-sofas.webp',
-                              'paper': '/material-categories/boxes.webp',
-                              'plastic': '/material-categories/plastic.webp',
-                            };
-                            const bgImage = (cat as any).image_url || (imageMap as any)[(cat as any).slug || (cat as any).id];
+                            const identifier = ((cat as any).slug || (cat as any).id || '').toLowerCase();
+                            let bgImage = (cat as any).image_url;
+                            if (!bgImage) {
+                              if (identifier.includes('paper') || identifier.includes('cardboard') || identifier.includes('box')) bgImage = '/material-categories/boxes.webp';
+                              else if (identifier.includes('plastic')) bgImage = '/material-categories/plastic.webp';
+                              else if (identifier.includes('ewaste') || identifier.includes('e-waste') || identifier.includes('electronic')) bgImage = '/material-categories/E-waste.webp';
+                              else if (identifier.includes('metal')) bgImage = '/material-categories/metal.webp';
+                              else if (identifier.includes('organic') || identifier.includes('food')) bgImage = '/material-categories/organic-waste.webp';
+                              else if (identifier.includes('general') || identifier.includes('trash')) bgImage = '/material-categories/general-waste.webp';
+                              else if (identifier.includes('glass')) bgImage = '/material-categories/glasses.webp';
+                              else if (identifier.includes('appliance')) bgImage = '/material-categories/bulky-item.webp';
+                              else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
+                              else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
+                            }
 
                             return (
                               <button

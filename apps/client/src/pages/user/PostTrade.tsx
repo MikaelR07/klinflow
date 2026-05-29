@@ -253,7 +253,7 @@ export default function PostTrade() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-900/70 max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -314,19 +314,20 @@ export default function PostTrade() {
                     (cat.slug || '').toLowerCase().includes(searchQuery.toLowerCase())
                   ).map((cat) => {
                     const isSelected = wasteType?.id === cat.id;
-                    const imageMap = {
-                      'paper': '/material-categories/boxes.webp',
-                      'plastic': '/material-categories/plastic.webp',
-                      'ewaste': '/material-categories/E-waste.webp',
-                      'metal': '/material-categories/metal.webp',
-                      'organic': '/material-categories/organic-waste.webp',
-                      'general': '/material-categories/general-waste.webp',
-                      'recyclable': '/material-categories/recyclables.webp',
-                      'glass': '/material-categories/glasses.webp',
-                      'appliances': '/material-categories/bulky-item.webp',
-                      'bulky': '/material-categories/bulky-sofas.webp',
-                    };
-                    const bgImage = (imageMap as any)[cat.slug || cat.id];
+                    const identifier = (cat.slug || cat.id || '').toLowerCase();
+                    let bgImage = cat.image_url;
+                    if (!bgImage) {
+                      if (identifier.includes('paper') || identifier.includes('cardboard') || identifier.includes('box')) bgImage = '/material-categories/boxes.webp';
+                      else if (identifier.includes('plastic')) bgImage = '/material-categories/plastic.webp';
+                      else if (identifier.includes('ewaste') || identifier.includes('e-waste') || identifier.includes('electronic')) bgImage = '/material-categories/E-waste.webp';
+                      else if (identifier.includes('metal')) bgImage = '/material-categories/metal.webp';
+                      else if (identifier.includes('organic') || identifier.includes('food')) bgImage = '/material-categories/organic-waste.webp';
+                      else if (identifier.includes('general') || identifier.includes('trash')) bgImage = '/material-categories/general-waste.webp';
+                      else if (identifier.includes('glass')) bgImage = '/material-categories/glasses.webp';
+                      else if (identifier.includes('appliance')) bgImage = '/material-categories/bulky-item.webp';
+                      else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
+                      else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
+                    }
 
                     return (
                       <button
