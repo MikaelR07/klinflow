@@ -173,12 +173,9 @@ export default function App() {
     };
   }, [isAuthenticated, userId, profile?.isOnline, subscribeToJobs, cleanupJobs]);
 
-  if (isInitializing) {
-    return <LoadingScreen message="Syncing Dispatch..." />;
-  }
-
   return (
     <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
+      {isInitializing && <LoadingScreen message="Syncing Dispatch..." />}
       <OfflineBanner />
       <Routes>
         <Route path="/welcome" element={isAuthenticated ? <Navigate to="/" replace /> : <Welcome />} />

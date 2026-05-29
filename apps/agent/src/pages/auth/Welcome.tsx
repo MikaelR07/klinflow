@@ -35,12 +35,12 @@ export default function Welcome() {
             </span>
           </div>
 
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white leading-[0.95] mb-6 tracking-tighter">
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white leading-[0.95] mb-2 tracking-tighter">
             Clean Cities & <br />
             <span className="text-emerald-500 ">Unlimited Earnings.</span>
           </h1>
 
-          <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-sm mb-10 leading-relaxed">
+          <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-sm mb-4 leading-relaxed">
             Klinflow Agent is the command center for modern recyclers. Navigate,
             collect, and trade waste-assets with AI-powered efficiency.
           </p>
@@ -80,7 +80,7 @@ export default function Welcome() {
             </div>
 
             <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800 shadow-xl  flex items-center justify-center text-amber-500 shrink-0 border border-slate-100 dark:border-slate-700">
+              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-amber-500 shrink-0 border border-slate-100 dark:border-slate-700">
                 <Truck className="w-7 h-7" />
               </div>
               <div>
@@ -114,10 +114,10 @@ export default function Welcome() {
         </div>
 
         {/* Footer Actions */}
-        <div className="relative z-10 pb-8 space-y-4">
+        <div className="relative z-10  space-y-2">
           <button
             onClick={() => navigate("/role-selection")}
-            className="w-full py-5 bg-emerald-600 text-white rounded-[2rem] font-semibold text-base shadow-2xl shadow-emerald-600/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+            className="w-full py-3 bg-emerald-600 text-white rounded-[2rem] font-semibold text-base flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
           >
             Start Collecting <ArrowRight className="w-5 h-5" />
           </button>

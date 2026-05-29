@@ -178,7 +178,7 @@ export default function UserHome() {
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
               <div className="shrink-0">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
+                <div className="w-10 h-10  rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
                   {profile?.avatarUrl ? (
                     <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                   ) : (

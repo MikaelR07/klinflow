@@ -196,12 +196,9 @@ export default function App() {
     };
   }, [isAuthenticated, userId, role, checkAppRole]);
 
-  if (isInitializing) {
-    return <LoadingScreen message="Securing Session..." />;
-  }
-
   return (
     <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
+      {isInitializing && <LoadingScreen message="Securing Session..." />}
       <OfflineBanner />
 
 

@@ -222,13 +222,13 @@ function SellerLeaderboard() {
         </div>
       </div>
 
-      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-2">
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] relative max-w-lg mx-auto w-full px-2">
         {/* Hero Banner */}
-        <div className="bg-gradient-to-br from-emerald-600 to-teal-700 dark:from-slate-900 dark:to-slate-900 p-8 rounded-2xl text-white relative overflow-hidden border border-emerald-500/20 dark:border-white/5">
+        <div className="bg-gradient-to-b from-primary to-teal-700 dark:from-primary dark:to-emerald-900 p-4 rounded-2xl text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
           <div className="relative z-10 text-center">
             <Trophy className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-black mb-2 italic tracking-tighter">Profit Dominance!</h2>
+            <h2 className="text-2xl mb-2 italic tracking-tighter">Profit Dominance!</h2>
             <p className="text-[11px] font-semibold text-slate-100 leading-relaxed max-w-[280px] mx-auto capitalize tracking-widest">
               Dominate the market to unlock premium buyer access and zero-fee withdrawals! 🚀
             </p>

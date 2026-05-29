@@ -287,7 +287,7 @@ export default function AgentHome() {
         {/* Header Section - Edge to Edge - FIXED TOPNAV */}
         <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900 ">
           <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {/* Profile Avatar */}
               <div className="shrink-0">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">

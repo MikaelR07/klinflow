@@ -305,7 +305,7 @@ export default function CreateRFQPage() {
                         : 'border-slate-400 dark:border-slate-100 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-850'
                         }`}
                     >
-                      <span className="text-[10px] font-bold text-slate-300 dark:text-slate-350 leading-tight">{cat.label}</span>
+                      <span className="text-[10px] font-bold text-slate-700 dark:text-slate-350 leading-tight">{cat.label}</span>
                       {isSelected && (
                         <div className="absolute top-1 right-1 w-3 h-3 rounded-full bg-amber-500 flex items-center justify-center">
                           <CheckCircle2 className="w-2 h-2 text-white" />
@@ -401,7 +401,7 @@ export default function CreateRFQPage() {
             <div className="flex justify-center">
               <button
                 onClick={handleNext}
-                className="px-8 py-4 bg-emerald-600 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-sm tracking-widest shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center gap-2"
+                className="px-8 py-4 bg-emerald-600 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-sm tracking-widest  active:scale-95 transition-all flex items-center gap-2"
               >
                 Specify Logistics & Price <ChevronRight className="w-4 h-4" />
               </button>

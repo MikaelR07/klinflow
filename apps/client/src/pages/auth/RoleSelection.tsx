@@ -35,7 +35,7 @@ export default function RoleSelection() {
   ];
 
   return (
-    <div className="flex flex-col dark:bg-slate-900 min-h-dvh max-w-lg mx-auto px-2 py-4 relative overflow-hidden">
+    <div className="flex flex-col dark:bg-slate-900 min-h-dvh max-w-lg mx-auto px-4 py-4 relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
@@ -68,6 +68,11 @@ export default function RoleSelection() {
           >
             <div className="relative bg-[#FFFFFF] dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 rounded-[1.5rem] p-5 transition-all active:bg-slate-100 dark:active:bg-slate-800 overflow-hidden">
 
+              <div className="flex items-start justify-between mb-3">
+                <div className={`w-12 h-12 rounded-xl ${role.bgColor} flex items-center justify-center ${role.iconColor} border ${role.borderColor}`}>
+                  <role.icon className="w-6 h-6" />
+                </div>
+              </div>
 
               <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-1 tracking-tight">{role.title}</h2>
               <p className={`text-[10px] font-bold capitalize tracking-[0.2em] ${role.textColor} mb-2`}>{role.subtitle}</p>
@@ -95,7 +100,7 @@ export default function RoleSelection() {
 
       <footer className="py-8 text-center relative z-10">
         <p className="text-xs text-slate-400 font-semibold">
-          Klin <span className="text-emerald-500 font-semibold">Flow</span>
+          Powered by <span className="text-emerald-500 font-semibold">KlinFlow</span>
         </p>
       </footer>
     </div>
