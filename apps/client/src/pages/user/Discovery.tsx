@@ -74,14 +74,14 @@ export default function DiscoveryHub() {
   return (
     <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
         <div className="w-full mx-auto">
           <div className="flex items-center gap-4 mb-4">
-            <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
+            <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-3xl active:scale-90 transition-all">
               <ArrowLeft className="w-4 h-4 dark:text-white" />
             </button>
             <div>
-              <h1 className="text-sm font-bold dark:text-white tracking-tight leading-none mb-1">Find a Partner</h1>
+              <h1 className="text-lg font-bold dark:text-white tracking-tight leading-none mb-1">Find a Partner</h1>
               <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Verified Logistics</p>
             </div>
           </div>
@@ -94,7 +94,7 @@ export default function DiscoveryHub() {
                 placeholder="Search partners..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-100/50 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-primary/20 rounded-2xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
+                className="w-full bg-slate-300/50 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-primary/20 rounded-2xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
               />
             </div>
             <button
@@ -278,14 +278,14 @@ export default function DiscoveryHub() {
         </div>
 
         {/* ── INFO BOX ── */}
-        <div className="px-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-500  p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
-            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center shrink-0">
-              <Info className="w-5 h-5 text-blue-600" />
+        <div className="px-1.5">
+          <div className="bg-gradient-to-br from-emerald-800 to-green-500  p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
+            <div className="w-10 h-10 bg-emerald-800 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center shrink-0">
+              <Info className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h4 className="text-xs font-semibold text-white dark:text-blue-400 capitalize tracking-widest mb-1">Choosing the right scale</h4>
-              <p className="text-xs font-medium text-white dark:text-white leading-relaxed">
+              <h4 className="text-xs font-semibold text-white dark:text-white capitalize tracking-widest mb-1">Choosing the right scale</h4>
+              <p className="text-xs font-medium text-slate-200/70 dark:text-slate-200/70 leading-relaxed">
                 Standard agents use small vehicles for fast, small pickups. Bulk partners use trucks for estate-wide or industrial recycling.
               </p>
             </div>

@@ -171,14 +171,14 @@ export default function UserHome() {
       />
 
       {/* ── TOP NAV & HERO ── */}
-      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
+      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
         {/* Header Section - Edge to Edge - DYNAMIC STICKY */}
         <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
               <div className="shrink-0">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
                   {profile?.avatarUrl ? (
                     <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                   ) : (
@@ -197,7 +197,7 @@ export default function UserHome() {
             </div>
             <button
               onClick={() => navigate('/notifications')}
-              className="relative w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
+              className="relative w-11 h-11 shrink-0 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
             >
               <Bell className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
               {Number(unreadCount) > 0 && (
@@ -210,7 +210,7 @@ export default function UserHome() {
         </div>
 
         {/* Wallet Hero */}
-        <div className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800  rounded-2xl p-5 gpu-layer">
+        <div className="bg-gradient-to-br from-primary  to-emerald-600 to-emerald-800  rounded-xl p-6 gpu-layer">
           <div className="flex flex-col gap-6 relative z-10">
             <div className="flex items-end justify-between">
               <div>

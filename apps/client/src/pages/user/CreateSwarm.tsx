@@ -19,6 +19,7 @@ export default function CreateSwarm() {
 
   const [material, setMaterial] = useState('');
   const [targetWeight, setTargetWeight] = useState('');
+  const [initialWeight, setInitialWeight] = useState('');
   const [description, setDescription] = useState('');
   const [photos, setPhotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,7 @@ export default function CreateSwarm() {
   const handleSubmit = async () => {
     if (!material) return toast.error('Select a material type');
     if (!targetWeight || Number(targetWeight) < 10) return toast.error('Target must be at least 10 KG');
+    if (Number(initialWeight) < 0 || Number(initialWeight) > Number(targetWeight)) return toast.error('Initial weight cannot exceed target weight');
     if (photos.length < 1) return toast.error('Please upload at least 1 photo');
 
     setLoading(true);
@@ -75,17 +77,30 @@ export default function CreateSwarm() {
       const imageUrls = await Promise.all(uploadPromises);
       toast.dismiss(uploadToastId);
 
-      const { success } = await createSwarm({
+      const { success, data: newSwarm } = await createSwarm({
         creator_id: profile?.id,
         estate: estateName,
         material,
         target_weight: Number(targetWeight),
+        current_weight: Number(initialWeight) || 0,
         description: description.trim(),
         images: imageUrls,
         status: 'active',
       });
 
-      if (success) {
+      if (success && newSwarm) {
+        if (Number(initialWeight) > 0) {
+          const { error: joinError } = await supabase
+            .from('swarm_participants')
+            .insert({
+              swarm_id: newSwarm.id,
+              user_id: profile?.id,
+              pledged_weight: Number(initialWeight),
+              status: 'pledged'
+            });
+          if (joinError) console.error("Error adding initial participant:", joinError);
+        }
+        
         toast.success('Swarm created successfully!');
         navigate('/community-collective');
       } else {
@@ -214,6 +229,25 @@ export default function CreateSwarm() {
             className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300"
           />
           <p className="text-[10px] text-slate-400">Minimum 10 KG. Set a realistic target for your neighbourhood.</p>
+        </div>
+
+        {/* Initial Weight */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">
+          <div className="flex items-center gap-2.5 mb-1">
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+              <Scale className="w-4 h-4 text-emerald-600" />
+            </div>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Your Contribution (KG)</p>
+          </div>
+          <input
+            type="number"
+            value={initialWeight}
+            onChange={(e) => setInitialWeight(e.target.value)}
+            placeholder="e.g. 50"
+            min={0}
+            className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-slate-300"
+          />
+          <p className="text-[10px] text-slate-400">How much are you contributing right now? This helps build momentum.</p>
         </div>
 
         {/* Description */}

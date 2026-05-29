@@ -48,7 +48,7 @@ export default function CommunityCollective() {
             <div>
               <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Collective Hub</h1>
               <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1">
-                <Users className="w-3.5 h-3.5 text-emerald-500" /> {estateName} Sacco
+                <Users className="w-3.5 h-3.5 text-emerald-500" /> {estateName} Group
               </p>
             </div>
           </div>
@@ -198,44 +198,43 @@ export default function CommunityCollective() {
           {goals.map((goal) => {
             const percentage = Math.min(100, Math.round((goal.current_weight / goal.target_weight) * 100));
             return (
-              <Link to={`/community-collective/goal/${goal.id}`} key={goal.id} className="block bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 active:scale-[0.98] transition-all shadow-sm">
-                <div className="flex justify-between items-center mb-5">
-                  <div className="flex-1 pr-10 space-y-5">
-                    <div className="flex items-center gap-3.5">
-                      <div className="w-11 h-11 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center">
-                        <ShieldCheck className="w-5 h-5 text-[#0b3c2d] dark:text-emerald-400" />
+              <Link to={`/community-collective/goal/${goal.id}`} key={goal.id} className="block bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 active:scale-[0.98] transition-all shadow-sm">
+                <div className="flex justify-between items-center mb-3">
+                  <div className="flex-1 pr-6 space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center">
+                        <ShieldCheck className="w-4 h-4 text-[#0b3c2d] dark:text-emerald-400" />
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-0.5 tracking-tight">{goal.title}</h4>
-                        <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Community Goal</p>
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight tracking-tight">{goal.title}</h4>
+                        <p className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest mt-0.5">Community Goal</p>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                         <div className="h-full bg-[#00b634] rounded-full transition-all duration-1000" style={{ width: `${percentage}%` }} />
                       </div>
                       <div className="flex justify-between items-center">
-                        <p className="text-[11px] font-bold text-[#00b634] tracking-wide">{goal.current_weight.toLocaleString()} / {goal.target_weight.toLocaleString()} KG</p>
+                        <p className="text-[10px] font-bold text-[#00b634] tracking-wide">{goal.current_weight.toLocaleString()} / {goal.target_weight.toLocaleString()} KG</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="relative w-[88px] h-[88px] flex items-center justify-center shrink-0">
+                  <div className="relative w-[64px] h-[64px] flex items-center justify-center shrink-0">
                     <svg className="w-full h-full transform -rotate-90">
-                      <circle cx="44" cy="44" r="38" className="stroke-slate-100 dark:stroke-slate-800" strokeWidth="6" fill="none" />
-                      <circle cx="44" cy="44" r="38" className="stroke-[#00b634]" strokeWidth="6" fill="none" strokeDasharray="239" strokeDashoffset={239 - (239 * percentage) / 100} strokeLinecap="round" />
+                      <circle cx="32" cy="32" r="28" className="stroke-slate-100 dark:stroke-slate-800" strokeWidth="5" fill="none" />
+                      <circle cx="32" cy="32" r="28" className="stroke-[#00b634]" strokeWidth="5" fill="none" strokeDasharray="176" strokeDashoffset={176 - (176 * percentage) / 100} strokeLinecap="round" />
                     </svg>
-                    <span className="absolute text-base font-bold text-slate-800 dark:text-white">{percentage}%</span>
+                    <span className="absolute text-xs font-bold text-slate-800 dark:text-white">{percentage}%</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center justify-between">
                   <p className="text-[10px] font-bold text-slate-400">{goal.participants_count || 0} members contributing</p>
-                </div>
-
-                <div className="w-full text-center mt-5 py-3.5 bg-green-600 text-white rounded-xl font-bold text-[11px] uppercase tracking-widest">
-                  View Goal
+                  <div className="px-4 py-2 bg-green-600 text-white rounded-xl font-bold text-[9px] uppercase tracking-widest">
+                    View Goal
+                  </div>
                 </div>
               </Link>
             )

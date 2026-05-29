@@ -68,7 +68,7 @@ interface CollectiveState {
   fetchEstateStats: (estate: string) => Promise<void>;
   fetchSwarmById: (id: string) => Promise<{ swarm: Swarm | null; participants: SwarmParticipant[] }>;
   fetchGoalById: (id: string) => Promise<{ goal: CollectiveGoal | null; participants: GoalParticipant[] }>;
-  createSwarm: (data: Partial<Swarm>) => Promise<{ success: boolean; error?: any }>;
+  createSwarm: (data: Partial<Swarm>) => Promise<{ success: boolean; data?: Swarm; error?: any }>;
   updateSwarm: (id: string, data: Partial<Swarm>) => Promise<{ success: boolean; error?: any }>;
   deleteSwarm: (id: string) => Promise<{ success: boolean; error?: any }>;
   joinSwarm: (data: Partial<SwarmParticipant>) => Promise<{ success: boolean; error?: any }>;
@@ -219,11 +219,13 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
 
   createSwarm: async (data) => {
     try {
-      const { error } = await supabase
+      const { data: resData, error } = await supabase
         .from('swarms')
-        .insert(data);
+        .insert(data)
+        .select()
+        .single();
       if (error) throw error;
-      return { success: !error, error };
+      return { success: true, data: resData };
     } catch (error) {
       console.error('Error creating swarm:', error);
       return { success: false, error };

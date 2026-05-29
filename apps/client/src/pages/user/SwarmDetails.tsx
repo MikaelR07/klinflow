@@ -21,6 +21,7 @@ export default function SwarmDetails() {
   const [swarm, setSwarm] = useState<Swarm | null>(null);
   const [participants, setParticipants] = useState<SwarmParticipant[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const loadData = async () => {
     if (!id) return;
@@ -33,16 +34,20 @@ export default function SwarmDetails() {
 
   useEffect(() => { loadData(); }, [id]);
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (!id || !profile?.id || swarm?.creator_id !== profile.id) return;
-    if (confirm('Are you sure you want to delete this swarm?')) {
-      const { success } = await deleteSwarm(id);
-      if (success) {
-        toast.success('Swarm deleted successfully');
-        navigate('/community-collective');
-      } else {
-        toast.error('Failed to delete swarm');
-      }
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!id) return;
+    setShowDeleteModal(false);
+    const { success } = await deleteSwarm(id);
+    if (success) {
+      toast.success('Swarm deleted successfully');
+      navigate('/community-collective');
+    } else {
+      toast.error('Failed to delete swarm');
     }
   };
 
@@ -51,8 +56,27 @@ export default function SwarmDetails() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F8F9FF] dark:bg-slate-800">
-        <div className="w-8 h-8 border-3 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+      <div className="fixed top-0 left-0 right-0 bottom-[64px] z-[50] bg-[#F2F3F4] dark:bg-slate-800 overflow-hidden max-w-lg mx-auto">
+        {/* Skeleton Hero Image */}
+        <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800/80 animate-pulse relative">
+          {/* Skeleton Back Button */}
+          <div 
+            style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
+            className="absolute left-6 z-20 w-10 h-10 bg-black/10 dark:bg-black/20 rounded-full"
+          />
+        </div>
+        
+        {/* Skeleton Content Sheet */}
+        <div className="bg-[#F2F3F4] dark:bg-slate-800 px-2 pt-2 pb-2 space-y-4 rounded-t-2xl -mt-32 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+          {/* Top Card Skeleton */}
+          <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 h-[104px] animate-pulse" />
+          
+          {/* Progress Card Skeleton */}
+          <div className="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-700/40 h-[116px] animate-pulse" />
+          
+          {/* Stats Card Skeleton */}
+          <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 h-[132px] animate-pulse" />
+        </div>
       </div>
     );
   }
@@ -146,15 +170,25 @@ export default function SwarmDetails() {
             </div>
           </div>
         </div>
-        {/* Progress Card (Branded) */}
-        <div className="bg-indigo-700 dark:bg-indigo-500/10 p-5 rounded-2xl border border-indigo-500/20  flex flex-col justify-center text-center">
-          <p className="text-[10px] font-bold text-indigo-100 dark:text-indigo-400/60 capitalize tracking-widest mb-1">Swarm Progress</p>
-          <p className="text-xl font-black text-white dark:text-indigo-400 leading-none">{percentage}% Complete</p>
-          <p className="text-[10px] text-indigo-200 dark:text-indigo-500/60 font-bold capitalize mt-1.5">
+        {/* Progress Card (Professional Neutral Style) */}
+        <div className="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-700/40 flex flex-col justify-center text-center shadow-sm">
+          <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1">
+            Swarm Progress
+          </p>
+
+          <p className="text-xl font-black text-green-600 dark:text-slate-100 leading-none">
+            {percentage}% Complete
+          </p>
+
+          <p className="text-[10px] text-slate-400 dark:text-slate-400 font-semibold mt-1.5">
             {swarm.current_weight} / {swarm.target_weight} KG collected
           </p>
-          <div className="h-2 w-full bg-white/20 rounded-full overflow-hidden mt-3">
-            <div className="h-full bg-white rounded-full transition-all duration-1000" style={{ width: `${percentage}%` }} />
+
+          <div className="h-2 w-full bg-slate-700/50 dark:bg-slate-800 rounded-full overflow-hidden mt-3">
+            <div
+              className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400"
+              style={{ width: `${percentage}%` }}
+            />
           </div>
         </div>
 
@@ -273,6 +307,35 @@ export default function SwarmDetails() {
           </div>
         )}
       </div>
+
+      {/* Custom Delete Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl p-6 shadow-2xl border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in duration-200">
+            <div className="w-12 h-12 rounded-full bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center mb-4">
+              <Trash2 className="w-6 h-6 text-rose-500" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Delete this Swarm?</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
+              This action cannot be undone. All collected progress and participant data will be permanently removed.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="flex-1 py-3.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold text-xs uppercase tracking-widest active:scale-[0.98] transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex-1 py-3.5 bg-rose-500 text-white rounded-xl font-bold text-xs uppercase tracking-widest active:scale-[0.98] transition-all shadow-lg shadow-rose-500/20"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
