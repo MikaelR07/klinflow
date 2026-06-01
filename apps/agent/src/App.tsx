@@ -48,8 +48,7 @@ const NotificationsFeed = lazy(() => import('./pages/agent/NotificationsFeed'));
 const PrivacySecurityPage = lazy(() => import('./pages/settings/PrivacySecurityPage'));
 const SupportPage = lazy(() => import('./pages/settings/SupportPage'));
 const FeedbackPage = lazy(() => import('./pages/settings/FeedbackPage'));
-const StaffApplication = lazy(() => import('./pages/settings/StaffApplication'));
-
+const CompanyStaffRequests = lazy(() => import('./pages/settings/CompanyStaffRequests'));
 import Welcome from './pages/auth/Welcome';
 import RoleSelection from './pages/auth/RoleSelection';
 import Login from './pages/auth/Login';
@@ -211,9 +210,7 @@ export default function App() {
             <Route path="/admin/finance" element={<FleetFinance />} />
             <Route path="/admin/rfqs" element={<FleetRFQs />} />
             <Route path="/admin/dispatch" element={<DispatchDashboard />} />
-
-
-
+            <Route path="/admin/driver-requests" element={<CompanyStaffRequests />} />
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />
               <Route path="configuration" element={<AgentConfigurationPage />} />
@@ -222,7 +219,7 @@ export default function App() {
               <Route path="privacy" element={<PrivacySecurityPage />} />
               <Route path="support" element={<SupportPage />} />
               <Route path="feedback" element={<FeedbackPage />} />
-              <Route path="staff-application" element={<StaffApplication />} />
+
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

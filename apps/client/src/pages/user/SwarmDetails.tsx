@@ -60,20 +60,20 @@ export default function SwarmDetails() {
         {/* Skeleton Hero Image */}
         <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800/80 animate-pulse relative">
           {/* Skeleton Back Button */}
-          <div 
+          <div
             style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
             className="absolute left-6 z-20 w-10 h-10 bg-black/10 dark:bg-black/20 rounded-full"
           />
         </div>
-        
+
         {/* Skeleton Content Sheet */}
         <div className="bg-[#F2F3F4] dark:bg-slate-800 px-2 pt-2 pb-2 space-y-4 rounded-t-2xl -mt-32 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
           {/* Top Card Skeleton */}
           <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 h-[104px] animate-pulse" />
-          
+
           {/* Progress Card Skeleton */}
           <div className="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-700/40 h-[116px] animate-pulse" />
-          
+
           {/* Stats Card Skeleton */}
           <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 h-[132px] animate-pulse" />
         </div>
@@ -132,7 +132,7 @@ export default function SwarmDetails() {
       <div className="bg-[#F2F3F4] dark:bg-slate-800 px-2 pt-2 pb-2 space-y-4 rounded-t-2xl -mt-32 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
 
         {/* Material & Status Card */}
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
+        <div className="bg-white dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Target Material</p>
@@ -193,7 +193,7 @@ export default function SwarmDetails() {
         </div>
 
         {/* Swarm Stats Card */}
-        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
+        <div className="bg-white dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
@@ -240,7 +240,7 @@ export default function SwarmDetails() {
         )}
 
         {/* Participants Card */}
-        <div className="bg-white dark:bg-slate-900 p-0 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900/60 p-0 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
           <div className="px-5 py-4">
             <h4 className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Participants ({participants.length})</h4>
           </div>
@@ -282,7 +282,7 @@ export default function SwarmDetails() {
           <div className="flex gap-3 pt-2">
             <button
               onClick={handleDelete}
-              className="flex-1 py-4 bg-white dark:bg-slate-900 text-rose-500 border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest shadow-sm active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+              className="flex-1 py-4  bg-red-600 text-white border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all flex items-center justify-center gap-2"
             >
               <Trash2 className="w-4 h-4" /> Delete Swarm
             </button>

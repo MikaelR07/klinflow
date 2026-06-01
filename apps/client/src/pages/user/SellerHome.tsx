@@ -206,10 +206,10 @@ export default function SellerHome() {
       />
 
       {/* ── TOP NAV & HERO ── */}
-      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
+      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
         <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/70 ">
           <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               {/* Profile Avatar */}
               <div className="shrink-0">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
@@ -246,9 +246,9 @@ export default function SellerHome() {
 
         {/* ── REVENUE HERO CARD ── */}
         <div className="relative group">
-          <div className="bg-gradient-to-b from-primary to-emerald-600 to-emerald-800  rounded-xl   p-6  gpu-layer relative overflow-hidden">
+          <div className="bg-gradient-to-b from-primary to-emerald-600 to-emerald-800 rounded-xl p-4 gpu-layer relative overflow-hidden">
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
-            <div className="flex flex-col gap-6 relative z-10">
+            <div className="flex flex-col gap-2 relative z-10">
               <div className="flex items-end justify-between">
                 <div>
                   <p className="text-[12px] font-semibold text-emerald-100/90 capitalise tracking-widest mb-1.5 flex items-center gap-1.5">
@@ -268,37 +268,39 @@ export default function SellerHome() {
                 </button>
               </div>
 
-              {/* Stats row */}
-              <div className="pt-5 border-t border-white/30">
-                <div className="flex items-center justify-between sm:justify-start sm:gap-16 px-1">
+              {/* Stats grid */}
+              <div className="pt-4 border-t border-white/20">
+                <div className="grid grid-cols-4 gap-2 ">
 
-                  <div className="flex flex-col items-center gap-1">
-                    <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalDeals}</p>
-                    <div className="flex items-center gap-1.5">
-                      <Handshake className="w-3.5 h-3.5 text-emerald-300" />
-                      <p className="text-[10px] font-semibold text-emerald-200 capitalize tracking-widest">Deals</p>
+                  <div className="bg-emerald-950/30 rounded-xl p-2 text-center flex flex-col">
+                    <Handshake className="w-4 h-4 text-emerald-400 mx-auto mb-3" />
+                    <div>
+                      <p className="text-sm sm:text-base font-bold text-white leading-none mb-1">{totalDeals}</p>
+                      <p className="text-[9px] font-semibold text-emerald-100/70 capitalize truncate">Deals</p>
                     </div>
                   </div>
 
-                  {/* Independent Divider */}
-                  <div className="w-px h-8 bg-white/20" />
-
-                  <div className="flex flex-col items-center gap-1">
-                    <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">{totalSoldKg}kg</p>
-                    <div className="flex items-center gap-1.5">
-                      <Scale className="w-3.5 h-3.5 text-emerald-300" />
-                      <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest">Sold KG</p>
+                  <div className="bg-emerald-950/30 rounded-xl p-2 text-center flex flex-col">
+                    <Scale className="w-4 h-4 text-emerald-400 mb-3 mx-auto" />
+                    <div>
+                      <p className="text-sm sm:text-base font-bold text-white leading-none mb-1">{totalSoldKg}</p>
+                      <p className="text-[9px] font-semibold text-emerald-100/70 capitalize truncate">Sold KG</p>
                     </div>
                   </div>
 
-                  {/* Independent Divider */}
-                  <div className="w-px h-8 bg-white/20" />
+                  <div className="bg-emerald-950/30 rounded-xl p-2 text-center flex flex-col">
+                    <Clock className="w-4 h-4 text-emerald-400 mb-3 mx-auto" />
+                    <div>
+                      <p className="text-sm sm:text-base font-bold text-white leading-none mb-1">{inEscrowAmount.toLocaleString()}</p>
+                      <p className="text-[9px] font-semibold text-emerald-100/70 capitalize truncate">Pending</p>
+                    </div>
+                  </div>
 
-                  <div className="flex flex-col items-center gap-1">
-                    <p className="text-sm sm:text-base font-semibold text-white leading-none truncate">KSh {inEscrowAmount.toLocaleString()}</p>
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-emerald-300" />
-                      <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest">Pending</p>
+                  <div onClick={() => navigate('/impact-hub')} className="bg-emerald-950/30 rounded-xl p-2 text-center flex flex-col cursor-pointer hover:bg-emerald-950/50 transition-colors">
+                    <Star className="w-4 h-4 text-amber-400 mb-3 mx-auto" />
+                    <div>
+                      <p className="text-sm sm:text-base font-bold text-white leading-none mb-1">{rewardPoints}</p>
+                      <p className="text-[9px] font-semibold text-emerald-100/70 capitalize truncate">GFP</p>
                     </div>
                   </div>
 
@@ -372,7 +374,7 @@ export default function SellerHome() {
             >
               <div className="relative">
                 <div className="w-10 h-10 bg-amber-500 dark:bg-slate-800  text-amber-500 group-hover:text-amber-600 rounded-xl flex items-center justify-center  transition-colors">
-                  <Wallet className="w-6 h-6 text-white dark:text-white" />
+                  <Wallet className="w-5 h-5 text-white dark:text-white" />
                 </div>
 
               </div>
@@ -380,6 +382,29 @@ export default function SellerHome() {
                 <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Wallet</p>
               </div>
             </button>
+          </div>
+
+          {/* RFQ Card Inside Quick Actions */}
+          <div className="px-1 pb-1">
+            <div
+              onClick={() => navigate('/my-rfq-offers')}
+              className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-4 flex items-center justify-between group active:scale-[0.98] transition-all shadow-sm relative overflow-hidden"
+            >
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="w-10 h-10 bg-orange-50 dark:bg-orange-500/10 rounded-xl flex items-center justify-center text-orange-500 shadow-inner shrink-0">
+                  <Receipt className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-[13px] font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1">Submitted RFQs</h3>
+                  <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest flex items-center gap-2">
+                    Track Requests to Buyers
+                  </p>
+                </div>
+              </div>
+              <div className="p-1.5 bg-white dark:bg-slate-700 rounded-lg group-hover:bg-orange-500 group-hover:text-white transition-all relative z-10 shadow-sm border border-slate-200 dark:border-slate-600">
+                <ArrowRight className="w-3.5 h-3.5" />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -390,77 +415,49 @@ export default function SellerHome() {
           <p className="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide px-1 ">
             Business Tools
           </p>
-          {/* ── MARKET INTELLIGENCE (NEW OS LAYER) ── */}
-          <div
-            onClick={() => navigate('/market-pulse')}
-            className="bg-gradient-to-br from-primary to-emerald-800 to-emerald-600  border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
-          >
-
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-emerald-600 shadow-sm">
-                <BarChart3 className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-slate-50 dark:text-white capitalize tracking-tight leading-none mb-1">Market Intelligence</h3>
-                <p className="text-[9px] font-bold text-slate-200 capitalize tracking-widest flex items-center gap-1.5">
-                  View Material Prices in the Market
-                </p>
+          <div className="grid grid-cols-2 gap-2 !mt-2">
+            {/* ── MARKET INTELLIGENCE ── */}
+            <div
+              onClick={() => navigate('/market-pulse')}
+              className="bg-gradient-to-br from-primary to-emerald-800 to-emerald-600 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-3 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+            >
+              <div className="flex items-center gap-2.5 relative z-10 w-full">
+                <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
+                  <BarChart3 className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-[11px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
+                    Market Prices
+                  </h3>
+                  <p className="text-[9px] font-medium text-slate-200 leading-snug mt-0.5 line-clamp-2">
+                    View material prices
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/70 shrink-0" />
               </div>
             </div>
-            <div className="p-1.5 rounded-lg shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all relative z-10">
-              <ArrowRight className="w-3.5 h-3.5 text-white" />
+
+            {/* ── COMMUNITY COLLECTIVE ── */}
+            <div
+              onClick={() => navigate('/community-collective')}
+              className="bg-gradient-to-br from-blue-600 via-emerald-600 to-primary border border-slate-200 dark:border-slate-800 rounded-2xl p-3 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+            >
+              <div className="flex items-center gap-2.5 relative z-10 w-full">
+                <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
+                  <Users className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-[11px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
+                    Collective Hub
+                  </h3>
+                  <p className="text-[9px] font-medium text-slate-50 leading-snug mt-0.5 line-clamp-2">
+                    Join Group Pickups
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/70 shrink-0" />
+              </div>
             </div>
           </div>
-
-          {/* ── MY RFQ QUOTES (NEW OS LAYER) ── */}
-          <div
-            onClick={() => navigate('/my-rfq-offers')}
-            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all shadow-sm relative overflow-hidden"
-          >
-
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-amber-50 dark:bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 shadow-inner">
-                <Receipt className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1.5">Submitted RFQ Proposals</h3>
-                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest flex items-center gap-2">
-                  Track Requests to Buyers
-                </p>
-              </div>
-            </div>
-            {/* Accepted Quotes Badge */}
-            {/* {sentOffers.filter((o: any) => o.status === 'accepted').length > 0 && (
-                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
-                    <span className="text-[8px] font-semibold text-white">{sentOffers.filter((o: any) => o.status === 'accepted').length}</span>
-                  </div>
-                )} */}
-            <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl group-hover:bg-amber-500 group-hover:text-white transition-all relative z-10">
-              <ArrowRight className="w-4 h-4" />
-            </div>
-          </div>
-
-          {/* ── COMMUNITY COLLECTIVE (NEW OS LAYER) ── */}
-          <div
-            onClick={() => navigate('/community-collective')}
-            className="bg-gradient-to-br from-blue-600 via-emerald-600 to-primary  dark:border-slate-800 rounded-3xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all relative overflow-hidden"
-          >
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white shadow-inner">
-                <Users className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-white capitalize tracking-tight leading-none mb-1.5">Collective Hub</h3>
-                <p className="text-[10px] font-bold text-slate-50 capitalize tracking-widest flex items-center gap-2 italic">
-                  Join Swarms & Group Missions
-                </p>
-              </div>
-            </div>
-            <div className="p-2 bg-white/10 rounded-xl text-white group-hover:bg-white group-hover:text-indigo-600 transition-all relative z-10">
-              <ArrowRight className="w-4 h-4" />
-            </div>
-          </div>
-          {/* End space-y-3 */}
         </div>
 
 

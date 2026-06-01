@@ -2,7 +2,7 @@
  * Seller Wallet — Financial dashboard for marketplace sellers
  * Clean, dark greenish theme matching the resident wallet hero card
  */
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   ArrowLeft, Eye, EyeOff, ArrowUpRight,
   Gift, Send, Banknote, Package,
@@ -13,12 +13,35 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+import { walletService } from '@klinflow/core';
+import { SellerWalletStats } from '@klinflow/core/services/walletService';
 import { toast } from 'sonner';
 
 export default function SellerWallet() {
   const navigate = useNavigate();
-  const { profile, walletBalance, rewardPoints } = useAuthStore();
+  const { profile, userId, walletBalance } = useAuthStore();
   const [balanceVisible, setBalanceVisible] = useState(true);
+  const [gfpBalance, setGfpBalance] = useState(0);
+  const [cashBalance, setCashBalance] = useState(0);
+  const [stats, setStats] = useState<SellerWalletStats | null>(null);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
+
+  useEffect(() => {
+    if (userId) {
+      walletService.getWalletDetails(userId).then(data => {
+        if (data) {
+          setGfpBalance(data.available_points);
+          setCashBalance(data.cash_balance);
+        }
+      });
+      walletService.getSellerDashboard(userId).then(data => {
+        if (data) {
+          setStats(data);
+        }
+        setIsLoadingStats(false);
+      });
+    }
+  }, [userId]);
 
   // Use marketplace store or dummy data for stats
   const receivedOrders = useMarketplaceStore(s => s.receivedOrders) || [];
@@ -29,25 +52,10 @@ export default function SellerWallet() {
       .reduce((acc, o: any) => acc + (parseFloat(String(o.totalPrice || 0)) || 0), 0)
     , [receivedOrders]);
 
-  const totalEarningsThisMonth = useMemo(() =>
-    receivedOrders
-      .filter((o: any) => o.status === 'completed')
-      .reduce((acc, o: any) => acc + (parseFloat(String(o.totalPrice || 0)) || 0), 0)
-    , [receivedOrders]);
-
-  // Mock data for Marketplace Earnings
-  const marketplaceEarnings = [
-    { id: '1', material: 'Plastic (PET)', buyer: 'GreenCycle Ltd', amount: 2400, status: 'Paid' },
-    { id: '2', material: 'Cardboard', buyer: 'EcoPack Solutions', amount: 1800, status: 'Paid' },
-    { id: '3', material: 'Aluminum Cans', buyer: 'Recyclers Hub', amount: 3150, status: 'Paid' },
-    { id: '4', material: 'Mixed Paper', buyer: 'PaperMart', amount: 950, status: 'Paid' },
-  ];
-
-  // Mock data for Recent Payouts
-  const recentPayouts = [
-    { id: '1', method: 'M-Pesa Withdrawal', date: '12 May 2024 • 9:41 AM', amount: 10000, status: 'Completed', icon: Landmark },
-    { id: '2', method: 'Bank Transfer', date: '03 May 2024 • 11:20 AM', amount: 7500, status: 'Completed', icon: Landmark },
-  ];
+  const totalEarningsThisMonth = stats?.earnings_this_month || 0;
+  const marketplaceEarnings = stats?.recent_trades || [];
+  const recentTransactions = stats?.recent_transactions || [];
+  const topMaterials = stats?.top_materials || [];
 
   return (
     <div className="space-y-4 pb-8">
@@ -78,7 +86,7 @@ export default function SellerWallet() {
               </p>
               <div className="flex items-center gap-2">
                 <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-none">
-                  {balanceVisible ? `KES ${walletBalance.toLocaleString()}.00` : '••••••••'}
+                  {balanceVisible ? `KES ${cashBalance.toLocaleString()}.00` : '••••••••'}
                 </h2>
                 <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-1 hover:bg-white/10 rounded-lg transition-colors">
                   {balanceVisible ? <Eye className="w-5 h-5 text-emerald-100/80" /> : <EyeOff className="w-5 h-5 text-emerald-100/80" />}
@@ -98,7 +106,7 @@ export default function SellerWallet() {
             <div className="flex justify-between items-end">
               <div>
                 <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-1">Total Earnings</p>
-                <p className="text-sm font-bold text-white">KES {totalEarningsThisMonth.toLocaleString() || '56,430.00'}</p>
+                <p className="text-sm font-bold text-white">KES {isLoadingStats ? '...' : totalEarningsThisMonth.toLocaleString()}</p>
               </div>
               <BarChart2 className="w-5 h-5 text-[#c2ed7d]" />
             </div>
@@ -124,7 +132,7 @@ export default function SellerWallet() {
           {/* Redeem Rewards */}
           <button
             onClick={() => {
-              if (rewardPoints < 100) {
+              if (gfpBalance < 0) {
                 toast.warning('You need at least 100 points to redeem rewards.');
               } else {
                 navigate('/redeem-gfp');
@@ -180,25 +188,31 @@ export default function SellerWallet() {
           </div>
 
           <div className="space-y-3">
-            {marketplaceEarnings.map(item => (
-              <div key={item.id} className="flex items-center text-xs">
-                <div className="flex-[2] flex items-center gap-2 text-slate-900 dark:text-slate-200 font-medium">
+            {isLoadingStats ? (
+              <div className="py-4 text-center text-xs text-slate-500">Loading...</div>
+            ) : marketplaceEarnings.length === 0 ? (
+              <div className="py-4 text-center text-xs text-slate-500">No recent trades found.</div>
+            ) : (
+              marketplaceEarnings.map(item => (
+                <div key={item.id} className="flex items-center text-xs">
+                  <div className="flex-[2] flex items-center gap-2 text-slate-900 dark:text-slate-200 font-medium">
 
-                  {item.material}
+                    {item.material}
+                  </div>
+                  <div className="flex-[2] text-slate-500 dark:text-slate-400 truncate pr-2">
+                    {item.buyer || 'Unknown Buyer'}
+                  </div>
+                  <div className="flex-1 text-right font-medium text-slate-900 dark:text-slate-200">
+                    KES {item.amount.toLocaleString()}
+                  </div>
+                  <div className="flex-1 text-right">
+                    <span className="inline-block border border-emerald-500/30 text-emerald-500 text-[9px] font-semibold px-2 py-0.5 rounded-full">
+                      {item.status}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex-[2] text-slate-500 dark:text-slate-400 truncate pr-2">
-                  {item.buyer}
-                </div>
-                <div className="flex-1 text-right font-medium text-slate-900 dark:text-slate-200">
-                  KES {item.amount.toLocaleString()}
-                </div>
-                <div className="flex-1 text-right">
-                  <span className="inline-block border border-emerald-500/30 text-emerald-500 text-[9px] font-semibold px-2 py-0.5 rounded-full">
-                    {item.status}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
@@ -233,15 +247,22 @@ export default function SellerWallet() {
           </div>
 
           <p className="text-lg font-black text-slate-900 dark:text-white mb-1 leading-none truncate">
-            KES 23,030
+            KES {isLoadingStats ? '...' : totalEarningsThisMonth.toLocaleString()}
           </p>
 
           <div className="flex items-center gap-1.5 mb-4">
-            <TrendingUp className="w-3 h-3 text-[#c2ed7d] shrink-0" />
-
-            <p className="text-[10px] font-bold text-[#84cc16] dark:text-[#c2ed7d] truncate">
-              23% vs last month
-            </p>
+            {totalEarningsThisMonth > 0 ? (
+              <>
+                <TrendingUp className="w-3 h-3 text-[#c2ed7d] shrink-0" />
+                <p className="text-[10px] font-bold text-[#84cc16] dark:text-[#c2ed7d] truncate">
+                  Active earning
+                </p>
+              </>
+            ) : (
+              <p className="text-[10px] font-bold text-slate-400 truncate">
+                No earnings yet
+              </p>
+            )}
           </div>
         </div>
 
@@ -266,74 +287,69 @@ export default function SellerWallet() {
           <div className="flex items-center gap-3">
             <div className="flex-1 space-y-1.5">
 
-              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <div className="w-2 h-2 rounded-sm bg-[#c2ed7d] shrink-0" />
-                  <span className="truncate">Plastic</span>
-                </div>
-
-                <span className="shrink-0">45%</span>
-              </div>
-
-              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <div className="w-2 h-2 rounded-sm bg-[#65a30d] shrink-0" />
-                  <span className="truncate">Cardboard</span>
-                </div>
-
-                <span className="shrink-0">25%</span>
-              </div>
-
-              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <div className="w-2 h-2 rounded-sm bg-slate-600 shrink-0" />
-                  <span className="truncate">Aluminum</span>
-                </div>
-
-                <span className="shrink-0">15%</span>
-              </div>
-
-              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <div className="w-2 h-2 rounded-sm bg-slate-500 shrink-0" />
-                  <span className="truncate">Paper</span>
-                </div>
-
-                <span className="shrink-0">10%</span>
-              </div>
+              {isLoadingStats ? (
+                <div className="py-2 text-xs text-slate-500">Loading...</div>
+              ) : topMaterials.length === 0 ? (
+                <div className="py-2 text-xs text-slate-500">No data available</div>
+              ) : (
+                topMaterials.map((mat, idx) => {
+                  const colors = ['bg-[#c2ed7d]', 'bg-[#65a30d]', 'bg-slate-600', 'bg-slate-500'];
+                  const total = topMaterials.reduce((acc, m) => acc + m.amount_sold, 0);
+                  const percentage = total > 0 ? Math.round((mat.amount_sold / total) * 100) : 0;
+                  return (
+                    <div key={idx} className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <div className={`w-2 h-2 rounded-sm ${colors[idx % colors.length]} shrink-0`} />
+                        <span className="truncate">{mat.material}</span>
+                      </div>
+                      <span className="shrink-0">{percentage}%</span>
+                    </div>
+                  );
+                })
+              )}
 
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── RECENT PAYOUTS ── */}
+      {/* ── RECENT TRANSACTIONS ── */}
       <div className="mx-1 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Recent Payouts</h3>
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Recent Transactions</h3>
           <button className="text-[10px] font-bold text-[#c2ed7d] tracking-wide">
             View all
           </button>
         </div>
 
         <div className="space-y-4">
-          {recentPayouts.map(payout => (
-            <div key={payout.id} className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
-                  <payout.icon className="w-5 h-5 text-emerald-500" />
+          {isLoadingStats ? (
+            <div className="py-2 text-center text-xs text-slate-500">Loading...</div>
+          ) : recentTransactions.length === 0 ? (
+            <div className="py-2 text-center text-xs text-slate-500">No recent transactions.</div>
+          ) : (
+            recentTransactions.map(tx => (
+              <div key={tx.id} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+                    <Landmark className="w-5 h-5 text-emerald-500" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5 capitalize">{tx.method.replace('_', ' ')}</p>
+                    <p className="text-[10px] text-slate-400 font-medium">
+                      {new Date(tx.date).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">{payout.method}</p>
-                  <p className="text-[10px] text-slate-400 font-medium">{payout.date}</p>
+                <div className="text-right">
+                  <p className="text-sm font-bold text-slate-900 dark:text-white mb-0.5">
+                    {tx.amount > 0 ? '+' : ''} KES {Math.abs(tx.amount).toLocaleString()}
+                  </p>
+                  <p className="text-[10px] font-medium text-emerald-500">{tx.status}</p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="text-sm font-bold text-slate-900 dark:text-white mb-0.5">- KES {payout.amount.toLocaleString()}.00</p>
-                <p className="text-[10px] font-medium text-emerald-500">{payout.status}</p>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

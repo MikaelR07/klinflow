@@ -335,8 +335,8 @@ export default function ImpactAnalytics() {
         <div className="bg-gradient-to-br from-emerald-900 via-green-900 to-[#022c22] rounded-[1rem] p-4 sm:p-5  relative overflow-hidden">
           {/* Earth background image with gradient overlays */}
           <div className="absolute top-0 left-0 right-0 h-full pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#022c22] via-[#022c22]/40 to-transparent z-10" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#022c22]/90 to-[#022c22] z-10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#022c22] via-[#022c22]/10 to-transparent z-10" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#022c22]/10 to-[#022c22] z-10" />
             <OptimizedImage src="/vectors/earth.webp" alt="Earth" className="w-full h-full object-cover object-right-top mix-blend-screen opacity-80 relative z-0" wrapperClassName="absolute inset-0 z-0" />
           </div>
 
@@ -345,13 +345,13 @@ export default function ImpactAnalytics() {
               <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-emerald-700 text-emerald-100 rounded-lg text-[10px] font-bold mb-2  border border-white/10">
                 <Leaf className="w-3.5 h-3.5" /> Your Impact
               </div>
-              <p className="text-[11px] font-medium text-emerald-100/70 ">Total Waste Recycled</p>
+              <p className="text-[11px] font-medium text-emerald-100/80 ">Total Waste Recycled</p>
               <div className="flex items-baseline gap-1.5 mb-1">
                 <h2 className="text-5xl font-black text-white tracking-tighter leading-none">{stats.totalWeight}</h2>
                 <span className="text-sm font-bold text-emerald-400">KG</span>
               </div>
-              <p className="text-[11px] text-emerald-100/70 max-w-[150px] leading-relaxed">
-                Great job! You're making a real difference.
+              <p className="text-[11px] text-emerald-100/80 max-w-[150px] leading-relaxed">
+                Your action creates Impact!
               </p>
             </div>
 
@@ -364,7 +364,7 @@ export default function ImpactAnalytics() {
           </div>
 
           <div className="relative z-10 pt-4 border-t border-white/10">
-            <p className="text-[9px] font-medium text-emerald-100/60 mb-3">This is equivalent to:</p>
+            <p className="text-[9px] font-medium text-emerald-100/70 mb-3">This is equivalent to:</p>
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center border border-white/5">
@@ -372,7 +372,7 @@ export default function ImpactAnalytics() {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-white leading-none mb-0.5">{Math.round(stats.totalWeight * 0.15)}</p>
-                  <p className="text-[9px] text-emerald-100/60">Trees saved</p>
+                  <p className="text-[9px] text-emerald-100/70">Trees saved</p>
                 </div>
               </div>
 
@@ -382,7 +382,7 @@ export default function ImpactAnalytics() {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-white leading-none mb-0.5">{Math.round(stats.totalWeight * 2.5)}</p>
-                  <p className="text-[9px] text-emerald-100/60">KWh Saved</p>
+                  <p className="text-[9px] text-emerald-100/70">KWh Saved</p>
                 </div>
               </div>
 
@@ -392,7 +392,7 @@ export default function ImpactAnalytics() {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-white leading-none mb-0.5">{Math.round(stats.totalWeight * 1.8)}</p>
-                  <p className="text-[9px] text-emerald-100/60">kg CO₂ avoided</p>
+                  <p className="text-[9px] text-emerald-100/70">CO₂ Offset</p>
                 </div>
               </div>
             </div>

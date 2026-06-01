@@ -300,12 +300,12 @@ export default function CreateRFQPage() {
                         setFormData({ ...formData, category: cat.id, materialName: '' });
                         setStepError('');
                       }}
-                      className={`px-2 py-3.5 rounded-xl border text-center transition-all relative overflow-hidden ${isSelected
+                      className={`px-2 py-3.5 rounded-xl  border text-center transition-all relative overflow-hidden ${isSelected
                         ? 'border-amber-500 bg-amber-500/5 shadow-sm shadow-amber-500/5'
-                        : 'border-slate-400 dark:border-slate-100 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-850'
+                        : 'border-slate-400 dark:border-slate-100  bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-850'
                         }`}
                     >
-                      <span className="text-[10px] font-bold text-slate-700 dark:text-slate-350 leading-tight">{cat.label}</span>
+                      <span className="text-[10px] font-bold text-slate-700 dark:text-slate-50 leading-tight">{cat.label}</span>
                       {isSelected && (
                         <div className="absolute top-1 right-1 w-3 h-3 rounded-full bg-amber-500 flex items-center justify-center">
                           <CheckCircle2 className="w-2 h-2 text-white" />

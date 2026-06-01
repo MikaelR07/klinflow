@@ -40,6 +40,8 @@ const ResidentWallet = lazy(() => import('./pages/user/ResidentWallet'));
 const SellerWallet = lazy(() => import('./pages/user/SellerWallet'));
 const RedeemGFP = lazy(() => import('./pages/user/RedeemGFP'));
 const TransferGFP = lazy(() => import('./pages/user/TransferGFP'));
+const TransferHistory = lazy(() => import('./pages/user/TransferHistory'));
+const RedemptionHistory = lazy(() => import('./pages/user/RedemptionHistory'));
 
 // Seller Pages
 const PostTrade = lazy(() => import('./pages/user/PostTrade'));
@@ -56,6 +58,8 @@ const CommunityCollective = lazy(() => import('./pages/user/CommunityCollective'
 const CreateSwarm = lazy(() => import('./pages/user/CreateSwarm'));
 const EditSwarm = lazy(() => import('./pages/user/EditSwarm'));
 const JoinSwarm = lazy(() => import('./pages/user/JoinSwarm'));
+const SwarmsList = lazy(() => import('./pages/user/SwarmsList'));
+const CommunityGoals = lazy(() => import('./pages/user/CommunityGoals'));
 const CreateGoal = lazy(() => import('./pages/user/CreateGoal'));
 const SwarmDetails = lazy(() => import('./pages/user/SwarmDetails'));
 const GoalDetails = lazy(() => import('./pages/user/GoalDetails'));
@@ -219,7 +223,9 @@ export default function App() {
             <Route path="/resident-wallet" element={<ResidentWallet />} />
             <Route path="/seller-wallet" element={<SellerWallet />} />
             <Route path="/redeem-gfp" element={<RedeemGFP />} />
+            <Route path="/redemption-history" element={<RedemptionHistory />} />
             <Route path="/transfer-gfp" element={<TransferGFP />} />
+            <Route path="/wallet-history" element={<TransferHistory />} />
             <Route path="/discovery" element={<DiscoveryHub />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/book-pickup" element={<BookPickup />} />
@@ -237,6 +243,8 @@ export default function App() {
             <Route path="/market-pulse" element={<MarketIntelligenceHub />} />
             <Route path="/circular-resume" element={<CircularResume />} />
             <Route path="/community-collective" element={<ProtectedRoute><CommunityCollective /></ProtectedRoute>} />
+            <Route path="/swarms" element={<ProtectedRoute><SwarmsList /></ProtectedRoute>} />
+            <Route path="/community-goals" element={<ProtectedRoute><CommunityGoals /></ProtectedRoute>} />
             <Route path="/community-collective/swarm/create" element={<ProtectedRoute><CreateSwarm /></ProtectedRoute>} />
             <Route path="/community-collective/swarm/:id/edit" element={<ProtectedRoute><EditSwarm /></ProtectedRoute>} />
             <Route path="/community-collective/swarm/:id/join" element={<ProtectedRoute><JoinSwarm /></ProtectedRoute>} />

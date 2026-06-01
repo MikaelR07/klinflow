@@ -22,16 +22,18 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminReports from './pages/admin/AdminReports';
 
 import AdminFeedbackInbox from './pages/admin/AdminFeedbackInbox';
-import AdminB2B from './pages/admin/AdminB2B';
 import MarketHub from './pages/admin/MarketHub';
 import HygeneXPage from './pages/shared/HygeneXPage';
 import UserManager from './pages/admin/UserManager';
+import PointTransfers from './pages/admin/PointTransfers';
 import IndAgentMetrics from './pages/admin/IndAgentMetrics';
-import CompanyMetrics from './pages/admin/CompanyMetrics';
-import EnvironmentalReport from './pages/admin/EnvironmentalReport';
 import FinancialReport from './pages/admin/FinancialReport';
 import SovereignImpact from './pages/admin/SovereignImpact';
 import NetworkOracle from './pages/admin/NetworkOracle';
+import PointRedemptions from './pages/admin/PointRedemptions';
+import AdminB2B from './pages/admin/AdminB2B';
+import CompanyMetrics from './pages/admin/CompanyMetrics';
+import EnvironmentalReport from './pages/admin/EnvironmentalReport';
 
 // Settings Pages
 import SettingsMenu from './pages/settings/SettingsMenu';
@@ -109,9 +111,9 @@ export default function App() {
             <Route path="/financial-report" element={<FinancialReport />} />
             <Route path="/sovereign-impact" element={<SovereignImpact />} />
             <Route path="/oracle" element={<NetworkOracle />} />
+            <Route path="/transfers" element={<PointTransfers />} />
+            <Route path="/redemptions" element={<PointRedemptions />} />
             <Route path="/hygenex" element={<HygeneXPage />} />
-
-            
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />
               <Route path="profile" element={<ProfilePage />} />

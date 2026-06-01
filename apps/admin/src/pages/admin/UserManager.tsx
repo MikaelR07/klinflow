@@ -26,9 +26,7 @@ export default function UserManager() {
       .channel('public:profiles-manager')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, (payload) => {
         fetchUsers(); 
-        if (payload.new?.notes?.includes('staff_application_pending')) {
-          toast.info("New Staff Application!", { description: `${payload.new.name} has requested to join the team.` });
-        }
+
       })
       .subscribe();
 
@@ -60,51 +58,7 @@ export default function UserManager() {
     setLoading(false);
   };
 
-  const approveStaff = async (user) => {
-    if (user.role !== 'agent') {
-      toast.error("Invalid Role", { description: "Only agents can join your team." });
-      return;
-    }
-    
-    const randomNum = Math.floor(1000 + Math.random() * 9000);
-    const fleetId = `CF-${randomNum}-FT`;
 
-    // Use RPC to bypass RLS
-    const { error } = await supabase.rpc('approve_staff_application', {
-      target_user_id: user.id,
-      new_fleet_id: fleetId
-    });
-
-    if (error) {
-      console.error('[Admin] Approve RPC failed:', error);
-      toast.error("Failed to approve", { description: error.message });
-    } else {
-      toast.success(`${user.name} added to Team!`, { description: `Staff ID: ${fleetId}` });
-      setUsers(prev => prev.map(u => u.id === user.id ? { ...u, is_staff: true, fleet_id: fleetId, notes: '', is_verified: true } : u));
-    }
-  };
-
-  const toggleStaffStatus = async (user) => {
-    if (user.role !== 'agent') {
-      toast.error("Access Denied", { description: "Only agents can be on your team." });
-      return;
-    }
-
-    // Use RPC to bypass RLS
-    const { error } = await supabase.rpc('admin_update_profile', {
-      target_user_id: user.id,
-      field_name: 'is_staff',
-      field_value: (!user.is_staff).toString()
-    });
-
-    if (error) {
-      console.error('[Admin] Toggle staff failed:', error);
-      toast.error("Update failed", { description: error.message });
-    } else {
-      toast.success(user.is_staff ? "Removed from Team" : "Added to Team");
-      fetchUsers();
-    }
-  };
 
   const toggleVerification = async (userId, currentStatus) => {
     const { error } = await supabase.rpc('admin_update_profile', {
@@ -139,7 +93,6 @@ export default function UserManager() {
 
     return baseUsers.filter(u => {
       const matchesSearch = (u.name?.toLowerCase().includes(search.toLowerCase())) || (u.phone?.includes(search));
-      const isApplicant = u.notes?.includes('staff_application_pending');
       
       if (activeHub === 'marketplace') {
         const isMarketUser = (u.role === 'business' || u.business_type === 'weaver' || u.business_type === 'recycler' || u.business_type === 'manufacturer');
@@ -158,7 +111,6 @@ export default function UserManager() {
         if (logisticsSubFilter === 'companies') return matchesSearch && u.agent_account_type === 'company_admin';
         if (logisticsSubFilter === 'fleet') return matchesSearch && u.agent_account_type === 'fleet_driver';
         if (logisticsSubFilter === 'independent') return matchesSearch && u.agent_account_type === 'independent';
-        if (logisticsSubFilter === 'requests') return matchesSearch && isApplicant;
         return matchesSearch;
       }
       
@@ -180,7 +132,7 @@ export default function UserManager() {
   })();
 
   const stats = {
-    pendingApps: users.filter(u => u.role === 'agent' && u.notes?.includes('staff_application_pending')).length || 2,
+    pendingApps: 0,
     pendingLicenses: users.filter(u => !u.is_verified && u.nema_license).length || 1,
     totalAgents: users.filter(u => u.role === 'agent').length || 3,
     totalBusinesses: users.filter(u => u.role === 'business' || u.business_type).length || 5
@@ -326,13 +278,7 @@ export default function UserManager() {
               >
                 Ind. Agents
               </button>
-              <button 
-                onClick={() => setLogisticsSubFilter('requests')}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all flex items-center gap-2 ${logisticsSubFilter === 'requests' ? 'bg-rose-500 text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}
-              >
-                Waitlist
-                {stats.pendingApps > 0 && <div className={`w-2 h-2 rounded-full ${logisticsSubFilter === 'requests' ? 'bg-white' : 'bg-rose-500'} animate-pulse`} />}
-              </button>
+
             </div>
          )}
 
@@ -408,7 +354,6 @@ export default function UserManager() {
                       </td>
                     </tr>
                   ) : filteredUsers.map(u => {
-                    const isApplicant = u.notes?.includes('staff_application_pending');
                     const roleLabel = u.role === 'admin' ? '🛡️ Admin' :
                                     u.agent_account_type === 'company_admin' ? '🏢 Company Owner' :
                                     u.agent_account_type === 'fleet_driver' ? '🚛 Fleet Driver' :
@@ -420,14 +365,11 @@ export default function UserManager() {
                                     '👤 Resident';
 
                     return (
-                      <tr key={u.id} className={`hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors ${u.role === 'agent' && isApplicant ? 'bg-orange-50/30 dark:bg-orange-500/5' : ''}`}>
+                      <tr key={u.id} className={`hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors`}>
                          <td className="px-8 py-6">
                             <div className="flex items-center gap-4">
                                <div className="relative">
                                  <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl shadow-inner">{u.avatar || '👤'}</div>
-                                 {u.role === 'agent' && isApplicant && (
-                                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 border-2 border-white dark:border-slate-900 rounded-full animate-bounce" />
-                                 )}
                                </div>
                                <div>
                                   <h4 className="text-sm font-semibold dark:text-white leading-tight flex items-center gap-2">
@@ -475,9 +417,7 @@ export default function UserManager() {
                             </td>
                          )}
                          <td className="px-8 py-6 text-center">
-                            {u.role === 'agent' && isApplicant ? (
-                               <span className="px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full uppercase tracking-widest animate-pulse">Request</span>
-                            ) : u.role === 'agent' ? (
+                            {u.role === 'agent' ? (
                               <div className="flex flex-col items-center gap-1">
                                  <div className={`w-2 h-2 rounded-full ${u.is_online ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
                                  <span className="text-xs font-semibold uppercase text-slate-400 tracking-tighter">
@@ -495,25 +435,7 @@ export default function UserManager() {
                          </td>
                          <td className="px-8 py-6">
                             <div className="flex items-center justify-end gap-2">
-                               {u.role === 'agent' && isApplicant ? (
-                                 <button 
-                                   onClick={() => approveStaff(u)}
-                                   className="flex items-center gap-2 px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-semibold uppercase tracking-widest shadow-lg shadow-orange-500/20 transition-all active:scale-95"
-                                 >
-                                    <Check className="w-4 h-4" /> Approve
-                                 </button>
-                               ) : (
-                                 <>
-                                   {u.role === 'agent' && (
-                                     <button 
-                                       onClick={() => toggleStaffStatus(u)}
-                                       className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all text-xs font-semibold uppercase tracking-tighter ${u.is_staff ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5 text-slate-400 hover:text-primary'}`}
-                                       title={u.is_staff ? "Remove from Team" : "Add to Team"}
-                                     >
-                                        <Briefcase className="w-3.5 h-3.5" />
-                                        {u.is_staff ? 'On Team' : 'Add Team'}
-                                     </button>
-                                   )}
+
                                    {u.nema_license && (
                                      <button 
                                        onClick={() => {
@@ -540,8 +462,7 @@ export default function UserManager() {
                                    >
                                       <ShieldCheck className="w-4 h-4" />
                                    </button>
-                                 </>
-                               )}
+
                                <button 
                                  title="Remove User Account"
                                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-100 dark:border-white/5 text-slate-400 hover:text-red-500 bg-white dark:bg-slate-900 text-xs font-semibold uppercase tracking-tighter"

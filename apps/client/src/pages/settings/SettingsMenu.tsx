@@ -10,7 +10,8 @@ import {
   Users, Star, CreditCard, ChevronDown, CheckCircle2, X, Plus, Info, Trophy,
   IdCard,
   ChartBar,
-  BarChart2
+  BarChart2,
+  Copy
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -118,11 +119,24 @@ export default function SettingsMenu() {
               )}
             </div>
             <div className="space-y-1">
-              <h2 className="text-lg  font-bold text-slate-200  dark:text-white leading-tight">{profile?.name}</h2>
-              <p className="text-[11px] font-bold text-emerald-500 capitalize tracking-widest">{profile?.phone}</p>
-              <div className="flex items-center gap-1.5 mt-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                <span className="text-[9px] font-bold text-slate-100 dark:text-emerald-400 capitalize tracking-widest">Verified Identity</span>
+              <div className="flex items-center gap-1.5">
+                <h2 className="text-lg font-bold text-slate-200 dark:text-white leading-tight">{profile?.name}</h2>
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+              </div>
+              <div className="flex flex-col gap-1 items-start">
+                <p className="text-[11px] font-bold text-emerald-500 capitalize tracking-widest">{profile?.phone}</p>
+                {profile?.klinflowId && (
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(profile.klinflowId!);
+                      toast.success('Klinflow ID copied');
+                    }}
+                    className="flex items-center gap-1.5 bg-slate-800/60 hover:bg-slate-700/60 transition-colors px-2 py-1 rounded-md border border-slate-600/50 active:scale-95"
+                  >
+                    <span className="text-[10px] font-mono font-bold text-slate-200 tracking-wider">ID: {profile.klinflowId}</span>
+                    <Copy className="w-3 h-3 text-slate-400" />
+                  </button>
+                )}
               </div>
             </div>
           </div>

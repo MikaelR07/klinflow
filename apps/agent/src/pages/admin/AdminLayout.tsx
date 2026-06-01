@@ -81,7 +81,7 @@ export default function AdminLayout() {
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'My Agents', path: '/admin/agents', icon: Users },
     { name: 'Earnings', path: '/admin/earnings', icon: DollarSign },
-    { name: 'Driver Requests', path: '/settings/staff-application', icon: UserPlus, badge: pendingDriverCount },
+    { name: 'Driver Requests', path: '/admin/driver-requests', icon: UserPlus, badge: pendingDriverCount },
     { name: 'Fund Requests', path: '/admin/finance', icon: Banknote, badge: pendingCount },
     { name: 'RFQ Requests', path: '/admin/rfqs', icon: Receipt },
     { name: 'Active RFQ Pickups', path: '/pickups', icon: Truck },

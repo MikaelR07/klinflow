@@ -283,11 +283,11 @@ export default function AgentHome() {
         onClose={() => setShowPushPrompt(false)}
       />
       {/* ── TOP NAV & CORE CONTROLS ── */}
-      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
+      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
         {/* Header Section - Edge to Edge - FIXED TOPNAV */}
         <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900 ">
           <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {/* Profile Avatar */}
               <div className="shrink-0">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
@@ -308,7 +308,7 @@ export default function AgentHome() {
 
             <button
               onClick={() => navigate('/notifications')}
-              className="relative w-11 h-11 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
+              className="relative w-11 h-11 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
             >
               <Bell className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
               {unreadCount > 0 && (
@@ -464,28 +464,28 @@ export default function AgentHome() {
 
       {/* ── PERFORMANCE CARD ── */}
       <div className="relative !mt-2.5">
-        <div className="relative bg-gradient-to-br from-primary to-[#064e3b] dark:from-emerald-900 dark:to-primary rounded-2xl p-3 shadow-none">
+        <div className="relative bg-gradient-to-br from-primary to-[#064e3b] dark:from-emerald-900 dark:to-primary rounded-xl p-3 shadow-none">
 
           {/* TOP SECTION */}
           <div className="flex items-start justify-between gap-3 mb-4">
 
             {/* LEFT */}
             <div className="flex-1 min-w-0 pl-1">
-              <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
+              <p className="text-[12px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
                 Assets Value
               </p>
 
               <div className="flex items-baseline gap-1 mb-2 min-w-0">
-                <span className="text-lg sm:text-xl font-bold text-emerald-400 shrink-0">
+                <span className="text-xl sm:text-xl font-bold text-emerald-400 shrink-0">
                   KSh
                 </span>
 
-                <h2 className="text-lg sm:text-xl font-black text-white truncate">
+                <h2 className="text-xl sm:text-xl font-black text-white truncate">
                   {earnings?.today}
                 </h2>
               </div>
 
-              <div className="bg-emerald-500/20 text-emerald-100 text-[9px] font-black px-2 py-1 rounded-md inline-flex max-w-full">
+              <div className="bg-emerald-500/20 text-emerald-100 text-[10px] font-black px-2 py-1 rounded-md inline-flex max-w-full">
                 {performanceChange >= 0 ? `↑ ${performanceChange.toFixed(0)}% from yesterday` : `↓ ${Math.abs(performanceChange).toFixed(0)}% from yesterday`}
               </div>
             </div>
@@ -495,16 +495,16 @@ export default function AgentHome() {
 
             {/* RIGHT */}
             <div className="flex-1 min-w-0 flex flex-col items-end text-right pr-1">
-              <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
+              <p className="text-[12px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
                 Wallet Balance
               </p>
 
               <div className="flex items-baseline justify-end gap-1 mb-2 min-w-0 w-full">
-                <span className="text-lg sm:text-xl font-bold text-emerald-400 shrink-0">
+                <span className="text-xl sm:text-xl font-bold text-emerald-400 shrink-0">
                   KSh
                 </span>
 
-                <h2 className="text-lg sm:text-xl font-black text-white truncate">
+                <h2 className="text-xl sm:text-xl font-black text-white truncate">
                   {(profile?.walletBalance || 0).toLocaleString()}
                 </h2>
               </div>
@@ -512,7 +512,7 @@ export default function AgentHome() {
               <div className="w-full flex justify-end">
                 <button
                   onClick={() => navigate('/deposit')}
-                  className="bg-white text-emerald-700 dark:text-slate-900 px-6 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
+                  className="bg-emerald-800 text-white  px-8 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
                 >
                   Deposit
                 </button>
@@ -521,10 +521,10 @@ export default function AgentHome() {
           </div>
 
           {/* STATS GRID */}
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-1">
 
-            <div className="bg-emerald-950/40 rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
-              <Handshake className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="bg-emerald-950/40 text-center rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
+              <Handshake className="w-4 h-4 text-emerald-400 shrink-0 mx-auto" />
 
               <div>
                 <h4 className="text-sm font-black text-white leading-none mb-1 truncate">
@@ -538,8 +538,8 @@ export default function AgentHome() {
               </div>
             </div>
 
-            <div className="bg-emerald-950/40 rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
-              <Truck className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="bg-emerald-950/40 text-center rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
+              <Truck className="w-4 h-4 text-emerald-400 shrink-0 mx-auto" />
 
               <div>
                 <h4 className="text-sm font-black text-white leading-none mb-1 truncate">
@@ -553,8 +553,8 @@ export default function AgentHome() {
               </div>
             </div>
 
-            <div className="bg-emerald-950/40 rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
-              <Star className="w-4 h-4 text-amber-400 shrink-0" />
+            <div className="bg-emerald-950/40 text-center rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
+              <Star className="w-4 h-4 text-amber-400 shrink-0 mx-auto" />
 
               <div>
                 <h4 className="text-sm font-black text-white leading-none mb-1 truncate">
@@ -570,8 +570,8 @@ export default function AgentHome() {
               </div>
             </div>
 
-            <div className="bg-emerald-950/40 rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
-              <Zap className="w-4 h-4 text-blue-400 shrink-0" />
+            <div className="bg-emerald-950/40 text-center rounded-xl p-2.5 flex flex-col justify-between min-h-[84px]">
+              <Zap className="w-4 h-4 text-blue-400 shrink-0 mx-auto" />
 
               <div>
                 <h4 className="text-sm font-black text-white leading-none mb-1 truncate">

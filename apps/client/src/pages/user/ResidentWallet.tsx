@@ -2,7 +2,7 @@
  * Resident Wallet — Full-featured wallet management for residents
  * Dark greenish theme matching agent performance card styling
  */
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Wallet, ArrowUpRight, ArrowDownLeft,
@@ -16,13 +16,29 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { walletService } from '@klinflow/core';
 import { toast } from 'sonner';
 
 export default function ResidentWallet() {
   const navigate = useNavigate();
-  const { profile, walletBalance, rewardPoints } = useAuthStore();
-  const bookings = useBookingStore(s => s.bookings);
+  const { profile, userId } = useAuthStore();
+  const { bookings, fetchBookings } = useBookingStore(s => s);
   const [balanceVisible, setBalanceVisible] = useState(true);
+  const [gfpBalance, setGfpBalance] = useState(0);
+  const [cashBalance, setCashBalance] = useState(0);
+
+  // Fetch real wallet balance and bookings
+  useEffect(() => {
+    if (userId) {
+      walletService.getWalletDetails(userId).then(data => {
+        if (data) {
+          setGfpBalance(data.available_points);
+          setCashBalance(data.cash_balance);
+        }
+      });
+      fetchBookings();
+    }
+  }, [userId, fetchBookings]);
 
   // Derived metrics
   const now = new Date();
@@ -96,14 +112,14 @@ export default function ResidentWallet() {
 
   // Impact level calculation
   const getImpactLevel = () => {
-    const pts = rewardPoints || 0;
+    const pts = gfpBalance || 0;
     if (pts >= 1000) return { level: 4, label: 'Climate Guardian', nextThreshold: 2000, icon: '🏆' };
     if (pts >= 500) return { level: 3, label: 'Eco Hero', nextThreshold: 1000, icon: '🛡️' };
     if (pts >= 100) return { level: 2, label: 'Green Scout', nextThreshold: 500, icon: '🌱' };
     return { level: 1, label: 'Seedling', nextThreshold: 100, icon: '🥚' };
   };
   const impact = getImpactLevel();
-  const progressPercent = Math.min(((rewardPoints || 0) / impact.nextThreshold) * 100, 100);
+  const progressPercent = Math.min(((gfpBalance || 0) / impact.nextThreshold) * 100, 100);
 
   return (
     <div className="space-y-4 pb-8">
@@ -142,7 +158,7 @@ export default function ResidentWallet() {
             </p>
             <div className="flex items-center gap-2 mb-1.5">
               <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-none">
-                {balanceVisible ? `KES ${walletBalance.toLocaleString()}.00` : '••••••••'}
+                {balanceVisible ? `KES ${cashBalance.toLocaleString()}.00` : '••••••••'}
               </h2>
               <button
                 onClick={() => setBalanceVisible(!balanceVisible)}
@@ -165,8 +181,8 @@ export default function ResidentWallet() {
               </div>
               <div>
                 <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-0.5">Eco Points</p>
-                <p className="text-sm font-black text-white leading-none">{rewardPoints}</p>
-                <p className="text-[8px] font-semibold text-emerald-300/60 mt-0.5">Worth KES {rewardPoints}</p>
+                <p className="text-sm font-black text-white leading-none">{gfpBalance.toLocaleString()}</p>
+                <p className="text-[8px] font-semibold text-emerald-300/60 mt-0.5">Worth KES {(gfpBalance / 2).toLocaleString()}</p>
               </div>
             </div>
             <div className="bg-emerald-950/40 rounded-xl p-3 flex items-center gap-3">
@@ -206,8 +222,8 @@ export default function ResidentWallet() {
           {/* Redeem Rewards */}
           <button
             onClick={() => {
-              if (rewardPoints < 0) {
-                toast.warning('You need at least 50 GFP to redeem rewards.');
+              if (gfpBalance < 200) {
+                toast.warning(`You need ${200 - gfpBalance} more GFP to redeem.`);
               } else {
                 navigate('/redeem-gfp');
               }
@@ -307,7 +323,7 @@ export default function ResidentWallet() {
             </div>
 
             <p className="text-[8px] font-bold text-slate-400 mt-1">
-              {rewardPoints}/{impact.nextThreshold} pts
+              {gfpBalance}/{impact.nextThreshold} pts
             </p>
 
           </div>
@@ -367,7 +383,7 @@ export default function ResidentWallet() {
             </h4>
 
             <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">
-              This Month
+              Overall
             </span>
           </div>
 
@@ -442,8 +458,11 @@ export default function ResidentWallet() {
               Recent Transactions
             </h3>
 
-            <button className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">
-              View all
+            <button
+              onClick={() => navigate('/wallet-history')}
+              className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
+            >
+              View History
             </button>
 
           </div>

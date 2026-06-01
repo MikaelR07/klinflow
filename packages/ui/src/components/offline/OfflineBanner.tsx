@@ -12,7 +12,7 @@ export default function OfflineBanner() {
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="fixed top-16 left-0 right-0 z-[100] bg-opacity-100 bg-primary/95 backdrop-blur-md text-white px-4 py-2 flex items-center justify-center gap-3 shadow-lg "
+          className="fixed top-16 left-0 right-0 z-[100] bg-opacity-100 bg-red-500 backdrop-blur-md text-white px-4 py-2 flex items-center justify-center gap-3 shadow-lg "
         >
           <WifiOff className="w-4 h-4 animate-pulse" />
           <p className="text-xs font-semibold tracking-wide">

@@ -307,42 +307,6 @@ export default function ImpactHub() {
             </div>
           </div>
         )}
-
-        {/* Environmental Impact Card (New Addition) */}
-        <div className="card bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 relative overflow-hidden mt-8">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
-              <Globe className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-800 dark:text-white leading-tight tracking-tight">Environmental Impact</h3>
-              <p className="text-[10px] text-slate-400 font-black capitalize tracking-[0.2em]">Verified Sustainability Score</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6">
-            <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-600">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-                <span className="text-xs font-black text-slate-600 dark:text-slate-400 capitalize tracking-widest">CO2 Mitigated</span>
-              </div>
-              <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg * 1.5).toFixed(1)} KG</span>
-            </div>
-
-            <div className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-600">
-                  <Leaf className="w-5 h-5" />
-                </div>
-                <span className="text-xs font-black text-slate-600 dark:text-slate-400 capitalize tracking-widest">Tree Equivalent</span>
-              </div>
-              <span className="text-lg font-black text-emerald-600 font-mono">~{(badgeStats.totalKg / 20).toFixed(1)} <span className="text-xs font-bold capitalize">Trees</span></span>
-            </div>
-          </div>
-        </div>
-
         {/* The Path to Mastery */}
         <div className="card bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 p-6 rounded-[2.5rem] relative overflow-hidden mt-8">
           <div className="absolute top-0 right-0 p-4 opacity-10">

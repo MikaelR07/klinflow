@@ -2,7 +2,7 @@ import {
   User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle,
   Truck, BadgeCheck, Clock, DollarSign, Brain, Settings,
   Wallet, ArrowUpRight, ArrowDownLeft, History, Package,
-  Search, Briefcase, Star, ShieldCheck, HelpCircle, X, Loader2, Zap, BarChart3
+  Search, Briefcase, Star, ShieldCheck, HelpCircle, X, Loader2, Zap, BarChart3, Copy
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -33,7 +33,7 @@ export default function SettingsMenu() {
   }, []);
 
 
-  const isStaff = profile?.isStaff === true;
+
   const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
   const isCompanyOwner = profile?.agentAccountType === 'company_admin';
   const isFleet = isFleetDriver || isCompanyOwner;
@@ -58,7 +58,7 @@ export default function SettingsMenu() {
     { icon: User, label: 'Profile Settings', subtitle: 'Personal info & location', path: '/settings/profile', color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10' },
     { icon: Bell, label: 'Notifications', subtitle: 'Manage alerts & SMS', path: '/settings/notifications', color: 'text-amber-600 bg-amber-50 dark:bg-amber-500/10' },
     { icon: ShieldCheck, label: 'Privacy & Security', subtitle: 'Passcode & Encryption', path: '/settings/privacy', color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' },
-    { icon: Briefcase, label: 'Staff Application', subtitle: 'Join the Klinflow Team', path: '/settings/staff-application', color: 'text-blue-600 bg-blue-50 dark:bg-blue-500/10' },
+
     { icon: HelpCircle, label: 'Support Center', subtitle: 'Help & WhatsApp', path: '/settings/support', color: 'text-slate-600 bg-slate-50 dark:bg-slate-500/10' },
     { icon: MessageCircle, label: 'Give Feedback', subtitle: 'Help us improve', path: '/settings/feedback', color: 'text-rose-600 bg-rose-50 dark:bg-rose-500/10' },
   ];
@@ -102,20 +102,28 @@ export default function SettingsMenu() {
                     <div className="text-xl">👤</div>
                   )}
                 </div>
-                {isStaff && (
-                  <div className="absolute -bottom-0.5 -right-0.5 bg-white text-primary p-0.5 rounded-full shadow-md">
-                    <BadgeCheck className="w-4 h-4" />
-                  </div>
-                )}
               </div>
 
               <div className="flex-1 min-w-0">
                 <h2 className="text-base font-black text-white leading-tight truncate">
                   {profile?.name || 'Klinflow Agent'}
                 </h2>
+                {profile?.klinflowId && (
+                  <button 
+                    onClick={(e) => { 
+                      e.stopPropagation();
+                      navigator.clipboard.writeText(profile.klinflowId!);
+                      toast.success('Klinflow ID copied');
+                    }}
+                    className="flex items-center gap-1.5 mt-1.5 bg-white/10 hover:bg-white/20 transition-colors px-2 py-1 rounded-md border border-white/10 active:scale-95 w-fit"
+                  >
+                    <span className="text-[10px] font-mono font-bold text-white tracking-wider">ID: {profile.klinflowId}</span>
+                    <Copy className="w-3 h-3 text-white/70" />
+                  </button>
+                )}
                 <button
                   onClick={(e) => { e.stopPropagation(); navigate('/settings/profile'); }}
-                  className="flex items-center gap-1 mt-1 text-emerald-250 font-bold text-[9px] capitalize tracking-[0.2em] hover:text-white transition-colors"
+                  className="flex items-center gap-1 mt-2 text-emerald-100 font-bold text-[9px] capitalize tracking-[0.2em] hover:text-white transition-colors"
                 >
                   Edit Profile <ChevronRight className="w-2 h-2" />
                 </button>

@@ -117,12 +117,9 @@ export default function App() {
     }
   }, [isAuthenticated, userId, role, checkAppRole]);
 
-  if (isInitializing) {
-    return <LoadingScreen message="Syncing Marketplace..." />;
-  }
-
   return (
     <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-900 transition-colors duration-200">
+      {isInitializing && <LoadingScreen message="Syncing Marketplace..." />}
 
 
       <Routes>

@@ -61,6 +61,7 @@ export const ProfileSchema = z.object({
   fullName: z.string().nullable().optional(),
   email: z.string().email().nullable().optional(),
   phone: z.string().nullable().optional(),
+  klinflowId: z.string().nullable().optional(),
   role: z.string().default('user'),
   avatarUrl: z.string().nullable().optional(), // Removed .url() to allow emojis/paths
   avatar: z.string().nullable().optional(), // Added for compatibility
