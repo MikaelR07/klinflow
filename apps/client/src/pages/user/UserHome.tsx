@@ -209,8 +209,8 @@ export default function UserHome() {
         </div>
 
         {/* Wallet Hero */}
-        <div className="bg-gradient-to-br from-primary  to-emerald-600 to-emerald-800  rounded-xl p-4 gpu-layer">
-          <div className="flex flex-col gap-2 relative z-10">
+        <div className="bg-gradient-to-br from-primary  to-emerald-600 to-emerald-800  rounded-xl p-6 gpu-layer">
+          <div className="flex flex-col gap-6 relative z-10">
             <div className="flex items-end justify-between">
               <div>
                 <p className="text-[12px] font-semibold text-emerald-200/90 Capitalise tracking-widest mb-1.5 flex items-center gap-1.5">
@@ -230,46 +230,34 @@ export default function UserHome() {
               </button>
             </div>
 
-            {/* Stats grid */}
-            <div className="pt-3 border-t border-white/20">
-              <div className="grid grid-cols-4 gap-2">
+            <div className="pt-4 border-t border-white/50 px-1">
+              <div className="flex items-center justify-between w-full">
 
-                {/* GFP Card */}
-                <div onClick={() => navigate('/impact-hub')} className="bg-emerald-950/30 text-center rounded-xl p-2 flex flex-col cursor-pointer hover:bg-emerald-950/50 transition-colors">
-                  <Star className="w-4 h-4 text-amber-400 mb-3 mx-auto" />
-                  <div>
-                    <p className="text-sm sm:text-base font-bold text-white leading-none mb-1">{rewardPoints}</p>
-                    <p className="text-[9px] font-semibold text-emerald-100/70 capitalize truncate">GFP</p>
-                  </div>
+                <div onClick={() => navigate('/impact-hub')} className="flex flex-col cursor-pointer">
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">GFP</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{rewardPoints}</p>
                 </div>
 
-                {/* Pickups Card */}
-                <div className="bg-emerald-950/30 text-center rounded-xl p-2 flex flex-col ">
-                  <Truck className="w-4 h-4 text-emerald-400 mb-3 mx-auto" />
-                  <div>
-                    <p className="text-sm sm:text-base font-bold text-white leading-none mb-1">{totalPickups}</p>
-                    <p className="text-[9px] font-semibold text-emerald-100/70 capitalize truncate">Pickups</p>
-                  </div>
+                <div className="w-px h-8 bg-white/60" />
+
+                <div className="flex flex-col">
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Pickups</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
                 </div>
 
-                {/* Recovered Card */}
-                <div className="bg-emerald-950/30 text-center rounded-xl p-2 flex flex-col ">
-                  <Recycle className="w-4 h-4 text-emerald-400 mb-3 mx-auto" />
-                  <div>
-                    <p className="text-sm sm:text-base font-bold text-white leading-none mb-1">{kgRecovered} KG</p>
-                    <p className="text-[9px] font-semibold text-emerald-100/70 capitalize truncate">Recovered</p>
-                  </div>
+                <div className="w-px h-8 bg-white/60" />
+
+                <div className="flex flex-col">
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Recovered</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
                 </div>
 
-                {/* Impact Card */}
-                <div className="bg-emerald-950/30 text-center rounded-xl p-2 flex flex-col ">
-                  <Sparkles className="w-4 h-4 text-blue-400 mb-3 mx-auto" />
-                  <div>
-                    <p className="text-sm sm:text-base font-bold text-white leading-none mb-1">{co2OffsetTonnes}</p>
-                    <p className="text-[9px] font-semibold text-emerald-100/70 capitalize truncate">CO₂ Offset</p>
-                  </div>
-                </div>
+                <div className="w-px h-8 bg-white/60" />
 
+                <div className="flex flex-col">
+                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Offset</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
+                </div>
               </div>
             </div>
           </div>
@@ -304,7 +292,7 @@ export default function UserHome() {
               onClick={() => navigate('/my-bookings')}
               className="rounded-2xl border p-2.5 flex border-slate-200 dark:border-slate-700 flex-col items-center gap-2 relative"
             >
-              <div className="w-10 h-10 bg-indigo-500 text-white rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-green-600 text-white rounded-xl flex items-center justify-center">
                 <Recycle className="w-5 h-5" />
               </div>
 
@@ -348,19 +336,19 @@ export default function UserHome() {
           {/* Discovery Entry Point */}
           <div
             onClick={() => navigate('/discovery')}
-            className="bg-gradient-to-r from-primary to-emerald-600 !mt-2 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all group shadow-sm"
+            className="bg-gradient-to-r from-primary to-emerald-600 !mt-2 rounded-xl p-3 border border-slate-100 dark:border-slate-800 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all group shadow-sm"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center shrink-0">
-                <MapPin className="w-5 h-5 text-primary" />
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-green-600 flex items-center justify-center shrink-0">
+                <MapPin className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-base font-semibold dark:text-white leading-none mb-1">Ready to recycle?</h3>
-                <p className="text-xs font-semibold text-slate-100">Find a verified collection partner near you</p>
+                <h3 className="text-[14px] font-semibold text-white leading-none mb-1">Ready to recycle?</h3>
+                <p className="text-[11px]  text-slate-100">Find a verified collection partner near you</p>
               </div>
             </div>
-            <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center shrink-0 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-900/50 transition-colors">
-              <ChevronRight className="w-4 h-4 text-primary" />
+            <div className="w-8 h-8  rounded-full flex items-center justify-center shrink-0 transition-colors">
+              <ChevronRight className="w-4 h-4 text-white" />
             </div>
           </div>
 
@@ -369,49 +357,49 @@ export default function UserHome() {
           <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1">
             Market Intelligence
           </p>
-          <div className="grid grid-cols-2 gap-2 !mt-2">
-            {/* ── MARKET INTELLIGENCE ── */}
-            <div
-              onClick={() => navigate('/market-pulse')}
-              className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-3 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
-            >
-              <div className="flex items-center gap-2.5 relative z-10 w-full">
-                <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
-                  <BarChart3Icon className="w-4 h-4 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[11px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
-                    Market Prices
-                  </h3>
-                  <p className="text-[9px] font-medium text-emerald-100 leading-snug mt-0.5 line-clamp-2">
-                    View prices in the market
-                  </p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/70 shrink-0" />
-              </div>
-            </div>
 
-            {/* ── COMMUNITY COLLECTIVE ── */}
-            <div
-              onClick={() => navigate('/community-collective')}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
-            >
-              <div className="flex items-center gap-2.5 relative z-10 w-full">
-                <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
-                  <Users className="w-4 h-4 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-[11px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
-                    Collective Hub
-                  </h3>
-                  <p className="text-[9px] font-medium text-indigo-100 leading-snug mt-0.5 line-clamp-2">
-                    Join community pickups
-                  </p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-white/70 shrink-0" />
+          {/* ── MARKET INTELLIGENCE ── */}
+          <div
+            onClick={() => navigate('/market-pulse')}
+            className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-5 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+          >
+            <div className="flex items-center gap-2.5 relative z-10 w-full">
+              <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
+                <BarChart3Icon className="w-4 h-4 text-white" />
               </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-[12px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
+                  Market Prices
+                </h3>
+                <p className="text-[10px] font-medium text-emerald-100 leading-snug mt-0.5 line-clamp-2">
+                  View Material prices in the market
+                </p>
+              </div>
+              <ChevronRight className="w-4 h-4 text-white/70 shrink-0" />
             </div>
           </div>
+
+          {/* ── COMMUNITY COLLECTIVE ── */}
+          <div
+            onClick={() => navigate('/community-collective')}
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+          >
+            <div className="flex items-center gap-2.5 relative z-10 w-full">
+              <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
+                <Users className="w-4 h-4 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-[12px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
+                  Collective Hub
+                </h3>
+                <p className="text-[10px] font-medium text-indigo-100 leading-snug mt-0.5 line-clamp-2">
+                  Join community pickups and Goals
+                </p>
+              </div>
+              <ChevronRight className="w-4 h-4 text-white/70 shrink-0" />
+            </div>
+          </div>
+
         </div>
 
       </div>

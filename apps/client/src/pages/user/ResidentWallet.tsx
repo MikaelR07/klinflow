@@ -180,7 +180,7 @@ export default function ResidentWallet() {
                 <Leaf className="w-4.5 h-4.5 text-emerald-400" />
               </div>
               <div>
-                <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-0.5">Eco Points</p>
+                <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-0.5">GFP Points</p>
                 <p className="text-sm font-black text-white leading-none">{gfpBalance.toLocaleString()}</p>
                 <p className="text-[8px] font-semibold text-emerald-300/60 mt-0.5">Worth KES {(gfpBalance / 2).toLocaleString()}</p>
               </div>
