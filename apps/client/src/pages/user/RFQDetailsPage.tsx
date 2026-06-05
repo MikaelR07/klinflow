@@ -316,7 +316,7 @@ export default function RFQDetailsPage() {
       </div>
 
       <div className="space-y-4 px-1.5 mt-2">
-        <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
           <div>
             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 leading-none">Client Name</p>
             <h3 className="text-sm font-black text-slate-900 dark:text-white capitalize leading-none">{rfq.company}</h3>
@@ -369,14 +369,14 @@ export default function RFQDetailsPage() {
         </div>
 
         {rfq.notes && (
-          <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-3">
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-3">
             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Description / Specifications</p>
             <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{rfq.notes}</p>
           </div>
         )}
 
         {existingOfferId ? (
-          <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-3xl p-6 border border-emerald-100 dark:border-emerald-800/40 shadow-sm text-center space-y-3">
+          <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-xl p-6 border border-emerald-100 dark:border-emerald-800/40 shadow-sm text-center space-y-3">
             <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-800/50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2">
               <CheckCircle2 className="w-6 h-6" />
             </div>
@@ -392,7 +392,7 @@ export default function RFQDetailsPage() {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmitProposal} className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5">
+          <form onSubmit={handleSubmitProposal} className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5">
             <div>
               <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">Submit Bid Proposal</h4>
               <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">Set your rates and upload your inventory batch details.</p>
@@ -459,14 +459,14 @@ export default function RFQDetailsPage() {
                 </div>
                 <div className="grid grid-cols-4 gap-2.5">
                   {proofImages.length < 4 && (
-                    <label className="aspect-square rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 transition-colors">
+                    <label className="aspect-square rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 transition-colors">
                       <Camera className="w-5 h-5 text-slate-400" />
                       <span className="text-[8px] font-black text-slate-400 uppercase mt-1">Upload</span>
                       <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" multiple />
                     </label>
                   )}
                   {proofImages.map((src, index) => (
-                    <div key={index} className="relative aspect-square rounded-2xl overflow-hidden group border border-slate-100 dark:border-slate-800">
+                    <div key={index} className="relative aspect-square rounded-xl overflow-hidden group border border-slate-100 dark:border-slate-800">
                       <OptimizedImage src={src} alt={`Proof ${index}`} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                       <button
                         type="button"
@@ -484,7 +484,7 @@ export default function RFQDetailsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-primary hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em]  active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
               {submitting ? 'Submitting proposal...' : 'Submit Proposal & Negotiate'}
             </button>
