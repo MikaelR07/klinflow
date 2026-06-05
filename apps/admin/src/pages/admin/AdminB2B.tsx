@@ -42,8 +42,8 @@ export default function AdminB2B() {
 
       {/* KPI Row (B2B Specific) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none flex items-center gap-6">
-          <div className="p-4 rounded-3xl bg-emerald-500/10 text-emerald-600">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none flex items-center gap-6">
+          <div className="p-4 rounded-[1rem] bg-emerald-500/10 text-emerald-600">
             <BadgeCheck className="w-8 h-8" />
           </div>
           <div>
@@ -51,8 +51,8 @@ export default function AdminB2B() {
             <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">{unverifiedBusinesses.length}</h2>
           </div>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none flex items-center gap-6">
-          <div className="p-4 rounded-3xl bg-indigo-500/10 text-indigo-600">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none flex items-center gap-6">
+          <div className="p-4 rounded-[1rem] bg-indigo-500/10 text-indigo-600">
             <TrendingUp className="w-8 h-8" />
           </div>
           <div>
@@ -60,8 +60,8 @@ export default function AdminB2B() {
             <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">{marketplaceFeed.length}</h2>
           </div>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none flex items-center gap-6">
-          <div className="p-4 rounded-3xl bg-amber-500/10 text-amber-600">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none flex items-center gap-6">
+          <div className="p-4 rounded-[1rem] bg-amber-500/10 text-amber-600">
             <Truck className="w-8 h-8" />
           </div>
           <div>
@@ -72,12 +72,12 @@ export default function AdminB2B() {
       </div>
 
       {/* Tab Selector */}
-      <div className="flex bg-slate-200/50 dark:bg-slate-800 p-1.5 rounded-3xl gap-2 max-w-2xl">
+      <div className="flex bg-slate-200/50 dark:bg-slate-800 p-1.5 rounded-[1rem] gap-2 max-w-2xl">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 flex items-center justify-center gap-3 py-3.5 rounded-2xl text-[11px] font-semibold uppercase tracking-widest transition-all ${
+            className={`flex-1 flex items-center justify-center gap-3 py-3.5 rounded-[1rem] text-[11px] font-semibold uppercase tracking-widest transition-all ${
               activeTab === tab.id
                 ? 'bg-white dark:bg-slate-700 text-primary shadow-xl shadow-slate-200/50 dark:shadow-none'
                 : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
@@ -95,7 +95,7 @@ export default function AdminB2B() {
       </div>
 
       {/* Content Area */}
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden min-h-[500px]">
+      <div className="bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden min-h-[500px]">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-40">
             <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4" />
@@ -186,11 +186,11 @@ export default function AdminB2B() {
                       <p className="text-xs font-semibold text-slate-400 mt-1">Industrial Bulk Listings & Pricing Analytics</p>
                     </div>
                     <div className="flex gap-2">
-                       <div className="p-4 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-center min-w-[120px]">
+                       <div className="p-4 rounded-[1rem] bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-center min-w-[120px]">
                           <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Avg Price (PET)</p>
                           <p className="text-lg font-semibold text-primary">KSh 32/kg</p>
                        </div>
-                       <div className="p-4 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-center min-w-[120px]">
+                       <div className="p-4 rounded-[1rem] bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-center min-w-[120px]">
                           <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Weekly Move</p>
                           <p className="text-lg font-semibold text-emerald-500">+4.2%</p>
                        </div>
@@ -199,8 +199,8 @@ export default function AdminB2B() {
 
                  <div className="grid md:grid-cols-2 gap-4">
                     {marketplaceFeed.map(item => (
-                      <div key={item.id} className="p-5 rounded-3xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex items-center gap-5 hover:bg-white dark:hover:bg-slate-800 hover:shadow-xl transition-all cursor-pointer group">
-                        <div className="w-16 h-16 rounded-2xl overflow-hidden bg-slate-200 shrink-0">
+                      <div key={item.id} className="p-5 rounded-[1rem] border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex items-center gap-5 hover:bg-white dark:hover:bg-slate-800 hover:shadow-xl transition-all cursor-pointer group">
+                        <div className="w-16 h-16 rounded-[1rem] overflow-hidden bg-slate-200 shrink-0">
                            <img src={item.photo_url || 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80&w=200'} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
                         </div>
                         <div className="flex-1">
@@ -243,12 +243,12 @@ export default function AdminB2B() {
 
                  <div className="space-y-3">
                     {b2bLogistics.length === 0 ? (
-                      <div className="py-20 text-center border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[2rem]">
+                      <div className="py-20 text-center border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[1rem]">
                         <Truck className="w-12 h-12 text-slate-200 mx-auto mb-4" />
                         <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest">No Active Freight Requests</p>
                       </div>
                     ) : b2bLogistics.map(order => (
-                      <div key={order.id} className="p-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] shadow-sm hover:shadow-xl transition-all flex items-center gap-8">
+                      <div key={order.id} className="p-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1rem] shadow-sm hover:shadow-xl transition-all flex items-center gap-8">
                          <div className="w-14 h-14 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 shrink-0">
                             <Truck className="w-6 h-6" />
                          </div>
@@ -268,7 +268,7 @@ export default function AdminB2B() {
                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Platform Revenue</p>
                            <p className="text-lg font-semibold text-slate-900 dark:text-white italic underline decoration-primary decoration-4">KSh {order.total_price * 0.2 > 500 ? (order.total_price * 0.2).toFixed(0) : 500}</p>
                          </div>
-                         <button className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400 hover:bg-primary hover:text-white transition-all group">
+                         <button className="p-4 bg-slate-50 dark:bg-slate-800 rounded-[1rem] text-slate-400 hover:bg-primary hover:text-white transition-all group">
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                          </button>
                       </div>

@@ -35,7 +35,7 @@ export default function Welcome() {
             { icon: Globe, title: 'Impact Map', desc: 'Geospatial visualization of city health.' }
           ].map((feat, idx) => (
             <div key={idx} className="flex items-center gap-4 group">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform shadow-2xl shadow-primary/20">
+              <div className="w-12 h-12 rounded-[1rem] bg-white/5 border border-white/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform shadow-2xl shadow-primary/20">
                 <feat.icon className="w-6 h-6" />
               </div>
               <div>
@@ -51,7 +51,7 @@ export default function Welcome() {
       <div className="relative z-10 pb-8 space-y-4 max-w-md mx-auto w-full">
         <button
           onClick={() => navigate('/login')}
-          className="w-full py-5 bg-white text-slate-900 rounded-3xl font-semibold text-base shadow-2xl shadow-white/10 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+          className="w-full py-5 bg-white text-slate-900 rounded-[1rem] font-semibold text-base shadow-2xl shadow-white/10 flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
         >
           Enter Command Center <ArrowRight className="w-5 h-5" />
         </button>

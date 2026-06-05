@@ -78,7 +78,7 @@ export default function AdminRegister() {
         
         {/* Admin Branding */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-[1rem] bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-4">
             <ShieldAlert className="w-8 h-8 text-rose-500" />
           </div>
           <h1 className="text-2xl font-semibold text-white tracking-tight">
@@ -93,7 +93,7 @@ export default function AdminRegister() {
         </div>
 
         {/* Registration Form */}
-        <form onSubmit={handleAdminRegister} className="bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-2xl space-y-4">
+        <form onSubmit={handleAdminRegister} className="bg-slate-800 p-6 sm:p-8 rounded-[1rem] border border-slate-700 shadow-2xl space-y-4">
           
           <div>
             <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Full Name</label>

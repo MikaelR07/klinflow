@@ -24,58 +24,16 @@ import { OfflineBanner } from '@klinflow/ui';
 // Components
 import WeightVerificationModal from './components/user/WeightVerificationModal';
 
-// ── LAZY LOADED PAGES (SPEED OPTIMIZATION) ─────────────────────────
-const UserHome = lazy(() => import('./pages/user/UserHome'));
-const DiscoveryHub = lazy(() => import('./pages/user/Discovery'));
-const Leaderboard = lazy(() => import('./pages/user/Leaderboard'));
-const BookPickup = lazy(() => import('./pages/user/BookPickup'));
-const MyBookings = lazy(() => import('./pages/user/MyBookings'));
+import { getResidentRoutes } from './features/resident/routes/ResidentRoutes';
+import { getSellerRoutes } from './features/seller/routes/SellerRoutes';
+import { getCommunityRoutes } from './features/community/routes/CommunityRoutes';
+import { getSettingsRoutes } from './features/settings/routes/SettingsRoutes';
 
-const ImpactHub = lazy(() => import('./pages/user/ImpactHub'));
-const WithdrawalPage = lazy(() => import('./pages/user/WithdrawalPage'));
+// Pages rendered outside MobileLayout (no bottom nav)
 const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
-const CompanyProfile = lazy(() => import('./pages/user/CompanyProfile'));
-const ImpactAnalytics = lazy(() => import('./pages/user/ImpactAnalytics'));
-const ResidentWallet = lazy(() => import('./pages/user/ResidentWallet'));
-const SellerWallet = lazy(() => import('./pages/user/SellerWallet'));
-const RedeemGFP = lazy(() => import('./pages/user/RedeemGFP'));
-const TransferGFP = lazy(() => import('./pages/user/TransferGFP'));
-const TransferHistory = lazy(() => import('./pages/user/TransferHistory'));
-const RedemptionHistory = lazy(() => import('./pages/user/RedemptionHistory'));
-
-// Seller Pages
-const PostTrade = lazy(() => import('./pages/user/PostTrade'));
-const MyTrades = lazy(() => import('./pages/user/MyTrades'));
-const TrustScoreDetails = lazy(() => import('./pages/user/TrustScoreDetails'));
-const MyOffers = lazy(() => import('./pages/user/MyOffers'));
-const MyRFQOffers = lazy(() => import('./pages/user/MyRFQOffers'));
-const SubmittedQuoteDetailsPage = lazy(() => import('./pages/user/SubmittedQuoteDetailsPage'));
-const MarketplaceInventory = lazy(() => import('./pages/user/MarketplaceInventory'));
-const MarketIntelligenceHub = lazy(() => import('./pages/user/MarketIntelligenceHub'));
 const RFQDetailsPage = lazy(() => import('./pages/user/RFQDetailsPage'));
-const CircularResume = lazy(() => import('./pages/user/CircularResume'));
-const CommunityCollective = lazy(() => import('./pages/user/CommunityCollective'));
-const CreateSwarm = lazy(() => import('./pages/user/CreateSwarm'));
-const EditSwarm = lazy(() => import('./pages/user/EditSwarm'));
-const JoinSwarm = lazy(() => import('./pages/user/JoinSwarm'));
-const SwarmsList = lazy(() => import('./pages/user/SwarmsList'));
-const CommunityGoals = lazy(() => import('./pages/user/CommunityGoals'));
-const CreateGoal = lazy(() => import('./pages/user/CreateGoal'));
-const SwarmDetails = lazy(() => import('./pages/user/SwarmDetails'));
-const GoalDetails = lazy(() => import('./pages/user/GoalDetails'));
-const FinancingHub = lazy(() => import('./pages/user/FinancingHub'));
 const FulfillmentTrackingPage = lazy(() => import('./pages/user/FulfillmentTrackingPage'));
-
-// Settings Pages
-const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
-const ProfilePage = lazy(() => import('./pages/settings/ProfilePage'));
-const NotificationsPage = lazy(() => import('./pages/settings/NotificationsPage'));
-const NotificationsFeed = lazy(() => import('./pages/user/NotificationsFeed'));
-const PrivacySecurityPage = lazy(() => import('./pages/settings/PrivacySecurityPage'));
-const SupportPage = lazy(() => import('./pages/settings/SupportPage'));
-const FeedbackPage = lazy(() => import('./pages/settings/FeedbackPage'));
-const SubscriptionPage = lazy(() => import('./pages/settings/SubscriptionPage'));
-const SubscriptionDetail = lazy(() => import('./pages/settings/SubscriptionDetail'));
+const SubmittedQuoteDetailsPage = lazy(() => import('./pages/user/SubmittedQuoteDetailsPage'));
 
 // Auth Pages (Instant Load)
 import Welcome from './pages/auth/Welcome';
@@ -218,52 +176,10 @@ export default function App() {
           <Route path="/fulfillment/:id" element={<FulfillmentTrackingPage />} />
           <Route path="/my-rfq-offers/:quoteId" element={<SubmittedQuoteDetailsPage />} />
           <Route element={<MobileLayout />}>
-            <Route path="/" element={<UserHome />} />
-            <Route path="/withdraw" element={<WithdrawalPage />} />
-            <Route path="/resident-wallet" element={<ResidentWallet />} />
-            <Route path="/seller-wallet" element={<SellerWallet />} />
-            <Route path="/redeem-gfp" element={<RedeemGFP />} />
-            <Route path="/redemption-history" element={<RedemptionHistory />} />
-            <Route path="/transfer-gfp" element={<TransferGFP />} />
-            <Route path="/wallet-history" element={<TransferHistory />} />
-            <Route path="/discovery" element={<DiscoveryHub />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="/book-pickup" element={<BookPickup />} />
-            <Route path="/my-bookings" element={<MyBookings />} />
-            <Route path="/impact-hub" element={<ImpactHub />} />
-
-            <Route path="/company/:agentId" element={<CompanyProfile />} />
-            <Route path="/analytics" element={<ImpactAnalytics />} />
-            <Route path="/post-trade" element={<PostTrade />} />
-            <Route path="/my-trades" element={<MyTrades />} />
-            <Route path="/my-offers" element={<MyOffers />} />
-            <Route path="/my-rfq-offers" element={<MyRFQOffers />} />
-            <Route path="/inventory" element={<MarketplaceInventory />} />
-            <Route path="/trust-score" element={<TrustScoreDetails />} />
-            <Route path="/market-pulse" element={<MarketIntelligenceHub />} />
-            <Route path="/circular-resume" element={<CircularResume />} />
-            <Route path="/community-collective" element={<ProtectedRoute><CommunityCollective /></ProtectedRoute>} />
-            <Route path="/swarms" element={<ProtectedRoute><SwarmsList /></ProtectedRoute>} />
-            <Route path="/community-goals" element={<ProtectedRoute><CommunityGoals /></ProtectedRoute>} />
-            <Route path="/community-collective/swarm/create" element={<ProtectedRoute><CreateSwarm /></ProtectedRoute>} />
-            <Route path="/community-collective/swarm/:id/edit" element={<ProtectedRoute><EditSwarm /></ProtectedRoute>} />
-            <Route path="/community-collective/swarm/:id/join" element={<ProtectedRoute><JoinSwarm /></ProtectedRoute>} />
-            <Route path="/community-collective/goal/create" element={<ProtectedRoute><CreateGoal /></ProtectedRoute>} />
-            <Route path="/community-collective/swarm/:id" element={<ProtectedRoute><SwarmDetails /></ProtectedRoute>} />
-            <Route path="/community-collective/goal/:id" element={<ProtectedRoute><GoalDetails /></ProtectedRoute>} />
-            <Route path="/financing" element={<ProtectedRoute><FinancingHub /></ProtectedRoute>} />
-            <Route path="/notifications" element={<NotificationsFeed />} />
-            
-            <Route path="/settings">
-              <Route index element={<SettingsMenu />} />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="subscriptions" element={<SubscriptionPage />} />
-              <Route path="subscriptions/:tierId" element={<SubscriptionDetail />} />
-              <Route path="notifications" element={<NotificationsPage />} />
-              <Route path="privacy" element={<PrivacySecurityPage />} />
-              <Route path="support" element={<SupportPage />} />
-              <Route path="feedback" element={<FeedbackPage />} />
-            </Route>
+            {getResidentRoutes()}
+            {getSellerRoutes()}
+            {getCommunityRoutes()}
+            {getSettingsRoutes()}
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>

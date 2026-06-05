@@ -50,7 +50,7 @@ export default function SettingsMenu() {
   const quickActions = [
     { label: 'Dashboard', icon: BarChart3, path: '/earnings', color: 'bg-emerald-500' },
     { label: 'Warehouse', icon: Package, path: '/warehouse', color: 'bg-indigo-500' },
-    { label: 'Pricing', icon: Settings, path: '/settings/configuration', color: 'bg-blue-500' },
+    { label: 'Pricing', icon: Settings, path: isCompanyOwner ? '/admin/services' : '/settings/configuration', color: 'bg-blue-500' },
     { label: 'Reviews', icon: Star, path: '/reviews', color: 'bg-amber-500' },
   ];
 
@@ -82,9 +82,11 @@ export default function SettingsMenu() {
         </div>
       )}
 
-      <main className={`flex-1 ${isCompanyOwner ? 'pt-8' : 'pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)]'} pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5`}>
+      <main className={`flex-1 ${isCompanyOwner ? 'pt-8 max-w-6xl w-full' : 'pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] max-w-lg w-full px-1.5'} pb-6 mx-auto`}>
+        <div className={isCompanyOwner ? 'grid lg:grid-cols-12 gap-8' : 'space-y-6'}>
+          <div className={isCompanyOwner ? 'lg:col-span-5 space-y-6 h-fit' : 'space-y-6 h-fit'}>
         {/* ── HERO BENTO CARD ── */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white mb-6 group">
+        <div className="relative overflow-hidden rounded-[1rem] bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white mb-6 group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 dark:bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32 transition-transform group-hover:scale-110 duration-700" />
 
           <div className="relative z-10 space-y-2.5">
@@ -198,7 +200,7 @@ export default function SettingsMenu() {
                 onClick={() => navigate(action.path)}
                 className="flex flex-col items-center gap-3 active:scale-90 transition-all"
               >
-                <div className={`w-14 h-14 rounded-2xl ${action.color} text-white flex items-center justify-center shadow-lg shadow-black/5`}>
+                <div className={`w-14 h-14 rounded-[1rem] ${action.color} text-white flex items-center justify-center shadow-lg shadow-black/5`}>
                   <action.icon className="w-6 h-6" />
                 </div>
                 <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-tighter">{action.label}</span>
@@ -207,10 +209,12 @@ export default function SettingsMenu() {
           </div>
         </div>
 
+          </div>
+          <div className={isCompanyOwner ? 'lg:col-span-7 space-y-6 h-fit' : 'space-y-6 h-fit'}>
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3 mb-10">
           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
-          <div className="bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
@@ -237,7 +241,7 @@ export default function SettingsMenu() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm mb-6">
           <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {secondaryMenu.map((item, i) => (
               <button
@@ -268,13 +272,15 @@ export default function SettingsMenu() {
               toast.success('Logged Out');
               navigate('/login', { replace: true });
             }}
-            className="px-8 py-3 rounded-2xl bg-rose-50 dark:bg-rose-500/10 text-rose-500 font-bold text-sm tracking-[0.2em] capitalize border border-rose-100 dark:border-rose-500/20 active:scale-95 transition-all flex items-center gap-2"
+            className="px-8 py-3 rounded-[1rem] bg-rose-50 dark:bg-rose-500/10 text-rose-500 font-bold text-sm tracking-[0.2em] capitalize border border-rose-100 dark:border-rose-500/20 active:scale-95 transition-all flex items-center gap-2"
           >
             <LogOut className="w-4 h-4" /> SIGN OUT
           </button>
         </div>
 
-        <div className="text-center space-y-1 opacity-40">
+                  </div>
+        </div>
+        <div className={`text-center space-y-1 opacity-40 ${isCompanyOwner ? 'mt-12' : 'mt-8'}`}>
           <p className="text-[10px] font-bold capitalize tracking-[0.3em]">Klinflow Operating System</p>
           <p className="text-[9px] font-medium italic">Empowering the Circular Economy • V1.4.2</p>
         </div>

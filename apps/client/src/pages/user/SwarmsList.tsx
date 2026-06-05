@@ -5,7 +5,10 @@
 import { useEffect, useState } from 'react';
 import {
   Users, ArrowLeft, Truck, Plus,
-  Search, Filter
+  Search, Filter,
+  Gift,
+  Leaf,
+  LeafyGreen
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore } from '@klinflow/core';
@@ -82,7 +85,7 @@ export default function SwarmsList() {
               placeholder="Search swarms by material..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-300 dark:focus:border-indigo-600 transition-colors"
+              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-300 dark:focus:border-indigo-600 transition-colors"
             />
           </div>
 
@@ -143,45 +146,158 @@ export default function SwarmsList() {
         )}
 
         {/* Swarm Cards */}
-        <div className="flex flex-col gap-y-[1px] bg-slate-200 dark:bg-slate-800 border-y border-slate-200 dark:border-slate-800">
-          {filteredSwarms.map((swarm: any) => (
-            <div key={swarm.id} className="bg-white dark:bg-slate-900 p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-indigo-50/80 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                    <Truck className="w-4 h-4" strokeWidth={2} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-0.5 tracking-tight">{swarm.material}</h4>
-                    <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">{swarm.estate}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className={`text-[10px] font-bold uppercase tracking-widest ${swarm.status === 'active' ? 'text-green-500' : 'text-emerald-500'}`}>{swarm.status}</p>
-                </div>
-              </div>
+        <div className="flex flex-col gap-3 px-1.5">
+          {filteredSwarms.map((swarm: any) => {
+            const progress = Math.min(100, Math.round((swarm.current_weight / swarm.target_weight) * 100));
+            // Placeholder reward pool: KSh 5 per target kg
+            const rewardPool = swarm.target_weight * 5;
 
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-end">
-                  <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 tracking-wide">{swarm.current_weight} / {swarm.target_weight} KG</p>
-                  <p className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">{Math.min(100, Math.round((swarm.current_weight / swarm.target_weight) * 100))}%</p>
-                </div>
-                <div className="h-1.5 w-full bg-slate-300 dark:bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-indigo-500 rounded-full transition-all duration-1000" style={{ width: `${Math.min(100, (swarm.current_weight / swarm.target_weight) * 100)}%` }} />
-                </div>
-              </div>
+            return (
+              <div
+                key={swarm.id}
+                className="
+      bg-white dark:bg-slate-900/60
+      rounded-xl
+      border border-slate-200/80 dark:border-slate-800
+      shadow-sm
+      p-3
+      transition-all duration-200
+      hover:border-green-200
+      dark:hover:border-green-900
+    "
+              >
+                {/* Header */}
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="text-base font-bold text-slate-900 dark:text-white truncate">
+                        Material:{swarm.material}
+                      </h4>
 
-              <div className="flex items-center justify-between pt-1">
-                <div className="flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5 text-slate-400" />
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400">{swarm.participants_count || 0}</p>
+                      {swarm.status === 'active' && (
+                        <span
+                          className="
+                px-2 py-1
+                rounded-full
+                text-[10px]
+                font-semibold
+                bg-green-50
+                text-green-700
+                dark:bg-green-500/10
+                dark:text-green-400
+              "
+                        >
+                          Active
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                      {swarm.estate}
+                    </p>
+                  </div>
+
+                  <Link
+                    to={`/community-collective/swarm/${swarm.id}`}
+                    className="
+          text-xs
+          font-semibold
+          text-green-600
+          dark:text-green-400
+          whitespace-nowrap
+        "
+                  >
+                    View Details
+                  </Link>
                 </div>
-                <Link to={`/community-collective/swarm/${swarm.id}`} className="px-3 py-2 bg-indigo-600 text-white rounded-xl text-[9px] uppercase tracking-widest font-bold active:scale-95 transition-all shadow-sm">
-                  View Details
-                </Link>
+
+                {/* Metrics + Progress Ring */}
+                <div className="flex items-center justify-between gap-4 ">
+                  <div className="flex-1">
+                    <div className="grid grid-cols-3 gap-4">
+                      {/* Reward Pool */}
+                      <div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-1">
+                          Reward Pool
+                        </p>
+
+                        <p className="text-sm font-bold text-slate-900 dark:text-white">
+                          ksh {rewardPool.toLocaleString()}
+                        </p>
+                      </div>
+
+                      {/* Participants */}
+                      <div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-1">
+                          Participants
+                        </p>
+
+                        <p className="text-sm font-bold text-slate-900 dark:text-white">
+                          {swarm.participants_count || 0}
+                        </p>
+                      </div>
+
+                      {/* Target */}
+                      <div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-1">
+                          Target
+                        </p>
+
+                        <p className="text-sm font-bold text-slate-900 dark:text-white">
+                          {swarm.target_weight.toLocaleString()}kg
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Progress Ring */}
+                  <div className="shrink-0">
+                    <div className="relative w-[84px] h-[84px]">
+                      <svg
+                        className="w-full h-full -rotate-90"
+                        viewBox="0 0 84 84"
+                      >
+                        <circle
+                          cx="42"
+                          cy="42"
+                          r="36"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          className="text-slate-200 dark:text-slate-700"
+                        />
+
+                        <circle
+                          cx="42"
+                          cy="42"
+                          r="36"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="6"
+                          className="text-green-500"
+                          strokeDasharray={`${2 * Math.PI * 34}`}
+                          strokeDashoffset={`${2 * Math.PI * 34 * (1 - progress / 100)
+                            }`}
+                          strokeLinecap="round"
+                        />
+                      </svg>
+
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <span className="text-lg font-black text-slate-900 dark:text-white">
+                          {progress}%
+                        </span>
+
+                        <span className="text-[9px] text-slate-500 dark:text-slate-400">
+                          Complete
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </main>
     </div>

@@ -37,7 +37,7 @@ export default function AdminLogin() {
         
         {/* Admin Branding */}
         <div className="text-center mb-10">
-          <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-[1rem] bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto mb-4">
             <ShieldAlert className="w-8 h-8 text-rose-500" />
           </div>
           <h1 className="text-2xl font-semibold text-white tracking-tight">
@@ -49,7 +49,7 @@ export default function AdminLogin() {
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleAdminLogin} className="bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-2xl">
+        <form onSubmit={handleAdminLogin} className="bg-slate-800 p-6 sm:p-8 rounded-[1rem] border border-slate-700 shadow-2xl">
           <div className="space-y-5">
             <div>
               <label className="block text-sm font-semibold text-slate-300 mb-1.5">Authorized Phone</label>

@@ -54,6 +54,7 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
         .from('waste_categories')
         .select('*')
         .eq('is_active', true)
+        .is('parent_category', null)
         .order('label');
 
       if (!error && data && data.length > 0) {
@@ -75,6 +76,7 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
       const { data, error } = await supabase
         .from('waste_categories')
         .select('*')
+        .is('parent_category', null)
         .order('label');
 
       if (!error && data) {
@@ -90,11 +92,18 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
   fetchMaterialPrices: async () => {
     try {
       const { data, error } = await supabase
-        .from('material_prices')
-        .select('*');
+        .from('waste_categories')
+        .select('*')
+        .not('parent_category', 'is', null);
 
       if (!error && data) {
-        set({ materialPrices: data });
+        const mapped = data.map(d => ({
+          id: d.id,
+          material_name: d.label,
+          category: d.parent_category,
+          price_per_kg: d.price_per_kg
+        }));
+        set({ materialPrices: mapped });
       }
     } catch (error) {
       console.error('Error fetching material prices:', error);
@@ -201,14 +210,28 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
 
   addMaterialPrice: async (materialName, category, pricePerKg) => {
     try {
+      const slug = materialName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       const { data, error } = await supabase
-        .from('material_prices')
-        .insert({ material_name: materialName, category, price_per_kg: pricePerKg })
+        .from('waste_categories')
+        .insert({ 
+          label: materialName, 
+          slug, 
+          parent_category: category, 
+          price_per_kg: pricePerKg,
+          price_per_unit: pricePerKg,
+          is_active: true
+        })
         .select()
         .single();
 
       if (error) throw error;
-      set(state => ({ materialPrices: [...state.materialPrices, data] }));
+      const mapped = {
+        id: data.id,
+        material_name: data.label,
+        category: data.category,
+        price_per_kg: data.price_per_kg
+      };
+      set(state => ({ materialPrices: [...state.materialPrices, mapped] }));
       return { success: true };
     } catch (error) {
       console.error('Error adding material price:', error);
@@ -218,12 +241,25 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
 
   updateMaterialPrice: async (id, updates) => {
     try {
-      const { error } = await supabase
-        .from('material_prices')
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq('id', id);
+      const dbUpdates: any = { updated_at: new Date().toISOString() };
+      if (updates.material_name) {
+        dbUpdates.label = updates.material_name;
+        dbUpdates.slug = updates.material_name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      }
+      if (updates.price_per_kg !== undefined) {
+        dbUpdates.price_per_kg = updates.price_per_kg;
+        dbUpdates.price_per_unit = updates.price_per_kg;
+      }
+
+      const { data, error } = await supabase
+        .from('waste_categories')
+        .update(dbUpdates)
+        .eq('id', id)
+        .select();
 
       if (error) throw error;
+      if (!data || data.length === 0) throw new Error("Update blocked by database policy");
+
       set(state => ({
         materialPrices: state.materialPrices.map(m => m.id === id ? { ...m, ...updates } : m)
       }));
@@ -237,7 +273,7 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
   deleteMaterialPrice: async (id) => {
     try {
       const { error } = await supabase
-        .from('material_prices')
+        .from('waste_categories')
         .delete()
         .eq('id', id);
 

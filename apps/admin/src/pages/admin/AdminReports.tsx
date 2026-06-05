@@ -33,9 +33,9 @@ export default function AdminReports() {
       </div>
 
       {/* NEMA AI Report */}
-      <div className="bg-gradient-to-r from-primary/5 to-secondary/5 border-2 border-dashed border-primary/30 rounded-2xl p-6">
+      <div className="bg-gradient-to-r from-primary/5 to-secondary/5 border-2 border-dashed border-primary/30 rounded-[1rem] p-6">
         <div className="flex flex-col sm:flex-row items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0">
+          <div className="w-16 h-16 rounded-[1rem] bg-gradient-to-br from-primary to-secondary flex items-center justify-center shrink-0">
             <Sparkles className="w-8 h-8 text-white" />
           </div>
           <div className="flex-1 text-center sm:text-left">

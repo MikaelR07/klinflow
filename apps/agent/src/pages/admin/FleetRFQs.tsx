@@ -288,7 +288,7 @@ export default function FleetRFQs() {
             setFormData(prev => ({ ...prev, pickupArea: profile?.location?.estate || profile?.estate || prev.pickupArea }));
             setIsModalOpen(true);
           }}
-          className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-3 rounded-2xl font-bold text-xs capitalize tracking-widest shadow-xl flex items-center justify-center gap-2 hover:scale-102 active:scale-98 transition-all shrink-0"
+          className="bg-primary text-white dark:text-slate-900 px-4 py-3 rounded-xl font-bold text-xs capitalize tracking-widest shadow-xl flex items-center justify-center gap-2 hover:scale-102 active:scale-98 transition-all shrink-0"
         >
           <Plus className="w-4 h-4" /> Broadcast New RFQ
         </button>
@@ -302,7 +302,7 @@ export default function FleetRFQs() {
           { name: 'Fulfilled', value: stats.fulfilled, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
           { name: 'Seller Responses', value: stats.totalBids, color: 'text-purple-500', bg: 'bg-purple-500/10' },
         ].map((item, idx) => (
-          <div key={idx} className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700/50 shadow-sm flex items-center gap-4">
+          <div key={idx} className="bg-white dark:bg-slate-900/60 p-6 rounded-xl border border-slate-200 dark:border-slate-700/50 shadow-sm flex items-center gap-4">
             <div className={`w-12 h-12 rounded-2xl ${item.bg} flex items-center justify-center`}>
               <Receipt className={`w-6 h-6 ${item.color}`} />
             </div>
@@ -323,10 +323,10 @@ export default function FleetRFQs() {
             placeholder="Search by material grade or pickup area..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl pl-12 pr-4 py-4 text-sm font-semibold focus:ring-2 focus:ring-primary outline-none transition-all shadow-sm"
+            className="w-full bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 py-4 text-sm font-semibold focus:ring-2 focus:ring-primary outline-none transition-all shadow-sm"
           />
         </div>
-        <div className="flex items-center gap-2 bg-white dark:bg-slate-800 p-2 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-2 bg-white dark:bg-slate-900/60 p-2 rounded-xl border border-slate-200 dark:border-slate-700  overflow-x-auto no-scrollbar">
           {(['pending', 'accepted', 'closed', 'cancelled'] as const).map((status) => {
             const label = { pending: 'Open / Bidding', accepted: 'Fulfilled', closed: 'Closed', cancelled: 'Cancelled' }[status];
             return (
@@ -340,7 +340,7 @@ export default function FleetRFQs() {
               >
                 <span>{label}</span>
                 {status === 'pending' && stats.open > 0 && (
-                  <span className="flex items-center justify-center min-w-[20px] h-5 bg-red-500 text-white rounded-full text-[10px] font-bold px-1 shadow-sm">
+                  <span className="flex items-center justify-center min-w-[20px] h-5 bg-red-500 text-white rounded-full text-[10px] font-bold px-1">
                     {stats.open}
                   </span>
                 )}
@@ -351,7 +351,7 @@ export default function FleetRFQs() {
       </div>
 
       {/* ── FLEET RFQS GRID ── */}
-      <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] overflow-hidden border border-slate-200 dark:border-slate-700/50 shadow-sm">
+      <div className="bg-white dark:bg-slate-800 rounded-[1rem] overflow-hidden border border-slate-200 dark:border-slate-700/50 shadow-sm">
         {filteredRFQs.length === 0 ? (
           <div className="py-24 text-center">
             <div className="w-16 h-16 bg-slate-100 dark:bg-slate-700/40 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -452,10 +452,10 @@ export default function FleetRFQs() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-150 dark:border-slate-700/60"
+              className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-[1rem] overflow-hidden border border-slate-150 dark:border-slate-700/60"
             >
               {/* Header */}
-              <div className="px-8 py-6 bg-slate-50 dark:bg-slate-750/30 border-b border-slate-150 dark:border-slate-700/50 flex items-center justify-between">
+              <div className="px-8 py-6 bg-slate-50 dark:bg-slate-900 border-b border-slate-150 dark:border-slate-700/50 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
                     <Receipt className="w-5 h-5" />
@@ -482,7 +482,7 @@ export default function FleetRFQs() {
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value, materialName: '' })}
-                      className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
+                      className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
                       required
                     >
                       <option value="">Select Category</option>
@@ -504,7 +504,7 @@ export default function FleetRFQs() {
                           const price = customRates[selectedSub] || customRates[formData.category] || '';
                           setFormData({ ...formData, materialName: selectedSub, price: price ? String(price) : '' });
                         }}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       >
                         <option value="">Select Material Type</option>
@@ -534,7 +534,7 @@ export default function FleetRFQs() {
                         placeholder="e.g. 1500"
                         value={formData.weight}
                         onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                     </div>
@@ -550,7 +550,7 @@ export default function FleetRFQs() {
                         placeholder="e.g. 25"
                         value={formData.price}
                         onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                     </div>
@@ -568,7 +568,7 @@ export default function FleetRFQs() {
                         placeholder="e.g. Kasarani, Nairobi"
                         value={formData.pickupArea}
                         onChange={(e) => setFormData({ ...formData, pickupArea: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl pl-12 pr-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                     </div>
@@ -583,7 +583,7 @@ export default function FleetRFQs() {
                         onClick={() => setFormData({ ...formData, deliveryMethod: 'agent_pickup' })}
                         className={`h-12 text-sm font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'agent_pickup'
                           ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
                           }`}
                       >
                         We Pick Up
@@ -593,7 +593,7 @@ export default function FleetRFQs() {
                         onClick={() => setFormData({ ...formData, deliveryMethod: 'self_drop' })}
                         className={`h-12 text-sm font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'self_drop'
                           ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
                           }`}
                       >
                         You Drop Off
@@ -603,7 +603,7 @@ export default function FleetRFQs() {
                         onClick={() => setFormData({ ...formData, deliveryMethod: 'flexible' })}
                         className={`h-12 text-sm font-bold rounded-xl border transition-all ${formData.deliveryMethod === 'flexible'
                           ? 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
+                          : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-emerald-300'
                           }`}
                       >
                         Flexible
@@ -619,14 +619,14 @@ export default function FleetRFQs() {
                         type="date"
                         value={formData.deadlineDate}
                         onChange={(e) => setFormData({ ...formData, deadlineDate: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                       <input
                         type="time"
                         value={formData.deadlineTime}
                         onChange={(e) => setFormData({ ...formData, deadlineTime: e.target.value })}
-                        className="w-full h-12 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
+                        className="w-full h-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 text-sm font-semibold text-slate-900 dark:text-white"
                         required
                       />
                     </div>
@@ -634,7 +634,7 @@ export default function FleetRFQs() {
                 </div>
 
                 {/* Image Upload Area */}
-                <div className="bg-slate-50/50 dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-150 dark:border-slate-700/50 shadow-sm space-y-3">
+                <div className="bg-slate-50/50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-150 dark:border-slate-700/50 shadow-sm space-y-3">
                   <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-750 pb-3">
                     <div className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
                       <ImageIcon className="w-4 h-4" />
@@ -673,7 +673,7 @@ export default function FleetRFQs() {
                     placeholder="Provide details about purity, sorting (baled vs loose), pickup logistics..."
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm font-semibold text-slate-900 dark:text-white resize-none"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm font-semibold text-slate-900 dark:text-white resize-none"
                   />
                 </div>
 
@@ -689,7 +689,7 @@ export default function FleetRFQs() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-8 py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs capitalize tracking-widest shadow-xl shadow-emerald-500/20 flex items-center gap-2 hover:scale-102 active:scale-98 disabled:opacity-50 transition-all"
+                    className="px-8 py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs capitalize tracking-widest  flex items-center gap-2 hover:scale-102 active:scale-98 disabled:opacity-50 transition-all"
                   >
                     {isSubmitting ? (
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

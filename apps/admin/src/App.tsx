@@ -91,7 +91,7 @@ export default function App() {
   }, [isAuthenticated, userId, role]);
 
   return (
-    <div className="min-h-dvh bg-slate-100 dark:bg-slate-900 transition-colors duration-200">
+    <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
       <Routes>
         <Route path="/welcome" element={isAuthenticated && role === ROLES.ADMIN ? <Navigate to="/" replace /> : <Welcome />} />
         <Route path="/login" element={isAuthenticated && role === ROLES.ADMIN ? <Navigate to="/" replace /> : <Login />} />

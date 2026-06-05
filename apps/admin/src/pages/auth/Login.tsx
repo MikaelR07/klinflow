@@ -57,7 +57,7 @@ export default function Login() {
         </div>
 
         {/* Login Form */}
-        <div className="bg-slate-800/50 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl min-h-[340px] flex flex-col justify-center">
+        <div className="bg-slate-800/50 backdrop-blur-xl p-6 sm:p-8 rounded-[1rem] border border-white/10 shadow-2xl min-h-[340px] flex flex-col justify-center">
           <form onSubmit={handleLogin} className="space-y-5 animate-slide-up">
             <div className="text-center mb-6">
               <h2 className="text-lg font-semibold text-white pb-1">Administrator Sign In</h2>

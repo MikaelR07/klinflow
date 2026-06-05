@@ -404,9 +404,9 @@ export const useNotificationStore = create<NotificationStore>()(
 }),
     {
       name: 'notification-store',
-      storage: idbStorage,
-      partialize: (state) => ({
-        notifications: state.notifications.slice(0, 100)
+      storage: idbStorage as any,
+      partialize: (state: any) => ({
+        notifications: state.notifications.slice(0, 100) as any
       })
     }
   )

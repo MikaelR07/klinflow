@@ -22,7 +22,7 @@ export default function OfflineBanner() {
                 {pendingCount} actions queued
               </span>
             ) : (
-              <span className="opacity-90 font-medium ml-1">App is running in offline mode.</span>
+              <span className="opacity-90 font-medium ml-1">You are in offline mode</span>
             )}
           </p>
         </motion.div>

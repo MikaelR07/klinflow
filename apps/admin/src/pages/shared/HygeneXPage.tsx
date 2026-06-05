@@ -181,7 +181,7 @@ export default function HygeneXPage() {
                   </div>
                   
                   <div className="flex flex-col gap-2 max-w-[85%]">
-                    <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${
+                    <div className={`relative px-4 py-3 rounded-[1rem] text-[13px] border ${
                       isAi 
                         ? 'bg-slate-50 dark:bg-white/[0.03] border-slate-100 dark:border-white/5 text-slate-700 dark:text-slate-200 rounded-tl-none' 
                         : 'bg-emerald-500 border-emerald-400 text-white font-medium rounded-tr-none shadow-lg shadow-emerald-500/10'
@@ -194,7 +194,7 @@ export default function HygeneXPage() {
                       <motion.div 
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 space-y-3"
+                        className="p-4 rounded-[1rem] bg-emerald-500/10 border border-emerald-500/20 space-y-3"
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white">
@@ -227,7 +227,7 @@ export default function HygeneXPage() {
                 <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
                   <Brain className="w-4 h-4" />
                 </div>
-                <div className="flex items-center gap-1.5 px-4 py-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-100 dark:border-white/5 rounded-2xl rounded-tl-none">
+                <div className="flex items-center gap-1.5 px-4 py-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-100 dark:border-white/5 rounded-[1rem] rounded-tl-none">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '150ms' }} />
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -242,7 +242,7 @@ export default function HygeneXPage() {
       {/* Floating Input Control */}
       <div className="fixed bottom-0 left-0 right-0 p-4 pb-24 lg:pb-8 z-30 pointer-events-none">
         <div className="max-w-3xl mx-auto pointer-events-auto">
-          <div className="relative group bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-slate-100 dark:border-white/10 rounded-[2.5rem] p-2 shadow-2xl shadow-emerald-500/10">
+          <div className="relative group bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-slate-100 dark:border-white/10 rounded-[1rem] p-2 shadow-2xl shadow-emerald-500/10">
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}

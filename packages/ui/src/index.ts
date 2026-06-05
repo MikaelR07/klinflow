@@ -1,3 +1,4 @@
+export * from './components/primitives';
 export { default as OptimizedImage } from './components/OptimizedImage';
 export { default as AIInsightCard } from './components/AIInsightCard';
 export { default as LocationSelector } from './components/LocationSelector';

@@ -80,9 +80,9 @@ export default function NetworkOracle() {
           { label: 'Active Weavers', value: '124', sub: 'In the last 24h', icon: Users, color: 'blue' },
           { label: 'Liquidity Depth', value: 'High', sub: 'Market confidence', icon: ShieldCheck, color: 'purple' },
         ].map((kpi, i) => (
-          <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm group">
+          <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm group">
             <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-2xl bg-${kpi.color}-500/10 text-${kpi.color}-600 dark:text-${kpi.color}-400`}>
+              <div className={`p-3 rounded-[1rem] bg-${kpi.color}-500/10 text-${kpi.color}-600 dark:text-${kpi.color}-400`}>
                 <kpi.icon className="w-6 h-6" />
               </div>
               <Activity className="w-4 h-4 text-slate-200 dark:text-slate-700 animate-pulse" />
@@ -97,7 +97,7 @@ export default function NetworkOracle() {
       <div className="grid lg:grid-cols-12 gap-8">
         {/* Left Column: Price Controls */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                 Market Rates <span className="text-xs font-semibold text-indigo-500 bg-indigo-500/10 px-2 py-0.5 rounded-full uppercase">KSh/KG</span>
@@ -106,7 +106,7 @@ export default function NetworkOracle() {
 
             <div className="space-y-4">
               {prices.map((m) => (
-                <div key={m.id} className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 transition-all group hover:border-indigo-500/30">
+                <div key={m.id} className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-[1rem] border border-slate-100 dark:border-slate-800 transition-all group hover:border-indigo-500/30">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center text-xl shadow-sm">
@@ -148,7 +148,7 @@ export default function NetworkOracle() {
               ))}
             </div>
             
-            <div className="mt-6 p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl">
+            <div className="mt-6 p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-[1rem]">
               <div className="flex gap-3">
                 <Info className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
                 <p className="text-[11px] text-indigo-700 dark:text-indigo-400 font-medium leading-relaxed">
@@ -161,7 +161,7 @@ export default function NetworkOracle() {
 
         {/* Right Column: Asset Flow & Activity */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none">
+          <div className="bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none">
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Live Asset Verification Flow</h3>
@@ -211,7 +211,7 @@ export default function NetworkOracle() {
           </div>
 
           {/* Recent Verifications Table */}
-          <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden">
             <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <h3 className="font-semibold text-lg text-slate-900 dark:text-white">Audit Log: Recent Assets</h3>
               <div className="flex items-center gap-3">

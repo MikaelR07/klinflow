@@ -74,7 +74,7 @@ export default function SystemConfigPage() {
         
         {/* LEFT COLUMN: INFO & SAVE */}
         <div className="space-y-6">
-          <div className="card p-8 bg-slate-900 rounded-[2.5rem] text-white shadow-2xl">
+          <div className="card p-8 bg-slate-900 rounded-[1rem] text-white shadow-2xl">
              <div className="flex items-center gap-3 mb-4">
                 <Shield className="w-5 h-5 text-primary" />
                 <h3 className="text-sm font-semibold uppercase tracking-widest">Pricing & Hours Policy</h3>
@@ -82,7 +82,7 @@ export default function SystemConfigPage() {
              <p className="text-xs text-slate-400 leading-relaxed font-medium">
                Operating hours affect all live apps immediately. Ensure your team is available during the active slots to maintain service quality.
              </p>
-             <button onClick={handleSave} disabled={isLoading} className="w-full mt-8 py-5 bg-primary hover:bg-primary/90 text-white rounded-2xl font-semibold flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-primary/20">
+             <button onClick={handleSave} disabled={isLoading} className="w-full mt-8 py-5 bg-primary hover:bg-primary/90 text-white rounded-[1rem] font-semibold flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-primary/20">
                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                SAVE OPERATING HOURS
              </button>
@@ -90,7 +90,7 @@ export default function SystemConfigPage() {
         </div>
 
         {/* RIGHT COLUMN: OPERATING HOURS */}
-        <div className="card p-8 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 shadow-sm">
+        <div className="card p-8 bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 shadow-sm">
            <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
                 <Clock className="w-5 h-5 text-orange-500" />
@@ -105,7 +105,7 @@ export default function SystemConfigPage() {
                    <p className="text-xs font-semibold text-slate-400 mt-2 uppercase tracking-widest">Loading Schedule...</p>
                 </div>
               ) : days.map(day => (
-                <div key={day} className={`p-4 rounded-2xl border transition-all ${form.hours[day]?.active ? 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-white/5' : 'bg-white dark:bg-slate-900 border-dashed border-slate-200 opacity-50'}`}>
+                <div key={day} className={`p-4 rounded-[1rem] border transition-all ${form.hours[day]?.active ? 'bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-white/5' : 'bg-white dark:bg-slate-900 border-dashed border-slate-200 opacity-50'}`}>
                    <div className="flex items-center justify-between mb-3">
                       <span className="text-xs font-semibold uppercase tracking-widest text-slate-900 dark:text-white">{day}</span>
                       <button 

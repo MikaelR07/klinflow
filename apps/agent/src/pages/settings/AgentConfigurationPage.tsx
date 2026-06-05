@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
-import { WASTE_CATEGORIES, getCategoryBySlug } from '@klinflow/core/data/wasteDefinitions';
 import { supabase } from '@klinflow/supabase';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -28,7 +27,7 @@ export default function AgentConfigurationPage() {
   const navigate = useNavigate();
   const { profile, fetchProfile } = useAuthStore();
   const { agentConfig, fetchAgentConfig, updateAgentConfig } = useAgentStore();
-  const { categories, fetchCategories } = useServiceStore();
+  const { categories, fetchCategories, materialPrices = [], fetchMaterialPrices } = useServiceStore();
 
   const [formData, setFormData] = useState({
     base_logistics_fee: 200,
@@ -63,24 +62,25 @@ export default function AgentConfigurationPage() {
   useEffect(() => {
     fetchAgentConfig();
     fetchCategories();
-  }, [fetchAgentConfig, fetchCategories]);
+    if (fetchMaterialPrices) fetchMaterialPrices();
+  }, [fetchAgentConfig, fetchCategories, fetchMaterialPrices]);
 
   // Re-initialize form when agentConfig changes from DB
   useEffect(() => {
     if (!agentConfig) return;
 
-    // Filter out legacy materials that are no longer in our current system
-    const validSlugs = WASTE_CATEGORIES.map(c => c.id);
+    // Filter out materials that are no longer in our current system
+    const validSlugs = categories.map(c => c.slug || c.id);
     const filteredMaterials = (agentConfig.accepted_materials || []).filter(m => validSlugs.includes(m));
 
     setFormData(prev => ({
       ...prev,
       base_logistics_fee: agentConfig.base_logistics_fee ?? 200,
       cashback_percentage: agentConfig.cashback_percentage ?? 10,
-      accepted_materials: filteredMaterials,
+      accepted_materials: agentConfig.accepted_materials || [],
       custom_rates: agentConfig.custom_rates || {},
     }));
-  }, [agentConfig]);
+  }, [agentConfig, categories]);
 
   // Re-initialize service_profile fields when profile.service_profile updates
   useEffect(() => {
@@ -251,7 +251,7 @@ export default function AgentConfigurationPage() {
         <div className="space-y-6">
 
           {isFleetDriver && (
-            <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/50 rounded-2xl flex items-start gap-3">
+            <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/50 rounded-[1rem] flex items-start gap-3">
               <ShieldCheck className="w-5 h-5 text-orange-500 shrink-0" />
               <p className="text-xs font-semibold text-orange-700 dark:text-orange-300">
                 Pricing is managed by your company admin. You can view rates but cannot change them.
@@ -261,7 +261,7 @@ export default function AgentConfigurationPage() {
 
           {/* 🏪 HUB MODE SECTION */}
           {canBeHub && (
-            <div className="card p-6 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-[2rem] shadow-sm space-y-4">
+            <div className="card p-6 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-[1rem] shadow-sm space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${hubData.active ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-100 text-slate-400'}`}>
@@ -289,10 +289,10 @@ export default function AgentConfigurationPage() {
                       placeholder="e.g. Langata Rd, Opp T-Mall"
                       value={hubData.address}
                       onChange={(e) => setHubData(prev => ({ ...prev, address: e.target.value }))}
-                      className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-semibold text-sm outline-none focus:border-emerald-500"
+                      className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[1rem] font-semibold text-sm outline-none focus:border-emerald-500"
                     />
                   </div>
-                  <div className="p-4 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-2xl">
+                  <div className="p-4 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-[1rem]">
                     <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 leading-tight">
                       By enabling Hub Mode, your location will appear on the marketplace as a verified drop-off point for sellers.
                     </p>
@@ -303,7 +303,7 @@ export default function AgentConfigurationPage() {
           )}
 
           {/* 🚚 LOGISTICS FEE */}
-          <div className="card p-6 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-[2rem] shadow-sm space-y-4">
+          <div className="card p-6 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-[1rem] shadow-sm space-y-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
                 <Truck className="w-5 h-5" />
@@ -325,7 +325,7 @@ export default function AgentConfigurationPage() {
                   const val = e.target.value.replace(/[^0-9.]/g, '');
                   setFormData({ ...formData, base_logistics_fee: val });
                 }}
-                className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-semibold text-sm outline-none focus:border-amber-500"
+                className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[1rem] font-semibold text-sm outline-none focus:border-amber-500"
               />
               <p className="text-xs font-semibold text-emerald-500 capitalize tracking-widest mt-2 flex items-center gap-1.5">
                 💡 Hint: Setting a 0 base fee attracts significantly more clients!
@@ -334,7 +334,7 @@ export default function AgentConfigurationPage() {
           </div>
 
           {/* ⚖️ OPERATIONAL CAPACITY */}
-          <div className="card p-6 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-[2rem] shadow-sm space-y-4">
+          <div className="card p-6 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-[1rem] shadow-sm space-y-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
                 <Scale className="w-5 h-5" />
@@ -353,7 +353,7 @@ export default function AgentConfigurationPage() {
                   disabled={isFleetDriver}
                   value={formData.min_weight}
                   onChange={(e) => setFormData({ ...formData, min_weight: e.target.value })}
-                  className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-semibold text-sm outline-none focus:border-indigo-500"
+                  className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[1rem] font-semibold text-sm outline-none focus:border-indigo-500"
                 />
               </div>
               <div className="space-y-1.5">
@@ -363,7 +363,7 @@ export default function AgentConfigurationPage() {
                   disabled={isFleetDriver}
                   value={formData.max_weight}
                   onChange={(e) => setFormData({ ...formData, max_weight: e.target.value })}
-                  className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-semibold text-sm outline-none focus:border-indigo-500"
+                  className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[1rem] font-semibold text-sm outline-none focus:border-indigo-500"
                 />
               </div>
             </div>
@@ -383,15 +383,16 @@ export default function AgentConfigurationPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              {WASTE_CATEGORIES.map((cat) => {
-                const isSelected = formData.accepted_materials.includes(cat.id);
+              {categories.map((cat) => {
+                const slug = cat.slug || cat.id;
+                const isSelected = formData.accepted_materials.includes(slug);
                 return (
                   <button
                     key={cat.id}
                     type="button"
                     disabled={isFleetDriver}
-                    onClick={() => handleToggleMaterial(cat.id)}
-                    className={`p-4 rounded-2xl border-2 text-left transition-all ${isSelected
+                    onClick={() => handleToggleMaterial(slug)}
+                    className={`p-4 rounded-[1rem] border-2 text-left transition-all ${isSelected
                       ? 'border-primary bg-primary/10'
                       : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 hover:border-primary/40'
                       } disabled:opacity-50 relative overflow-hidden`}
@@ -423,7 +424,7 @@ export default function AgentConfigurationPage() {
 
                 {/* Add Category Form */}
                 {showAddCategory && (
-                  <div className="p-4 bg-primary/5 border border-primary/20 rounded-2xl space-y-3">
+                  <div className="p-4 bg-primary/5 border border-primary/20 rounded-[1rem] space-y-3">
                     <div className="flex items-center gap-2">
                       <input
                         placeholder="Icon (emoji)"
@@ -447,14 +448,14 @@ export default function AgentConfigurationPage() {
 
                 {/* Custom Category List */}
                 {formData.custom_services.length === 0 && !showAddCategory && (
-                  <div className="p-4 text-center bg-slate-50 dark:bg-slate-800 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+                  <div className="p-4 text-center bg-slate-50 dark:bg-slate-800 rounded-[1rem] border-2 border-dashed border-slate-200 dark:border-slate-700">
                     <Tag className="w-5 h-5 mx-auto mb-2 text-slate-300" />
                     <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">No custom categories yet</p>
                   </div>
                 )}
                 <div className="space-y-2">
                   {formData.custom_services.map((svc, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 bg-primary/5 border border-primary/20 rounded-2xl">
+                    <div key={i} className="flex items-center justify-between p-3 bg-primary/5 border border-primary/20 rounded-[1rem]">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">{svc.icon}</span>
                         <div>
@@ -473,7 +474,7 @@ export default function AgentConfigurationPage() {
           </div>
 
           {/* Pricing Rates */}
-          <div className="card p-6 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-[2rem] shadow-sm space-y-6">
+          <div className="card p-6 bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 rounded-[1rem] shadow-sm space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
                 <Truck className="w-5 h-5" />
@@ -485,19 +486,20 @@ export default function AgentConfigurationPage() {
             </div>
 
             {formData.accepted_materials.length === 0 ? (
-              <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+              <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-[1rem] border-2 border-dashed border-slate-200 dark:border-slate-700">
                 <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">No materials selected yet</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {formData.accepted_materials.map((slug) => {
-                  const category = getCategoryBySlug(slug);
+                  const category = categories.find(c => (c.slug || c.id) === slug);
                   if (!category) return null;
                   const isExpanded = expandedCategory === slug;
+                  const subcats = materialPrices.filter(m => m.category === category.id || m.category === category.slug || m.category === category.label);
 
                   return (
                     <div key={slug} className="space-y-2">
-                      <div className="flex flex-col bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden">
+                      <div className="flex flex-col bg-slate-50 dark:bg-slate-800 rounded-[1rem] border border-slate-100 dark:border-slate-700 overflow-hidden">
                         <div className="flex items-center justify-between p-4">
                           <div className="flex items-center gap-3">
                             <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 capitalize tracking-widest">{category.label}</span>
@@ -533,13 +535,12 @@ export default function AgentConfigurationPage() {
                               <Info className="w-3 h-3 text-primary" />
                               <p className="text-xs font-semibold text-slate-400 capitalize tracking-tight">Setting a grade price overrides the default {category.label} rate.</p>
                             </div>
-                            {category.subcategories.map(sub => {
+                            {subcats.length > 0 ? subcats.map(sub => {
                               const subSlug = `${slug}_${sub.id}`;
                               return (
                                 <div key={sub.id} className="flex items-center justify-between pl-4 border-l-2 border-primary/20">
                                   <div>
-                                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">{sub.label}</p>
-                                    <p className="text-xs font-semibold text-slate-400 capitalize">{sub.description}</p>
+                                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">{sub.material_name}</p>
                                   </div>
                                   <div className="flex items-center gap-2">
                                     <input
@@ -553,7 +554,9 @@ export default function AgentConfigurationPage() {
                                   </div>
                                 </div>
                               );
-                            })}
+                            }) : (
+                              <p className="text-xs text-slate-400">No sub-grades defined for this category in the database.</p>
+                            )}
                           </div>
                         )}
                       </div>
@@ -577,7 +580,7 @@ export default function AgentConfigurationPage() {
                 const isExpanded = expandedCustomCat === catIndex;
                 const subInput = newSubItem[catIndex] || { name: '', rate_per_kg: '' };
                 return (
-                  <div key={catIndex} className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+                  <div key={catIndex} className="rounded-[1rem] border border-slate-200 dark:border-slate-700 overflow-hidden">
                     <button type="button" onClick={() => setExpandedCustomCat(isExpanded ? null : catIndex)} className="w-full flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">{svc.icon}</span>
@@ -618,7 +621,7 @@ export default function AgentConfigurationPage() {
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2.5rem] font-semibold text-sm capitalize tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1rem] font-semibold text-sm capitalize tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
               >
                 {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                 {isSaving ? 'Deploy New Rates' : 'Deploy New Rates'}

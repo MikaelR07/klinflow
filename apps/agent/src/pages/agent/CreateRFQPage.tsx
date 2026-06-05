@@ -281,7 +281,7 @@ export default function CreateRFQPage() {
             className="space-y-6 px-1.5"
           >
             {/* Category selection */}
-            <div className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
               <div className="flex items-center gap-2 border-b border-slate-50 dark:border-slate-750 pb-3">
                 <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
                   <Package className="w-4 h-4" />

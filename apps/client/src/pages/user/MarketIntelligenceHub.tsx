@@ -1,14 +1,14 @@
 /**
  * MarketIntelligenceHub.jsx — The "Bloomberg Terminal" for the Circular Economy.
- * Provides price transparency, buy requests (RFQs), and community operational intelligence.
+ * Refactored: Tab UI extracted into dedicated components.
  */
 import { useState, useEffect } from 'react';
 import {
   TrendingUp, ArrowLeft, Target, Handshake,
-  AlertCircle, Zap, BarChart3,
+  AlertCircle, Zap, BarChart3, ShieldCheck, Calendar,
   ChevronRight, ArrowUpRight, ArrowDownRight, Clock,
   Sparkles, Search, SlidersHorizontal, X, ChevronDown,
-  Bell, MapPin, Award
+  Bell, MapPin, Award, GitGraph, Users, ArrowRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,41 +16,17 @@ import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
-// COMMODITY_TRENDS, AI_TRENDS_SECTIONS, and ACTIONABLE_INSIGHTS are now fetched dynamically via RPC.
 
-// MOCK_RFQS removed, using real data from Supabase
-
-const ACTIONABLE_INSIGHTS = [
-  {
-    category: 'Market Alert',
-    title: "Prioritize PET Plastic",
-    text: "Demand for PET is up 12% this week. Focus collections here.",
-    badge: "High Yield",
-    color: "emerald",
-    iconName: "trendingup"
-  },
-  {
-    category: 'Regional Opportunity',
-    title: "Mombasa Route Optimization",
-    text: "New buyers active in Mombasa. Combine deliveries to save transport costs.",
-    badge: "Logistics",
-    color: "indigo",
-    iconName: "mappin"
-  },
-  {
-    category: 'Market Timing',
-    title: "Hold Copper Wire",
-    text: "Market indicates a potential price jump next week. Stockpile if possible.",
-    badge: "Strategy",
-    color: "amber",
-    iconName: "clock"
-  }
-];
+import MarketIntelPricesTab from '../../features/marketIntel/MarketIntelPricesTab';
+import MarketIntelTrendsTab from '../../features/marketIntel/MarketIntelTrendsTab';
+import MarketIntelRFQsTab from '../../features/marketIntel/MarketIntelRFQsTab';
+import MarketIntelTipsTab from '../../features/marketIntel/MarketIntelTipsTab';
+import type { MarketIntelRFQ, MarketIntelData, MarketIntelCommodityTrend } from '../../features/marketIntel/marketIntel.types';
 
 export default function MarketIntelligenceHub() {
   const navigate = useNavigate();
   const profile = useAuthStore(s => (s as any).profile);
-  const isSeller = profile?.role === 'seller';
+
   const prices = usePriceStore(s => s.prices);
   const fetchPrices = usePriceStore(s => s.fetchPrices);
   const [activeTab, setActiveTab] = useState('prices');
@@ -63,8 +39,8 @@ export default function MarketIntelligenceHub() {
   const [selectedQuantity, setSelectedQuantity] = useState('All');
   const [selectedUrgency, setSelectedUrgency] = useState('All');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [rfqsList, setRfqsList] = useState<any[]>([]);
-  const [marketData, setMarketData] = useState<any>({ commodity_trends: [], ai_trends: [], actionable_insights: [] });
+  const [rfqsList, setRfqsList] = useState<MarketIntelRFQ[]>([]);
+  const [marketData, setMarketData] = useState<MarketIntelData>({ commodity_trends: [] });
 
   const fetchRFQs = async () => {
     try {
@@ -161,7 +137,7 @@ export default function MarketIntelligenceHub() {
 
   // Filtered Lists
   const commodityTrends = marketData?.commodity_trends || [];
-  const filteredTrends = commodityTrends.filter((item: any) => {
+  const filteredTrends = commodityTrends.filter((item: MarketIntelCommodityTrend) => {
     const matchesSearch = item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.topBuyer.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRegion = selectedRegion === 'All' || item.region === selectedRegion;
@@ -209,7 +185,7 @@ export default function MarketIntelligenceHub() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-700 transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
@@ -228,7 +204,7 @@ export default function MarketIntelligenceHub() {
         <div className="flex px-4 pb-3 gap-1.5 overflow-x-auto no-scrollbar">
           {([
             { id: 'prices', label: 'Prices', icon: TrendingUp },
-            isSeller ? { id: 'rfqs', label: 'Requests', icon: Handshake } : null,
+            profile?.role === 'seller' ? { id: 'rfqs', label: 'Live RFQs', icon: Target } : null,
             { id: 'trends', label: 'AI Trends', icon: Sparkles },
             { id: 'tips', label: 'Insights', icon: Zap },
           ].filter(Boolean) as Array<{ id: string, label: string, icon: any }>).map(tab => (
@@ -246,7 +222,7 @@ export default function MarketIntelligenceHub() {
               }}
               className={`flex-1 py-2 px-2.5 rounded-xl flex items-center justify-center gap-1.5 transition-all border shrink-0 ${activeTab === tab.id
                 ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm font-bold'
-                : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:text-slate-600'
+                : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-700 text-slate-400 hover:text-slate-600'
                 }`}
             >
               <tab.icon className={`w-3.5 h-3.5 shrink-0 ${activeTab === tab.id ? 'text-white' : 'text-slate-400'}`} />
@@ -266,7 +242,7 @@ export default function MarketIntelligenceHub() {
                 placeholder="Search materials or buyers..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-8 py-2 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-slate-600 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                className="w-full pl-9 pr-8 py-3 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
               />
               {searchQuery && (
                 <button
@@ -466,368 +442,28 @@ export default function MarketIntelligenceHub() {
       </div>
 
       {/* ── CONTENT AREA ── */}
-      <main className={`flex-1 pb-10 max-w-lg mx-auto w-full px-1.5 space-y-0.5 transition-all duration-300 ${activeTab === 'trends' || activeTab === 'tips'
+      <main className={`flex-1 pb-5 max-w-lg mx-auto w-full px-1.5 space-y-0.5 transition-all duration-300 ${activeTab === 'trends' || activeTab === 'tips'
         ? 'pt-[calc(env(safe-area-inset-top,1rem)+6.5rem)]'
         : 'pt-[calc(env(safe-area-inset-top,1rem)+9.25rem)]'
         }`}>
         <AnimatePresence mode="wait">
           {activeTab === 'prices' && (
-            <motion.div
-              key="prices-view"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-0.5"
-            >
-              {/* Market Insight Banner */}
-              <div className="bg-gradient-to-tr from-emerald-700 to-primary rounded-2xl p-5 text-white relative overflow-hidden">
-
-                <div className="relative z-10 space-y-4">
-                  {/* Title */}
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <h3 className="text-[10px] font-bold capitalize tracking-[0.2em] text-white">Today's Market</h3>
-                    <div className="flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live Price
-                    </div>
-                  </div>
-
-                  {/* Grid metrics in a row */}
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] font-semibold text-indigo-200 uppercase tracking-wider">Top Rising</span>
-                      <span className="text-[12px] font-semibold text-white mt-0.5 flex items-center gap-0.5">
-                        Copper <span className="text-emerald-400 font-bold">↑ 12%</span>
-                      </span>
-                    </div>
-                    <div className="flex flex-col border-l border-white/10 pl-2">
-                      <span className="text-[10px] font-semibold text-indigo-200 uppercase tracking-wider">Highest Demand</span>
-                      <span className="text-[12px] font-semibold text-white mt-0.5 truncate" title="PET Plastic">
-                        PET Plastic
-                      </span>
-                    </div>
-                    <div className="flex flex-col border-l border-white/10 pl-2">
-                      <span className="text-[10px] font-semibold text-indigo-200 uppercase tracking-wider">Oversupplied</span>
-                      <span className="text-[12px] font-semibold text-indigo-100 mt-0.5 truncate" title="Mixed Paper">
-                        Mixed Paper
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Price Grid */}
-              <div className="flex flex-col space-y-px">
-                {filteredTrends.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-12 px-4 text-center bg-white dark:bg-slate-800">
-                    <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-3">
-                      <Search className="w-5 h-5 text-slate-400" />
-                    </div>
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">No Commodities Found</h3>
-                    <p className="text-[11px] text-slate-400 mt-1 max-w-[200px] mx-auto font-medium">Try adjusting your filters or search keywords.</p>
-                  </div>
-                ) : (
-                  filteredTrends.map((item) => (
-                    <div key={item.id} className="bg-white dark:bg-slate-800 rounded-none p-4 border-b border-slate-100 dark:border-slate-800/40 flex flex-col gap-3 group active:bg-slate-50 dark:active:bg-slate-800/60 transition-all">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3.5">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.trend === 'up' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' :
-                            item.trend === 'down' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-600' : 'bg-slate-50 dark:bg-slate-700 text-slate-400'
-                            }`}>
-                            {item.trend === 'up' ? <TrendingUp className="w-5 h-5" /> : item.trend === 'down' ? <TrendingUp className="w-5 h-5 rotate-180" /> : <BarChart3 className="w-5 h-5" />}
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white capitalize tracking-tight leading-tight">{item.label}</h4>
-                            <p className="text-[10px] font-semibold text-slate-405 dark:text-slate-400 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                              Demand: <span className={item.demand === 'High' || item.demand === 'Critical' ? 'text-emerald-500 font-bold' : 'text-slate-400'}>{item.demand}</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm font-semibold text-slate-900 dark:text-white">KSh {item.price}<span className="text-[10px] text-slate-400 font-bold">/kg</span></p>
-                          <div className={`text-[10px] font-semibold capitalize flex items-center justify-end gap-0.5 ${item.trend === 'up' ? 'text-emerald-500' : item.trend === 'down' ? 'text-rose-500' : 'text-slate-400'
-                            }`}>
-                            {item.change} {item.trend === 'up' ? '▲' : item.trend === 'down' ? '▼' : '•'}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Supply & Top Buyer info */}
-                      <div className="grid grid-cols-2 gap-2 pt-1.5 border-t border-slate-50 dark:border-slate-700/30 text-[10px] font-semibold capitalize tracking-widest text-slate-400 dark:border-slate-800/40 text-slate-500">
-                        <div>
-                          Supply: <span className={`font-semibold normal-case ml-1 ${item.supply.toLowerCase().includes('high') || item.supply.toLowerCase().includes('abundant')
-                            ? 'text-emerald-600 dark:text-emerald-400 font-bold'
-                            : item.supply.toLowerCase().includes('low') || item.supply.toLowerCase().includes('critical')
-                              ? 'text-rose-500 font-bold'
-                              : 'text-slate-600 dark:text-slate-300'
-                            }`}>{item.supply}</span>
-                        </div>
-                        <div className="text-right truncate">
-                          Top Buyer: <span className="text-slate-700 dark:text-slate-300 font-semibold normal-case ml-1 truncate max-w-[100px] sm:max-w-[140px]" title={item.topBuyer}>{item.topBuyer}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              <div className="px-4 py-3">
-                <p className="text-center text-[10px] font-bold text-slate-400 capitalize tracking-widest italic">
-                  Prices updated every 3 hours based on hub data.
-                </p>
-              </div>
-            </motion.div>
+            <MarketIntelPricesTab marketData={marketData} filteredTrends={filteredTrends} />
           )}
 
           {activeTab === 'trends' && (
-            <motion.div
-              key="trends-view"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-4 px-1.5 pb-5"
-            >
-              {/* AI Forecast Overview Banner */}
-              <div className="bg-gradient-to-br from-emerald-50/60 to-white dark:from-slate-900 dark:to-emerald-950/20 rounded-2xl p-4 text-slate-900 dark:text-white relative overflow-hidden shadow-sm border border-emerald-100 dark:border-emerald-500/10 space-y-3">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl -mr-10 -mt-10" />
-                <div className="flex items-center gap-3 relative z-10">
-                  <div className="w-10 h-10 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-750 dark:text-emerald-350 border border-emerald-500/20 dark:border-emerald-500/30">
-                    <Sparkles className="w-5 h-5 animate-pulse" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold capitalize tracking-tight leading-none mb-1.5">AI Assistant</h3>
-                    <p className="text-[10px] font-semibold text-slate-450 dark:text-slate-400 capitalize tracking-widest flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" /> Helps you sell for more
-                    </p>
-                  </div>
-                </div>
-                <p className="text-[11px] font-medium text-slate-550 dark:text-slate-405 leading-relaxed relative z-10 pt-2 border-t border-emerald-100/50 dark:border-slate-800/60">
-                  Our AI Assistant looks at what buyers are searching for and buying this week. It helps you see which materials are hot, where you can get the best deals, and how to make the most money from your collected waste.
-                </p>
-              </div>
-
-              {/* Sections list */}
-              <div className="space-y-4">
-                {marketData.ai_trends?.map((section: any, idx: number) => {
-                  const accentColorClass =
-                    section.color === 'emerald' ? 'text-emerald-500 border-emerald-500/20 bg-emerald-500/5' :
-                      section.color === 'indigo' ? 'text-indigo-500 border-indigo-500/20 bg-indigo-500/5' :
-                        section.color === 'amber' ? 'text-amber-500 border-amber-500/20 bg-amber-500/5' :
-                          'text-rose-500 border-rose-500/20 bg-rose-500/5';
-
-                  const badgeColorClass =
-                    section.color === 'emerald' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold' :
-                      section.color === 'indigo' ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold' :
-                        section.color === 'amber' ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold' :
-                          'bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold';
-
-                  return (
-                    <div
-                      key={idx}
-                      className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4"
-                    >
-                      {/* Section Header */}
-                      <div className="flex items-center justify-between border-b border-slate-50 dark:border-slate-800 pb-3">
-                        <div>
-                          <h4 className="text-sm font-semibold text-slate-900 dark:text-white capitalize">{section.title}</h4>
-                          <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium mt-0.5 capitalize tracking-wide leading-none">{section.tagline}</p>
-                        </div>
-                        <span className={`w-2.5 h-2.5 rounded-full ${section.color === 'emerald' ? 'bg-emerald-500' :
-                          section.color === 'indigo' ? 'bg-indigo-500' :
-                            section.color === 'amber' ? 'bg-amber-500' :
-                              'bg-rose-500'
-                          }`} />
-                      </div>
-
-                      {/* Items */}
-                      <div className="space-y-3">
-                        {section.items.map((item, itemIdx) => (
-                          <div
-                            key={itemIdx}
-                            className="bg-slate-50/50 dark:bg-slate-800/30 rounded-2xl p-4 border border-slate-100 dark:border-slate-800/20 space-y-2"
-                          >
-                            <div className="flex items-start justify-between gap-2">
-                              <div>
-                                <h5 className="text-sm font-semibold text-slate-900 dark:text-white capitalize">{item.material}</h5>
-                                <span className={`text-[10px] font-semibold uppercase tracking-wider leading-none mt-1.5 inline-block ${accentColorClass.split(' ')[0]}`}>
-                                  {item.status}
-                                </span>
-                              </div>
-                              <span className={`text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded-lg ${badgeColorClass}`}>
-                                {item.badge}
-                              </span>
-                            </div>
-                            <p className="text-xs font-normal text-slate-655 dark:text-slate-350 leading-relaxed">
-                              {item.text}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Disclaimer */}
-              <div className="pt-2">
-                <p className="text-center text-[10px] font-semibold text-slate-400 capitalize tracking-widest italic">
-                  AI tips updated every 5 minutes based on active local buyers.
-                </p>
-              </div>
-            </motion.div>
+            <MarketIntelTrendsTab marketData={marketData} />
           )}
 
           {activeTab === 'rfqs' && (
-            <motion.div
-              key="rfqs-view"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-0.5"
-            >
-              {/* Discovery Entry */}
-              <div className="px-4 py-2">
-                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Global Buy Requests</p>
-                <p className="text-xs font-semibold text-slate-500">Businesses actively looking for materials right now.</p>
-              </div>
-
-              <div className="flex flex-col space-y-0.5">
-                {filteredRFQs.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-12 px-4 text-center bg-white dark:bg-slate-800">
-                    <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-3">
-                      <Search className="w-5 h-5 text-slate-400" />
-                    </div>
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">No Requests Found</h3>
-                    <p className="text-[11px] text-slate-400 mt-1 max-w-[200px] mx-auto font-medium">Try adjusting your filters or search keywords.</p>
-                  </div>
-                ) : (
-                  filteredRFQs.map((rfq) => (
-                    <div key={rfq.id} className="bg-white dark:bg-slate-800 rounded-none p-4 border-b border-slate-100 dark:border-slate-800/40 flex flex-col gap-3.5 group active:bg-slate-50 dark:active:bg-slate-850 transition-all">
-                      {/* Top Row: Company & Price */}
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest mb-1.5 leading-none">Client Name:</p>
-                          <h4 className="text-sm font-semibold text-slate-900 dark:text-white capitalize tracking-tight leading-none">{rfq.company}</h4>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest mb-1.5 leading-none">Offered Price</p>
-                          <p className="text-base font-bold text-emerald-600 dark:text-emerald-500 leading-none">KSh {rfq.price}<span className="text-[10px] text-slate-400 font-bold">/kg</span></p>
-                        </div>
-                      </div>
-
-                      {/* Middle row: Material, Quantity, and Deadline */}
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800/40">
-                        <div>
-                          <p className="text-xs text-slate-900 dark:text-white capitalize leading-none mb-1.5">
-                            <span className="text-slate-400 font-bold mr-1">Material:</span>{rfq.material}
-                          </p>
-                          <p className="text-[10px] font-bold text-slate-700 dark:text-slate-350 capitalize tracking-wide">
-                            <span className="text-slate-400 mr-1">Required Weight:</span>{rfq.quantity}
-                          </p>
-                        </div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-500/10 text-rose-600">
-                          {rfq.deadline === 'Open' ? 'No Deadline' : `${rfq.deadline} Left`}
-                        </span>
-                      </div>
-
-                      {/* Meta details: Delivery, Offers */}
-                      <div className="grid grid-cols-2 gap-2 text-[10px] font-semibold capitalize tracking-widest text-slate-400 dark:text-slate-500 pt-0.5">
-                        <div className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span>Delivery: <span className="text-slate-700 dark:text-slate-300 font-semibold normal-case ml-0.5">{rfq.delivery}</span></span>
-                        </div>
-                        <div className="text-right">
-                          Offers Submitted: <span className="text-slate-700 dark:text-slate-300 font-semibold normal-case ml-0.5">{rfq.offersSubmitted}</span>
-                        </div>
-                      </div>
-
-                      {/* Button */}
-                      <div className="flex justify-end pt-1">
-                        <button
-                          onClick={() => navigate(`/rfq/${rfq.id}`)}
-                          className="px-4 py-2 bg-primary hover:bg-primary/95 text-white rounded-xl font-bold text-[10px] uppercase tracking-wider shadow-md shadow-primary/10 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
-                        >
-                          Fulfill Request <ArrowRight className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </motion.div>
+            <MarketIntelRFQsTab filteredRFQs={filteredRFQs} navigate={navigate} />
           )}
 
           {activeTab === 'tips' && (
-            <motion.div
-              key="tips-view"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="space-y-0.5 pb-10"
-            >
-              <div className="bg-white dark:bg-slate-800 rounded-none p-4 border-b border-slate-100 dark:border-slate-800/40 space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-amber-50 dark:bg-amber-500/10 rounded-xl flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-amber-500 animate-pulse" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none mb-1.5">Intelligence Coach</h3>
-                    <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">Actionable tips to earn more</p>
-                  </div>
-                </div>
-
-                <div className="space-y-3.5">
-                  {ACTIONABLE_INSIGHTS.map((tip, i) => {
-                    const IconComponent = tip.iconName === 'bell' ? Bell :
-                      tip.iconName === 'mappin' ? MapPin :
-                        tip.iconName === 'trendingup' ? TrendingUp :
-                          tip.iconName === 'award' ? Award : Clock;
-
-                    const colorClasses = tip.color === 'rose' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-600' :
-                      tip.color === 'indigo' ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600' :
-                        tip.color === 'emerald' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' :
-                          tip.color === 'purple' ? 'bg-purple-50 dark:bg-purple-500/10 text-purple-600' :
-                            'bg-amber-50 dark:bg-amber-500/10 text-amber-600';
-
-                    const badgeClasses = tip.color === 'rose' ? 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-400' :
-                      tip.color === 'indigo' ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400' :
-                        tip.color === 'emerald' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400' :
-                          tip.color === 'purple' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400' :
-                            'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400';
-
-                    return (
-                      <div key={i} className="flex gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800/40">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${colorClasses}`}>
-                          <IconComponent className="w-5 h-5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <span className="text-[10px] font-semibold text-slate-405 dark:text-slate-500 capitalize tracking-wider">{tip.category}</span>
-                            <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md ${badgeClasses}`}>
-                              {tip.badge}
-                            </span>
-                          </div>
-                          <h4 className="text-sm font-semibold text-slate-900 dark:text-white capitalize mb-1">{tip.title}</h4>
-                          <p className="text-xs font-normal text-slate-600 dark:text-slate-350 leading-relaxed">{tip.text}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <button className="w-full py-3 bg-slate-900 dark:bg-slate-700 text-white rounded-xl font-bold text-xs uppercase tracking-wider active:scale-95 transition-all">
-                  Join Community Forum
-                </button>
-              </div>
-            </motion.div>
+            <MarketIntelTipsTab marketData={marketData} />
           )}
         </AnimatePresence>
       </main>
     </div>
-  );
-}
-
-function ArrowRight(props: any) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
   );
 }

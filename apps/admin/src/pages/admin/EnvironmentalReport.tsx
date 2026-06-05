@@ -107,7 +107,7 @@ export default function EnvironmentalReport() {
     <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-20 print:p-0 print:space-y-4">
       
       {/* ── ACTION BAR (HIDDEN IN PRINT) ── */}
-      <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-100 dark:border-white/5 shadow-sm print:hidden">
+      <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-[1rem] border border-slate-100 dark:border-white/5 shadow-sm print:hidden">
         <button 
           onClick={() => navigate('/reports')}
           className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors text-sm font-semibold text-slate-500"
@@ -125,7 +125,7 @@ export default function EnvironmentalReport() {
       </div>
 
       {/* ── THE REPORT DOCUMENT ── */}
-      <div ref={reportRef} className="bg-white dark:bg-slate-900 p-12 rounded-[3rem] border border-slate-100 dark:border-white/5 shadow-2xl print:shadow-none print:border-none print:rounded-none print:p-0">
+      <div ref={reportRef} className="bg-white dark:bg-slate-900 p-12 rounded-[1rem] border border-slate-100 dark:border-white/5 shadow-2xl print:shadow-none print:border-none print:rounded-none print:p-0">
         
         {/* REPORT HEADER */}
         <div className="flex justify-between items-start border-b-4 border-primary pb-8 mb-10">
@@ -147,8 +147,8 @@ export default function EnvironmentalReport() {
 
         {/* EXECUTIVE SUMMARY */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="p-6 bg-emerald-50 dark:bg-emerald-900/10 rounded-[2rem] border border-emerald-100 dark:border-emerald-800/30">
-            <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-white mb-4">
+          <div className="p-6 bg-emerald-50 dark:bg-emerald-900/10 rounded-[1rem] border border-emerald-100 dark:border-emerald-800/30">
+            <div className="w-10 h-10 bg-emerald-500 rounded-[1rem] flex items-center justify-center text-white mb-4">
               <Scale className="w-5 h-5" />
             </div>
             <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Total Diversion</p>
@@ -156,8 +156,8 @@ export default function EnvironmentalReport() {
             <p className="text-xs text-slate-400 font-semibold mt-1">Waste recovered from landfills</p>
           </div>
 
-          <div className="p-6 bg-indigo-50 dark:bg-indigo-900/10 rounded-[2rem] border border-indigo-100 dark:border-indigo-800/30">
-            <div className="w-10 h-10 bg-indigo-500 rounded-2xl flex items-center justify-center text-white mb-4">
+          <div className="p-6 bg-indigo-50 dark:bg-indigo-900/10 rounded-[1rem] border border-indigo-100 dark:border-indigo-800/30">
+            <div className="w-10 h-10 bg-indigo-500 rounded-[1rem] flex items-center justify-center text-white mb-4">
               <Activity className="w-5 h-5" />
             </div>
             <p className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Carbon Offset</p>
@@ -165,8 +165,8 @@ export default function EnvironmentalReport() {
             <p className="text-xs text-slate-400 font-semibold mt-1">Estimated greenhouse gas reduction</p>
           </div>
 
-          <div className="p-6 bg-slate-900 rounded-[2rem] text-white">
-             <div className="w-10 h-10 bg-white/10 rounded-2xl flex items-center justify-center text-primary mb-4">
+          <div className="p-6 bg-slate-900 rounded-[1rem] text-white">
+             <div className="w-10 h-10 bg-white/10 rounded-[1rem] flex items-center justify-center text-primary mb-4">
                <MapPin className="w-5 h-5" />
              </div>
              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Communities Served</p>
@@ -203,7 +203,7 @@ export default function EnvironmentalReport() {
              </h3>
              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {stats.byEstate.map((e, i) => (
-                  <div key={i} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                  <div key={i} className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-[1rem] border border-slate-100 dark:border-slate-800">
                     <p className="text-xs font-semibold text-slate-400 uppercase truncate">{e.name}</p>
                     <p className="text-xl font-semibold dark:text-white mt-1">{e.weight.toLocaleString()} <span className="text-xs text-slate-400">KG</span></p>
                   </div>

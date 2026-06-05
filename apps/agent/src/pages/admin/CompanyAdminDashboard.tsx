@@ -83,12 +83,12 @@ export default function CompanyAdminDashboard() {
       {/* ── HEADER & MASTER TOGGLE ── */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Command Center</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">Company Admin Dashboard</h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Manage your fleet, track revenue, and dominate logistics.</p>
         </div>
 
         {/* Marketplace Visibility Toggle */}
-        <div className="w-full md:w-auto bg-white dark:bg-slate-800 text-slate-900 dark:text-white p-3 px-5 rounded-2xl flex items-center justify-between md:justify-start gap-6 shadow-xl shadow-slate-900/5 dark:shadow-slate-900/20 border border-slate-200 dark:border-white/5 transition-colors">
+        <div className="w-full md:w-auto bg-white dark:bg-slate-900/60 text-slate-900 dark:text-white p-3 px-5 rounded-2xl flex items-center justify-between md:justify-start gap-6 shadow-xl shadow-slate-900/5 dark:shadow-slate-900/20 border border-slate-200 dark:border-white/5 transition-colors">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${profile.isOnline ? 'bg-emerald-500 shadow-lg shadow-emerald-500/40 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500'}`}>
               {isToggling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Power className="w-4 h-4" />}
@@ -115,7 +115,7 @@ export default function CompanyAdminDashboard() {
 
         {/* Total Company Payout */}
         <div className="relative group perspective-1000 h-full">
-          <div className="relative bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-[2rem] p-6 shadow-xl shadow-emerald-900/20 overflow-hidden flex flex-col justify-between h-full">
+          <div className="relative bg-gradient-to-br from-emerald-800 to-emerald-600 rounded-[1rem] p-6 shadow-xl shadow-emerald-900/20 overflow-hidden flex flex-col justify-between h-full">
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-3xl" />
             <div className="relative z-10">
               <div className="text-[10px] font-bold text-emerald-200/80 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
@@ -136,7 +136,7 @@ export default function CompanyAdminDashboard() {
 
         {/* Payout Today */}
         <div className="relative group perspective-1000 h-full">
-          <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full transition-all hover:border-emerald-500/50">
+          <div className="relative bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-[1rem] p-6 shadow-sm flex flex-col justify-between h-full transition-all hover:border-emerald-500/50">
             <div className="relative z-10">
               <div className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
                 <div className="w-6 h-6 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg flex items-center justify-center">
@@ -157,7 +157,7 @@ export default function CompanyAdminDashboard() {
 
         {/* Company Wallet */}
         <div className="relative group perspective-1000 h-full">
-          <div className="relative bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between h-full transition-all hover:border-amber-500/50">
+          <div className="relative bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-[1rem] p-6 shadow-sm flex flex-col justify-between h-full transition-all hover:border-amber-500/50">
             <div className="relative z-10 flex items-start justify-between">
               <div className="flex-1">
                 <div className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4 flex items-center gap-2">
@@ -190,7 +190,7 @@ export default function CompanyAdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Fleet Performance Summary */}
-        <div className="lg:col-span-2 bg-slate-100/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-6 flex flex-col justify-between">
+        <div className="lg:col-span-2 bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-[1rem] p-6 flex flex-col justify-between">
           <div className="grid grid-cols-3 gap-8">
             <div>
               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-2">Pickups Today</p>
@@ -236,7 +236,7 @@ export default function CompanyAdminDashboard() {
         </div>
 
         {/* Quick Invite Code */}
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 shadow-sm flex flex-col justify-between group hover:border-primary/50 transition-all">
+        <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-[1rem] p-6 shadow-sm flex flex-col justify-between group hover:border-primary/50 transition-all">
           <div>
             <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-4">Onboard Drivers</p>
             <h3 className="text-base font-bold text-slate-900 dark:text-white leading-tight">Fleet Invite Code</h3>
@@ -258,7 +258,7 @@ export default function CompanyAdminDashboard() {
       </div>
 
       {/* ── LIVE FLEET RADAR ── */}
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] p-6 shadow-sm">
+      <div className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-[1rem] p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">

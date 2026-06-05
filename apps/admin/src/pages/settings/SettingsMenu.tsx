@@ -23,7 +23,7 @@ export default function SettingsMenu() {
       <div 
         className="w-full card flex items-center gap-4 p-5 text-left"
       >
-        <div className="w-16 h-16 rounded-2xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-3xl shadow-sm">
+        <div className="w-16 h-16 rounded-[1rem] bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-3xl shadow-sm">
           {profile?.avatar || '👤'}
         </div>
         <div className="flex-1">
@@ -61,7 +61,7 @@ export default function SettingsMenu() {
           toast.success('Logged Out', { description: 'You have been securely signed out.' });
           navigate('/login', { replace: true });
         }}
-        className="w-full flex items-center justify-center gap-2 text-rose-500 font-semibold text-[15px] py-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-2xl transition-all"
+        className="w-full flex items-center justify-center gap-2 text-rose-500 font-semibold text-[15px] py-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-[1rem] transition-all"
       >
         <LogOut className="w-5 h-5" /> Secure Sign Out
       </button>

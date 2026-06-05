@@ -70,7 +70,7 @@ export default function WithdrawalPage() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-6 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)] relative max-w-lg mx-auto w-full px-5">
+      <div className="flex-1 space-y-6 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] relative max-w-lg mx-auto w-full px-1.5">
 
         {/* Step Indicator */}
         <div className="flex items-center justify-between px-4 mb-4">
@@ -88,7 +88,7 @@ export default function WithdrawalPage() {
 
         {step === 1 && (
           <div className="space-y-4 animate-slide-up">
-            <div className="card p-6 bg-gradient-to-br from-primary to-emerald-700 text-white border-none">
+            <div className="card p-6 bg-gradient-to-br from-primary to-emerald-700 text-white border-none rounded-xl">
               <p className="text-xs font-semibold text-emerald-100 capitalize tracking-[0.2em] mb-1">Available for Withdrawal</p>
               <h2 className="text-4xl font-semibold tracking-tight">KSh {walletBalance.toLocaleString()}</h2>
               <div className="flex items-center gap-2 mt-4 text-xs font-semibold bg-white/10 w-fit px-3 py-1.5 rounded-full">
@@ -122,7 +122,7 @@ export default function WithdrawalPage() {
 
         {step === 2 && method && (
           <div className="space-y-6 animate-slide-up">
-            <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm">
               <div className="flex items-center gap-4 mb-8">
                 <div className={`w-14 h-14 ${method.bg} ${method.color} rounded-3xl flex items-center justify-center`}>
                   <method.icon className="w-8 h-8" />
@@ -173,7 +173,7 @@ export default function WithdrawalPage() {
             <button
               onClick={handleConfirm}
               disabled={loading || Number(amount) < 100}
-              className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-semibold text-sm capitalize tracking-[0.2em] shadow-2xl active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+              className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-semibold text-sm capitalize tracking-[0.2em] shadow-2xl active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
             >
               {loading ? (
                 <>
@@ -195,7 +195,7 @@ export default function WithdrawalPage() {
 
         {step === 3 && (
           <div className="text-center space-y-8 py-10 animate-scale-in">
-            <div className="w-24 h-24 bg-emerald-500 text-white rounded-[2.5rem] flex items-center justify-center mx-auto shadow-2xl shadow-emerald-500/40 relative">
+            <div className="w-24 h-24 bg-emerald-500 text-white rounded-[1rem] flex items-center justify-center mx-auto shadow-2xl shadow-emerald-500/40 relative">
               <CheckCircle2 className="w-12 h-12" />
               <div className="absolute inset-0 bg-emerald-500 rounded-[2.5rem] animate-ping opacity-20" />
             </div>

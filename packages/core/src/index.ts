@@ -3,7 +3,7 @@ export { useAuthStore, getBusinessLabel, normalizePhone, phoneToEmail } from './
 export * from './stores/hygenexStore';
 export * from './stores/bookingStore.types';
 export * from './stores/bookingStore';
-export * from './stores/agentStore';
+export * from './features/agent/store/agentStore';
 export * from './stores/adminStore';
 export * from './stores/themeStore';
 export * from './stores/marketplaceStore.types';
@@ -30,3 +30,4 @@ export * from './utils/imageUtils';
 export * from './validation';
 export * from './stores/collectiveStore';
 export * from './services/walletService';
+export * from './features/agent/store/agentStore.types';

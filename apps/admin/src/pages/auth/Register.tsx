@@ -83,7 +83,7 @@ export default function Register() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
           </div>
-          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-3xl mb-4" alt="Admin Logo" />
+          <img src="/logo.png" className="w-56 h-auto shadow-2xl rounded-[1rem] mb-4" alt="Admin Logo" />
         </div>
 
         <div>
@@ -92,7 +92,7 @@ export default function Register() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleRegister} className="glass p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-4">
+        <form onSubmit={handleRegister} className="glass p-6 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-4">
           
           {/* Base Fields */}
           <div>

@@ -224,38 +224,38 @@ export default function UserHome() {
 
               <button
                 onClick={handleWithdraw}
-                className="bg-white hover:bg-slate-50 text-emerald-800 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold Capitalise tracking-widest active:scale-95 transition-all "
+                className="bg-primary  text-white px-5 py-3 rounded-xl text-xs font-semibold Capitalise tracking-widest active:scale-95 transition-all "
               >
                 Withdraw
               </button>
             </div>
 
-            <div className="pt-4 border-t border-white/50 px-1">
+            <div className="pt-2 border-t border-white/50 px-1">
               <div className="flex items-center justify-between w-full">
 
                 <div onClick={() => navigate('/impact-hub')} className="flex flex-col cursor-pointer">
-                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">GFP</p>
+                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">GFP</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{rewardPoints}</p>
                 </div>
 
-                <div className="w-px h-8 bg-white/60" />
+                <div className="w-px h-10 bg-white/60" />
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Pickups</p>
+                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Pickups</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
                 </div>
 
-                <div className="w-px h-8 bg-white/60" />
+                <div className="w-px h-10 bg-white/60" />
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Recovered</p>
+                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Recovered</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
                 </div>
 
-                <div className="w-px h-8 bg-white/60" />
+                <div className="w-px h-10 bg-white/60" />
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Offset</p>
+                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Offset</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
                 </div>
               </div>
@@ -336,7 +336,7 @@ export default function UserHome() {
           {/* Discovery Entry Point */}
           <div
             onClick={() => navigate('/discovery')}
-            className="bg-gradient-to-r from-primary to-emerald-600 !mt-2 rounded-xl p-3 border border-slate-100 dark:border-slate-800 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all group shadow-sm"
+            className="bg-gradient-to-r from-primary to-emerald-600 !mt-2 rounded-xl p-4 border border-slate-100 dark:border-slate-800 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all group shadow-sm"
           >
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-xl bg-green-600 flex items-center justify-center shrink-0">
@@ -361,7 +361,7 @@ export default function UserHome() {
           {/* ── MARKET INTELLIGENCE ── */}
           <div
             onClick={() => navigate('/market-pulse')}
-            className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-5 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+            className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
           >
             <div className="flex items-center gap-2.5 relative z-10 w-full">
               <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
@@ -382,7 +382,7 @@ export default function UserHome() {
           {/* ── COMMUNITY COLLECTIVE ── */}
           <div
             onClick={() => navigate('/community-collective')}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
           >
             <div className="flex items-center gap-2.5 relative z-10 w-full">
               <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
@@ -462,8 +462,8 @@ export default function UserHome() {
             ));
           })() : (
             <div className="text-center py-6">
-              <p className="text-[10px] font-semibold text-slate-600 capitalize tracking-widest">{isActivityCleared ? 'Activity Cleared' : 'No recent pickups'}</p>
-              {!isActivityCleared && <button onClick={() => navigate('/discovery')} className="text-[9px] font-semibold text-primary capitalize tracking-widest mt-2 underline">Start Recycling →</button>}
+              <p className="text-[11px] font-semibold text-slate-600 capitalize tracking-widest">{isActivityCleared ? 'Activity Cleared' : 'No recent pickups'}</p>
+              {!isActivityCleared && <button onClick={() => navigate('/discovery')} className="text-[10px] font-semibold text-primary capitalize tracking-widest mt-2 underline">Start Recycling →</button>}
             </div>
           )}
         </div>

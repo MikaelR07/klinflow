@@ -80,13 +80,12 @@ export default function AdminLayout() {
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
     { name: 'My Agents', path: '/admin/agents', icon: Users },
-    { name: 'Earnings', path: '/admin/earnings', icon: DollarSign },
     { name: 'Driver Requests', path: '/admin/driver-requests', icon: UserPlus, badge: pendingDriverCount },
-    { name: 'Fund Requests', path: '/admin/finance', icon: Banknote, badge: pendingCount },
+    { name: 'Company Finance', path: '/admin/finance', icon: Banknote, badge: pendingCount },
     { name: 'RFQ Requests', path: '/admin/rfqs', icon: Receipt },
     { name: 'Active RFQ Pickups', path: '/pickups', icon: Truck },
     { name: 'Dispatch', path: '/admin/dispatch', icon: PackageCheck },
-    { name: 'Pricing & Services', path: '/settings/configuration', icon: Settings },
+    { name: 'Pricing & Services', path: '/admin/services', icon: Settings },
     { name: 'System Settings', path: '/settings', icon: Menu },
   ];
 
@@ -101,7 +100,7 @@ export default function AdminLayout() {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:flex-shrink-0 flex flex-col ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900/60 border-r border-slate-200 dark:border-slate-700 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:flex-shrink-0 flex flex-col ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         {/* Logo Area */}
         <div className="h-16 flex items-center px-6 border-b border-slate-200 dark:border-slate-700 justify-between">
           <div className="flex items-center gap-2">
@@ -117,7 +116,7 @@ export default function AdminLayout() {
 
         {/* Nav Links */}
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          <p className="px-2 text-[10px] font-semibold text-slate-400 capitalize tracking-widest mb-4">Command Center</p>
+          <p className="px-2 text-[10px] font-semibold text-slate-400 capitalize tracking-widest mb-4">Company Admin Dashboard</p>
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
             return (
@@ -184,8 +183,8 @@ export default function AdminLayout() {
         </div>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-800 p-4 lg:p-8">
-          <div className="max-w-6xl mx-auto">
+        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-800 p-4 lg:p-6">
+          <div className="w-full max-w-7xl">
             <Suspense fallback={<LoadingScreen message="Loading Dashboard..." />}>
               <Outlet />
             </Suspense>

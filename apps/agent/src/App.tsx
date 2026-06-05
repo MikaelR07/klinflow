@@ -61,6 +61,7 @@ const FleetManagement = lazy(() => import('./pages/admin/FleetManagement'));
 const FleetFinance = lazy(() => import('./pages/admin/FleetFinance'));
 const FleetRFQs = lazy(() => import('./pages/admin/FleetRFQs'));
 const DispatchDashboard = lazy(() => import('./pages/admin/DispatchDashboard'));
+const CompanyServicesConfigPage = lazy(() => import('./pages/admin/CompanyServicesConfigPage'));
 
 
 function MobileLayout() {
@@ -210,6 +211,7 @@ export default function App() {
             <Route path="/admin/finance" element={<FleetFinance />} />
             <Route path="/admin/rfqs" element={<FleetRFQs />} />
             <Route path="/admin/dispatch" element={<DispatchDashboard />} />
+            <Route path="/admin/services" element={<CompanyServicesConfigPage />} />
             <Route path="/admin/driver-requests" element={<CompanyStaffRequests />} />
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />

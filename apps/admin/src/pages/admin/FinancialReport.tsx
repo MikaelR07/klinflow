@@ -80,7 +80,7 @@ export default function FinancialReport() {
     <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-20 print:p-0">
       
       {/* ── ACTION BAR ── */}
-      <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-100 dark:border-white/5 shadow-sm print:hidden">
+      <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-4 rounded-[1rem] border border-slate-100 dark:border-white/5 shadow-sm print:hidden">
         <button 
           onClick={() => navigate('/reports')}
           className="flex items-center gap-2 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors text-sm font-semibold text-slate-500"
@@ -118,7 +118,7 @@ export default function FinancialReport() {
 
         {/* SUMMARY TILES */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="p-8 bg-slate-50 dark:bg-slate-900/50 rounded-[2.5rem] border border-slate-100 dark:border-slate-800/50">
+          <div className="p-8 bg-slate-50 dark:bg-slate-900/50 rounded-[1rem] border border-slate-100 dark:border-slate-800/50">
              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Gross Transaction Value</p>
              <h2 className="text-4xl font-semibold text-slate-900 dark:text-white leading-none">KSh {stats.totalGross.toLocaleString()}</h2>
              <div className="flex items-center gap-1 mt-4 text-emerald-500">
@@ -127,13 +127,13 @@ export default function FinancialReport() {
              </div>
           </div>
 
-          <div className="p-8 bg-primary/5 rounded-[2.5rem] border border-primary/20">
+          <div className="p-8 bg-primary/5 rounded-[1rem] border border-primary/20">
              <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Platform Commissions</p>
              <h2 className="text-4xl font-semibold text-primary leading-none">KSh {stats.totalCommission.toLocaleString()}</h2>
              <p className="text-xs text-slate-500 font-semibold mt-4 uppercase tracking-tighter">Avg. Take Rate: {commissionRate * 100}%</p>
           </div>
 
-          <div className="p-8 bg-slate-900 rounded-[2.5rem] text-white">
+          <div className="p-8 bg-slate-900 rounded-[1rem] text-white">
              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Total Agent Payouts</p>
              <h2 className="text-4xl font-semibold leading-none">KSh {stats.totalPayouts.toLocaleString()}</h2>
              <div className="flex items-center gap-1 mt-4 text-slate-500">
@@ -168,7 +168,7 @@ export default function FinancialReport() {
               <h3 className="text-xs font-semibold text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald-500" /> Monthly Growth Trend
               </h3>
-              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-6 border border-slate-100 dark:border-slate-800 h-full flex flex-col justify-end gap-2">
+              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-[1rem] p-6 border border-slate-100 dark:border-slate-800 h-full flex flex-col justify-end gap-2">
                  <div className="flex items-end justify-between h-40 gap-2">
                     {stats.trend.map((t, i) => {
                       const max = Math.max(...stats.trend.map(x => x.gross));

@@ -153,7 +153,7 @@ export default function UserManager() {
          {/* Hub: Market */}
          <button 
            onClick={() => { setActiveHub('marketplace'); setMarketSubFilter('all'); }}
-           className={`p-8 rounded-[2.5rem] border transition-all text-left group relative overflow-hidden ${
+           className={`p-8 rounded-[1rem] border transition-all text-left group relative overflow-hidden ${
              activeHub === 'marketplace' 
                ? 'bg-slate-900 border-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.3)] scale-[1.02] ring-2 ring-primary/20' 
                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5 hover:border-primary/30'
@@ -164,7 +164,7 @@ export default function UserManager() {
                Active View
              </div>
            )}
-           <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all ${
+           <div className={`w-14 h-14 rounded-[1rem] flex items-center justify-center mb-6 transition-all ${
              activeHub === 'marketplace' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
            }`}>
              <Briefcase className="w-7 h-7" />
@@ -176,7 +176,7 @@ export default function UserManager() {
          {/* Hub: Logistics */}
          <button 
            onClick={() => { setActiveHub('logistics'); setLogisticsSubFilter('all'); }}
-           className={`p-8 rounded-[2.5rem] border transition-all text-left group relative overflow-hidden ${
+           className={`p-8 rounded-[1rem] border transition-all text-left group relative overflow-hidden ${
              activeHub === 'logistics' 
                ? 'bg-slate-900 border-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.3)] scale-[1.02] ring-2 ring-indigo-500/20' 
                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5 hover:border-indigo-400/30'
@@ -187,7 +187,7 @@ export default function UserManager() {
                Active View
              </div>
            )}
-           <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all ${
+           <div className={`w-14 h-14 rounded-[1rem] flex items-center justify-center mb-6 transition-all ${
              activeHub === 'logistics' ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/30' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
            }`}>
              <Truck className="w-7 h-7" />
@@ -199,7 +199,7 @@ export default function UserManager() {
          {/* Hub: Community */}
          <button 
            onClick={() => { setActiveHub('community'); setCommunitySubFilter('all'); }}
-           className={`p-8 rounded-[2.5rem] border transition-all text-left group relative overflow-hidden ${
+           className={`p-8 rounded-[1rem] border transition-all text-left group relative overflow-hidden ${
              activeHub === 'community' 
                ? 'bg-slate-900 border-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.3)] scale-[1.02] ring-2 ring-slate-500/20' 
                : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5 hover:border-slate-400/30'
@@ -210,7 +210,7 @@ export default function UserManager() {
                Active View
              </div>
            )}
-           <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all ${
+           <div className={`w-14 h-14 rounded-[1rem] flex items-center justify-center mb-6 transition-all ${
              activeHub === 'community' ? 'bg-slate-700 text-white shadow-lg shadow-slate-700/30' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
            }`}>
              <Users className="w-7 h-7" />
@@ -318,13 +318,13 @@ export default function UserManager() {
               placeholder={`Search within ${activeHub}...`} 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-white/5 outline-none focus:border-primary transition-all shadow-sm dark:text-white"
+              className="w-full pl-12 pr-6 py-4 bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 dark:border-white/5 outline-none focus:border-primary transition-all shadow-sm dark:text-white"
             />
          </div>
       </div>
 
       {/* USER LIST */}
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-white/5 overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 dark:border-white/5 overflow-hidden shadow-sm">
         {loading ? (
           <div className="p-20 flex flex-col items-center justify-center gap-4">
              <Loader2 className="w-10 h-10 text-primary animate-spin" />
@@ -369,7 +369,7 @@ export default function UserManager() {
                          <td className="px-8 py-6">
                             <div className="flex items-center gap-4">
                                <div className="relative">
-                                 <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl shadow-inner">{u.avatar || '👤'}</div>
+                                 <div className="w-12 h-12 rounded-[1rem] bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl shadow-inner">{u.avatar || '👤'}</div>
                                </div>
                                <div>
                                   <h4 className="text-sm font-semibold dark:text-white leading-tight flex items-center gap-2">

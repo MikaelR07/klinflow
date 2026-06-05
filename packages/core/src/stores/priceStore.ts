@@ -24,6 +24,7 @@ export const usePriceStore = create<PriceStore>((set, get) => ({
       const { data, error } = await supabase
         .from('waste_categories')
         .select('*')
+        .is('parent_category', null)
         .order('label');
 
       if (error) throw error;
@@ -69,6 +70,7 @@ export const usePriceStore = create<PriceStore>((set, get) => ({
         .insert({
           label: name,
           slug: name.toLowerCase().replace(/ /g, '-'),
+          category,
           price_per_kg: pricePerKg,
           is_active: true
         })

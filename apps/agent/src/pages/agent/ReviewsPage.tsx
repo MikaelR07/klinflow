@@ -98,6 +98,8 @@ function ReviewCard({ review }: { review: any }) {
 export default function ReviewsPage() {
   const navigate = useNavigate();
   const { profile } = useAuthStore();
+  const isCompanyOwner = profile?.agentAccountType === 'company_admin';
+  
   const {
     recentReviews,
     fetchReviews,
@@ -137,26 +139,37 @@ export default function ReviewsPage() {
   }, [recentReviews]);
 
   return (
-    <div className="space-y-6 px-1.5 animate-fade-in pb-20">
-      {/* Sticky Top Nav */}
-      <div className="sticky top-0 z-50 -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-4 max-w-lg mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate(-1)}
-              className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center  active:scale-95 transition-all"
-            >
-              <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-            </button>
-            <div>
-              <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white capitalize">Reviews and Feedback</h1>
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 flex items-center gap-1.5 leading-none">
-                <TrendingUp className="w-3 h-3 text-primary" /> Live Feedback reports
-              </p>
+    <div className={`space-y-6 animate-fade-in ${isCompanyOwner ? '' : 'px-1.5 pb-20'}`}>
+      {isCompanyOwner ? (
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Reviews and Feedback</h1>
+            <p className="text-sm font-medium text-slate-500 mt-1 flex items-center gap-1.5">
+              <TrendingUp className="w-4 h-4 text-primary" /> Live Feedback reports
+            </p>
+          </div>
+        </div>
+      ) : (
+        /* Sticky Top Nav */
+        <div className="sticky top-0 z-50 -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+          <div className="pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-4 max-w-lg mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate(-1)}
+                className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center  active:scale-95 transition-all"
+              >
+                <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+              </button>
+              <div>
+                <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white capitalize">Reviews and Feedback</h1>
+                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 flex items-center gap-1.5 leading-none">
+                  <TrendingUp className="w-3 h-3 text-primary" /> Live Feedback reports
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Analytics Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 !mt-2">

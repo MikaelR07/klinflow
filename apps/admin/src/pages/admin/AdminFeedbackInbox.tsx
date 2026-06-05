@@ -70,7 +70,7 @@ export default function AdminFeedbackInbox() {
           <button
             key={hub.id}
             onClick={() => setActiveHub(hub.id)}
-            className={`p-4 rounded-3xl border transition-all text-left group relative overflow-hidden ${
+            className={`p-4 rounded-[1rem] border transition-all text-left group relative overflow-hidden ${
               activeHub === hub.id 
                 ? 'bg-slate-900 border-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.3)] scale-[1.02] ring-2 ring-primary/20' 
                 : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-white/5 hover:border-slate-200'
@@ -94,8 +94,8 @@ export default function AdminFeedbackInbox() {
 
       {/* ── FEEDBACK LIST ── */}
       {filteredFeedback.length === 0 ? (
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-[2.5rem] p-20 flex flex-col items-center justify-center text-center">
-          <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-200 dark:text-slate-700 flex items-center justify-center mb-4">
+        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-[1rem] p-20 flex flex-col items-center justify-center text-center">
+          <div className="w-16 h-16 rounded-[1rem] bg-slate-50 dark:bg-slate-800 text-slate-200 dark:text-slate-700 flex items-center justify-center mb-4">
              <MessageSquare className="w-8 h-8" />
           </div>
           <h3 className="text-xl font-semibold dark:text-white tracking-tight">No feedback found</h3>
@@ -104,7 +104,7 @@ export default function AdminFeedbackInbox() {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredFeedback.map((item) => (
-            <div key={item.id} className="bg-white dark:bg-slate-900 p-4 rounded-3xl relative overflow-hidden group border border-slate-100 dark:border-white/5 hover:border-primary/40 transition-all hover:shadow-lg hover:shadow-primary/5 flex flex-col h-full">
+            <div key={item.id} className="bg-white dark:bg-slate-900 p-4 rounded-[1rem] relative overflow-hidden group border border-slate-100 dark:border-white/5 hover:border-primary/40 transition-all hover:shadow-lg hover:shadow-primary/5 flex flex-col h-full">
                
                 {/* Header: Rating & Date & SOURCE */}
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
@@ -168,7 +168,7 @@ export default function AdminFeedbackInbox() {
       {/* ── CONFIRMATION MODAL ── */}
       {deleteModal.isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-6 animate-fade-in">
-           <div className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-[2rem] overflow-hidden shadow-2xl border border-slate-100 dark:border-white/5 animate-scale-in">
+           <div className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-[1rem] overflow-hidden shadow-2xl border border-slate-100 dark:border-white/5 animate-scale-in">
               <div className="p-8 text-center space-y-4">
                  <div className="w-16 h-16 bg-rose-50 dark:bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center mx-auto">
                     <AlertTriangle className="w-8 h-8" />
@@ -187,13 +187,13 @@ export default function AdminFeedbackInbox() {
                  <div className="grid grid-cols-2 gap-3 pt-4">
                     <button 
                       onClick={() => setDeleteModal({ isOpen: false, targetId: null, isBulk: false })}
-                      className="py-3.5 px-6 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                      className="py-3.5 px-6 rounded-[1rem] bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                     >
                        Cancel
                     </button>
                     <button 
                       onClick={confirmDelete}
-                      className="py-3.5 px-6 rounded-2xl bg-rose-500 text-white font-semibold text-sm hover:bg-rose-600 shadow-lg shadow-rose-500/25 transition-all active:scale-95"
+                      className="py-3.5 px-6 rounded-[1rem] bg-rose-500 text-white font-semibold text-sm hover:bg-rose-600 shadow-lg shadow-rose-500/25 transition-all active:scale-95"
                     >
                        Yes, Delete
                     </button>

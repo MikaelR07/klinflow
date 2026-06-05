@@ -106,7 +106,7 @@ export default function WarehousePage() {
                   </div>
                   <div>
                      <h4 className="text-sm font-semibold text-slate-900 dark:text-white">Security Check</h4>
-                     <p className="text-[11px] text-slate-500 mt-1">Ensure your QR code is ready for the Gate Manager to scan upon arrival.</p>
+                     <p className="text-[11px] text-slate-500 mt-1">Ensure your  code is ready for the Gate Manager to scan upon arrival.</p>
                   </div>
                </div>
             </div>

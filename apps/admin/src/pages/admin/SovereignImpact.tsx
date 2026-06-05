@@ -39,7 +39,7 @@ export default function SovereignImpact() {
            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Institutional ESG & Circularity Reporting</p>
         </div>
         <div className="flex gap-4">
-           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2 flex items-center gap-2">
+           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[1rem] p-2 flex items-center gap-2">
               <select 
                 value={activeRegion}
                 onChange={(e) => setActiveRegion(e.target.value)}
@@ -50,7 +50,7 @@ export default function SovereignImpact() {
                  <option>Kisumu West</option>
               </select>
            </div>
-           <button className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2 shadow-xl active:scale-95 transition-all">
+           <button className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1rem] font-black text-xs uppercase tracking-widest flex items-center gap-2 shadow-xl active:scale-95 transition-all">
               <Download className="w-4 h-4" /> Export ESG Report
            </button>
         </div>
@@ -62,11 +62,11 @@ export default function SovereignImpact() {
             <motion.div 
               key={metric.id}
               whileHover={{ y: -5 }}
-              className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden"
+              className="bg-white dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden"
             >
                <div className={`absolute top-0 right-0 w-24 h-24 bg-${metric.color}-500/5 rounded-full blur-2xl -mr-8 -mt-8`} />
                <div className="flex items-center justify-between mb-4 relative z-10">
-                  <div className={`w-12 h-12 bg-${metric.color}-500/10 rounded-2xl flex items-center justify-center text-${metric.color}-500 shadow-inner`}>
+                  <div className={`w-12 h-12 bg-${metric.color}-500/10 rounded-[1rem] flex items-center justify-center text-${metric.color}-500 shadow-inner`}>
                      {metric.icon}
                   </div>
                   <div className="flex items-center gap-1 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">
@@ -82,7 +82,7 @@ export default function SovereignImpact() {
 
       <div className="grid grid-cols-3 gap-8">
          {/* ── MATERIAL DIVERSION CHART ── */}
-         <div className="col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm">
+         <div className="col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="flex items-center justify-between mb-8">
                <div>
                   <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight">Material Diversion Velocity</h3>
@@ -117,11 +117,11 @@ export default function SovereignImpact() {
          </div>
 
          {/* ── ESG SCORECARD ── */}
-         <div className="bg-slate-900 p-8 rounded-[3rem] text-white flex flex-col justify-between border border-white/5 relative overflow-hidden">
+         <div className="bg-slate-900 p-8 rounded-[1rem] text-white flex flex-col justify-between border border-white/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] -mr-20 -mt-20" />
             <div className="relative z-10">
                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-emerald-400 shadow-xl">
+                  <div className="w-12 h-12 bg-white/10 rounded-[1rem] flex items-center justify-center text-emerald-400 shadow-xl">
                      <ShieldCheck className="w-6 h-6" />
                   </div>
                   <div>
@@ -165,7 +165,7 @@ export default function SovereignImpact() {
 
       {/* ── SECTOR ANALYSIS ── */}
       <div className="grid grid-cols-2 gap-8">
-         <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm">
+         <div className="bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="flex items-center gap-3 mb-8">
                <Building2 className="w-6 h-6 text-indigo-500" />
                <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">Enterprise Diversion Partners</h3>
@@ -176,7 +176,7 @@ export default function SovereignImpact() {
                   { name: 'Industrial Pack Ltd', weight: '180 Tons', impact: 'A', progress: 70 },
                   { name: 'E-Waste Solutions', weight: '45 Tons', impact: 'B+', progress: 45 }
                ].map((partner, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                  <div key={i} className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-[1rem] border border-slate-100 dark:border-slate-800">
                      <div className="w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center font-black text-xs text-indigo-600 shadow-sm">{partner.impact}</div>
                      <div className="flex-1">
                         <p className="text-xs font-black text-slate-900 dark:text-white uppercase leading-none mb-1">{partner.name}</p>
@@ -190,7 +190,7 @@ export default function SovereignImpact() {
             </div>
          </div>
 
-         <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+         <div className="bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
             <div className="flex items-center justify-between mb-8">
                <div className="flex items-center gap-3">
                   <PieChart className="w-6 h-6 text-amber-500" />

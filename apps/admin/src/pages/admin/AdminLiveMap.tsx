@@ -50,14 +50,14 @@ export default function AdminLiveMap() {
           <p className="text-sm text-slate-400 font-medium">Nairobi Operational Fleet • {agents.length} active units</p>
         </div>
         
-        <div className="flex items-center gap-4 text-xs font-semibold uppercase tracking-widest bg-white dark:bg-slate-900 py-3 px-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
+        <div className="flex items-center gap-4 text-xs font-semibold uppercase tracking-widest bg-white dark:bg-slate-900 py-3 px-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/50 dark:shadow-none">
           <span className="flex items-center gap-2 text-emerald-600"><span className="w-2.5 h-2.5 rounded-full shadow-inner bg-emerald-500" /> Active</span>
           <span className="flex items-center gap-2 border-l border-slate-100 dark:border-slate-800 pl-4 text-amber-500"><span className="w-2.5 h-2.5 rounded-full shadow-inner bg-amber-500" /> Idle</span>
           <span className="flex items-center gap-2 border-l border-slate-100 dark:border-slate-800 pl-4 text-slate-400"><span className="w-2.5 h-2.5 rounded-full shadow-inner bg-slate-400" /> Offline</span>
         </div>
       </div>
 
-      <div className="flex-1 rounded-[2rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-2xl relative min-h-[500px]">
+      <div className="flex-1 rounded-[1rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-2xl relative min-h-[500px]">
         <MapContainer center={[-1.2921, 36.8219]} zoom={13} className="w-full h-full absolute inset-0" scrollWheelZoom>
           <TileLayer
             attribution='&copy; <a href="https://osm.org">OSM</a>'
@@ -85,7 +85,7 @@ export default function AdminLiveMap() {
           ))}
         </MapContainer>
         
-        <div className="absolute bottom-6 left-6 z-[400] bg-white/90 dark:bg-slate-900/95 backdrop-blur-md p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-2xl flex items-center gap-3 transition-all">
+        <div className="absolute bottom-6 left-6 z-[400] bg-white/90 dark:bg-slate-900/95 backdrop-blur-md p-3 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-2xl flex items-center gap-3 transition-all">
            <div className="p-2.5 bg-primary/10 text-primary rounded-xl">
               <Network className="w-4 h-4 animate-pulse" />
            </div>
