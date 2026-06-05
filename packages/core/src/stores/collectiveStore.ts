@@ -252,14 +252,17 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
 
   deleteSwarm: async (id: string) => {
     try {
-      const { error } = await supabase.from('swarms').delete().eq('id', id);
-      if (!error) {
-        set((state) => ({ swarms: state.swarms.filter(s => s.id !== id) }));
+      const { data, error } = await supabase.from('swarms').delete().eq('id', id).select();
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error('Could not delete swarm. It may have already been deleted, or you do not have permission.');
       }
-      return { success: !error, error };
-    } catch (error) {
+      
+      set((state) => ({ swarms: state.swarms.filter(s => s.id !== id) }));
+      return { success: true };
+    } catch (error: any) {
       console.error('Error deleting swarm:', error);
-      return { success: false, error };
+      return { success: false, error: error.message };
     }
   },
 

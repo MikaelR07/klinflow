@@ -135,7 +135,7 @@ export default function SwarmDetails() {
         <div className="bg-white dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Target Material</p>
+              <p className="text-[10px] font-bold text-slate-400 border capitalize tracking-widest mb-1">Target Material</p>
               <h2 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none">{swarm.material}</h2>
             </div>
             <div className="flex items-center gap-2">

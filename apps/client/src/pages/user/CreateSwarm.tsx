@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Truck, Scale, MapPin, ChevronRight, Zap, Camera, X, FileText, Image as ImageIcon, CalendarClock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, useCollectiveStore, useServiceStore } from '@klinflow/core';
+import { useAuthStore, useCollectiveStore, useServiceStore, uploadFile } from '@klinflow/core';
 import { supabase } from '@klinflow/supabase';
 import { compressImage } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
@@ -15,8 +15,11 @@ export default function CreateSwarm() {
   const createSwarm = useCollectiveStore(s => s.createSwarm);
   const categories = useServiceStore(s => s.categories);
   const fetchCategories = useServiceStore(s => s.fetchCategories);
+  const fetchMaterialPrices = useServiceStore(s => s.fetchMaterialPrices);
+  const materialPrices = useServiceStore(s => s.materialPrices);
   const estateName = profile?.location?.estate || profile?.estate || 'Nairobi';
 
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [material, setMaterial] = useState('');
   const [targetWeight, setTargetWeight] = useState('');
   const [initialWeight, setInitialWeight] = useState('');
@@ -27,6 +30,7 @@ export default function CreateSwarm() {
 
   useEffect(() => {
     fetchCategories();
+    fetchMaterialPrices();
   }, []);
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,19 +64,11 @@ export default function CreateSwarm() {
     try {
       let uploadToastId = toast.loading(`Uploading ${photos.length} image${photos.length > 1 ? 's' : ''}...`);
 
-      const uploadPromises = photos.map(async (p, i) => {
+      const uploadPromises = photos.map(async (p) => {
         const compressed = await compressImage(p.file, { maxWidth: 1024, quality: 0.8 });
-        const fileExt = compressed.name.split('.').pop() || 'jpg';
-        const fileName = `swarm_${Date.now()}_${i}.${fileExt}`;
-        const filePath = `${profile?.id}/${fileName}`;
-
-        const { data, error } = await supabase.storage
-          .from('swarms')
-          .upload(filePath, compressed);
-
-        if (error) throw error;
-
-        return supabase.storage.from('swarms').getPublicUrl(data.path).data.publicUrl;
+        const url = await uploadFile('swarms', compressed, profile?.id);
+        if (!url) throw new Error('Failed to upload image');
+        return url;
       });
 
       const imageUrls = await Promise.all(uploadPromises);
@@ -149,7 +145,7 @@ export default function CreateSwarm() {
         </div>
 
         {/* Location */}
-        <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">
+        <div className="bg-white dark:bg-slate-900/60 rounded-xl p-3 border border-slate-200 dark:border-slate-700 space-y-2">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
               <MapPin className="w-4 h-4 text-emerald-600" />
@@ -159,15 +155,14 @@ export default function CreateSwarm() {
               <p className="text-sm font-bold text-slate-900 dark:text-white">{estateName}</p>
             </div>
           </div>
-          <p className="text-[10px] text-slate-400 leading-relaxed">Only sellers in your estate will see and be able to join this swarm.</p>
         </div>
 
         {/* Material Selection */}
         <div className="space-y-3">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">Select Material</p>
-          <div className="grid grid-cols-2 gap-4">
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1">1. Select Material Category</p>
+          <div className="grid grid-cols-2 gap-3">
             {categories.map((cat) => {
-              const isSelected = material === cat.label;
+              const isSelected = selectedCategory === cat.label;
               const identifier = (cat.slug || cat.id || '').toLowerCase();
               let bgImage = cat.image_url;
               if (!bgImage) {
@@ -186,117 +181,127 @@ export default function CreateSwarm() {
               return (
                 <button
                   key={cat.id}
-                  onClick={() => setMaterial(cat.label)}
-                  className={`relative h-32 rounded-2xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all group overflow-hidden border-2 ${isSelected
+                  onClick={() => { setSelectedCategory(cat.label); setMaterial(''); }}
+                  className={`relative h-20 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all group overflow-hidden border-2 ${isSelected
                     ? 'border-indigo-500 ring-2 ring-indigo-500/20'
                     : 'border-slate-100 dark:border-slate-800 hover:border-indigo-500/40'
                     }`}
                   style={bgImage ? {
-                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.6)), url(${bgImage})`,
+                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), url(${bgImage})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   } : {}}
                 >
                   {!bgImage && <div className={`absolute inset-0 ${isSelected ? 'bg-indigo-50/50 dark:bg-indigo-900/10' : 'bg-slate-100 dark:bg-slate-800'}`} />}
-                  {!bgImage && <div className="absolute top-0 right-0 w-12 h-12 bg-indigo-500/5 rounded-bl-3xl -mr-4 -mt-4 group-hover:bg-indigo-500/10 transition-colors z-0" />}
-
-                  <div className={`relative z-10 w-10 h-10 rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform ${bgImage ? 'bg-white/10 backdrop-blur-md' : (isSelected ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600' : 'bg-slate-50 dark:bg-slate-800/50')
+                  <span className={`relative z-10 text-sm font-black capitalize tracking-widest text-center leading-none flex items-center gap-2 ${bgImage ? 'text-white' : (isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white')
                     }`}>
-                    {cat.icon || '📦'}
-                  </div>
-                  <span className={`relative z-10 text-xs font-black capitalize tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : (isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white')
-                    }`}>
-                    {cat.label}
+                    <span className="text-xl">{cat.icon || '📦'}</span> {cat.label}
                   </span>
                 </button>
               );
             })}
           </div>
+
+          {selectedCategory && (
+            <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1 mb-2">2. Specific Material Type</p>
+              <select
+                value={material}
+                onChange={(e) => setMaterial(e.target.value)}
+                className="w-full p-3 rounded-xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all appearance-none"
+              >
+                <option value="" disabled>Select specific material...</option>
+                {materialPrices.filter(m => m.category === selectedCategory).map(m => (
+                  <option key={m.id} value={m.material_name}>{m.material_name}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
 
-        {/* Target Weight */}
-        <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">
-          <div className="flex items-center gap-2.5 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
-              <Scale className="w-4 h-4 text-indigo-600" />
+        {/* Weights Side by Side */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Target Weight */}
+          <div className="bg-white dark:bg-slate-900/60 rounded-xl p-3 border border-slate-200 dark:border-slate-700 space-y-2">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-6 h-6 rounded-md bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
+                <Scale className="w-3.5 h-3.5 text-indigo-600" />
+              </div>
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Target (KG)</p>
             </div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Target Weight (KG)</p>
+            <input
+              type="number"
+              value={targetWeight}
+              onChange={(e) => setTargetWeight(e.target.value)}
+              placeholder="e.g. 500"
+              min={10}
+              className="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300"
+            />
           </div>
-          <input
-            type="number"
-            value={targetWeight}
-            onChange={(e) => setTargetWeight(e.target.value)}
-            placeholder="e.g. 500"
-            min={10}
-            className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300"
-          />
-          <p className="text-[10px] text-slate-400">Minimum 10 KG. Set a realistic target for your neighbourhood.</p>
-        </div>
 
-        {/* Initial Weight */}
-        <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">
-          <div className="flex items-center gap-2.5 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
-              <Scale className="w-4 h-4 text-emerald-600" />
+          {/* Initial Weight */}
+          <div className="bg-white dark:bg-slate-900/60 rounded-xl p-3 border border-slate-200 dark:border-slate-700 space-y-2">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-6 h-6 rounded-md bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+                <Scale className="w-3.5 h-3.5 text-emerald-600" />
+              </div>
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Your Contrib. (KG)</p>
             </div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Your Contribution (KG)</p>
+            <input
+              type="number"
+              value={initialWeight}
+              onChange={(e) => setInitialWeight(e.target.value)}
+              placeholder="e.g. 50"
+              min={0}
+              className="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-slate-300"
+            />
           </div>
-          <input
-            type="number"
-            value={initialWeight}
-            onChange={(e) => setInitialWeight(e.target.value)}
-            placeholder="e.g. 50"
-            min={0}
-            className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-slate-300"
-          />
-          <p className="text-[10px] text-slate-400">How much are you contributing right now? This helps build momentum.</p>
-        </div>
-
-        {/* Description */}
-        <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">
-          <div className="flex items-center gap-2.5 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
-              <FileText className="w-4 h-4 text-indigo-600" />
-            </div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Description (Optional)</p>
-          </div>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe the materials, condition, or any other details..."
-            rows={3}
-            className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300 resize-none"
-          />
         </div>
 
         {/* Deadline */}
-        <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">
-          <div className="flex items-center gap-2.5 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center">
-              <CalendarClock className="w-4 h-4 text-amber-600" />
+        <div className="bg-white dark:bg-slate-900/60 rounded-xl p-3 border border-slate-200 dark:border-slate-700 space-y-2">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-6 h-6 rounded-md bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center">
+              <CalendarClock className="w-3.5 h-3.5 text-amber-600" />
             </div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Submission Deadline (Optional)</p>
+            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Submission Deadline (Optional)</p>
           </div>
           <input
             type="datetime-local"
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
             min={new Date().toISOString().slice(0, 16)}
-            className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-amber-500 transition-all"
+            className="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-amber-500 transition-all"
           />
-          <p className="text-[10px] text-slate-400">Set a deadline so members know when to submit their materials by.</p>
+        </div>
+
+        {/* Description */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-xl p-3 border border-slate-200 dark:border-slate-700 space-y-2">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-6 h-6 rounded-md bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
+              <FileText className="w-3.5 h-3.5 text-indigo-600" />
+            </div>
+            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Description (Optional)</p>
+          </div>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Describe the materials, condition, or any other details..."
+            rows={2}
+            className="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300 resize-none"
+          />
         </div>
 
         {/* Visual Proof */}
-        <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">
+        <div className="bg-white dark:bg-slate-900/60 rounded-xl p-3 border border-slate-200 dark:border-slate-700 space-y-2">
           <div className="flex justify-between items-center mb-1">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
-                <ImageIcon className="w-4 h-4 text-indigo-600" />
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
+                <ImageIcon className="w-3.5 h-3.5 text-indigo-600" />
               </div>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Visual Proof</p>
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Visual Proof</p>
             </div>
-            <p className="text-[10px] font-bold text-indigo-600">{photos.length} / 3</p>
+            <p className="text-[9px] font-bold text-indigo-600">{photos.length} / 3</p>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
