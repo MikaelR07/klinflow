@@ -131,7 +131,7 @@ export default function CommunityCollective() {
               </div>
 
               <div className="flex justify-between items-start mb-1">
-                <h3 className="text-lg font-black text-[#0e1d2c] dark:text-white">Bulk Selling Groups</h3>
+                <h3 className="text-base font-black text-[#0e1d2c] dark:text-white">Bulk Selling Groups</h3>
                 <span className="text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-2 py-0.5 rounded-full">
                   {swarms.length} Groups
                 </span>
@@ -184,7 +184,7 @@ export default function CommunityCollective() {
               </div>
 
               <div className="flex justify-between items-start mb-1">
-                <h3 className="text-lg font-black text-[#0e1d2c] dark:text-white">Community Challenges</h3>
+                <h3 className="text-base font-black text-[#0e1d2c] dark:text-white">Community Challenges</h3>
                 <span className="text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-2 py-0.5 rounded-full">
                   {goals.length}
                 </span>
