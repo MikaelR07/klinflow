@@ -161,7 +161,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col justify-center min-h-dvh max-w-lg mx-auto px-6 py-10 relative overflow-hidden">
+    <div className="flex flex-col justify-center min-h-dvh max-w-lg mx-auto px-2 py-10 relative overflow-hidden">
       {/* Background Decor (Matched to Welcome Page) */}
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
@@ -197,7 +197,7 @@ export default function Register() {
         <form onSubmit={initiateRegistration} className="space-y-4">
 
           {/* Section 1: Identity */}
-          <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800  shadow-slate-200/40 dark:shadow-none space-y-5">
+          <div className="glass p-6 rounded-[1rem] border border-slate-200 dark:border-slate-800  shadow-slate-200/40 dark:shadow-none space-y-5">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -254,7 +254,7 @@ export default function Register() {
 
 
           {/* Section 1.5: Gender Identity */}
-          <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5 animate-slide-up">
+          <div className="glass p-6 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5 animate-slide-up">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
@@ -288,7 +288,7 @@ export default function Register() {
           </div>
 
           {/* Section 2: Security */}
-          <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5">
+          <div className="glass p-6 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
@@ -325,18 +325,20 @@ export default function Register() {
           </div>
 
           {/* Section 3: Location */}
-          <div className="glass p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-5">
-            <div className="flex items-center gap-2 ">
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 px-1">
               <div className="w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
               </div>
               <h3 className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Location Area</h3>
             </div>
 
-            <div className="min-h-[140px]">
+            <div className="glass overflow-hidden rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none min-h-[140px] relative z-0 w-full">
               <LocationSelector
                 value={formData.location}
                 onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))}
+                hideHeaderText={true}
+                hideFooterText={true}
               />
             </div>
           </div>

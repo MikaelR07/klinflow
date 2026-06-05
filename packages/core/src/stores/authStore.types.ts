@@ -38,6 +38,8 @@ export interface AuthState {
   sendOtp: (phone: string) => Promise<boolean>;
   verifyOtp: (phone: string, token: string) => Promise<any>;
   checkAppRole: (currentApp: string) => void;
+  changePin: (currentPin: string, newPin: string) => Promise<void>;
+  deleteAccount: () => Promise<void>;
   
   // Internal Helpers (exposed for store logic)
   _mapProfile: (data: ProfileRow) => Profile | null;

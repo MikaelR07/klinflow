@@ -56,7 +56,7 @@ export default function Login() {
         </div>
 
         {/* Login Card */}
-        <div className="glass p-8 sm:p-10 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none">
+        <div className="glass p-8 sm:p-10 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none">
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="text-center mb-6">
               <h2 className="text-xl font-semibold text-slate-800 dark:text-white pb-1 tracking-tight">Business Portal</h2>
@@ -137,7 +137,7 @@ export default function Login() {
 
         <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-10">
           New to the marketplace?{' '}
-          <Link to="/register" className="text-indigo-600 hover:underline underline-offset-4">Register Now</Link>
+          <Link to="/roles" className="text-indigo-600 hover:underline underline-offset-4">Register Now</Link>
         </p>
       </div>
     </div>

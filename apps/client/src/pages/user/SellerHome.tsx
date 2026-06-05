@@ -212,7 +212,7 @@ export default function SellerHome() {
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
               <div className="shrink-0">
-                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
                   {profile?.avatarUrl ? (
                     <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                   ) : (
@@ -254,7 +254,7 @@ export default function SellerHome() {
                   <p className="text-[12px] font-semibold text-emerald-100/90 capitalise tracking-widest mb-1.5 flex items-center gap-1.5">
                     <Wallet className="w-3 h-3" /> Seller Wallet
                   </p>
-                  <h2 className="text-3xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
+                  <h2 className="text-2xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
                     KSh {walletBalance.toLocaleString()}
                   </h2>
 
@@ -262,7 +262,7 @@ export default function SellerHome() {
 
                 <button
                   onClick={() => navigate('/withdraw')}
-                  className="bg-emerald-800 hover:bg-slate-50 text-white dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold capitalise tracking-widest active:scale-95 transition-all "
+                  className="bg-primary hover:bg-slate-50 text-white  dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold capitalise tracking-widest active:scale-95 transition-all "
                 >
                   Withdraw
                 </button>

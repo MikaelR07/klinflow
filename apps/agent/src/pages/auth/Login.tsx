@@ -10,7 +10,7 @@ export default function Login() {
   const [pin, setPin] = useState('');
   const [showPin, setShowPin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Recovery Flow State
   const [recoveryStep, setRecoveryStep] = useState<'none' | 'phone' | 'otp'>('none');
   const [recoveryPhone, setRecoveryPhone] = useState('');
@@ -61,14 +61,14 @@ export default function Login() {
 
   const handleSendRecoveryOtp = async () => {
     if (recoveryPhone.length !== 10) return toast.error('Invalid Phone', { description: 'Enter a valid 10-digit number.' });
-    
+
     setIsLoading(true);
     try {
       const available = await checkAvailability(recoveryPhone);
       if (available) {
         throw new Error('This phone number is not registered as an agent.');
       }
-      
+
       await sendOtp(recoveryPhone);
       setTimeLeft(600);
       setRecoveryStep('otp');
@@ -89,10 +89,10 @@ export default function Login() {
     try {
       await resetPin(recoveryPhone, recoveryOtp, newPin);
       toast.success('Account Recovered!', { description: 'Your PIN has been reset successfully. You can now login.' });
-      
+
       setPhone(recoveryPhone);
       setPin(newPin);
-      
+
       setRecoveryStep('none');
       setRecoveryPhone('');
       setRecoveryOtp('');
@@ -126,7 +126,7 @@ export default function Login() {
         </div>
 
         {/* Login Form */}
-        <div className="glass p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none min-h-[340px] flex flex-col justify-center">
+        <div className="glass p-6 sm:p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none min-h-[340px] flex flex-col justify-center">
           <form onSubmit={handleLogin} className="space-y-5 animate-slide-up">
             <div className="text-center mb-6">
               <h2 className="text-lg font-semibold text-slate-800 dark:text-white pb-1">Agent Sign In</h2>
@@ -199,7 +199,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8 font-medium">
           Don't have an account?{' '}
-          <Link to="/register" className="text-secondary font-semibold hover:underline">
+          <Link to="/role-selection" className="text-secondary font-semibold hover:underline">
             Register Here
           </Link>
         </p>
@@ -218,7 +218,7 @@ export default function Login() {
               <div className="w-16 h-16 bg-secondary/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-secondary">
                 <Lock className="w-8 h-8" />
               </div>
-              
+
               <div>
                 <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Agent Recovery</h3>
                 <p className="text-sm text-slate-500 font-medium mt-2">Enter your registered agent phone number to receive a secure recovery code.</p>
@@ -262,7 +262,7 @@ export default function Login() {
             </button>
 
             <div className="text-center space-y-6">
-              <button 
+              <button
                 onClick={() => setRecoveryStep('phone')}
                 className="absolute left-6 top-6 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors"
               >
@@ -272,7 +272,7 @@ export default function Login() {
               <div className="w-16 h-16 bg-secondary/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-secondary mt-2">
                 <ShieldCheck className="w-8 h-8" />
               </div>
-              
+
               <div>
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Secure Reset</h3>
                 <p className="text-sm text-slate-500 font-medium mt-1">
@@ -282,15 +282,15 @@ export default function Login() {
 
               <div className="space-y-4 text-left">
                 <div className="relative">
-                  <input 
+                  <input
                     autoFocus
                     autoComplete="one-time-code"
                     type="text"
                     inputMode="numeric"
-                    value={recoveryOtp} 
+                    value={recoveryOtp}
                     onChange={(e) => setRecoveryOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    placeholder="000000" 
-                    className="w-full text-center text-3xl font-semibold tracking-[0.5em] py-3 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:border-secondary outline-none transition-all placeholder:text-slate-300" 
+                    placeholder="000000"
+                    className="w-full text-center text-3xl font-semibold tracking-[0.5em] py-3 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:border-secondary outline-none transition-all placeholder:text-slate-300"
                   />
                 </div>
 
@@ -304,22 +304,22 @@ export default function Login() {
                 <div className="pt-2 space-y-3">
                   <div className="relative group">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-secondary transition-colors" />
-                    <input 
-                      type="password" 
-                      value={newPin} 
-                      onChange={(e) => setNewPin(e.target.value)} 
-                      placeholder="New Passcode" 
-                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all" 
+                    <input
+                      type="password"
+                      value={newPin}
+                      onChange={(e) => setNewPin(e.target.value)}
+                      placeholder="New Passcode"
+                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all"
                     />
                   </div>
                   <div className="relative group">
                     <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-secondary transition-colors" />
-                    <input 
-                      type="password" 
-                      value={confirmNewPin} 
-                      onChange={(e) => setConfirmNewPin(e.target.value)} 
-                      placeholder="Confirm Passcode" 
-                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all" 
+                    <input
+                      type="password"
+                      value={confirmNewPin}
+                      onChange={(e) => setConfirmNewPin(e.target.value)}
+                      placeholder="Confirm Passcode"
+                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -334,15 +334,14 @@ export default function Login() {
                   {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Reset & Login'}
                 </button>
 
-                <button 
+                <button
                   type="button"
                   disabled={timeLeft > 0 || isLoading}
                   onClick={handleSendRecoveryOtp}
-                  className={`py-2 rounded-full text-[11px] font-semibold capitalize tracking-widest transition-all ${
-                    timeLeft > 0 
-                      ? 'text-slate-400 cursor-not-allowed' 
+                  className={`py-2 rounded-full text-[11px] font-semibold capitalize tracking-widest transition-all ${timeLeft > 0
+                      ? 'text-slate-400 cursor-not-allowed'
                       : 'text-secondary hover:bg-secondary/10'
-                  }`}
+                    }`}
                 >
                   Resend Recovery Code
                 </button>

@@ -46,7 +46,7 @@ USING (sender_id = auth.uid() OR receiver_id = auth.uid());
 -- 3. Create wallet_ledger table
 CREATE TABLE IF NOT EXISTS public.wallet_ledger (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL REFERENCES public.profiles(id),
+    user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
     transaction_type TEXT NOT NULL CHECK (transaction_type IN ('earn', 'redeem', 'transfer_sent', 'transfer_received', 'adjustment', 'bonus', 'migration')),
     amount INTEGER NOT NULL,
     balance_before INTEGER NOT NULL,

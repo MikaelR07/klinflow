@@ -178,7 +178,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-4 py-8 relative overflow-hidden">
+    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-2 py-8 relative overflow-hidden">
       {/* Background Decor (Matched to Welcome Page) */}
       <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
       <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
@@ -200,7 +200,7 @@ export default function Register() {
         </div>
 
         {/* Form */}
-        <form onSubmit={initiateRegistration} className="glass p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-4">
+        <form onSubmit={initiateRegistration} className="glass p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-4">
 
           {/* Base Fields */}
           <div>
@@ -308,11 +308,18 @@ export default function Register() {
           </div>
 
           {/* Location Block */}
-          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 animate-slide-up">
-            <LocationSelector
-              value={formData.location}
-              onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))}
-            />
+          <div className="pt-4 mt-2 border-t border-slate-100 dark:border-slate-800 animate-slide-up -mx-6 overflow-hidden">
+            <div className="px-6 mb-3">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 capitalize tracking-wider">Location Area</label>
+            </div>
+            <div className="min-h-[140px] relative z-0 w-full">
+              <LocationSelector
+                value={formData.location}
+                onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))}
+                hideHeaderText={true}
+                hideFooterText={true}
+              />
+            </div>
           </div>
 
           <button

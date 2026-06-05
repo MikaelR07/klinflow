@@ -177,7 +177,7 @@ export default function UserHome() {
             <div className="flex items-center gap-4">
               {/* Profile Avatar */}
               <div className="shrink-0">
-                <div className="w-10 h-10  rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
+                <div className="w-12 h-12  rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
                   {profile?.avatarUrl ? (
                     <img src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" alt="Profile" />
                   ) : (
@@ -216,7 +216,7 @@ export default function UserHome() {
                 <p className="text-[12px] font-semibold text-emerald-200/90 Capitalise tracking-widest mb-1.5 flex items-center gap-1.5">
                   <Wallet className="w-3 h-3" /> Wallet Balance
                 </p>
-                <h2 className="text-3xl sm:text-5xl font-semibold  text-white tracking-tighter leading-none">
+                <h2 className="text-2xl sm:text-5xl font-semibold  text-white tracking-tighter leading-none">
                   KSh {walletBalance.toLocaleString()}
                 </h2>
 
@@ -230,23 +230,14 @@ export default function UserHome() {
               </button>
             </div>
 
-            <div className="pt-2 border-t border-white/50 px-1">
+            <div className="pt-4 border-t border-white/50 px-1">
               <div className="flex items-center justify-between w-full">
-
-                <div onClick={() => navigate('/impact-hub')} className="flex flex-col cursor-pointer">
-                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">GFP</p>
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{rewardPoints}</p>
-                </div>
-
-                <div className="w-px h-10 bg-white/60" />
 
                 <div className="flex flex-col">
                   <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Pickups</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
                 </div>
-
                 <div className="w-px h-10 bg-white/60" />
-
                 <div className="flex flex-col">
                   <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Recovered</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
@@ -258,6 +249,14 @@ export default function UserHome() {
                   <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Offset</p>
                   <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
                 </div>
+
+                <div className="w-px h-10 bg-white/60" />
+                <div onClick={() => navigate('/impact-hub')} className="flex flex-col cursor-pointer">
+                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">GFP</p>
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{rewardPoints}</p>
+                </div>
+
+
               </div>
             </div>
           </div>

@@ -341,6 +341,30 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
+      deleteAccount: async () => {
+        const { userId, logout } = get();
+        if (!userId) throw new Error("Not authenticated");
+        
+        const { error } = await supabase.rpc('delete_own_user');
+        if (error) throw new Error(error.message);
+        
+        await logout();
+      },
+
+      changePin: async (currentPin: string, newPin: string) => {
+        const { profile } = get();
+        if (!profile?.phone) throw new Error("Profile not loaded.");
+        const email = phoneToEmail(profile.phone);
+        
+        // 1. Verify current PIN
+        const { error: verifyError } = await supabase.auth.signInWithPassword({ email, password: currentPin });
+        if (verifyError) throw new Error('Incorrect current PIN.');
+        
+        // 2. Update to new PIN
+        const { error: updateError } = await supabase.auth.updateUser({ password: newPin });
+        if (updateError) throw new Error(updateError.message);
+      },
+
       updateProfile: async (newData: Partial<Profile>): Promise<boolean> => {
         const { userId, profile } = get();
         if (!userId) throw new Error("Not authenticated");
