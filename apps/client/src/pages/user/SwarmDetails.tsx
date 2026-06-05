@@ -169,6 +169,22 @@ export default function SwarmDetails() {
               </p>
             </div>
           </div>
+          {swarm.closes_at && (
+            <>
+              <div className="h-px bg-slate-100 dark:bg-slate-700" />
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
+                  <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Submission Deadline</p>
+                  <p className="text-[11px] font-black text-amber-600 dark:text-amber-400 tracking-tight">
+                    {new Date(swarm.closes_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
         {/* Progress Card (Professional Neutral Style) */}
         <div className="bg-white dark:bg-slate-900/60 p-5 rounded-xl border border-slate-700/40 flex flex-col justify-center text-center shadow-sm">

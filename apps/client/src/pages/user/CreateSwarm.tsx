@@ -2,7 +2,7 @@
  * CreateSwarm.tsx — Full-page form for starting a new logistics swarm.
  */
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Truck, Scale, MapPin, ChevronRight, Zap, Camera, X, FileText, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Truck, Scale, MapPin, ChevronRight, Zap, Camera, X, FileText, Image as ImageIcon, CalendarClock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore, useServiceStore } from '@klinflow/core';
 import { supabase } from '@klinflow/supabase';
@@ -21,6 +21,7 @@ export default function CreateSwarm() {
   const [targetWeight, setTargetWeight] = useState('');
   const [initialWeight, setInitialWeight] = useState('');
   const [description, setDescription] = useState('');
+  const [deadline, setDeadline] = useState('');
   const [photos, setPhotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -85,6 +86,7 @@ export default function CreateSwarm() {
         current_weight: Number(initialWeight) || 0,
         description: description.trim(),
         images: imageUrls,
+        closes_at: deadline ? new Date(deadline).toISOString() : undefined,
         status: 'active',
       });
 
@@ -265,6 +267,24 @@ export default function CreateSwarm() {
             rows={3}
             className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300 resize-none"
           />
+        </div>
+
+        {/* Deadline */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">
+          <div className="flex items-center gap-2.5 mb-1">
+            <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center">
+              <CalendarClock className="w-4 h-4 text-amber-600" />
+            </div>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Submission Deadline (Optional)</p>
+          </div>
+          <input
+            type="datetime-local"
+            value={deadline}
+            onChange={(e) => setDeadline(e.target.value)}
+            min={new Date().toISOString().slice(0, 16)}
+            className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-amber-500 transition-all"
+          />
+          <p className="text-[10px] text-slate-400">Set a deadline so members know when to submit their materials by.</p>
         </div>
 
         {/* Visual Proof */}

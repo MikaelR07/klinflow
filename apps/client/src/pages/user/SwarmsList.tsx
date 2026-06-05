@@ -8,7 +8,8 @@ import {
   Search, Filter,
   Gift,
   Leaf,
-  LeafyGreen
+  LeafyGreen,
+  Clock
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore } from '@klinflow/core';
@@ -195,6 +196,12 @@ export default function SwarmsList() {
                     <p className="text-sm text-slate-500 dark:text-slate-400">
                       Location: {swarm.estate}
                     </p>
+                    {swarm.closes_at && (
+                      <p className="text-xs text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1 mt-1">
+                        <Clock className="w-3 h-3" />
+                        Deadline: {new Date(swarm.closes_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </p>
+                    )}
                   </div>
 
                   <Link
