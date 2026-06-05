@@ -170,8 +170,8 @@ export default function SwarmsList() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="text-base font-bold text-slate-900 dark:text-white truncate">
-                        Material:{swarm.material}
+                      <h4 className="text-base  text-slate-900 dark:text-white truncate">
+                        Material: {swarm.material}
                       </h4>
 
                       {swarm.status === 'active' && (
@@ -193,7 +193,7 @@ export default function SwarmsList() {
                     </div>
 
                     <p className="text-sm text-slate-500 dark:text-slate-400">
-                      {swarm.estate}
+                      Location: {swarm.estate}
                     </p>
                   </div>
 

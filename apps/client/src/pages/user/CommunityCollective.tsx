@@ -51,7 +51,7 @@ export default function CommunityCollective() {
         >
           {/* Background Image */}
           <div
-            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-30 dark:opacity-30 z-0"
+            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-60 dark:opacity-30 z-0"
             style={{ backgroundImage: "url('/vectors/collective-banner.webp')" }}
           />
 
@@ -117,15 +117,16 @@ export default function CommunityCollective() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
             {/* SWARMS CARD */}
-            <div className="bg-white dark:bg-slate-900/60 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col">
+            <div className="bg-white dark:bg-slate-900/60 rounded-xl p-2 border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col">
               <div className="relative h-32 mb-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-50 to-emerald-100/50 dark:from-slate-700 dark:to-slate-700/50">
                 <div className="absolute top-3 left-3 w-8 h-8 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm z-10">
                   <Users className="w-4 h-4 text-green-600" />
                 </div>
                 <OptimizedImage
-                  src="/vectors/community.webp"
+                  src="/vectors/recycle-banner.webp"
                   alt="Swarms"
-                  className="w-full h-full object-contain object-bottom mix-blend-multiply dark:mix-blend-screen opacity-80"
+                  wrapperClassName="w-full h-full"
+                  className="w-full h-full object-cover object-bottom mix-blend-multiply dark:mix-blend-screen opacity-80"
                 />
               </div>
 
@@ -169,7 +170,7 @@ export default function CommunityCollective() {
             </div>
 
             {/* COMMUNITY GOALS CARD */}
-            <div className="bg-white dark:bg-slate-900/60 rounded-3xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col">
+            <div className="bg-white dark:bg-slate-900/60 rounded-xl p-2 border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col">
               <div className="relative h-32 mb-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-50 to-emerald-100/50 dark:from-slate-700 dark:to-slate-700/50">
                 <div className="absolute top-3 left-3 w-8 h-8 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm z-10">
                   <Target className="w-4 h-4 text-green-600" />
@@ -177,7 +178,8 @@ export default function CommunityCollective() {
                 <OptimizedImage
                   src="/vectors/community.webp"
                   alt="Community Goals"
-                  className="w-full h-full object-contain object-bottom mix-blend-multiply dark:mix-blend-screen opacity-80"
+                  wrapperClassName="w-full h-full"
+                  className="w-full h-full object-cover object-bottom mix-blend-multiply dark:mix-blend-screen opacity-80"
                 />
               </div>
 
@@ -224,7 +226,7 @@ export default function CommunityCollective() {
         </div>
 
         {/* ── FOOTER REAL REWARDS ── */}
-        <div className="bg-[#F4F6F9] dark:bg-slate-900/60 rounded-xl p-5 space-y-4 border border-slate-100 dark:border-slate-700">
+        <div className="bg-[#F4F6F9] dark:bg-slate-900/60 rounded-xl p-2 space-y-4 border border-slate-100 dark:border-slate-700">
           <h3 className="text-[13px] font-bold text-[#0e1d2c] dark:text-white">Real Rewards. Real Impact.</h3>
 
           <div className="grid grid-cols-2 gap-y-4 gap-x-2">
@@ -233,8 +235,8 @@ export default function CommunityCollective() {
                 <Trophy className="w-4 h-4 text-[#eab308]" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Group Bonuses</p>
-                <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-tight">Extra points for collective achievements</p>
+                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Group Bonuses</p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">Extra points for collective achievements</p>
               </div>
             </div>
 
@@ -243,8 +245,8 @@ export default function CommunityCollective() {
                 <Gift className="w-4 h-4 text-[#22c55e]" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Exclusive Rewards</p>
-                <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-tight">Access special rewards for collectives</p>
+                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Exclusive Rewards</p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">Access special rewards for collectives</p>
               </div>
             </div>
 
@@ -253,8 +255,8 @@ export default function CommunityCollective() {
                 <Award className="w-4 h-4 text-[#3b82f6]" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Impact Recognition</p>
-                <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-tight">Get recognized on leaderboards and beyond</p>
+                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Impact Recognition</p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">Get recognized on leaderboards and beyond</p>
               </div>
             </div>
 
@@ -263,8 +265,8 @@ export default function CommunityCollective() {
                 <Handshake className="w-4 h-4 text-[#f97316]" />
               </div>
               <div>
-                <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Stronger Communities</p>
-                <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-tight">Build connections that last</p>
+                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Stronger Communities</p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">Build connections that last</p>
               </div>
             </div>
           </div>

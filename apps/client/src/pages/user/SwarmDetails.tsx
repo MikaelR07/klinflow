@@ -129,10 +129,10 @@ export default function SwarmDetails() {
       </div>
 
       {/* ── Content Sheet ── */}
-      <div className="bg-[#F2F3F4] dark:bg-slate-800 px-2 pt-2 pb-2 space-y-4 rounded-t-2xl -mt-32 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+      <div className="bg-white dark:bg-slate-800 px-2 pt-2 pb-2 space-y-4 rounded-t-2xl -mt-32 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
 
         {/* Material & Status Card */}
-        <div className="bg-white dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
+        <div className="bg-white dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Target Material</p>
@@ -171,7 +171,7 @@ export default function SwarmDetails() {
           </div>
         </div>
         {/* Progress Card (Professional Neutral Style) */}
-        <div className="bg-white dark:bg-slate-900/60 p-5 rounded-2xl border border-slate-700/40 flex flex-col justify-center text-center shadow-sm">
+        <div className="bg-white dark:bg-slate-900/60 p-5 rounded-xl border border-slate-700/40 flex flex-col justify-center text-center shadow-sm">
           <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1">
             Swarm Progress
           </p>
