@@ -10,7 +10,9 @@ import {
   Users, ShieldCheck, X, Sparkles, Search, Brain,
   BarChart2,
   BarChart2Icon,
-  BarChart3Icon
+  BarChart3Icon,
+  LeafyGreen,
+  Leaf
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -233,27 +235,28 @@ export default function UserHome() {
             <div className="pt-4 border-t border-white/50 px-1">
               <div className="flex items-center justify-between w-full">
 
-                <div className="flex flex-col">
-                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Pickups</p>
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{totalPickups}</p>
-                </div>
-                <div className="w-px h-10 bg-white/60" />
-                <div className="flex flex-col">
-                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Recovered</p>
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{kgRecovered}kg</p>
+                <div className="flex flex-col items-center">
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none text-center mb-1">{totalPickups}</p>
+                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest flex items-center gap-1">
+                    <Truck className="w-3 h-3" /> Pickups
+                  </p>
                 </div>
 
                 <div className="w-px h-10 bg-white/60" />
 
-                <div className="flex flex-col">
-                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">Offset</p>
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{co2OffsetTonnes}t</p>
+                <div className="flex flex-col items-center">
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none mb-1 text-center">{kgRecovered}kg</p>
+                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest flex items-center gap-1">
+                    <Recycle className="w-3 h-3" /> Recovered
+                  </p>
                 </div>
 
                 <div className="w-px h-10 bg-white/60" />
-                <div onClick={() => navigate('/impact-hub')} className="flex flex-col cursor-pointer">
-                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest mb-1">GFP</p>
-                  <p className="text-sm sm:text-base font-semibold text-white leading-none">{rewardPoints}</p>
+                <div onClick={() => navigate('/impact-hub')} className="flex flex-col items-center cursor-pointer">
+                  <p className="text-sm sm:text-base font-semibold text-white leading-none text-center mb-1">{rewardPoints}</p>
+                  <p className="text-[11px] font-semibold text-emerald-300 capitalize tracking-widest flex items-center gap-1">
+                    <Leaf className="w-3 h-3" />Green Points
+                  </p>
                 </div>
 
 
