@@ -46,7 +46,7 @@ export default function MyRFQs() {
           quantity: `${r.requested_weight} ${r.weight_unit || 'kg'}`,
           targetPrice: r.target_price?.toString() || '0',
           location: r.pickup_area,
-          status: r.status === 'open' ? 'pending' : r.status === 'fulfilled' ? 'accepted' : r.status,
+          status: r.status === 'open' ? 'pending' : r.status === 'fulfilled' ? 'accepted' : r.status === 'completed' ? 'completed' : r.status,
           createdAt: new Date(r.created_at).toLocaleString(),
           bidsCount: r.rfq_offers?.[0]?.count || 0,
           description: r.notes || ''
@@ -137,7 +137,7 @@ export default function MyRFQs() {
 
       {/* ── CONTENT AREA ── */}
       <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 space-y-px pt-[calc(env(safe-area-inset-top,1rem)+5.85rem)] bg-slate-100 dark:bg-slate-800">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           {filteredRFQs.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
