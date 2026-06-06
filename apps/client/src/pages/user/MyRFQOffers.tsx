@@ -8,14 +8,20 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@klinflow/core/lib/supabaseClient';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 
 
 
 export default function MyRFQOffers() {
   const navigate = useNavigate();
   const profile = useAuthStore(s => s.profile);
+  const { materialPrices, fetchMaterialPrices } = useServiceStore();
   const [filter, setFilter] = useState<'pending' | 'accepted' | 'completed' | 'declined'>('pending');
   const [quotes, setQuotes] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchMaterialPrices();
+  }, [fetchMaterialPrices]);
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -46,7 +52,8 @@ export default function MyRFQOffers() {
             id: o.id,
             rfqId: o.rfq_id,
             company: o.rfq?.buyer?.company_name || o.rfq?.buyer?.name || 'Unknown Buyer',
-            material: getSubcategoryLabel(o.rfq?.category, o.rfq?.material_grade) || o.rfq?.material_grade,
+            material: o.rfq?.material_grade,
+            category: o.rfq?.category,
             location: o.rfq?.pickup_area || '',
             quantity: `${o.offered_weight}kg`,
             quotedPrice: o.offered_price,
@@ -168,7 +175,7 @@ export default function MyRFQOffers() {
                     {/* Row 1: Material Name + Status Badge */}
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="text-[15px] font-black text-slate-900 dark:text-white capitalize leading-none truncate max-w-[200px]">
-                        {quote.material}
+                        {materialPrices?.find(m => m.id === quote.material)?.material_name || getSubcategoryLabel(quote.category, quote.material) || quote.material}
                       </h4>
                       <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border}`}>
                         <StatusIcon className="w-3 h-3" />

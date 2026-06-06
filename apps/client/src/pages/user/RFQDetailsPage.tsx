@@ -5,6 +5,7 @@ import { ArrowLeft, Clock, Scale, Coins, Truck, Camera, Trash2, CheckCircle2 } f
 import { toast } from 'sonner';
 import { supabase } from '@klinflow/supabase';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { compressImage } from '@klinflow/core/utils/imageUtils';
 
 const parseTime = (timeStr: string) => {
@@ -31,6 +32,7 @@ export default function RFQDetailsPage() {
   const [availableQty, setAvailableQty] = useState('');
   const [shippingDate, setShippingDate] = useState('');
   const [shippingTime, setShippingTime] = useState('');
+  const [sellerNotes, setSellerNotes] = useState('');
   const [proofFiles, setProofFiles] = useState<File[]>([]);
   const [proofImages, setProofImages] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -41,6 +43,18 @@ export default function RFQDetailsPage() {
     const fetchRFQ = async () => {
       if (!profile?.id) return;
       try {
+        let storeMaterials = useServiceStore.getState().materialPrices;
+        if (!storeMaterials || storeMaterials.length === 0) {
+          await useServiceStore.getState().fetchMaterialPrices();
+          storeMaterials = useServiceStore.getState().materialPrices;
+        }
+
+        let storeCategories = useServiceStore.getState().categories;
+        if (!storeCategories || storeCategories.length === 0) {
+          await useServiceStore.getState().fetchCategories();
+          storeCategories = useServiceStore.getState().categories;
+        }
+
         const response = await supabase
           .from('rfqs')
           .select(`
@@ -70,17 +84,27 @@ export default function RFQDetailsPage() {
           if (data.delivery_method === 'agent_pickup') deliveryText = 'Agent Pickup';
           else if (data.delivery_method === 'self_drop') deliveryText = 'Self Drop-off';
 
+          // Resolve material ID to name
+          const storeMaterials = useServiceStore.getState().materialPrices;
+          const materialRecord = storeMaterials.find(m => m.id === data.material_grade);
+          const materialName = materialRecord ? materialRecord.material_name : data.material_grade;
+
+          // Resolve category ID to name
+          const storeCategories = useServiceStore.getState().categories;
+          const categoryRecord = storeCategories.find(c => c.id === data.category);
+          const categoryName = categoryRecord ? categoryRecord.label : data.category;
+
           setRfq({
             id: data.id,
             buyer_id: data.buyer_id, // Needed for inserting offer
             company: data.buyer?.company_name || data.buyer?.name || 'Unknown Buyer',
-            material: data.material_grade,
+            material: materialName,
             quantity: `${data.requested_weight}kg`,
             price: data.target_price || 0,
             deadline: deadlineText,
             verified: true,
             region: data.pickup_area,
-            category: data.category,
+            category: categoryName,
             delivery: deliveryText,
             offersSubmitted: data.rfq_offers?.[0]?.count || 0,
             notes: data.notes || null,
@@ -210,6 +234,7 @@ export default function RFQDetailsPage() {
         offered_weight: parseFloat(availableQty),
         offered_price: parseFloat(bidPrice),
         images: uploadedUrls,
+        notes: sellerNotes || null,
         earliest_shipping_date: isNaN(earliestShippingDateObj.getTime()) ? null : earliestShippingDateObj.toISOString(),
         status: 'pending'
       };
@@ -385,7 +410,7 @@ export default function RFQDetailsPage() {
               Your quote has been successfully sent to the buyer. You can track its status in your Submitted Quotes dashboard.
             </p>
             <button
-              onClick={() => navigate('/quotes')}
+              onClick={() => navigate('/my-rfq-offers')}
               className="mt-2 w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all"
             >
               View My Quotes
@@ -450,6 +475,16 @@ export default function RFQDetailsPage() {
                     required
                   />
                 </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Additional Notes</label>
+                <textarea
+                  value={sellerNotes}
+                  onChange={(e) => setSellerNotes(e.target.value)}
+                  placeholder="Any special instructions, material conditions, or details..."
+                  className="w-full px-4 py-3 text-sm font-medium rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all min-h-[100px] resize-none"
+                />
               </div>
 
               <div className="flex flex-col gap-1.5">

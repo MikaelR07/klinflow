@@ -17,18 +17,19 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { useNotificationStore, NOTIFICATION_TYPES } from '@klinflow/core/stores/notificationStore';
-import { WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@klinflow/supabase';
-import { compressImage, getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { compressImage } from '@klinflow/core/utils/imageUtils';
 import { OptimizedImage } from '@klinflow/ui';
 
 export default function CreateRFQPage() {
   const navigate = useNavigate();
   const { profile } = useAuthStore();
   const { agentConfig, fetchAgentConfig } = useAgentStore();
+  const { categories, materialPrices, fetchCategories, fetchMaterialPrices } = useServiceStore();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stepError, setStepError] = useState('');
@@ -48,12 +49,14 @@ export default function CreateRFQPage() {
 
   useEffect(() => {
     fetchAgentConfig();
-  }, [fetchAgentConfig]);
+    fetchCategories();
+    fetchMaterialPrices();
+  }, [fetchAgentConfig, fetchCategories, fetchMaterialPrices]);
 
   const activeCategories = useMemo(() => {
     const rawMaterials = agentConfig?.accepted_materials;
     if (!rawMaterials || !Array.isArray(rawMaterials)) {
-      return WASTE_CATEGORIES;
+      return categories;
     }
 
     const acceptedSlugs = rawMaterials.map(item => {
@@ -61,17 +64,17 @@ export default function CreateRFQPage() {
       if (typeof item === 'string') return item.toLowerCase();
       if (typeof item === 'object') {
         const obj = item as any;
-        return (obj.id || obj.name || '').toLowerCase();
+        return (obj.slug || obj.id || obj.name || '').toLowerCase();
       }
       return '';
     }).filter(Boolean);
 
     if (acceptedSlugs.length === 0) {
-      return WASTE_CATEGORIES;
+      return categories;
     }
 
-    return WASTE_CATEGORIES.filter(cat => acceptedSlugs.includes(cat.id));
-  }, [agentConfig]);
+    return categories.filter(cat => acceptedSlugs.includes(cat.slug) || acceptedSlugs.includes(cat.id));
+  }, [agentConfig, categories]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -160,8 +163,8 @@ export default function CreateRFQPage() {
         uploadedUrls.push(publicUrl);
       }
 
-      const cat = WASTE_CATEGORIES.find(c => c.id === formData.category);
-      const sub = cat?.subcategories.find(s => s.label === formData.materialName);
+      const cat = activeCategories.find(c => c.id === formData.category);
+      const sub = materialPrices.find(s => s.material_name === formData.materialName && (s.category === cat?.label || s.category === cat?.slug || s.category === cat?.id));
       const materialId = sub ? sub.id : formData.materialName;
 
       const parseTime = (timeStr: string) => {
@@ -216,9 +219,15 @@ export default function CreateRFQPage() {
   };
 
   const subcategories = useMemo(() => {
-    const cat = WASTE_CATEGORIES.find(c => c.id === formData.category);
-    return cat ? cat.subcategories.map(sub => sub.label) : [];
-  }, [formData.category]);
+    const cat = activeCategories.find(c => c.id === formData.category);
+    if (!cat) return [];
+    
+    // DB stores parent_category in 'category' field inside materialPrices
+    // It often stores the label (e.g. 'Plastic') or slug
+    return materialPrices
+      .filter(m => m.category === cat.label || m.category === cat.slug || m.category === cat.id)
+      .map(m => m.material_name);
+  }, [formData.category, activeCategories, materialPrices]);
 
   const stepTitles = [
     "Material Details",

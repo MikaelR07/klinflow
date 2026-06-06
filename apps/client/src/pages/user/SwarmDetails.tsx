@@ -279,7 +279,7 @@ export default function SwarmDetails() {
                         </div>
                       )}
                       <div>
-                        <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize tracking-tight">{p.profiles?.name || 'Anonymous'}</p>
+                        <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize tracking-tight">{p.profiles?.name || 'Creator'}</p>
                         <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
                           {p.status} {p.description && '• With notes'}
                         </p>

@@ -33,6 +33,7 @@ const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
 const CreateRFQPage = lazy(() => import('./pages/agent/CreateRFQPage'));
 const MyRFQs = lazy(() => import('./pages/agent/MyRFQs'));
 const RFQDetailsPage = lazy(() => import('./pages/agent/RFQDetailsPage'));
+const RFQOfferDetailsPage = lazy(() => import('./pages/agent/RFQOfferDetailsPage'));
 const ActivePickupsPage = lazy(() => import('./pages/agent/ActivePickupsPage'));
 const ActivePickupDetailsPage = lazy(() => import('./pages/agent/ActivePickupDetailsPage'));
 const NavigatePickupPage = lazy(() => import('./pages/agent/NavigatePickupPage'));
@@ -185,10 +186,12 @@ export default function App() {
 
         <Route element={<ProtectedLayout />}>
           <Route path="/hygenex" element={<HygeneXPage />} />
+          {/* Full-screen pages without layout paddings */}
+          <Route path="/pickups/navigate/:id" element={<NavigatePickupPage />} />
+          <Route path="/jobs/navigate/:id" element={<NavigateJobPage />} />
           <Route element={<DynamicRoleLayout />}>
             <Route path="/" element={<RoleBasedIndex />} />
             <Route path="/jobs" element={<AvailableJobs />} />
-            <Route path="/jobs/navigate/:id" element={<NavigateJobPage />} />
             <Route path="/routes" element={<MyRoutes />} />
             <Route path="/warehouse" element={<AgentWarehouse />} />
             <Route path="/warehouse/sell" element={<AgentSellStock />} />
@@ -197,8 +200,8 @@ export default function App() {
             <Route path="/rfq/create" element={<CreateRFQPage />} />
             <Route path="/rfqs" element={<MyRFQs />} />
             <Route path="/rfqs/:rfqId" element={<RFQDetailsPage />} />
+            <Route path="/rfqs/:rfqId/offers/:offerId" element={<RFQOfferDetailsPage />} />
             <Route path="/pickups" element={<ActivePickupsPage />} />
-            <Route path="/pickups/navigate/:id" element={<NavigatePickupPage />} />
             <Route path="/pickups/:id" element={<ActivePickupDetailsPage />} />
             <Route path="/trades" element={<MyTrades />} />
             <Route path="/earnings" element={<EarningsPage />} />

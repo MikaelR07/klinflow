@@ -2,24 +2,25 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Clock, Scale, Coins, CheckCircle2, XCircle,
-  MapPin, Package, MessageSquare, ShieldCheck
+  MapPin, Package, MessageSquare, ShieldCheck, Timer
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@klinflow/supabase';
-import { WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
-
-const getSubcategoryLabel = (catId: string, subId: string) => {
-  const cat = WASTE_CATEGORIES.find(c => c.id === catId);
-  const sub = cat?.subcategories.find(s => s.id === subId);
-  return sub ? sub.label : subId;
-};
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
 
 export default function RFQDetailsPage() {
   const { rfqId } = useParams();
   const navigate = useNavigate();
+  const { materialPrices, fetchMaterialPrices, categories, fetchCategories } = useServiceStore();
   const [loading, setLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  useEffect(() => {
+    fetchMaterialPrices();
+    fetchCategories();
+  }, [fetchMaterialPrices, fetchCategories]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const scrollLeft = e.currentTarget.scrollLeft;
@@ -32,12 +33,14 @@ export default function RFQDetailsPage() {
 
   const [rfq, setRfq] = useState<any>({
     id: '',
-    material: '',
+    materialId: '',
+    categoryId: '',
     quantity: '',
     targetPrice: '0',
     location: '',
     status: 'pending',
     createdAt: '',
+    deadline: '',
     description: '',
     images: [],
     bids: []
@@ -79,12 +82,14 @@ export default function RFQDetailsPage() {
 
       setRfq({
         id: rfqData.id,
-        material: getSubcategoryLabel(rfqData.category, rfqData.material_grade),
+        materialId: rfqData.material_grade,
+        categoryId: rfqData.category,
         quantity: `${rfqData.requested_weight} ${rfqData.weight_unit || 'kg'}`,
         targetPrice: rfqData.target_price?.toString() || '0',
         location: rfqData.pickup_area,
         status: rfqData.status === 'open' ? 'pending' : rfqData.status,
         createdAt: new Date(rfqData.created_at).toLocaleString(),
+        deadline: rfqData.deadline ? new Date(rfqData.deadline).toLocaleString() : 'N/A',
         description: rfqData.notes || '',
         images: rfqData.images || [],
         bids
@@ -113,62 +118,7 @@ export default function RFQDetailsPage() {
     }
   }, [rfqId]);
 
-  const handleAcceptBid = async (bidId: string, sellerName: string) => {
-    try {
-      // Call the atomic RPC — this accepts the offer, rejects others,
-      // marks the RFQ fulfilled, generates a verification code,
-      // and creates the fulfillment_order in one transaction.
-      const { data: fulfillmentId, error } = await supabase
-        .rpc('accept_rfq_offer_v2', {
-          p_offer_id: bidId,
-          p_delivery_method: 'agent_pickup', // default per user preference
-          p_pickup_address: rfq.location || null,
-          p_dropoff_address: null
-        });
 
-      if (error) {
-        console.error('RPC error:', error);
-        toast.error(error.message || 'Failed to accept offer');
-        return;
-      }
-
-      // Optimistic local update
-      setRfq((prev: any) => ({
-        ...prev,
-        status: 'accepted',
-        bids: prev.bids.map((b: any) =>
-          b.id === bidId ? { ...b, status: 'accepted' } : { ...b, status: 'declined' }
-        )
-      }));
-      toast.success(`Accepted quote from ${sellerName}! Fulfillment order created 🤝`);
-
-      // Navigate to the active pickups page after a short delay
-      setTimeout(() => navigate('/pickups'), 1500);
-    } catch (err: any) {
-      console.error('Accept bid error:', err);
-      toast.error('Something went wrong accepting this offer');
-    }
-  };
-
-  const handleDeclineBid = async (bidId: string, sellerName: string) => {
-    const { error } = await supabase
-      .from('rfq_offers')
-      .update({ status: 'rejected' })
-      .eq('id', bidId);
-
-    if (error) {
-      toast.error('Failed to decline offer');
-      return;
-    }
-
-    setRfq((prev: any) => ({
-      ...prev,
-      bids: prev.bids.map((b: any) =>
-        b.id === bidId ? { ...b, status: 'declined' } : b
-      )
-    }));
-    toast.error(`Declined quote from ${sellerName}`);
-  };
 
   const handleCancelRFQ = async () => {
     const { error } = await supabase
@@ -197,19 +147,21 @@ export default function RFQDetailsPage() {
     );
   }
 
-  const statusConfig = {
+  const statusConfigs: Record<string, { icon: typeof Clock; color: string; bg: string; border: string; label: string }> = {
     pending: { icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10', border: 'border-amber-200 dark:border-amber-500/20', label: 'Bidding Open' },
-    accepted: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Fulfilled' },
+    accepted: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Accepted' },
+    fulfilled: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Accepted' },
     closed: { icon: XCircle, color: 'text-slate-500', bg: 'bg-slate-50 dark:bg-slate-500/10', border: 'border-slate-200 dark:border-slate-500/20', label: 'Closed' },
     cancelled: { icon: XCircle, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10', border: 'border-rose-200 dark:border-rose-500/20', label: 'Cancelled' },
-  }[rfq.status as 'pending' | 'accepted' | 'closed' | 'cancelled'];
+  };
 
+  const statusConfig = statusConfigs[rfq.status] || statusConfigs.pending;
   const StatusIcon = statusConfig.icon;
 
   return (
     <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-16 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90  border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
           <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-amber-500 transition-colors" />
@@ -226,7 +178,7 @@ export default function RFQDetailsPage() {
       <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
         {/* ── IMAGE CAROUSEL ── */}
         {rfq.images && rfq.images.length > 0 && (
-          <div className="relative h-[250px] w-full overflow-hidden rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm bg-slate-900">
+          <div className="relative h-[250px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800  bg-slate-900">
             <div
               onScroll={handleScroll}
               className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
@@ -235,7 +187,7 @@ export default function RFQDetailsPage() {
                 <div key={index} className="w-full h-full shrink-0 snap-center">
                   <img
                     src={url}
-                    alt={`${rfq.material} sample ${index + 1}`}
+                    alt={`${materialPrices?.find(m => m.id === rfq.materialId)?.material_name || getSubcategoryLabel(rfq.categoryId, rfq.materialId) || rfq.materialId} sample ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -266,11 +218,13 @@ export default function RFQDetailsPage() {
         )}
 
         {/* ── RFQ SPECIFICATIONS CARD ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Requested</p>
-              <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize leading-tight">{rfq.material}</h2>
+              <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize leading-tight">
+                {materialPrices?.find(m => m.id === rfq.materialId)?.material_name || getSubcategoryLabel(rfq.categoryId, rfq.materialId) || rfq.materialId}
+              </h2>
             </div>
             <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border}`}>
               <StatusIcon className="w-3.5 h-3.5" />
@@ -313,6 +267,16 @@ export default function RFQDetailsPage() {
                 <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.createdAt}</span>
               </div>
             </div>
+
+            {rfq.deadline && rfq.deadline !== 'N/A' && (
+              <div className="flex items-start gap-3">
+                <Timer className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Deadline</p>
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.deadline}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {rfq.description && (
@@ -328,7 +292,7 @@ export default function RFQDetailsPage() {
           {rfq.status === 'pending' && (
             <button
               onClick={handleCancelRFQ}
-              className="w-full mt-2 py-3.5 bg-rose-50 dark:bg-rose-900/10 text-rose-600 hover:bg-rose-100/50 dark:hover:bg-rose-950/20 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
+              className="w-full mt-2 py-3.5 bg-rose-600  text-white hover:bg-rose-700 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
             >
               Close / Cancel RFQ
             </button>
@@ -355,7 +319,7 @@ export default function RFQDetailsPage() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800/50 rounded-3xl p-8 text-center"
+                  className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-800/50 rounded-xl p-8 text-center"
                 >
                   <div className="w-12 h-12 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mx-auto mb-3 animate-pulse">
                     <Clock className="w-6 h-6 text-slate-400" />
@@ -378,7 +342,8 @@ export default function RFQDetailsPage() {
                       layout
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`bg-white dark:bg-slate-900 border rounded-3xl p-5 space-y-4 transition-all duration-300 ${isAccepted
+                      onClick={() => navigate(`/rfqs/${rfqId}/offers/${bid.id}`)}
+                      className={`group bg-white dark:bg-slate-900 border rounded-xl p-5 space-y-4 transition-all duration-300 cursor-pointer hover:border-amber-400 dark:hover:border-amber-600 active:scale-[0.98] ${isAccepted
                         ? 'border-emerald-500 shadow-lg shadow-emerald-500/5'
                         : isDeclined
                           ? 'opacity-50 border-slate-200 dark:border-slate-850'
@@ -401,7 +366,7 @@ export default function RFQDetailsPage() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quoted Price</p>
+                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offered Price</p>
                           <p className="text-base font-black text-emerald-600 leading-none">
                             KSh {bid.price}<span className="text-[9px] text-emerald-600/70">/kg</span>
                           </p>
@@ -417,19 +382,10 @@ export default function RFQDetailsPage() {
 
                       {/* Actions */}
                       {rfq.status === 'pending' && bid.status === 'pending' && (
-                        <div className="flex gap-2.5 pt-1">
-                          <button
-                            onClick={() => handleDeclineBid(bid.id, bid.sellerName)}
-                            className="flex-1 py-3 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs uppercase tracking-widest border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-950 active:scale-98 transition-all"
-                          >
-                            Decline
-                          </button>
-                          <button
-                            onClick={() => handleAcceptBid(bid.id, bid.sellerName)}
-                            className="flex-1 py-3 bg-emerald-600 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-md shadow-emerald-500/10 hover:bg-emerald-700 active:scale-98 transition-all flex items-center justify-center gap-1.5"
-                          >
-                            <CheckCircle2 className="w-4 h-4" /> Accept Offer
-                          </button>
+                        <div className="flex justify-end pt-1">
+                          <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest flex items-center gap-1 group-hover:text-amber-600 transition-colors">
+                            View Offer Details <ArrowLeft className="w-3 h-3 rotate-180" />
+                          </span>
                         </div>
                       )}
 

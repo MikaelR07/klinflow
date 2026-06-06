@@ -7,6 +7,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@klinflow/supabase';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
 import { toast } from 'sonner';
 
@@ -19,8 +20,13 @@ const getSubcategoryLabel = (catId: string, subId: string) => {
 export default function MyRFQs() {
   const navigate = useNavigate();
   const profile = useAuthStore(s => s.profile);
-  const [filter, setFilter] = useState<'pending' | 'accepted' | 'closed' | 'cancelled'>('pending');
+  const { materialPrices, fetchMaterialPrices } = useServiceStore();
+  const [filter, setFilter] = useState<'pending' | 'accepted' | 'completed' | 'closed'>('pending');
   const [rfqs, setRfqs] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchMaterialPrices();
+  }, [fetchMaterialPrices]);
 
   useEffect(() => {
     const fetchRFQs = async () => {
@@ -35,11 +41,12 @@ export default function MyRFQs() {
       if (data) {
         const mapped = data.map((r: any) => ({
           id: r.id,
-          material: getSubcategoryLabel(r.category, r.material_grade) || r.material_grade,
+          material: r.material_grade,
+          category: r.category,
           quantity: `${r.requested_weight} ${r.weight_unit || 'kg'}`,
           targetPrice: r.target_price?.toString() || '0',
           location: r.pickup_area,
-          status: r.status === 'open' ? 'pending' : r.status,
+          status: r.status === 'open' ? 'pending' : r.status === 'fulfilled' ? 'accepted' : r.status,
           createdAt: new Date(r.created_at).toLocaleString(),
           bidsCount: r.rfq_offers?.[0]?.count || 0,
           description: r.notes || ''
@@ -69,7 +76,10 @@ export default function MyRFQs() {
     }
   }, [profile?.id]);
 
-  const filteredRFQs = rfqs.filter(rfq => rfq.status === filter);
+  const filteredRFQs = rfqs.filter(rfq => {
+    if (filter === 'closed') return rfq.status === 'closed' || rfq.status === 'cancelled';
+    return rfq.status === filter;
+  });
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
@@ -91,13 +101,16 @@ export default function MyRFQs() {
 
         {/* Status Filters (Exactly styled like seller pipeline page) */}
         <div className="flex px-4 pb-3 gap-1.5 overflow-x-auto no-scrollbar">
-          {(['pending', 'accepted', 'closed', 'cancelled'] as const).map((statusOption) => {
-            const count = rfqs.filter(q => q.status === statusOption).length;
+          {(['pending', 'accepted', 'completed', 'closed'] as const).map((statusOption) => {
+            const count = rfqs.filter(q => {
+              if (statusOption === 'closed') return q.status === 'closed' || q.status === 'cancelled';
+              return q.status === statusOption;
+            }).length;
             const labelConfig = {
               pending: 'Pending',
-              accepted: 'Fulfilled',
-              closed: 'Closed',
-              cancelled: 'Cancelled'
+              accepted: 'Accepted',
+              completed: 'Completed',
+              closed: 'Closed'
             }[statusOption];
 
             return (
@@ -142,10 +155,11 @@ export default function MyRFQs() {
             filteredRFQs.map((rfq) => {
               const statusConfig = {
                 pending: { icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10', border: 'border-amber-200 dark:border-amber-500/20', label: 'Bidding Open' },
-                accepted: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Fulfilled' },
+                accepted: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Accepted' },
+                completed: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Completed' },
                 closed: { icon: XCircle, color: 'text-slate-500', bg: 'bg-slate-50 dark:bg-slate-500/10', border: 'border-slate-200 dark:border-slate-500/20', label: 'Closed' },
                 cancelled: { icon: XCircle, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10', border: 'border-rose-200 dark:border-rose-500/20', label: 'Cancelled' },
-              }[rfq.status as 'pending' | 'accepted' | 'closed' | 'cancelled'];
+              }[rfq.status as 'pending' | 'accepted' | 'completed' | 'closed' | 'cancelled'];
 
               const StatusIcon = statusConfig.icon;
 
@@ -167,7 +181,7 @@ export default function MyRFQs() {
                     {/* Row 1: Material Name + Status Badge */}
                     <div className="flex items-center justify-between mb-3">
                       <h4 className="text-[15px] font-black text-slate-900 dark:text-white capitalize leading-none truncate max-w-[200px]">
-                        {rfq.material}
+                        {materialPrices?.find(m => m.id === rfq.material)?.material_name || getSubcategoryLabel(rfq.category, rfq.material) || rfq.material}
                       </h4>
                       <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border}`}>
                         <StatusIcon className="w-3 h-3" />

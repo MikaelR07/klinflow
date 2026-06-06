@@ -41,6 +41,7 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 import { supabase } from '@klinflow/supabase';
+import { walletService } from '@klinflow/core';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { OptimizedImage } from '@klinflow/ui';
 import { SkeletonCard } from '@klinflow/ui/components/Skeletons';
@@ -100,6 +101,7 @@ export default function SellerHome() {
 
   const [isWithdrawing, setIsWithdrawing] = useState(false);
   const [showPushPrompt, setShowPushPrompt] = useState(false);
+  const [cashBalance, setCashBalance] = useState(0);
 
   useEffect(() => {
     fetchBookings();
@@ -111,6 +113,12 @@ export default function SellerHome() {
     if (profile?.id) {
       fetchNotifications(profile.id, role);
       subscribeToProfileChanges(profile.id);
+      // Fetch real wallet balance from user_wallets (includes RFQ payouts)
+      walletService.getWalletDetails(profile.id).then(data => {
+        if (data) {
+          setCashBalance(Number(data.cash_balance || 0));
+        }
+      });
       // Realtime subscription handled globally by App.tsx
     }
 
@@ -255,7 +263,7 @@ export default function SellerHome() {
                     <Wallet className="w-3 h-3" /> Seller Wallet
                   </p>
                   <h2 className="text-2xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
-                    KSh {walletBalance.toLocaleString()}
+                    KSh {cashBalance.toLocaleString()}
                   </h2>
 
                 </div>

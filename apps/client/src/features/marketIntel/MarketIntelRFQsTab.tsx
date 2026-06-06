@@ -37,7 +37,7 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
         </div>
       ) : (
         filteredRFQs.map((rfq) => (
-          <div key={rfq.id} className="bg-white dark:bg-slate-900 rounded-[1rem] px-4 py-3.5 border border-slate-100 dark:border-slate-800 group hover:border-primary/30 transition-all">
+          <div key={rfq.id} className="bg-white dark:bg-slate-900 -mx-1.5 px-4 py-4 border-y border-slate-100 dark:border-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
             {/* Row 1: Company, Material, Price */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 min-w-0 flex-1">

@@ -3,6 +3,8 @@
  * Extracted from AgentHome.tsx
  */
 import { ChevronRight, Package, MapPin, Clock, Navigation, BarChart2, ArrowRight } from 'lucide-react';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
 import type { AgentPickupOrder } from './agentHome.types';
 
 interface AgentHomeActivePickupProps {
@@ -10,7 +12,25 @@ interface AgentHomeActivePickupProps {
   navigate: (path: string) => void;
 }
 
+import { useEffect } from 'react';
+
 export default function AgentHomeActivePickup({ activePickup, navigate }: AgentHomeActivePickupProps) {
+  const { materialPrices, fetchMaterialPrices, categories, fetchCategories } = useServiceStore();
+
+  useEffect(() => {
+    fetchMaterialPrices();
+    fetchCategories();
+  }, [fetchMaterialPrices, fetchCategories]);
+
+  const resolveMaterialName = (rfq: any) => {
+    if (!rfq) return 'Collect materials';
+    return materialPrices?.find(m => m.id === rfq.material_grade)?.material_name
+      || getSubcategoryLabel(rfq.category, rfq.material_grade)
+      || categories?.find(c => c.id === rfq.category)?.label
+      || rfq.category
+      || 'Collect materials';
+  };
+
   return (
     <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-700">
       <div className="flex items-center justify-between mb-3 mt-1 px-1">
@@ -30,14 +50,14 @@ export default function AgentHomeActivePickup({ activePickup, navigate }: AgentH
       </div>
 
       {activePickup ? (
-        <button onClick={() => navigate(`/pickups`)} className="w-full bg-slate-100 dark:bg-slate-800/40 border border-slate-300 dark:border-slate-800 rounded-xl p-5 flex items-center justify-between group active:scale-[0.98] transition-all mb-1">
+        <button onClick={() => navigate(`/pickups`)} className="w-full bg-slate-100 dark:bg-slate-800/40 border border-slate-300 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between group active:scale-[0.98] transition-all mb-1">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
               <Package className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
             <div className="text-left">
               <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">Pickup #{activePickup.id.slice(0, 8).toUpperCase()}</h4>
-              <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 capitalize">{activePickup.rfq?.category || 'Collect materials'}</p>
+              <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 capitalize">{resolveMaterialName(activePickup.rfq)}</p>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 truncate max-w-[100px]">
                   <MapPin className="w-3 h-3 shrink-0" /> {activePickup.pickup_address || 'TBD'}

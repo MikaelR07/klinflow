@@ -244,17 +244,24 @@ BEGIN
     INSERT INTO public.fulfillment_orders (
         rfq_id, proposal_id, buyer_id, seller_id, 
         organization_id, assigned_agent_id,
-        delivery_method, pickup_address, dropoff_address, verification_code
+        delivery_method, pickup_address, dropoff_address, verification_code,
+        status
     ) VALUES (
         v_rfq_id, p_offer_id, v_buyer_id, v_seller_id,
         CASE WHEN v_buyer_account_type = 'company_admin' THEN v_buyer_id ELSE NULL END,
         CASE WHEN v_buyer_account_type = 'independent' THEN v_buyer_id ELSE NULL END,
-        p_delivery_method, p_pickup_address, p_dropoff_address, v_verification_code
+        p_delivery_method, p_pickup_address, p_dropoff_address, v_verification_code,
+        CASE WHEN v_buyer_account_type = 'independent' THEN 'agent_assigned'::public.fulfillment_status_enum ELSE 'pending_coordination'::public.fulfillment_status_enum END
     ) RETURNING id INTO v_fulfillment_id;
 
     -- 6. Insert initial history
     INSERT INTO public.fulfillment_status_history (fulfillment_id, status, actor_id, notes)
-    VALUES (v_fulfillment_id, 'pending_coordination', v_buyer_id, 'Fulfillment order created upon acceptance.');
+    VALUES (
+        v_fulfillment_id, 
+        CASE WHEN v_buyer_account_type = 'independent' THEN 'agent_assigned'::public.fulfillment_status_enum ELSE 'pending_coordination'::public.fulfillment_status_enum END, 
+        v_buyer_id, 
+        'Fulfillment order created upon acceptance.'
+    );
 
     RETURN v_fulfillment_id;
 END;

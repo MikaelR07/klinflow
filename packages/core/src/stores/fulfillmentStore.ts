@@ -177,15 +177,13 @@ export const useFulfillmentStore = create<FulfillmentStore>()(
       });
       if (verifyErr) throw verifyErr;
 
-      // 3. Update Order and Status to completed (skipping in_transit for simplicity in this flow)
-      const { error: updateErr } = await supabase.from('fulfillment_orders').update({
-        status: 'completed',
-        verification_status: 'verified',
-        payment_status: 'released',
-        verified_weight: weight,
-        quality_grade: grade,
-        contamination_level: contamination
-      }).eq('id', fulfillmentId);
+      // 3. Update Order and Wallet using RPC
+      const { data: payoutData, error: updateErr } = await supabase.rpc('process_rfq_payout', {
+        p_fulfillment_id: fulfillmentId,
+        p_weight_kg: Number(weight),
+        p_grade: grade,
+        p_contamination: parseInt(String(contamination), 10)
+      });
       
       if (updateErr) throw updateErr;
       

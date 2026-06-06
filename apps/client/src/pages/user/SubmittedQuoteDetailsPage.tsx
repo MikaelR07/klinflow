@@ -1,21 +1,35 @@
 import { OptimizedImage } from "@klinflow/ui";
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Clock, Scale, Coins, Truck, CheckCircle2, XCircle, MapPin, Package, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Clock, Scale, Coins, Truck, CheckCircle2, XCircle, MapPin, Package, MessageSquare, Pencil, Trash2, X, Save } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@klinflow/core/lib/supabaseClient';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 
 export default function SubmittedQuoteDetailsPage() {
   const { quoteId } = useParams();
   const navigate = useNavigate();
   const profile = useAuthStore(s => s.profile);
+  const { materialPrices, fetchMaterialPrices, categories, fetchCategories } = useServiceStore();
 
   const [quote, setQuote] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchMaterialPrices();
+    fetchCategories();
+  }, [fetchMaterialPrices, fetchCategories]);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  // Edit state
+  const [isEditing, setIsEditing] = useState(false);
+  const [editPrice, setEditPrice] = useState('');
+  const [editWeight, setEditWeight] = useState('');
+  const [editNotes, setEditNotes] = useState('');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchQuoteDetails = async () => {
@@ -28,21 +42,32 @@ export default function SubmittedQuoteDetailsPage() {
           rfq:rfqs(
             material_grade, category, pickup_area, target_price,
             buyer:profiles!buyer_id(company_name, name)
-          )
+          ),
+          fulfillment_orders(status)
         `)
         .eq('id', quoteId)
         .single();
 
       if (data) {
+        let computedStatus = data.status;
+        if (computedStatus === 'accepted' && data.fulfillment_orders?.[0]) {
+          const fulfillmentStatus = data.fulfillment_orders[0].status;
+          if (['completed', 'pickup_completed', 'delivered'].includes(fulfillmentStatus)) {
+            computedStatus = 'completed';
+          }
+        }
+        
         setQuote({
           id: data.id,
           rfqId: data.rfq_id,
           company: data.rfq?.buyer?.company_name || data.rfq?.buyer?.name || 'Unknown Buyer',
-          material: getSubcategoryLabel(data.rfq?.category, data.rfq?.material_grade) || data.rfq?.material_grade,
+          materialId: data.rfq?.material_grade,
+          categoryId: data.rfq?.category,
           location: data.rfq?.pickup_area || '',
           quantity: `${data.offered_weight}kg`,
+          rawWeight: data.offered_weight,
           quotedPrice: data.offered_price,
-          status: data.status,
+          status: computedStatus,
           submittedAt: new Date(data.created_at).toLocaleString(),
           clientTargetPrice: data.rfq?.target_price || 0,
           message: data.notes || '',
@@ -53,19 +78,19 @@ export default function SubmittedQuoteDetailsPage() {
     };
 
     fetchQuoteDetails();
-    
+
     // Realtime updates for status
     const channel = supabase.channel(`quote_detail_${quoteId}`)
-      .on('postgres_changes', { 
-          event: 'UPDATE', 
-          schema: 'public', 
-          table: 'rfq_offers',
-          filter: `id=eq.${quoteId}` 
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'rfq_offers',
+        filter: `id=eq.${quoteId}`
       }, () => {
-          fetchQuoteDetails();
+        fetchQuoteDetails();
       })
       .subscribe();
-      
+
     return () => { supabase.removeChannel(channel); };
   }, [quoteId]);
 
@@ -84,31 +109,91 @@ export default function SubmittedQuoteDetailsPage() {
   const statusConfig = {
     pending: { icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10', border: 'border-amber-200 dark:border-amber-500/20', label: 'Pending Review' },
     accepted: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Offer Accepted' },
+    completed: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10', border: 'border-emerald-200 dark:border-emerald-500/20', label: 'Completed' },
     declined: { icon: XCircle, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10', border: 'border-rose-200 dark:border-rose-500/20', label: 'Offer Declined' },
-  }[quote.status as 'pending' | 'accepted' | 'declined'];
+  }[quote.status as 'pending' | 'accepted' | 'completed' | 'declined'];
   const StatusIcon = statusConfig.icon;
 
-  const handleRetract = () => {
-    toast.success('Quote retracted successfully');
+  const openEditModal = () => {
+    setEditPrice(quote.quotedPrice.toString());
+    setEditWeight(quote.rawWeight.toString());
+    setEditNotes(quote.message);
+    setIsEditing(true);
+  };
+
+  const handleSaveEdit = async () => {
+    const price = parseFloat(editPrice);
+    const weight = parseFloat(editWeight);
+
+    if (isNaN(price) || price <= 0) {
+      toast.error('Please enter a valid price');
+      return;
+    }
+    if (isNaN(weight) || weight <= 0) {
+      toast.error('Please enter a valid weight');
+      return;
+    }
+
+    setSaving(true);
+    const { error } = await supabase
+      .from('rfq_offers')
+      .update({
+        offered_price: price,
+        offered_weight: weight,
+        notes: editNotes || null,
+      })
+      .eq('id', quoteId);
+
+    setSaving(false);
+
+    if (error) {
+      toast.error('Failed to update quote');
+      return;
+    }
+
+    // Update local state
+    setQuote((prev: any) => ({
+      ...prev,
+      quotedPrice: price,
+      rawWeight: weight,
+      quantity: `${weight}kg`,
+      message: editNotes,
+    }));
+    setIsEditing(false);
+    toast.success('Quote updated successfully!');
+  };
+
+  const handleDelete = async () => {
+    const { error } = await supabase
+      .from('rfq_offers')
+      .delete()
+      .eq('id', quoteId);
+
+    if (error) {
+      toast.error('Failed to delete quote');
+      return;
+    }
+
+    toast.success('Quote deleted successfully');
     navigate(-1);
   };
 
   return (
-    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-12 transition-colors">
+    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-8 transition-colors">
       {/* ── IMAGE PREVIEW AT THE TOP (EDGE-TO-EDGE & TOP-COVERED) ── */}
-      <div 
+      <div
         className="relative h-[350px] w-full overflow-hidden border-b border-slate-200 dark:border-slate-800 shadow-sm bg-slate-900"
       >
         {quote.imageUrls && quote.imageUrls.length > 0 ? (
-          <div 
+          <div
             onScroll={handleScroll}
             className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
           >
             {quote.imageUrls.map((url: string, index: number) => (
               <div key={index} className="w-full h-full shrink-0 snap-center">
-                <OptimizedImage 
-                  src={url} 
-                  alt={`${quote.material} view ${index + 1}`}
+                <OptimizedImage
+                  src={url}
+                  alt={`${materialPrices?.find(m => m.id === quote.materialId)?.material_name || getSubcategoryLabel(quote.categoryId, quote.materialId) || quote.materialId} view ${index + 1}`}
                   className="w-full h-full object-cover"
                   wrapperClassName="w-full h-full"
                 />
@@ -123,9 +208,9 @@ export default function SubmittedQuoteDetailsPage() {
         )}
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
-        
-        <button 
-          onClick={() => navigate(-1)} 
+
+        <button
+          onClick={() => navigate(-1)}
           className="absolute top-[calc(env(safe-area-inset-top,1rem)+0.6rem)] left-4 w-10 h-10 rounded-2xl bg-black/25 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-md active:scale-95 transition-all z-10"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
@@ -141,11 +226,10 @@ export default function SubmittedQuoteDetailsPage() {
         {quote.imageUrls && quote.imageUrls.length > 1 && (
           <div className="absolute bottom-16 left-0 right-0 flex justify-center gap-1.5 z-10">
             {quote.imageUrls.map((_: any, index: number) => (
-              <div 
-                key={index} 
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'
-                }`}
+              <div
+                key={index}
+                className={`h-1.5 rounded-full transition-all duration-300 ${index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'
+                  }`}
               />
             ))}
           </div>
@@ -155,12 +239,14 @@ export default function SubmittedQuoteDetailsPage() {
 
       <div className="space-y-4 px-1.5 mt-2">
         {/* ── DETAIL CARD BELOW ── */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
           {/* Material & Status */}
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Submitted Quote</p>
-              <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize leading-tight">{quote.material}</h2>
+              <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize leading-tight">
+                {materialPrices?.find(m => m.id === quote.materialId)?.material_name || getSubcategoryLabel(quote.categoryId, quote.materialId) || quote.materialId}
+              </h2>
             </div>
             <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border}`}>
               <StatusIcon className="w-3 h-3" />
@@ -230,21 +316,21 @@ export default function SubmittedQuoteDetailsPage() {
         </div>
 
         {/* ── ACTION BUTTONS ── */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
           <div className="mb-2">
             <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">Actions</h4>
             <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">Manage your quote submission</p>
           </div>
 
-          {quote.status === 'accepted' && (
-            <button 
+          {['accepted', 'completed'].includes(quote.status) && (
+            <button
               onClick={async () => {
                 const { data } = await supabase
                   .from('fulfillment_orders')
                   .select('id')
                   .eq('proposal_id', quoteId)
                   .maybeSingle();
-                
+
                 if (data?.id) {
                   navigate(`/fulfillment/${data.id}`);
                 } else {
@@ -253,7 +339,7 @@ export default function SubmittedQuoteDetailsPage() {
               }}
               className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
-              View Delivery Schedule
+              {quote.status === 'completed' ? 'View Completed Progress' : 'View Delivery Schedule'}
             </button>
           )}
 
@@ -264,20 +350,84 @@ export default function SubmittedQuoteDetailsPage() {
           )}
 
           {quote.status === 'pending' && (
-            <div className="flex flex-col gap-3">
-              <button className="w-full py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center">
-                Edit Quote
-              </button>
-              <button 
-                onClick={handleRetract}
-                className="w-full py-4 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 text-rose-600 rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all flex items-center justify-center"
+            <div className="flex flex-row gap-3">
+              <button
+                onClick={openEditModal}
+                className="flex-1 py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
               >
-                Retract Quote
+                <Pencil className="w-4 h-4" /> Edit Quote
+              </button>
+              <button
+                onClick={handleDelete}
+                className="flex-[0.6] py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" /> Delete
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {/* ── EDIT QUOTE MODAL ── */}
+      {isEditing && (
+        <div className="fixed inset-0 z-[200] flex items-end justify-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsEditing(false)} />
+          <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-3xl p-6 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)] shadow-2xl space-y-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider">Edit Quote</h3>
+                <p className="text-[10px] text-slate-400 font-bold mt-0.5 uppercase tracking-wider">Update your offer details</p>
+              </div>
+              <button onClick={() => setIsEditing(false)} className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-95 transition-all">
+                <X className="w-4 h-4 text-slate-500" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">Offered Price (KSh/kg)</label>
+                <input
+                  type="number"
+                  value={editPrice}
+                  onChange={(e) => setEditPrice(e.target.value)}
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                  placeholder="e.g. 45"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">Offered Weight (kg)</label>
+                <input
+                  type="number"
+                  value={editWeight}
+                  onChange={(e) => setEditWeight(e.target.value)}
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                  placeholder="e.g. 100"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">Notes (Optional)</label>
+                <textarea
+                  value={editNotes}
+                  onChange={(e) => setEditNotes(e.target.value)}
+                  rows={3}
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"
+                  placeholder="Any additional details..."
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={handleSaveEdit}
+              disabled={saving}
+              className="w-full py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              <Save className="w-4 h-4" /> {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

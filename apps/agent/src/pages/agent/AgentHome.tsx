@@ -83,7 +83,7 @@ export default function AgentHome() {
         .from('fulfillment_orders')
         .select(`
           id, status, pickup_address, created_at,
-          rfq:rfqs(category)
+          rfq:rfqs(category, material_grade)
         `)
         .eq('assigned_agent_id', profile.id)
         .not('status', 'in', '(completed,cancelled)')

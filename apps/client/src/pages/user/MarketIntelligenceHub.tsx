@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
 
@@ -71,16 +72,26 @@ export default function MarketIntelligenceHub() {
           if (r.delivery_method === 'agent_pickup') deliveryText = 'Agent Pickup';
           else if (r.delivery_method === 'self_drop') deliveryText = 'Self Drop-off';
 
+          // Resolve material ID to name
+          const storeMaterials = useServiceStore.getState().materialPrices;
+          const materialRecord = storeMaterials.find(m => m.id === r.material_grade);
+          const materialName = materialRecord ? materialRecord.material_name : r.material_grade;
+
+          // Resolve category ID to name
+          const storeCategories = useServiceStore.getState().categories;
+          const categoryRecord = storeCategories.find(c => c.id === r.category);
+          const categoryName = categoryRecord ? categoryRecord.label : r.category;
+
           return {
             id: r.id,
             company: r.buyer?.company_name || r.buyer?.name || 'Unknown Buyer',
-            material: r.material_grade,
+            material: materialName,
             quantity: `${r.requested_weight}kg`,
             price: r.target_price || 0,
             deadline: deadlineText,
             verified: true, // Assuming true for now
             region: r.pickup_area,
-            category: r.category,
+            category: categoryName,
             delivery: deliveryText,
             offersSubmitted: r.rfq_offers?.[0]?.count || 0,
           };
@@ -105,7 +116,12 @@ export default function MarketIntelligenceHub() {
 
   useEffect(() => {
     fetchPrices();
-    fetchRFQs();
+    Promise.all([
+      useServiceStore.getState().fetchMaterialPrices(),
+      useServiceStore.getState().fetchCategories()
+    ]).then(() => {
+      fetchRFQs();
+    });
     fetchIntelligence();
 
     const channel = supabase.channel('public:rfqs-feed')
