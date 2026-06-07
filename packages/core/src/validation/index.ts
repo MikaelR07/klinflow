@@ -148,6 +148,9 @@ export const MarketplaceListingSchema = z.object({
   aiMatchScore: z.number().optional(),
   sellerName: z.string().optional(),
   description: z.string().nullable().optional(),
+  swarmId: z.string().uuid().nullable().optional(),
+  isBulkDrive: z.boolean().default(false),
+  groupMetadata: z.any().nullable().optional(),
   createdAt: z.string(),
 });
 

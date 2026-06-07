@@ -168,7 +168,10 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           latitude: (listingData as any).latitude,
           longitude: (listingData as any).longitude,
           photo_url: (listingData as any).photoUrl,
-          grade: (listingData as any).grade
+          grade: (listingData as any).grade,
+          swarm_id: (listingData as any).swarmId || (listingData as any).swarm_id,
+          is_bulk_drive: (listingData as any).isBulkDrive || (listingData as any).is_bulk_drive || false,
+          group_metadata: (listingData as any).groupMetadata || (listingData as any).group_metadata
         })
         .select()
         .single();
@@ -395,12 +398,21 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
 
   releaseEscrow: async (order) => {
     try {
-      const { error } = await supabase
-        .from('marketplace_orders')
-        .update({ status: 'completed' })
-        .eq('id', order.id);
+      if (order.swarmId || (order as any).swarm_id) {
+        // Use the automated split RPC for Swarms
+        const { error } = await supabase.rpc('process_swarm_payout', {
+          p_order_id: order.id
+        });
+        if (error) throw error;
+      } else {
+        // Standard escrow release
+        const { error } = await supabase
+          .from('marketplace_orders')
+          .update({ status: 'completed' })
+          .eq('id', order.id);
 
-      if (error) throw error;
+        if (error) throw error;
+      }
 
       set(state => ({
         myOrders: state.myOrders.map(o => o.id === order.id ? { ...o, status: 'completed' as any } : o)
@@ -553,7 +565,8 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           unit_price: offer.offeredPrice,
           total_price: offer.offeredPrice * offer.quantity,
           status: 'pending',
-          message: 'Offer accepted'
+          message: 'Offer accepted',
+          swarm_id: offer.listing?.swarmId || offer.listing?.swarm_id
         })
         .select()
         .single();

@@ -253,7 +253,7 @@ export default function PostTrade() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-0 pb-2 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] relative max-w-lg mx-auto w-full px-5">
+      <div className="flex-1 space-y-0 pb-2 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] relative max-w-lg mx-auto w-full px-1.5">
         <AnimatePresence mode="wait">
 
           {/* ── STEP 1: MATERIAL & WEIGHT ── */}
@@ -327,6 +327,7 @@ export default function PostTrade() {
               selectedHub={selectedHub}
               assetValue={assetValue}
               logisticsFee={logisticsFee}
+              photos={photos}
             />
           )}
         </AnimatePresence>
@@ -351,7 +352,7 @@ export default function PostTrade() {
             <button
               disabled={isSubmitting}
               onClick={() => initialMode === 'sell' ? handleBook() : setShowEscrowModal(true)}
-              className="w-full p-5 bg-primary text-white rounded-2xl font-semibold text-sm shadow-xl shadow-emerald-900/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+              className="w-full p-5 bg-primary text-white rounded-2xl font-semibold text-sm  active:scale-95 transition-all flex items-center justify-center gap-3"
             >
               <span>CONFIRM TRADE</span>
               <ChevronRight className="w-5 h-5" />
@@ -439,7 +440,7 @@ export default function PostTrade() {
                 <button
                   disabled={isSubmitting}
                   onClick={() => handleBook()}
-                  className={`w-full p-5 ${pickupMode === 'pickup' ? 'bg-emerald-600 shadow-emerald-600/30' : 'bg-slate-900 shadow-slate-900/30'} text-white rounded-2xl font-semibold text-sm shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3`}
+                  className={`w-full p-5 ${pickupMode === 'pickup' ? 'bg-emerald-600 shadow-emerald-600/30' : 'bg-slate-900 shadow-slate-900/30'} text-white rounded-2xl font-semibold text-sm  active:scale-95 transition-all flex items-center justify-center gap-3`}
                 >
                   {isSubmitting ? (
                     <span className="animate-pulse">{pickupMode === 'pickup' ? 'DISPATCHING AGENT...' : 'POSTING TRADE...'}</span>

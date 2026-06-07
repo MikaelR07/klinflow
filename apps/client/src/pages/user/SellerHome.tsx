@@ -254,7 +254,7 @@ export default function SellerHome() {
 
         {/* ── REVENUE HERO CARD ── */}
         <div className="relative group">
-          <div className="bg-gradient-to-b from-primary to-emerald-600 to-emerald-800  rounded-2xl   p-5  gpu-layer relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#064e3b] to-primary dark:from-emerald-900  rounded-2xl   p-5  gpu-layer relative overflow-hidden">
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
             <div className="flex flex-col gap-6 relative z-10">
               <div className="flex items-end justify-between">
@@ -263,7 +263,7 @@ export default function SellerHome() {
                     <Wallet className="w-3 h-3" /> Seller Wallet
                   </p>
                   <h2 className="text-2xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
-                    KSh {cashBalance.toLocaleString()}
+                    KSh {cashBalance.toLocaleString()}.00
                   </h2>
 
                 </div>

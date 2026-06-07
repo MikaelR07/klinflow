@@ -9,7 +9,8 @@ import {
   Gift,
   Leaf,
   LeafyGreen,
-  Clock
+  Clock,
+  MapPin
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore, useServiceStore } from '@klinflow/core';
@@ -162,93 +163,78 @@ export default function SwarmsList() {
                 key={swarm.id}
                 className="
                   block
-                  bg-white dark:bg-slate-900/60
-                  border-b border-slate-200/80 dark:border-slate-800
-                  p-3
+                  bg-white dark:bg-slate-900
+                  rounded-[1.25rem]
+                  border border-slate-100 dark:border-slate-800 shadow-sm
+                  p-3.5
+                  mb-3
                   transition-all duration-200
-                  active:bg-slate-50 dark:active:bg-slate-800/50
+                  hover:shadow-md
+                  active:scale-[0.98]
                 "
               >
                 {/* Header & Progress Ring */}
-                <div className="flex items-start justify-between gap-4 mb-0.5">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-col gap-0.5 mb-1.5">
-                      <div className="flex items-center gap-2">
-                        <h2 className="text-xs  text-slate-900 font-semibold dark:text-white truncate uppercase tracking-tight">
-                          Category: {materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}
-                        </h2>
-
-                        {swarm.status === 'active' && (
-                          <span
-                            className="
-                  px-2 py-0.5
-                  rounded-full
-                  text-[9px]
-                  font-bold
-                  bg-green-50
-                  text-green-700
-                  dark:bg-green-500/10
-                  dark:text-green-400
-                "
-                          >
-                            Active
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400">
-                        Material: {swarm.material}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <p className="text-[11px] font-medium text-slate-500 uppercase dark:text-slate-400">
+                        Category: <span className="font-bold uppercase text-slate-900 dark:text-white">{materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}</span>
                       </p>
+                      {swarm.status === 'active' && (
+                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-[#e8f5e9] text-[#2e7d32] dark:bg-green-900/30 dark:text-green-400">
+                          Active
+                        </span>
+                      )}
                     </div>
 
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                      {swarm.estate}
-                    </p>
+                    <h3 className="text-base font-bold text-[#5c50e6] dark:text-indigo-400 mb-2 leading-tight tracking-tight">
+                      {swarm.material}
+                    </h3>
+
+                    <div className="flex items-center gap-1.5 mb-1.5 text-slate-500 dark:text-slate-400">
+                      <MapPin className="w-3.5 h-3.5 shrink-0" />
+                      <p className="text-xs font-medium">{swarm.estate}</p>
+                    </div>
+
                     {swarm.closes_at && (
-                      <p className="text-xs text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1 mt-1">
-                        <Clock className="w-3 h-3" />
-                        Deadline: {new Date(swarm.closes_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                      </p>
+                      <div className="flex items-center gap-1.5 text-[#e65100] dark:text-amber-500 font-bold mt-0.5">
+                        <Clock className="w-3.5 h-3.5 shrink-0" />
+                        <p className="text-xs">Deadline: {new Date(swarm.closes_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                      </div>
                     )}
                   </div>
 
                   {/* Progress Ring */}
-                  <div className="shrink-0">
-                    <div className="relative w-[72px] h-[72px]">
-                      <svg
-                        className="w-full h-full -rotate-90"
-                        viewBox="0 0 84 84"
-                      >
+                  <div className="shrink-0 ml-1 mt-0.5">
+                    <div className="relative w-[88px] h-[88px]">
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 84 84">
                         <circle
                           cx="42"
                           cy="42"
-                          r="36"
+                          r="38"
                           fill="none"
                           stroke="currentColor"
                           strokeWidth="4"
                           className="text-slate-200 dark:text-slate-700"
                         />
-
                         <circle
                           cx="42"
                           cy="42"
-                          r="36"
+                          r="38"
                           fill="none"
                           stroke="currentColor"
-                          strokeWidth="6"
+                          strokeWidth="4"
                           className="text-green-500"
-                          strokeDasharray={`${2 * Math.PI * 34}`}
-                          strokeDashoffset={`${2 * Math.PI * 34 * (1 - progress / 100)
-                            }`}
+                          strokeDasharray={`${2 * Math.PI * 38}`}
+                          strokeDashoffset={`${2 * Math.PI * 38 * (1 - progress / 100)}`}
                           strokeLinecap="round"
                         />
                       </svg>
-
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-base font-black text-slate-900 dark:text-white leading-none mb-0.5">
+                        <span className="text-lg font-black text-slate-900 dark:text-white leading-none mb-0.5">
                           {progress}%
                         </span>
-
-                        <span className="text-[8px] text-slate-500 dark:text-slate-400 leading-none">
+                        <span className="text-[9px] text-[#868e96] dark:text-slate-400 font-medium leading-none">
                           Complete
                         </span>
                       </div>
@@ -256,46 +242,38 @@ export default function SwarmsList() {
                   </div>
                 </div>
 
+                <div className="my-2.5 h-px w-full bg-[#f1f3f5] dark:bg-slate-800" />
+
                 {/* Metrics & Action */}
-                <div className="mt-1 flex items-end justify-between ">
-                  <div className="flex items-center gap-5">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-4">
                     {/* Reward Pool */}
                     <div>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5 capitalize tracking-wider">
-                        Reward
-                      </p>
-                      <p className="text-[11px] font-black text-primary dark:text-white">
-                        ksh {rewardPool.toLocaleString()}
-                      </p>
+                      <p className="text-[12px] text-[#868e96] dark:text-slate-400 mb-0.5">Reward</p>
+                      <p className="text-[11px] font-bold text-[#2e7d32] dark:text-green-500">ksh {rewardPool.toLocaleString()}</p>
                     </div>
+
+                    <div className="w-px h-6 bg-[#f1f3f5] dark:bg-slate-800" />
 
                     {/* Participants */}
                     <div>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5 Capitalize tracking-wider">
-                        Members
-                      </p>
-                      <p className="text-[11px] font-black text-slate-900 dark:text-white">
-                        {swarm.participants_count || 0}
-                      </p>
+                      <p className="text-[12px] text-[#868e96] dark:text-slate-400 mb-0.5">Members</p>
+                      <p className="text-[11px] font-bold text-slate-900 dark:text-white">{swarm.participants_count || 0}</p>
                     </div>
+
+                    <div className="w-px h-6 bg-[#f1f3f5] dark:bg-slate-800" />
 
                     {/* Target */}
                     <div>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5 capitalize tracking-wider">
-                        Target
-                      </p>
-                      <p className="text-[11px] font-black text-slate-900 dark:text-white">
-                        {swarm.target_weight.toLocaleString()}kg
-                      </p>
+                      <p className="text-[12px] text-[#868e96] dark:text-slate-400 mb-0.5">Target</p>
+                      <p className="text-[11px] font-bold text-slate-900 dark:text-white">{swarm.target_weight.toLocaleString()}kg</p>
                     </div>
                   </div>
 
-                  {/* Pseudo View Details Button */}
-                  <div className="px-3 py-1.5 bg-primary text-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-bold rounded-lg whitespace-nowrap group-active:bg-slate-200 dark:group-active:bg-slate-700 transition-colors">
+                  <div className="px-3 py-1.5 bg-[#2e7d32] hover:bg-[#1b5e20] text-white text-[10px] font-bold rounded-lg transition-colors shrink-0 shadow-sm">
                     View Details
                   </div>
                 </div>
-
               </Link>
             );
           })}

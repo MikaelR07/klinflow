@@ -85,8 +85,8 @@ export default function SellerWallet() {
                 Total Available
               </p>
               <div className="flex items-center gap-2">
-                <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-none">
-                  {balanceVisible ? `KES ${cashBalance.toLocaleString()}.00` : '••••••••'}
+                <h2 className="text-2xl sm:text-4xl font-semibold text-white tracking-tight leading-none">
+                  {balanceVisible ? `KSH ${cashBalance.toLocaleString()}.00` : '••••••••'}
                 </h2>
                 <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-1 hover:bg-white/10 rounded-lg transition-colors">
                   {balanceVisible ? <Eye className="w-5 h-5 text-emerald-100/80" /> : <EyeOff className="w-5 h-5 text-emerald-100/80" />}

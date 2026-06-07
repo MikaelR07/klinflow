@@ -12,6 +12,7 @@ const CreateGoal = lazy(() => import('../../../pages/user/CreateGoal'));
 const SwarmDetails = lazy(() => import('../../../pages/user/SwarmDetails'));
 const GoalDetails = lazy(() => import('../../../pages/user/GoalDetails'));
 const FinancingHub = lazy(() => import('../../../pages/user/FinancingHub'));
+const PostBulkTrade = lazy(() => import('../../../pages/user/PostBulkTrade'));
 
 export function getCommunityRoutes() {
   return (
@@ -22,6 +23,7 @@ export function getCommunityRoutes() {
       <Route path="/community-collective/swarm/create" element={<ProtectedRoute><CreateSwarm /></ProtectedRoute>} />
       <Route path="/community-collective/swarm/:id/edit" element={<ProtectedRoute><EditSwarm /></ProtectedRoute>} />
       <Route path="/community-collective/swarm/:id/join" element={<ProtectedRoute><JoinSwarm /></ProtectedRoute>} />
+      <Route path="/community-collective/swarm/:id/post-trade" element={<ProtectedRoute><PostBulkTrade /></ProtectedRoute>} />
       <Route path="/community-collective/goal/create" element={<ProtectedRoute><CreateGoal /></ProtectedRoute>} />
       <Route path="/community-collective/swarm/:id" element={<ProtectedRoute><SwarmDetails /></ProtectedRoute>} />
       <Route path="/community-collective/goal/:id" element={<ProtectedRoute><GoalDetails /></ProtectedRoute>} />

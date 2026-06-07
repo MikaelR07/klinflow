@@ -211,7 +211,7 @@ export default function UserHome() {
         </div>
 
         {/* Wallet Hero */}
-        <div className="bg-gradient-to-br from-primary  to-emerald-600 to-emerald-800  rounded-xl p-6 gpu-layer">
+        <div className="bg-gradient-to-br from-[#064e3b] to-primary dark:from-emerald-900  rounded-xl p-6 gpu-layer">
           <div className="flex flex-col gap-6 relative z-10">
             <div className="flex items-end justify-between">
               <div>
@@ -219,7 +219,7 @@ export default function UserHome() {
                   <Wallet className="w-3 h-3" /> Wallet Balance
                 </p>
                 <h2 className="text-2xl sm:text-5xl font-semibold  text-white tracking-tighter leading-none">
-                  KSh {walletBalance.toLocaleString()}
+                  KSh {walletBalance.toLocaleString()}.00
                 </h2>
 
               </div>

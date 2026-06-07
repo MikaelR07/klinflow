@@ -293,12 +293,20 @@ export default function SwarmDetails() {
           )}
         </div>
 
-        {/* Delete Button (owner only) */}
+        {/* Creator Actions */}
         {swarm.creator_id === profile?.id && (
-          <div className="flex gap-3 pt-2">
+          <div className="flex flex-col gap-3 pt-2">
+            {swarm.current_weight > 0 && (
+              <button
+                onClick={() => navigate(`/community-collective/swarm/${swarm.id}/post-trade`)}
+                className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+              >
+                <Truck className="w-4 h-4" /> Post Bulk Trade to Marketplace
+              </button>
+            )}
             <button
               onClick={handleDelete}
-              className="flex-1 py-4  bg-red-600 text-white border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all flex items-center justify-center gap-2"
             >
               <Trash2 className="w-4 h-4" /> Delete Swarm
             </button>

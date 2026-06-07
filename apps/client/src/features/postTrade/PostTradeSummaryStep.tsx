@@ -11,7 +11,8 @@ export default function PostTradeSummaryStep({
   customTime,
   selectedHub,
   assetValue,
-  logisticsFee
+  logisticsFee,
+  photos
 }: any) {
   return (
     <motion.div key="p4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 pb-12">
@@ -21,13 +22,40 @@ export default function PostTradeSummaryStep({
       </div>
 
       {/* ── MATERIAL PREVIEW ── */}
-      <div className="bg-white dark:bg-slate-900/70 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 flex items-center gap-6">
-        <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-4xl shadow-inner">
-          {wasteType?.icon || '📦'}
-        </div>
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{wasteType?.label}</h3>
-          <p className="text-xs font-semibold text-emerald-600 capitalize tracking-widest mt-1">{quantity} KG Stock</p>
+      <div className="bg-white dark:bg-slate-900/70 border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden">
+        {photos && photos.length > 0 ? (
+          <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 relative">
+            <div className={`flex ${photos.length > 1 ? 'overflow-x-auto snap-x snap-mandatory' : ''} hide-scrollbar w-full h-full`}>
+              {photos.map((p: any, idx: number) => (
+                <div key={idx} className="min-w-full h-full shrink-0 snap-center relative">
+                  <img
+                    src={typeof p === 'string' ? p : URL.createObjectURL(p)}
+                    alt={`Proof ${idx + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  {photos.length > 1 && (
+                    <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/40 backdrop-blur-md rounded-lg text-white text-[10px] font-bold tracking-widest">
+                      {idx + 1} / {photos.length}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="w-full aspect-video bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">No Image</span>
+          </div>
+        )}
+        <div className="p-5 bg-white dark:bg-slate-900/70 flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Target Material</p>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none">{wasteType?.label}</h3>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Stock Weight</p>
+            <p className="text-sm font-black text-emerald-600 capitalize tracking-widest">{quantity} KG</p>
+          </div>
         </div>
       </div>
 
@@ -69,7 +97,7 @@ export default function PostTradeSummaryStep({
       </div>
 
       {/* ── FINANCIAL BREAKDOWN ── */}
-      <div className="bg-emerald-600 dark:bg-primary rounded-[2rem] p-8 relative overflow-hidden shadow-2xl border border-white/20">
+      <div className="bg-emerald-600 dark:bg-primary rounded-[1rem] p-4 relative overflow-hidden  border border-white/20">
         <div className="absolute -top-16 -right-16 w-56 h-56 bg-white/20 rounded-full blur-3xl" />
         <div className="relative z-10 space-y-6">
           <div className="space-y-4">
@@ -81,7 +109,7 @@ export default function PostTradeSummaryStep({
               <span className="text-[10px] font-black capitalize tracking-widest">Logistics Fee</span>
               <span className="text-sm font-bold">- KSh {pickupMode === 'pickup' ? logisticsFee : 0}</span>
             </div>
-            <div className="pt-4 border-t border-white/20 flex justify-between items-center">
+            <div className="pt-4 border-t border-white/60 flex justify-between items-center">
               <span className="text-[10px] font-black text-white capitalize tracking-widest">EST. REVENUE</span>
               <div className="text-right">
                 <h3 className="text-3xl font-black text-white tracking-tighter">KSh {(assetValue - (pickupMode === 'pickup' ? logisticsFee : 0)).toLocaleString()}</h3>

@@ -157,8 +157,8 @@ export default function ResidentWallet() {
               Available Balance
             </p>
             <div className="flex items-center gap-2 mb-1.5">
-              <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-none">
-                {balanceVisible ? `KES ${cashBalance.toLocaleString()}.00` : '••••••••'}
+              <h2 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight leading-none">
+                {balanceVisible ? `KSH ${cashBalance.toLocaleString()}.00` : '••••••••'}
               </h2>
               <button
                 onClick={() => setBalanceVisible(!balanceVisible)}
@@ -182,7 +182,7 @@ export default function ResidentWallet() {
               <div>
                 <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-0.5">GFP Points</p>
                 <p className="text-sm font-black text-white leading-none">{gfpBalance.toLocaleString()}</p>
-                <p className="text-[8px] font-semibold text-emerald-300/60 mt-0.5">Worth KES {(gfpBalance / 2).toLocaleString()}</p>
+                <p className="text-[8px] font-semibold text-emerald-300/60 mt-0.5">Worth KSH {(gfpBalance / 2).toLocaleString()}</p>
               </div>
             </div>
             <div className="bg-emerald-950/40 rounded-xl p-3 flex items-center gap-3">

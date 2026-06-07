@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   ArrowLeft, Wallet, Smartphone, Building2,
   ChevronRight, CheckCircle2, ShieldCheck,
@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { walletService } from '@klinflow/core';
 import { toast } from 'sonner';
 
 interface Method {
@@ -24,19 +25,30 @@ const METHODS: Method[] = [
 
 export default function WithdrawalPage() {
   const navigate = useNavigate();
-  const { profile, walletBalance, withdrawRewards } = useAuthStore();
+  const { profile, userId, withdrawRewards } = useAuthStore();
   const [step, setStep] = useState(1); // 1: Method, 2: Amount/Details, 3: Success
   const [method, setMethod] = useState<Method | null>(null);
-  const [amount, setAmount] = useState<number | ''>(walletBalance || 0);
+  const [cashBalance, setCashBalance] = useState(0);
+  const [amount, setAmount] = useState<number | ''>('');
   const [details, setDetails] = useState(profile?.phone || '');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (userId) {
+      walletService.getWalletDetails(userId).then(data => {
+        if (data) {
+          setCashBalance(data.cash_balance);
+        }
+      });
+    }
+  }, [userId]);
 
   const handleConfirm = async () => {
     if (typeof amount !== 'number' || amount < 100) {
       toast.error('Minimum withdrawal is KSh 100');
       return;
     }
-    if (amount > walletBalance) {
+    if (amount > cashBalance) {
       toast.error('Insufficient balance');
       return;
     }
@@ -90,7 +102,7 @@ export default function WithdrawalPage() {
           <div className="space-y-4 animate-slide-up">
             <div className="card p-6 bg-gradient-to-br from-primary to-emerald-700 text-white border-none rounded-xl">
               <p className="text-xs font-semibold text-emerald-100 capitalize tracking-[0.2em] mb-1">Available for Withdrawal</p>
-              <h2 className="text-4xl font-semibold tracking-tight">KSh {walletBalance.toLocaleString()}</h2>
+              <h2 className="text-4xl font-semibold tracking-tight">KSh {cashBalance.toLocaleString()}.00</h2>
               <div className="flex items-center gap-2 mt-4 text-xs font-semibold bg-white/10 w-fit px-3 py-1.5 rounded-full">
                 <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
               </div>
@@ -151,7 +163,7 @@ export default function WithdrawalPage() {
                   </div>
                   <div className="flex justify-between px-1">
                     <p className="text-xs font-semibold text-slate-400">Fee: <span className="text-slate-900 dark:text-white">KSh 0.00</span></p>
-                    <button onClick={() => setAmount(walletBalance)} className="text-xs font-semibold text-primary capitalize tracking-widest hover:underline">Withdraw All</button>
+                    <button onClick={() => setAmount(cashBalance)} className="text-xs font-semibold text-primary capitalize tracking-widest hover:underline">Withdraw All</button>
                   </div>
                 </div>
 
