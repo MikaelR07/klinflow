@@ -70,7 +70,7 @@ export default function FinancingHub() {
   const totalVolume = 642;
 
   const [selectedLoan, setSelectedLoan] = useState<any>(null); return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
+    <div className=" bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-700 ">
         <div className="flex items-center justify-between">

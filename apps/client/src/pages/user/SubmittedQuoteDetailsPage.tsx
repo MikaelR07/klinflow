@@ -179,7 +179,7 @@ export default function SubmittedQuoteDetailsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-8 transition-colors">
+    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-8 transition-colors">
       {/* ── IMAGE PREVIEW AT THE TOP (EDGE-TO-EDGE & TOP-COVERED) ── */}
       <div
         className="relative h-[350px] w-full overflow-hidden border-b border-slate-200 dark:border-slate-800 shadow-sm bg-slate-900"

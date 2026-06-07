@@ -58,7 +58,7 @@ export default function DispatchDashboard() {
   const onlineDrivers = fleetDrivers.filter(driver => driver.is_online);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-800 pb-20">
+    <div className=" bg-slate-50 dark:bg-slate-800 pb-20">
       {/* HEADER */}
       <div className="sticky top-0 z-30 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4">
         <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Fleet Dispatch</h1>

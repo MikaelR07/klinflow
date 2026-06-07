@@ -122,7 +122,7 @@ export default function RedeemGFP() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 text-slate-900 dark:text-white pb-5">
+    <div className=" bg-[#F8F8FF] dark:bg-slate-800 text-slate-900 dark:text-white pb-5">
       {/* HEADER */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-[#F8F8FF] dark:bg-slate-800 dark:border-slate-600 border-b border-gray-200 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">

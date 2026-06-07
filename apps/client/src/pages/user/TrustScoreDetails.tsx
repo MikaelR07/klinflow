@@ -93,7 +93,7 @@ export default function TrustScoreDetails() {
   ];
 
   return (
-    <div className="pb-8 min-h-screen bg-slate-50 dark:bg-slate-800 animate-fade-in relative z-10">
+    <div className="pb-8 bg-slate-50 dark:bg-slate-800 animate-fade-in relative z-10">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-slate-50/90 dark:bg-slate-800 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">

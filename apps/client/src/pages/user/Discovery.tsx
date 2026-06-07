@@ -72,7 +72,7 @@ export default function DiscoveryHub() {
   }, [partners, activeMaterial, activeScale, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
+    <div className=" bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
         <div className="w-full mx-auto">

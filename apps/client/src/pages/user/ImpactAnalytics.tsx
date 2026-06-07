@@ -305,7 +305,7 @@ export default function ImpactAnalytics() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-800 transition-colors pb-10">
+    <div className=" bg-slate-50 dark:bg-slate-800 transition-colors pb-10">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-slate-50/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-600/50">
         <div className="flex items-center justify-between">

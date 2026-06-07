@@ -95,7 +95,7 @@ export default function FulfillmentTrackingPage() {
   const isCompleted = ['completed', 'pickup_completed', 'in_transit', 'delivered'].includes(order.status);
 
   return (
-    <div className="min-h-screen max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-10 px-1.5 transition-colors">
+    <div className=" max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-10 px-1.5 transition-colors">
       {/* HEADER */}
       <div className="sticky top-0 z-30 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-900 p-4 flex items-center gap-3">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-xl active:bg-slate-100 dark:active:bg-slate-800 transition-colors">

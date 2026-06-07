@@ -163,7 +163,7 @@ export default function Sourcing() {
   }, [listings, searchTerm, selectedTab]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
         <div className="h-[calc(env(safe-area-inset-top,1rem)+8.4rem)]" />

@@ -64,7 +64,7 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-24">
+    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-24">
       {/* FIXED TOP NAV */}
       {!isCompanyOwner && (
         <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">

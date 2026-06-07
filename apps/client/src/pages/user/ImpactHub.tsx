@@ -139,7 +139,7 @@ export default function ImpactHub() {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
       <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
         <div className="flex items-center gap-4">
