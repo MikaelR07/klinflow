@@ -128,14 +128,14 @@ export default function AgentHomeStats({
       </div>
 
       {/* ── QUICK ACTIONS ── */}
-      <div className="px-2 pb-2">
-        <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mb-1 px-1">
+      <div className="px-2 pb-2 !mt-2">
+        <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mb-0.5  px-1">
           Quick Actions
         </p>
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="grid grid-cols-4 gap-1">
           <button
             onClick={() => navigate('/jobs')}
-            className="min-w-0 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
           >
             <div className="w-10 h-10 shrink-0 bg-blue-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Briefcase className="w-5 h-5" />
@@ -147,7 +147,7 @@ export default function AgentHomeStats({
 
           <button
             onClick={() => navigate('/trades')}
-            className="min-w-0 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
           >
             <div className="w-10 h-10 shrink-0 bg-emerald-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Handshake className="w-5 h-5" />
@@ -159,7 +159,7 @@ export default function AgentHomeStats({
 
           <button
             onClick={() => navigate('/rfqs')}
-            className="min-w-0 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
           >
             <div className="w-10 h-10 shrink-0 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Receipt className="w-5 h-5" />
@@ -171,7 +171,7 @@ export default function AgentHomeStats({
 
           <button
             onClick={() => navigate('/rfq/create')}
-            className="min-w-0 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
           >
             <div className="w-10 h-10 shrink-0 bg-amber-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <PlusSquare className="w-5 h-5" />

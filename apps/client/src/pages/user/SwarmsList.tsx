@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore, useServiceStore } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
 
 const TABS = ['Active', 'My Swarms', 'Completed'];
 
@@ -29,6 +30,7 @@ export default function SwarmsList() {
 
   const [activeTab, setActiveTab] = useState('Active');
   const [searchQuery, setSearchQuery] = useState('');
+  const [postedSwarmIds, setPostedSwarmIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (estateName) {
@@ -36,6 +38,18 @@ export default function SwarmsList() {
       fetchGoals(estateName);
       fetchMaterialPrices();
       setupSubscriptions(estateName);
+
+      // Check which swarms have been posted to the marketplace
+      supabase
+        .from('marketplace_listings')
+        .select('swarm_id')
+        .not('swarm_id', 'is', null)
+        .then(({ data }) => {
+          if (data) {
+            setPostedSwarmIds(new Set(data.map((d: any) => d.swarm_id).filter(Boolean)));
+          }
+        });
+
       return () => cleanupSubscriptions();
     }
   }, [estateName]);
@@ -180,9 +194,14 @@ export default function SwarmsList() {
                       <p className="text-[11px] font-medium text-slate-500 uppercase dark:text-slate-400">
                         <span className="font-semibold uppercase text-slate-900 text-sm dark:text-white">{materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}</span>
                       </p>
-                      {swarm.status === 'active' && (
+                      {swarm.status === 'active' && postedSwarmIds.has(swarm.id) && (
                         <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
                           Posted
+                        </span>
+                      )}
+                      {swarm.status === 'active' && !postedSwarmIds.has(swarm.id) && (
+                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                          Active
                         </span>
                       )}
                     </div>

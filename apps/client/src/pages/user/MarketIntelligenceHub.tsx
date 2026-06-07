@@ -201,7 +201,7 @@ export default function MarketIntelligenceHub() {
   return (
     <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90  border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
@@ -249,7 +249,7 @@ export default function MarketIntelligenceHub() {
 
         {/* Search & Filter Bar */}
         {activeTab !== 'trends' && activeTab !== 'tips' && (
-          <div className="flex items-center gap-2 px-4 pb-3">
+          <div className="flex items-center gap-2 px-4 pb-1">
             {/* Search Box */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />

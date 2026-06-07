@@ -59,10 +59,11 @@ export default function CreateSwarm() {
     if (Number(initialWeight) < 0 || Number(initialWeight) > Number(targetWeight)) return toast.error('Initial weight cannot exceed target weight');
     if (photos.length < 1) return toast.error('Please upload at least 1 photo');
 
+    let uploadToastId: string | number | null = null;
     setLoading(true);
 
     try {
-      let uploadToastId = toast.loading(`Uploading ${photos.length} image${photos.length > 1 ? 's' : ''}...`);
+      uploadToastId = toast.loading(`Uploading ${photos.length} image${photos.length > 1 ? 's' : ''}...`);
 
       const uploadPromises = photos.map(async (p) => {
         const compressed = await compressImage(p.file, { maxWidth: 1024, quality: 0.8 });
@@ -108,6 +109,7 @@ export default function CreateSwarm() {
       console.error(error);
       toast.error('Failed to upload images or create swarm');
     } finally {
+      if (uploadToastId) toast.dismiss(uploadToastId);
       setLoading(false);
     }
   };

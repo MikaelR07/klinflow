@@ -150,7 +150,7 @@ export default function ResidentWallet() {
         transition={{ duration: 0.45, ease: 'easeOut' }}
         className="mx-1"
       >
-        <div className="relative bg-gradient-to-br from-[#064e3b] to-primary dark:from-emerald-900 dark:to-primary rounded-2xl p-5 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-[#064e3b] to-primary  rounded-2xl p-5 overflow-hidden">
           {/* Balance Section */}
           <div className="relative z-10 mb-4 pl-1">
             <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
@@ -192,7 +192,7 @@ export default function ResidentWallet() {
               <div>
                 <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-0.5">Recycled This Month</p>
                 <p className="text-sm font-black text-white leading-none">{kgRecoveredThisMonth} kg</p>
-                <p className="text-[8px] font-semibold text-emerald-300/60 mt-0.5">Great job! 💪</p>
+
               </div>
             </div>
           </div>

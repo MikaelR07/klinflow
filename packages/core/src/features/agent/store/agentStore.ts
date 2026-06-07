@@ -263,7 +263,8 @@ export const useAgentStore = create<AgentStore>()(
           photoUrl: b.photo_url,
           photos: b.photo_url ? [b.photo_url] : [],
           phone: profileMap[b.user_id]?.phone || '',
-          is_market_trade: b.is_market_trade || false
+          is_market_trade: b.is_market_trade || false,
+          is_group_pickup: b.is_group_pickup || false
         })).filter(job => !job.is_market_trade);
       
       const available = mapped.filter(job => !rejectedJobIds.includes(job.id));
@@ -378,6 +379,7 @@ export const useAgentStore = create<AgentStore>()(
       photos: b.photo_url ? [b.photo_url] : [],
       notes: b.notes,
       is_market_trade: b.is_market_trade || false,
+      is_group_pickup: b.is_group_pickup || false,
       booking_type: b.booking_type || null,
       total_price: b.total_price || b.fee || 0
     }));

@@ -221,7 +221,7 @@ export default function CreateRFQPage() {
   const subcategories = useMemo(() => {
     const cat = activeCategories.find(c => c.id === formData.category);
     if (!cat) return [];
-    
+
     // DB stores parent_category in 'category' field inside materialPrices
     // It often stores the label (e.g. 'Plastic') or slug
     return materialPrices
@@ -661,7 +661,7 @@ export default function CreateRFQPage() {
                   </div>
                 )}
 
-                <div className="bg-slate-50/80 dark:bg-slate-800/80 p-2.5 rounded-2xl border border-slate-150 dark:border-slate-700/50 shadow-sm space-y-4">
+                <div className="bg-slate-50/80 dark:bg-slate-900 p-2.5 rounded-2xl border border-slate-150 dark:border-slate-700/50 shadow-sm space-y-4">
                   {/* Title & Price Header */}
                   <div className="flex justify-between items-start">
                     <div>
@@ -680,7 +680,7 @@ export default function CreateRFQPage() {
                   </div>
 
                   {/* Volume Grid Subcard */}
-                  <div className="bg-white dark:bg-slate-800 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl grid grid-cols-2 gap-3 text-xs shadow-sm">
+                  <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl grid grid-cols-2 gap-3 text-xs shadow-sm">
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Volume Wanted</p>
                       <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{formData.weight} KG</p>
@@ -693,8 +693,30 @@ export default function CreateRFQPage() {
                     </div>
                   </div>
 
+                  {/* Budget Breakdown */}
+                  <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm space-y-2.5">
+                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                      <Info className="w-3 h-3" /> Budget Breakdown
+                    </p>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-semibold text-slate-500">Buying Price</span>
+                        <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">KSh {parseFloat(formData.price || '0').toLocaleString()} /kg</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-semibold text-slate-500">Requested Weight</span>
+                        <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">× {parseFloat(formData.weight || '0').toLocaleString()} kg</span>
+                      </div>
+                      <div className="h-px bg-slate-100 dark:bg-slate-700 my-1" />
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300">Total Est. Budget</span>
+                        <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {(parseFloat(formData.weight || '0') * parseFloat(formData.price || '0')).toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Deadline Subcard */}
-                  <div className="flex justify-between items-center text-xs bg-white dark:bg-slate-800 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm">
+                  <div className="flex justify-between items-center text-xs bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
                         <Clock className="w-4 h-4" />
@@ -707,7 +729,7 @@ export default function CreateRFQPage() {
                   </div>
 
                   {formData.notes && (
-                    <div className="bg-white dark:bg-slate-800 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm space-y-1.5">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl shadow-sm space-y-1.5">
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Specifications & Notes</p>
                       <p className="text-xs text-slate-600 dark:text-slate-350 italic font-medium">
                         "{formData.notes}"

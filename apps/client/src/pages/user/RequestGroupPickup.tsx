@@ -146,8 +146,12 @@ export default function RequestGroupPickup() {
 
       const timeString = isManualTime ? `${customDate} @ ${customTime}` : ((selectedTime as any)?.time || 'ASAP');
 
+      const prices = usePriceStore.getState().prices;
+      const matchedCategory = prices.find((p: any) => p.label === swarm.material || p.material_name === swarm.material);
+      const wasteTypeSlug = (matchedCategory?.parent_category || matchedCategory?.slug || matchedCategory?.id || swarm.material).toLowerCase().replace(/\s+/g, '-');
+
       const bookingData = {
-        wasteType: swarm.material,
+        wasteType: wasteTypeSlug,
         weight: quantity,
         estate: customLocation.estate,
         latitude: customLocation.latitude,
@@ -163,7 +167,11 @@ export default function RequestGroupPickup() {
         isGroupPickup: true
       };
 
-      await createBooking(bookingData);
+      const result = await createBooking(bookingData);
+      
+      if (!result) {
+        throw new Error('Database operation failed. Please ensure the latest migrations are applied.');
+      }
 
       await useNotificationStore.getState().addNotification(
         "New Group Pickup! 🏘️",
@@ -321,9 +329,9 @@ export default function RequestGroupPickup() {
                 customTime={customTime}
                 selectedHub={null}
                 assetValue={Math.round(quantity * (getCategoryPrice(swarm.material) || 0))}
-                logisticsFee={0}
                 photos={photos}
                 askingPrice={null}
+                hideFinancials={true}
               />
 
               {/* ── REVENUE CALCULATION BREAKDOWN (merged into green) ── */}
@@ -349,13 +357,19 @@ export default function RequestGroupPickup() {
                       <span className="text-xs font-bold text-white">- KSh 0</span>
                     </div>
                     <div className="h-px bg-white/40" />
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-black text-white">EST. Revenue</span>
-                      <span className="text-sm font-black text-white">KSh {Math.round(quantity * (getCategoryPrice(swarm.material) || 0)).toLocaleString()}</span>
+                    <div className="pt-2 flex justify-between items-center">
+                      <span className="text-[10px] font-black text-white capitalize tracking-widest">EST. REVENUE</span>
+                      <div className="text-right">
+                        <h3 className="text-3xl font-black text-white tracking-tighter">KSh {Math.round(quantity * (getCategoryPrice(swarm.material) || 0)).toLocaleString()}</h3>
+                        <p className="text-[10px] font-bold text-white/95 capitalize tracking-widest mt-1 flex items-center justify-end gap-1.5">
+                          PAYOUT: AWAITING VERIFICATION
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <p className="text-[10px] font-semibold text-green-300 leading-relaxed mt-2">Revenue will be split among {participants.length} contributors after agent verification. Each contributor also earns 2 GFP per verified KG.</p>
                 </div>
+
               </div>
             </div>
           )}

@@ -480,7 +480,7 @@ export default function Sourcing() {
                   itemContent={(index, listing) => (
                     <div
                       onClick={() => setSelectedId(listing.id)}
-                      className="bg-white dark:bg-slate-800 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
+                      className="bg-white dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
                     >
                       <div className="flex gap-3">
                         <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
@@ -507,7 +507,7 @@ export default function Sourcing() {
                           {/* Row 2: Location & Optional Badge */}
                           <div className="flex items-center justify-between mt-0.5">
                             <p className="text-[9px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                              <MapPin className="w-2.5 h-2.5 text-slate-300" /> {listing.location}
+                              <MapPin className="w-2.5 h-2.5 text-green-500" /> {listing.location}
                             </p>
                             {getHasOffer(listing.id) && (
                               <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[6px] font-black capitalize tracking-[0.2em] rounded shrink-0">

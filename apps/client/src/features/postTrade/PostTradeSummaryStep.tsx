@@ -13,7 +13,8 @@ export default function PostTradeSummaryStep({
   assetValue,
   logisticsFee,
   photos,
-  askingPrice
+  askingPrice,
+  hideFinancials
 }: any) {
   return (
     <motion.div key="p4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 pb-12">
@@ -98,36 +99,38 @@ export default function PostTradeSummaryStep({
       </div>
 
       {/* ── FINANCIAL BREAKDOWN ── */}
-      <div className="bg-emerald-600 dark:bg-primary rounded-[1rem] p-4 relative overflow-hidden  border border-white/20">
-        <div className="absolute -top-16 -right-16 w-56 h-56 bg-white/20 rounded-full blur-3xl" />
-        <div className="relative z-10 space-y-6">
-          <div className="space-y-4">
-            {askingPrice != null && (
+      {!hideFinancials && (
+        <div className="bg-emerald-600 dark:bg-primary rounded-[1rem] p-4 relative overflow-hidden  border border-white/20">
+          <div className="absolute -top-16 -right-16 w-56 h-56 bg-white/20 rounded-full blur-3xl" />
+          <div className="relative z-10 space-y-6">
+            <div className="space-y-4">
+              {askingPrice != null && (
+                <div className="flex justify-between items-center text-white">
+                  <span className="text-[10px] font-black capitalize tracking-widest">Asking Price</span>
+                  <span className="text-sm font-bold">KSh {askingPrice.toLocaleString()} /kg</span>
+                </div>
+              )}
               <div className="flex justify-between items-center text-white">
-                <span className="text-[10px] font-black capitalize tracking-widest">Asking Price</span>
-                <span className="text-sm font-bold">KSh {askingPrice.toLocaleString()} /kg</span>
+                <span className="text-[10px] font-black capitalize tracking-widest">Gross Value</span>
+                <span className="text-sm font-bold">KSh {assetValue.toLocaleString()}</span>
               </div>
-            )}
-            <div className="flex justify-between items-center text-white">
-              <span className="text-[10px] font-black capitalize tracking-widest">Gross Value</span>
-              <span className="text-sm font-bold">KSh {assetValue.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between items-center text-white/90">
-              <span className="text-[10px] font-black capitalize tracking-widest">Logistics Fee</span>
-              <span className="text-sm font-bold">- KSh {pickupMode === 'pickup' ? logisticsFee : 0}</span>
-            </div>
-            <div className="pt-4 border-t border-white/60 flex justify-between items-center">
-              <span className="text-[10px] font-black text-white capitalize tracking-widest">EST. REVENUE</span>
-              <div className="text-right">
-                <h3 className="text-3xl font-black text-white tracking-tighter">KSh {(assetValue - (pickupMode === 'pickup' ? logisticsFee : 0)).toLocaleString()}</h3>
-                <p className="text-[10px] font-bold text-white/95 capitalize tracking-widest mt-1.5 flex items-center justify-end gap-1.5">
-                  PAYOUT: AWAITING VERIFICATION
-                </p>
+              <div className="flex justify-between items-center text-white/90">
+                <span className="text-[10px] font-black capitalize tracking-widest">Logistics Fee</span>
+                <span className="text-sm font-bold">- KSh {pickupMode === 'pickup' ? logisticsFee : 0}</span>
+              </div>
+              <div className="pt-4 border-t border-white/60 flex justify-between items-center">
+                <span className="text-[10px] font-black text-white capitalize tracking-widest">EST. REVENUE</span>
+                <div className="text-right">
+                  <h3 className="text-3xl font-black text-white tracking-tighter">KSh {(assetValue - (pickupMode === 'pickup' ? logisticsFee : 0)).toLocaleString()}</h3>
+                  <p className="text-[10px] font-bold text-white/95 capitalize tracking-widest mt-1.5 flex items-center justify-end gap-1.5">
+                    PAYOUT: AWAITING VERIFICATION
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </motion.div>
   );
 }

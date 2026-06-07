@@ -78,7 +78,7 @@ export default function SellerWallet() {
 
       {/* ── BALANCE HERO CARD ── */}
       <div className="mx-1">
-        <div className="bg-gradient-to-br from-[#064e3b] to-primary dark:from-emerald-900 dark:to-primary rounded-2xl p-5 overflow-hidden border border-emerald-800/50">
+        <div className="bg-gradient-to-br from-[#064e3b] to-primary  dark:to-primary rounded-2xl p-5 overflow-hidden border border-emerald-800/50">
           <div className="flex justify-between items-start mb-6">
             <div>
               <p className="text-[10px] font-bold text-emerald-100/80 mb-1 tracking-wider uppercase">

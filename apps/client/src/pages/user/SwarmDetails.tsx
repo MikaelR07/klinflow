@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import {
   ArrowLeft, Truck, Scale, MapPin, Users, Clock,
   CheckCircle2, AlertTriangle, FileText, Image as ImageIcon,
-  Edit3, Trash2
+  Edit3, Trash2, ChevronDown
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore } from '@klinflow/core';
@@ -24,6 +24,7 @@ export default function SwarmDetails() {
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
+  const [expandedParticipantId, setExpandedParticipantId] = useState<string | null>(null);
 
   const loadData = async () => {
     if (!id) return;
@@ -279,29 +280,55 @@ export default function SwarmDetails() {
             </div>
           ) : (
             <div>
-              {participants.map((p, idx) => (
-                <div key={p.id}>
-                  {idx > 0 && <div className="h-px bg-slate-100 dark:bg-slate-700 mx-5" />}
-                  <div className="px-5 py-3.5 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {p.images && p.images.length > 0 ? (
-                        <img src={p.images[0]} alt="Proof" className="w-10 h-10 rounded-xl object-cover border border-slate-100 dark:border-slate-700" />
-                      ) : (
-                        <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 text-indigo-600 font-bold text-xs">
+              {participants.map((p, idx) => {
+                const isExpanded = expandedParticipantId === p.id;
+                const hasDetails = p.description || (p.images && p.images.length > 0);
+
+                return (
+                  <div key={p.id}>
+                    {idx > 0 && <div className="h-px bg-slate-100 dark:bg-slate-700 mx-5" />}
+                    <div
+                      onClick={() => hasDetails && setExpandedParticipantId(isExpanded ? null : p.id)}
+                      className={`px-5 py-3.5 flex items-center justify-between ${hasDetails ? 'cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors' : ''}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 shrink-0 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 text-indigo-600 font-bold text-xs">
                           {(p.profiles?.name || 'U')[0].toUpperCase()}
                         </div>
-                      )}
-                      <div>
-                        <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize tracking-tight">{p.profiles?.name || 'Creator'}</p>
-                        <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
-                          {p.status} {p.description && '• With notes'}
-                        </p>
+                        <div>
+                          <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize tracking-tight">{p.profiles?.name || 'Creator'}</p>
+                          <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest flex items-center gap-1">
+                            {p.status} {p.description && '• notes'} {p.images && p.images.length > 0 && '• photo'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-black text-indigo-600 dark:text-indigo-400">{p.pledged_weight} KG</p>
+                        {hasDetails && (
+                          <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                        )}
                       </div>
                     </div>
-                    <p className="text-sm font-black text-indigo-600 dark:text-indigo-400">{p.pledged_weight} KG</p>
+
+                    {isExpanded && hasDetails && (
+                      <div className="px-5 pb-4 animate-in slide-in-from-top-2 duration-200">
+                        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
+                          {p.description && (
+                            <p className="text-xs text-slate-600 dark:text-slate-300 mb-2 italic">"{p.description}"</p>
+                          )}
+                          {p.images && p.images.length > 0 && (
+                            <div className="grid grid-cols-3 gap-2 mt-1">
+                              {p.images.map((img: string, i: number) => (
+                                <img key={i} src={img} alt="Proof" className="w-full h-20 rounded-lg object-cover border border-slate-200 dark:border-slate-600 shadow-sm" />
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

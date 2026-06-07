@@ -211,7 +211,7 @@ export default function UserHome() {
         </div>
 
         {/* Wallet Hero */}
-        <div className="bg-gradient-to-br from-[#064e3b] to-primary dark:from-emerald-900  rounded-xl p-6 gpu-layer">
+        <div className="bg-gradient-to-br from-[#064e3b] to-primary  rounded-xl p-6 gpu-layer">
           <div className="flex flex-col gap-6 relative z-10">
             <div className="flex items-end justify-between">
               <div>
@@ -258,7 +258,6 @@ export default function UserHome() {
                     <Leaf className="w-3 h-3" />Green Points
                   </p>
                 </div>
-
 
               </div>
             </div>
