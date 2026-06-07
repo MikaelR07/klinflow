@@ -107,7 +107,14 @@ export default function MarketIntelligenceHub() {
     try {
       const { data, error } = await supabase.rpc('get_market_intelligence');
       if (!error && data) {
-        setMarketData(data);
+        let dataStr = JSON.stringify(data);
+        const materials = useServiceStore.getState().materialPrices || [];
+        materials.forEach(m => {
+          if (m.id && dataStr.includes(m.id)) {
+            dataStr = dataStr.replace(new RegExp(m.id, 'g'), m.material_name);
+          }
+        });
+        setMarketData(JSON.parse(dataStr));
       }
     } catch (err) {
       console.error('Failed to fetch market intelligence:', err);

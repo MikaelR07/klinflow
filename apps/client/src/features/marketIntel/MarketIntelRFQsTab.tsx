@@ -20,7 +20,7 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
       exit={{ opacity: 0, y: -10 }}
       className="space-y-0 pb-5"
     >
-      <div className="flex items-center justify-between px-2 pt-2 bg-white dark:bg-slate-800">
+      <div className="flex items-center justify-between px-2  bg-white dark:bg-slate-800">
         <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Buy Requests</h3>
         <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full text-[10px] font-bold">
           {filteredRFQs.length} Open

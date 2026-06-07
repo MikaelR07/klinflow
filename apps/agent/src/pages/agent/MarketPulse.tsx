@@ -96,7 +96,15 @@ export default function MarketPulse() {
     try {
       const { data, error } = await supabase.rpc('get_market_intelligence');
       if (!error && data) {
-        setMarketData(data);
+        let dataStr = JSON.stringify(data);
+        const { usePriceStore } = await import('@klinflow/core/stores/priceStore');
+        const materials = usePriceStore.getState().prices || [];
+        materials.forEach(m => {
+          if (m.id && dataStr.includes(m.id)) {
+            dataStr = dataStr.replace(new RegExp(m.id, 'g'), m.label);
+          }
+        });
+        setMarketData(JSON.parse(dataStr));
       }
     } catch (err) {
       console.error('Failed to fetch market intelligence:', err);

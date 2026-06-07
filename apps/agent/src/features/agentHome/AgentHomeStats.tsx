@@ -128,7 +128,7 @@ export default function AgentHomeStats({
       </div>
 
       {/* ── QUICK ACTIONS ── */}
-      <div className="px-2 pb-2 !mt-2">
+      <div className="px-2  !mt-2">
         <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mb-0.5  px-1">
           Quick Actions
         </p>
