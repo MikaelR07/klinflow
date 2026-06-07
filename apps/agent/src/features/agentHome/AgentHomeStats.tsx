@@ -165,7 +165,7 @@ export default function AgentHomeStats({
               <Receipt className="w-5 h-5" />
             </div>
             <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
-              Incoming Quotes
+              Quotes
             </p>
           </button>
 
