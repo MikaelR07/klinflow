@@ -127,7 +127,7 @@ export default function SwarmsList() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+9rem)] pb-5 max-w-lg mx-auto w-full">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)] pb-5 max-w-lg mx-auto w-full">
         {/* Loading */}
         {loadingSwarms && swarms.length === 0 && (
           <div className="space-y-3 px-1.5">
@@ -178,17 +178,17 @@ export default function SwarmsList() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5">
                       <p className="text-[11px] font-medium text-slate-500 uppercase dark:text-slate-400">
-                        Category: <span className="font-bold uppercase text-slate-900 dark:text-white">{materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}</span>
+                        <span className="font-semibold uppercase text-slate-900 text-sm dark:text-white">{materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}</span>
                       </p>
                       {swarm.status === 'active' && (
-                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-[#e8f5e9] text-[#2e7d32] dark:bg-green-900/30 dark:text-green-400">
-                          Active
+                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                          Posted
                         </span>
                       )}
                     </div>
 
-                    <h3 className="text-base font-bold text-[#5c50e6] dark:text-indigo-400 mb-2 leading-tight tracking-tight">
-                      {swarm.material}
+                    <h3 className="text-xs font-bold text-[#5c50e6] dark:text-indigo-400 mb-2 leading-tight tracking-tight">
+                      Material: {swarm.material}
                     </h3>
 
                     <div className="flex items-center gap-1.5 mb-1.5 text-slate-500 dark:text-slate-400">
@@ -242,7 +242,7 @@ export default function SwarmsList() {
                   </div>
                 </div>
 
-                <div className="my-2.5 h-px w-full bg-[#f1f3f5] dark:bg-slate-800" />
+                <div className="my-2 border-t border-slate-200 dark:border-slate-700 w-full" />
 
                 {/* Metrics & Action */}
                 <div className="flex items-center justify-between gap-2">

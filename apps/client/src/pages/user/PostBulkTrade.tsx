@@ -122,7 +122,7 @@ export default function PostBulkTrade() {
 
   const liveRatePerKg = usePriceStore.getState().getCategoryPrice(swarm?.material || '');
   const quantity = swarm?.current_weight || 0;
-  
+
   const logisticsFee = pickupMode === 'dropoff' ? 0 : getConfigValue('fee_pickup', 200);
   const hubBonus = pickupMode === 'dropoff' ? 20 : 0;
   const askingPrice = customPricePerKg !== null ? customPricePerKg : (liveRatePerKg || 0);
@@ -220,17 +220,20 @@ export default function PostBulkTrade() {
           {/* ── PRE-FILLED INFO ── */}
           <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 mb-6 flex items-center justify-between">
             <div>
-               <p className="text-[10px] font-bold text-indigo-400 capitalize tracking-widest mb-1">Community Bulk Drive</p>
-               <h3 className="text-sm font-black text-indigo-900 dark:text-indigo-100 capitalize">{swarm?.material} • {quantity} KG</h3>
+              <p className="text-[10px] font-bold text-indigo-400 capitalize tracking-widest mb-1">Community Bulk Drive</p>
+              <h3 className="text-sm font-black text-indigo-900 dark:text-indigo-100 capitalize">{swarm?.material} • {quantity} KG</h3>
             </div>
             <div className="text-right">
-               <p className="text-[10px] font-bold text-indigo-400 capitalize tracking-widest mb-1">Contributors</p>
-               <p className="text-sm font-black text-indigo-900 dark:text-indigo-100">{participants.length}</p>
+              <p className="text-[10px] font-bold text-indigo-400 capitalize tracking-widest mb-1">Contributors</p>
+              <p className="text-sm font-black text-indigo-900 dark:text-indigo-100">{participants.length}</p>
             </div>
           </div>
+        </AnimatePresence>
 
+        <AnimatePresence mode="wait">
           {step === 1 && (
             <PostTradeValuationStep
+              key="step-1"
               photos={photos}
               setPhotos={setPhotos}
               liveRatePerKg={liveRatePerKg}
@@ -243,6 +246,7 @@ export default function PostBulkTrade() {
 
           {step === 2 && (
             <PostTradeCollectionStep
+              key="step-2"
               pickupMode={pickupMode}
               setPickupMode={setPickupMode}
               drillDownCompany={drillDownCompany}
@@ -272,6 +276,7 @@ export default function PostBulkTrade() {
 
           {step === 3 && (
             <PostTradeSummaryStep
+              key="step-3"
               wasteType={{ label: swarm?.material }}
               quantity={quantity}
               pickupMode={pickupMode}
@@ -283,6 +288,7 @@ export default function PostBulkTrade() {
               assetValue={assetValue}
               logisticsFee={logisticsFee}
               photos={photos}
+              askingPrice={askingPrice}
             />
           )}
         </AnimatePresence>
@@ -321,7 +327,7 @@ export default function PostBulkTrade() {
             <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl p-8 pb-10 shadow-2xl overflow-hidden">
               <div className="relative space-y-6">
                 <div className="w-16 h-16 bg-indigo-600/10 rounded-3xl flex items-center justify-center">
-                   <Truck className="w-8 h-8 text-indigo-600" />
+                  <Truck className="w-8 h-8 text-indigo-600" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">Confirm Bulk Listing</h3>
@@ -332,7 +338,7 @@ export default function PostBulkTrade() {
                 <button
                   disabled={isSubmitting}
                   onClick={() => handleBook()}
-                  className={`w-full p-5 bg-indigo-600 shadow-indigo-600/30 text-white rounded-2xl font-semibold text-sm shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3`}
+                  className={`w-full p-5 bg-indigo-600 shadow-indigo-600/30 text-white rounded-2xl font-semibold text-sm active:scale-95 transition-all flex items-center justify-center gap-3`}
                 >
                   {isSubmitting ? <span className="animate-pulse">POSTING BULK DRIVE...</span> : <span>POST TO MARKETPLACE</span>}
                 </button>

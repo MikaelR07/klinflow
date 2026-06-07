@@ -11,6 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore } from '@klinflow/core';
 import type { Swarm, SwarmParticipant } from '@klinflow/core/stores/collectiveStore';
 import { toast } from 'sonner';
+import { supabase } from '@klinflow/supabase';
 
 export default function SwarmDetails() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function SwarmDetails() {
   const [participants, setParticipants] = useState<SwarmParticipant[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isPosted, setIsPosted] = useState(false);
 
   const loadData = async () => {
     if (!id) return;
@@ -29,6 +31,17 @@ export default function SwarmDetails() {
     const result = await fetchSwarmById(id);
     setSwarm(result.swarm);
     setParticipants(result.participants);
+
+    const { data } = await supabase
+      .from('marketplace_listings')
+      .select('id')
+      .eq('swarm_id', id)
+      .maybeSingle();
+
+    if (data) {
+      setIsPosted(true);
+    }
+
     setLoading(false);
   };
 
@@ -92,7 +105,7 @@ export default function SwarmDetails() {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-[64px] z-[50] bg-[#F2F3F4] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-10 max-w-lg mx-auto">
+    <div className="fixed top-0 left-0 right-0 bottom-[34px] z-[50] bg-[#F2F3F4] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-10 max-w-lg mx-auto">
 
       {/* ── Edge-to-Edge Hero Image ── */}
       <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
@@ -296,20 +309,31 @@ export default function SwarmDetails() {
         {/* Creator Actions */}
         {swarm.creator_id === profile?.id && (
           <div className="flex flex-col gap-3 pt-2">
-            {swarm.current_weight > 0 && (
-              <button
-                onClick={() => navigate(`/community-collective/swarm/${swarm.id}/post-trade`)}
-                className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
-              >
-                <Truck className="w-4 h-4" /> Post Bulk Trade to Marketplace
-              </button>
+            {isPosted ? (
+              <div className="w-full bg-indigo-600 dark:bg-indigo-900/20 p-5 rounded-3xl border border-indigo-100 dark:border-indigo-800 text-center">
+                <Truck className="w-6 h-6 text-white mx-auto mb-2" />
+                <p className="text-sm font-semibold text-indigo-100 dark:text-indigo-300 leading-relaxed">
+                  Material posted awaiting buyer response you'll be notified. Check on your inventory page for response.
+                </p>
+              </div>
+            ) : (
+              <>
+                {swarm.current_weight > 0 && (
+                  <button
+                    onClick={() => navigate(`/community-collective/swarm/${swarm.id}/post-trade`)}
+                    className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                  >
+                    <Truck className="w-4 h-4" /> Post Bulk Trade to Marketplace
+                  </button>
+                )}
+                <button
+                  onClick={handleDelete}
+                  className="w-full py-4 bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" /> Delete Swarm
+                </button>
+              </>
             )}
-            <button
-              onClick={handleDelete}
-              className="w-full py-4 bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all flex items-center justify-center gap-2"
-            >
-              <Trash2 className="w-4 h-4" /> Delete Swarm
-            </button>
           </div>
         )}
 

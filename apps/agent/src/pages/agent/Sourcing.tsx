@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Scale, TrendingUp,
   ChevronRight, MessageSquareQuote, Check,
-  ArrowLeft, Clock, Package, CheckCircle2, Info, User
+  ArrowLeft, Clock, Package, CheckCircle2, Info, User, Users
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
@@ -166,10 +166,10 @@ export default function Sourcing() {
     <div className="flex flex-col min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
-        <div className="h-[calc(env(safe-area-inset-top,1rem)+9rem)]" />
+        <div className="h-[calc(env(safe-area-inset-top,1rem)+8.4rem)]" />
       )}
       {!selectedId && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.8rem)] pb-1 px-4 border-b border-slate-200 dark:border-slate-900 shadow-sm max-w-lg mx-auto">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 pt-[calc(env(safe-area-inset-top,1rem)+0.8rem)] pb-1 px-4 border-b border-slate-200 dark:border-slate-900 max-w-lg mx-auto">
           <div className="max-w-lg mx-auto">
             {/* Header row */}
             <div className="flex items-center justify-between mb-2">

@@ -328,6 +328,7 @@ export default function PostTrade() {
               assetValue={assetValue}
               logisticsFee={logisticsFee}
               photos={photos}
+              askingPrice={askingPrice}
             />
           )}
         </AnimatePresence>

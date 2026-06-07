@@ -12,7 +12,8 @@ export default function PostTradeSummaryStep({
   selectedHub,
   assetValue,
   logisticsFee,
-  photos
+  photos,
+  askingPrice
 }: any) {
   return (
     <motion.div key="p4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 pb-12">
@@ -101,6 +102,12 @@ export default function PostTradeSummaryStep({
         <div className="absolute -top-16 -right-16 w-56 h-56 bg-white/20 rounded-full blur-3xl" />
         <div className="relative z-10 space-y-6">
           <div className="space-y-4">
+            {askingPrice != null && (
+              <div className="flex justify-between items-center text-white">
+                <span className="text-[10px] font-black capitalize tracking-widest">Asking Price</span>
+                <span className="text-sm font-bold">KSh {askingPrice.toLocaleString()} /kg</span>
+              </div>
+            )}
             <div className="flex justify-between items-center text-white">
               <span className="text-[10px] font-black capitalize tracking-widest">Gross Value</span>
               <span className="text-sm font-bold">KSh {assetValue.toLocaleString()}</span>
