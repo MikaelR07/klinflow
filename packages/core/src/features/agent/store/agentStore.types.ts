@@ -27,6 +27,8 @@ export interface AgentJob {
   photos: string[];
   phone: string;
   is_market_trade: boolean;
+  is_group_pickup?: boolean;
+  swarm_id?: string | null;
   listing_id?: string | null;
   latitude?: number | null;
   longitude?: number | null;

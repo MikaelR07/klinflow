@@ -200,7 +200,9 @@ export const useBookingStore = create<BookingStore>()(
         notes: bookingData.notes || '',
         photo_url: bookingData.photoUrl || null,
         booking_type: bookingData.bookingType || 'any',
-        is_market_trade: bookingData.isMarketTrade || false
+        is_market_trade: bookingData.isMarketTrade || false,
+        swarm_id: bookingData.swarmId || null,
+        is_group_pickup: bookingData.isGroupPickup || false
       };
 
       const { data, error } = await supabase

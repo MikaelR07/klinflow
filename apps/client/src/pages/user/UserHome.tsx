@@ -392,7 +392,7 @@ export default function UserHome() {
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-[12px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
-                  Collective Hub
+                  Collective Pickups
                 </h3>
                 <p className="text-[10px] font-medium text-indigo-100 leading-snug mt-0.5 line-clamp-2">
                   Join community pickups and Goals

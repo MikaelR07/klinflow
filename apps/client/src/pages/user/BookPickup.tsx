@@ -369,7 +369,7 @@ export default function BookPickup() {
         </div>
       </div>
 
-      <div className="px-5 pt-[calc(env(safe-area-inset-top,1rem)+2rem)]">
+      <div className="px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+2rem)]">
         <AnimatePresence mode="wait">
 
           {step === 1 && (

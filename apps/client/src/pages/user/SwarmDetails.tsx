@@ -318,13 +318,22 @@ export default function SwarmDetails() {
               </div>
             ) : (
               <>
-                {swarm.current_weight > 0 && (
+                {profile?.role === 'user' ? (
                   <button
-                    onClick={() => navigate(`/community-collective/swarm/${swarm.id}/post-trade`)}
-                    className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                    onClick={() => navigate(`/community-collective/swarm/${swarm.id}/request-pickup`)}
+                    className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-sm shadow-emerald-900/20"
                   >
-                    <Truck className="w-4 h-4" /> Post Bulk Trade to Marketplace
+                    <Truck className="w-4 h-4" /> Request Group Pickup
                   </button>
+                ) : (
+                  swarm.current_weight > 0 && (
+                    <button
+                      onClick={() => navigate(`/community-collective/swarm/${swarm.id}/post-trade`)}
+                      className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                    >
+                      <Truck className="w-4 h-4" /> Post Bulk Trade to Marketplace
+                    </button>
+                  )
                 )}
                 <button
                   onClick={handleDelete}

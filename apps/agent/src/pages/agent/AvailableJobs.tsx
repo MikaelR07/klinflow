@@ -229,11 +229,13 @@ export default function AvailableJobs() {
                                 </p>
                               </div>
                               <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black capitalize tracking-wider border ${
-                                (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id)
-                                  ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20'
-                                  : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/20'
+                                job.is_group_pickup
+                                  ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20'
+                                  : (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id)
+                                    ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20'
+                                    : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/20'
                               }`}>
-                                {(job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) ? '🤝 Seller Trade' : '🏠 Resident Pickup'}
+                                {job.is_group_pickup ? '👥 Group Pickup' : (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) ? '🤝 Seller Trade' : '🏠 Resident Pickup'}
                               </div>
                             </div>
 
@@ -383,7 +385,10 @@ export default function AvailableJobs() {
                                 material-type:<span className="text-slate-900 dark:text-white ml-1">{waste?.label || job.material}</span>
                               </p>
                               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
-                                client:<span className="text-slate-900 dark:text-white ml-1">{job.customerName || job.customer || 'Resident'}</span>
+                                client:<span className="text-slate-900 dark:text-white ml-1">
+                                  {job.customerName || job.customer || 'Resident'}
+                                  {job.is_group_pickup && <span className="text-emerald-500 ml-1">👥 Group</span>}
+                                </span>
                               </p>
                               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
                                 ID: <span className="text-indigo-600 font-mono ml-1">{job.id.slice(0, 8).toUpperCase()}</span>

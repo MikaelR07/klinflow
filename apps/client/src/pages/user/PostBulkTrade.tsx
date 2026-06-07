@@ -120,7 +120,8 @@ export default function PostBulkTrade() {
     return () => cleanupAgents();
   }, [id]);
 
-  const liveRatePerKg = usePriceStore.getState().getCategoryPrice(swarm?.material || '');
+  const getCategoryPrice = usePriceStore(s => s.getCategoryPrice);
+  const liveRatePerKg = getCategoryPrice(swarm?.material || '');
   const quantity = swarm?.current_weight || 0;
 
   const logisticsFee = pickupMode === 'dropoff' ? 0 : getConfigValue('fee_pickup', 200);
@@ -215,7 +216,7 @@ export default function PostBulkTrade() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-0 pb-2 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] relative max-w-lg mx-auto w-full px-5">
+      <div className="flex-1 space-y-0 pb-2 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] relative max-w-lg mx-auto w-full px-1.5">
         <AnimatePresence mode="wait">
           {/* ── PRE-FILLED INFO ── */}
           <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 mb-6 flex items-center justify-between">
