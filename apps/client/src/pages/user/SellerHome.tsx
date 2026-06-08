@@ -231,7 +231,7 @@ export default function SellerHome() {
                 </div>
               </div>
               <div>
-                <h1 className="text-lg font-normal italic  tracking-wide text-slate-900 dark:text-white leading-tight">
+                <h1 className="text-lg font-normal   tracking-wide text-slate-900 dark:text-white leading-tight">
                   Hello {(profile?.fullName || profile?.name || 'Merchant').split(' ')[0]}👋
                 </h1>
                 <div className="flex items-center gap-1.5  text-[10px] text-primary font-semibold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
@@ -334,7 +334,7 @@ export default function SellerHome() {
                 <TruckIcon className="w-5 h-5 text-white" />
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[11px] font-normal capitalize tracking-widest leading-none">Sell</p>
+                <p className="text-[11px] font-semibold capitalize tracking-widest leading-none">Sell</p>
               </div>
             </button>
 
@@ -353,7 +353,7 @@ export default function SellerHome() {
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[11px] font-normal  dark:text-white capitalize tracking-widest leading-none">Listings</p>
+                <p className="text-[11px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Listings</p>
               </div>
             </button>
 
@@ -372,7 +372,7 @@ export default function SellerHome() {
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[11px] font-normal  dark:text-white capitalize tracking-widest leading-none">Offers</p>
+                <p className="text-[11px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Offers</p>
               </div>
             </button>
 
@@ -387,7 +387,7 @@ export default function SellerHome() {
 
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[11px] font-normal  dark:text-white capitalize tracking-widest leading-none">Wallet</p>
+                <p className="text-[11px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Wallet</p>
               </div>
             </button>
           </div>
@@ -399,7 +399,7 @@ export default function SellerHome() {
           >
 
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-amber-50 dark:bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 shadow-inner">
+              <div className="w-12 h-12 bg-amber-50 dark:bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500">
                 <Receipt className="w-6 h-6" />
               </div>
               <div>
@@ -415,7 +415,7 @@ export default function SellerHome() {
                     <span className="text-[8px] font-semibold text-white">{sentOffers.filter((o: any) => o.status === 'accepted').length}</span>
                   </div>
                 )} */}
-            <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl group-hover:bg-amber-500 group-hover:text-white transition-all relative z-10">
+            <div className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl  transition-all relative z-10">
               <ArrowRight className="w-4 h-4" />
             </div>
           </div>

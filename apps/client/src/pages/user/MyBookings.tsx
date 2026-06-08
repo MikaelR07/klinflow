@@ -308,7 +308,7 @@ export default function MyBookings() {
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shadow-inner border border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
+                        <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shadow-inner border border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
                           {b.photoUrl ? (
                             <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                           ) : (
@@ -323,7 +323,7 @@ export default function MyBookings() {
                             ID: <span className="text-primary font-mono">{b.id.slice(0, 8).toUpperCase()}</span>
                           </p>
                           <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1.5">
-                            <MapPin className="w-3 h-3 text-slate-400" /> {b.estate}
+                            <MapPin className="w-3 h-3 text-green-500" /> {b.estate}
                           </p>
                         </div>
                       </div>
@@ -431,18 +431,6 @@ export default function MyBookings() {
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed inset-0 z-[1000] bg-white dark:bg-slate-800 flex flex-col"
             >
-              <div className="bg-white dark:bg-slate-800 pt-[env(safe-area-inset-top,0px)] border-b border-slate-100 dark:border-slate-800">
-                <div className="flex items-center justify-between px-4 py-3">
-                  <button
-                    onClick={() => setSelectedBooking(null)}
-                    className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-90 transition-all text-slate-600 dark:text-white"
-                  >
-                    <ArrowLeft className="w-5 h-5" />
-                  </button>
-                  <p className="text-xs font-bold text-slate-900 dark:text-white capitalize tracking-widest">Pickup Detail</p>
-                  <div className="w-10" /> {/* Spacer for balance */}
-                </div>
-              </div>
 
               <div className="flex-1 overflow-y-auto no-scrollbar">
                 <div className="w-full aspect-[4/5] bg-slate-900 relative overflow-hidden">
@@ -461,36 +449,40 @@ export default function MyBookings() {
                   )}
                 </div>
 
-                <div className="relative -mt-24 bg-white dark:bg-slate-800 rounded-t-[1rem] px-4 pt-6 pb-24 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
-                  <div className="inline-flex items-center px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl">
-                    <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest">pickup id: <span className="text-slate-900 dark:text-white font-mono">{String(b.id || '').slice(0, 8).toUpperCase()}</span></p>
-                  </div>
+                {/* Overlaid Back Button */}
+                <button
+                  onClick={() => navigate(-1)}
+                  className="absolute top-[calc(env(safe-area-inset-top,1.5rem)+1rem)] left-4 w-10 h-10 rounded-2xl bg-black/70 border border-white/20 flex items-center justify-center  active:scale-95 transition-all z-10"
+                >
+                  <ArrowLeft className="w-5 h-5 text-white" />
+                </button>
+
+                <div className="relative -mt-32 bg-white dark:bg-slate-800 rounded-t-[1rem] px-1.5 pt-2 pb-4 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
 
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
+                    <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
                       <Package className="w-4 h-4 text-primary mb-2" />
                       <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Material</p>
                       <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{String(waste?.label || wasteTypeVal)}</p>
                     </div>
-                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
+                    <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
                       <Clock className="w-4 h-4 text-amber-500 mb-2" />
                       <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-2">Status</p>
                       <span className={`text-[9px] font-black tracking-[0.05em] px-2 py-1 rounded-lg capitalize shadow-sm whitespace-nowrap ${status.color}`}>
                         {String(status.label)}
                       </span>
                     </div>
-                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
+                    <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
                       <MapPin className="w-4 h-4 text-rose-500 mb-2" />
                       <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Origin</p>
                       <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{String(b.estate || '')}</p>
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 rounded-[2rem]  space-y-6 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
+                  <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 rounded-[1rem] !mt space-y-3 relative overflow-hidden">
                     <div className="flex items-center justify-between relative z-10">
                       <div className="space-y-1">
-                        <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest">Settlement Value</p>
+                        <p className="text-[11px] font-bold text-emerald-100 capitalize tracking-widest">Settlement Value</p>
                         {b.status === 'completed' ? (
                           <p className="text-3xl font-black text-white tracking-tighter leading-none">
                             KSh {(b.totalPrice || 0).toLocaleString()}
@@ -499,7 +491,7 @@ export default function MyBookings() {
                           <p className="text-xl font-black text-emerald-200 capitalize tracking-[0.2em] italic leading-none opacity-50">Cancelled</p>
                         ) : (
                           <div className="flex flex-col gap-1">
-                            <p className="text-xl font-black text-white tracking-tighter flex items-center gap-2 leading-none">
+                            <p className="text-sm font-black text-white tracking-tighter flex items-center gap-2 leading-none">
                               <Zap className="w-4 h-4 fill-emerald-300" /> Awaiting Verification
                             </p>
                           </div>
@@ -530,7 +522,7 @@ export default function MyBookings() {
                   )}
 
                   {(b.notes || b.wasteType) && (
-                    <div className="bg-slate-50 dark:bg-slate-800/40 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+                    <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm">
                       <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
                         <Info className="w-4 h-4 text-primary" /> Collector Instructions
                       </h4>
@@ -550,7 +542,7 @@ export default function MyBookings() {
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleCancel(b.id); setSelectedBooking(null); }}
-                        className="flex-1 py-4 bg-white dark:bg-slate-800 text-red-600 border border-red-50 dark:border-red-900/20 rounded-2xl font-black text-[10px] capitalize tracking-[0.1em] active:scale-95 transition-all flex items-center justify-center gap-2"
+                        className="flex-1 py-4 bg-slate-500 dark:bg-slate-900 text-red-600 border border-red-50 dark:border-red-900/20 rounded-2xl font-black text-[10px] capitalize tracking-[0.1em] active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
                         <XCircle className="w-4 h-4" /> Cancel
                       </button>
@@ -559,7 +551,7 @@ export default function MyBookings() {
 
                   <button
                     onClick={() => setSelectedBooking(null)}
-                    className="w-full py-4 text-slate-400 font-bold text-[10px] capitalize tracking-[0.3em] active:opacity-50"
+                    className="w-full py-4 text-slate-800 font-bold text-[11px] capitalize tracking-[0.3em] active:opacity-50"
                   >
                     Close Detail
                   </button>
