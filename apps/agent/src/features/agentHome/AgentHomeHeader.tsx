@@ -39,8 +39,8 @@ export default function AgentHomeHeader({
               </div>
             </div>
             <div>
-              <h1 className="text-lg font-normal tracking-tight text-slate-900 dark:text-white leading-tight">Hello {profile?.name?.split(' ')[0]}👋</h1>
-              <div className="flex items-center gap-1.5 text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
+              <h1 className="text-lg font-normal italic tracking-wide text-slate-900 dark:text-white leading-tight">Hello {profile?.name?.split(' ')[0]}👋</h1>
+              <div className="flex items-center gap-1.5 text-[10px] text-primary font-bold capitalize tracking-wide bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
                 <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'searching...'}
               </div>
             </div>
@@ -48,7 +48,7 @@ export default function AgentHomeHeader({
 
           <button
             onClick={() => navigate('/notifications')}
-            className="relative w-11 h-11 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
+            className="relative w-11 h-11 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all active:scale-95 group"
           >
             <Bell className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
             {unreadCount > 0 && (

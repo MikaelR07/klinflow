@@ -23,7 +23,7 @@ export default function BookPickupConfirmModal({
       {showEscrowModal && (
         <div className="fixed inset-0 z-[100] flex items-end justify-center p-4 pb-28">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowEscrowModal(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
-          <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-[3rem] p-8 pb-10 shadow-2xl overflow-hidden">
+          <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2rem] p-8 pb-10 shadow-2xl overflow-hidden">
             <div className="relative space-y-6">
               <div className="w-16 h-16 bg-primary/10 rounded-[2rem] flex items-center justify-center">
                 {preselectedCompanyName ? <span className="text-3xl">🏢</span> : <CheckCircle2 className="w-8 h-8 text-primary" />}
@@ -49,8 +49,8 @@ export default function BookPickupConfirmModal({
               >
                 {isSubmitting ? 'OPTIMIZING & DISPATCHING...' : 'DISPATCH AGENT NOW'}
               </Button>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="w-full text-xs font-semibold text-slate-400 capitalize tracking-widest mt-2"
                 onClick={() => setShowEscrowModal(false)}
               >

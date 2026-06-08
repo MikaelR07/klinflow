@@ -34,7 +34,7 @@ export default function AgentHomeActivePickup({ activePickup, navigate }: AgentH
   return (
     <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-700">
       <div className="flex items-center justify-between mb-3 mt-1 px-1">
-        <p className="text-[11px] font-semibold text-emerald-500 dark:text-slate-400 tracking-wide">
+        <p className="text-[12px] font-semibold text-emerald-500 dark:text-slate-400 tracking-wide">
           Active Quotes Pickups
         </p>
 

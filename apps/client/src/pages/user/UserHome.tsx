@@ -176,7 +176,7 @@ export default function UserHome() {
         {/* Header Section - Edge to Edge - DYNAMIC STICKY */}
         <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
           <div className="flex items-center justify-between px-1">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               {/* Profile Avatar */}
               <div className="shrink-0">
                 <div className="w-12 h-12  rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-2xl shadow-lg border-2 border-white dark:border-slate-700 transition-all overflow-hidden">
@@ -188,17 +188,17 @@ export default function UserHome() {
                 </div>
               </div>
               <div>
-                <h1 className="text-lg font-normal  tracking-tight text-slate-900 dark:text-white leading-tight">
+                <h1 className="text-lg font-normal italic tracking-wide text-slate-900 dark:text-white leading-tight">
                   Hello {(profile?.fullName || profile?.name || 'Resident').split(' ')[0]}👋
                 </h1>
-                <div className="flex items-center gap-1.5  text-[10px] text-primary font-bold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
+                <div className="flex items-center gap-1.5  text-[10px] text-primary font-semibold capitalize tracking-wider bg-primary/10 px-0.5 py-0.5 rounded-full border border-primary/20 w-fit">
                   <MapPin className="w-3 h-3" /> {profile?.location?.estate || profile?.estate || 'searching...'}
                 </div>
               </div>
             </div>
             <button
               onClick={() => navigate('/notifications')}
-              className="relative w-11 h-11 shrink-0 rounded-3xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
+              className="relative w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center  transition-all active:scale-95 group"
             >
               <Bell className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
               {Number(unreadCount) > 0 && (
@@ -211,7 +211,7 @@ export default function UserHome() {
         </div>
 
         {/* Wallet Hero */}
-        <div className="bg-gradient-to-br from-[#064e3b] to-primary  rounded-xl p-6 gpu-layer">
+        <div className="bg-gradient-to-br  from-[#064e3b] to-primary  rounded-xl p-6 gpu-layer">
           <div className="flex flex-col gap-6 relative z-10">
             <div className="flex items-end justify-between">
               <div>
@@ -268,11 +268,11 @@ export default function UserHome() {
         <div className="bg-white dark:bg-slate-900/60 mt-3 rounded-[1rem] p-2 border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
 
           {/* Quick Actions */}
-          <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1">
+          <p className="text-[13px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1">
             Quick Actions
           </p>
 
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-2 !mt-1">
 
             <button
               onClick={() => navigate('/book-pickup')}
@@ -283,7 +283,7 @@ export default function UserHome() {
               </div>
 
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">
+                <p className="text-[11px] font-normal capitalize tracking-widest leading-none dark:text-white">
                   Pickup
                 </p>
               </div>
@@ -298,7 +298,7 @@ export default function UserHome() {
               </div>
 
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">
+                <p className="text-[11px] font-normal capitalize tracking-widest leading-none dark:text-white">
                   Bookings
                 </p>
               </div>
@@ -313,7 +313,7 @@ export default function UserHome() {
               </div>
 
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">
+                <p className="text-[11px] font-normal capitalize tracking-widest leading-none dark:text-white">
                   Dashboard
                 </p>
               </div>
@@ -328,7 +328,7 @@ export default function UserHome() {
               </div>
 
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none dark:text-white">
+                <p className="text-[11px] font-normal capitalize tracking-widest leading-none dark:text-white">
                   Wallet
                 </p>
               </div>
@@ -345,7 +345,7 @@ export default function UserHome() {
               </div>
               <div>
                 <h3 className="text-[14px] font-semibold text-white leading-none mb-1">Ready to recycle?</h3>
-                <p className="text-[11px]  text-slate-100">Find a verified collection partner near you</p>
+                <p className="text-[12px]  text-slate-100">Find a verified collection partner near you</p>
               </div>
             </div>
             <div className="w-8 h-8  rounded-full flex items-center justify-center shrink-0 transition-colors">
@@ -355,21 +355,21 @@ export default function UserHome() {
 
         </div>
         <div className="bg-white dark:bg-slate-900/60 mt-3 rounded-[1rem] p-2 border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
-          <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1">
+          <p className="text-[13px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1">
             Market Intelligence
           </p>
 
           {/* ── MARKET INTELLIGENCE ── */}
           <div
             onClick={() => navigate('/market-pulse')}
-            className="bg-gradient-to-br from-primary to-emerald-600 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+            className="bg-gradient-to-br  from-primary to-emerald-600 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
           >
             <div className="flex items-center gap-2.5 relative z-10 w-full">
               <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
                 <BarChart3Icon className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-[12px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
+                <h3 className="text-[14px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
                   Market Prices
                 </h3>
                 <p className="text-[10px] font-medium text-emerald-100 leading-snug mt-0.5 line-clamp-2">
@@ -390,7 +390,7 @@ export default function UserHome() {
                 <Users className="w-4 h-4 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-[12px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
+                <h3 className="text-[14px] sm:text-xs font-bold text-white capitalize tracking-tight leading-tight truncate">
                   Collective Pickups
                 </h3>
                 <p className="text-[10px] font-medium text-indigo-100 leading-snug mt-0.5 line-clamp-2">

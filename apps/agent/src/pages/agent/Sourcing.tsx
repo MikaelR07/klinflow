@@ -501,12 +501,12 @@ export default function Sourcing() {
                                 </span>
                               )}
                             </div>
-                            <span className="text-xs font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {listing.pricePerKg}/kg</span>
+                            <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {listing.pricePerKg}/kg</span>
                           </div>
 
                           {/* Row 2: Location & Optional Badge */}
                           <div className="flex items-center justify-between mt-0.5">
-                            <p className="text-[9px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                            <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
                               <MapPin className="w-2.5 h-2.5 text-green-500" /> {listing.location}
                             </p>
                             {getHasOffer(listing.id) && (
@@ -518,16 +518,16 @@ export default function Sourcing() {
 
                           {/* Row 3: Timestamp & Quantity */}
                           <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50">
-                            <p className="text-[9px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
-                              <Clock className="w-2.5 h-2.5 text-slate-300" /> {listing.createdAt ? new Date(listing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'ASAP'}
+                            <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
+                              <Clock className="w-2.5 h-2.5 text-slate-400" /> {listing.createdAt ? new Date(listing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'ASAP'}
                             </p>
-                            <p className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
-                              <span className="text-[8px] text-slate-400 not-italic font-bold mr-1 opacity-70">Quantity:</span>
+                            <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
+                              <span className="text-[9px] text-slate-400 not-italic font-bold mr-1 opacity-70">Quantity:</span>
                               <Scale className="w-2.5 h-2.5" /> {listing.quantity} KG
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center justify-center text-slate-200">
+                        <div className="flex items-center justify-center text-slate-300">
                           <ChevronRight className="w-4 h-4" />
                         </div>
                       </div>

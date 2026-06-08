@@ -41,7 +41,7 @@ export default function BookPickupSummaryStep({
             <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Payment Status</span>
             <span className="text-xs text-slate-400">Via Klinflow Wallet</span>
           </div>
-          <span className="text-xs font-semibold text-orange-500 capitalize tracking-widest">Verified Weight</span>
+          <span className="text-xs font-semibold text-orange-500 capitalize tracking-widest">Awaiting Verification</span>
         </div>
 
         {/* Estimated Reward Display */}
@@ -66,13 +66,13 @@ export default function BookPickupSummaryStep({
         </div>
       </div>
 
-      <div className="p-8 rounded-3xl text-center relative overflow-hidden shadow-2xl transition-all bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 mt-6">
+      <div className="p-4 rounded-xl text-center relative overflow-hidden  transition-all bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 mt-6">
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           <p className="text-xs font-semibold capitalize tracking-[0.3em] text-primary mb-4">Direct Verification</p>
-          <h3 className="text-3xl font-semibold tracking-tighter mt-1 italic text-slate-900 dark:text-white">Weight Verified Payout</h3>
+          <h3 className="text-2xl font-semibold tracking-tighter mt-1  text-slate-900 dark:text-white">Payout on Weight Verification</h3>
           <p className="text-xs font-semibold text-slate-400 mt-4 leading-relaxed">
-            You will be paid instantly to your wallet based on the <span className="text-slate-900 dark:text-white">KSh {activeRate}/kg</span> {selectedAgent || selectedCompanyId ? 'rate offered by your selected partner' : 'standard market rate'}.
+            Agents have Different Rates Currently We're Using <span className="text-slate-900 dark:text-white">KSh {activeRate}/kg</span> {selectedAgent || selectedCompanyId ? 'rate offered by your selected partner' : 'standard market rate'}.
           </p>
         </div>
       </div>

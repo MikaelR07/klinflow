@@ -22,7 +22,7 @@ export default function AgentHomeStats({
     <>
       {/* ── PERFORMANCE CARD ── */}
       <div className="relative !mt-1.5">
-        <div className="relative bg-gradient-to-br from-primary to-[#064e3b] dark:from-emerald-900 dark:to-primary rounded-xl p-3 shadow-none">
+        <div className="relative bg-gradient-to-br from-[#064e3b] to-primary  rounded-xl p-3 shadow-none">
           {/* TOP SECTION */}
           <div className="flex items-start justify-between gap-3 mb-2">
             {/* LEFT */}
@@ -129,7 +129,7 @@ export default function AgentHomeStats({
 
       {/* ── QUICK ACTIONS ── */}
       <div className="px-2  !mt-2">
-        <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mb-0.5  px-1">
+        <p className="text-[13px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mb-0.5  px-1">
           Quick Actions
         </p>
         <div className="grid grid-cols-4 gap-1">
