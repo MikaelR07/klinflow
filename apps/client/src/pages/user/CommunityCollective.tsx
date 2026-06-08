@@ -51,7 +51,7 @@ export default function CommunityCollective() {
         >
           {/* Background Image */}
           <div
-            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-70 dark:opacity-30 z-0"
+            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat opacity-70 z-0"
             style={{ backgroundImage: "url('/vectors/collective-banner.webp')" }}
           />
 
