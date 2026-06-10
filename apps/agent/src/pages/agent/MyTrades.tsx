@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, MapPin, Scale, Wallet, 
   CheckCircle2, Navigation, Phone, Clock,
-  PackageCheck, Info, ShieldCheck, TrendingUp, ChevronDown, ArrowRight
+  PackageCheck, Info, ShieldCheck, TrendingUp, ChevronDown, ChevronRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
@@ -178,119 +178,148 @@ export default function MyTrades() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] bg-white dark:bg-slate-800 overflow-y-auto overflow-x-hidden no-scrollbar pb-24"
+                className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-800 overflow-y-auto overflow-x-hidden no-scrollbar pb-6"
               >
                 {(() => {
                   const trade = activeTrades.find(t => t.id === expandedId);
                   if (!trade) return null;
                   const photoUrl = trade.photo_url || trade.listing?.photo_url;
                   
+                  // mock photos array if only one
+                  const photos = photoUrl ? [photoUrl] : [];
+
                   return (
                     <div className="max-w-lg mx-auto">
-                      {/* Edge-to-Edge Hero Image */}
-                      <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-900 relative overflow-hidden shadow-xl">
-                        {photoUrl ? (
-                          <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-800">
-                            <div className="text-6xl mb-4">{getMaterialEmoji(trade.waste_type || trade.listing?.material || '')}</div>
-                            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">Asset Visual Unavailable</p>
+                      {/* ── FIXED TOP NAV ── */}
+                      <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+                        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+                          <button onClick={() => setExpandedId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+                            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+                          </button>
+                          <div>
+                            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Trade Details</h1>
+                            <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> Marketplace Trade
+                            </p>
                           </div>
-                        )}
-
-                        <button 
-                          onClick={() => setExpandedId(null)}
-                          style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
-                          className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
-                        >
-                          <ArrowLeft className="w-5 h-5" />
-                        </button>
+                        </div>
                       </div>
 
-                      {/* Content Sheet (Overlaps Image) */}
-                      <div className="relative -mt-36 bg-white dark:bg-slate-800 rounded-t-2xl px-3 pt-6 pb-2 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <p className="text-[10px] font-black text-emerald-600 capitalize tracking-[0.2em]">Active Marketplace Trade</p>
-                            <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 leading-none">Secured & Verified Deal</p>
-                          </div>
-                          <div className="text-right">
-                             <div className="bg-emerald-500/10 text-emerald-600 px-3 py-1 rounded-lg text-[10px] font-black capitalize tracking-tighter border border-emerald-500/20">
-                                {trade.status?.replace('_', ' ')}
-                             </div>
-                          </div>
-                        </div>
-
-                        {/* Unified Material, Merchant & Location Cards */}
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col items-center text-center">
-                            <PackageCheck className="w-3.5 h-3.5 text-indigo-500 mb-2" />
-                            <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Asset</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{trade.waste_type || 'Materials'}</p>
-                          </div>
-                          <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col items-center text-center">
-                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 mb-2" />
-                            <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Seller</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">Verified Partner</p>
-                          </div>
-                          <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col items-center text-center">
-                            <MapPin className="w-3.5 h-3.5 text-rose-500 mb-2" />
-                            <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Origin</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{trade.estate}</p>
-                          </div>
-                                    {/* Trade Financials Card */}
-                        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
-                           <div className="flex items-center justify-between">
-                             <div>
-                               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Contract Settlement</p>
-                               <p className="text-lg font-bold text-slate-800 dark:text-white">
-                                 KSh {(trade.total_price || 0).toLocaleString()}
-                               </p>
-                             </div>
-                             <div className="text-right">
-                               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Unit Price</p>
-                               <p className="text-xs font-black text-emerald-600 italic">
-                                 KES {Math.round((trade.total_price || 0) / (trade.actual_weight_kg || trade.listing?.quantity || 1))} /KG
-                               </p>
-                             </div>
-                           </div>
- 
-                           <div className="h-px bg-slate-50 dark:bg-slate-700" />
- 
-                           <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                 <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
-                                    <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                 </div>
-                                 <div>
-                                    <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Locked Volume</p>
-                                    <p className="text-sm font-bold text-slate-800 dark:text-white capitalize tracking-tight">{trade.actual_weight_kg || trade.listing?.quantity || 0} KG</p>
-                                 </div>
+                      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
+                        {/* ── IMAGE CAROUSEL ── */}
+                        <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
+                          <div className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar">
+                            {photos.length > 0 ? photos.map((imgUrl, idx) => (
+                              <div key={idx} className="w-full h-full shrink-0 snap-center">
+                                <OptimizedImage src={getThumbnailUrl(imgUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={`${trade.waste_type || trade.listing?.material} - View ${idx + 1}`} />
                               </div>
-                           </div>
-                        </div>              </div>
+                            )) : (
+                              <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800">
+                                <div className="text-6xl mb-4">{getMaterialEmoji(trade.waste_type || trade.listing?.material || '')}</div>
+                                <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">Asset Visual Unavailable</p>
+                              </div>
+                            )}
+                          </div>
 
-                        {/* Logistics Context */}
-                        <div className="bg-white dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                           <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
-                             <Navigation className="w-3.5 h-3.5" /> Logistics Instructions
-                           </h4>
-                           <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
-                             "{trade.notes || `Please collect ${trade.waste_type || 'materials'} from ${trade.estate}. Ensure weight verification is completed on-site.`}"
-                           </p>
+                          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
+
+                          {photos.length > 1 && (
+                            <>
+                              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+                                <span>Photos ({photos.length})</span>
+                                <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
+                              </div>
+                              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                                {photos.map((_, i) => (
+                                  <div key={i} className="w-1.5 h-1.5 rounded-full bg-white shadow-lg opacity-50 first:opacity-100" />
+                                ))}
+                              </div>
+                            </>
+                          )}
                         </div>
 
-                        <div className="pt-4 space-y-3">
+                        {/* ── MATERIAL SPECIFICATIONS CARD ── */}
+                        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Asset</p>
+                              <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
+                                {trade.waste_type || trade.listing?.material || 'Recyclables'}
+                              </h2>
+                            </div>
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 border border-emerald-200 dark:border-emerald-500/20">
+                              <span className="text-[9px] font-black uppercase tracking-wider leading-none mt-px">{trade.status?.replace('_', ' ')}</span>
+                            </div>
+                          </div>
+
+                          <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="flex items-start gap-3">
+                              <Wallet className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Contract Settlement</p>
+                                <p className="text-xs font-black text-slate-900 dark:text-white">KSh {(trade.total_price || 0).toLocaleString()}</p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-3">
+                              <Scale className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Locked Volume</p>
+                                <span className="text-xs font-black text-slate-900 dark:text-white">{trade.actual_weight_kg || trade.listing?.quantity || 0} KG</span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-3">
+                              <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Origin</p>
+                                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{trade.estate}</span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-3">
+                              <ShieldCheck className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Seller</p>
+                                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">Verified Partner</span>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start gap-3 col-span-2">
+                               <TrendingUp className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                               <div>
+                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Unit Price</p>
+                                 <span className="text-xs font-black text-slate-900 dark:text-white">KES {Math.round((trade.total_price || 0) / (trade.actual_weight_kg || trade.listing?.quantity || 1))} /KG</span>
+                               </div>
+                            </div>
+                          </div>
+
+                          <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                          <div>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                              <Navigation className="w-3.5 h-3.5" /> Logistics Instructions
+                            </p>
+                            <p className="text-xs text-slate-600 dark:text-slate-350 italic">
+                              "{trade.notes || `Please collect ${trade.waste_type || 'materials'} from ${trade.estate}. Ensure weight verification is completed on-site.`}"
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="pt-2 pb-8 space-y-3">
                            <button 
                               onClick={() => handleStartMission(trade)}
-                              className="w-full py-4 bg-emerald-600 text-white rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all group"
+                              className="w-full py-4 bg-emerald-600 text-white rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all group"
                            >
                               <Navigation className="w-5 h-5 group-hover:animate-pulse" />
                               <span className="font-black text-xs capitalize tracking-[0.2em]">Start Collection</span>
                            </button>
                            <button 
                               onClick={() => setExpandedId(null)}
-                              className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-2xl font-black text-xs capitalize tracking-[0.2em] active:scale-95 transition-all"
+                              className="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 rounded-2xl font-black text-xs capitalize tracking-[0.2em] active:scale-95 transition-all"
                            >
                               Return to List
                            </button>
@@ -327,33 +356,52 @@ export default function MyTrades() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="bg-white dark:bg-slate-800 -mx-3 border-b border-slate-200 dark:border-slate-800 overflow-hidden transition-all"
+                      className="bg-white dark:bg-slate-900/60 border-b border-slate-100 dark:border-slate-800 transition-all overflow-hidden"
                     >
-                      <button 
+                      <div 
                         onClick={() => setExpandedId(trade.id)}
-                        className="w-full p-4 flex items-center gap-3 active:bg-slate-50 dark:active:bg-slate-800 transition-colors"
+                        className="bg-white dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
                       >
-                        <div className="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-xl shrink-0 border border-slate-100 dark:border-slate-700">
-                          {getMaterialEmoji(trade.waste_type || trade.listing?.material)}
+                        <div className="flex gap-3">
+                          <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
+                            {(trade.photo_url || trade.listing?.photo_url) ? (
+                              <OptimizedImage src={getThumbnailUrl(trade.photo_url || trade.listing?.photo_url, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={trade.listing?.material || trade.waste_type} />
+                            ) : (
+                              getMaterialEmoji(trade.waste_type || trade.listing?.material)
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0 flex flex-col justify-center">
+                            {/* Row 1: Material & Price */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">{trade.listing?.material || trade.waste_type || 'Recyclables'}</h3>
+                              </div>
+                              <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {(trade.total_price || 0).toLocaleString()}</span>
+                            </div>
+
+                            {/* Row 2: Location */}
+                            <div className="flex items-center justify-between mt-0.5">
+                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                                <MapPin className="w-2.5 h-2.5 text-green-500" /> {trade.estate || 'Nairobi'}
+                              </p>
+                            </div>
+
+                            {/* Row 3: Seller & Quantity */}
+                            <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50 mt-1">
+                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
+                                <ShieldCheck className="w-2.5 h-2.5 text-slate-400" /> Verified Partner
+                              </p>
+                              <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
+                                <span className="text-[9px] text-slate-400 not-italic font-bold mr-1 opacity-70">Contracted:</span>
+                                <Scale className="w-2.5 h-2.5" /> {trade.actual_weight_kg || trade.listing?.quantity || 0} KG
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-center text-slate-300">
+                            <ChevronRight className="w-4 h-4" />
+                          </div>
                         </div>
-                        <div className="flex-1 min-w-0 text-left">
-                          <h4 className="text-xs font-semibold text-slate-900 dark:text-white leading-none capitalize tracking-tight truncate">
-                            {trade.listing?.material || trade.waste_type || 'Recyclables'}
-                          </h4>
-                          <p className="text-[10px] font-semibold text-emerald-500 capitalize tracking-widest mt-1 flex items-center gap-1">
-                            <MapPin className="w-2.5 h-2.5" /> {trade.estate || 'Nairobi'}
-                          </p>
-                        </div>
-                        <div className="text-right shrink-0">
-                          <p className="text-sm font-black text-slate-900 dark:text-white tracking-tighter leading-none font-mono">
-                            KSh {(trade.total_price || 0).toLocaleString()}
-                          </p>
-                          <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mt-1">
-                            {trade.actual_weight_kg || trade.listing?.quantity || 0}kg Contracted
-                          </p>
-                        </div>
-                        <ArrowRight className="w-4 h-4 text-slate-300 ml-1" />
-                      </button>
+                      </div>
                     </motion.div>
                   ))
                 )}

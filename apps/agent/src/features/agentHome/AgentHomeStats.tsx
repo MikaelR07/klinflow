@@ -66,7 +66,7 @@ export default function AgentHomeStats({
               <div className="w-full flex justify-end">
                 <button
                   onClick={() => navigate('/deposit')}
-                  className="bg-emerald-800 text-white px-8 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
+                  className="bg-primary text-white px-8 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
                 >
                   Deposit
                 </button>
@@ -126,10 +126,10 @@ export default function AgentHomeStats({
           </div>
         </div>
       </div>
-
+    <div className="bg-white dark:bg-slate-900 rounded-xl !mt-2 p-1 border border-slate-200/60 dark:border-slate-700 space-y-4">
       {/* ── QUICK ACTIONS ── */}
-      <div className="px-2  !mt-2">
-        <p className="text-[13px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mb-0.5  px-1">
+      <div className="px-2">
+        <p className="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mb-0.5  px-1">
           Quick Actions
         </p>
         <div className="grid grid-cols-4 gap-1">
@@ -181,6 +181,7 @@ export default function AgentHomeStats({
             </p>
           </button>
         </div>
+      </div>
       </div>
     </>
   );

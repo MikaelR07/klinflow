@@ -148,7 +148,7 @@ export default function AvailableJobs() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-5"
+                className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-800 overflow-y-auto no-scrollbar pb-6"
               >
                 {(() => {
                   const job = currentJobs.find(j => j.id === expandedId);
@@ -156,160 +156,175 @@ export default function AvailableJobs() {
                   const waste = categories.find((w) => w.slug === job.material) ||
                     categories.find((w) => w.id === job.material);
                   const photoUrl = job.photoUrl || job.photo_url;
+                  
+                  // mock photos array if only one
+                  const photos = photoUrl ? [photoUrl] : [];
 
                   return (
                     <div className="max-w-lg mx-auto">
-                      {/* Edge-to-Edge Hero Image */}
-                      <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 relative overflow-hidden shadow-xl">
-                        {photoUrl ? (
-                          <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800">
-                            <div className="text-6xl mb-4">{waste?.icon || '📦'}</div>
-                            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">Asset Visual Unavailable</p>
-                          </div>
-                        )}
-
-                        <button
-                          onClick={() => setExpandedId(null)}
-                          style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
-                          className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
-                        >
-                          <ArrowLeft className="w-5 h-5" />
-                        </button>
-                      </div>
-
-                      {/* Content Sheet */}
-                      <div className="relative -mt-36 bg-[#F2F3F4] dark:bg-slate-800 rounded-t-[1rem] px-3 pt-4 pb-5 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.15)]">
-                        <div className="flex items-center justify-between mb-4">
+                      {/* ── FIXED TOP NAV ── */}
+                      <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+                        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+                          <button onClick={() => setExpandedId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+                            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+                          </button>
                           <div>
-                            <p className="text-[11px] font-black text-indigo-600 capitalize tracking-[0.2em]">Mission Request</p>
-                            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 leading-none">Pickup ID: {job.id.slice(0, 8).toUpperCase()}</p>
-                          </div>
-                          <div className="text-right">
-                            <div className={`px-3 py-1 rounded-lg text-[10px] font-black capitalize tracking-tighter border ${job.time?.toUpperCase() === 'ASAP'
-                              ? 'bg-rose-500/10 text-rose-600 border-rose-500/20'
-                              : 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20'
-                              }`}>
-                              {job.time?.toLowerCase() || 'scheduled'}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Material, Client & Location */}
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
-                            <Package className="w-3.5 h-3.5 text-indigo-500 mb-2" />
-                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Material-Type</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{waste?.label || job.material}</p>
-                          </div>
-                          <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
-                            <User className="w-3.5 h-3.5 text-emerald-500 mb-2" />
-                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Client's Name</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{job.customerName || job.customer || 'Resident'}</p>
-                          </div>
-                          <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col items-center text-center">
-                            <MapPin className="w-3.5 h-3.5 text-rose-500 mb-2" />
-                            <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Location</p>
-                            <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{job.location}</p>
-                          </div>
-                        </div>
-
-                        {/* Earnings & Load */}
-                        {activeTab === 'completed' ? (
-                          <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-4 shadow-sm">
-                            {/* Payout Amount */}
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Amount Paid to Client</p>
-                                <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                                  <DollarSign className="w-4 h-4" /> KSh {(job.total_price || job.fee || job.pay || 0).toLocaleString()}
-                                </p>
-                              </div>
-                              <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black capitalize tracking-wider border ${job.is_group_pickup
-                                ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20'
-                                : (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id)
-                                  ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20'
-                                  : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-500/20'
-                                }`}>
-                                {job.is_group_pickup ? '👥 Group Pickup' : (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) ? '🤝 Seller Trade' : '🏠 Resident Pickup'}
-                              </div>
-                            </div>
-
-                            <div className="h-px bg-slate-100 dark:bg-slate-700" />
-
-                            {/* Payment Timestamp */}
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-100 dark:border-emerald-500/20 shrink-0">
-                                  <Clock className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                                </div>
-                                <div>
-                                  <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Payment Settled</p>
-                                  <p className="text-xs font-black text-slate-900 dark:text-white tracking-tight">
-                                    {job.completed_at
-                                      ? new Date(job.completed_at).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-                                      : job.date || 'N/A'
-                                    }
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="h-px bg-slate-100 dark:bg-slate-700" />
-
-                            {/* Verified Weight */}
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
-                                  <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                </div>
-                                <div>
-                                  <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Verified Weight</p>
-                                  <p className="text-sm font-black text-slate-900 dark:text-white capitalize tracking-tight">{job.actual_weight_kg || 0} KG</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-between">
-                            <div>
-                              <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">EST. Material value</p>
-                              <p className="text-base font-black text-slate-900 dark:text-white flex items-center gap-1">
-                                <Zap className="w-3.5 h-3.5 fill-emerald-500 text-emerald-500" /> KSh {Math.floor((job.actual_weight_kg || job.bags || 0) * getPriceForMaterial(job.material || ''))}
-                              </p>
-                            </div>
-
-                            <div className="w-px h-8 bg-slate-100 dark:bg-slate-700" />
-
-                            <div className="text-right">
-                              <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">EST. LOAD</p>
-                              <div className="flex items-center justify-end gap-1">
-                                <p className="text-base font-black text-slate-900 dark:text-white capitalize tracking-tight">{job.actual_weight_kg || job.bags || 0} KG</p>
-                                <Scale className="w-3.5 h-3.5 text-indigo-500" />
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Description */}
-                        {job.notes && (
-                          <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
-                            <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
-                              <Info className="w-3.5 h-3.5" /> Description
-                            </h4>
-                            <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
-                              "{job.notes}"
+                            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Mission Details</h1>
+                            <p className="text-[10px] font-bold text-indigo-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" /> Pickup Request
                             </p>
                           </div>
-                        )}
+                        </div>
+                      </div>
 
-                        <div className="pt-4 flex gap-3">
+                      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
+                        {/* ── IMAGE CAROUSEL ── */}
+                        <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
+                          <div className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar">
+                            {photos.length > 0 ? photos.map((imgUrl, idx) => (
+                              <div key={idx} className="w-full h-full shrink-0 snap-center">
+                                <OptimizedImage src={getThumbnailUrl(imgUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={`${job.material} - View ${idx + 1}`} />
+                              </div>
+                            )) : (
+                              <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800">
+                                <div className="text-6xl mb-4">{waste?.icon || '📦'}</div>
+                                <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">Asset Visual Unavailable</p>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
+
+                          {photos.length > 1 && (
+                            <>
+                              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+                                <span>Photos ({photos.length})</span>
+                                <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
+                              </div>
+                              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                                {photos.map((_, i) => (
+                                  <div key={i} className="w-1.5 h-1.5 rounded-full bg-white shadow-lg opacity-50 first:opacity-100" />
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        {/* ── MATERIAL SPECIFICATIONS CARD ── */}
+                        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material-Type</p>
+                              <h2 className="text-[16px] font-semibold text-indigo-700 dark:text-white capitalize leading-tight">
+                                {waste?.label || job.material}
+                              </h2>
+                            </div>
+                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border ${job.time?.toUpperCase() === 'ASAP'
+                                ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-500 border-rose-200 dark:border-rose-500/20'
+                                : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 border-indigo-200 dark:border-indigo-500/20'
+                              }`}>
+                              {job.time?.toUpperCase() === 'ASAP' ? <Zap className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                              <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{job.time?.toLowerCase() || 'scheduled'}</span>
+                            </div>
+                          </div>
+
+                          <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="flex items-start gap-3">
+                              <User className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Client's Name</p>
+                                <p className="text-[13px] font-semibold text-slate-900 dark:text-white capitalize">{job.customerName || job.customer || 'Resident'}</p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-start gap-3">
+                              <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Location</p>
+                                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{job.location}</span>
+                              </div>
+                            </div>
+
+                            {activeTab === 'completed' ? (
+                              <>
+                                <div className="flex items-start gap-3">
+                                  <DollarSign className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                                  <div>
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Amount Paid</p>
+                                    <p className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {(job.total_price || job.fee || job.pay || 0).toLocaleString()}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                  <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                                  <div>
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Verified Weight</p>
+                                    <span className="text-xs font-black text-slate-900 dark:text-white">{job.actual_weight_kg || 0} KG</span>
+                                  </div>
+                                </div>
+                                <div className="flex items-start gap-3 col-span-2">
+                                  <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                                  <div>
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Payment Settled</p>
+                                    <span className="text-xs font-black text-slate-900 dark:text-white">
+                                      {job.completed_at
+                                        ? new Date(job.completed_at).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                                        : job.date || 'N/A'}
+                                    </span>
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="flex items-start gap-3">
+                                  <Zap className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                                  <div>
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Value</p>
+                                    <p className="text-xs font-black text-slate-900 dark:text-white">KSh {Math.floor((job.actual_weight_kg || job.bags || 0) * getPriceForMaterial(job.material || ''))}</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                  <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                                  <div>
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Load</p>
+                                    <span className="text-xs font-black text-slate-900 dark:text-white">{job.actual_weight_kg || job.bags || 0} KG</span>
+                                  </div>
+                                </div>
+                              </>
+                            )}
+
+                            <div className="flex items-start gap-3 col-span-2">
+                              <Package className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup ID / Type</p>
+                                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                                  {job.id.slice(0, 8).toUpperCase()} • {job.is_group_pickup ? 'Group Pickup' : (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) ? 'Seller Trade' : 'Resident Pickup'}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {job.notes && (
+                            <>
+                              <hr className="border-slate-100 dark:border-slate-800/60" />
+                              <div>
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                                  <Info className="w-3.5 h-3.5" /> Description
+                                </p>
+                                <p className="text-xs text-slate-600 dark:text-slate-350 italic">"{job.notes}"</p>
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="pt-2 pb-8 flex gap-3">
                           {activeTab === 'available' ? (
                             <>
                               <button
                                 onClick={() => { rejectJob(job.id); setExpandedId(null); }}
-                                className="flex-[1] py-4 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-2xl font-black text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
+                                className="flex-[1] py-4 bg-red-500 text-white rounded-2xl font-black text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
                               >
                                 <XCircle className="w-4 h-4" /> Dismiss
                               </button>
@@ -351,7 +366,7 @@ export default function AvailableJobs() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="space-y-1"
+                
               >
                 {currentJobs.map((job) => {
                   const waste = categories.find((w) => w.slug === job.material) ||
@@ -363,55 +378,57 @@ export default function AvailableJobs() {
                       key={job.id}
                       className="bg-white dark:bg-slate-900/60 border-b border-slate-100 dark:border-slate-800 transition-all overflow-hidden"
                     >
-                      <button
-                        className="w-full p-4 text-left active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
+                      <div
                         onClick={() => setExpandedId(job.id)}
+                        className="bg-white dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3.5">
-                            <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
-                              {photoUrl ? (
-                                <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
-                              ) : (
-                                waste?.icon || '📦'
-                              )}
-                            </div>
-                            <div className="space-y-0.5">
-                              <p className="text-[12px] font-bold text-slate-400 captitalize tracking-widest flex items-center">
-                                Material: <span className="text-indigo-600 dark:text-indigo-400 ml-1.5 capitalize">{waste?.label || job.material}</span>
-                              </p>
+                        <div className="flex gap-3">
+                          <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
+                            {photoUrl ? (
+                              <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={waste?.label || job.material} />
+                            ) : (
+                              waste?.icon || '📦'
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0 flex flex-col justify-center">
+                            {/* Row 1: Material & Value/Time */}
+                            <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5 min-w-0">
-                                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest flex items-center truncate">
-                                  Client: <span className="text-slate-900 dark:text-white ml-1.5 capitalize truncate">
-                                    {job.customerName || job.customer || 'Resident'}
-                                  </span>
-                                </p>
+                                <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">{waste?.label || job.material}</h3>
                                 {job.is_group_pickup && (
                                   <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center gap-0.5 shrink-0">
                                     <Users className="w-2.5 h-2.5" /> Group
                                   </span>
                                 )}
                               </div>
-                              <p className="text-[10px]  font-bold text-slate-400 capitalize tracking-widest flex items-center">
-                                Pickup Ref: <span className="text-indigo-600 dark:text-indigo-400 font-mono ml-1.5">{job.id.slice(0, 8).toUpperCase()}</span>
+                              <span className={`text-[9px] font-black tracking-widest px-2 py-0.5 rounded-md uppercase shrink-0 ml-2 ${job.time?.toUpperCase() === 'ASAP' ? 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20'}`}>
+                                {job.time?.toLowerCase() || 'scheduled'}
+                              </span>
+                            </div>
+
+                            {/* Row 2: Location & Client */}
+                            <div className="flex items-center justify-between mt-0.5">
+                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                                <MapPin className="w-2.5 h-2.5 text-green-500" /> {job.location}
+                              </p>
+                            </div>
+
+                            {/* Row 3: Timestamp/User & Quantity/Value */}
+                            <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50 mt-1">
+                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
+                                <User className="w-2.5 h-2.5 text-slate-400" /> {job.customerName || job.customer || 'Resident'}
+                              </p>
+                              <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
+                                <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Value:</span>
+                                KSh {activeTab === 'completed' ? (job.total_price || job.fee || job.pay || 0).toLocaleString() : Math.floor((job.actual_weight_kg || job.bags || 0) * getPriceForMaterial(job.material || ''))}
                               </p>
                             </div>
                           </div>
-                          <div className="text-right flex flex-col items-end justify-between self-stretch py-0.5">
-                            <span className={`text-[9px] font-black tracking-widest  px-2.5 py-1 rounded-lg uppercase ${job.time?.toUpperCase() === 'ASAP'
-                              ? 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20'
-                              : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20'
-                              }`}>
-                              {job.time?.toLowerCase() || 'scheduled'}
-                            </span>
-                            <div className="flex flex-col items-end mt-2">
-                              <p className="text-[9px] font-semibold text-slate-500 flex items-center gap-1 capitalize tracking-wide">
-                                {job.location} <MapPin className="w-3 h-3 text-green-500" />
-                              </p>
-                            </div>
+                          <div className="flex items-center justify-center text-slate-300">
+                            <ChevronRight className="w-4 h-4" />
                           </div>
                         </div>
-                      </button>
+                      </div>
                     </div>
                   );
                 })}

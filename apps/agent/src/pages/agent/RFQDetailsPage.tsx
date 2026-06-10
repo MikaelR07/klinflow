@@ -175,10 +175,10 @@ export default function RFQDetailsPage() {
         </div>
       </div>
 
-      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
+      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
         {/* ── IMAGE CAROUSEL ── */}
         {rfq.images && rfq.images.length > 0 && (
-          <div className="relative h-[250px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800  bg-slate-900">
+          <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800  bg-slate-900">
             <div
               onScroll={handleScroll}
               className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
@@ -222,7 +222,7 @@ export default function RFQDetailsPage() {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Requested</p>
-              <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize leading-tight">
+              <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
                 {materialPrices?.find(m => m.id === rfq.materialId)?.material_name || getSubcategoryLabel(rfq.categoryId, rfq.materialId) || rfq.materialId}
               </h2>
             </div>
@@ -237,7 +237,7 @@ export default function RFQDetailsPage() {
           {/* Details Grid */}
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
-              <Coins className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Target Budget</p>
                 <p className="text-xs font-black text-emerald-600 leading-none">KSh {rfq.targetPrice}/kg</p>
@@ -245,7 +245,7 @@ export default function RFQDetailsPage() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Scale className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+              <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Volume Wanted</p>
                 <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{rfq.quantity}</p>
@@ -253,7 +253,7 @@ export default function RFQDetailsPage() {
             </div>
 
             <div className="flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+              <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
                 <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.location}</span>
@@ -261,7 +261,7 @@ export default function RFQDetailsPage() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+              <Clock className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Created On</p>
                 <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.createdAt}</span>
@@ -270,7 +270,7 @@ export default function RFQDetailsPage() {
 
             {rfq.deadline && rfq.deadline !== 'N/A' && (
               <div className="flex items-start gap-3">
-                <Timer className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+                <Timer className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Deadline</p>
                   <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.deadline}</span>
