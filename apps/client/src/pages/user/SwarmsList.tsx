@@ -181,7 +181,6 @@ export default function SwarmsList() {
                   rounded-[1.25rem]
                   border border-slate-100 dark:border-slate-800 shadow-sm
                   p-3.5
-                  mb-3
                   transition-all duration-200
                   hover:shadow-md
                   active:scale-[0.98]

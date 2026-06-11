@@ -37,7 +37,7 @@ export default function AgentHomeHeader({
               </div>
             </div>
             <div className="min-w-0">
-              <h1 className="text-sm font-normal italic tracking-wide text-slate-900 dark:text-white leading-tight truncate">
+              <h1 className="text-base font-normal italic tracking-wide text-slate-900 dark:text-white leading-tight truncate">
                 Hello {profile?.name?.split(' ')[0]}👋
               </h1>
               <div className="flex items-center gap-1 text-[9px] text-primary font-bold capitalize tracking-wide bg-primary/10 px-1.5 py-0.5 rounded-full border border-primary/20 w-fit">
@@ -54,9 +54,9 @@ export default function AgentHomeHeader({
               onClick={handleToggle}
               disabled={isToggling}
               aria-label={profile?.isOnline ? 'Go offline' : 'Go online'}
-              className={`flex items-center gap-1.5 pl-2.5 pr-1 py-1.5 rounded-full border transition-all duration-300 active:scale-95 ${
+              className={`flex items-center gap-1 pl-2.5 pr-1 py-1.5 rounded-full border transition-all duration-300 active:scale-95 ${
                 profile?.isOnline
-                  ? 'bg-emerald-50 border-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/30'
+                  ? 'bg-white border-emerald-400 dark:bg-slate-800 dark:border-emerald-400'
                   : 'bg-slate-50 border-slate-200 dark:bg-slate-700/50 dark:border-slate-600'
               }`}
             >

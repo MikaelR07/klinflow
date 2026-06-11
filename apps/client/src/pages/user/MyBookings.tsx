@@ -429,11 +429,26 @@ export default function MyBookings() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-0 z-[1000] bg-white dark:bg-slate-800 flex flex-col"
+              className="fixed inset-0 z-[1000] bg-slate-50 dark:bg-slate-800 flex flex-col"
             >
 
-              <div className="flex-1 overflow-y-auto no-scrollbar">
-                <div className="w-full aspect-[4/5] bg-slate-900 relative overflow-hidden">
+              {/* ── FIXED TOP NAV ── */}
+              <div className="fixed top-0 left-0 right-0 z-[1001] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+                <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+                  <button onClick={() => setSelectedBooking(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+                    <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+                  </button>
+                  <div>
+                    <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Booking Details</h1>
+                    <p className="text-[10px] font-bold text-primary capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Pickup Request
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] pb-6">
+                <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
                   {b.photoUrl ? (
                     <OptimizedImage
                       src={getThumbnailUrl(b.photoUrl, { width: 800 })}
@@ -442,40 +457,49 @@ export default function MyBookings() {
                       alt="Material pickup"
                     />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-slate-800 opacity-50">
-                      <Package className="w-20 h-20 text-slate-300" />
-                      <p className="text-xs font-bold text-slate-400 capitalize tracking-widest">No photo provided</p>
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400">
+                      <Package className="w-12 h-12 mb-2 opacity-50" />
+                      <p className="text-[10px] font-bold tracking-widest uppercase">No photo provided</p>
                     </div>
                   )}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
                 </div>
 
-                {/* Overlaid Back Button */}
-                <button
-                  onClick={() => navigate(-1)}
-                  className="absolute top-[calc(env(safe-area-inset-top,1.5rem)+1rem)] left-4 w-10 h-10 rounded-2xl bg-black/70 border border-white/20 flex items-center justify-center  active:scale-95 transition-all z-10"
-                >
-                  <ArrowLeft className="w-5 h-5 text-white" />
-                </button>
+                <div className="space-y-4">
 
-                <div className="relative -mt-32 bg-white dark:bg-slate-800 rounded-t-[1rem] px-1.5 pt-2 pb-4 space-y-4 z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.1)]">
+                  {/* ── SPECIFICATIONS CARD ── */}
+                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Requested</p>
+                        <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
+                          {String(waste?.label || wasteTypeVal)}
+                        </h2>
+                      </div>
+                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${status.color} border border-current/20 bg-current/10`}>
+                        <Clock className="w-3.5 h-3.5" />
+                        <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{String(status.label)}</span>
+                      </div>
+                    </div>
 
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
-                      <Package className="w-4 h-4 text-primary mb-2" />
-                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Material</p>
-                      <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{String(waste?.label || wasteTypeVal)}</p>
-                    </div>
-                    <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
-                      <Clock className="w-4 h-4 text-amber-500 mb-2" />
-                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-2">Status</p>
-                      <span className={`text-[9px] font-black tracking-[0.05em] px-2 py-1 rounded-lg capitalize shadow-sm whitespace-nowrap ${status.color}`}>
-                        {String(status.label)}
-                      </span>
-                    </div>
-                    <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800/50 flex flex-col items-center text-center">
-                      <MapPin className="w-4 h-4 text-rose-500 mb-2" />
-                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest leading-none mb-1">Origin</p>
-                      <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{String(b.estate || '')}</p>
+                    <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex items-start gap-3">
+                        <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
+                          <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 capitalize block max-w-[120px]">{String(b.estate || '')}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3">
+                        <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight Booked</p>
+                          <p className="text-[11px] font-black text-slate-900 dark:text-white capitalize">{b.bags ? `${b.bags} Bags` : 'Est at Pickup'}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
 

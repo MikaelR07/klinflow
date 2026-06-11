@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Star, Building2, Truck,
   ArrowLeft, SlidersHorizontal, ShieldCheck, X,
-  Sparkles, Filter, ChevronRight, Scale, Info, Package
+  Sparkles, Filter, ChevronRight, Scale, Info, Package,
+  CircleCheck
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@klinflow/supabase';
@@ -185,77 +186,94 @@ export default function DiscoveryHub() {
               const isCompany = partner.agentAccountType === 'company_admin';
 
               return (
-                <motion.button
+                <div
                   key={partner.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  className="w-full bg-white dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800  overflow-hidden transition-all text-left  block cursor-pointer"
                   onClick={() => navigate(`/company/${partner.id}`)}
-                  className="w-full bg-white dark:bg-slate-800 p-4 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-900/50 active:scale-[0.99] transition-all group text-left"
                 >
-                  <div className="flex gap-4">
+                  <div className="p-4 flex gap-3 relative">
                     {/* Avatar/Icon */}
-                    <div className="relative shrink-0">
-                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-50 dark:bg-indigo-900/30' : 'bg-emerald-50 dark:bg-emerald-900/30'
-                        }`}>
+                    <div className="shrink-0 mt-0.5">
+                      <div className={`w-[60px] h-[60px] rounded-2xl flex items-center justify-center text-2xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-600 dark:bg-indigo-900/30 text-white' : 'bg-[#138a53] text-white'}`}>
                         {partner.avatarUrl ? (
                           <OptimizedImage src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
-                          isCompany ? '🏢' : '🚛'
+                          isCompany ? '🏢' : <Truck className="w-7 h-7" />
                         )}
                       </div>
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between mb-1">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 mb-0.5">
-                            <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                    <div className="flex-1 min-w-0 flex justify-between">
+                       <div className="min-w-0 flex-1">
+                          {/* Name & Badge */}
+                          <div className="flex items-center gap-1 mb-1">
+                            <h4 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white truncate">
                               {isCompany ? (partner.companyName || partner.name) : partner.name}
                             </h4>
-                            {partner.role === 'admin' && <ShieldCheck className="w-3.5 h-3.5 text-primary fill-primary/10" />}
+                            <CircleCheck className="w-4 h-4 text-green-500 fill-green-500/20 shrink-0" />
                           </div>
-                          <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-0.5 text-amber-500">
-                              <Star className="w-2.5 h-2.5 fill-current" />
-                              <span className="text-xs font-semibold">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
-                            </div>
-                            <span className="text-xs text-slate-300">•</span>
-                            <div className="flex items-center gap-1 text-xs font-semibold text-slate-500">
-                              <Package className="w-2.5 h-2.5" />
-                              <span>{Number(partner.totalPickups || 0)} Pickups</span>
-                            </div>
-                            <span className="text-xs text-slate-300">•</span>
-                            <span className={`text-xs font-semibold capitalize tracking-widest ${scale === 'bulk' || scale === 'industrial' ? 'text-indigo-500' : 'text-emerald-500'
-                              }`}>
-                              {scale}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="text-right shrink-0 ml-2">
-                          <p className="text-xs font-semibold text-slate-400 capitalize leading-none mb-0.5">Fee</p>
-                          <p className="text-xs font-semibold text-primary">KSh {logisticsFee}</p>
-                        </div>
-                      </div>
 
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {acceptedMaterials
-                          .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
-                          .slice(0, 3)
-                          .map((m: any) => (
-                            <span key={m} className="px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 border border-slate-100/50 dark:border-white/5">
-                              {(MATERIAL_LABELS as any)[m]}
-                            </span>
-                          ))}
-                        {acceptedMaterials.filter((m: any) => !!(MATERIAL_LABELS as any)[m]).length > 3 && (
-                          <span className="px-2 py-0.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-xs font-semibold text-slate-400 dark:text-slate-500 border border-slate-100/50 dark:border-white/5 italic">
-                            etc
-                          </span>
-                        )}
-                      </div>
+                          {/* Rating & Tag */}
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="flex items-center gap-1">
+                              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                              <span className="text-[11px] font-black text-[#0e1d2c] dark:text-white">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
+                              {(partner.rating || 0) > 0 && <span className="text-[11px] font-medium text-slate-400">({partner.reviewCount || 0})</span>}
+                            </div>
+                            {partner.rating > 4.5 && (
+                              <span className="text-[9px] font-bold text-[#138a53] bg-green-50 dark:bg-green-500/10 dark:text-green-400 px-1.5 py-0.5 rounded">Top Rated</span>
+                            )}
+                          </div>
+
+                          {/* Meta info */}
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="flex items-center gap-1.5">
+                              <Package className="w-3.5 h-3.5 text-slate-400" />
+                              <span className="text-[10px] font-medium text-slate-500">{Number(partner.totalPickups || 0)} Pickups</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                              <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">{partner.location?.estate || 'Nairobi'}</span>
+                            </div>
+                          </div>
+
+                          {/* Materials Icons row */}
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {acceptedMaterials
+                              .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
+                              .slice(0, 3)
+                              .map((m: any) => (
+                                <span key={m} className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[9px] font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
+                                  {(MATERIAL_LABELS as any)[m]}
+                                </span>
+                              ))}
+                            {acceptedMaterials.filter((m: any) => !!(MATERIAL_LABELS as any)[m]).length > 3 && (
+                              <span className="px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[9px] font-semibold text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-700">
+                                +{acceptedMaterials.length - 3}
+                              </span>
+                            )}
+                          </div>
+                       </div>
+                       
+                       <div className="shrink-0 flex flex-col items-end justify-between pl-2 pb-1">
+                         <span className={`text-[9px] font-bold px-2 py-1 rounded capitalize ${scale === 'bulk' || scale === 'industrial' ? 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400' : 'bg-green-50 text-[#138a53] dark:bg-green-500/10 dark:text-green-400'}`}>
+                           {scale}
+                         </span>
+                         
+                         <div className="flex items-center gap-1 mt-auto">
+                           <div className="text-left">
+                             <p className="text-[10px] text-slate-500 font-medium leading-none mb-1.5">From</p>
+                             <p className="text-[15px] font-black text-[#138a53] dark:text-green-400 leading-none mb-1">KSh {logisticsFee}</p>
+                             <p className="text-[9px] text-slate-500 font-medium leading-none">No booking fee</p>
+                           </div>
+                           <ChevronRight className="w-4 h-4 text-slate-700 dark:text-slate-300 ml-1 -mr-1" />
+                         </div>
+                       </div>
                     </div>
                   </div>
-                </motion.button>
+
+                 
+                </div>
               );
             })
           ) : (

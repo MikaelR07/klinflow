@@ -106,99 +106,113 @@ export default function SwarmDetails() {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-[34px] z-[50] bg-[#F2F3F4] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-10 max-w-lg mx-auto">
-
-      {/* ── Edge-to-Edge Hero Image ── */}
-      <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
-        {swarm.images && swarm.images.length > 0 ? (
-          <div className={`flex ${swarm.images.length > 1 ? 'overflow-x-auto snap-x snap-mandatory' : ''} hide-scrollbar w-full h-full`}>
-            {swarm.images.map((img, idx) => (
-              <div key={idx} className="min-w-full h-full shrink-0 snap-center relative">
-                <img src={img} alt={`Swarm sample ${idx + 1}`} className="w-full h-full object-cover" />
-                {/* Image counter pill */}
-                {swarm.images.length > 1 && (
-                  <div className="absolute bottom-6 right-6 px-3 py-1.5 bg-black/40 backdrop-blur-xl rounded-full">
-                    <span className="text-[10px] font-bold text-white tracking-widest">{idx + 1} / {swarm.images.length}</span>
-                  </div>
-                )}
-              </div>
-            ))}
+    <div className="fixed top-0 left-0 right-0 bottom-[34px] z-[50] bg-slate-50 dark:bg-slate-800 flex flex-col max-w-lg mx-auto">
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-[1001] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+          </button>
+          <div>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Swarm Details</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Community Collection
+            </p>
           </div>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
-            <ImageIcon className="w-20 h-20 text-slate-200 dark:text-slate-700" />
-          </div>
-        )}
-
-        {/* Floating Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
-          className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-
-
+        </div>
       </div>
 
-      {/* ── Content Sheet ── */}
-      <div className="bg-white dark:bg-slate-800 px-2 pt-2 pb-2 space-y-4 rounded-t-2xl -mt-32 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+      <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] pb-14">
+        {/* ── IMAGE CAROUSEL ── */}
+        <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
+          {swarm.images && swarm.images.length > 0 ? (
+            <div className={`flex ${swarm.images.length > 1 ? 'overflow-x-auto snap-x snap-mandatory' : ''} no-scrollbar w-full h-full`}>
+              {swarm.images.map((img, idx) => (
+                <div key={idx} className="w-full h-full shrink-0 snap-center">
+                  <img src={img} alt={`Swarm sample ${idx + 1}`} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400">
+              <ImageIcon className="w-12 h-12 mb-2 opacity-50" />
+              <p className="text-[10px] font-bold tracking-widest uppercase">No images provided</p>
+            </div>
+          )}
 
-        {/* Material & Status Card */}
-        <div className="bg-white dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
+
+          {swarm.images && swarm.images.length > 1 && (
+            <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+              <span>1 / {swarm.images.length}</span>
+              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
+            </div>
+          )}
+        </div>
+
+        {/* ── SPECIFICATIONS CARD ── */}
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
+          <div className="flex items-start justify-between">
             <div>
-              <p className="text-[10px] font-bold text-slate-400 border capitalize tracking-widest mb-1">Target Material</p>
-              <h2 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none">{swarm.material}</h2>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Target Material</p>
+              <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
+                {swarm.material}
+              </h2>
             </div>
             <div className="flex items-center gap-2">
-              <div className={`px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest ${swarm.status === 'active' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 border border-emerald-100 dark:border-emerald-500/20' : 'bg-slate-50 dark:bg-slate-700/50 text-slate-500 border border-slate-100 dark:border-slate-700'
-                }`}>
-                {swarm.status}
+              <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${swarm.status === 'active' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border border-emerald-200 dark:border-emerald-500/20' : 'bg-slate-50 dark:bg-slate-500/10 text-slate-500 border border-slate-200 dark:border-slate-500/20'}`}>
+                {swarm.status === 'active' ? <Clock className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+                <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{swarm.status}</span>
               </div>
               {swarm.creator_id === profile?.id && (
                 <button
                   onClick={() => navigate(`/community-collective/swarm/${swarm.id}/edit`)}
-                  className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-center active:scale-95 transition-all"
+                  className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-center active:scale-95 transition-all"
                 >
-                  <Edit3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <Edit3 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 </button>
               )}
             </div>
           </div>
-          <div className="h-px bg-slate-100 dark:bg-slate-700" />
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Location</p>
-              <div className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-indigo-500" />
-                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest italic">{swarm.estate}</span>
+
+          <hr className="border-slate-100 dark:border-slate-800/60" />
+
+          {/* Details Grid */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-start gap-3">
+              <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Target Volume</p>
+                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{swarm.target_weight} KG</p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Created</p>
-              <p className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 capitalize tracking-tight">
-                {new Date(swarm.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-              </p>
+
+            <div className="flex items-start gap-3">
+              <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 capitalize block truncate max-w-[120px]">{swarm.estate}</span>
+              </div>
             </div>
-          </div>
-          {swarm.closes_at && (
-            <>
-              <div className="h-px bg-slate-100 dark:bg-slate-700" />
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
-                  <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                </div>
+
+            <div className="flex items-start gap-3">
+              <Clock className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Created On</p>
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{new Date(swarm.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
+            </div>
+
+            {swarm.closes_at && (
+              <div className="flex items-start gap-3">
+                <Clock className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Submission Deadline</p>
-                  <p className="text-[11px] font-black text-amber-600 dark:text-amber-400 tracking-tight">
-                    {new Date(swarm.closes_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                  </p>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Deadline</p>
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{new Date(swarm.closes_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
               </div>
-            </>
-          )}
+            )}
+          </div>
         </div>
         {/* Progress Card (Professional Neutral Style) */}
         <div className="bg-white dark:bg-slate-900/60 p-5 rounded-xl border border-slate-700/40 flex flex-col justify-center text-center shadow-sm">

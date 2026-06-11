@@ -1,7 +1,7 @@
 import { OptimizedImage } from "@klinflow/ui";
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Clock, Scale, Coins, Truck, CheckCircle2, XCircle, MapPin, Package, MessageSquare, Pencil, Trash2, X, Save } from 'lucide-react';
+import { ArrowLeft, Clock, Scale, Coins, Truck, CheckCircle2, XCircle, MapPin, Package, MessageSquare, Pencil, Trash2, X, Save, User } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@klinflow/core/lib/supabaseClient';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -180,88 +180,81 @@ export default function SubmittedQuoteDetailsPage() {
 
   return (
     <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-8 transition-colors">
-      {/* ── IMAGE PREVIEW AT THE TOP (EDGE-TO-EDGE & TOP-COVERED) ── */}
-      <div
-        className="relative h-[350px] w-full overflow-hidden border-b border-slate-200 dark:border-slate-800 shadow-sm bg-slate-900"
-      >
-        {quote.imageUrls && quote.imageUrls.length > 0 ? (
-          <div
-            onScroll={handleScroll}
-            className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
-          >
-            {quote.imageUrls.map((url: string, index: number) => (
-              <div key={index} className="w-full h-full shrink-0 snap-center">
-                <OptimizedImage
-                  src={url}
-                  alt={`${materialPrices?.find(m => m.id === quote.materialId)?.material_name || getSubcategoryLabel(quote.categoryId, quote.materialId) || quote.materialId} view ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  wrapperClassName="w-full h-full"
-                />
-              </div>
-            ))}
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+          </button>
+          <div>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Quote Details</h1>
+            <p className="text-[10px] font-bold text-primary capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Submitted Proposal
+            </p>
           </div>
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400">
-            <Package className="w-12 h-12 mb-2 opacity-50" />
-            <span className="text-xs font-bold tracking-wider uppercase">No Images Provided</span>
-          </div>
-        )}
-
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
-
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-[calc(env(safe-area-inset-top,1rem)+0.6rem)] left-4 w-10 h-10 rounded-2xl bg-black/25 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-md active:scale-95 transition-all z-10"
-        >
-          <ArrowLeft className="w-5 h-5 text-white" />
-        </button>
-
-        {quote.imageUrls && quote.imageUrls.length > 1 && (
-          <div className="absolute top-[calc(env(safe-area-inset-top,1rem)+0.6rem)] right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
-            <span>{activeImageIndex + 1} / {quote.imageUrls.length}</span>
-            <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
-          </div>
-        )}
-
-        {quote.imageUrls && quote.imageUrls.length > 1 && (
-          <div className="absolute bottom-16 left-0 right-0 flex justify-center gap-1.5 z-10">
-            {quote.imageUrls.map((_: any, index: number) => (
-              <div
-                key={index}
-                className={`h-1.5 rounded-full transition-all duration-300 ${index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'
-                  }`}
-              />
-            ))}
-          </div>
-        )}
-
+        </div>
       </div>
 
-      <div className="space-y-4 px-1.5 mt-2">
-        {/* ── DETAIL CARD BELOW ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
-          {/* Material & Status */}
+      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
+        {/* ── IMAGE CAROUSEL ── */}
+        <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
+          {quote.imageUrls && quote.imageUrls.length > 0 ? (
+            <div
+              onScroll={handleScroll}
+              className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
+            >
+              {quote.imageUrls.map((url: string, index: number) => (
+                <div key={index} className="w-full h-full shrink-0 snap-center">
+                  <OptimizedImage
+                    src={url}
+                    alt={`${materialPrices?.find(m => m.id === quote.materialId)?.material_name || getSubcategoryLabel(quote.categoryId, quote.materialId) || quote.materialId} view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    wrapperClassName="w-full h-full"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400">
+              <Package className="w-12 h-12 mb-2 opacity-50" />
+              <span className="text-xs font-bold tracking-wider uppercase">No Images Provided</span>
+            </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
+
+          {quote.imageUrls && quote.imageUrls.length > 1 && (
+            <>
+              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+                <span>{activeImageIndex + 1} / {quote.imageUrls.length}</span>
+                <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
+              </div>
+              
+              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
+                {quote.imageUrls.map((_: any, index: number) => (
+                  <div
+                    key={index}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+
+        {/* ── SPECIFICATIONS CARD ── */}
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Submitted Quote</p>
-              <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize leading-tight">
+              <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
                 {materialPrices?.find(m => m.id === quote.materialId)?.material_name || getSubcategoryLabel(quote.categoryId, quote.materialId) || quote.materialId}
               </h2>
             </div>
-            <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border}`}>
-              <StatusIcon className="w-3 h-3" />
+            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border}`}>
+              <StatusIcon className="w-3.5 h-3.5" />
               <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{statusConfig.label}</span>
-            </div>
-          </div>
-
-          <hr className="border-slate-100 dark:border-slate-800/60" />
-
-          {/* Client Info */}
-          <div>
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 leading-none">Client Name</p>
-            <h3 className="text-sm font-black text-slate-900 dark:text-white capitalize leading-none">{quote.company}</h3>
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 mt-2">
-              <MapPin className="w-3.5 h-3.5" /> {quote.location}
             </div>
           </div>
 
@@ -270,7 +263,7 @@ export default function SubmittedQuoteDetailsPage() {
           {/* Details Grid */}
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
-              <Coins className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Your Quoted Price</p>
                 <p className="text-xs font-black text-emerald-600 leading-none">KSh {quote.quotedPrice}/kg</p>
@@ -278,7 +271,7 @@ export default function SubmittedQuoteDetailsPage() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Scale className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+              <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Client Target</p>
                 <p className="text-xs font-black text-slate-900 dark:text-white capitalize">KSh {quote.clientTargetPrice}/kg</p>
@@ -286,7 +279,7 @@ export default function SubmittedQuoteDetailsPage() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Package className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <Package className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Requested Weight</p>
                 <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{quote.quantity}</p>
@@ -294,7 +287,23 @@ export default function SubmittedQuoteDetailsPage() {
             </div>
 
             <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+              <User className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Client Name</p>
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block truncate max-w-[120px]">{quote.company}</span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Location</p>
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block truncate max-w-[120px]">{quote.location}</span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <Clock className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Submitted On</p>
                 <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{quote.submittedAt}</span>
@@ -302,16 +311,16 @@ export default function SubmittedQuoteDetailsPage() {
             </div>
           </div>
 
-          <hr className="border-slate-100 dark:border-slate-800/60" />
-
           {quote.message && (
-            <div>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Attached Message</p>
-              <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800/40 flex items-start gap-2">
-                <MessageSquare className="w-4 h-4 text-slate-400 shrink-0 mt-px" />
-                <p className="text-xs text-slate-600 dark:text-slate-300 italic leading-relaxed">{quote.message}</p>
+            <>
+              <hr className="border-slate-100 dark:border-slate-800/60" />
+              <div>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                  <MessageSquare className="w-3.5 h-3.5" /> Attached Message
+                </p>
+                <p className="text-xs text-slate-600 dark:text-slate-300 italic leading-relaxed">"{quote.message}"</p>
               </div>
-            </div>
+            </>
           )}
         </div>
 

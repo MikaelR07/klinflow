@@ -74,141 +74,180 @@ export default function CommunityCollective() {
         </div>
 
         {/* ── CHOOSE HOW TO GROW ── */}
+        <div className="flex items-center justify-center gap-2 py-2 pt-4">
+          <Leaf className="w-4 h-4 text-[#329845]" />
+          <h2 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white">How do you want to grow together?</h2>
+          <Leaf className="w-4 h-4 text-[#329845] scale-x-[-1]" />
+        </div>
+
         <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {/* SWARMS CARD */}
-            <div className="bg-white dark:bg-slate-900/60 rounded-xl p-2 border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col">
-              <div className="relative h-32 mb-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-50 to-emerald-100/50 dark:from-slate-700 dark:to-slate-700/50">
-                <div className="absolute top-3 left-3 w-8 h-8 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm z-10">
-                  <Users className="w-4 h-4 text-green-600" />
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
+              <div className="flex gap-4">
+                {/* Left side: Illustration */}
+                <div className="w-[45%] shrink-0 flex items-end justify-center -ml-2">
+                  <OptimizedImage
+                    src="/vectors/recycle-banner.webp"
+                    alt="Swarms"
+                    className="w-[115%] h-auto object-contain object-bottom origin-bottom-left"
+                    wrapperClassName="w-full flex items-end justify-center"
+                  />
                 </div>
-                <OptimizedImage
-                  src="/vectors/recycle-banner.webp"
-                  alt="Swarms"
-                  wrapperClassName="w-full h-full"
-                  className="w-full h-full object-cover object-bottom mix-blend-multiply dark:mix-blend-screen opacity-80"
-                />
+                {/* Right side: Info */}
+                <div className="flex-1 space-y-2 py-1 flex flex-col justify-center">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center shrink-0">
+                      <Users className="w-4 h-4 text-[#329845] dark:text-green-400" />
+                    </div>
+                    <h3 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Join a Swarm</h3>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-2">
+                    Team up nearby.<br />Fill the truck. Earn more.
+                  </p>
+                </div>
               </div>
 
-              <div className="flex justify-between items-start mb-1">
-                <h3 className="text-sm font-bold text-[#0e1d2c] dark:text-white">Bulk Groups</h3>
-                <span className="text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-2 py-0.5 rounded-full">
-                  {swarms.length} Groups
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-4 leading-relaxed flex-1">
-                Join or create a swarm to combine waste pickups in your area and earn more together.
-              </p>
+              {/* 3 Steps */}
+              <div className="flex items-center justify-between mt-6 mb-5 px-1 relative">
+              
+                <div className="flex flex-col items-center gap-2 z-10 w-1/3">
+                  <div className="w-7 h-7 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center">
+                    <Users className="w-6 h-6 text-[#329845] dark:text-green-400" />
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 text-center">1. Join others</span>
+                </div>
 
-              <ul className="grid grid-cols-2 md:grid-cols-1 gap-2 mb-5">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">Better Prices for materials</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">Priority Pickups from agents</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">Group Bonuses to everyone</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">Unlock Klinflow Group Rewards</span>
-                </li>
-              </ul>
+                <div className="z-10 bg-white dark:bg-slate-900 px-1 -mt-5">
+                  <ChevronRight className="w-3 h-3 text-[#329845] dark:text-green-400" />
+                </div>
+
+                <div className="flex flex-col items-center gap-2 z-10 w-1/3">
+                  <div className="w-7 h-7 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-[#329845] dark:text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 text-center">2. Add your waste</span>
+                </div>
+
+                <div className="z-10 bg-white dark:bg-slate-900 px-1 -mt-5">
+                  <ChevronRight className="w-3 h-3 text-[#329845] dark:text-green-400" />
+                </div>
+
+                <div className="flex flex-col items-center gap-2 z-10 w-1/3">
+                  <div className="w-7 h-7 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-[#329845] dark:text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 text-center leading-[1.2]">3. Truck comes<br />& everyone earns</span>
+                </div>
+              </div>
 
               <Link
                 to="/swarms"
-                className="w-full py-3.5 bg-primary hover:bg-[#1f7343] text-white rounded-xl font-bold text-sm flex items-center justify-between px-5 transition-colors"
+                className="w-full py-3.5 bg-[#329845] hover:bg-[#287d37] text-white rounded-[10px] font-bold text-xs flex items-center justify-center gap-2 transition-colors relative shadow-sm"
               >
-                Explore Swarms
-                <ChevronRight className="w-5 h-5" />
+                <span>Explore Swarms</span>
+                <ChevronRight className="w-4 h-4 absolute right-4" />
               </Link>
             </div>
 
             {/* COMMUNITY GOALS CARD */}
-            <div className="bg-white dark:bg-slate-900/60 rounded-xl p-2 border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col">
-              <div className="relative h-32 mb-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-50 to-emerald-100/50 dark:from-slate-700 dark:to-slate-700/50">
-                <div className="absolute top-3 left-3 w-8 h-8 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm z-10">
-                  <Target className="w-4 h-4 text-green-600" />
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
+              <div className="flex gap-4">
+                {/* Left side: Illustration */}
+                <div className="w-[45%] shrink-0 flex items-end justify-center -ml-2">
+                  <OptimizedImage
+                    src="/vectors/community.webp"
+                    alt="Community Goals"
+                    className="w-[115%] h-auto object-contain object-bottom origin-bottom-left"
+                    wrapperClassName="w-full flex items-end justify-center"
+                  />
                 </div>
-                <OptimizedImage
-                  src="/vectors/community.webp"
-                  alt="Community Goals"
-                  wrapperClassName="w-full h-full"
-                  className="w-full h-full object-cover object-bottom mix-blend-multiply dark:mix-blend-screen opacity-80"
-                />
+                {/* Right side: Info */}
+                <div className="flex-1 space-y-2 py-1 flex flex-col justify-center">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center shrink-0">
+                      <Target className="w-4 h-4 text-[#329845] dark:text-green-400" />
+                    </div>
+                    <h3 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Join a Goal</h3>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-2">
+                    Work together.<br />Hit the target. Unlock rewards.
+                  </p>
+                </div>
               </div>
 
-              <div className="flex justify-between items-start mb-1">
-                <h3 className="text-sm font-bold text-[#0e1d2c] dark:text-white">Community Goals</h3>
-                <span className="text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 px-2 py-0.5 rounded-full">
-                  {goals.length}
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-4 leading-relaxed flex-1">
-                Set goals as a community, track progress, and unlock milestone rewards for everyone.
-              </p>
+              {/* 3 Steps */}
+              <div className="flex items-center justify-between mt-6 mb-5 px-1 relative">
+      
+                <div className="flex flex-col items-center gap-2 z-10 w-1/3">
+                  <div className="w-7 h-7 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center">
+                    <Users className="w-6 h-6 text-[#329845] dark:text-green-400" />
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 text-center">1. Many contribute</span>
+                </div>
 
-              <ul className="grid grid-cols-2 md:grid-cols-1 gap-2 mb-5">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">Create and join community goals</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">Track progress in real-time</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">Unlock milestone rewards</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className="text-[11px] font-medium text-slate-700 dark:text-slate-300">Celebrate impact together</span>
-                </li>
-              </ul>
+                <div className="z-10 bg-white dark:bg-slate-900 px-1 -mt-5">
+                  <ChevronRight className="w-3 h-3 text-[#329845] dark:text-green-400" />
+                </div>
+
+                <div className="flex flex-col items-center gap-2 z-10 w-1/3">
+                  <div className="w-7 h-7 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center">
+                    <Target className="w-6 h-6 text-[#329845] dark:text-green-400" />
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 text-center">2. Reach the goal</span>
+                </div>
+
+                <div className="z-10 bg-white dark:bg-slate-900 px-1 -mt-5">
+                  <ChevronRight className="w-3 h-3 text-[#329845] dark:text-green-400" />
+                </div>
+
+                <div className="flex flex-col items-center gap-2 z-10 w-1/3">
+                  <div className="w-7 h-7 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center">
+                    <Gift className="w-6 h-6 text-[#329845] dark:text-green-400" />
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 text-center leading-[1.2]">3. Unlock rewards<br />together</span>
+                </div>
+              </div>
 
               <Link
                 to="/community-goals"
-                className="w-full py-3.5 bg-primary hover:bg-[#1f7343] text-white rounded-xl font-bold text-sm flex items-center justify-between px-5 transition-colors"
+                className="w-full py-3.5 bg-[#329845] hover:bg-[#287d37] text-white rounded-[10px] font-bold text-xs flex items-center justify-center gap-2 transition-colors relative shadow-sm"
               >
-                View Community Goals
-                <ChevronRight className="w-5 h-5" />
+                <span>View Goals</span>
+                <ChevronRight className="w-4 h-4 absolute right-4" />
               </Link>
             </div>
 
           </div>
         </div>
 
+       
         {/* ── STATS BANNER ── */}
         <div className="bg-gradient-to-br from-primary to-emerald-700 rounded-xl p-5 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="md:w-1/3">
             <p className="text-[10px] font-semibold text-emerald-100/80 tracking-wide mb-1">Together, We Achieve More</p>
-            <h3 className="text-sm sm:text-base font-bold leading-tight">Communities are driving real change</h3>
+            <h3 className="text-sm sm:text-base text-white font-bold leading-tight">Communities are driving real change</h3>
           </div>
 
           <div className="flex gap-4 md:w-2/3 justify-between">
             <div className="flex items-start gap-2">
               <Users className="w-4 h-4 text-emerald-300 mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-bold">1,248+</p>
+                <p className="text-sm font-bold">876+</p>
                 <p className="text-[9px] text-emerald-100 leading-tight mt-0.5">Active<br />Collectives</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Leaf className="w-4 h-4 text-emerald-300 mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-bold">256K+</p>
+                <p className="text-sm font-bold">58K+</p>
                 <p className="text-[9px] text-emerald-100 leading-tight mt-0.5">Kg Waste<br />Consolidated</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <TrendingUp className="w-4 h-4 text-emerald-300 mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-bold">KSh 135k+</p>
+                <p className="text-sm font-bold">KSh 127k+</p>
                 <p className="text-[9px] text-emerald-100 leading-tight mt-0.5">Earned by<br />Communities</p>
               </div>
             </div>

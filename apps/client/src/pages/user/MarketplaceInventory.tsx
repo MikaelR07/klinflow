@@ -4,7 +4,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
   Package, Search, Plus, ArrowLeft,
-  Trash2, MapPin, Scale, ChevronRight,
+  Trash2, MapPin, Scale, ChevronRight, Coins,
   Tag, AlertCircle, Clock, X, TrendingUp, CheckCircle2, Ban
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -92,7 +92,7 @@ export default function MarketplaceInventory() {
               </button>
 
               <div className="text-center">
-                <h1 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-widest leading-none">Inventory</h1>
+                <h1 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-widest leading-none">MarketPlace Listings</h1>
                 <p className="text-[9px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-0.5">What You have listed for sale</p>
               </div>
 
@@ -118,7 +118,7 @@ export default function MarketplaceInventory() {
         </div>
       )}
 
-      <div className={`flex-1 space-y-0 pb-24 ${!selectedId ? 'pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)]' : 'pt-0'} relative max-w-lg mx-auto w-full`}>
+      <div className={`flex-1 space-y-0 pb-10 ${!selectedId ? 'pt-[calc(env(safe-area-inset-top,1rem)+5rem)]' : 'pt-0'} relative max-w-lg mx-auto w-full`}>
 
         <main className="mt-0">
           {selectedId && selectedListing ? (
@@ -127,91 +127,112 @@ export default function MarketplaceInventory() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[9999] bg-[#F2F3F4] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-24"
+              className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-800 flex flex-col"
             >
-
-              {/* Edge-to-Edge Hero Image */}
-              <div className="w-full aspect-[4/5] sm:aspect-square bg-slate-200 dark:bg-slate-800 overflow-hidden relative">
-
-                {/* Overlaid Back Button - Now with Notch Support */}
-                <button
-                  onClick={() => setSelectedId(null)}
-                  style={{ top: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}
-                  className="absolute left-6 z-20 p-2.5 bg-black/40 backdrop-blur-xl rounded-full text-white active:scale-95 transition-all shadow-xl"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </button>
-
-
-                <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
-                  {((selectedListing?.photoUrls && selectedListing.photoUrls.length > 0) ? selectedListing.photoUrls : [selectedListing?.photoUrl]).map((imgUrl, idx) => (
-                    <div key={idx} className="flex-none w-full h-full snap-start">
-                      {imgUrl ? (
-                        <OptimizedImage src={getThumbnailUrl(imgUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={`${selectedListing.material} - View ${idx + 1}`} />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
-                          <Package className="w-20 h-20 text-slate-200" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {(selectedListing?.photoUrls && selectedListing.photoUrls.length > 1) && (
-                  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1.5">
-                    {selectedListing?.photoUrls?.map((_, i) => (
-                      <div key={i} className="w-1.5 h-1.5 rounded-full bg-white shadow-lg opacity-60 first:opacity-100" />
-                    ))}
-                  </div>
-                )}
-
-
-              </div>
-
-              {/* Content Sheet (Overlaps Image) */}
-              <div className="bg-[#F2F3F4] dark:bg-slate-800 px-2 pt-4 pb-2 space-y-4 rounded-t-xl -mt-16 relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
-
-                {/* Unified Listing Detail Card */}
-                <div className="bg-white dark:bg-slate-900/80 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Material Type</p>
-                      <h2 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none">{selectedListing.material}</h2>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-700/50 py-1.5 px-3 rounded-xl border border-slate-100 dark:border-slate-700 w-fit">
-                      <MapPin className="w-3.5 h-3.5 text-indigo-500" />
-                      <span className="text-[10px] font-bold text-slate-900 dark:text-white capitalize tracking-widest italic">{selectedListing.location || 'Nairobi Hub'}</span>
-                    </div>
-                  </div>
-
-                  <div className="h-px bg-slate-100 dark:bg-slate-700" />
-
-                  <div className="flex items-center gap-2 px-1">
-                    <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
-                      Posted {new Date(selectedListing.createdAt || selectedListing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+              {/* ── FIXED TOP NAV ── */}
+              <div className="fixed top-0 left-0 right-0 z-[10000] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+                <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+                  <button onClick={() => setSelectedId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+                    <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+                  </button>
+                  <div>
+                    <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Listing Details</h1>
+                    <p className="text-[10px] font-bold text-primary capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Live Marketplace
                     </p>
                   </div>
+                </div>
+              </div>
 
-                  <div className="h-px bg-slate-100 dark:bg-slate-700" />
+              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] pb-10">
+                {/* ── IMAGE CAROUSEL ── */}
+                <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
+                  <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
+                    {((selectedListing?.photoUrls && selectedListing.photoUrls.length > 0) ? selectedListing.photoUrls : [selectedListing?.photoUrl]).map((imgUrl, idx) => (
+                      <div key={idx} className="flex-none w-full h-full snap-start">
+                        {imgUrl ? (
+                          <OptimizedImage src={getThumbnailUrl(imgUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={`${selectedListing.material} - View ${idx + 1}`} />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-slate-100 dark:bg-slate-800">
+                            <Package className="w-20 h-20 text-slate-200 opacity-50" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
 
-                  {/* Stats Row - Unified Internal */}
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="text-center">
-                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mb-1">Asking Rate</p>
-                      <p className="text-sm font-black text-emerald-600 italic leading-none">KSh {selectedListing.pricePerKg}</p>
-                      <p className="text-[8px] font-bold text-slate-300 capitalize tracking-widest mt-1">/ KG</p>
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
+
+                  {((selectedListing?.photoUrls && selectedListing.photoUrls.length > 0) ? selectedListing.photoUrls : [selectedListing?.photoUrl]).length > 1 && (
+                    <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+                      <span>1 / {((selectedListing?.photoUrls && selectedListing.photoUrls.length > 0) ? selectedListing.photoUrls : [selectedListing?.photoUrl]).length}</span>
+                      <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
                     </div>
-                    <div className="text-center border-x border-slate-100 dark:border-slate-700 px-1">
-                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mb-1">{selectedListing.status === 'active' ? 'Inventory' : 'Total Load'}</p>
-                      <p className="text-sm font-black text-slate-900 dark:text-white italic leading-none">{displayQuantity}</p>
-                      <p className="text-[8px] font-bold text-slate-300 capitalize tracking-widest mt-1">KG LOAD</p>
+                  )}
+                </div>
+
+                {/* ── SPECIFICATIONS CARD ── */}
+                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Type</p>
+                      <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
+                        {selectedListing.material}
+                      </h2>
                     </div>
-                    <div className="text-center">
-                      <p className="text-[8px] font-bold text-slate-400 capitalize tracking-widest mb-1">{selectedListing.status === 'sold' ? 'Settled Value' : 'Est. Value'}</p>
-                      <p className="text-sm font-black text-slate-900 dark:text-white italic leading-none">KSh {estValue.toLocaleString()}</p>
-                      <p className="text-[8px] font-bold text-slate-300 capitalize tracking-widest mt-1">Net Total</p>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 border border-emerald-200 dark:border-emerald-500/20">
+                      <Tag className="w-3.5 h-3.5" />
+                      <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{selectedListing.status === 'active' ? 'Live Listing' : selectedListing.status}</span>
                     </div>
                   </div>
+
+                  <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                  {/* Details Grid */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-start gap-3">
+                      <Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Asking Rate</p>
+                        <p className="text-xs font-black text-emerald-600 leading-none">KSh {selectedListing.pricePerKg}/kg</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{selectedListing.status === 'active' ? 'Inventory Load' : 'Total Load'}</p>
+                        <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{displayQuantity} KG</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Location</p>
+                        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block truncate max-w-[120px]">{selectedListing.location || 'Nairobi Hub'}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Clock className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Posted On</p>
+                        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{new Date(selectedListing.createdAt || selectedListing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expected Value Card */}
+                <div className="bg-emerald-600 dark:bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20 shadow-xl shadow-emerald-500/10 flex flex-col justify-center text-center">
+                  <p className="text-[10px] font-bold text-emerald-100 dark:text-emerald-400/60 capitalize tracking-widest mb-1">{selectedListing.status === 'sold' ? 'Settled Value' : 'Est. Total Value'}</p>
+                  <p className="text-xl font-black text-white dark:text-emerald-400 leading-none">
+                    KSh {estValue.toLocaleString()}
+                  </p>
+                  <p className="text-[10px] text-emerald-200 dark:text-emerald-500/60 font-bold capitalize mt-1.5">
+                    {selectedListing.pricePerKg} × {displayQuantity}kg Total Stock
+                  </p>
                 </div>
 
                 {/* Description */}
@@ -272,41 +293,48 @@ export default function MarketplaceInventory() {
                     return (
                       <div
                         onClick={() => setSelectedId(listing.id)}
-                        className="bg-white dark:bg-slate-900/60 py-4 px-4 shadow-sm border-b border-slate-100 dark:border-slate-800 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
+                        className="bg-white dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
                       >
-                        <div className="flex items-center gap-4">
-                          <div className="w-20 h-20 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden relative flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-800">
+                        <div className="flex gap-3">
+                          <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
                             {listing.photoUrl ? (
                               <OptimizedImage src={getThumbnailUrl(listing.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                             ) : (
-                              <Package className="w-6 h-6 text-slate-200" />
+                              <Package className="w-5 h-5 text-slate-200" />
                             )}
                           </div>
-
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-0.5">
-                              <div className="flex items-center gap-1.5">
-                                <span className={`w-1.5 h-1.5 rounded-full ${listing.status === 'active' ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]' : 'bg-slate-300 dark:bg-slate-600'}`} />
-                                <span className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">{listing.status === 'active' ? 'Live' : listing.status}</span>
+                          <div className="flex-1 min-w-0 flex flex-col justify-center">
+                            {/* Row 1: Material & Price */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">{listing.material}</h3>
+                                <span className={`px-1 py-0.5 rounded text-[8px] font-bold ${listing.status === 'active' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400' : 'bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-400'} flex items-center gap-0.5 shrink-0`}>
+                                  {listing.status === 'active' ? 'Live' : listing.status}
+                                </span>
                               </div>
-                              <span className="text-sm font-bold text-emerald-600">KSh {listing.pricePerKg}/kg</span>
+                              <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {listing.pricePerKg}/kg</span>
                             </div>
 
-                            <h3 className="text-[13px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">{listing.material}</h3>
+                            {/* Row 2: Location */}
+                            <div className="flex items-center justify-between mt-0.5">
+                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                                <MapPin className="w-2.5 h-2.5 text-green-500" /> {listing.location || 'Nairobi Hub'}
+                              </p>
+                            </div>
 
-                            <div className="flex items-center gap-3 mt-1.5">
-                              <div className="flex items-center gap-1 text-xs font-semibold text-slate-500">
-                                <Scale className="w-4 h-4 text-slate-400" />
-                                <span>{itemQuantity} KG</span>
-                              </div>
-                              <div className="flex items-center gap-1 text-xs font-semibold text-slate-500">
-                                <Clock className="w-4 h-4 text-slate-400" />
-                                <span>{new Date(listing.createdAt || listing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                              </div>
+                            {/* Row 3: Timestamp & Quantity */}
+                            <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
+                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
+                                <Clock className="w-2.5 h-2.5 text-slate-400" /> {listing.createdAt ? new Date(listing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'ASAP'}
+                              </p>
+                              <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
+                                <span className="text-[9px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span>
+                                <Scale className="w-2.5 h-2.5" /> {itemQuantity} KG
+                              </p>
                             </div>
                           </div>
 
-                          <div className="text-slate-200 dark:text-slate-700 shrink-0">
+                          <div className="flex items-center justify-center text-slate-300">
                             <ChevronRight className="w-4 h-4" />
                           </div>
                         </div>
