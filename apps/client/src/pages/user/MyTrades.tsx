@@ -47,7 +47,7 @@ const statusConfig = {
   pending: {
     label: "Waiting Approval",
     color:
-      "bg-amber-100 text-orange-700 dark:bg-amber-500/20 dark:text-amber-400",
+      "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400",
     icon: Clock,
   },
   confirmed: {
