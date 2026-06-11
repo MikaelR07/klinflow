@@ -1,12 +1,23 @@
 import { OptimizedImage } from "@klinflow/ui";
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Clock, Scale, Coins, Truck, Camera, Trash2, CheckCircle2, User, FileText } from 'lucide-react';
-import { toast } from 'sonner';
-import { supabase } from '@klinflow/supabase';
-import { useAuthStore } from '@klinflow/core/stores/authStore';
-import { useServiceStore } from '@klinflow/core/stores/serviceStore';
-import { compressImage } from '@klinflow/core/utils/imageUtils';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  ArrowLeft,
+  Clock,
+  Scale,
+  Coins,
+  Truck,
+  Camera,
+  Trash2,
+  CheckCircle2,
+  User,
+  FileText,
+} from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@klinflow/supabase";
+import { useAuthStore } from "@klinflow/core/stores/authStore";
+import { useServiceStore } from "@klinflow/core/stores/serviceStore";
+import { compressImage } from "@klinflow/core/utils/imageUtils";
 
 const parseTime = (timeStr: string) => {
   if (!timeStr) return "00:00";
@@ -22,17 +33,17 @@ const parseTime = (timeStr: string) => {
 export default function RFQDetailsPage() {
   const { rfqId } = useParams();
   const navigate = useNavigate();
-  const profile = useAuthStore(s => (s as any).profile);
+  const profile = useAuthStore((s) => (s as any).profile);
 
   const [rfq, setRfq] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   // Bid & Negotiation State
-  const [bidPrice, setBidPrice] = useState('');
-  const [availableQty, setAvailableQty] = useState('');
-  const [shippingDate, setShippingDate] = useState('');
-  const [shippingTime, setShippingTime] = useState('');
-  const [sellerNotes, setSellerNotes] = useState('');
+  const [bidPrice, setBidPrice] = useState("");
+  const [availableQty, setAvailableQty] = useState("");
+  const [shippingDate, setShippingDate] = useState("");
+  const [shippingTime, setShippingTime] = useState("");
+  const [sellerNotes, setSellerNotes] = useState("");
   const [proofFiles, setProofFiles] = useState<File[]>([]);
   const [proofImages, setProofImages] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -56,13 +67,15 @@ export default function RFQDetailsPage() {
         }
 
         const response = await supabase
-          .from('rfqs')
-          .select(`
+          .from("rfqs")
+          .select(
+            `
             *,
             buyer:profiles!rfqs_buyer_id_fkey(company_name, name),
             rfq_offers(count)
-          `)
-          .eq('id', rfqId || '')
+          `,
+          )
+          .eq("id", rfqId || "")
           .single();
 
         const data: any = response.data;
@@ -71,33 +84,47 @@ export default function RFQDetailsPage() {
         if (error) throw error;
 
         if (data) {
-          let deadlineText = 'Open';
+          let deadlineText = "Open";
           if (data.deadline) {
-            const daysLeft = Math.ceil((new Date(data.deadline).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
-            if (daysLeft < 0) deadlineText = 'Expired';
-            else if (daysLeft === 0) deadlineText = 'Today';
-            else if (daysLeft === 1) deadlineText = 'Tomorrow';
+            const daysLeft = Math.ceil(
+              (new Date(data.deadline).getTime() - new Date().getTime()) /
+                (1000 * 3600 * 24),
+            );
+            if (daysLeft < 0) deadlineText = "Expired";
+            else if (daysLeft === 0) deadlineText = "Today";
+            else if (daysLeft === 1) deadlineText = "Tomorrow";
             else deadlineText = `${daysLeft} days`;
           }
 
-          let deliveryText = 'Flexible';
-          if (data.delivery_method === 'agent_pickup') deliveryText = 'Agent Pickup';
-          else if (data.delivery_method === 'self_drop') deliveryText = 'Self Drop-off';
+          let deliveryText = "Flexible";
+          if (data.delivery_method === "agent_pickup")
+            deliveryText = "Agent Pickup";
+          else if (data.delivery_method === "self_drop")
+            deliveryText = "Self Drop-off";
 
           // Resolve material ID to name
           const storeMaterials = useServiceStore.getState().materialPrices;
-          const materialRecord = storeMaterials.find(m => m.id === data.material_grade);
-          const materialName = materialRecord ? materialRecord.material_name : data.material_grade;
+          const materialRecord = storeMaterials.find(
+            (m) => m.id === data.material_grade,
+          );
+          const materialName = materialRecord
+            ? materialRecord.material_name
+            : data.material_grade;
 
           // Resolve category ID to name
           const storeCategories = useServiceStore.getState().categories;
-          const categoryRecord = storeCategories.find(c => c.id === data.category);
-          const categoryName = categoryRecord ? categoryRecord.label : data.category;
+          const categoryRecord = storeCategories.find(
+            (c) => c.id === data.category,
+          );
+          const categoryName = categoryRecord
+            ? categoryRecord.label
+            : data.category;
 
           setRfq({
             id: data.id,
             buyer_id: data.buyer_id, // Needed for inserting offer
-            company: data.buyer?.company_name || data.buyer?.name || 'Unknown Buyer',
+            company:
+              data.buyer?.company_name || data.buyer?.name || "Unknown Buyer",
             material: materialName,
             quantity: `${data.requested_weight}kg`,
             price: data.target_price || 0,
@@ -108,19 +135,22 @@ export default function RFQDetailsPage() {
             delivery: deliveryText,
             offersSubmitted: data.rfq_offers?.[0]?.count || 0,
             notes: data.notes || null,
-            imageUrls: data.images && data.images.length > 0 ? data.images : [
-              'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=600&q=80'
-            ]
+            imageUrls:
+              data.images && data.images.length > 0
+                ? data.images
+                : [
+                    "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=600&q=80",
+                  ],
           });
           setBidPrice((data.target_price || 0).toString());
           setAvailableQty(data.requested_weight.toString());
 
           // Check if seller already submitted an offer
           const { data: offerData } = await supabase
-            .from('rfq_offers')
-            .select('id')
-            .eq('rfq_id', rfqId)
-            .eq('seller_id', profile.id)
+            .from("rfq_offers")
+            .select("id")
+            .eq("rfq_id", rfqId)
+            .eq("seller_id", profile.id)
             .maybeSingle();
 
           if (offerData) {
@@ -128,12 +158,12 @@ export default function RFQDetailsPage() {
           }
 
           // If RFQ is fulfilled, check if this seller won the bid
-          if (data.status === 'fulfilled') {
+          if (data.status === "fulfilled") {
             const { data: fulfillmentData } = await supabase
-              .from('fulfillment_orders')
-              .select('id')
-              .eq('rfq_id', rfqId)
-              .eq('seller_id', profile.id)
+              .from("fulfillment_orders")
+              .select("id")
+              .eq("rfq_id", rfqId)
+              .eq("seller_id", profile.id)
               .maybeSingle();
 
             if (fulfillmentData) {
@@ -143,8 +173,8 @@ export default function RFQDetailsPage() {
           }
         }
       } catch (err: any) {
-        console.error('Failed to fetch RFQ:', err);
-        toast.error('Failed to load RFQ details');
+        console.error("Failed to fetch RFQ:", err);
+        toast.error("Failed to load RFQ details");
       } finally {
         setLoading(false);
       }
@@ -159,46 +189,46 @@ export default function RFQDetailsPage() {
       const spaceLeft = 4 - proofFiles.length;
 
       if (spaceLeft <= 0) {
-        toast.error('Maximum limit of 4 proof images reached');
+        toast.error("Maximum limit of 4 proof images reached");
         return;
       }
 
       const filesToUpload = filesArray.slice(0, spaceLeft);
-      const newImages = filesToUpload.map(file => URL.createObjectURL(file));
+      const newImages = filesToUpload.map((file) => URL.createObjectURL(file));
 
-      setProofFiles(prev => [...prev, ...filesToUpload]);
-      setProofImages(prev => [...prev, ...newImages]);
+      setProofFiles((prev) => [...prev, ...filesToUpload]);
+      setProofImages((prev) => [...prev, ...newImages]);
 
       if (filesArray.length > spaceLeft) {
         toast.warning(`Only ${spaceLeft} image(s) added. Max limit is 4.`);
       } else {
-        toast.success('Proof image added');
+        toast.success("Proof image added");
       }
     }
   };
 
   const removeImage = (index: number) => {
-    setProofFiles(prev => prev.filter((_, i) => i !== index));
-    setProofImages(prev => prev.filter((_, i) => i !== index));
-    toast.info('Proof image removed');
+    setProofFiles((prev) => prev.filter((_, i) => i !== index));
+    setProofImages((prev) => prev.filter((_, i) => i !== index));
+    toast.info("Proof image removed");
   };
 
   const handleSubmitProposal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) {
-      toast.error('You must be logged in to submit an offer');
+      toast.error("You must be logged in to submit an offer");
       return;
     }
     if (!bidPrice || Number(bidPrice) <= 0) {
-      toast.error('Please enter a valid price');
+      toast.error("Please enter a valid price");
       return;
     }
     if (!availableQty || Number(availableQty) <= 0) {
-      toast.error('Please enter a valid quantity');
+      toast.error("Please enter a valid quantity");
       return;
     }
     if (!shippingDate || !shippingTime) {
-      toast.error('Please specify the earliest shipping date and time');
+      toast.error("Please specify the earliest shipping date and time");
       return;
     }
 
@@ -209,22 +239,29 @@ export default function RFQDetailsPage() {
       const uploadedUrls: string[] = [];
       for (let i = 0; i < proofFiles.length; i++) {
         const file = proofFiles[i]!;
-        const compressed = await compressImage(file, { maxWidth: 1024, quality: 0.7 });
+        const compressed = await compressImage(file, {
+          maxWidth: 1024,
+          quality: 0.7,
+        });
 
-        const fileName = `${profile.id}/${Date.now()}-${i}-${compressed.name?.replace(/\s/g, '_')}`;
+        const fileName = `${profile.id}/${Date.now()}-${i}-${compressed.name?.replace(/\s/g, "_")}`;
 
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('rfq-images')
+          .from("rfq-images")
           .upload(fileName, compressed);
 
         if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage.from('rfq-images').getPublicUrl(fileName);
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("rfq-images").getPublicUrl(fileName);
         uploadedUrls.push(publicUrl);
       }
 
       // 2. Parse Earliest Shipping Date
-      const earliestShippingDateObj = new Date(`${shippingDate}T${parseTime(shippingTime)}`);
+      const earliestShippingDateObj = new Date(
+        `${shippingDate}T${parseTime(shippingTime)}`,
+      );
 
       // 3. Insert Offer
       const insertPayload: any = {
@@ -235,21 +272,25 @@ export default function RFQDetailsPage() {
         offered_price: parseFloat(bidPrice),
         images: uploadedUrls,
         notes: sellerNotes || null,
-        earliest_shipping_date: isNaN(earliestShippingDateObj.getTime()) ? null : earliestShippingDateObj.toISOString(),
-        status: 'pending'
+        earliest_shipping_date: isNaN(earliestShippingDateObj.getTime())
+          ? null
+          : earliestShippingDateObj.toISOString(),
+        status: "pending",
       };
 
-      const { error: insertError } = await supabase.from('rfq_offers').insert(insertPayload);
+      const { error: insertError } = await supabase
+        .from("rfq_offers")
+        .insert(insertPayload);
 
       if (insertError) throw insertError;
 
-      toast.success('Your offer has been sent to the buyer!', {
-        description: `Bidded KSh ${bidPrice}/kg for ${availableQty}kg.`
+      toast.success("Your offer has been sent to the buyer!", {
+        description: `Bidded KSh ${bidPrice}/kg for ${availableQty}kg.`,
       });
-      setExistingOfferId('submitted'); // Optimistic update
+      setExistingOfferId("submitted"); // Optimistic update
     } catch (err: any) {
-      console.error('Failed to submit offer:', err);
-      toast.error(err.message || 'Failed to submit offer. Please try again.');
+      console.error("Failed to submit offer:", err);
+      toast.error(err.message || "Failed to submit offer. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -275,24 +316,37 @@ export default function RFQDetailsPage() {
   if (!rfq) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-800 p-4 text-center">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white">RFQ Not Found</h2>
-        <button onClick={() => navigate(-1)} className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-xl">Go Back</button>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+          RFQ Not Found
+        </h2>
+        <button
+          onClick={() => navigate(-1)}
+          className="mt-4 px-6 py-2 bg-emerald-600 text-white rounded-xl"
+        >
+          Go Back
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-12 transition-colors">
+    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-8 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0"
+          >
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">RFQ Details</h1>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">
+              RFQ Details
+            </h1>
             <p className="text-[10px] font-bold text-primary capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Sourcing Request Command
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />{" "}
+              Sourcing Request Command
             </p>
           </div>
         </div>
@@ -320,7 +374,9 @@ export default function RFQDetailsPage() {
 
           {rfq.imageUrls.length > 1 && (
             <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
-              <span>{activeImageIndex + 1} / {rfq.imageUrls.length}</span>
+              <span>
+                {activeImageIndex + 1} / {rfq.imageUrls.length}
+              </span>
               <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
             </div>
           )}
@@ -330,26 +386,31 @@ export default function RFQDetailsPage() {
               {rfq.imageUrls.map((_: any, index: number) => (
                 <div
                   key={index}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'}`}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${index === activeImageIndex ? "w-4 bg-emerald-500" : "w-1.5 bg-white/40"}`}
                 />
               ))}
             </div>
           )}
         </div>
 
-
         {/* ── SPECIFICATIONS CARD ── */}
         <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                Material
+              </p>
               <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
                 {rfq.material}
               </h2>
             </div>
-            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border border-emerald-200 dark:border-emerald-500/20`}>
+            <div
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border border-emerald-200 dark:border-emerald-500/20`}
+            >
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">Verified</span>
+              <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">
+                Verified
+              </span>
             </div>
           </div>
 
@@ -360,48 +421,75 @@ export default function RFQDetailsPage() {
             <div className="flex items-start gap-3">
               <User className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Client Name</p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{rfq.company}</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                  Client Name
+                </p>
+                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                  {rfq.company}
+                </p>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
               <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Required Weight</p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{rfq.quantity}</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                  Required Weight
+                </p>
+                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                  {rfq.quantity}
+                </p>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
               <Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offered Price</p>
-                <p className="text-xs font-black text-emerald-600 leading-none">KSh {rfq.price}/kg</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                  Offered Price
+                </p>
+                <p className="text-xs font-black text-emerald-600 leading-none">
+                  KSh {rfq.price}/kg
+                </p>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
               <Truck className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Delivery Time</p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{rfq.delivery}</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                  Delivery Time
+                </p>
+                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                  {rfq.delivery}
+                </p>
               </div>
             </div>
 
             <div className="flex items-start gap-3">
               <Clock className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Deadline</p>
-                <span className="text-xs font-black text-rose-500 uppercase">{rfq.deadline === 'Open' ? 'No Deadline' : `${rfq.deadline} Left`}</span>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                  Deadline
+                </p>
+                <span className="text-xs font-black text-rose-500 uppercase">
+                  {rfq.deadline === "Open"
+                    ? "No Deadline"
+                    : `${rfq.deadline} Left`}
+                </span>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-3">
               <FileText className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offers Submitted</p>
-                <span className="text-xs font-black text-slate-900 dark:text-white">{rfq.offersSubmitted} proposal{rfq.offersSubmitted !== 1 ? 's' : ''}</span>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+                  Offers Submitted
+                </p>
+                <span className="text-xs font-black text-slate-900 dark:text-white">
+                  {rfq.offersSubmitted} proposal
+                  {rfq.offersSubmitted !== 1 ? "s" : ""}
+                </span>
               </div>
             </div>
           </div>
@@ -409,37 +497,53 @@ export default function RFQDetailsPage() {
 
         {rfq.notes && (
           <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-3">
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Description / Specifications</p>
-            <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{rfq.notes}</p>
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+              Description / Specifications
+            </p>
+            <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
+              {rfq.notes}
+            </p>
           </div>
         )}
 
         {existingOfferId ? (
-          <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-xl p-6 border border-emerald-100 dark:border-emerald-800/40 shadow-sm text-center space-y-3">
+          <div className="bg-emerald-50 dark:bg-emerald-900 rounded-xl p-4 border border-emerald-100 dark:border-emerald-800/40 shadow-sm text-center space-y-3">
             <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-800/50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2">
-              <CheckCircle2 className="w-6 h-6" />
+              <CheckCircle2 className="w-6 h-6 text-white" />
             </div>
-            <h4 className="text-sm font-black text-emerald-900 dark:text-emerald-400 uppercase tracking-wider">Offer Has Been Submitted</h4>
-            <p className="text-xs text-emerald-700/80 dark:text-emerald-500/80 font-semibold mb-4 leading-relaxed">
-              Your quote has been successfully sent to the buyer. You can track its status in your Submitted Quotes dashboard.
+            <h4 className="text-sm font-black text-emerald-900 dark:text-emerald-400 uppercase tracking-wider">
+              Offer Has Been Submitted
+            </h4>
+            <p className="text-xs text-emerald-300/80 dark:text-emerald-400/80 font-semibold mb-4 leading-relaxed">
+              Your quote has been successfully sent to the buyer. You can track
+              its status in your Submitted Quotes dashboard.
             </p>
             <button
-              onClick={() => navigate('/my-rfq-offers')}
-              className="mt-2 w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all"
+              onClick={() => navigate("/my-rfq-offers")}
+              className="mt-2 w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all"
             >
               View My Quotes
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmitProposal} className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5">
+          <form
+            onSubmit={handleSubmitProposal}
+            className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5"
+          >
             <div>
-              <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">Submit Bid Proposal</h4>
-              <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">Set your rates and upload your inventory batch details.</p>
+              <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                Submit Bid Proposal
+              </h4>
+              <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
+                Set your rates and upload your inventory batch details.
+              </p>
             </div>
 
             <div className="space-y-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Your Offer Rate (KSh/kg)</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  Your Offer Rate (KSh/kg)
+                </label>
                 <div className="relative">
                   <input
                     type="number"
@@ -449,12 +553,16 @@ export default function RFQDetailsPage() {
                     className="w-full pl-4 pr-16 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">KSh/kg</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">
+                    KSh/kg
+                  </span>
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Available Supply (kg)</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  Available Supply (kg)
+                </label>
                 <div className="relative">
                   <input
                     type="number"
@@ -464,13 +572,17 @@ export default function RFQDetailsPage() {
                     className="w-full pl-4 pr-12 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">kg</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">
+                    kg
+                  </span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Earliest Ship Date</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    Earliest Ship Date
+                  </label>
                   <input
                     type="date"
                     value={shippingDate}
@@ -480,7 +592,9 @@ export default function RFQDetailsPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Earliest Time</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    Earliest Time
+                  </label>
                   <input
                     type="time"
                     value={shippingTime}
@@ -492,7 +606,9 @@ export default function RFQDetailsPage() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Additional Notes</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  Additional Notes
+                </label>
                 <textarea
                   value={sellerNotes}
                   onChange={(e) => setSellerNotes(e.target.value)}
@@ -503,20 +619,40 @@ export default function RFQDetailsPage() {
 
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Attach Material Proof Images</label>
-                  <span className="text-[9px] font-bold text-slate-450 dark:text-slate-400 uppercase">{proofImages.length} / 4 uploaded</span>
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    Attach Material Proof Images
+                  </label>
+                  <span className="text-[9px] font-bold text-slate-450 dark:text-slate-400 uppercase">
+                    {proofImages.length} / 4 uploaded
+                  </span>
                 </div>
                 <div className="grid grid-cols-4 gap-2.5">
                   {proofImages.length < 4 && (
                     <label className="aspect-square rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 transition-colors">
                       <Camera className="w-5 h-5 text-slate-400" />
-                      <span className="text-[8px] font-black text-slate-400 uppercase mt-1">Upload</span>
-                      <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" multiple />
+                      <span className="text-[8px] font-black text-slate-400 uppercase mt-1">
+                        Upload
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        multiple
+                      />
                     </label>
                   )}
                   {proofImages.map((src, index) => (
-                    <div key={index} className="relative aspect-square rounded-xl overflow-hidden group border border-slate-100 dark:border-slate-800">
-                      <OptimizedImage src={src} alt={`Proof ${index}`} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
+                    <div
+                      key={index}
+                      className="relative aspect-square rounded-xl overflow-hidden group border border-slate-100 dark:border-slate-800"
+                    >
+                      <OptimizedImage
+                        src={src}
+                        alt={`Proof ${index}`}
+                        className="w-full h-full object-cover"
+                        wrapperClassName="w-full h-full"
+                      />
                       <button
                         type="button"
                         onClick={() => removeImage(index)}
@@ -535,7 +671,9 @@ export default function RFQDetailsPage() {
               disabled={submitting}
               className="w-full py-4 bg-primary hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em]  active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
-              {submitting ? 'Submitting proposal...' : 'Submit Proposal & Negotiate'}
+              {submitting
+                ? "Submitting proposal..."
+                : "Submit Proposal & Negotiate"}
             </button>
           </form>
         )}
