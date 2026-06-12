@@ -336,7 +336,7 @@ export default function UserHome() {
         {/* Subscription Tier Card Hidden for Launch */}
         <div className="bg-white dark:bg-slate-900/60 mt-3 rounded-[1rem] p-2 border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
           {/* Quick Actions */}
-          <p className="text-[13px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1">
+          <p className="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide px-1">
             Quick Actions
           </p>
 
@@ -464,7 +464,7 @@ export default function UserHome() {
                   Collective Pickups
                 </h3>
                 <p className="text-[10px] font-medium text-indigo-100 leading-snug mt-0.5 line-clamp-2">
-                  Join community pickups and Goals
+                  Join community pickups and Klin Challenges
                 </p>
               </div>
               <ChevronRight className="w-4 h-4 text-white/70 shrink-0" />

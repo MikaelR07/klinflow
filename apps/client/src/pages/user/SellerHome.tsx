@@ -320,7 +320,7 @@ export default function SellerHome() {
 
 
         <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2  border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
-          <p className="text-[13px] font-semibold text-slate-600 dark:text-slate-400 tracking-wide px-1 ">
+          <p className="text-[12px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide px-1 ">
             Quick Actions
           </p>
           {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
@@ -334,7 +334,7 @@ export default function SellerHome() {
                 <TruckIcon className="w-5 h-5 text-white" />
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[11px] font-semibold capitalize tracking-widest leading-none">Sell</p>
+                <p className="text-[10px] font-semibold capitalize tracking-widest leading-none">Sell</p>
               </div>
             </button>
 
@@ -343,17 +343,13 @@ export default function SellerHome() {
               className="dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
             >
               <div className="relative">
-                {myListings.filter((l: any) => l.status === 'active').length > 0 && (
-                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
-                    <span className="text-[8px] font-semibold text-white">{myListings.filter((l: any) => l.status === 'active').length}</span>
-                  </div>
-                )}
+                
                 <div className="w-10 h-10 bg-green-600 dark:bg-slate-800 text-blue-500 group-hover:text-blue-600 rounded-xl flex items-center justify-center  transition-colors">
                   <Package className="w-5 h-5 text-white" />
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[11px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Listings</p>
+                <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Listings</p>
               </div>
             </button>
 
@@ -363,7 +359,7 @@ export default function SellerHome() {
             >
               <div className="relative">
                 {receivedOffers.filter((o: any) => o.status === 'pending').length > 0 && (
-                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-emerald-500 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
+                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-green-600 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
                     <span className="text-[8px] font-semibold text-white">{receivedOffers.filter((o: any) => o.status === 'pending').length}</span>
                   </div>
                 )}
@@ -372,7 +368,7 @@ export default function SellerHome() {
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[11px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Offers</p>
+                <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Offers</p>
               </div>
             </button>
 
@@ -387,7 +383,7 @@ export default function SellerHome() {
 
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[11px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Wallet</p>
+                <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Wallet</p>
               </div>
             </button>
           </div>

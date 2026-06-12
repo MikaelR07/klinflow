@@ -14,6 +14,8 @@ export interface MarketIntelRFQ {
   category: string;
   delivery: string;
   offersSubmitted: number;
+  avatar?: string;
+  postedAt?: string;
 }
 
 export interface MarketIntelCommodityTrend {

@@ -63,6 +63,7 @@ export default function PostTrade() {
   const liveWeavers: any[] = []; // Placeholder until weaver store is built
   const categories = useServiceStore(s => s.categories);
   const fetchCategories = useServiceStore(s => s.fetchCategories);
+  const fetchMaterialPrices = useServiceStore(s => s.fetchMaterialPrices);
   const fetchPrices = usePriceStore(s => s.fetchPrices);
   const getPriceForMaterial = usePriceStore(s => s.getPriceForMaterial);
   const fetchConfig = useSystemStore(s => s.fetchConfig);
@@ -71,6 +72,7 @@ export default function PostTrade() {
   const [step, setStep] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [wasteType, setWasteType] = useState<any>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string>('');
   const [selectedSubItem, setSelectedSubItem] = useState<any>(null);
   const [quantity, setQuantity] = useState<any>(1);
   const [customLocation] = useState(profile?.location || { estate: 'Westlands', latitude: -1.2635, longitude: 36.8048 });
@@ -124,6 +126,7 @@ export default function PostTrade() {
 
   useEffect(() => {
     fetchCategories();
+    fetchMaterialPrices();
     fetchPrices();
     fetchConfig();
     fetchNearbyAgents();
@@ -144,7 +147,7 @@ export default function PostTrade() {
     }
 
     return () => cleanupAgents();
-  }, [initialMode, categories.length, cleanupAgents, fetchCategories, fetchConfig, fetchNearbyAgents, fetchPrices, subscribeToAgents]);
+  }, [initialMode, categories.length, cleanupAgents, fetchCategories, fetchMaterialPrices, fetchConfig, fetchNearbyAgents, fetchPrices, subscribeToAgents]);
 
   // ── PRICING (Powered by Market Hub) ──
   const selected = selectedSubItem || wasteType;
@@ -197,7 +200,9 @@ export default function PostTrade() {
 
       // 2. Create Marketplace Listing
       await createListing({
-        material: selected.label || selected.slug,
+        material: selectedSubcategory || selected.label || selected.slug,
+        materialCategory: wasteType?.label,
+        materialSubcategory: selectedSubcategory || null,
         quantity: quantity,
         pricePerKg: askingPrice,
         location: pickupMode === 'dropoff' ? (selectedHub?.name || 'Klinflow Hub') : customLocation.estate,
@@ -253,23 +258,26 @@ export default function PostTrade() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-0 pb-2 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] relative max-w-lg mx-auto w-full px-1.5">
+      <div className="flex-1 space-y-0 pb-2 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)] relative max-w-lg mx-auto w-full px-2">
         <AnimatePresence mode="wait">
 
           {/* ── STEP 1: MATERIAL & WEIGHT ── */}
-          {step === 1 && (
-            <PostTradeMaterialStep
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              wasteType={wasteType}
-              setWasteType={setWasteType}
-              quantity={quantity}
-              setQuantity={setQuantity}
-              categories={categories}
-              setSelectedSubItem={setSelectedSubItem}
-              getPriceForMaterial={getPriceForMaterial}
-            />
-          )}
+            {step === 1 && (
+              <PostTradeMaterialStep
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                wasteType={wasteType}
+                setWasteType={setWasteType}
+                quantity={quantity}
+                setQuantity={setQuantity}
+                categories={categories}
+                setSelectedSubItem={setSelectedSubItem}
+                getPriceForMaterial={getPriceForMaterial}
+                selectedSubcategory={selectedSubcategory}
+                setSelectedSubcategory={setSelectedSubcategory}
+                userId={userId}
+              />
+            )}
 
           {/* ── STEP 2: VALUATION & PROOF ── */}
           {step === 2 && (
@@ -318,6 +326,7 @@ export default function PostTrade() {
           {step === 4 && (
             <PostTradeSummaryStep
               wasteType={wasteType}
+              selectedSubcategory={selectedSubcategory}
               quantity={quantity}
               pickupMode={pickupMode}
               profile={profile}

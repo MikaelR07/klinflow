@@ -142,45 +142,44 @@ export default function RedeemGFP() {
 
       <div className="pt-[calc(env(safe-area-inset-top,1rem)+3rem)] px-1.5 max-w-lg mx-auto space-y-6">
 
-        {/* HERO CARD */}
-        <div className="relative overflow-hidden rounded-xl p-3 border border-emerald-900/40 bg-gradient-to-br from-primary to-emerald-800 ">
-          <div className="relative z-10 flex flex-col gap-1 text-white">
-            <div className="flex justify-between items-start">
-              <div className="w-[60%]">
-                <h2 className="text-xl font-bold leading-snug tracking-tight text-white mb-2">
-                  Turn your green actions into <span className="text-emerald-300">rewards</span>
-                </h2>
-                <p className="text-[11px] text-emerald-100/80 leading-relaxed">
-                  Redeem your GFP points for cash, airtime, or vouchers from our trusted partners.
-                </p>
-              </div>
+        {/* HERO CARD (Banner Image Only) */}
+        <div className="relative overflow-hidden rounded-xl shadow-sm bg-emerald-800 border border-emerald-900/40 h-[240px]">
+          {/* Background Image */}
+          <div
+            className="absolute inset-0 w-full h-full z-0"
+            style={{ 
+              backgroundImage: "url('/vectors/redeem-gfp.webp')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat"
+            }}
+          />
+        </div>
+
+        {/* STATS CARDS */}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 flex items-center gap-2.5 shadow-sm">
+            <div className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-center shrink-0">
+              <Receipt className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
             </div>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-slate-900 dark:text-white mb-0.5 leading-tight">Value</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">100 GFP = KES 50</p>
+            </div>
+          </div>
 
-            <div className="mt-3 grid grid-cols-2 gap-2 relative z-10">
-              <div className="rounded-xl border border-emerald-800/30 bg-black/20 p-2.5 flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-lg bg-white/10 border border-white/5 flex items-center justify-center shrink-0">
-                  <Receipt className="w-4 h-4 text-emerald-300" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-bold text-white mb-0.5 leading-tight">Value</p>
-                  <p className="text-[10px] text-emerald-100/80">100 GFP = KES 50</p>
-                </div>
+          <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 flex items-center gap-2.5 shadow-sm">
+            <div className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-center shrink-0">
+              <Wallet className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-baseline gap-1">
+                <p className="text-[15px] font-black text-slate-900 dark:text-white leading-none">
+                  {isLoadingWallet ? '...' : gfpBalance.toLocaleString()}
+                </p>
+                <p className="text-[9px] font-bold text-emerald-500 dark:text-emerald-400">GFP</p>
               </div>
-
-              <div className="rounded-xl border border-emerald-800/30 bg-emerald-950/40 p-2.5 flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0">
-                  <Wallet className="w-4 h-4 text-emerald-400" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-baseline gap-1">
-                    <p className="text-[15px] font-black text-white leading-none">
-                      {isLoadingWallet ? '...' : gfpBalance.toLocaleString()}
-                    </p>
-                    <p className="text-[9px] font-bold text-emerald-400">GFP</p>
-                  </div>
-                  <p className="text-[10px] text-emerald-100/80 mt-0.5">≈ KES {maxKsh.toLocaleString()}</p>
-                </div>
-              </div>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">≈ KES {maxKsh.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -195,7 +194,7 @@ export default function RedeemGFP() {
               <button
                 key={opt.id}
                 onClick={() => handleCardClick(opt.id)}
-                disabled={isLoadingWallet || gfpBalance < MIN_REDEMPTION_POINTS}
+                disabled={isLoadingWallet}
                 className={`flex flex-col p-4 rounded-2xl text-left transition-colors disabled:opacity-50 ${selectedOption === opt.id
                   ? 'bg-slate-100 dark:bg-slate-800 border-2 border-emerald-500'
                   : 'bg-white dark:bg-slate-900/50 border-2 border-slate-200 dark:border-transparent '

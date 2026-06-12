@@ -8,18 +8,14 @@ import EmptyState from '@klinflow/ui/components/EmptyState';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function ReviewCard({ review }: { review: any }) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const isPositive = review.rating >= 4;
 
   return (
-    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[1.5rem] shadow-sm hover:shadow-md transition-all overflow-hidden group">
-      {/* Header - Always Visible */}
-      <div
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="p-5 cursor-pointer select-none flex items-center justify-between"
-      >
+    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[1.5rem] shadow-sm hover:shadow-md transition-all overflow-hidden group p-5">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700">
+          <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700 shrink-0">
             {review.customerAvatar ? (
               <img
                 src={getThumbnailUrl(review.customerAvatar, { width: 100 })}
@@ -56,41 +52,21 @@ function ReviewCard({ review }: { review: any }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden xs:flex px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg">
-            <p className="text-[9px] font-mono text-slate-400 capitalize">#{review.id.slice(0, 6)}</p>
-          </div>
-          <div className={`p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-            <ChevronDown className="w-4 h-4" />
-          </div>
+        <div className="hidden xs:flex px-2 py-1 bg-slate-50 dark:bg-slate-800/50 rounded-lg shrink-0">
+          <p className="text-[9px] font-mono text-slate-400 capitalize">#{review.id.slice(0, 6)}</p>
         </div>
       </div>
 
-      {/* Expandable Content */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-          >
-            <div className="px-5 pb-5 pt-1">
-              <div className="pl-4 border-l-2 border-primary/20 bg-slate-50/50 dark:bg-white/5 p-4 rounded-r-2xl">
-                {review.feedback ? (
-                  <p className="text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed italic">
-                    "{review.feedback}"
-                  </p>
-                ) : (
-                  <p className="text-xs text-slate-400 font-medium italic opacity-60">No written comment provided.</p>
-                )}
-              </div>
-
-
-            </div>
-          </motion.div>
+      {/* Review Content */}
+      <div className="pl-4 border-l-2 border-primary/20 bg-slate-50/50 dark:bg-white/5 p-4 rounded-r-2xl">
+        {review.feedback ? (
+          <p className="text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed italic">
+            "{review.feedback}"
+          </p>
+        ) : (
+          <p className="text-xs text-slate-400 font-medium italic opacity-60">No written comment provided.</p>
         )}
-      </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -151,7 +127,7 @@ export default function ReviewsPage() {
         </div>
       ) : (
         /* Sticky Top Nav */
-        <div className="sticky top-0 z-50 -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+        <div className="sticky top-0 z-50 -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white/80 dark:bg-slate-800/80  border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
           <div className="pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-4 max-w-lg mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
@@ -163,7 +139,7 @@ export default function ReviewsPage() {
               <div>
                 <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white capitalize">Reviews and Feedback</h1>
                 <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 flex items-center gap-1.5 leading-none">
-                  <TrendingUp className="w-3 h-3 text-primary" /> Live Feedback reports
+                   View feedback from clients
                 </p>
               </div>
             </div>
@@ -171,31 +147,26 @@ export default function ReviewsPage() {
         </div>
       )}
 
-      {/* Analytics Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 !mt-2">
-        {/* Main Rating Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-[1.5rem] p-6 text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 relative overflow-hidden ">
-          <div className="absolute top-0 right-0 p-6 opacity-10 dark:opacity-5">
-            <Award className="w-20 h-20 rotate-12 text-slate-900 dark:text-white" />
-          </div>
-          <div className="relative z-10">
-            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-[0.2em] mb-1">Agent Rating</p>
-            <div className="flex items-baseline gap-1.5">
-              <h2 className="text-3xl font-black tracking-tighter">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
-              <span className="text-sm font-bold text-slate-300 dark:text-slate-600">/5.0</span>
+      {/* Rating & Breakdown */}
+      <div className="bg-white dark:bg-slate-900/70 rounded-[1rem] p-4 border border-slate-200 dark:border-white/5 !mt-2">
+        <div className="flex gap-5">
+          {/* Left: Rating Summary */}
+          <div className="flex flex-col items-center justify-center shrink-0 pr-5 border-r border-slate-100 dark:border-slate-800">
+            <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-[0.2em] mb-1">Rating</p>
+            <div className="flex items-baseline gap-1">
+              <h2 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
+              <span className="text-xs font-bold text-slate-400">/5</span>
             </div>
-            <div className="flex gap-0.5 mt-2">
+            <div className="flex gap-0.5 mt-1.5">
               {[1, 2, 3, 4, 5].map(s => (
-                <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.round(Number(stats.total === 0 ? 0 : (stats.average || profile?.rating || 0))) ? 'fill-primary text-primary' : 'text-slate-100 dark:text-slate-800'}`} />
+                <Star key={s} className={`w-3 h-3 ${s <= Math.round(Number(stats.total === 0 ? 0 : (stats.average || profile?.rating || 0))) ? 'fill-primary text-primary' : 'text-slate-300 dark:text-slate-600'}`} />
               ))}
             </div>
+            <p className="text-[9px] text-slate-400 mt-1.5 font-medium">{stats.total} review{stats.total !== 1 ? 's' : ''}</p>
           </div>
-        </div>
 
-        {/* Rating Breakdown */}
-        <div className="md:col-span-2 bg-white dark:bg-slate-800 rounded-[1.5rem] p-6 border border-slate-200 dark:border-white/5  space-y-4">
-          <h3 className="text-[9px] font-bold text-slate-400 capitalize tracking-[0.2em]">Rating Analytics</h3>
-          <div className="space-y-2">
+          {/* Right: Breakdown Bars */}
+          <div className="flex-1 space-y-2 justify-center flex flex-col">
             {stats.breakdown.length > 0 ? stats.breakdown.map((item) => (
               <div key={item.stars} className="flex items-center gap-3">
                 <span className="text-[9px] font-bold text-slate-400 w-3">{item.stars}★</span>
@@ -209,10 +180,10 @@ export default function ReviewsPage() {
               </div>
             )) : (
               [5, 4, 3, 2, 1].map(s => (
-                <div key={s} className="flex items-center gap-3 opacity-20">
+                <div key={s} className="flex items-center gap-3">
                   <span className="text-[9px] font-bold text-slate-400 w-3">{s}★</span>
-                  <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full" />
-                  <span className="text-[9px] font-bold text-slate-500 w-6 text-right">0%</span>
+                  <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full" />
+                  <span className="text-[9px] font-bold text-slate-400 w-6 text-right">0%</span>
                 </div>
               ))
             )}
@@ -221,7 +192,7 @@ export default function ReviewsPage() {
       </div>
 
       {/* Reviews List */}
-      <div className="space-y-4 pt-4">
+      <div className="space-y-4 pt-1 !mt-2">
         <div className="flex items-center justify-between px-1">
           <h3 className="text-xs font-bold text-slate-400 capitalize tracking-[0.2em]">Recent Feedback</h3>
           <div className="px-2 py-1 bg-primary/10 rounded-lg">

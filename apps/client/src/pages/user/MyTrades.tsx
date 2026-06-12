@@ -348,7 +348,7 @@ export default function MyTrades() {
       </div>
 
       <div
-        className={`flex-1 space-y-0 pb-24 ${!expandedId ? "pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}
+        className={`flex-1 space-y-0 pb-24 ${!expandedId ? "pt-[calc(env(safe-area-inset-top,1rem)+4.8rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}
       >
         <div className="space-y-0 pt-1">
           <AnimatePresence mode="wait">

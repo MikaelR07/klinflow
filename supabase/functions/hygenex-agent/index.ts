@@ -43,7 +43,7 @@ Deno.serve(async (req) => {
 
     // ── CASE A: VISION SCAN (IMAGE ANALYSIS) ──────────────────────────
     if (type === 'vision_scan') {
-      const { imageBase64, materialHint } = payload;
+      const { imageBase64, materialHint, validMaterials } = payload;
       
       if (!imageBase64) {
         throw new Error('Missing image data for vision scan');
@@ -51,7 +51,11 @@ Deno.serve(async (req) => {
 
       const visionPrompt = `
         You are the Klinflow AI Vision Lab. Analyze this image of recyclable waste.
-        STRICT OBJECTIVE: Identify the MATERIAL and assign a GRADE (A, B, or C).
+        ${validMaterials && validMaterials.length > 0 ? 
+          `STRICT OBJECTIVE: Identify the MATERIAL from this EXACT list: ${validMaterials.join(', ')}. If none match, return null.` : 
+          `STRICT OBJECTIVE: Identify the MATERIAL.`
+        }
+        Additionally, assign a GRADE (A, B, or C).
         
         GRADING RULES:
         - Grade A: High purity, clean, uniform (e.g. clear PET bottles only).
@@ -62,7 +66,7 @@ Deno.serve(async (req) => {
         
         Return ONLY a JSON object:
         {
-          "material": "recyclable|metal|ewaste|glass|paper|organic",
+          "material": "${validMaterials && validMaterials.length > 0 ? `One of: ${validMaterials.join(', ')}` : 'recyclable|metal|ewaste|glass|paper|organic'}",
           "grade": "A|B|C",
           "purity": 0-100,
           "confidence": 0-100,

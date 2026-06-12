@@ -76,7 +76,7 @@ export default function BookPickupMaterialStep({
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-1">
                   {categories.filter(cat =>
                     (cat.label || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                     (cat.slug || '').toLowerCase().includes(searchQuery.toLowerCase())
@@ -121,7 +121,7 @@ export default function BookPickupMaterialStep({
                             slug: cat.slug || cat.id
                           });
                         }}
-                        className="relative h-32 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center gap-2 active:scale-95 transition-all shadow-md group hover:border-primary/40 overflow-hidden"
+                        className="relative h-24 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition-all shadow-md group hover:border-primary/40 overflow-hidden"
                         style={bgImage ? {
                           backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8)), url(${bgImage})`,
                           backgroundSize: 'cover',
@@ -129,10 +129,10 @@ export default function BookPickupMaterialStep({
                         } : {}}
                       >
                         {!bgImage && <div className="absolute top-0 right-0 w-12 h-12 bg-primary/5 rounded-bl-3xl -mr-4 -mt-4 group-hover:bg-primary/10 transition-colors" />}
-                        <div className={`w-10 h-10 ${bgImage ? 'bg-white/10 backdrop-blur-md' : 'bg-slate-50 dark:bg-slate-800/50'} rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform`}>
+                        <div className={`w-8 h-8 ${bgImage ? 'bg-white/10 backdrop-blur-md' : 'bg-slate-50 dark:bg-slate-800/50'} rounded-xl flex items-center justify-center text-lg group-hover:scale-110 transition-transform`}>
                           {cat.icon || '📦'}
                         </div>
-                        <span className={`text-xs font-black capitalize tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                        <span className={`text-[10px] font-black capitalize tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                           {cat.label}
                         </span>
                       </button>

@@ -151,28 +151,43 @@ export default function TransferGFP() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)] pb-[20px] max-w-lg mx-auto w-full px-1.5 space-y-4">
 
         {/* HERO CARD */}
-        <div className="bg-gradient-to-l from-primary to-emerald-800 rounded-xl p-4 text-white relative overflow-hidden shadow-sm">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none -mr-10 -mt-10" />
+        <div className="relative rounded-xl p-4 text-white overflow-hidden shadow-sm bg-emerald-800">
+          {/* Background Image */}
+          <div
+            className="absolute inset-0 w-full h-full z-0"
+            style={{ 
+              backgroundImage: "url('/vectors/money.webp')",
+              backgroundSize: "cover",
+              backgroundPosition: "50% center",
+              backgroundRepeat: "no-repeat"
+            }}
+          />
+
+          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none -mr-10 -mt-10 z-0" />
 
           <div className="relative z-10">
-            <h2 className="text-xl font-bold text-white leading-tight tracking-tight mb-2">
-              Transfer GFP<br />
-              <span className="text-emerald-400">Rewards</span>
-            </h2>
-            <p className="text-[11px] text-emerald-100 leading-snug mb-5 max-w-[70%]">
-              Share your recycling rewards with friends, family, or community members.
-            </p>
-
-            <div className="inline-flex items-center gap-3 bg-black/20 rounded-xl p-1.5 border border-emerald-900/50">
-              <div className="w-9 h-9 rounded-xl bg-emerald-900/50 flex items-center justify-center shrink-0">
-                <Wallet className="w-4 h-4 text-emerald-400" />
+            <div className="flex flex-col gap-4">
+              <div>
+                <h2 className="text-2xl font-black text-slate-50 tracking-tighter leading-none mb-1.5">
+                 Gift your GFP
+                </h2>
+                <p className="text-xs font-semibold text-slate-800 leading-snug max-w-[75%]">
+                  Share your recycling rewards instantly with friends, family, or community members.
+                </p>
               </div>
-              <div className="pr-3">
-                <p className="text-[9px] text-emerald-100 font-semibold uppercase tracking-widest mb-0.5">Available Balance</p>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-[22px] font-black tracking-tight">{walletBalance.toLocaleString()}</span>
-                  <span className="text-[11px] font-bold text-white">GFP</span>
-                  <span className="text-[10px] text-emerald-100 ml-1">≈ KES {(walletBalance / 2).toLocaleString()}</span>
+
+              <div className="inline-flex items-center gap-3 bg-green-700  rounded-[1rem] p-2 shadow-md">
+                <div className="w-10 h-10 rounded-[0.85rem] bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100/50">
+                  <Wallet className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div className="pr-4">
+                  <p className="text-[9px] text-slate-50 font-bold uppercase tracking-widest mb-0.5">Available Balance</p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[20px] font-black text-slate-50 tracking-tight leading-none">{walletBalance.toLocaleString()}</span>
+                    <span className="text-[11px] font-bold text-emerald-300">GFP</span>
+                    <div className="w-1 h-1 rounded-full bg-slate-300 mx-0.5" />
+                    <span className="text-[10px] font-bold text-slate-50">KES {(walletBalance / 2).toLocaleString()}</span>
+                  </div>
                 </div>
               </div>
             </div>

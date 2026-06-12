@@ -9,6 +9,7 @@ const MyBookings = lazy(() => import('../../../pages/user/MyBookings'));
 const ImpactHub = lazy(() => import('../../../pages/user/ImpactHub'));
 const WithdrawalPage = lazy(() => import('../../../pages/user/WithdrawalPage'));
 const CompanyProfile = lazy(() => import('../../../pages/user/CompanyProfile'));
+const AgentReviews = lazy(() => import('../../../pages/user/AgentReviews'));
 const ImpactAnalytics = lazy(() => import('../../../pages/user/ImpactAnalytics'));
 const ResidentWallet = lazy(() => import('../../../pages/user/ResidentWallet'));
 const RedeemGFP = lazy(() => import('../../../pages/user/RedeemGFP'));
@@ -33,6 +34,7 @@ export function getResidentRoutes() {
       <Route path="/my-bookings" element={<MyBookings />} />
       <Route path="/impact-hub" element={<ImpactHub />} />
       <Route path="/company/:agentId" element={<CompanyProfile />} />
+      <Route path="/company/:agentId/reviews" element={<AgentReviews />} />
       <Route path="/analytics" element={<ImpactAnalytics />} />
       <Route path="/notifications" element={<NotificationsFeed />} />
     </>

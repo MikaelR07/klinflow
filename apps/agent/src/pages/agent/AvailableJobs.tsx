@@ -1,11 +1,12 @@
 /**
  * AvailableJobs.jsx — Job cards with AI recommendations, accept/reject
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import {
   Sparkles, MapPin, Clock, Package, CheckCircle, XCircle, Users,
   RefreshCw, Loader2, Navigation, Zap, Truck, User, ArrowLeft,
-  ChevronRight, Calendar, Scale, ChevronDown, Info, DollarSign
+  ChevronRight, Calendar, Scale, ChevronDown, Info, DollarSign,
+  Search, X, SlidersHorizontal
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,6 +29,12 @@ export default function AvailableJobs() {
   const [weightValue, setWeightValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // Search & Filter State
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterMaterial, setFilterMaterial] = useState('All');
+  const [filterTime, setFilterTime] = useState('All');
 
   const availableJobs = useAgentStore(s => s.availableJobs);
   const activeJobs = useAgentStore(s => s.activeJobs);
@@ -81,6 +88,36 @@ export default function AvailableJobs() {
         ? completedJobs
         : rejectedJobs.slice(0, 10);
 
+  const filteredJobs = useMemo(() => {
+    let result = currentJobs;
+
+    if (filterMaterial !== 'All') {
+      result = result.filter(j => {
+        const waste = categories.find((w) => w.slug === j.material) || categories.find((w) => w.id === j.material);
+        const matName = (waste?.label || j.material || '').toLowerCase();
+        return matName.includes(filterMaterial.toLowerCase());
+      });
+    }
+
+    if (filterTime !== 'All') {
+      result = result.filter(j => {
+        if (filterTime === 'asap') return j.time?.toUpperCase() === 'ASAP';
+        if (filterTime === 'scheduled') return j.time?.toUpperCase() !== 'ASAP';
+        return true;
+      });
+    }
+
+    if (!searchTerm) return result;
+    const term = searchTerm.toLowerCase();
+    return result.filter(j => {
+      const waste = categories.find((w) => w.slug === j.material) || categories.find((w) => w.id === j.material);
+      const matName = (waste?.label || j.material || '').toLowerCase();
+      const loc = (j.location || '').toLowerCase();
+      const client = (j.customerName || j.customer || '').toLowerCase();
+      return matName.includes(term) || loc.includes(term) || client.includes(term);
+    });
+  }, [currentJobs, searchTerm, filterMaterial, filterTime, categories]);
+
   const TABS = [
     { id: 'available', label: 'Requested', count: availableJobs.length },
     { id: 'active', label: 'Accepted', count: activeJobs.length },
@@ -91,8 +128,8 @@ export default function AvailableJobs() {
   return (
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
-        <div className="flex items-center justify-between max-w-lg mx-auto pb-3">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
+        <div className="flex items-center justify-between max-w-lg mx-auto pb-2">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
           </button>
@@ -107,20 +144,102 @@ export default function AvailableJobs() {
           </div>
         </div>
 
-        {/* Tabs - Edge to edge underline style */}
-        <div className="flex border-b border-slate-200 dark:border-slate-800">
+        {/* Compact Search Bar & Filter Toggle */}
+        <div className=" flex items-center gap-2">
+          <div className="relative group flex-1">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search missions or locations..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              >
+                <X className="w-3 h-3 text-slate-400" />
+              </button>
+            )}
+          </div>
+          
+          <button
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className={`p-3 rounded-xl border flex items-center justify-center gap-1.5 transition-all shrink-0 ${isFilterOpen || filterMaterial !== 'All' || filterTime !== 'All'
+              ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500/30 text-indigo-600 dark:text-indigo-400'
+              : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-750'
+              }`}
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            {(filterMaterial !== 'All' || filterTime !== 'All') && (
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+            )}
+          </button>
+        </div>
+
+        {/* Dropdown Filters Expandable Panel */}
+        <AnimatePresence>
+          {isFilterOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden mb-3 bg-slate-50/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl"
+            >
+              <div className="p-3 grid grid-cols-2 gap-2">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Material</label>
+                  <div className="relative">
+                    <select
+                      value={filterMaterial}
+                      onChange={(e) => setFilterMaterial(e.target.value)}
+                      className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-indigo-500"
+                    >
+                      <option value="All">All Materials</option>
+                      {categories.map(c => (
+                        <option key={c.id || c.slug} value={c.label || c.slug}>{c.label}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Timing</label>
+                  <div className="relative">
+                    <select
+                      value={filterTime}
+                      onChange={(e) => setFilterTime(e.target.value)}
+                      className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-indigo-500"
+                    >
+                      <option value="All">All Times</option>
+                      <option value="asap">ASAP (Urgent)</option>
+                      <option value="scheduled">Scheduled</option>
+                    </select>
+                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Tabs - Pill style */}
+        <div className="mt-1 flex bg-slate-100 dark:bg-slate-900/80 p-1.5 rounded-xl">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex-1 py-3 text-[10px] font-bold capitalize tracking-widest transition-all flex items-center justify-center border-b-2 ${activeTab === tab.id
-                ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400'
-                : 'border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+              className={`relative flex-1 py-1 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-0.5 ${activeTab === tab.id
+                ? 'bg-indigo-600 shadow-sm text-white font-black'
+                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                 }`}
             >
-              {tab.label}
+              <span className="truncate">{tab.label}</span>
               {tab.count > 0 && (
-                <span className="absolute -top-0.5 right-1 min-w-[16px] h-4 px-1 text-[8px] font-bold rounded-full flex items-center justify-center bg-indigo-600 text-white">
+                <span className={`min-w-[16px] h-4 px-1 text-[8px] font-bold rounded-full flex items-center justify-center ${activeTab === tab.id ? 'bg-white text-indigo-600' : 'bg-indigo-500/20 text-indigo-600 dark:bg-indigo-500/30 dark:text-indigo-400'}`}>
                   {tab.count}
                 </span>
               )}
@@ -129,13 +248,13 @@ export default function AvailableJobs() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-px pb-24 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full">
+      <div className="flex-1 space-y-px pb-24 pt-[calc(env(safe-area-inset-top,1rem)+8rem)] relative max-w-lg mx-auto w-full">
 
         {isLoadingJobs ? (
           <div className="space-y-4 p-4">
             {[1, 2, 3].map(i => <div key={i} className="h-24 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-2xl" />)}
           </div>
-        ) : currentJobs.length === 0 ? (
+        ) : filteredJobs.length === 0 ? (
           <EmptyState
             title={`No ${activeTab} missions`}
             subtitle="New jobs will appear here as they are posted in your area."
@@ -368,7 +487,7 @@ export default function AvailableJobs() {
                 exit={{ opacity: 0 }}
                 
               >
-                {currentJobs.map((job) => {
+                {filteredJobs.map((job) => {
                   const waste = categories.find((w) => w.slug === job.material) ||
                     categories.find((w) => w.id === job.material);
                   const photoUrl = job.photoUrl || job.photo_url || job.photos?.[0];

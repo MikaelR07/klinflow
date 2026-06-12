@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Scale, TrendingUp,
   ChevronRight, MessageSquareQuote, Check,
-  ArrowLeft, Clock, Package, CheckCircle2, Info, User, Users
+  ArrowLeft, Clock, Package, CheckCircle2, Info, User, Users,
+  SlidersHorizontal, X, ChevronDown
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
@@ -16,6 +17,22 @@ import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { OptimizedImage } from '@klinflow/ui';
 import { toast } from 'sonner';
 import { Virtuoso } from 'react-virtuoso';
+
+// Category badge color map
+const CATEGORY_COLORS: Record<string, { bg: string; text: string; darkBg: string; darkText: string }> = {
+  plastic: { bg: 'bg-blue-200', text: 'text-blue-700', darkBg: 'dark:bg-blue-500/15', darkText: 'dark:text-blue-400' },
+  metal: { bg: 'bg-amber-200', text: 'text-amber-700', darkBg: 'dark:bg-amber-500/15', darkText: 'dark:text-amber-400' },
+  paper: { bg: 'bg-indigo-200', text: 'text-indigo-700', darkBg: 'dark:bg-indigo-500/15', darkText: 'dark:text-indigo-400' },
+  organic: { bg: 'bg-green-200', text: 'text-green-700', darkBg: 'dark:bg-green-500/15', darkText: 'dark:text-green-400' },
+  glass: { bg: 'bg-cyan-200', text: 'text-cyan-700', darkBg: 'dark:bg-cyan-500/15', darkText: 'dark:text-cyan-400' },
+  'e-waste': { bg: 'bg-red-200', text: 'text-red-700', darkBg: 'dark:bg-red-500/15', darkText: 'dark:text-red-400' },
+  textile: { bg: 'bg-purple-200', text: 'text-purple-700', darkBg: 'dark:bg-purple-500/15', darkText: 'dark:text-purple-400' },
+};
+
+const getCategoryStyle = (category: string) => {
+  const key = category?.toLowerCase() || '';
+  return CATEGORY_COLORS[key] || { bg: 'bg-slate-100', text: 'text-slate-600', darkBg: 'dark:bg-slate-700', darkText: 'dark:text-slate-400' };
+};
 
 export default function Sourcing() {
   const navigate = useNavigate();
@@ -33,6 +50,11 @@ export default function Sourcing() {
   const [selectedTab, setSelectedTab] = useState<'All' | 'Individual' | 'Bulk Sells'>('All');
   const [offerPrice, setOfferPrice] = useState('');
   const [offerQty, setOfferQty] = useState(1);
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterMaterial, setFilterMaterial] = useState('All');
+  const [filterPriceRange, setFilterPriceRange] = useState('All');
+  const [filterWeight, setFilterWeight] = useState('All');
 
   const [activeBidsCount, setActiveBidsCount] = useState(0);
   const [acceptedTradesCount, setAcceptedTradesCount] = useState(0);
@@ -154,13 +176,40 @@ export default function Sourcing() {
       result = result.filter(l => l.isBulkDrive);
     }
 
+    if (filterMaterial !== 'All') {
+      result = result.filter(l => {
+        const cat = (l.materialCategory || l.material || '').toLowerCase();
+        return cat.includes(filterMaterial.toLowerCase());
+      });
+    }
+
+    if (filterWeight !== 'All') {
+      result = result.filter(l => {
+        const qty = parseFloat(l.quantity) || 0;
+        if (filterWeight === 'small') return qty < 100;
+        if (filterWeight === 'medium') return qty >= 100 && qty <= 500;
+        if (filterWeight === 'large') return qty > 500;
+        return true;
+      });
+    }
+
+    if (filterPriceRange !== 'All') {
+      result = result.filter(l => {
+        const price = parseFloat(l.pricePerKg) || 0;
+        if (filterPriceRange === 'low') return price < 50;
+        if (filterPriceRange === 'medium') return price >= 50 && price <= 100;
+        if (filterPriceRange === 'high') return price > 100;
+        return true;
+      });
+    }
+
     if (!searchTerm) return result;
     const term = searchTerm.toLowerCase();
     return result.filter(l =>
       (l.material && l.material.toLowerCase().includes(term)) ||
       (l.location && l.location.toLowerCase().includes(term))
     );
-  }, [listings, searchTerm, selectedTab]);
+  }, [listings, searchTerm, selectedTab, filterMaterial, filterWeight, filterPriceRange]);
 
   return (
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
@@ -186,19 +235,128 @@ export default function Sourcing() {
             </div>
 
 
-            {/* Compact Search Bar */}
-            <div className="mt-2">
-              <div className="relative group">
+            {/* Compact Search Bar & Filter Toggle */}
+            <div className="mt-2 flex items-center gap-2">
+              <div className="relative group flex-1">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
                   type="text"
                   placeholder="Search materials or locations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm"
+                  className="w-full pl-10 pr-10 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm"
                 />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                  >
+                    <X className="w-3 h-3 text-slate-400" />
+                  </button>
+                )}
               </div>
+              
+              {/* Filter Panel Toggle */}
+              <button
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className={`p-3 rounded-xl border flex items-center justify-center gap-1.5 transition-all shrink-0 ${isFilterOpen || filterMaterial !== 'All' || filterPriceRange !== 'All' || filterWeight !== 'All'
+                  ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500/30 text-indigo-600 dark:text-indigo-400'
+                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-750'
+                  }`}
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                {(filterMaterial !== 'All' || filterPriceRange !== 'All' || filterWeight !== 'All') && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                )}
+              </button>
             </div>
+
+            {/* Dropdown Filters Expandable Panel */}
+            <AnimatePresence>
+              {isFilterOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden mt-2 bg-slate-50/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl"
+                >
+                  <div className="p-3 grid grid-cols-3 gap-2">
+                    {/* Material Filter */}
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Material</label>
+                      <div className="relative">
+                        <select
+                          value={filterMaterial}
+                          onChange={(e) => setFilterMaterial(e.target.value)}
+                          className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-indigo-500"
+                        >
+                          <option value="All">All Materials</option>
+                          <option value="Plastic">Plastic</option>
+                          <option value="Metal">Metal</option>
+                          <option value="Paper">Paper</option>
+                          <option value="Organic">Organic</option>
+                          <option value="Glass">Glass</option>
+                          <option value="E-waste">E-waste</option>
+                        </select>
+                        <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Weight Filter */}
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Weight</label>
+                      <div className="relative">
+                        <select
+                          value={filterWeight}
+                          onChange={(e) => setFilterWeight(e.target.value)}
+                          className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-indigo-500"
+                        >
+                          <option value="All">All Weights</option>
+                          <option value="small">&lt; 100kg</option>
+                          <option value="medium">100 - 500kg</option>
+                          <option value="large">&gt; 500kg</option>
+                        </select>
+                        <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
+                      </div>
+                    </div>
+
+                    {/* Price Filter */}
+                    <div className="flex flex-col gap-1">
+                      <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Price/kg</label>
+                      <div className="relative">
+                        <select
+                          value={filterPriceRange}
+                          onChange={(e) => setFilterPriceRange(e.target.value)}
+                          className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-indigo-500"
+                        >
+                          <option value="All">All Prices</option>
+                          <option value="low">&lt; 50/kg</option>
+                          <option value="medium">50 - 100/kg</option>
+                          <option value="high">&gt; 100/kg</option>
+                        </select>
+                        <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Clear filters bar */}
+                  {(filterMaterial !== 'All' || filterWeight !== 'All' || filterPriceRange !== 'All') && (
+                    <div className="px-3 pb-2 flex justify-end">
+                      <button
+                        onClick={() => {
+                          setFilterMaterial('All');
+                          setFilterWeight('All');
+                          setFilterPriceRange('All');
+                        }}
+                        className="text-[10px] font-semibold text-rose-500 hover:text-rose-600 uppercase tracking-wider flex items-center gap-1"
+                      >
+                        Clear Filters
+                      </button>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Tabs */}
             <div className="mt-1 flex bg-slate-100 dark:bg-slate-900/80 p-1.5 rounded-xl">
@@ -285,9 +443,19 @@ export default function Sourcing() {
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
-                      <h2 className="text-[16px] text-indigo-700 font-bold dark:text-white capitalize leading-tight">
-                        {selectedListing.material}
+                      <h2 className="text-[16px] text-indigo-700 font-bold dark:text-white capitalize leading-tight mb-2">
+                        {selectedListing.materialSubcategory || selectedListing.material}
                       </h2>
+                      {(() => {
+                        const category = selectedListing.materialCategory || (selectedListing.materialSubcategory ? selectedListing.material : null);
+                        if (!category) return null;
+                        const style = getCategoryStyle(category);
+                        return (
+                          <span className={`inline-flex items-center px-2 py-1 rounded text-[10px] font-bold whitespace-nowrap ${style.bg} ${style.text} ${style.darkBg} ${style.darkText}`}>
+                            {category}
+                          </span>
+                        );
+                      })()}
                     </div>
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border border-emerald-200 dark:border-emerald-500/20">
                       <CheckCircle2 className="w-3.5 h-3.5" />
@@ -518,8 +686,20 @@ export default function Sourcing() {
                         <div className="flex-1 min-w-0 flex flex-col justify-center">
                           {/* Row 1: Material & Price */}
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5 min-w-0">
-                              <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">{listing.material}</h3>
+                            <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
+                              <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize tracking-tight">
+                                {listing.materialSubcategory || listing.material}
+                              </h3>
+                              {(() => {
+                                const category = listing.materialCategory || (listing.materialSubcategory ? listing.material : null);
+                                if (!category) return null;
+                                const style = getCategoryStyle(category);
+                                return (
+                                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold whitespace-nowrap ${style.bg} ${style.text} ${style.darkBg} ${style.darkText}`}>
+                                    {category}
+                                  </span>
+                                );
+                              })()}
                               {listing.isBulkDrive && (
                                 <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center gap-0.5 shrink-0">
                                   <Users className="w-2.5 h-2.5" /> Bulk

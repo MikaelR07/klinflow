@@ -149,9 +149,9 @@ export default function MyOffers() {
     cleanupStuckOffers();
   }, [receivedOffers, bookings, fetchIncomingOffers]);
 
-  const pendingOffers = (receivedOffers || []).filter(
-    (o) => o.status === "pending",
-  );
+  const pendingOffers = (receivedOffers || [])
+    .filter((o) => o.status === "pending")
+    .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
   // Smart filter: even if DB hasn't healed yet, hide from In-Progress if booking is done
   const inProgressOffers = (receivedOffers || []).filter((o) => {
@@ -165,7 +165,7 @@ export default function MyOffers() {
           new Date(o.createdAt || Date.now()),
     );
     return !hasCompletedBooking;
-  });
+  }).sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
   // Smart filter: show in Confirmed if DB is completed OR if healing is pending
   const completedOffers = (receivedOffers || []).filter((o) => {
@@ -180,11 +180,11 @@ export default function MyOffers() {
           new Date(o.createdAt || Date.now()),
     );
     return hasCompletedBooking;
-  });
+  }).sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
-  const counterOffers = (bookings || []).filter(
-    (b: Booking) => b.counterOfferStatus === "pending",
-  );
+  const counterOffers = (bookings || [])
+    .filter((b: Booking) => b.counterOfferStatus === "pending")
+    .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
 
   const selectedOffer = receivedOffers?.find(
     (o: MarketplaceOffer) => o.id === selectedOfferId,
@@ -263,7 +263,7 @@ export default function MyOffers() {
       )}
 
       <div
-        className={`flex-1 space-y-0 pb-24 ${!selectedOfferId ? "pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}
+        className={`flex-1 space-y-0 pb-24 ${!selectedOfferId ? "pt-[calc(env(safe-area-inset-top,1rem)+4.8rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}
       >
         {/* ── CONTENT AREA ── */}
         <div className={`pt-1 ${selectedOfferId ? "animate-fade-in" : ""}`}>
@@ -520,7 +520,6 @@ export default function MyOffers() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="space-y-3"
               >
                 {pendingOffers.length === 0 ? (
                   <div className="py-20 text-center">

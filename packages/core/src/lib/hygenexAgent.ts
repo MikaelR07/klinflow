@@ -45,6 +45,13 @@ export const callHygeneXAgent = {
       payload: { userMessage, chatHistory, userRole },
     }),
 
+  visionScan: (userId: string, imageBase64: string, materialHint?: string, validMaterials?: string[]) =>
+    invoke({
+      type: 'vision_scan',
+      userId,
+      payload: { imageBase64, materialHint, validMaterials },
+    }),
+
   scheduled: (checkType: 'daily_report' | 'reward_audit' | 'agent_dispatch' = 'daily_report') =>
     invoke({
       type: 'scheduled',

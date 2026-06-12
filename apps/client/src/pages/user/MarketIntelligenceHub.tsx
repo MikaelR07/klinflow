@@ -49,7 +49,7 @@ export default function MarketIntelligenceHub() {
         .from('rfqs')
         .select(`
           *,
-          buyer:profiles!rfqs_buyer_id_fkey(company_name, name),
+          buyer:profiles!rfqs_buyer_id_fkey(company_name, name, avatar_url),
           rfq_offers(count)
         `)
         .eq('status', 'open')
@@ -94,6 +94,15 @@ export default function MarketIntelligenceHub() {
             category: categoryName,
             delivery: deliveryText,
             offersSubmitted: r.rfq_offers?.[0]?.count || 0,
+            avatar: r.buyer?.avatar_url || null,
+            postedAt: r.created_at ? (() => {
+              const diffMs = new Date().getTime() - new Date(r.created_at).getTime();
+              const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+              const diffDays = Math.floor(diffHours / 24);
+              if (diffDays > 0) return `${diffDays} days ago`;
+              if (diffHours > 0) return `${diffHours} hrs ago`;
+              return 'Just now';
+            })() : undefined,
           };
         });
         setRfqsList(mapped);

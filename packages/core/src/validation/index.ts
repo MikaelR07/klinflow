@@ -134,6 +134,8 @@ export const MarketplaceListingSchema = z.object({
   id: z.string().uuid(),
   sellerId: z.string().uuid(),
   material: z.string(),
+  materialCategory: z.string().nullable().optional(),
+  materialSubcategory: z.string().nullable().optional(),
   quantity: z.number().nonnegative(),
   pricePerKg: z.number().nonnegative(),
   unit: z.string().default('kg'),

@@ -248,6 +248,8 @@ export type Database = {
           location: string | null
           latitude: number | null
           longitude: number | null
+          material_category: string | null
+          material_subcategory: string | null
           photo_url: string | null
           photo_urls: string[] | null
           views: number
@@ -271,6 +273,8 @@ export type Database = {
           location?: string | null
           latitude?: number | null
           longitude?: number | null
+          material_category?: string | null
+          material_subcategory?: string | null
           photo_url?: string | null
           photo_urls?: string[] | null
           views?: number
@@ -294,6 +298,8 @@ export type Database = {
           location?: string | null
           latitude?: number | null
           longitude?: number | null
+          material_category?: string | null
+          material_subcategory?: string | null
           photo_url?: string | null
           photo_urls?: string[] | null
           views?: number

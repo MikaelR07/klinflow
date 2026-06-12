@@ -161,6 +161,8 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           seller_id: userId,
           status: 'active',
           material: (listingData as any).material,
+          material_category: (listingData as any).materialCategory,
+          material_subcategory: (listingData as any).materialSubcategory,
           quantity: (listingData as any).quantity,
           price_per_kg: (listingData as any).pricePerKg,
           description: (listingData as any).description,

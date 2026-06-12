@@ -221,13 +221,7 @@ export default function ResidentWallet() {
 
           {/* Redeem Rewards */}
           <button
-            onClick={() => {
-              if (gfpBalance < 200) {
-                toast.warning(`You need ${200 - gfpBalance} more GFP to redeem.`);
-              } else {
-                navigate('/redeem-gfp');
-              }
-            }}
+            onClick={() => navigate('/redeem-gfp')}
             className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
           >
             <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">

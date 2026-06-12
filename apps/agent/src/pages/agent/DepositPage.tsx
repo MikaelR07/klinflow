@@ -227,7 +227,7 @@ export default function DepositPage() {
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full h-16 pl-16 pr-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-emerald-500/30 focus:border-primary text-2xl font-bold text-slate-900 dark:text-white outline-none transition-all"
+                  className="w-full h-16 pl-16 pr-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-emerald-500/30 focus:border-primary text-2xl font-bold text-slate-900 dark:text-white outline-none transition-colors"
                 />
               </div>
             </div>
@@ -291,7 +291,7 @@ export default function DepositPage() {
                       value={requestAmount}
                       onChange={(e) => setRequestAmount(e.target.value)}
                       placeholder="0.00"
-                      className="w-full h-14 pl-16 pr-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 text-xl font-bold text-slate-900 dark:text-white outline-none transition-all"
+                      className="w-full h-14 pl-16 pr-5 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 text-xl font-bold text-slate-900 dark:text-white outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -302,7 +302,7 @@ export default function DepositPage() {
                     value={requestReason}
                     onChange={(e) => setRequestReason(e.target.value)}
                     placeholder="e.g. Buying HDPE from residents"
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 text-sm font-medium text-slate-900 dark:text-white min-h-[100px] resize-none outline-none transition-all"
+                    className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 text-sm font-medium text-slate-900 dark:text-white min-h-[100px] resize-none outline-none transition-colors"
                   />
                 </div>
               </div>
@@ -350,12 +350,12 @@ export default function DepositPage() {
             </div>
 
             {/* Fleet Info */}
-            <div className="bg-amber-700/50 dark:bg-blue-500/5 border border-blue-200 dark:border-blue-500/10 rounded-xl p-4 space-y-2">
+            <div className="bg-amber-600  border border-amber-700 rounded-xl p-4 space-y-2">
               <div className="flex items-start gap-2">
-                <Building2 className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+                <Building2 className="w-4 h-4 text-white mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-[11px] font-bold text-slate-200 dark:text-blue-300">Fleet Driver Info</p>
-                  <p className="text-[10px] text-slate-200/60 dark:text-blue-400/60">As a fleet driver, you can't deposit directly but you can request funds from your company. Requested funds must be approved by your company admin before they appear in your wallet.</p>
+                  <p className="text-[11px] font-bold text-white">Fleet Driver Info</p>
+                  <p className="text-[10px] text-white leading-relaxed">As a fleet driver, you can't deposit directly but you can request funds from your company. Requested funds must be approved by your company admin before they appear in your wallet.</p>
                 </div>
               </div>
             </div>

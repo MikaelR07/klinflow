@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function PostTradeSummaryStep({
   wasteType,
+  selectedSubcategory,
   quantity,
   pickupMode,
   profile,
@@ -52,7 +53,14 @@ export default function PostTradeSummaryStep({
         <div className="p-5 bg-white dark:bg-slate-900/70 flex items-center justify-between">
           <div>
             <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Target Material</p>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none">{wasteType?.label}</h3>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none">
+              {selectedSubcategory || wasteType?.label}
+            </h3>
+            {selectedSubcategory && (
+              <p className="text-[10px] font-semibold text-slate-400 mt-1">
+                Category: {wasteType?.label}
+              </p>
+            )}
           </div>
           <div className="text-right">
             <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Stock Weight</p>

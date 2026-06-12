@@ -131,7 +131,7 @@ export default function MyRFQOffers() {
       </div>
 
       {/* ── CONTENT AREA ── */}
-      <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 space-y-px pt-[calc(env(safe-area-inset-top,1rem)+5.85rem)] bg-slate-100 dark:bg-slate-800">
+      <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 pt-[calc(env(safe-area-inset-top,1rem)+5.85rem)]">
         <AnimatePresence>
           {filteredQuotes.length === 0 ? (
             <motion.div
@@ -165,7 +165,7 @@ export default function MyRFQOffers() {
                   transition={{ duration: 0.25, ease: 'easeOut' }}
                   key={quote.id}
                   onClick={() => navigate(`/my-rfq-offers/${quote.id}`)}
-                  className="bg-white dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group"
+                  className="bg-white dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
                 >
                   {/* Status accent bar on left edge */}
                   <div className={`absolute left-0 top-0 bottom-0 w-1 ${quote.status === 'accepted' ? 'bg-emerald-500' : quote.status === 'declined' ? 'bg-rose-500' : 'bg-amber-500'

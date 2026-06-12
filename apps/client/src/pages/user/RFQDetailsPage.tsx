@@ -332,7 +332,7 @@ export default function RFQDetailsPage() {
   return (
     <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-8 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
           <button
             onClick={() => navigate(-1)}
@@ -507,14 +507,14 @@ export default function RFQDetailsPage() {
         )}
 
         {existingOfferId ? (
-          <div className="bg-emerald-50 dark:bg-emerald-900 rounded-xl p-4 border border-emerald-100 dark:border-emerald-800/40 shadow-sm text-center space-y-3">
-            <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-800/50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2">
+          <div className="bg-emerald-700 dark:bg-emerald-900 rounded-xl p-4 border border-emerald-100 dark:border-emerald-800/40 shadow-sm text-center space-y-3">
+            <div className="w-12 h-12 bg-emerald-500 dark:bg-emerald-800/50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2">
               <CheckCircle2 className="w-6 h-6 text-white" />
             </div>
-            <h4 className="text-sm font-black text-emerald-900 dark:text-emerald-400 uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-white dark:text-emerald-400 uppercase tracking-wider">
               Offer Has Been Submitted
             </h4>
-            <p className="text-xs text-emerald-300/80 dark:text-emerald-400/80 font-semibold mb-4 leading-relaxed">
+            <p className="text-xs text-slate-300 dark:text-slate-200 font-semibold mb-4 leading-relaxed">
               Your quote has been successfully sent to the buyer. You can track
               its status in your Submitted Quotes dashboard.
             </p>

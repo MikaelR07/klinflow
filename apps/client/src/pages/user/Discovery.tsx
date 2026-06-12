@@ -111,7 +111,7 @@ export default function DiscoveryHub() {
         </div>
       </div>
 
-      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+5.75rem)] pb-6 px-0 space-y-6">
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+6.7rem)] pb-6 px-0 space-y-6">
 
         {/* ── EXPANDABLE FILTERS ── */}
         <AnimatePresence>
@@ -191,10 +191,10 @@ export default function DiscoveryHub() {
                   className="w-full bg-white dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800  overflow-hidden transition-all text-left  block cursor-pointer"
                   onClick={() => navigate(`/company/${partner.id}`)}
                 >
-                  <div className="p-4 flex gap-3 relative">
+                  <div className="p-2 flex gap-3 relative">
                     {/* Avatar/Icon */}
                     <div className="shrink-0 mt-0.5">
-                      <div className={`w-[60px] h-[60px] rounded-2xl flex items-center justify-center text-2xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-600 dark:bg-indigo-900/30 text-white' : 'bg-[#138a53] text-white'}`}>
+                      <div className={`w-[50px] h-[50px] rounded-2xl flex items-center justify-center text-2xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-600 dark:bg-indigo-900/30 text-white' : 'bg-[#138a53] text-white'}`}>
                         {partner.avatarUrl ? (
                           <OptimizedImage src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
