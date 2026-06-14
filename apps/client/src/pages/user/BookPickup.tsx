@@ -321,10 +321,12 @@ export default function BookPickup() {
       if (rescheduleId) {
         // Update existing booking
         const { rescheduleBooking } = useBookingStore.getState();
-        await rescheduleBooking(rescheduleId, customDate, timeString, bookingData);
+        const res = await rescheduleBooking(rescheduleId, customDate, timeString, bookingData);
+        if (!res.success) throw new Error(res.error || "Failed to reschedule booking.");
       } else {
         // Create new booking
-        await createBooking(bookingData);
+        const result = await createBooking(bookingData);
+        if (!result) throw new Error("Failed to create pickup request. Please try again.");
       }
 
 
@@ -341,9 +343,9 @@ export default function BookPickup() {
       setShowEscrowModal(false);
       toast.success("Pickup Requested!");
       navigate('/my-bookings');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Booking error:', err);
-      toast.error("Booking Failed", { description: err instanceof Error ? err.message : 'An unknown error occurred' });
+      toast.error("Booking Failed", { description: err?.message || 'An unknown error occurred' });
     } finally {
       setIsSubmitting(false);
     }
@@ -423,6 +425,7 @@ export default function BookPickup() {
               estimatedGFP={estimatedGFP}
               selectedAgent={selectedAgent}
               selectedCompanyId={selectedCompanyId}
+              photo={photo}
             />
           )}
         </AnimatePresence>

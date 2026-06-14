@@ -13,7 +13,8 @@ import {
   Calendar,
   Clock,
   Trash2,
-  Plus
+  Plus,
+  Users
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
@@ -44,7 +45,8 @@ export default function CreateRFQPage() {
     deliveryMethod: 'flexible',
     deadlineDate: '',
     deadlineTime: '',
-    notes: ''
+    notes: '',
+    isGroupCollection: false
   });
 
   useEffect(() => {
@@ -193,7 +195,8 @@ export default function CreateRFQPage() {
         images: uploadedUrls,
         notes: formData.notes,
         deadline: isNaN(deadlineDateObj.getTime()) ? null : deadlineDateObj.toISOString(),
-        status: 'open'
+        status: 'open',
+        is_group_collection: formData.isGroupCollection
       });
 
       if (insertError) throw insertError;
@@ -559,6 +562,24 @@ export default function CreateRFQPage() {
               </div>
             </div>
 
+            {/* Group Collection Toggle */}
+            <div className="bg-emerald-50/80 dark:bg-emerald-900/10 p-4 rounded-xl border border-emerald-100 dark:border-emerald-800/30 flex items-start gap-3 shadow-sm">
+              <div className="pt-0.5">
+                <div
+                  onClick={() => setFormData(prev => ({ ...prev, isGroupCollection: !prev.isGroupCollection }))}
+                  className={`w-10 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors ${formData.isGroupCollection ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`}
+                >
+                  <div className={`bg-white w-4 h-4 rounded-full shadow-sm transform transition-transform ${formData.isGroupCollection ? 'translate-x-4' : 'translate-x-0'}`} />
+                </div>
+              </div>
+              <div>
+                <h3 className="text-xs font-bold text-slate-800 dark:text-emerald-100 uppercase tracking-wider">Group Collection Request</h3>
+                <p className="text-[10px] font-medium text-slate-500 dark:text-emerald-200/70 leading-relaxed mt-0.5">
+                  Allow multiple sellers to pool their resources together to fulfill this large volume contract.
+                </p>
+              </div>
+            </div>
+
             {/* RFQ Deadline */}
             <div className="bg-slate-50/80 dark:bg-slate-800/80 p-5 rounded-2xl border border-slate-150 dark:border-slate-700/50 shadow-sm space-y-4">
               <div className="flex items-center gap-2 border-b border-slate-50 dark:border-slate-750 pb-3">
@@ -733,6 +754,15 @@ export default function CreateRFQPage() {
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Specifications & Notes</p>
                       <p className="text-xs text-slate-600 dark:text-slate-350 italic font-medium">
                         "{formData.notes}"
+                      </p>
+                    </div>
+                  )}
+
+                  {formData.isGroupCollection && (
+                    <div className="flex items-start gap-2.5 p-3 bg-emerald-500/5 border border-emerald-500/10 rounded-xl mt-2">
+                      <Users className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                      <p className="text-[9px] font-semibold text-emerald-700 dark:text-emerald-400 leading-tight">
+                        This is a Group Collection. Multiple sellers can join and contribute to fulfilling this requested volume.
                       </p>
                     </div>
                   )}

@@ -124,14 +124,14 @@ export default function MarketIntelTipsTab({ marketData }: MarketIntelTipsTabPro
 
             const colorClassesBg =
               tip.color === 'rose'
-                ? 'bg-rose-500/10 border-rose-500/20'
+                ? 'bg-rose-500/10 border-rose-200'
                 : tip.color === 'indigo'
-                ? 'bg-indigo-500/10 border-indigo-500/20'
+                ? 'bg-indigo-500/10 border-indigo-200'
                 : tip.color === 'emerald'
-                ? 'bg-emerald-500/10 border-emerald-500/20'
+                ? 'bg-emerald-500/10 border-emerald-200'
                 : tip.color === 'purple'
-                ? 'bg-purple-500/10 border-purple-500/20'
-                : 'bg-amber-500/10 border-amber-500/20';
+                ? 'bg-purple-500/10 border-purple-200'
+                : 'bg-amber-500/10 border-amber-200';
 
             const colorClassesText =
               tip.color === 'rose'

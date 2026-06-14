@@ -24,7 +24,7 @@ export default function SwarmsList() {
   const userId = useAuthStore(s => s.userId);
   const estateName = profile?.location?.estate || profile?.estate || 'Nairobi';
 
-  const { swarms, goals, loadingSwarms, fetchSwarms, fetchGoals, setupSubscriptions, cleanupSubscriptions } = useCollectiveStore();
+  const { swarms, loadingSwarms, fetchSwarms, setupSubscriptions, cleanupSubscriptions } = useCollectiveStore();
   const fetchMaterialPrices = useServiceStore(s => s.fetchMaterialPrices);
   const materialPrices = useServiceStore(s => s.materialPrices);
 
@@ -34,10 +34,9 @@ export default function SwarmsList() {
 
   useEffect(() => {
     if (estateName) {
-      fetchSwarms(estateName);
-      fetchGoals(estateName);
+      fetchSwarms(estateName, profile?.role);
       fetchMaterialPrices();
-      setupSubscriptions(estateName);
+      setupSubscriptions(estateName, profile?.role);
 
       // Check which swarms have been posted to the marketplace
       supabase
@@ -81,7 +80,7 @@ export default function SwarmsList() {
                 <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
               </button>
               <div>
-                <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Logistics Swarms</h1>
+                <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Logistics Swarms</h1>
                 <p className="text-[10px] font-bold text-indigo-600 capitalize tracking-widest flex items-center gap-1">
                   <Truck className="w-3.5 h-3.5 text-indigo-500" /> {estateName}
                 </p>
@@ -206,7 +205,7 @@ export default function SwarmsList() {
                     </div>
 
                     <h3 className="text-xs font-bold text-[#5c50e6] dark:text-indigo-400 mb-2 leading-tight tracking-tight">
-                      Material: {swarm.material}
+                      Material-Type: {swarm.material}
                     </h3>
 
                     <div className="flex items-center gap-1.5 mb-1.5 text-slate-500 dark:text-slate-400">

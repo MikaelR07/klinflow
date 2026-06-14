@@ -213,8 +213,8 @@ export default function MyBookings() {
             </button>
 
             <div className="text-center">
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
-              <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup History</p>
+              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
+              <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup Details and history</p>
             </div>
 
             <div className="w-10" /> {/* Spacer */}
@@ -317,14 +317,15 @@ export default function MyBookings() {
                         </div>
                         <div className="space-y-1">
                           <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
-                            material-type:<span className="text-slate-900 dark:text-white">{waste?.label || wasteTypeVal}</span>
+                            Material:<span className="text-slate-900 dark:text-white text-[11px]">{waste?.label || wasteTypeVal}</span>
                           </p>
-                          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
-                            ID: <span className="text-primary font-mono">{b.id.slice(0, 8).toUpperCase()}</span>
-                          </p>
-                          <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1.5">
+                           <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1.5">
                             <MapPin className="w-3 h-3 text-green-500" /> {b.estate}
                           </p>
+                          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
+                            ID: <span className="text-primary font-mono text-[11px]">{b.id.slice(0, 8).toUpperCase()}</span>
+                          </p>
+                         
                         </div>
                       </div>
                       <div className="text-right flex flex-col items-end gap-1.5">

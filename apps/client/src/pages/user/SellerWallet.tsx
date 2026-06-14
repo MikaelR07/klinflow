@@ -8,7 +8,8 @@ import {
   Gift, Send, Banknote, Package,
   TrendingUp, BarChart2, ShieldCheck, CheckCircle2,
   Receipt, Landmark, ChevronRight,
-  ArrowLeftRight
+  ArrowLeftRight,
+  BadgeDollarSign
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -60,14 +61,14 @@ export default function SellerWallet() {
   return (
     <div className="space-y-4 pb-8">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-600">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-600">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors active:scale-95">
               <ArrowLeft className="w-5 h-5 text-slate-500" />
             </button>
             <div className="flex items-center gap-2">
-              <h1 className="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Seller Wallet</h1>
+              <h1 className="font-bold text-lg tracking-tight text-slate-600 dark:text-white">Seller Wallet</h1>
             </div>
           </div>
         </div>
@@ -78,10 +79,10 @@ export default function SellerWallet() {
 
       {/* ── BALANCE HERO CARD ── */}
       <div className="mx-1">
-        <div className="bg-gradient-to-br from-[#064e3b] to-primary  dark:to-primary rounded-2xl p-5 overflow-hidden border border-emerald-800/50">
+        <div className="bg-primary rounded-2xl p-5 overflow-hidden ">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <p className="text-[10px] font-bold text-emerald-100/80 mb-1 tracking-wider uppercase">
+              <p className="text-[10px] font-bold text-emerald-100 mb-1 tracking-wider uppercase">
                 Total Available
               </p>
               <div className="flex items-center gap-2">
@@ -92,7 +93,7 @@ export default function SellerWallet() {
                   {balanceVisible ? <Eye className="w-5 h-5 text-emerald-100/80" /> : <EyeOff className="w-5 h-5 text-emerald-100/80" />}
                 </button>
               </div>
-              <p className="text-[10px] font-medium text-emerald-200/70 mt-1">Ready for withdrawal</p>
+              <p className="text-[10px] font-medium text-emerald-200 mt-1">Ready for withdrawal</p>
             </div>
 
           </div>
@@ -100,12 +101,12 @@ export default function SellerWallet() {
           {/* Stats Row */}
           <div className="grid grid-cols-2 gap-4 border-t border-emerald-700/50 pt-4">
             <div>
-              <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-1">Pending Settlement</p>
+              <p className="text-[9px] font-bold text-emerald-100 uppercase tracking-widest mb-1">Pending Settlement</p>
               <p className="text-sm font-bold text-white">KES {pendingSettlement.toLocaleString() || '8,200.00'}</p>
             </div>
             <div className="flex justify-between items-end">
               <div>
-                <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-1">Total Earnings</p>
+                <p className="text-[9px] font-bold text-emerald-100 uppercase tracking-widest mb-1">Total Earnings</p>
                 <p className="text-sm font-bold text-white">KES {isLoadingStats ? '...' : totalEarningsThisMonth.toLocaleString()}</p>
               </div>
               <BarChart2 className="w-5 h-5 text-[#c2ed7d]" />
@@ -116,7 +117,7 @@ export default function SellerWallet() {
 
       {/* ── QUICK ACTIONS ── */}
       <div className="mx-1">
-        <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 px-1">Quick Actions</h3>
+        <h3 className="text-sm font-bold text-slate-600 dark:text-white px-1">Quick Actions</h3>
         <div className="grid grid-cols-4 gap-2">
           {/* Withdraw */}
           <button
@@ -124,7 +125,7 @@ export default function SellerWallet() {
             className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-colors"
           >
             <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center">
-              <Landmark className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <BadgeDollarSign className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
             <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">Withdraw</p>
           </button>
@@ -237,7 +238,7 @@ export default function SellerWallet() {
     "
         >
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+            <h4 className="text-xs font-bold text-slate-600 dark:text-white">
               Earnings Overview
             </h4>
 
@@ -246,7 +247,7 @@ export default function SellerWallet() {
             </span>
           </div>
 
-          <p className="text-lg font-black text-slate-900 dark:text-white mb-1 leading-none truncate">
+          <p className="text-lg font-black text-slate-800 dark:text-white mb-1 leading-none truncate">
             KES {isLoadingStats ? '...' : totalEarningsThisMonth.toLocaleString()}
           </p>
 

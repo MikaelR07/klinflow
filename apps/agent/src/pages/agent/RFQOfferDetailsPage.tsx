@@ -52,6 +52,7 @@ export default function RFQOfferDetailsPage() {
         location: rfqData.pickup_area,
         status: rfqData.status,
         description: rfqData.notes || '',
+        isGroupCollection: rfqData.is_group_collection || false,
       });
 
       // Fetch Offer
@@ -175,63 +176,68 @@ export default function RFQOfferDetailsPage() {
   const StatusIcon = statusConfig.icon;
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-12 transition-colors -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] -mx-1 relative">
-
-      {/* ── IMAGE PREVIEW AT THE TOP (EDGE-TO-EDGE & TOP-COVERED) ── */}
-      <div className="relative h-[350px] w-full overflow-hidden border-b border-slate-200 dark:border-slate-800 shadow-sm bg-slate-900">
-        {offer.images && offer.images.length > 0 ? (
-          <div
-            onScroll={handleScroll}
-            className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
-          >
-            {offer.images.map((img: string, idx: number) => (
-              <div key={idx} className="w-full h-full shrink-0 snap-center relative">
-                <OptimizedImage
-                  src={img}
-                  alt={`Proof ${idx + 1}`}
-                  className="w-full h-full object-cover"
-                  wrapperClassName="w-full h-full"
-                />
-              </div>
-            ))}
+    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-16 transition-colors">
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-amber-500 transition-colors" />
+          </button>
+          <div>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Offer Details</h1>
+            <p className="text-[10px] font-bold text-amber-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> Sourcing Request Command
+            </p>
           </div>
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400">
-            <Package className="w-12 h-12 mb-2 opacity-50" />
-            <span className="text-xs font-bold tracking-wider uppercase">No Images Provided</span>
-          </div>
-        )}
-
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
-
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-[calc(env(safe-area-inset-top,1.5rem)+1rem)] left-4 w-10 h-10 rounded-2xl bg-black/25 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-md active:scale-95 transition-all z-10"
-        >
-          <ArrowLeft className="w-5 h-5 text-white" />
-        </button>
-
-        {offer.images && offer.images.length > 1 && (
-          <div className="absolute top-[calc(env(safe-area-inset-top,1.5rem)+1rem)] right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
-            <span>{activeImageIndex + 1} / {offer.images.length}</span>
-            <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
-          </div>
-        )}
-
-        {offer.images && offer.images.length > 1 && (
-          <div className="absolute bottom-16 left-0 right-0 flex justify-center gap-1.5 z-10">
-            {offer.images.map((_: any, index: number) => (
-              <div
-                key={index}
-                className={`h-1.5 rounded-full transition-all duration-300 ${index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'
-                  }`}
-              />
-            ))}
-          </div>
-        )}
+        </div>
       </div>
 
-      <div className="space-y-4 px-1.5 mt-1">
+      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
+        {/* ── IMAGE CAROUSEL ── */}
+        <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
+          {offer.images && offer.images.length > 0 ? (
+            <div
+              onScroll={handleScroll}
+              className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar"
+            >
+              {offer.images.map((img: string, idx: number) => (
+                <div key={idx} className="w-full h-full shrink-0 snap-center relative">
+                  <OptimizedImage
+                    src={img}
+                    alt={`Proof ${idx + 1}`}
+                    className="w-full h-full object-cover"
+                    wrapperClassName="w-full h-full"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400">
+              <Package className="w-12 h-12 mb-2 opacity-50" />
+              <span className="text-xs font-bold tracking-wider uppercase">No Images Provided</span>
+            </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
+
+          {offer.images && offer.images.length > 1 && (
+            <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+              <span>{activeImageIndex + 1} / {offer.images.length}</span>
+              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
+            </div>
+          )}
+
+          {offer.images && offer.images.length > 1 && (
+            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
+              {offer.images.map((_: any, index: number) => (
+                <div
+                  key={index}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${index === activeImageIndex ? 'w-4 bg-emerald-500' : 'w-1.5 bg-white/40'}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
         {/* ── DETAIL CARD BELOW ── */}
         <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
 
@@ -331,36 +337,50 @@ export default function RFQOfferDetailsPage() {
             <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">Review and manage this offer</p>
           </div>
 
-          {isAccepted && (
-            <button
-              onClick={() => navigate('/pickups')}
-              className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-            >
-              <ShieldCheck className="w-5 h-5" /> View Active Pickups
-            </button>
-          )}
-
-          {isDeclined && (
-            <button onClick={() => navigate(-1)} className="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all">
-              Go Back
-            </button>
-          )}
-
-          {isPending && (
-            <div className="flex flex-row gap-3">
-              <button
-                onClick={handleDeclineBid}
-                className="flex-[0.6] py-4 bg-red-600  text-white  rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-              >
-                <XCircle className="w-5 h-5" /> Decline
-              </button>
-              <button
-                onClick={handleAcceptBid}
-                className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-              >
-                <CheckCircle2 className="w-5 h-5" /> Accept
+          {rfq.isGroupCollection ? (
+            <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/30 p-4 rounded-xl text-center">
+              <p className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-1">Group Collection Pledge</p>
+              <p className="text-xs text-blue-800/70 dark:text-blue-200/70 font-medium leading-relaxed">
+                This pledge has been automatically added to the pool. Once the goal is reached, you can generate contracts for the entire pool.
+              </p>
+              <button onClick={() => navigate(-1)} className="mt-3 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-[11px] uppercase tracking-widest transition-all">
+                Return to Pool
               </button>
             </div>
+          ) : (
+            <>
+              {isAccepted && (
+                <button
+                  onClick={() => navigate('/pickups')}
+                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  <ShieldCheck className="w-5 h-5" /> View Active Pickups
+                </button>
+              )}
+
+              {isDeclined && (
+                <button onClick={() => navigate(-1)} className="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all">
+                  Go Back
+                </button>
+              )}
+
+              {isPending && (
+                <div className="flex flex-row gap-3">
+                  <button
+                    onClick={handleDeclineBid}
+                    className="flex-[0.6] py-4 bg-red-600  text-white  rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  >
+                    <XCircle className="w-5 h-5" /> Decline
+                  </button>
+                  <button
+                    onClick={handleAcceptBid}
+                    className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle2 className="w-5 h-5" /> Accept
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

@@ -346,7 +346,7 @@ export default function RFQDetailsPage() {
             </h1>
             <p className="text-[10px] font-bold text-primary capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />{" "}
-              Sourcing Request Command
+              Buyer's Material Request 
             </p>
           </div>
         </div>
@@ -528,15 +528,24 @@ export default function RFQDetailsPage() {
         ) : (
           <form
             onSubmit={handleSubmitProposal}
-            className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5"
+            className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5"
           >
             <div>
-              <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+              <h4 className="text-sm font-black text-slate-600 dark:text-white uppercase tracking-wider">
                 Submit Bid Proposal
               </h4>
               <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
                 Set your rates and upload your inventory batch details.
               </p>
+            </div>
+
+            {/* Buyer's target payout rate */}
+            <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-xl p-4 flex items-center gap-3 border border-emerald-100 dark:border-emerald-800/30">
+              <Coins className="w-5 h-5 text-emerald-600 shrink-0" />
+              <div>
+                <p className="text-xs font-bold text-emerald-800 dark:text-emerald-300">Buyer's Target Rate: KSh {rfq.price}/kg</p>
+                <p className="text-[10px] text-emerald-600/70 dark:text-emerald-300/60 font-medium">You can match or negotiate a different rate below</p>
+              </div>
             </div>
 
             <div className="space-y-4">

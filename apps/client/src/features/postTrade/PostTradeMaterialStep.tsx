@@ -132,7 +132,7 @@ export default function PostTradeMaterialStep({
                     slug: cat.slug || cat.id
                   });
                 }}
-                className={`relative h-20 rounded-xl flex flex-col items-center justify-center gap-1 active:scale-95 transition-all group overflow-hidden border-2 ${isSelected
+                className={`relative h-24 rounded-xl flex flex-col items-center justify-center gap-1 active:scale-95 transition-all group overflow-hidden border-2 ${isSelected
                   ? 'border-emerald-500 ring-2 ring-emerald-500/20'
                   : 'border-slate-100 dark:border-slate-800 hover:border-emerald-500/40'
                   }`}

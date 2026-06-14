@@ -235,7 +235,7 @@ export default function CreateSwarm() {
               type="number"
               value={targetWeight}
               onChange={(e) => setTargetWeight(e.target.value)}
-              placeholder="e.g. 500"
+              placeholder="e.g. 200"
               min={10}
               className="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300"
             />

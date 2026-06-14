@@ -75,9 +75,9 @@ export default function DiscoveryHub() {
   return (
     <div className=" bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
         <div className="w-full mx-auto">
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-4 mb-2">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-3xl active:scale-90 transition-all">
               <ArrowLeft className="w-4 h-4 dark:text-white" />
             </button>
@@ -111,7 +111,7 @@ export default function DiscoveryHub() {
         </div>
       </div>
 
-      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+6.7rem)] pb-6 px-0 space-y-6">
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+6rem)] pb-6 px-0 space-y-6">
 
         {/* ── EXPANDABLE FILTERS ── */}
         <AnimatePresence>
@@ -243,7 +243,7 @@ export default function DiscoveryHub() {
                               .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
                               .slice(0, 3)
                               .map((m: any) => (
-                                <span key={m} className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[9px] font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
+                                <span key={m} className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[10px] font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
                                   {(MATERIAL_LABELS as any)[m]}
                                 </span>
                               ))}

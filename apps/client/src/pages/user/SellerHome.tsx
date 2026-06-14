@@ -35,7 +35,12 @@ import {
   Scale,
   Receipt,
   Circle,
-  TruckIcon
+  TruckIcon,
+  Brain,
+  BrainCog,
+  BrainCircuit,
+  TrainFront,
+  CircleFadingPlus
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -256,7 +261,7 @@ export default function SellerHome() {
 
         {/* ── REVENUE HERO CARD ── */}
         <div className="relative group">
-          <div className="bg-gradient-to-br from-[#064e3b] to-primary rounded-xl   p-5  gpu-layer relative overflow-hidden">
+          <div className="bg-gradient-to-bl from-[#064e3b] to-primary  rounded-xl p-6 gpu-layer relative overflow-hidden">
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-[radial-gradient(circle,_rgba(16,185,129,0.05)_0%,_transparent_70%)] pointer-events-none" />
             <div className="flex flex-col gap-6 relative z-10">
               <div className="flex items-end justify-between">
@@ -331,7 +336,7 @@ export default function SellerHome() {
             >
 
               <div className="w-10 h-10 bg-emerald-600 dark:bg-slate-800 text-white rounded-xl flex items-center justify-center  group-hover:scale-110 transition-transform">
-                <TruckIcon className="w-5 h-5 text-white" />
+                <CircleFadingPlus className="w-5 h-5 text-white" />
               </div>
               <div className="text-center mt-auto">
                 <p className="text-[10px] font-semibold capitalize tracking-widest leading-none">Sell</p>
@@ -359,8 +364,8 @@ export default function SellerHome() {
             >
               <div className="relative">
                 {receivedOffers.filter((o: any) => o.status === 'pending').length > 0 && (
-                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-green-600 rounded-full border border-white dark:border-slate-900 flex items-center justify-center shadow-sm">
-                    <span className="text-[8px] font-semibold text-white">{receivedOffers.filter((o: any) => o.status === 'pending').length}</span>
+                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-600 rounded-full  dark:border-slate-900 flex items-center justify-center shadow-sm">
+                    <span className="text-[10px] font-semibold text-white">{receivedOffers.filter((o: any) => o.status === 'pending').length}</span>
                   </div>
                 )}
                 <div className="w-10 h-10 bg-blue-600  dark:bg-slate-800 text-indigo-500 group-hover:text-indigo-600 rounded-xl flex items-center justify-center  transition-colors">
@@ -459,7 +464,7 @@ export default function SellerHome() {
               <div>
                 <h3 className="text-sm font-bold text-white capitalize tracking-tight leading-none mb-1.5">Collective Hub</h3>
                 <p className="text-[10px] font-bold text-slate-50 capitalize tracking-widest flex items-center gap-2 italic">
-                  Join Group Pickups & Challenges
+                  Join Group Pickups & Contracts
                 </p>
               </div>
             </div>
@@ -528,6 +533,16 @@ export default function SellerHome() {
         </div>
       </div>
 
+      {/* Floating AI Voice Assistant */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => navigate("/hygenex")}
+        className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 border-1 border-white dark:border-slate-800"
+      >
+        <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
+        <TrainFront className="w-6 h-6 text-white" />
+      </motion.button>
     </div >
   );
 }

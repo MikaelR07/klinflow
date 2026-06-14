@@ -1,6 +1,6 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { Store, PlusCircle, ShoppingBag, Package, Brain, MoreHorizontal } from 'lucide-react';
+import { Store, PlusCircle, ShoppingBag, Package, Brain, MoreHorizontal, CircleFadingPlus } from 'lucide-react';
 
 // Shared Packages
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -48,7 +48,7 @@ import Register from './pages/auth/Register';
 
 const BUSINESS_NAV = [
   { path: '/', icon: Store, label: 'Home' },
-  { path: '/sell', icon: PlusCircle, label: 'Sell' },
+  { path: '/sell', icon:CircleFadingPlus , label: 'Sell' },
   { path: '/warehouse', icon: Package, label: 'Yard' },
   { path: '/orders', icon: ShoppingBag, label: 'Orders' },
   { path: '/settings', icon: MoreHorizontal, label: 'More' },

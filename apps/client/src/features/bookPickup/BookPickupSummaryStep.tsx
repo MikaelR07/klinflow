@@ -13,16 +13,35 @@ interface BookPickupSummaryStepProps {
   estimatedGFP: number;
   selectedAgent: any;
   selectedCompanyId: string | null;
+  photo?: string | File | null;
 }
 
 export default function BookPickupSummaryStep({
   selected, quantity, activeRate,
   xpMultiplier, estimatedGFP,
-  selectedAgent, selectedCompanyId
+  selectedAgent, selectedCompanyId, photo
 }: BookPickupSummaryStepProps) {
   return (
     <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 pb-6">
       <h2 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight italic px-2">Marketplace Summary</h2>
+      
+      {/* ── MATERIAL PREVIEW ── */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+        {photo ? (
+          <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 relative">
+            <img
+              src={typeof photo === 'string' ? photo : URL.createObjectURL(photo)}
+              alt="Material Preview"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ) : (
+          <div className="w-full aspect-video bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">No Image Provided</span>
+          </div>
+        )}
+      </div>
+
       <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-0">
         <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Pickup Breakdown</p>
 

@@ -349,7 +349,7 @@ export default function SwarmDetails() {
 
         {/* Creator Actions */}
         {swarm.creator_id === profile?.id && (
-          <div className="flex flex-col gap-3 pt-2">
+          <div className="pt-2">
             {isPosted ? (
               <div className="w-full bg-indigo-600 dark:bg-indigo-900/20 p-5 rounded-3xl border border-indigo-100 dark:border-indigo-800 text-center">
                 <Truck className="w-6 h-6 text-white mx-auto mb-2" />
@@ -358,31 +358,31 @@ export default function SwarmDetails() {
                 </p>
               </div>
             ) : (
-              <>
+              <div className="flex gap-2 w-full">
+                <button
+                  onClick={handleDelete}
+                  className={`${(profile?.role === 'user' || swarm.current_weight > 0) ? 'flex-1' : 'w-full'} py-4 bg-red-500 dark:bg-slate-800 text-white border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all flex items-center justify-center gap-2`}
+                >
+                  <Trash2 className="w-4 h-4 shrink-0" /> Delete
+                </button>
                 {profile?.role === 'user' ? (
                   <button
                     onClick={() => navigate(`/community-collective/swarm/${swarm.id}/request-pickup`)}
-                    className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-sm shadow-emerald-900/20"
+                    className="flex-[2] py-4 bg-emerald-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2 shadow-sm shadow-emerald-900/20"
                   >
-                    <Truck className="w-4 h-4" /> Request Group Pickup
+                    <Truck className="w-4 h-4 shrink-0" /> Request Group Pickup
                   </button>
                 ) : (
                   swarm.current_weight > 0 && (
                     <button
                       onClick={() => navigate(`/community-collective/swarm/${swarm.id}/post-trade`)}
-                      className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                      className="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-[0.1em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"
                     >
-                      <Truck className="w-4 h-4" /> Post Bulk Trade to Marketplace
+                      <Truck className="w-4 h-4 shrink-0" /> Post Bulk Trade
                     </button>
                   )
                 )}
-                <button
-                  onClick={handleDelete}
-                  className="w-full py-4 bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all flex items-center justify-center gap-2"
-                >
-                  <Trash2 className="w-4 h-4" /> Delete Swarm
-                </button>
-              </>
+              </div>
             )}
           </div>
         )}

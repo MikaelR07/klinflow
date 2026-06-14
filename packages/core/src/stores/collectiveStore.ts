@@ -31,78 +31,48 @@ export interface SwarmParticipant {
   profiles?: { name?: string; avatar_url?: string };
 }
 
-export interface CollectiveGoal {
-  id: string;
-  creator_id: string;
-  estate: string;
-  title: string;
-  description: string;
-  target_weight: number;
-  current_weight: number;
-  reward: string;
-  closes_at: string;
-  status: 'active' | 'completed' | 'cancelled';
-  created_at: string;
-  updated_at?: string;
-  participants_count?: number;
-}
-
-export interface GoalParticipant {
-  id: string;
-  goal_id: string;
-  user_id: string;
-  pledged_weight: number;
-  status: 'pledged' | 'fulfilled' | 'withdrawn';
-  created_at: string;
-  profiles?: { name?: string; avatar_url?: string };
-}
-
 interface CollectiveState {
   swarms: Swarm[];
-  goals: CollectiveGoal[];
   estateStats: { totalRecovery: number; activeSellers: number } | null;
   loadingSwarms: boolean;
-  loadingGoals: boolean;
-  fetchSwarms: (estate: string) => Promise<void>;
-  fetchGoals: (estate: string) => Promise<void>;
+  fetchSwarms: (estate: string, userRole?: string) => Promise<void>;
   fetchEstateStats: (estate: string) => Promise<void>;
   fetchSwarmById: (id: string) => Promise<{ swarm: Swarm | null; participants: SwarmParticipant[] }>;
-  fetchGoalById: (id: string) => Promise<{ goal: CollectiveGoal | null; participants: GoalParticipant[] }>;
   createSwarm: (data: Partial<Swarm>) => Promise<{ success: boolean; data?: Swarm; error?: any }>;
   updateSwarm: (id: string, data: Partial<Swarm>) => Promise<{ success: boolean; error?: any }>;
   deleteSwarm: (id: string) => Promise<{ success: boolean; error?: any }>;
   joinSwarm: (data: Partial<SwarmParticipant>) => Promise<{ success: boolean; error?: any }>;
-  createGoal: (data: Partial<CollectiveGoal>) => Promise<{ success: boolean; error?: any }>;
-  joinGoal: (goalId: string, userId: string, weight: number) => Promise<{ success: boolean; error?: any }>;
-  setupSubscriptions: (estate: string) => void;
+  setupSubscriptions: (estate: string, userRole?: string) => void;
   cleanupSubscriptions: () => void;
 }
 
 let swarmSub: any = null;
-let goalSub: any = null;
 
 export const useCollectiveStore = create<CollectiveState>((set, get) => ({
   swarms: [],
-  goals: [],
   estateStats: null,
   loadingSwarms: false,
-  loadingGoals: false,
 
-  fetchSwarms: async (estate) => {
+  fetchSwarms: async (estate, userRole) => {
     set({ loadingSwarms: true });
     try {
       const { data, error } = await supabase
         .from('swarms')
-        .select(`*, swarm_participants(count)`)
-        .eq('estate', estate)
-        .eq('status', 'active');
+        .select(`*, swarm_participants(count), profiles:creator_id(role)`)
+        .eq('estate', estate);
       
       if (error) throw error;
       
-      const swarms = data.map((s: any) => ({
+      let swarms = data.map((s: any) => ({
         ...s,
-        participants_count: s.swarm_participants?.[0]?.count || 0
+        participants_count: s.swarm_participants?.[0]?.count || 0,
+        creator_role: s.profiles?.role
       }));
+
+      if (userRole) {
+        swarms = swarms.filter((s: any) => s.creator_role === userRole);
+      }
+
       set({ swarms });
     } catch (error) {
       console.error('Error fetching swarms:', error);
@@ -111,28 +81,7 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
     }
   },
 
-  fetchGoals: async (estate) => {
-    set({ loadingGoals: true });
-    try {
-      const { data, error } = await supabase
-        .from('collective_goals')
-        .select(`*, goal_participants(count)`)
-        .eq('estate', estate)
-        .eq('status', 'active');
-      
-      if (error) throw error;
-      
-      const goals = data.map((g: any) => ({
-        ...g,
-        participants_count: g.goal_participants?.[0]?.count || 0
-      }));
-      set({ goals });
-    } catch (error) {
-      console.error('Error fetching goals:', error);
-    } finally {
-      set({ loadingGoals: false });
-    }
-  },
+
 
   fetchEstateStats: async (estate) => {
     try {
@@ -142,14 +91,8 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
         .select('current_weight')
         .eq('estate', estate);
         
-      const { data: goalsData } = await supabase
-        .from('collective_goals')
-        .select('current_weight')
-        .eq('estate', estate);
-
       let totalRecovery = 0;
       if (swarmsData) totalRecovery += swarmsData.reduce((acc, curr) => acc + (curr.current_weight || 0), 0);
-      if (goalsData) totalRecovery += goalsData.reduce((acc, curr) => acc + (curr.current_weight || 0), 0);
       
       // Get count of active sellers in the estate
       // Depending on schema we match role and estate. If location is JSONB, we might need a specific query, 
@@ -191,31 +134,6 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
     }
   },
 
-  fetchGoalById: async (id: string) => {
-    try {
-      const { data: goalData, error: goalError } = await supabase
-        .from('collective_goals')
-        .select(`*, goal_participants(count)`)
-        .eq('id', id)
-        .single();
-      if (goalError) throw goalError;
-
-      const { data: participants, error: partError } = await supabase
-        .from('goal_participants')
-        .select(`*, profiles:user_id(name, avatar_url)`)
-        .eq('goal_id', id)
-        .neq('status', 'withdrawn');
-      if (partError) throw partError;
-
-      return {
-        goal: { ...goalData, participants_count: goalData?.goal_participants?.[0]?.count || 0 } as CollectiveGoal,
-        participants: (participants || []) as GoalParticipant[]
-      };
-    } catch (error) {
-      console.error('Error fetching goal by ID:', error);
-      return { goal: null, participants: [] };
-    }
-  },
 
   createSwarm: async (data) => {
     try {
@@ -280,56 +198,16 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
     }
   },
 
-  createGoal: async (data) => {
-    try {
-      const { error } = await supabase
-        .from('collective_goals')
-        .insert(data);
-      if (error) throw error;
-      return { success: true };
-    } catch (error) {
-      console.error('Error creating goal:', error);
-      return { success: false, error };
-    }
-  },
 
-  joinGoal: async (goalId, userId, weight) => {
-    try {
-      const { error } = await supabase
-        .from('goal_participants')
-        .upsert({
-          goal_id: goalId,
-          user_id: userId,
-          pledged_weight: weight,
-          status: 'pledged'
-        });
-      if (error) throw error;
-      return { success: true };
-    } catch (error) {
-      console.error('Error joining goal:', error);
-      return { success: false, error };
-    }
-  },
-
-  setupSubscriptions: (estate: string) => {
+  setupSubscriptions: (estate: string, userRole?: string) => {
     if (swarmSub) supabase.removeChannel(swarmSub);
-    if (goalSub) supabase.removeChannel(goalSub);
 
     swarmSub = supabase.channel('swarms_changes')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'swarms', filter: `estate=eq.${estate}` }, () => {
-        get().fetchSwarms(estate);
+        get().fetchSwarms(estate, userRole);
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'swarm_participants' }, () => {
-        get().fetchSwarms(estate);
-      })
-      .subscribe();
-
-    goalSub = supabase.channel('goals_changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'collective_goals', filter: `estate=eq.${estate}` }, () => {
-        get().fetchGoals(estate);
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'goal_participants' }, () => {
-        get().fetchGoals(estate);
+        get().fetchSwarms(estate, userRole);
       })
       .subscribe();
   },
@@ -338,10 +216,6 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
     if (swarmSub) {
       supabase.removeChannel(swarmSub);
       swarmSub = null;
-    }
-    if (goalSub) {
-      supabase.removeChannel(goalSub);
-      goalSub = null;
     }
   }
 }));

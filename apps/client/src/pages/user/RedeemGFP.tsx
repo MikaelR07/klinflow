@@ -129,7 +129,7 @@ export default function RedeemGFP() {
           <button onClick={() => navigate(-1)} className="p-2 -ml-2 active:scale-95 transition-all">
             <ArrowLeft className="w-5 h-5 text-slate-900 dark:text-white" />
           </button>
-          <h1 className="text-[18px] font-semibold tracking-wide text-slate-900 dark:text-white">Redeem GFP</h1>
+          <h1 className="text-[18px] font-semibold tracking-wide text-slate-600 dark:text-white">Redeem GFP</h1>
         </div>
         <button 
           onClick={() => navigate('/redemption-history')}
@@ -156,31 +156,38 @@ export default function RedeemGFP() {
           />
         </div>
 
-        {/* STATS CARDS */}
-        <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 flex items-center gap-2.5 shadow-sm">
-            <div className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-center shrink-0">
-              <Receipt className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+        {/* COMPACT COMBINED STATS CARD */}
+        <div className="bg-white dark:bg-slate-900 rounded-xl !mt-2 border border-slate-200 dark:border-slate-800 p-2 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                <Wallet className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Available Balance</p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-xl font-black text-slate-700 dark:text-white leading-none tracking-tight">
+                    {isLoadingWallet ? '...' : gfpBalance.toLocaleString()}
+                  </span>
+                  <span className="text-xs font-bold text-emerald-500">GFP</span>
+                </div>
+              </div>
             </div>
-            <div className="min-w-0">
-              <p className="text-[11px] font-bold text-slate-900 dark:text-white mb-0.5 leading-tight">Value</p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400">100 GFP = KES 50</p>
+            
+            <div className="text-right border-l border-slate-100 dark:border-slate-800 pl-4">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Equivalent To</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-white tracking-tight leading-none">
+                <span className="text-[10px] text-slate-500 mr-0.5">KES</span>
+                {maxKsh.toLocaleString()}
+              </p>
             </div>
           </div>
-
-          <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 flex items-center gap-2.5 shadow-sm">
-            <div className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-center shrink-0">
-              <Wallet className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-baseline gap-1">
-                <p className="text-[15px] font-black text-slate-900 dark:text-white leading-none">
-                  {isLoadingWallet ? '...' : gfpBalance.toLocaleString()}
-                </p>
-                <p className="text-[9px] font-bold text-emerald-500 dark:text-emerald-400">GFP</p>
-              </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">≈ KES {maxKsh.toLocaleString()}</p>
-            </div>
+          
+          <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
+            <Receipt className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-tight">
+              Rate: <span className="font-bold text-slate-700 dark:text-slate-200">2 GFP = KES 1</span>. Redeem for airtime, tokens, or cash.
+            </p>
           </div>
         </div>
 

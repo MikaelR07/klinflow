@@ -10,6 +10,7 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
 import { toast } from 'sonner';
+import { OptimizedImage } from '@klinflow/ui';
 
 const getSubcategoryLabel = (catId: string, subId: string) => {
   const cat = WASTE_CATEGORIES.find(c => c.id === catId);
@@ -49,7 +50,8 @@ export default function MyRFQs() {
           status: r.status === 'open' ? 'pending' : r.status === 'fulfilled' ? 'accepted' : r.status === 'completed' ? 'completed' : r.status,
           createdAt: new Date(r.created_at).toLocaleString(),
           bidsCount: r.rfq_offers?.[0]?.count || 0,
-          description: r.notes || ''
+          description: r.notes || '',
+          images: r.images || []
         }));
         setRfqs(mapped);
       }
@@ -175,8 +177,12 @@ export default function MyRFQs() {
                 >
                   <div className="py-3 px-3.5">
                     <div className="flex gap-3">
-                      <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
-                        <Package className="w-5 h-5 text-slate-200" />
+                      <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800 relative">
+                        {rfq.images && rfq.images.length > 0 ? (
+                          <OptimizedImage src={rfq.images[0]} alt={rfq.material} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
+                        ) : (
+                          <Package className="w-5 h-5 text-slate-300 dark:text-slate-600" />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0 flex flex-col justify-center">
                         {/* Row 1: Material & Budget */}

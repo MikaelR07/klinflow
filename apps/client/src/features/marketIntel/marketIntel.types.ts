@@ -16,6 +16,7 @@ export interface MarketIntelRFQ {
   offersSubmitted: number;
   avatar?: string;
   postedAt?: string;
+  isGroupCollection?: boolean;
 }
 
 export interface MarketIntelCommodityTrend {

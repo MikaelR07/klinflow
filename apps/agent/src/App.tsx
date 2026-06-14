@@ -37,6 +37,7 @@ const RFQOfferDetailsPage = lazy(() => import('./pages/agent/RFQOfferDetailsPage
 const ActivePickupsPage = lazy(() => import('./pages/agent/ActivePickupsPage'));
 const ActivePickupDetailsPage = lazy(() => import('./pages/agent/ActivePickupDetailsPage'));
 const NavigatePickupPage = lazy(() => import('./pages/agent/NavigatePickupPage'));
+const NavigateGroupPickupPage = lazy(() => import('./pages/agent/NavigateGroupPickupPage'));
 const MarketPulse = lazy(() => import('./pages/agent/MarketPulse'));
 const DepositPage = lazy(() => import('./pages/agent/DepositPage'));
 
@@ -188,6 +189,7 @@ export default function App() {
           <Route path="/hygenex" element={<HygeneXPage />} />
           {/* Full-screen pages without layout paddings */}
           <Route path="/pickups/navigate/:id" element={<NavigatePickupPage />} />
+          <Route path="/pickups/group-navigate/:rfqId" element={<NavigateGroupPickupPage />} />
           <Route path="/jobs/navigate/:id" element={<NavigateJobPage />} />
           <Route element={<DynamicRoleLayout />}>
             <Route path="/" element={<RoleBasedIndex />} />

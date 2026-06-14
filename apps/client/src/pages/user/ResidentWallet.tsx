@@ -125,7 +125,7 @@ export default function ResidentWallet() {
     <div className="space-y-4 pb-8">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-600">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-600">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors active:scale-95">
@@ -133,7 +133,7 @@ export default function ResidentWallet() {
             </button>
             <div className="flex items-center gap-2">
 
-              <h1 className="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Resident Wallet</h1>
+              <h1 className="font-bold text-lg tracking-tight text-slate-600 dark:text-white">Resident Wallet</h1>
             </div>
           </div>
 
@@ -150,7 +150,7 @@ export default function ResidentWallet() {
         transition={{ duration: 0.45, ease: 'easeOut' }}
         className="mx-1"
       >
-        <div className="relative bg-gradient-to-br from-[#064e3b] to-primary  rounded-2xl p-5 overflow-hidden">
+        <div className="relative bg-primary  rounded-xl p-5 overflow-hidden">
           {/* Balance Section */}
           <div className="relative z-10 mb-4 pl-1">
             <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
@@ -165,35 +165,30 @@ export default function ResidentWallet() {
                 className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors"
               >
                 {balanceVisible
-                  ? <Eye className="w-5 h-5 text-slate-400" />
-                  : <EyeOff className="w-5 h-5 text-slate-400" />
+                  ? <Eye className="w-5 h-5 text-slate-200" />
+                  : <EyeOff className="w-5 h-5 text-slate-200" />
                 }
               </button>
             </div>
-            <p className="text-[10px] font-semibold text-emerald-200/70">Klinflow Wallet</p>
+            <p className="text-[10px] font-semibold text-emerald-100">Klinflow Wallet</p>
           </div>
 
           {/* Stats Row */}
-          <div className="relative z-10 grid grid-cols-2 gap-2">
-            <div className="bg-emerald-950/40 rounded-xl p-3 flex items-center gap-3">
-              <div className="w-9 h-9 bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
-                <Leaf className="w-4.5 h-4.5 text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-0.5">GFP Points</p>
-                <p className="text-sm font-black text-white leading-none">{gfpBalance.toLocaleString()}</p>
-                <p className="text-[8px] font-semibold text-emerald-300/60 mt-0.5">Worth KSH {(gfpBalance / 2).toLocaleString()}</p>
-              </div>
+          <div className="relative z-10 flex items-center gap-6 mt-4 pt-4 border-t border-white/10">
+            <div>
+              <p className="text-[10px] font-medium text-emerald-100/80 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
+                <Leaf className="w-3 h-3 text-emerald-300" /> GFP Points
+              </p>
+              <p className="text-base font-bold text-white leading-none">{gfpBalance.toLocaleString()}</p>
             </div>
-            <div className="bg-emerald-950/40 rounded-xl p-3 flex items-center gap-3">
-              <div className="w-9 h-9 bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
-                <Recycle className="w-4.5 h-4.5 text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-[9px] font-bold text-emerald-100/60 uppercase tracking-widest mb-0.5">Recycled This Month</p>
-                <p className="text-sm font-black text-white leading-none">{kgRecoveredThisMonth} kg</p>
-
-              </div>
+            
+            <div className="w-px h-8 bg-white/10" />
+            
+            <div>
+              <p className="text-[10px] font-medium text-emerald-100/80 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
+                <Recycle className="w-3 h-3 text-emerald-300" /> Recycled This Month
+              </p>
+              <p className="text-base font-bold text-white leading-none">{kgRecoveredThisMonth} kg</p>
             </div>
           </div>
         </div>
@@ -206,12 +201,12 @@ export default function ResidentWallet() {
         transition={{ duration: 0.4, delay: 0.1 }}
         className="mx-1"
       >
-        <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 px-1">Quick Actions</h3>
+        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-600  px-1">Quick Actions</h3>
         <div className="grid grid-cols-4 gap-2">
           {/* Withdraw */}
           <button
             onClick={() => navigate('/withdraw')}
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
           >
             <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Landmark className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -227,7 +222,7 @@ export default function ResidentWallet() {
             <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Gift className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             </div>
-            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">Redeem </p>
+            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">Redeem Points</p>
           </button>
 
           {/* Transfer Points */}
@@ -275,7 +270,7 @@ export default function ResidentWallet() {
           {/* Left side — Message */}
           <div className="flex items-start gap-3 flex-1 min-w-0">
 
-            <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20">
+            <div className="w-12 h-12 bg-emerald-200 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20">
               <span className="text-xl">{impact.icon}</span>
             </div>
 

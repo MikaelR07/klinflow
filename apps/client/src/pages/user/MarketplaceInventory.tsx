@@ -127,7 +127,7 @@ export default function MarketplaceInventory() {
                 <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-emerald-600 transition-colors" />
               </button>
               <div className="text-center">
-                <h1 className="text-base font-bold text-slate-900 dark:text-white capitalize tracking-widest leading-none">
+                <h1 className="text-base font-bold text-slate-600 dark:text-white capitalize tracking-widest leading-none">
                   MarketPlace Listings
                 </h1>
                 <p className="text-[9px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-0.5">

@@ -2,6 +2,7 @@
  * BookPickup Step 1 — Material Selection, Quantity, Photo & Description
  * Extracted from BookPickup.tsx for modularity.
  */
+import { useMemo } from 'react';
 import {
   Camera, Info, Trash2, Smartphone, Search, X, Scale
 } from 'lucide-react';
@@ -36,6 +37,13 @@ export default function BookPickupMaterialStep({
   customDescription, setCustomDescription,
   categories, isLoading
 }: BookPickupMaterialStepProps) {
+
+  // Memoize the image URL to prevent flickering on re-renders (like when typing)
+  const photoPreviewUrl = useMemo(() => {
+    if (!photo) return null;
+    return typeof photo === 'string' ? photo : URL.createObjectURL(photo);
+  }, [photo]);
+
   return (
     <motion.div key="p1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
       <div className="space-y-2.5">
@@ -210,7 +218,7 @@ export default function BookPickupMaterialStep({
             {photo ? (
               <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-primary shadow-xl">
                 <OptimizedImage
-                  src={typeof photo === 'string' ? photo : URL.createObjectURL(photo)}
+                  src={photoPreviewUrl as string}
                   className="w-full h-full object-cover"
                   wrapperClassName="w-full h-full"
                 />

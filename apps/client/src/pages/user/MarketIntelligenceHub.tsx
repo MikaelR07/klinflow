@@ -103,6 +103,7 @@ export default function MarketIntelligenceHub() {
               if (diffHours > 0) return `${diffHours} hrs ago`;
               return 'Just now';
             })() : undefined,
+            isGroupCollection: r.is_group_collection
           };
         });
         setRfqsList(mapped);
@@ -179,6 +180,8 @@ export default function MarketIntelligenceHub() {
   });
 
   const filteredRFQs = rfqsList.filter(rfq => {
+    if (rfq.isGroupCollection) return false;
+
     const matchesSearch = rfq.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
       rfq.material.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRegion = selectedRegion === 'All' || rfq.region === selectedRegion;
@@ -224,7 +227,7 @@ export default function MarketIntelligenceHub() {
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
             </button>
             <div>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Market Intelligence</h1>
+              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Market Intelligence</h1>
               <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Price Ticker & RFQs
               </p>

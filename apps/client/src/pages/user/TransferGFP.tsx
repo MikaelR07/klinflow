@@ -135,7 +135,7 @@ export default function TransferGFP() {
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
             </button>
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Transfer Points</h1>
+            <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Transfer Points</h1>
           </div>
           <button 
             onClick={() => navigate('/wallet-history')}
@@ -166,12 +166,12 @@ export default function TransferGFP() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none -mr-10 -mt-10 z-0" />
 
           <div className="relative z-10">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 p-1">
               <div>
                 <h2 className="text-2xl font-black text-slate-50 tracking-tighter leading-none mb-1.5">
                  Gift your GFP
                 </h2>
-                <p className="text-xs font-semibold text-slate-800 leading-snug max-w-[75%]">
+                <p className="text-xs font-semibold text-slate-200 leading-snug max-w-[75%]">
                   Share your recycling rewards instantly with friends, family, or community members.
                 </p>
               </div>
@@ -195,8 +195,8 @@ export default function TransferGFP() {
         </div>
 
         {/* STEP 1: RECIPIENT */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800">
-          <div className="flex items-start gap-3 mb-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 shadow-sm border border-slate-200 dark:border-slate-800">
+          <div className="flex items-start gap-3 mb-2">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">Who are you sending to?</h3>
               <p className="text-[10px] text-slate-500 dark:text-slate-400">Search by Klinflow ID or phone number.</p>
@@ -226,7 +226,7 @@ export default function TransferGFP() {
           )}
 
           {!isSearching && recipient && (
-            <div className="flex items-center justify-between p-3 rounded-xl border border-emerald-100 dark:border-emerald-500/20 bg-emerald-700 ">
+            <div className="flex items-center justify-between p-2 rounded-xl border border-emerald-100 dark:border-emerald-500/20 bg-emerald-700 ">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center text-sm font-bold overflow-hidden">
                   {recipient.avatar ? <img src={recipient.avatar} alt="avatar" className="w-full h-full object-cover" /> : recipient.full_name.charAt(0)}
@@ -234,7 +234,7 @@ export default function TransferGFP() {
                 <div>
                   <h4 className="text-[13px] font-bold text-slate-900 text-white leading-tight mb-0.5">{recipient.full_name}</h4>
                   <div className="flex items-center gap-1.5 mb-1">
-                    <p className="text-[10px] text-slate-200 uppercase tracking-widest leading-none">{recipient.account_type}</p>
+                    <p className="text-[10px] text-slate-200 capitalize tracking-widest leading-none">{recipient.account_type}</p>
                   </div>
                   <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400">
                     <CheckCircle2 className="w-3 h-3" />
@@ -250,8 +250,8 @@ export default function TransferGFP() {
         </div>
 
         {/* STEP 2: AMOUNT */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800">
-          <div className="flex items-start gap-3 mb-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+          <div className="flex items-start gap-3 mb-2">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">How many points?</h3>
               <p className="text-[10px] text-slate-500 dark:text-slate-400">Enter the amount of GFP to transfer.</p>
@@ -272,7 +272,7 @@ export default function TransferGFP() {
                 if (val === '' || Number(val) >= 0) setAmount(val);
               }}
               placeholder="0"
-              className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl py-4 pl-12 pr-12 text-2xl font-black text-emerald-700 dark:text-emerald-400 outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-300"
+              className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl py-2 pl-12 pr-12 text-2xl font-black text-emerald-700 dark:text-emerald-400 outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-300"
             />
             <span className="absolute right-4 text-[13px] font-bold text-emerald-700 dark:text-emerald-400">
               GFP
@@ -295,7 +295,7 @@ export default function TransferGFP() {
                   onClick={() => setAmount(val.toString())}
                   className={`py-2.5 rounded-xl text-[11px] font-bold transition-all active:scale-95 ${isSelected
                     ? 'bg-emerald-50 dark:bg-emerald-500/10 border-2 border-emerald-500 text-emerald-700 dark:text-emerald-400 shadow-sm'
-                    : 'bg-white dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-emerald-200'
+                    : 'bg-slate-200 dark:bg-slate-900 border-2 border-slate-100 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-emerald-200'
                     }`}
                 >
                   {label}
@@ -306,8 +306,8 @@ export default function TransferGFP() {
         </div>
 
         {/* STEP 3: SUMMARY */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800">
-          <div className="flex items-start gap-3 mb-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+          <div className="flex items-start gap-3 mb-2">
             <div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">Transfer Summary</h3>
               <p className="text-[10px] text-slate-500 dark:text-slate-400">Review the details before confirming.</p>
@@ -318,28 +318,28 @@ export default function TransferGFP() {
             <div className="flex items-center justify-between text-[11px]">
               <div className="flex items-center gap-2 text-slate-500">
                 <User className="w-3.5 h-3.5" />
-                <span className="font-semibold uppercase tracking-widest">Recipient</span>
+                <span className="font-semibold capitalize tracking-widest">Recipient</span>
               </div>
               <span className="font-bold text-slate-900 dark:text-white">{recipient?.full_name || '-'}</span>
             </div>
             <div className="flex items-center justify-between text-[11px]">
               <div className="flex items-center gap-2 text-slate-500">
                 <Leaf className="w-3.5 h-3.5" />
-                <span className="font-semibold uppercase tracking-widest">Amount</span>
+                <span className="font-semibold capitalize tracking-widest">Amount</span>
               </div>
               <span className="font-bold text-slate-900 dark:text-white">{transferAmount.toLocaleString()} GFP</span>
             </div>
             <div className="flex items-center justify-between text-[11px]">
               <div className="flex items-center gap-2 text-slate-500">
                 <Wallet className="w-3.5 h-3.5" />
-                <span className="font-semibold uppercase tracking-widest">Value</span>
+                <span className="font-semibold capitalize tracking-widest">Value</span>
               </div>
               <span className="font-bold text-slate-900 dark:text-white">KES {equivalentKes.toLocaleString()}</span>
             </div>
             <div className="flex items-center justify-between text-[11px]">
               <div className="flex items-center gap-2 text-slate-500">
                 <Tag className="w-3.5 h-3.5" />
-                <span className="font-semibold uppercase tracking-widest">Transfer Fee</span>
+                <span className="font-semibold capitalize tracking-widest">Transfer Fee</span>
               </div>
               <span className="font-black text-emerald-500 uppercase tracking-widest">Free</span>
             </div>
@@ -362,12 +362,12 @@ export default function TransferGFP() {
             </div>
             <div className="max-w-[85%]">
               <h4 className="text-[11px] font-bold text-white  mb-0.5 tracking-wide uppercase">Why transfer GFP?</h4>
-              <p className="text-[10px] font-medium text-slate-200/80  leading-tight">
-                Support other recyclers, reward family members, or share earned rewards within your community.
+              <p className="text-[10px] font-medium text-slate-100  leading-tight">
+                Support other recyclers, reward family members, or share earned rewards with your community and loved ones.
               </p>
             </div>
           </div>
-          <ChevronRight className="w-4 h-4 text-white shrink-0" />
+          
         </div>
 
         {/* ── BOTTOM CTA ── */}
@@ -376,7 +376,7 @@ export default function TransferGFP() {
             onClick={handleInitTransfer}
             disabled={isProcessing || !recipient || transferAmount <= 0 || transferAmount > walletBalance}
             className={`w-full py-4 rounded-2xl font-bold text-sm text-white transition-all flex items-center justify-center gap-2 mb-3 ${!recipient || transferAmount <= 0 || transferAmount > walletBalance
-              ? 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
+              ? 'bg-slate-200 dark:bg-primary text-slate-400 cursor-not-allowed'
               : 'bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] shadow-md shadow-emerald-600/20'
               }`}
           >

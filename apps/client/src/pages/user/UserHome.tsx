@@ -28,6 +28,8 @@ import {
   BarChart3Icon,
   LeafyGreen,
   Leaf,
+  BrainCog,
+  TrainFront,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookingStore } from "@klinflow/core/stores/bookingStore";
@@ -273,7 +275,7 @@ export default function UserHome() {
         </div>
 
         {/* Wallet Hero */}
-        <div className="bg-gradient-to-br  from-[#064e3b] to-primary  rounded-xl p-6 gpu-layer">
+        <div className="bg-gradient-to-bl  from-[#064e3b] to-primary rounded-xl p-6 gpu-layer">
           <div className="flex flex-col gap-6 relative z-10">
             <div className="flex items-end justify-between">
               <div>
@@ -404,10 +406,10 @@ export default function UserHome() {
           {/* Discovery Entry Point */}
           <div
             onClick={() => navigate("/discovery")}
-            className="bg-gradient-to-r from-primary to-emerald-600 !mt-2 rounded-xl p-4 border border-slate-100 dark:border-slate-800 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all group shadow-sm"
+            className="bg-gradient-to-r from-emerald-600 to-primary !mt-2 rounded-xl p-4 border border-slate-100 dark:border-slate-800 flex items-center justify-between cursor-pointer active:scale-[0.98] transition-all group shadow-sm"
           >
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-green-600 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shrink-0">
                 <MapPin className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -432,7 +434,7 @@ export default function UserHome() {
           {/* ── MARKET INTELLIGENCE ── */}
           <div
             onClick={() => navigate("/market-pulse")}
-            className="bg-gradient-to-br  from-primary to-emerald-600 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+            className="bg-gradient-to-bl  from-primary to-emerald-600 to-emerald-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-6 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
           >
             <div className="flex items-center gap-2.5 relative z-10 w-full">
               <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
@@ -453,7 +455,7 @@ export default function UserHome() {
           {/* ── COMMUNITY COLLECTIVE ── */}
           <div
             onClick={() => navigate("/community-collective")}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
+            className="bg-gradient-to-br from-blue-600 via-emerald-600 to-primary border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex items-center group active:scale-[0.98] transition-all relative overflow-hidden h-full shadow-sm"
           >
             <div className="flex items-center gap-2.5 relative z-10 w-full">
               <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center text-white shrink-0">
@@ -464,7 +466,7 @@ export default function UserHome() {
                   Collective Pickups
                 </h3>
                 <p className="text-[10px] font-medium text-indigo-100 leading-snug mt-0.5 line-clamp-2">
-                  Join community pickups and Klin Challenges
+                  Join community members for pickups and earn
                 </p>
               </div>
               <ChevronRight className="w-4 h-4 text-white/70 shrink-0" />
@@ -582,7 +584,7 @@ export default function UserHome() {
         className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 border-1 border-white dark:border-slate-800"
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
-        <Brain className="w-6 h-6 text-white" />
+        <TrainFront className="w-6 h-6 text-white" />
       </motion.button>
     </div>
   );

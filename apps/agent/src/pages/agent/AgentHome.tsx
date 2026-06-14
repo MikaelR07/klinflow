@@ -86,7 +86,7 @@ export default function AgentHome() {
           rfq:rfqs(category, material_grade)
         `)
         .eq('assigned_agent_id', profile.id)
-        .not('status', 'in', '(completed,cancelled)')
+        .not('status', 'in', '(completed,cancelled,delivered,disputed,pickup_completed)')
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();

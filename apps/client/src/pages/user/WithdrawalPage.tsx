@@ -82,7 +82,7 @@ export default function WithdrawalPage() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-6 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] relative max-w-lg mx-auto w-full px-1.5">
+      <div className="flex-1 space-y-6 pb-10 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] relative max-w-lg mx-auto w-full px-1.5">
 
         {/* Step Indicator */}
         <div className="flex items-center justify-between px-4 mb-4">
@@ -100,9 +100,9 @@ export default function WithdrawalPage() {
 
         {step === 1 && (
           <div className="space-y-4 animate-slide-up">
-            <div className="card p-6 bg-gradient-to-br from-primary to-emerald-700 text-white border-none rounded-xl">
+            <div className="card p-6 bg-primary dark:bg-primary text-white border-none rounded-xl">
               <p className="text-xs font-semibold text-emerald-100 capitalize tracking-[0.2em] mb-1">Available for Withdrawal</p>
-              <h2 className="text-4xl font-semibold tracking-tight">KSh {cashBalance.toLocaleString()}.00</h2>
+              <h2 className="text-xl font-semibold text-white tracking-tight">KSh {cashBalance.toLocaleString()}.00</h2>
               <div className="flex items-center gap-2 mt-4 text-xs font-semibold bg-white/10 w-fit px-3 py-1.5 rounded-full">
                 <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
               </div>
@@ -157,7 +157,7 @@ export default function WithdrawalPage() {
                         const val = e.target.value;
                         setAmount(val === '' ? '' : Number(val));
                       }}
-                      className="w-full bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-4 pl-14 pr-4 font-semibold text-xl focus:border-primary outline-none transition-all dark:text-white"
+                      className="w-full bg-slate-200 dark:bg-slate-900/70 border-2 border-slate-100 dark:border-slate-700 rounded-2xl py-4 pl-14 pr-4 font-semibold text-xl focus:border-primary outline-none transition-all dark:text-white"
                       placeholder="0.00"
                     />
                   </div>
@@ -175,7 +175,7 @@ export default function WithdrawalPage() {
                     type="text"
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-100 dark:border-slate-700 rounded-2xl p-4 font-semibold focus:border-primary outline-none transition-all dark:text-white"
+                    className="w-full bg-slate-200 dark:bg-slate-900/70 border-2 border-slate-100 dark:border-slate-700 rounded-2xl p-4 font-semibold focus:border-primary outline-none transition-all dark:text-white"
                     placeholder={method.id === 'bank' ? 'Enter Account No' : '07XXXXXXXX'}
                   />
                 </div>
