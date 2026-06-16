@@ -107,11 +107,34 @@ export default function FleetFinance() {
 
       // 2. Fetch Transactions (Sent to agents)
       if (profile?.id) {
-        const tx = await walletService.getTransferHistory(profile.id, 'sent', 50);
-        setTransactions(tx);
+        const { data: approvedRequests } = await supabase
+          .from('fund_requests')
+          .select(`
+            id,
+            amount,
+            status,
+            created_at,
+            driver:profiles!driver_id(name, klinflow_id)
+          `)
+          .eq('company_id', profile.id)
+          .eq('status', 'approved')
+          .order('updated_at', { ascending: false })
+          .limit(50);
+          
+        const mappedTx = (approvedRequests || []).map((req: any) => ({
+          id: req.id,
+          amount: req.amount,
+          status: 'completed', // Map 'approved' to 'completed' for UI styling
+          created_at: req.created_at,
+          receiver_name: req.driver?.name,
+          receiver_klinflow_id: req.driver?.klinflow_id,
+          fee: 0
+        }));
+        
+        setTransactions(mappedTx);
 
         // Calculate total sent
-        const sentSum = tx.filter(t => t.status === 'completed').reduce((acc, t) => acc + (t.amount || 0), 0);
+        const sentSum = mappedTx.reduce((acc: number, t: any) => acc + (Number(t.amount) || 0), 0);
         setTotalMoneySent(sentSum);
 
         // 3. Material spend breakdown

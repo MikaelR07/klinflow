@@ -16,6 +16,8 @@ export interface NearbyAgent {
   hubLocation?: { lat: number; lng: number } | null;
   fleetInviteCode?: string;
   rating?: number;
+  phone?: string;
+  klinflowId?: string;
   config?: any;
 }
 

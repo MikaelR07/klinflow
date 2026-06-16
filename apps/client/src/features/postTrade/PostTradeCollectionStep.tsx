@@ -1,7 +1,7 @@
-import { Truck, Home, Star, Zap, Clock } from 'lucide-react';
+import { Truck, Home, Star, Zap, Clock, Search } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 function ChangeView({ center }: { center: [number, number] }) {
@@ -19,6 +19,20 @@ export default function PostTradeCollectionStep({
   selectTime, setIsManualTime, isManualTime, selectedTime,
   customDate, setCustomDate, customTime, setCustomTime
 }: any) {
+  const [agentSearchQuery, setAgentSearchQuery] = useState('');
+  const agentSearchResults = agentSearchQuery.length >= 2
+    ? liveAgents.filter((a: any) => {
+        const q = agentSearchQuery.toLowerCase();
+        return (
+          a.name?.toLowerCase().includes(q) ||
+          a.companyName?.toLowerCase().includes(q) ||
+          a.fleetInviteCode?.toLowerCase().includes(q) ||
+          a.phone?.toLowerCase().includes(q) ||
+          a.klinflowId?.toLowerCase().includes(q)
+        );
+      }).slice(0, 5)
+    : [];
+
   return (
     <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 pb-12">
       <div className="space-y-1">
@@ -170,33 +184,101 @@ export default function PostTradeCollectionStep({
           )}
         </div>
       ) : (
-        <div className="space-y-3">
-          {/* SELECTED AGENT CARD (with deselect) */}
-          {selectedAgent ? (
-            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-2xl border border-emerald-100 dark:border-emerald-900/30 flex items-center gap-4">
-              <div className="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center shadow-lg text-lg">🚛</div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white truncate">{selectedAgent.name || 'Agent'}</h3>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <div className="flex items-center gap-0.5 text-xs font-semibold text-emerald-600 capitalize">
-                    <Star className="w-2.5 h-2.5 fill-emerald-500 text-emerald-500" />
-                    <span>4.9</span>
-                  </div>
-                  <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Targeted</span>
+        <div className="space-y-2">
+          {/* ── AGENT SELECTION CARD (Combined Target + Search) ── */}
+          <div className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
+            {/* Header */}
+            <div className="px-4 pt-4  flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                  <Truck className="w-3.5 h-3.5 text-emerald-600" />
                 </div>
+                <h2 className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-400">Preferred Agent</h2>
               </div>
-              <button
-                onClick={() => { setSelectedAgent(null); toast('Agent deselected', { icon: '🔄' }); }}
-                className="p-2 px-3 bg-emerald-100 dark:bg-emerald-900/40 rounded-xl text-emerald-600 font-semibold text-xs capitalize tracking-widest active:scale-95 transition-all"
-              >
-                Change
-              </button>
-            </motion.div>
-          ) : (
-            <div className="p-4 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-center bg-slate-50/50 dark:bg-slate-800/50">
-              <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Tap an agent on the map to target (optional)</p>
+              <span className="text-[10px] font-semibold text-slate-300 dark:text-slate-600 uppercase tracking-widest">Optional</span>
             </div>
-          )}
+
+            {/* Selected Agent Display OR Tap Prompt */}
+            <div className="px-4 pb-1">
+              {selectedAgent ? (
+                <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40">
+                  <div className="w-10 h-10 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-md text-base shrink-0">🚛</div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-xs font-bold text-slate-900 dark:text-white truncate">{selectedAgent.name || 'Agent'}</h3>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <Star className="w-2.5 h-2.5 fill-emerald-500 text-emerald-500" />
+                      <span className="text-[10px] font-bold text-emerald-600">4.9</span>
+                      <span className="text-[10px] font-semibold text-slate-400 ml-1">Targeted</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => { setSelectedAgent(null); toast('Agent deselected', { icon: '🔄' }); }}
+                    className="px-2.5 py-1.5 bg-emerald-100 dark:bg-emerald-900/50 rounded-lg text-emerald-600 font-bold text-[10px] uppercase tracking-wider active:scale-95 transition-all"
+                  >
+                    Change
+                  </button>
+                </motion.div>
+              ) : (
+                <div className="flex items-center gap-2 py-2 px-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600 animate-pulse" />
+                  <p className="text-[11px] font-medium text-slate-400">Tap an agent on the map or search below</p>
+                </div>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="mx-4 border-t border-slate-100 dark:border-slate-800" />
+
+            {/* Search Section */}
+            <div className="p-4 pt-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <input
+                  type="text"
+                  value={agentSearchQuery}
+                  placeholder="Search by name, phone, or Klin ID..."
+                  className="w-full bg-slate-50 dark:bg-slate-800 py-2.5 pl-9 pr-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 outline-none focus:border-emerald-500/50 focus:ring-2 ring-emerald-500/20 transition-all"
+                  onChange={(e) => setAgentSearchQuery(e.target.value)}
+                />
+              </div>
+              {agentSearchResults.length > 0 && (
+                <div className="mt-2.5 space-y-1.5 max-h-48 overflow-y-auto">
+                  {agentSearchResults.map((agent: any) => (
+                    <button
+                      key={agent.id}
+                      onClick={() => {
+                        if (agent.agentAccountType === 'company_admin') {
+                          setDrillDownCompany(agent);
+                          setSelectedAgent(null);
+                        } else {
+                          setSelectedAgent(agent);
+                        }
+                        setAgentSearchQuery('');
+                        toast.success(`${agent.name || agent.companyName || 'Agent'} selected`);
+                      }}
+                      className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-emerald-500/50 transition-all text-left"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-sm shrink-0">
+                        {agent.agentAccountType === 'company_admin' ? '🏢' : '🚛'}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">
+                          {agent.agentAccountType === 'company_admin' ? (agent.companyName || agent.name) : (agent.name || 'Agent')}
+                        </p>
+                        <p className="text-[10px] font-medium text-slate-400 truncate">
+                          {agent.klinflowId || agent.phone || 'Available'}
+                        </p>
+                      </div>
+                      <Star className="w-3 h-3 fill-emerald-500 text-emerald-500 shrink-0" />
+                    </button>
+                  ))}
+                </div>
+              )}
+              {agentSearchQuery.length >= 2 && agentSearchResults.length === 0 && (
+                <p className="text-[10px] font-semibold text-slate-400 mt-2 text-center py-2">No agents found matching "{agentSearchQuery}"</p>
+              )}
+            </div>
+          </div>
 
           {/* ASAP BUTTON */}
           <button

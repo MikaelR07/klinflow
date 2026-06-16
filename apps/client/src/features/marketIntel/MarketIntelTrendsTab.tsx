@@ -85,8 +85,8 @@ export default function MarketIntelTrendsTab({ marketData }: MarketIntelTrendsTa
                 <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">{opp.material}</h4>
 
                 <div className="space-y-1 ">
-                  <p className="text-[9px] font-semibold text-slate-500 dark:text-slate-400">{opp.metricLabel}</p>
-                  <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-none">{opp.metricValue}</p>
+                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">{opp.metricLabel}</p>
+                  <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-none">{opp.metricValue}</p>
                   <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold mt-1 ${opp.changeType === 'positive' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400' : 'bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400'}`}>
                     {opp.changeType === 'positive' ? '▲' : '▼'} {opp.change}
                   </div>

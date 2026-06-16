@@ -118,27 +118,38 @@ export default function MarketplaceInventory() {
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
         <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)]  px-4 border-b border-slate-200 dark:border-slate-600/60  z-50 transition-colors">
-          <div className="max-w-lg mx-auto space-y-2.5">
-            <div className="flex items-center justify-between">
+          <div className="max-w-lg mx-auto space-y-1.5">
+            <div className="flex items-center gap-3.5">
               <button
                 onClick={() => navigate(-1)}
-                className="w-8 h-8 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
+                className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
               >
-                <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-emerald-600 transition-colors" />
+                <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
               </button>
-              <div className="text-center">
-                <h1 className="text-base font-bold text-slate-600 dark:text-white capitalize tracking-widest leading-none">
-                  MarketPlace Listings
+              <div>
+                <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">
+                  Marketplace Listings
                 </h1>
-                <p className="text-[9px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-0.5">
+                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
                   What You have listed for sale
                 </p>
               </div>
-              <div className="w-8" /> {/* Spacer */}
+            </div>
+
+            {/* SEARCH INPUT */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search materials, price, or quantity..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:font-medium placeholder:text-slate-400"
+              />
             </div>
 
             {/* Integrated Tab Nav */}
-            <div className="flex bg-slate-100 dark:bg-slate-800/80 p-2 rounded-xl">
+            <div className="flex gap-2 bg-slate-100 dark:bg-slate-800/80 p-2 rounded-xl">
               {["active", "closed"].map((tab) => (
                 <button
                   key={tab}
@@ -146,7 +157,7 @@ export default function MarketplaceInventory() {
                   className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                     activeTab === tab
                       ? "bg-primary dark:bg-primary shadow-sm text-white dark:text-white font-black"
-                      : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                      : "text-slate-500 bg-slate-300 dark:bg-slate-900 hover:text-slate-600 dark:hover:text-slate-300"
                   }`}
                 >
                   {tab}
@@ -158,7 +169,7 @@ export default function MarketplaceInventory() {
       )}
 
       <div
-        className={`flex-1 space-y-0 pb-10 ${!selectedId ? "pt-[calc(env(safe-area-inset-top,1rem)+5rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}
+        className={`flex-1 space-y-0 pb-10 ${!selectedId ? "pt-[calc(env(safe-area-inset-top,1rem)+8.2rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}
       >
         <main className="mt-0">
           {selectedId && selectedListing ? (
@@ -446,7 +457,7 @@ export default function MarketplaceInventory() {
                             {/* Row 1: Material & Price */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5 min-w-0">
-                                <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">
+                                <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">
                                   {listing.material}
                                 </h3>
                                 <span
@@ -462,11 +473,11 @@ export default function MarketplaceInventory() {
                               </span>
                             </div>
 
-                            {/* Row 2: Location */}
+                            {/* Row 2: Location -> Trade ID */}
                             <div className="flex items-center justify-between mt-0.5">
                               <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                                <MapPin className="w-2.5 h-2.5 text-green-500" />{" "}
-                                {listing.location || "Nairobi Hub"}
+                                <Tag className="w-2.5 h-2.5 text-indigo-500" />{" "}
+                                CF-{listing.id?.slice(0, 8)}
                               </p>
                             </div>
 
@@ -487,11 +498,10 @@ export default function MarketplaceInventory() {
                                   : "ASAP"}
                               </p>
                               <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
-                                <span className="text-[9px] text-slate-400 not-italic font-bold mr-1 opacity-70">
+                                <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">
                                   Qty:
                                 </span>
-                                <Scale className="w-2.5 h-2.5" /> {itemQuantity}{" "}
-                                KG
+                                <Scale className="w-2.5 h-2.5" /> {itemQuantity} KG
                               </p>
                             </div>
                           </div>

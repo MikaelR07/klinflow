@@ -100,6 +100,8 @@ export interface TransferResult {
 }
 
 export interface SellerWalletStats {
+  lifetime_earnings: number;
+  pending_settlement: number;
   earnings_this_month: number;
   recent_trades: Array<{
     id: string;
@@ -111,13 +113,6 @@ export interface SellerWalletStats {
   top_materials: Array<{
     material: string;
     amount_sold: number;
-  }>;
-  recent_transactions: Array<{
-    id: string;
-    method: string;
-    date: string;
-    amount: number;
-    status: string;
   }>;
 }
 
@@ -237,16 +232,14 @@ export const walletService = {
    */
   async getWalletDetails(userId: string): Promise<WalletDetails | null> {
     const { data, error } = await supabase
-      .from('user_wallets')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
+      .rpc('get_resident_wallet_stats', { p_user_id: userId });
 
-    if (error && error.code !== 'PGRST116') {
-      console.error('[walletService] Error fetching wallet:', error);
+    if (error) {
+      console.error('[walletService] Error fetching wallet stats:', error);
+      return null;
     }
 
-    return data as WalletDetails | null;
+    return data as any;
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -308,6 +301,33 @@ export const walletService = {
       return (data || []) as RedemptionRecord[];
     } catch (error) {
       console.error('[walletService] Error fetching redemption history:', error);
+      return [];
+    }
+  },
+
+  /**
+   * Fetch paginated wallet transactions
+   */
+  async getWalletTransactions(userId: string, limit: number = 50): Promise<any[]> {
+    try {
+      const { data, error } = await supabase
+        .from('wallet_transactions')
+        .select(`
+          id,
+          amount,
+          transaction_type,
+          metadata,
+          created_at,
+          reference_id
+        `)
+        .eq('profile_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('[walletService] Error fetching wallet transactions:', error);
       return [];
     }
   }

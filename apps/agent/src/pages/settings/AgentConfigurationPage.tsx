@@ -77,7 +77,7 @@ export default function AgentConfigurationPage() {
       ...prev,
       base_logistics_fee: agentConfig.base_logistics_fee ?? 200,
       cashback_percentage: agentConfig.cashback_percentage ?? 10,
-      accepted_materials: agentConfig.accepted_materials || [],
+      accepted_materials: filteredMaterials,
       custom_rates: agentConfig.custom_rates || {},
     }));
   }, [agentConfig, categories]);
@@ -176,7 +176,7 @@ export default function AgentConfigurationPage() {
         Object.entries(formData.custom_rates).map(([k, v]) => [k, parseFloat(v) || 0])
       );
 
-      // 1. Update agent_configurations (logistics fee, cashback, rates)
+      // 1. Update legacy agent configuration
       const { success: legacySuccess, error: configError } = await updateAgentConfig({
         base_logistics_fee: Math.max(0, formData.base_logistics_fee === '' ? 0 : parseFloat(formData.base_logistics_fee) || 0),
         cashback_percentage: formData.cashback_percentage,

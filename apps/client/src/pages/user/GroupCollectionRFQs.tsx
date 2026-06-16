@@ -78,20 +78,22 @@ export default function GroupCollectionRFQs() {
       if (data) {
         // Fetch total pledged weights for all group RFQs
         const rfqIds = data.map((r: any) => r.id);
-        const { data: offersData } = await supabase
-          .from('rfq_offers')
-          .select('rfq_id, offered_weight, seller_id')
-          .in('rfq_id', rfqIds);
-
         const pledgedByRFQ: Record<string, number> = {};
         const myPledgedRfqs = new Set<string>();
 
-        offersData?.forEach((o: any) => {
-          pledgedByRFQ[o.rfq_id] = (pledgedByRFQ[o.rfq_id] || 0) + (o.offered_weight || 0);
-          if (o.seller_id === profile.id) {
-            myPledgedRfqs.add(o.rfq_id);
-          }
-        });
+        if (rfqIds.length > 0) {
+          const { data: offersData } = await supabase
+            .from('rfq_offers')
+            .select('rfq_id, offered_weight, seller_id')
+            .in('rfq_id', rfqIds);
+
+          offersData?.forEach((o: any) => {
+            pledgedByRFQ[o.rfq_id] = (pledgedByRFQ[o.rfq_id] || 0) + (o.offered_weight || 0);
+            if (o.seller_id === profile.id) {
+              myPledgedRfqs.add(o.rfq_id);
+            }
+          });
+        }
 
         const mapped: GroupRFQ[] = data.map((r: any) => {
           let deadlineText = 'Open';
@@ -173,6 +175,7 @@ export default function GroupCollectionRFQs() {
     }
     if (activeTab === 'My Pledges') {
       if (!rfq.hasMyPledge) return false;
+      if (rfq.status === 'completed' || rfq.status === 'fulfilled') return false;
     }
     if (activeTab === 'Fulfilled') {
       if (rfq.status !== 'fulfilled' && rfq.status !== 'completed' && rfq.totalPledgedWeight < rfq.requestedWeight) return false;
@@ -192,7 +195,7 @@ export default function GroupCollectionRFQs() {
 
   const tabCounts = {
     Open: rfqs.filter(r => r.status === 'open' && r.deadline !== 'Expired').length,
-    'My Pledges': rfqs.filter(r => r.hasMyPledge).length,
+    'My Pledges': rfqs.filter(r => r.hasMyPledge && r.status !== 'completed' && r.status !== 'fulfilled').length,
     Fulfilled: rfqs.filter(r => r.status === 'fulfilled' || r.status === 'completed' || r.totalPledgedWeight >= r.requestedWeight).length,
   };
 
@@ -321,7 +324,7 @@ export default function GroupCollectionRFQs() {
                       <div className="flex items-start gap-2 mt-4">
                         <div className="text-right">
                           <p className="text-sm font-black text-emerald-500 leading-none">
-                            KSh {rfq.price} <span className="text-[9px] text-slate-400 font-semibold">/kg</span>
+                            KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
                           </p>
                         </div>
                         <button className="text-slate-300 hover:text-slate-400 dark:text-slate-600 transition-colors">
@@ -341,10 +344,10 @@ export default function GroupCollectionRFQs() {
                       </div>
                       <div>
                         <div className="flex items-center gap-1 mb-0.5">
-                          <h4 className="text-[11px] font-bold text-slate-900 dark:text-white leading-none">{rfq.company}</h4>
+                          <h4 className="text-[12px] font-bold text-slate-900 dark:text-white leading-none">{rfq.company}</h4>
                           {rfq.verified && <CircleCheck className="w-3.5 h-3.5 text-blue-500" fill="currentColor" stroke="white" strokeWidth={2} />}
                         </div>
-                        <div className="flex items-center gap-1.5 text-[9px] font-semibold text-slate-500">
+                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500">
                           {rfq.verified && (
                             <span className="flex items-center gap-0.5">
                               <ShieldCheck className="w-2.5 h-2.5 text-emerald-600" /> Verified Buyer
@@ -367,8 +370,8 @@ export default function GroupCollectionRFQs() {
                         />
                       </div>
                       <div className="flex items-center justify-between mt-1">
-                        <span className="text-[9px] font-semibold text-slate-400">{rfq.totalPledgedWeight}kg pledged</span>
-                        <span className="text-[9px] font-bold text-slate-500">{rfq.requestedWeight}kg needed</span>
+                        <span className="text-[10px] font-semibold text-slate-400">{rfq.totalPledgedWeight}kg pledged</span>
+                        <span className="text-[10px] font-bold text-slate-500">{rfq.requestedWeight}kg needed</span>
                       </div>
                     </div>
 
@@ -379,8 +382,8 @@ export default function GroupCollectionRFQs() {
                           <Scale className="w-3.5 h-3.5 text-slate-400" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-none mb-0.5">{rfq.quantity}</p>
-                          <p className="text-[8px] font-semibold text-slate-400 leading-none">Quantity</p>
+                          <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-none mb-0.5">{rfq.quantity}</p>
+                          <p className="text-[9px] font-semibold text-slate-400 leading-none">Quantity</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5">
@@ -388,8 +391,8 @@ export default function GroupCollectionRFQs() {
                           <MapPin className="w-3.5 h-3.5 text-slate-400" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-none mb-0.5">{rfq.region}</p>
-                          <p className="text-[8px] font-semibold text-slate-400 leading-none">Location</p>
+                          <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-none mb-0.5">{rfq.region}</p>
+                          <p className="text-[9px] font-semibold text-slate-400 leading-none">Location</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5">
@@ -397,15 +400,15 @@ export default function GroupCollectionRFQs() {
                           <Clock className="w-3.5 h-3.5 text-rose-500" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[10px] font-bold text-rose-500 leading-none mb-0.5">{rfq.deadline}</p>
-                          <p className="text-[8px] font-semibold text-slate-400 leading-none">Deadline</p>
+                          <p className="text-[11px] font-bold text-rose-500 leading-none mb-0.5">{rfq.deadline}</p>
+                          <p className="text-[9px] font-semibold text-slate-400 leading-none">Deadline</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Row 5: Footer Actions */}
                     <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-2">
-                      <div className="flex items-center gap-1.5 text-[9px] font-semibold text-slate-400">
+                      <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
                         {rfq.postedAt ? `Posted ${rfq.postedAt}` : 'Posted recently'}
                         <span className="text-slate-300">·</span>
                         <span className="text-blue-500 font-bold">{rfq.offersSubmitted} seller{rfq.offersSubmitted !== 1 ? 's' : ''} joined</span>

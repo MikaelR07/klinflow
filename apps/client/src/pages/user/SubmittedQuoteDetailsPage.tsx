@@ -247,7 +247,7 @@ export default function SubmittedQuoteDetailsPage() {
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">
+            <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">
               Quote Details
             </h1>
             <p className="text-[10px] font-bold text-primary capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
@@ -467,18 +467,19 @@ export default function SubmittedQuoteDetailsPage() {
 
           {quote.status === "pending" && (
             <div className="flex flex-row gap-3">
+               <button
+                onClick={handleDelete}
+                className="flex-[0.6] py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              >
+                <Trash2 className="w-4 h-4" /> Delete
+              </button>
               <button
                 onClick={openEditModal}
                 className="flex-1 py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
               >
                 <Pencil className="w-4 h-4" /> Edit Quote
               </button>
-              <button
-                onClick={handleDelete}
-                className="flex-[0.6] py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" /> Delete
-              </button>
+             
             </div>
           )}
         </div>

@@ -5,7 +5,7 @@ export const AgentService = {
   fetchFleetDrivers: async (companyId: string): Promise<Partial<ProfileRow>[]> => {
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, name, phone, is_online, location, reward_points, avatar_url, wallet_balance, rating')
+      .select('id, name, phone, is_online, location, reward_points, avatar_url, rating, user_wallets(cash_balance)')
       .eq('company_id', companyId)
       .order('name');
       

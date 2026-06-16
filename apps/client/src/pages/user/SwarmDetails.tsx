@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import {
   ArrowLeft, Truck, Scale, MapPin, Users, Clock,
   CheckCircle2, AlertTriangle, FileText, Image as ImageIcon,
-  Edit3, Trash2, ChevronDown
+  Edit3, Trash2, ChevronDown, X
 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore } from '@klinflow/core';
@@ -25,6 +25,7 @@ export default function SwarmDetails() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
   const [expandedParticipantId, setExpandedParticipantId] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const loadData = async () => {
     if (!id) return;
@@ -215,61 +216,29 @@ export default function SwarmDetails() {
           </div>
         </div>
         {/* Progress Card (Professional Neutral Style) */}
-        <div className="bg-white dark:bg-slate-900/60 p-5 rounded-xl border border-slate-700/40 flex flex-col justify-center text-center shadow-sm">
-          <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1">
+        <div className="bg-gradient-to-r from-emerald-600 to-emerald-900  p-2 rounded-xl border border-slate-700/40 flex flex-col justify-center text-center shadow-sm">
+          <p className="text-[10px] font-bold text-white dark:text-slate-500 uppercase tracking-[0.2em] mb-1">
             Swarm Progress
           </p>
 
-          <p className="text-xl font-black text-green-600 dark:text-slate-100 leading-none">
+          <p className="text-xl font-black text-emerald-300 dark:text-emerald-400 leading-none">
             {percentage}% Complete
           </p>
 
-          <p className="text-[10px] text-slate-400 dark:text-slate-400 font-semibold mt-1.5">
-            {swarm.current_weight} / {swarm.target_weight} KG collected
-          </p>
+          <div className="flex items-center justify-center gap-4 mt-2 mb-1">
+            <p className="text-[10px] text-emerald-100 font-semibold bg-white/10 px-2 py-0.5 rounded-full">
+              {swarm.current_weight} KG Collected
+            </p>
+            <p className="text-[10px] text-emerald-100/70 font-semibold bg-white/10 px-2 py-0.5 rounded-full">
+              {Math.max(0, swarm.target_weight - swarm.current_weight)} KG Remaining
+            </p>
+          </div>
 
-          <div className="h-2 w-full bg-slate-700/50 dark:bg-slate-800 rounded-full overflow-hidden mt-3">
+          <div className="h-2 w-full bg-slate-800 dark:bg-slate-900 rounded-full overflow-hidden mt-3 border border-slate-700/50">
             <div
-              className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400"
+              className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 shadow-[0_0_10px_rgba(52,211,153,0.5)]"
               style={{ width: `${percentage}%` }}
             />
-          </div>
-        </div>
-
-        {/* Swarm Stats Card */}
-        <div className="bg-white dark:bg-slate-900/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-100 dark:border-indigo-500/20 shrink-0">
-                <Scale className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Target Weight</p>
-                <p className="text-sm font-black text-slate-900 dark:text-white tracking-tight capitalize">{swarm.target_weight} KG</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Collected</p>
-              <p className="text-sm font-bold text-slate-600 dark:text-slate-400">{swarm.current_weight} KG</p>
-            </div>
-          </div>
-
-          <div className="h-px bg-slate-100 dark:bg-slate-700" />
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center border border-blue-100 dark:border-blue-500/20 shrink-0">
-                <Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Members</p>
-                <p className="text-sm font-black text-slate-900 dark:text-white tracking-tight capitalize">{participants.length}</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-1">Remaining</p>
-              <p className="text-sm font-bold text-slate-600 dark:text-slate-400">{Math.max(0, swarm.target_weight - swarm.current_weight)} KG</p>
-            </div>
           </div>
         </div>
 
@@ -277,15 +246,15 @@ export default function SwarmDetails() {
 
         {/* Description Card */}
         {swarm.description && (
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <h4 className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-3">Description</h4>
-            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{swarm.description}</p>
+          <div className="bg-slate-200 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-100 capitalize tracking-widest mb-3">Description</h4>
+            <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">{swarm.description}</p>
           </div>
         )}
 
         {/* Participants Card */}
-        <div className="bg-white dark:bg-slate-900/60 p-0 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
-          <div className="px-5 py-4">
+        <div className="bg-slate-200 dark:bg-slate-900/60 p-0 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+          <div className="px-5 py-2">
             <h4 className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Participants ({participants.length})</h4>
           </div>
           {participants.length === 0 ? (
@@ -310,7 +279,14 @@ export default function SwarmDetails() {
                           {(p.profiles?.name || 'U')[0].toUpperCase()}
                         </div>
                         <div>
-                          <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize tracking-tight">{p.profiles?.name || 'Creator'}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize tracking-tight">{p.profiles?.name || 'Creator'}</p>
+                            {p.user_id === swarm.creator_id && (
+                              <span className="text-[8px] font-black text-indigo-600 bg-indigo-50 dark:bg-indigo-500/20 dark:text-indigo-400 px-1.5 py-0.5 rounded uppercase tracking-wider">
+                                Creator
+                              </span>
+                            )}
+                          </div>
                           <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest flex items-center gap-1">
                             {p.status} {p.description && '• notes'} {p.images && p.images.length > 0 && '• photo'}
                           </p>
@@ -333,7 +309,7 @@ export default function SwarmDetails() {
                           {p.images && p.images.length > 0 && (
                             <div className="grid grid-cols-3 gap-2 mt-1">
                               {p.images.map((img: string, i: number) => (
-                                <img key={i} src={img} alt="Proof" className="w-full h-20 rounded-lg object-cover border border-slate-200 dark:border-slate-600 shadow-sm" />
+                                <img key={i} src={img} alt="Proof" onClick={() => setSelectedImage(img)} className="w-full h-20 rounded-lg object-cover border border-slate-200 dark:border-slate-600 shadow-sm cursor-pointer hover:opacity-80 transition-opacity" />
                               ))}
                             </div>
                           )}
@@ -432,6 +408,16 @@ export default function SwarmDetails() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Image Zoom Modal */}
+      {selectedImage && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 p-4 animate-in fade-in duration-200" onClick={() => setSelectedImage(null)}>
+          <button onClick={() => setSelectedImage(null)} className="absolute top-6 right-6 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+          <img src={selectedImage} alt="Zoomed Proof" className="max-w-full max-h-[85vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
         </div>
       )}
     </div>

@@ -29,6 +29,7 @@ import { supabase } from "@klinflow/supabase";
 import { normalizeKeys } from "@klinflow/core/validation";
 import { toast } from "sonner";
 import { OptimizedImage } from "@klinflow/ui";
+import { walletService } from "@klinflow/core";
 
 export default function ImpactAnalytics() {
   const { profile } = useAuthStore() as any;
@@ -38,6 +39,7 @@ export default function ImpactAnalytics() {
   const [isLoading, setIsLoading] = useState(true);
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [goalType, setGoalType] = useState("weekly"); // 'weekly' or 'monthly'
+  const [gfpPoints, setGfpPoints] = useState(0);
 
   // Goals State (Persisted in localStorage for now)
   const [goals, setGoals] = useState({ weekly: 10, monthly: 50 });
@@ -182,14 +184,8 @@ export default function ImpactAnalytics() {
           ? Math.round(((currentMonthWeight - lastMonthWeight) / lastMonthWeight) * 100)
           : currentMonthWeight > 0 ? 100 : 0;
 
-        // Fetch Global Rank
-        const { count: rankCount } = await supabase
-          .from("profiles")
-          .select("id", { count: "exact", head: true })
-          .eq("role", "user")
-          .gt("reward_points", profile.reward_points || 0);
-
-        const globalRank = (rankCount || 0) + 1;
+        // Global rank will be computed later after walletData is fetched
+        let globalRank = 0;
 
         // Fetch Total Withdrawn
         const { data: withdrawals } = await supabase
@@ -264,6 +260,47 @@ export default function ImpactAnalytics() {
           plasticKg,
         });
       }
+
+      // Fetch actual GFP points and correct rank from wallet
+      const walletData = await walletService.getWalletDetails(profile.id);
+      if (walletData) {
+        setGfpPoints(walletData.available_points);
+        
+        // Compute correct global rank based on the true resident leaderboard
+        let userRank = 1;
+        const { data: leaderboard, error: rpcErr } = await supabase.rpc("get_resident_leaderboard");
+        if (!rpcErr && leaderboard && leaderboard.length > 0) {
+          userRank = leaderboard.find((u: any) => u.user_id === profile.id)?.rank || 1;
+        } else {
+          // Fallback: fetch all completed bookings and compute rank client-side
+          const { data: allBookings } = await supabase
+            .from("bookings")
+            .select("user_id, actual_weight_kg, weight_kg, profiles:user_id(role)")
+            .eq("status", "completed");
+
+          if (allBookings) {
+            const weightByUser = new Map<string, number>();
+            allBookings.forEach((b: any) => {
+              const p = Array.isArray(b.profiles) ? b.profiles[0] : b.profiles;
+              const role = p?.role || '';
+              if (!['user', 'resident', 'client'].includes(role)) return;
+              const w = Number(b.actual_weight_kg) || Number(b.weight_kg) || 0;
+              weightByUser.set(b.user_id, (weightByUser.get(b.user_id) || 0) + w);
+            });
+            // Count how many residents have more weight than current user
+            const myWeight = weightByUser.get(profile.id) || 0;
+            let ahead = 0;
+            weightByUser.forEach((w) => { if (w > myWeight) ahead++; });
+            userRank = ahead + 1;
+          }
+        }
+          
+        setLifetimeStats(prev => ({
+          ...prev,
+          globalRank: userRank
+        }));
+      }
+
       setIsLoading(false);
     };
 
@@ -431,13 +468,13 @@ export default function ImpactAnalytics() {
               <Star className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
             </div>
             <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">GFP Points</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{profile?.reward_points?.toLocaleString() || 0}</p>
+            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{gfpPoints.toLocaleString()}</p>
 
           </div>
         </div>
 
         {/* ── GOAL TRACKING (CIRCULAR) ── */}
-        <div className="space-y-3">
+        <div className="space-y-1">
           <div className="flex items-center justify-between px-1">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">Your Goals</h3>
 
@@ -501,7 +538,7 @@ export default function ImpactAnalytics() {
         </div>
 
         {/* ── RECYCLING TRENDS (KEPT EXISTING GRAPH AS REQUESTED) ── */}
-        <div className="space-y-3">
+        <div className="space-y-1">
           <div className="flex items-center justify-between px-1">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">Weekly Trends</h3>
             <button className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1 bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800">

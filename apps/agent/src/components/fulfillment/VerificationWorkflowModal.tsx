@@ -40,46 +40,78 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
     if (materialPrices.length === 0) fetchMaterialPrices();
   }, []);
 
-  // Build categories from DB, filtered by agent config accepted_materials
+  const { getEffectivePrice } = useAgentStore();
+
+  // Build categories from DB, filtered by agent config accepted_materials & custom_services
   const activeCategories = useMemo(() => {
-    const rawMaterials = agentConfig?.accepted_materials;
-    if (!rawMaterials || !Array.isArray(rawMaterials)) return categories;
+    const serviceProfile = (profile as any)?.service_profile;
+    const customServices = serviceProfile?.custom_services || [];
+    
+    let acceptedSlugs: string[] = [];
+    if (serviceProfile?.categories && Array.isArray(serviceProfile.categories)) {
+      acceptedSlugs = serviceProfile.categories.filter((c: any) => c.enabled).map((c: any) => c.name.toLowerCase());
+    } else if (agentConfig?.accepted_materials && Array.isArray(agentConfig.accepted_materials)) {
+      acceptedSlugs = agentConfig.accepted_materials.map((m: string) => m.toLowerCase());
+    }
 
-    const acceptedSlugs = rawMaterials.map((item: any) => {
-      if (!item) return '';
-      if (typeof item === 'string') return item.toLowerCase();
-      if (typeof item === 'object') return ((item as any).slug || (item as any).id || (item as any).name || '').toLowerCase();
-      return '';
-    }).filter(Boolean);
+    const customSlugs = customServices.map((c: any) => c.category.toLowerCase().replace(/\s+/g, '_'));
+    const allSlugs = [...new Set([...acceptedSlugs, ...customSlugs])];
 
-    if (acceptedSlugs.length === 0) return categories;
-    return categories.filter(cat => acceptedSlugs.includes((cat as any).slug) || acceptedSlugs.includes(cat.id));
-  }, [agentConfig, categories]);
+    // If still loading, or if the agent has explicitly zero configured categories, return an empty list.
+    // NEVER fall back to showing all default categories.
+    if (!agentConfig && !serviceProfile) return []; 
+    if (allSlugs.length === 0) return [];
 
-  // Get subcategories for the selected category from materialPrices
+    const filteredDB = categories.filter(cat => allSlugs.includes((cat as any).slug) || allSlugs.includes(cat.id));
+    
+    const customCats = customServices.map((c: any) => ({
+      id: c.category.toLowerCase().replace(/\s+/g, '_'),
+      label: c.category,
+      icon: c.icon || '📦',
+      slug: c.category.toLowerCase().replace(/\s+/g, '_')
+    }));
+    
+    const newCustom = customCats.filter((cc: any) => !filteredDB.some(db => db.id === cc.id || db.label.toLowerCase() === cc.label.toLowerCase()));
+    
+    return [...filteredDB, ...newCustom];
+  }, [agentConfig, categories, profile]);
+
+  // Get subcategories for the selected category from materialPrices or custom_services
   const activeSubcategories = useMemo(() => {
     if (!selectedCategory) return [];
+    
     const cat = activeCategories.find(c => c.id === selectedCategory);
     if (!cat) return [];
+
+    const customServices = (profile as any)?.service_profile?.custom_services || [];
+    const customMatch = customServices.find((c: any) => 
+      c.category.toLowerCase().replace(/\s+/g, '_') === selectedCategory || 
+      c.category.toLowerCase() === cat.label.toLowerCase()
+    );
+
+    if (customMatch && customMatch.subcategories?.length > 0) {
+      return customMatch.subcategories.map((s: any) => ({
+        id: s.name.toLowerCase().replace(/\s+/g, '_'),
+        material_name: s.name,
+        category: cat.id,
+        price_per_kg: s.rate_per_kg
+      }));
+    }
+
     return materialPrices.filter(m =>
       m.category === cat.id || m.category === (cat as any).slug || m.category === cat.label
     );
-  }, [selectedCategory, activeCategories, materialPrices]);
+  }, [selectedCategory, activeCategories, materialPrices, profile]);
 
-  // Derive agent rate from config custom_rates based on selected category + subcategory
+  // Derive agent rate from getEffectivePrice
   const agentRate = useMemo(() => {
     if (!selectedCategory || !selectedSubcategory) return 0;
     const cat = activeCategories.find(c => c.id === selectedCategory);
     if (!cat) return 0;
-    const customRates = (agentConfig?.custom_rates || {}) as Record<string, any>;
-    // Try slug-based lookup: catSlug_subSlug, then just catSlug
+
     const sub = activeSubcategories.find(s => s.material_name === selectedSubcategory);
-    if (sub) {
-      const slug = `${(cat as any).slug || cat.id}_${sub.id}`;
-      return parseFloat(customRates[slug]) || parseFloat(customRates[(cat as any).slug || cat.id]) || 0;
-    }
-    return parseFloat(customRates[(cat as any).slug || cat.id]) || 0;
-  }, [selectedCategory, selectedSubcategory, activeCategories, activeSubcategories, agentConfig]);
+    return getEffectivePrice((cat as any).slug || cat.id, sub?.id || selectedSubcategory);
+  }, [selectedCategory, selectedSubcategory, activeCategories, activeSubcategories, getEffectivePrice]);
 
   useEffect(() => {
     if (isOpen && proposal) {
@@ -173,6 +205,17 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
           exit={{ opacity: 0, y: 100, scale: 0.95 }}
           className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-[1rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
         >
+          {/* TEMP DEBUG PANEL FOR THE USER */}
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-900 dark:text-red-200 text-[10px] font-mono whitespace-pre-wrap border-b border-red-200 dark:border-red-800 max-h-[200px] overflow-y-auto">
+            <strong>DEBUG DATA:</strong>{'\n'}
+            - DB waste_categories length: {categories.length}{'\n'}
+            - DB categories found: {categories.map(c => c.id).join(', ')}{'\n'}
+            - profile.service_profile.categories: {JSON.stringify((profile as any)?.service_profile?.categories || [])}{'\n'}
+            - agentConfig.accepted_materials: {JSON.stringify(agentConfig?.accepted_materials || [])}{'\n'}
+            - profile.service_profile.custom_services: {JSON.stringify((profile as any)?.service_profile?.custom_services || [])}{'\n'}
+            - Calculated active categories: {activeCategories.map(c => c.id).join(', ')}
+          </div>
+
           {/* Header */}
           <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>

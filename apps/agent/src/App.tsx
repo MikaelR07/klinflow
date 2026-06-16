@@ -77,9 +77,9 @@ function MobileLayout() {
 
   const AGENT_NAV = [
     { path: '/', icon: Home, label: 'Home' },
-    { path: '/jobs', icon: Briefcase, label: 'Jobs', badge: availableJobs.length, badgeColor: 'bg-blue-500 shadow-sm shadow-blue-500/30' },
+    { path: '/jobs', icon: Briefcase, label: 'Jobs' },
     { path: '/warehouse', icon: Package, label: 'Warehouse' },
-    { path: '/sourcing', icon: Store, label: 'MarketPlace', badge: listings.length, badgeColor: 'bg-emerald-500 shadow-sm shadow-emerald-500/30' },
+    { path: '/sourcing', icon: Store, label: 'MarketPlace' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 

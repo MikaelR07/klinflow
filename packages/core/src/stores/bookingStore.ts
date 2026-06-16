@@ -148,6 +148,8 @@ export const useBookingStore = create<BookingStore>()(
         companyId: p.companyId,
         fleetInviteCode: p.fleetInviteCode,
         rating: p.rating || 4.9,
+        phone: p.phone,
+        klinflowId: p.klinflow_id,
         config: p.config
       } as NearbyAgent)) });
     }

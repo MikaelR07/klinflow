@@ -123,43 +123,43 @@ export default function MyTrades() {
   return (
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)]  px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="max-w-lg mx-auto">
           {/* Header row */}
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3 ">
              <button 
                onClick={() => navigate(-1)} 
-               className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
+               className="w-8 h-8 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
              >
-               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+               <ArrowLeft className="w-4 h-4 text-slate-500 group-hover:text-primary transition-colors" />
              </button>
              
-             <div className="text-center">
-                <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-wide leading-none">Marketplace Bids</h1>
-                <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">View all Accepted requests sent</p>
+             <div className="flex-1 flex items-center justify-between">
+               <div>
+                  <h1 className="text-base font-bold text-slate-600 dark:text-white capitalize tracking-tight leading-none">Marketplace Bids</h1>
+                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">View Requests accepted by sellers</p>
+               </div>
              </div>
-
-             <div className="w-10" /> {/* Spacer */}
           </div>
 
           {/* Stats row - Inside the fixed header */}
-          <div className="flex items-center justify-around">
-            <div className="text-center">
-              <p className="text-[9px] font-black text-slate-400 capitalize tracking-widest mb-1 leading-none">Active Deals</p>
-              <p className="text-sm font-bold text-slate-900 dark:text-white leading-none tracking-tight">{activeTrades.length}</p>
+          <div className="flex bg-slate-50 dark:bg-slate-800/60 rounded-lg p-1 border border-slate-100 dark:border-slate-700/50">
+            <div className="flex-1 text-center py-1">
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Active</p>
+              <p className="text-xs font-black text-slate-800 dark:text-white leading-none">{activeTrades.length}</p>
             </div>
-            <div className="w-px h-7 bg-slate-100 dark:bg-white/10" />
-            <div className="text-center">
-              <p className="text-[9px] font-black text-slate-400 capitalize tracking-widest mb-1 leading-none">Est. Weight</p>
-              <p className="text-sm font-black text-emerald-600 leading-none tracking-tight">
-                {activeTrades.reduce((acc, t) => acc + (t.actual_weight_kg || t.listing?.quantity || 0), 0).toLocaleString()} <span className="text-[10px] opacity-50">KG</span>
+            <div className="w-px bg-slate-200 dark:bg-slate-700/50 mx-1" />
+            <div className="flex-1 text-center py-1">
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Weight</p>
+              <p className="text-xs font-black text-emerald-600 dark:text-emerald-400 leading-none">
+                {activeTrades.reduce((acc, t) => acc + (t.actual_weight_kg || t.listing?.quantity || 0), 0).toLocaleString()} <span className="text-[8px] opacity-70">KG</span>
               </p>
             </div>
-            <div className="w-px h-7 bg-slate-100 dark:bg-white/10" />
-            <div className="text-center">
-              <p className="text-[9px] font-black text-slate-400 capitalize tracking-widest mb-1 leading-none">Total Value</p>
-              <p className="text-sm font-black text-indigo-600 leading-none tracking-tight">
-                <span className="text-[10px] mr-0.5">KSh</span>
+            <div className="w-px bg-slate-200 dark:bg-slate-700/50 mx-1" />
+            <div className="flex-1 text-center py-1">
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Value</p>
+              <p className="text-xs font-black text-indigo-600 dark:text-indigo-400 leading-none">
+                <span className="text-[8px] mr-0.5 opacity-70">KSh</span>
                 {activeTrades.reduce((acc, t) => acc + (t.total_price || 0), 0).toLocaleString()}
               </p>
             </div>
@@ -167,7 +167,7 @@ export default function MyTrades() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-0 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+5.5em)] relative max-w-lg mx-auto w-full">
+      <div className="flex-1 space-y-0 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+5em)] relative max-w-lg mx-auto w-full">
 
         {/* ── CONTENT AREA ── */}
         <div className="">
@@ -374,7 +374,7 @@ export default function MyTrades() {
                             {/* Row 1: Material & Price */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5 min-w-0">
-                                <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">{trade.listing?.material || trade.waste_type || 'Recyclables'}</h3>
+                                <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate tracking-tight">{trade.listing?.material || trade.waste_type || 'Recyclables'}</h3>
                               </div>
                               <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {(trade.total_price || 0).toLocaleString()}</span>
                             </div>

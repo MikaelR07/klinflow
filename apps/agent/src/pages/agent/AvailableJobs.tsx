@@ -118,6 +118,50 @@ export default function AvailableJobs() {
     });
   }, [currentJobs, searchTerm, filterMaterial, filterTime, categories]);
 
+  const formatJobTime = (job: AgentJob) => {
+    if (job.time?.toUpperCase() === 'ASAP') return 'ASAP';
+    
+    if (job.date) {
+      const d = new Date(job.date);
+      if (!isNaN(d.getTime())) {
+        const dd = d.getDate();
+        const mm = d.getMonth() + 1;
+        const yyyy = d.getFullYear();
+        const hh = String(d.getHours()).padStart(2, '0');
+        const min = String(d.getMinutes()).padStart(2, '0');
+        
+        let formatted = `${dd}/${mm}/${yyyy}`;
+        
+        if (job.time && job.time.toLowerCase() !== 'scheduled' && job.time.trim() !== '') {
+          let timePart = job.time;
+          if (timePart.includes('@')) {
+            timePart = timePart.split('@').pop()?.trim() || timePart;
+          }
+          // Strip any standalone YYYY-MM-DD date just in case
+          timePart = timePart.replace(/\d{4}-\d{2}-\d{2}/g, '').trim();
+          formatted += ` ${timePart}`;
+        } else {
+          formatted += ` ${hh}:${min}`;
+        }
+        return formatted;
+      }
+    }
+    
+    if (job.time) {
+      let timePart = job.time;
+      if (timePart.includes('@')) {
+        const parts = timePart.split('@');
+        const d = new Date(parts[0].trim());
+        if (!isNaN(d.getTime())) {
+          return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} ${parts[1]?.trim() || ''}`.trim();
+        }
+      }
+      return timePart.toLowerCase() === 'scheduled' ? 'Scheduled' : timePart;
+    }
+    
+    return 'Scheduled';
+  };
+
   const TABS = [
     { id: 'available', label: 'Requested', count: availableJobs.length },
     { id: 'active', label: 'Accepted', count: activeJobs.length },
@@ -129,18 +173,18 @@ export default function AvailableJobs() {
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
-        <div className="flex items-center justify-between max-w-lg mx-auto pb-2">
+        <div className="flex items-center gap-3 max-w-lg mx-auto pb-2">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
           </button>
 
-          <div className="text-center">
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Missions</h1>
-            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Available Jobs</p>
+          <div className="flex-1">
+            <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">Pickup Missions</h1>
+            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-1">view available jobs in the area</p>
           </div>
 
-          <div className="w-10 flex items-center justify-center">
-            <RefreshCw className={`w-4 h-4 text-slate-300 ${isLoadingJobs ? 'animate-spin' : ''}`} onClick={() => fetchAvailableJobs()} />
+          <div className="shrink-0 flex items-center justify-center">
+            <RefreshCw className={`w-4 h-4 text-slate-300 hover:text-indigo-500 cursor-pointer transition-colors ${isLoadingJobs ? 'animate-spin' : ''}`} onClick={() => fetchAvailableJobs()} />
           </div>
         </div>
 
@@ -338,12 +382,16 @@ export default function AvailableJobs() {
                                 {waste?.label || job.material}
                               </h2>
                             </div>
-                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border ${job.time?.toUpperCase() === 'ASAP'
-                                ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-500 border-rose-200 dark:border-rose-500/20'
-                                : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 border-indigo-200 dark:border-indigo-500/20'
+                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border ${
+                                activeTab === 'completed' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border-emerald-200 dark:border-emerald-500/20' :
+                                activeTab === 'active' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-500 border-blue-200 dark:border-blue-500/20' :
+                                activeTab === 'rejected' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-500 border-rose-200 dark:border-rose-500/20' :
+                                job.time?.toUpperCase() === 'ASAP' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-500 border-rose-200 dark:border-rose-500/20' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 border-indigo-200 dark:border-indigo-500/20'
                               }`}>
-                              {job.time?.toUpperCase() === 'ASAP' ? <Zap className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
-                              <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{job.time?.toLowerCase() || 'scheduled'}</span>
+                              {activeTab === 'completed' ? <CheckCircle className="w-3.5 h-3.5" /> : activeTab === 'active' ? <Clock className="w-3.5 h-3.5" /> : activeTab === 'rejected' ? <XCircle className="w-3.5 h-3.5" /> : job.time?.toUpperCase() === 'ASAP' ? <Zap className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                              <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">
+                                {activeTab === 'completed' ? 'completed' : activeTab === 'rejected' ? 'rejected' : formatJobTime(job)}
+                              </span>
                             </div>
                           </div>
 
@@ -513,15 +561,20 @@ export default function AvailableJobs() {
                             {/* Row 1: Material & Value/Time */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5 min-w-0">
-                                <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">{waste?.label || job.material}</h3>
+                                <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate tracking-tight">{waste?.label || job.material}</h3>
                                 {job.is_group_pickup && (
-                                  <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center gap-0.5 shrink-0">
+                                  <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center gap-0.5 shrink-0">
                                     <Users className="w-2.5 h-2.5" /> Group
                                   </span>
                                 )}
                               </div>
-                              <span className={`text-[9px] font-black tracking-widest px-2 py-0.5 rounded-md uppercase shrink-0 ml-2 ${job.time?.toUpperCase() === 'ASAP' ? 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20'}`}>
-                                {job.time?.toLowerCase() || 'scheduled'}
+                              <span className={`text-[9px] font-black tracking-widest px-2 py-0.5 rounded-md uppercase shrink-0 ml-2 ${
+                                activeTab === 'completed' ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20' :
+                                activeTab === 'active' ? 'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20' :
+                                activeTab === 'rejected' ? 'bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20' :
+                                job.time?.toUpperCase() === 'ASAP' ? 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20'
+                              }`}>
+                                {activeTab === 'completed' ? 'completed' : activeTab === 'rejected' ? 'rejected' : formatJobTime(job)}
                               </span>
                             </div>
 

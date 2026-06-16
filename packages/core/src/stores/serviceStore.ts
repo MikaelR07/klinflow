@@ -29,18 +29,6 @@ interface ServiceStore {
   deleteMaterialPrice: (id: string) => Promise<{ success: boolean; error?: any }>;
 }
 
-const DEFAULT_CATEGORIES: ServiceCategory[] = [
-  { id: 'general', label: 'General Waste', icon: '🗑️', description: 'Regular household trash', is_active: true },
-  { id: 'recyclable', label: 'Recyclable', icon: '♻️', description: 'Plastics, Paper, Cardboard', is_active: true },
-  { id: 'organic', label: 'Organic / Food', icon: '🍎', description: 'Food scraps and greens', is_active: true },
-  { id: 'metal', label: 'Metal', icon: '⛓️', description: 'Scrap metal, cans, tins', is_active: true },
-  { id: 'ewaste', label: 'E-Waste', icon: '💻', description: 'Electronics, batteries', is_active: true },
-  { id: 'bulky', label: 'Bulky Item', icon: '🛋️', description: 'Furniture, mattresses', is_active: true },
-  { id: 'appliances', label: 'Large Appliances', icon: '🧊', description: 'Fridges, Washers, Cookers', is_active: true },
-  { id: 'plastic', label: 'Plastic', icon: '🥤', description: 'PET bottles, containers, bags', is_active: true },
-  { id: 'paper', label: 'Paper & Cardboard', icon: '📦', description: 'Newspapers, boxes, flyers', is_active: true },
-];
-
 export const useServiceStore = create<ServiceStore>((set, get) => ({
   categories: [],
   allCategories: [],
@@ -57,14 +45,14 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
         .is('parent_category', null)
         .order('label');
 
-      if (!error && data && data.length > 0) {
+      if (!error && data) {
         set({ categories: data as ServiceCategory[] });
       } else {
-        set({ categories: DEFAULT_CATEGORIES });
+        set({ categories: [] });
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
-      set({ categories: DEFAULT_CATEGORIES });
+      set({ categories: [] });
     } finally {
       set({ isLoading: false });
     }

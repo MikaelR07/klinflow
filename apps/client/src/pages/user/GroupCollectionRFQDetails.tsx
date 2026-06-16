@@ -115,6 +115,7 @@ export default function GroupCollectionRFQDetails() {
           delivery: deliveryText,
           offersSubmitted: data.rfq_offers?.[0]?.count || 0,
           notes: data.notes || null,
+          status: data.status || 'open',
           imageUrls: data.images && data.images.length > 0
             ? data.images
             : ['https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=600&q=80'],
@@ -463,7 +464,23 @@ export default function GroupCollectionRFQDetails() {
         </div>
 
         {/* ── PLEDGE FORM OR ALREADY PLEDGED ── */}
-        {existingPledge ? (
+        {existingPledge && rfq.status === 'completed' ? (
+          <div className="bg-emerald-600 dark:bg-emerald-800 rounded-xl p-4 border border-emerald-100 dark:border-emerald-800/40 shadow-sm text-center space-y-3">
+            <div className="w-10 h-10 bg-emerald-500 dark:bg-emerald-700/50 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+              <CheckCircle2 className="w-5 h-5 text-white" />
+            </div>
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Contract Completed & Paid</h4>
+            <p className="text-xs text-emerald-100 font-semibold mb-4 leading-relaxed">
+              This contract has been fully fulfilled and payouts have been settled. Check your Wallet for payment details.
+            </p>
+            <button
+              onClick={() => navigate('/my-trades')}
+              className="mt-2 w-full py-4 bg-emerald-700 hover:bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all"
+            >
+              View Trade History
+            </button>
+          </div>
+        ) : existingPledge ? (
           <div className="bg-blue-700 dark:bg-blue-900 rounded-xl p-4 border border-blue-100 dark:border-blue-800/40 shadow-sm text-center space-y-3">
             <div className="w-10 h-10 bg-blue-500 dark:bg-blue-800/50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
               <CheckCircle2 className="w-5 h-5 text-white" />

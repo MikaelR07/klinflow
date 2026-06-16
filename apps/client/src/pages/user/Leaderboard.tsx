@@ -169,22 +169,33 @@ function SellerLeaderboard() {
       setLoading(true);
       try {
         const { data, error } = await supabase
-          .from('profiles')
-          .select('id, name, wallet_balance, avatar_url')
-          .eq('role', 'seller')
-          .order('wallet_balance', { ascending: false })
+          .from('user_wallets')
+          .select(`
+            user_id,
+            cash_balance,
+            profiles!inner (
+              name,
+              role,
+              avatar_url
+            )
+          `)
+          .eq('profiles.role', 'seller')
+          .order('cash_balance', { ascending: false })
           .limit(50);
 
         if (error) throw error;
 
-        const formatted = (data || []).map((u, i) => ({
-          id: u.id,
-          name: u.id === profileId ? 'You' : (u.name || 'Anonymous'),
-          revenue: u.wallet_balance || 0,
-          rank: i + 1,
-          isUser: u.id === profileId,
-          avatarUrl: u.avatar_url || null,
-        }));
+        const formatted = (data || []).map((w, i) => {
+          const p = Array.isArray(w.profiles) ? w.profiles[0] : w.profiles;
+          return {
+            id: w.user_id,
+            name: w.user_id === profileId ? 'You' : (p?.name || 'Anonymous'),
+            revenue: w.cash_balance || 0,
+            rank: i + 1,
+            isUser: w.user_id === profileId,
+            avatarUrl: p?.avatar_url || null,
+          };
+        });
 
         setTopSellers(formatted);
       } catch (err) {
@@ -210,7 +221,7 @@ function SellerLeaderboard() {
   return (
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-900  z-50 transition-colors max-w-lg mx-auto">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
@@ -335,23 +346,74 @@ export default function Leaderboard() {
     const fetchLeaderboard = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('id, name, reward_points, avatar_url')
-          .in('role', ['user', 'resident', 'client'])
-          .gt('reward_points', 0)
-          .order('reward_points', { ascending: false })
-          .limit(50);
+        // Try the RPC first (if deployed), otherwise fall back to client-side aggregation
+        const { data: rpcData, error: rpcError } = await supabase
+          .rpc('get_resident_leaderboard');
 
-        if (error) throw error;
+        if (!rpcError && rpcData && rpcData.length > 0) {
+          const formatted = rpcData.map((user: any, i: number) => ({
+            id: user.user_id,
+            name: user.user_id === profileId ? 'You' : (user.name || 'Anonymous'),
+            kg: Number(user.total_weight) || 0,
+            rank: Number(user.rank) || (i + 1),
+            isUser: user.user_id === profileId,
+            avatarUrl: user.avatar_url || null,
+          }));
+          setTopUsers(formatted);
+          return;
+        }
 
-        const formatted = (data || []).map((u, i) => ({
-          id: u.id,
-          name: u.id === profileId ? 'You' : (u.name || 'Anonymous'),
-          kg: Math.floor((Number(u.reward_points) || 0) / 2),
+        // Fallback: fetch completed bookings and aggregate weights client-side
+        const { data: bookingsData, error: bookingsError } = await supabase
+          .from('bookings')
+          .select(`
+            user_id,
+            actual_weight_kg,
+            weight_kg,
+            profiles:user_id (
+              name,
+              role,
+              avatar_url
+            )
+          `)
+          .eq('status', 'completed');
+
+        if (bookingsError) throw bookingsError;
+
+        // Aggregate by user
+        const userMap = new Map<string, { name: string; avatarUrl: string | null; totalWeight: number }>();
+
+        (bookingsData || []).forEach((b: any) => {
+          const p = Array.isArray(b.profiles) ? b.profiles[0] : b.profiles;
+          const role = p?.role || '';
+          // Only include residents/users/clients
+          if (!['user', 'resident', 'client'].includes(role)) return;
+
+          const weight = Number(b.actual_weight_kg) || Number(b.weight_kg) || 0;
+          const existing = userMap.get(b.user_id);
+          if (existing) {
+            existing.totalWeight += weight;
+          } else {
+            userMap.set(b.user_id, {
+              name: p?.name || 'Anonymous',
+              avatarUrl: p?.avatar_url || null,
+              totalWeight: weight,
+            });
+          }
+        });
+
+        // Sort by weight descending and assign ranks
+        const sorted = Array.from(userMap.entries())
+          .filter(([_, v]) => v.totalWeight > 0)
+          .sort((a, b) => b[1].totalWeight - a[1].totalWeight);
+
+        const formatted = sorted.map(([userId, info], i) => ({
+          id: userId,
+          name: userId === profileId ? 'You' : info.name,
+          kg: Math.round(info.totalWeight * 10) / 10,
           rank: i + 1,
-          isUser: u.id === profileId,
-          avatarUrl: u.avatar_url || null,
+          isUser: userId === profileId,
+          avatarUrl: info.avatarUrl,
         }));
 
         setTopUsers(formatted);
@@ -378,7 +440,7 @@ export default function Leaderboard() {
   return (
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-900  z-50 transition-colors max-w-lg mx-auto">
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -392,7 +454,7 @@ export default function Leaderboard() {
 
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-2">
         {/* Hero Banner */}
-        <div className="bg-gradient-to-br from-primary  to-emerald-800 p-8 rounded-2xl text-white relative overflow-hidden">
+        <div className="bg-gradient-to-br from-primary  to-emerald-800 p-8 rounded-xl text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
           <div className="relative z-10 text-center">
             <Crown className="w-12 h-12 text-amber-400 mx-auto mb-4" />

@@ -1,173 +1,173 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  ChevronLeft, Search, Zap, 
-  Layout as LayoutIcon, Smartphone,
-  Monitor, Brain, ShieldCheck,
-  TrendingUp, Clock
-} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, Search, Maximize2, X, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import Layout from '../layouts/Layout';
 
-const allScreenshots = [
-  { 
-    src: '/grid/route-optimizer.webp', 
-    title: 'Tactical Navigation',
-    category: 'Logistics',
-    desc: 'Agent HUD with AI-optimized multi-stop routing and real-time pickup telemetry.' 
-  },
-  { 
-    src: '/grid/visualproof.webp', 
-    title: 'HygeneX Vision Scan',
-    category: 'Intelligence',
-    desc: 'AI-powered material grading and purity verification for instant asset valuation.' 
-  },
-  { 
-    src: '/grid/book-pickup.webp', 
-    title: 'Mission Request',
-    category: 'Consumer',
-    desc: 'Streamlined waste categorization and collection scheduling for residents.' 
-  },
-  { 
-    src: '/grid/arrival-detail.webp', 
-    title: 'Agent Verification',
-    category: 'Logistics',
-    desc: 'On-site terminal for weight verification and material grade confirmation.' 
-  },
-  { 
-    src: '/grid/post-info.webp', 
-    title: 'B2B Trade Listing',
-    category: 'Marketplace',
-    desc: 'Advanced data entry for bulk material sales including grade and moisture parameters.' 
-  },
-  { 
-    src: '/grid/offer-review.webp', 
-    title: 'Escrow Negotiation',
-    category: 'Financial',
-    desc: 'Transparent bidding and fund release system for large-scale material trades.' 
-  },
-  { 
-    src: '/grid/post-summary.webp', 
-    title: 'Mission Settlement',
-    category: 'Financial',
-    desc: 'Digital receipts and automated wallet payouts upon successful collection.' 
-  },
-  { 
-    src: '/grid/impact-analysis.webp', 
-    title: 'Sustainomics Analytics',
-    category: 'Intelligence',
-    desc: 'Deep-dive environmental impact metrics and historical trade performance.' 
-  },
-  { 
-    src: '/grid/collection-method.webp', 
-    title: 'Logistics Strategy',
-    category: 'Logistics',
-    desc: 'Dynamic selection between agent pickup and self-service hub drop-offs.' 
-  },
+const allImages = [
+  "admin-dashboard.webp",
+  "agent-dashboard.webp",
+  "agent-home.webp",
+  "arrival-detail.webp",
+  "book-pickup.webp",
+  "business-home.webp",
+  "collection-method.webp",
+  "company-owner-homepage.webp",
+  "Hub-home.webp",
+  "impact-analysis.webp",
+  "offer-review.webp",
+  "post-info.webp",
+  "post-summary.webp",
+  "resident-home.webp",
+  "route-optimizer.webp",
+  "seller-home.webp",
+  "visualproof.webp"
 ];
+
+const formatTitle = (filename: string) => {
+  return filename
+    .replace('.webp', '')
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+};
 
 export default function EcosystemGallery() {
   const { isDarkMode } = useThemeStore();
-  const [selectedImage, setSelectedImage] = useState<typeof allScreenshots[0] | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
     <Layout>
-      <div className={`min-h-screen pt-24 md:pt-32 pb-20 md:pb-40 ${isDarkMode ? 'bg-surface-950' : 'bg-slate-50'}`}>
-        <div className="max-w-7xl mx-auto px-6">
+      <div className={`min-h-screen pt-24 md:pt-16 pb-24 ${isDarkMode ? 'bg-surface-950' : 'bg-surface-50'}`}>
+        
+        {/* HERO SECTION */}
+        <div className="max-w-[1400px] mx-auto px-6 mb-12 relative">
           
-          <Link to="/" className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs mb-8 hover:translate-x-[-4px] transition-transform">
+          <Link to="/" className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs mb-8 hover:-translate-x-1 transition-transform relative z-10">
             <ChevronLeft className="w-4 h-4" /> Back to Home
           </Link>
 
-          <div className="max-w-3xl mb-24">
-            <h1 className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-              The Product <br className="hidden sm:block" />
-              <span className="text-primary italic">Suite.</span>
-            </h1>
-            <p className={`text-base md:text-xl font-medium leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-              Explore the technical infrastructure defining the next generation of circular recovery. From household intake to industrial settlement.
-            </p>
-          </div>
-
-          <div className="columns-2 sm:columns-2 lg:columns-3 gap-4 md:gap-8 space-y-4 md:space-y-8">
-            {allScreenshots.map((shot, idx) => (
-              <motion.div
-                key={idx}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
+            <div>
+              <motion.div 
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                viewport={{ once: true }}
-                className="break-inside-avoid"
+                animate={{ opacity: 1, y: 0 }}
+                className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border mb-4 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-200 shadow-sm"}`}
               >
-                <div 
-                  onClick={() => setSelectedImage(shot)}
-                  className={`group relative rounded-2xl border overflow-hidden cursor-pointer transition-all duration-500 ${
-                    isDarkMode ? 'border-white/5 bg-surface-950' : 'border-slate-200 bg-white shadow-xl hover:shadow-2xl'
-                  }`}
-                >
-                  <div className="absolute top-6 left-6 z-10 flex items-center gap-2">
-                    <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-xs font-black uppercase tracking-widest text-white border border-white/20">
-                      {shot.category}
-                    </span>
-                  </div>
-
-                  <img 
-                    src={shot.src} 
-                    alt={shot.title} 
-                    loading="lazy"
-                    className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105" 
-                  />
-                  
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 p-8 flex flex-col justify-end">
-                    <h4 className="text-xl font-bold text-white mb-2">{shot.title}</h4>
-                    <p className="text-xs text-slate-300 font-medium leading-relaxed mb-6">{shot.desc}</p>
-                    <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center">
-                          <Search className="w-5 h-5" />
-                       </div>
-                       <span className="text-xs font-bold text-white uppercase tracking-widest">Enlarge Preview</span>
-                    </div>
-                  </div>
-                </div>
+                <Sparkles className="w-3 h-3 text-primary" />
+                <span className={`text-[10px] font-bold uppercase tracking-widest ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}>
+                  Product Showcase
+                </span>
               </motion.div>
-            ))}
+              
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}
+              >
+                Ecosystem{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">Gallery.</span>
+              </motion.h1>
+            </div>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className={`text-sm md:text-base font-medium leading-relaxed max-w-lg md:mb-1.5 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
+            >
+              Explore the interfaces powering the circular economy. From resident pickup booking to global logistics administration.
+            </motion.p>
+          </div>
+        </div>
+
+        {/* MASONRY GALLERY */}
+        <div className="max-w-[1400px] mx-auto px-6 relative z-10">
+          <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 gap-4 space-y-4">
+            {allImages.map((filename, idx) => {
+              const title = formatTitle(filename);
+              return (
+                <motion.div
+                  key={filename}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: (idx % 10) * 0.05 }}
+                  viewport={{ once: true }}
+                  className="break-inside-avoid relative group cursor-pointer"
+                  onClick={() => setSelectedImage(filename)}
+                >
+                  <div className={`rounded-2xl border overflow-hidden relative transition-all duration-500 shadow-lg ${isDarkMode ? 'border-white/10 bg-white/5 group-hover:shadow-primary/20 group-hover:border-primary/50' : 'border-slate-200 bg-white group-hover:shadow-2xl group-hover:border-primary/30'}`}>
+                    
+                    <img 
+                      src={`/grid/${filename}`} 
+                      alt={title}
+                      loading="lazy"
+                      className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+
+                    {/* Elegant Hover Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
+                      <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        <h3 className="text-white font-bold text-lg md:text-xl mb-1">{title}</h3>
+                        <p className="text-white/70 text-xs font-medium uppercase tracking-widest mb-4">View Interface</p>
+                        
+                        <div className="w-10 h-10 rounded-full bg-primary/90 text-white flex items-center justify-center backdrop-blur-md">
+                          <Maximize2 className="w-4 h-4" />
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* LIGHTBOX MODAL */}
-      {selectedImage && (
-        <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-950/98 backdrop-blur-2xl p-6"
-          onClick={() => setSelectedImage(null)}
-        >
+      {/* LIGHTBOX OVERLAY */}
+      <AnimatePresence>
+        {selectedImage && (
           <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative max-w-3xl w-full max-h-[70vh] flex flex-col items-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-10"
+            onClick={() => setSelectedImage(null)}
           >
-            <img 
-              src={selectedImage.src} 
-              alt={selectedImage.title} 
-              className="max-w-full max-h-[50vh] object-contain rounded-2xl shadow-2xl border-4 border-white/10" 
-            />
-            
-            <div className="mt-6 text-center max-w-xl px-4">
-               <span className="text-xs font-black text-primary uppercase tracking-[0.3em] mb-2 block">{selectedImage.category}</span>
-               <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 tracking-tighter">{selectedImage.title}</h3>
-               <p className="text-xs sm:text-sm text-slate-400 font-medium leading-relaxed">{selectedImage.desc}</p>
-            </div>
-
             <button 
-              className="absolute top-0 -right-12 text-white/50 hover:text-white transition-colors"
-              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 md:top-10 md:right-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors border border-white/10 z-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedImage(null);
+              }}
             >
-              <Zap className="w-8 h-8 rotate-12" />
+              <X className="w-5 h-5" />
             </button>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative max-w-4xl w-full flex flex-col items-center justify-center p-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative w-full flex items-center justify-center overflow-hidden rounded-2xl">
+                <img 
+                  src={`/grid/${selectedImage}`} 
+                  alt={formatTitle(selectedImage)} 
+                  className="max-w-full max-h-[65vh] object-contain rounded-xl shadow-2xl ring-1 ring-white/10" 
+                />
+              </div>
+              
+              <div className="mt-6 text-center bg-black/50 px-6 py-2.5 rounded-2xl border border-white/10 backdrop-blur-md">
+                 <h3 className="text-base md:text-lg font-bold text-white tracking-tight">{formatTitle(selectedImage)}</h3>
+              </div>
+            </motion.div>
           </motion.div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </Layout>
   );
 }

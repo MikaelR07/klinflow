@@ -162,7 +162,7 @@ export const useAuthStore = create<AuthState>()(
 
               const { data: profileData } = await supabase
                 .from('profiles')
-                .select('*')
+                .select('*, user_wallets(cash_balance, available_points)')
                 .eq('id', session.user.id)
                 .maybeSingle();
               
@@ -211,7 +211,7 @@ export const useAuthStore = create<AuthState>()(
         if (!userId) return;
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('*')
+          .select('*, user_wallets(cash_balance, available_points)')
           .eq('id', userId)
           .maybeSingle();
         if (profileData) {
@@ -226,11 +226,17 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      _mapProfile: (profileData: ProfileRow): Profile | null => {
+      _mapProfile: (profileData: any): Profile | null => {
         const normalized = normalizeKeys(profileData);
+        
+        // Extract wallet values from the joined user_wallets table if it exists
+        const userWallet = profileData.user_wallets && Array.isArray(profileData.user_wallets) 
+          ? profileData.user_wallets[0] 
+          : profileData.user_wallets;
+
         // Ensure strictly typed fields for monetary values
-        normalized.walletBalance = Number(profileData.wallet_balance || 0);
-        normalized.rewardPoints = Number(profileData.reward_points || 0);
+        normalized.walletBalance = userWallet ? Number(userWallet.cash_balance || 0) : Number(profileData.wallet_balance || 0);
+        normalized.rewardPoints = userWallet ? Number(userWallet.available_points || 0) : Number(profileData.reward_points || 0);
         const rawRating = profileData.rating;
         normalized.rating = (rawRating === null || rawRating === undefined || isNaN(Number(rawRating))) 
           ? 0.0 
@@ -262,30 +268,16 @@ export const useAuthStore = create<AuthState>()(
             schema: 'public', 
             table: 'profiles', 
             filter: `id=eq.${id}` 
-          }, async (payload) => {
-            const updated = payload.new as ProfileRow;
-            const oldBalance = get().profile?.walletBalance || 0;
-            const newBalance = Number(updated.wallet_balance || 0);
-            
-            // Force-fetch the latest profile from DB to guarantee accuracy
-            const { data: freshProfile } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('id', id)
-              .single();
-
-            if (freshProfile) {
-              const uiProfile = get()._mapProfile(freshProfile as ProfileRow);
-              if (!uiProfile) return;
-
-              set({
-                profile: uiProfile,
-                rewardPoints: uiProfile.rewardPoints || 0,
-                walletBalance: uiProfile.walletBalance || 0
-              });
-
-
-            }
+          }, async () => {
+            await get().fetchProfile();
+          })
+          .on('postgres_changes', { 
+            event: '*', 
+            schema: 'public', 
+            table: 'user_wallets', 
+            filter: `user_id=eq.${id}` 
+          }, async () => {
+            await get().fetchProfile();
           })
           .subscribe();
         

@@ -21,7 +21,10 @@ export interface AgentPickupOrder {
   status: string;
   pickup_address: string;
   created_at: string;
+  actual_weight?: number;
   rfq?: {
     category: string;
+    material_grade?: string;
+    requested_weight?: number;
   };
 }

@@ -204,7 +204,7 @@ export default function SwarmsList() {
                       )}
                     </div>
 
-                    <h3 className="text-xs font-bold text-[#5c50e6] dark:text-indigo-400 mb-2 leading-tight tracking-tight">
+                    <h3 className="text-xs font-semibold text-[#5c50e6] dark:text-indigo-400 mb-2 leading-tight tracking-tight">
                       Material-Type: {swarm.material}
                     </h3>
 

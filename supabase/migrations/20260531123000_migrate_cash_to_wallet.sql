@@ -289,10 +289,26 @@ BEGIN
         RAISE EXCEPTION 'Deposit amount must be positive';
     END IF;
 
-    INSERT INTO public.user_wallets (user_id, cash_balance)
-    VALUES (auth.uid(), p_amount)
+    -- Update the canonical wallet
+    INSERT INTO public.user_wallets (user_id, cash_balance, lifetime_cash_earned)
+    VALUES (auth.uid(), p_amount, p_amount)
     ON CONFLICT (user_id) DO UPDATE 
-    SET cash_balance = user_wallets.cash_balance + p_amount;
+    SET cash_balance = user_wallets.cash_balance + p_amount,
+        lifetime_cash_earned = user_wallets.lifetime_cash_earned + p_amount;
+
+    -- Sync to profiles so the UI sees the updated balance immediately
+    UPDATE public.profiles
+    SET wallet_balance = wallet_balance + p_amount
+    WHERE id = auth.uid();
+
+    -- Record in ledger for audit trail
+    INSERT INTO public.wallet_transactions (profile_id, amount, transaction_type, metadata)
+    VALUES (
+        auth.uid(),
+        p_amount,
+        'topup',
+        jsonb_build_object('source', 'self_deposit', 'method', 'in_app')
+    );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 

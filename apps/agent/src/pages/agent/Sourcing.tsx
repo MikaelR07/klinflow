@@ -215,7 +215,7 @@ export default function Sourcing() {
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
-        <div className="h-[calc(env(safe-area-inset-top,1rem)+8.4rem)]" />
+        <div className="h-[calc(env(safe-area-inset-top,1rem)+8.2rem)]" />
       )}
       {!selectedId && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 pt-[calc(env(safe-area-inset-top,1rem)+0.8rem)] pb-1 px-4 border-b border-slate-200 dark:border-slate-900 max-w-lg mx-auto">
@@ -227,7 +227,7 @@ export default function Sourcing() {
               </button>
 
               <div className="text-center">
-                <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Material Marketplace</h1>
+                <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">Material Marketplace</h1>
                 <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Sourcing Portal</p>
               </div>
 
@@ -687,7 +687,7 @@ export default function Sourcing() {
                           {/* Row 1: Material & Price */}
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-                              <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize tracking-tight">
+                              <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize tracking-tight">
                                 {listing.materialSubcategory || listing.material}
                               </h3>
                               {(() => {
@@ -695,13 +695,13 @@ export default function Sourcing() {
                                 if (!category) return null;
                                 const style = getCategoryStyle(category);
                                 return (
-                                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold whitespace-nowrap ${style.bg} ${style.text} ${style.darkBg} ${style.darkText}`}>
+                                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-semibold whitespace-nowrap ${style.bg} ${style.text} ${style.darkBg} ${style.darkText}`}>
                                     {category}
                                   </span>
                                 );
                               })()}
                               {listing.isBulkDrive && (
-                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center gap-0.5 shrink-0">
+                                <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center gap-0.5 shrink-0">
                                   <Users className="w-2.5 h-2.5" /> Bulk
                                 </span>
                               )}

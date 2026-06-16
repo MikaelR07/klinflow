@@ -208,16 +208,27 @@ export default function MyBookings() {
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
         <div className="w-full mx-auto space-y-4">
           <div className="flex items-center justify-between">
-            <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all">
-              <ArrowLeft className="w-4 h-4 dark:text-white" />
-            </button>
+            <div className="flex items-center gap-3">
+              <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all shrink-0">
+                <ArrowLeft className="w-4 h-4 dark:text-white" />
+              </button>
 
-            <div className="text-center">
-              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
-              <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup Details and history</p>
+              <div className="text-left">
+                <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
+                <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup Details and history</p>
+              </div>
             </div>
 
-            <div className="w-10" /> {/* Spacer */}
+            {(activeTab === 'Cancelled' || activeTab === 'Completed') && filteredBookings.length > 0 ? (
+              <button
+                onClick={() => handleClearHistory(activeTab.toLowerCase())}
+                className="text-[12px] font-bold text-white px-6 py-1.5 bg-red-500 rounded-lg shrink-0 transition-colors"
+              >
+                Clear
+              </button>
+            ) : (
+              <div className="w-10 shrink-0" />
+            )}
           </div>
 
           {/* Tabs */}
@@ -263,7 +274,7 @@ export default function MyBookings() {
         </div>
       </div>
 
-      <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+6rem)] px-0 relative max-w-lg mx-auto w-full space-y-4">
+      <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+6.5rem)] px-0 relative max-w-lg mx-auto w-full space-y-4">
 
         {filteredBookings.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center px-4">
@@ -277,16 +288,7 @@ export default function MyBookings() {
           </div>
         ) : (
           <div className="space-y-1">
-            {(activeTab === 'Cancelled' || activeTab === 'Completed') && (
-              <div className="flex justify-end mb-2 px-4">
-                <button
-                  onClick={() => handleClearHistory(activeTab.toLowerCase())}
-                  className="text-xs font-bold text-rose-600 hover:underline px-3 py-1.5 bg-rose-50 dark:bg-rose-500/10 rounded-lg flex items-center gap-2"
-                >
-                  clear
-                </button>
-              </div>
-            )}
+
             {filteredBookings.map((b: any) => {
               const wasteTypeVal = b.wasteType;
               const waste = categories.find((w: any) => w.slug === wasteTypeVal) ||
@@ -316,14 +318,14 @@ export default function MyBookings() {
                           )}
                         </div>
                         <div className="space-y-1">
-                          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
-                            Material:<span className="text-slate-900 dark:text-white text-[11px]">{waste?.label || wasteTypeVal}</span>
+                          <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
+                            <span className="text-slate-900 dark:text-white text-[14px]">{waste?.label || wasteTypeVal}</span>
                           </p>
-                           <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1.5">
+                           <p className="text-[10px] font-semibold text-slate-500 flex items-center gap-1.5">
                             <MapPin className="w-3 h-3 text-green-500" /> {b.estate}
                           </p>
-                          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">
-                            ID: <span className="text-primary font-mono text-[11px]">{b.id.slice(0, 8).toUpperCase()}</span>
+                          <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
+                            Pickup ID: <span className="text-primary font-mono text-[11px]">{b.id.slice(0, 8).toUpperCase()}</span>
                           </p>
                          
                         </div>

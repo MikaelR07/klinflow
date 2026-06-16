@@ -84,7 +84,7 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-24">
+    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-5">
 
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600  transition-all duration-300">
@@ -133,7 +133,7 @@ export default function SettingsMenu() {
                     }}
                     className="flex items-center gap-1.5 bg-slate-800/60 hover:bg-slate-700/60 transition-colors px-2 py-1 rounded-md border border-slate-600/50 active:scale-95"
                   >
-                    <span className="text-[10px] font-mono font-bold text-slate-200 tracking-wider">ID: {profile.klinflowId}</span>
+                    <span className="text-[10px] font-mono font-bold text-slate-200 tracking-wider">KLIN_ID: {profile.klinflowId}</span>
                     <Copy className="w-3 h-3 text-slate-400" />
                   </button>
                 )}
@@ -187,13 +187,13 @@ export default function SettingsMenu() {
                     <p className="text-[9px] text-slate-300 font-bold capitalize tracking-wider truncate mt-0.5">Ledger</p>
                   </div>
                 </button>
-                <button onClick={() => navigate('/my-offers')} className="bg-slate-600 dark:bg-slate-800 p-3 rounded-2xl  dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
+                <button onClick={() => navigate('/my-trades')} className="bg-slate-600 dark:bg-slate-800 p-3 rounded-2xl  dark:border-slate-800 shadow-sm flex items-center gap-3 text-left active:scale-[0.98] transition-all">
                   <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-500 shrink-0">
                     <Briefcase className="w-5 h-5" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-semibold text-slate-200 dark:text-white truncate leading-tight">Trades</p>
-                    <p className="text-[9px] text-slate-300 font-bold capitalize tracking-wider truncate mt-0.5">Orders</p>
+                    <p className="text-xs font-semibold text-slate-200 dark:text-white truncate leading-tight">Trades & Offers</p>
+                    <p className="text-[9px] text-slate-300 font-bold capitalize tracking-wider truncate mt-0.5">Orders & Bids</p>
                   </div>
                 </button>
               </>

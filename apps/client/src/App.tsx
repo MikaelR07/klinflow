@@ -60,7 +60,7 @@ function MobileLayout() {
   const sellerNav = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/post-trade', icon: CircleFadingPlus, label: 'Sell' },
-    { path: '/my-trades', icon: Package, label: 'Trades' },
+    { path: '/my-trades', icon: Handshake, label: 'Trades' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 

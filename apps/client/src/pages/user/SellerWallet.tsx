@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
-import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
+
 import { walletService } from '@klinflow/core';
 import { SellerWalletStats } from '@klinflow/core/services/walletService';
 import { toast } from 'sonner';
@@ -44,18 +44,10 @@ export default function SellerWallet() {
     }
   }, [userId]);
 
-  // Use marketplace store or dummy data for stats
-  const receivedOrders = useMarketplaceStore(s => s.receivedOrders) || [];
-
-  const pendingSettlement = useMemo(() =>
-    receivedOrders
-      .filter((o: any) => o.status === 'accepted')
-      .reduce((acc, o: any) => acc + (parseFloat(String(o.totalPrice || 0)) || 0), 0)
-    , [receivedOrders]);
-
+  const totalEarningsLifetime = stats?.lifetime_earnings || 0;
+  const pendingSettlement = stats?.pending_settlement || 0;
   const totalEarningsThisMonth = stats?.earnings_this_month || 0;
-  const marketplaceEarnings = stats?.recent_trades || [];
-  const recentTransactions = stats?.recent_transactions || [];
+  const recentTrades = stats?.recent_trades || [];
   const topMaterials = stats?.top_materials || [];
 
   return (
@@ -87,7 +79,7 @@ export default function SellerWallet() {
               </p>
               <div className="flex items-center gap-2">
                 <h2 className="text-2xl sm:text-4xl font-semibold text-white tracking-tight leading-none">
-                  {balanceVisible ? `KSH ${cashBalance.toLocaleString()}.00` : '••••••••'}
+                  {balanceVisible ? `KSH ${Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '••••••••'}
                 </h2>
                 <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-1 hover:bg-white/10 rounded-lg transition-colors">
                   {balanceVisible ? <Eye className="w-5 h-5 text-emerald-100/80" /> : <EyeOff className="w-5 h-5 text-emerald-100/80" />}
@@ -107,7 +99,7 @@ export default function SellerWallet() {
             <div className="flex justify-between items-end">
               <div>
                 <p className="text-[9px] font-bold text-emerald-100 uppercase tracking-widest mb-1">Total Earnings</p>
-                <p className="text-sm font-bold text-white">KES {isLoadingStats ? '...' : totalEarningsThisMonth.toLocaleString()}</p>
+                <p className="text-sm font-bold text-white">KES {isLoadingStats ? '...' : totalEarningsLifetime.toLocaleString()}</p>
               </div>
               <BarChart2 className="w-5 h-5 text-[#c2ed7d]" />
             </div>
@@ -171,11 +163,11 @@ export default function SellerWallet() {
         </div>
       </div>
 
-      {/* ── MARKETPLACE EARNINGS ── */}
+      {/* ── RECENT TRANSACTIONS ── */}
       <div className="mx-1 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Marketplace Earnings</h3>
-          <button className="text-[10px] font-bold  tracking-wide">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Recent Transactions</h3>
+          <button onClick={() => navigate('/transactions-history')} className="text-[10px] font-bold text-[#c2ed7d] tracking-wide hover:underline">
             View all
           </button>
         </div>
@@ -191,13 +183,12 @@ export default function SellerWallet() {
           <div className="space-y-3">
             {isLoadingStats ? (
               <div className="py-4 text-center text-xs text-slate-500">Loading...</div>
-            ) : marketplaceEarnings.length === 0 ? (
-              <div className="py-4 text-center text-xs text-slate-500">No recent trades found.</div>
+            ) : recentTrades.length === 0 ? (
+              <div className="py-4 text-center text-xs text-slate-500">No recent transactions found.</div>
             ) : (
-              marketplaceEarnings.map(item => (
+              recentTrades.slice(0, 4).map(item => (
                 <div key={item.id} className="flex items-center text-xs">
                   <div className="flex-[2] flex items-center gap-2 text-slate-900 dark:text-slate-200 font-medium">
-
                     {item.material}
                   </div>
                   <div className="flex-[2] text-slate-500 dark:text-slate-400 truncate pr-2">
@@ -314,45 +305,6 @@ export default function SellerWallet() {
         </div>
       </div>
 
-      {/* ── RECENT TRANSACTIONS ── */}
-      <div className="mx-1 bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Recent Transactions</h3>
-          <button className="text-[10px] font-bold text-[#c2ed7d] tracking-wide">
-            View all
-          </button>
-        </div>
-
-        <div className="space-y-4">
-          {isLoadingStats ? (
-            <div className="py-2 text-center text-xs text-slate-500">Loading...</div>
-          ) : recentTransactions.length === 0 ? (
-            <div className="py-2 text-center text-xs text-slate-500">No recent transactions.</div>
-          ) : (
-            recentTransactions.map(tx => (
-              <div key={tx.id} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
-                    <Landmark className="w-5 h-5 text-emerald-500" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5 capitalize">{tx.method.replace('_', ' ')}</p>
-                    <p className="text-[10px] text-slate-400 font-medium">
-                      {new Date(tx.date).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-bold text-slate-900 dark:text-white mb-0.5">
-                    {tx.amount > 0 ? '+' : ''} KES {Math.abs(tx.amount).toLocaleString()}
-                  </p>
-                  <p className="text-[10px] font-medium text-emerald-500">{tx.status}</p>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
     </div>
   );
 }

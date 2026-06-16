@@ -136,9 +136,9 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
       
       const agentRate = agentStore.getEffectivePrice(materialSlug, subcategorySlug);
       
-      const materialValue = verificationData.weightKg * agentRate;
+      const materialValue = verificationData.estimatedValue ?? (verificationData.weightKg * agentRate);
       const netPayout = materialValue; 
-      const clientEarnedCash = materialValue * 0.90; // Resident receives 90%
+      const clientEarnedCash = materialValue * 0.90; // Resident receives 90% (10% platform fee)
       const clientGFP = Math.floor(verificationData.weightKg * 2);
 
       const isManual = verificationData.isManual || false;

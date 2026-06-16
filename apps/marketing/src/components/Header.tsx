@@ -50,13 +50,13 @@ export default function Header() {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled || mobileMenuOpen ? (isDarkMode ? 'bg-surface-950/95 border-white/5' : 'bg-white/95 border-slate-200') + ' backdrop-blur-xl border-b py-4' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isDarkMode ? 'bg-surface-950 border-white/5' : 'bg-surface-50 border-slate-200'} border-b ${scrolled || mobileMenuOpen ? 'py-4 shadow-sm' : 'py-5'}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
-            <Leaf className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-center group-hover:scale-110 transition-transform">
+            <img src="/landing-page/app-logo.webp" alt="Klinflow Logo" className="h-14 w-auto object-contain -my-2" />
           </div>
-          <span className={`text-xl font-bold tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Klinflow</span>
+          <span className={`text-2xl font-bold tracking-tighter ${isDarkMode ? 'text-green-400' : 'text-green-700'}`}>Klinflow</span>
         </Link>
         
         {/* Desktop Navigation */}

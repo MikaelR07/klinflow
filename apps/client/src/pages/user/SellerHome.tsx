@@ -40,7 +40,8 @@ import {
   BrainCog,
   BrainCircuit,
   TrainFront,
-  CircleFadingPlus
+  CircleFadingPlus,
+  BrainCircuitIcon
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -49,6 +50,7 @@ import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 import { supabase } from '@klinflow/supabase';
 import { walletService } from '@klinflow/core';
+import type { SellerWalletStats } from '@klinflow/core/services/walletService';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { OptimizedImage } from '@klinflow/ui';
 import { SkeletonCard } from '@klinflow/ui/components/Skeletons';
@@ -109,6 +111,7 @@ export default function SellerHome() {
   const [isWithdrawing, setIsWithdrawing] = useState(false);
   const [showPushPrompt, setShowPushPrompt] = useState(false);
   const [cashBalance, setCashBalance] = useState(0);
+  const [stats, setStats] = useState<SellerWalletStats | null>(null);
 
   useEffect(() => {
     fetchBookings();
@@ -124,6 +127,11 @@ export default function SellerHome() {
       walletService.getWalletDetails(profile.id).then(data => {
         if (data) {
           setCashBalance(Number(data.cash_balance || 0));
+        }
+      });
+      walletService.getSellerDashboard(profile.id).then(data => {
+        if (data) {
+          setStats(data);
         }
       });
       // Realtime subscription handled globally by App.tsx
@@ -191,7 +199,7 @@ export default function SellerHome() {
     .filter(b => b.status !== 'completed' && b.status !== 'cancelled')
     .reduce((acc, b: any) => acc + (parseFloat(String(b.totalPrice || b.totalPrice || 0)) || 0), 0);
 
-  const inEscrowAmount = activeBookingsValue || acceptedOffersValue;
+  const inEscrowAmount = stats?.pending_settlement || 0;
 
   const recentBookings = [...bookings]
     .filter((b: any) => {
@@ -270,7 +278,7 @@ export default function SellerHome() {
                     <Wallet className="w-3 h-3" /> Seller Wallet
                   </p>
                   <h2 className="text-2xl sm:text-5xl font-semibold text-white tracking-tighter leading-none">
-                    KSh {cashBalance.toLocaleString()}.00
+                    KSh {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </h2>
 
                 </div>
@@ -359,7 +367,7 @@ export default function SellerHome() {
             </button>
 
             <button
-              onClick={() => navigate('/my-offers')}
+              onClick={() => navigate('/my-trades')}
               className=" dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.98] transition-all group"
             >
               <div className="relative">
@@ -373,7 +381,7 @@ export default function SellerHome() {
                 </div>
               </div>
               <div className="text-center mt-auto">
-                <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Offers</p>
+                <p className="text-[10px] font-semibold  dark:text-white capitalize tracking-widest leading-none">Trades & Offers</p>
               </div>
             </button>
 
@@ -541,7 +549,7 @@ export default function SellerHome() {
         className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 border-1 border-white dark:border-slate-800"
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
-        <TrainFront className="w-6 h-6 text-white" />
+        <BrainCircuit className="w-6 h-6 text-white" />
       </motion.button>
     </div >
   );

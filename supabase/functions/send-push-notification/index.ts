@@ -110,12 +110,17 @@ serve(async (req) => {
     // ── DISPATCH PUSHES ──
     const results = await Promise.all(subs.map(async (sub) => {
       try {
+        let cleanBody = notification.body || '';
+        if (cleanBody.includes('===METADATA===')) {
+          cleanBody = cleanBody.split('===METADATA===')[0].trim();
+        }
+
         await webpush.sendNotification({
           endpoint: sub.endpoint,
           keys: { auth: sub.auth, p256dh: sub.p256dh }
         }, JSON.stringify({
           title: notification.title,
-          body: notification.body,
+          body: cleanBody,
           icon: '/logo192.png',
           badge: '/logo192.png',
           sound: 'default',

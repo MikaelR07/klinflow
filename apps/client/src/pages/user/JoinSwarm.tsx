@@ -22,6 +22,7 @@ export default function JoinSwarm() {
   const [photos, setPhotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [showWarning, setShowWarning] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -155,11 +156,27 @@ export default function JoinSwarm() {
           <input
             type="number"
             value={targetWeight}
-            onChange={(e) => setTargetWeight(e.target.value)}
-            placeholder="e.g. 50"
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              const remaining = swarm ? Math.max(0, swarm.target_weight - swarm.current_weight) : 0;
+              if (val > remaining) {
+                setTargetWeight(remaining.toString());
+                setShowWarning(true);
+              } else {
+                setTargetWeight(e.target.value);
+                setShowWarning(false);
+              }
+            }}
+            placeholder={`e.g. ${swarm ? Math.max(0, swarm.target_weight - swarm.current_weight) : 50}`}
             min={1}
+            max={swarm ? Math.max(0, swarm.target_weight - swarm.current_weight) : undefined}
             className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300"
           />
+          {showWarning && (
+            <p className="text-[10px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-500/10 p-2 rounded-lg mt-2">
+              Note: You can only pledge up to the remaining {swarm ? Math.max(0, swarm.target_weight - swarm.current_weight) : 0} KG needed for this swarm.
+            </p>
+          )}
         </div>
 
         {/* Description */}

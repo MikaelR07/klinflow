@@ -30,6 +30,7 @@ import {
   Leaf,
   BrainCog,
   TrainFront,
+  BrainCircuit,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookingStore } from "@klinflow/core/stores/bookingStore";
@@ -283,7 +284,7 @@ export default function UserHome() {
                   <Wallet className="w-3 h-3" /> Wallet Balance
                 </p>
                 <h2 className="text-2xl sm:text-5xl font-semibold  text-white tracking-tighter leading-none">
-                  KSh {walletBalance.toLocaleString()}.00
+                  KSh {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </h2>
               </div>
 
@@ -584,7 +585,7 @@ export default function UserHome() {
         className="fixed bottom-24 right-6 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 border-1 border-white dark:border-slate-800"
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
-        <TrainFront className="w-6 h-6 text-white" />
+        <BrainCircuit className="w-6 h-6 text-white" />
       </motion.button>
     </div>
   );

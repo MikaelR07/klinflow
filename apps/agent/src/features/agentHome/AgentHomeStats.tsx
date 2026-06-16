@@ -2,9 +2,11 @@
  * AgentHome Stats & Quick Actions
  * Extracted from AgentHome.tsx
  */
+import { useState, useEffect } from 'react';
 import {
   Handshake, Truck, Star, Zap, Briefcase, Receipt, PlusSquare
 } from 'lucide-react';
+import { supabase } from '@klinflow/supabase';
 import type { AgentEarningsData } from './agentHome.types';
 
 interface AgentHomeStatsProps {
@@ -18,6 +20,69 @@ interface AgentHomeStatsProps {
 export default function AgentHomeStats({
   profile, earnings, performanceChange, acceptedTradesCount, navigate
 }: AgentHomeStatsProps) {
+  const [newPickupsCount, setNewPickupsCount] = useState(0);
+  const [newBidsCount, setNewBidsCount] = useState(0);
+  const [newRfqsCount, setNewRfqsCount] = useState(0);
+
+  useEffect(() => {
+    if (!profile?.id) return;
+
+    const checkNewItems = async () => {
+      const lastPickups = localStorage.getItem(`last_viewed_pickups_${profile.id}`) || '2000-01-01T00:00:00Z';
+      const lastBids = localStorage.getItem(`last_viewed_bids_${profile.id}`) || '2000-01-01T00:00:00Z';
+      const lastRfqs = localStorage.getItem(`last_viewed_rfqs_${profile.id}`) || '2000-01-01T00:00:00Z';
+
+      const { count: pickups } = await supabase
+        .from('bookings')
+        .select('*', { count: 'exact', head: true })
+        .eq('agent_id', profile.id)
+        .in('status', ['confirmed', 'scheduled', 'accepted', 'in_progress', 'in-progress', 'picked_up'])
+        .or('is_market_trade.is.null,is_market_trade.eq.false')
+        .gt('updated_at', lastPickups);
+      setNewPickupsCount(pickups || 0);
+
+      const { count: bids } = await supabase
+        .from('bookings')
+        .select('*', { count: 'exact', head: true })
+        .eq('agent_id', profile.id)
+        .or('is_market_trade.eq.true,booking_type.eq.marketplace_pickup')
+        .neq('status', 'completed')
+        .neq('status', 'cancelled')
+        .gt('created_at', lastBids);
+      setNewBidsCount(bids || 0);
+
+      const { count: rfqs } = await supabase
+        .from('rfqs')
+        .select('*', { count: 'exact', head: true })
+        .eq('buyer_id', profile.id)
+        .eq('status', 'fulfilled')
+        .gt('updated_at', lastRfqs);
+      setNewRfqsCount(rfqs || 0);
+    };
+
+    checkNewItems();
+    const interval = setInterval(checkNewItems, 30000);
+    return () => clearInterval(interval);
+  }, [profile?.id]);
+
+  const handlePickupsClick = () => {
+    localStorage.setItem(`last_viewed_pickups_${profile?.id}`, new Date().toISOString());
+    setNewPickupsCount(0);
+    navigate('/jobs');
+  };
+
+  const handleBidsClick = () => {
+    localStorage.setItem(`last_viewed_bids_${profile?.id}`, new Date().toISOString());
+    setNewBidsCount(0);
+    navigate('/trades');
+  };
+
+  const handleRfqsClick = () => {
+    localStorage.setItem(`last_viewed_rfqs_${profile?.id}`, new Date().toISOString());
+    setNewRfqsCount(0);
+    navigate('/rfqs');
+  };
+
   return (
     <>
       {/* ── PERFORMANCE CARD ── */}
@@ -66,7 +131,7 @@ export default function AgentHomeStats({
               <div className="w-full flex justify-end">
                 <button
                   onClick={() => navigate('/deposit')}
-                  className="bg-primary text-white px-8 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all hover:bg-slate-50 whitespace-nowrap"
+                  className="bg-primary text-white px-8 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all  whitespace-nowrap"
                 >
                   Deposit
                 </button>
@@ -134,38 +199,36 @@ export default function AgentHomeStats({
         </p>
         <div className="grid grid-cols-4 gap-1">
           <button
-            onClick={() => navigate('/jobs')}
-            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+            onClick={handlePickupsClick}
+            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group relative"
           >
+            {newPickupsCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center shadow-sm z-10">
+                {newPickupsCount > 99 ? '99+' : newPickupsCount}
+              </span>
+            )}
             <div className="w-10 h-10 shrink-0 bg-blue-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Briefcase className="w-5 h-5" />
             </div>
             <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
-              View Jobs
+              View Pickups
             </p>
           </button>
 
           <button
-            onClick={() => navigate('/trades')}
-            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+            onClick={handleBidsClick}
+            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group relative"
           >
+            {newBidsCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center shadow-sm z-10">
+                {newBidsCount > 99 ? '99+' : newBidsCount}
+              </span>
+            )}
             <div className="w-10 h-10 shrink-0 bg-emerald-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Handshake className="w-5 h-5" />
             </div>
             <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
-              Accepted Bids
-            </p>
-          </button>
-
-          <button
-            onClick={() => navigate('/rfqs')}
-            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
-          >
-            <div className="w-10 h-10 shrink-0 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Receipt className="w-5 h-5" />
-            </div>
-            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
-              View Quotes
+              Market Bids
             </p>
           </button>
 
@@ -178,6 +241,23 @@ export default function AgentHomeStats({
             </div>
             <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
               Create RFQ
+            </p>
+          </button>
+
+          <button
+            onClick={handleRfqsClick}
+            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group relative"
+          >
+            {newRfqsCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center shadow-sm z-10">
+                {newRfqsCount > 99 ? '99+' : newRfqsCount}
+              </span>
+            )}
+            <div className="w-10 h-10 shrink-0 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Receipt className="w-5 h-5" />
+            </div>
+            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
+              View RFQs
             </p>
           </button>
         </div>

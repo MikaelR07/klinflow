@@ -140,6 +140,7 @@ BEGIN
     FROM public.profiles p
     WHERE (p.phone = p_search_query OR p.klinflow_id = p_search_query)
     AND p.id != auth.uid() -- exclude self
+    AND p.role != 'agent'  -- exclude agents
     LIMIT 1;
 END;
 $$;
@@ -183,6 +184,12 @@ BEGIN
     PERFORM 1 FROM public.user_wallets WHERE user_id = p_recipient_id;
     IF NOT FOUND THEN
         RAISE EXCEPTION 'Recipient wallet not found';
+    END IF;
+
+    -- Ensure receiver is not an agent
+    PERFORM 1 FROM public.profiles WHERE id = p_recipient_id AND role = 'agent';
+    IF FOUND THEN
+        RAISE EXCEPTION 'Cannot transfer points to agents';
     END IF;
 
     -- Lock sender wallet
@@ -240,8 +247,8 @@ BEGIN
     -- Send notifications
     INSERT INTO public.notifications (target_user, target_role, type, title, body)
     VALUES 
-    (v_sender_id, 'user', 'transfer', 'Transfer Successful', 'You successfully sent ' || p_amount || ' points. Ref: ' || v_ref_number),
-    (p_recipient_id, 'user', 'transfer', 'Points Received!', 'You received ' || p_amount || ' points. Ref: ' || v_ref_number);
+    (v_sender_id, 'user', 'success', 'Transfer Successful', 'You successfully sent ' || p_amount || ' points. Ref: ' || v_ref_number),
+    (p_recipient_id, 'user', 'success', 'Points Received!', 'You received ' || p_amount || ' points. Ref: ' || v_ref_number);
 
     RETURN jsonb_build_object(
         'success', true, 

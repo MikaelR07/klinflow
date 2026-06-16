@@ -98,7 +98,7 @@ export default function NotificationsFeed() {
                   </span>
                 </div>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed pr-2">{n.body}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed pr-2">{n.content}</p>
             </div>
             {!n.read && (
               <div className="w-2 h-2 rounded-full bg-primary mt-2 shrink-0 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />

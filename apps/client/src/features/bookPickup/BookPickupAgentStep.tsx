@@ -2,8 +2,9 @@
  * BookPickup Step 2 — Agent Map, Fleet Drill-Down, Time Selection
  * Extracted from BookPickup.tsx for modularity.
  */
+import { useState } from 'react';
 import {
-  Zap, Star, ChevronRight, X, Clock, Truck, AlertCircle
+  Zap, Star, ChevronRight, X, Clock, Truck, AlertCircle, Search
 } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { motion } from 'framer-motion';
@@ -39,6 +40,20 @@ export default function BookPickupAgentStep({
   isManualTime, setIsManualTime,
   customDate, setCustomDate, customTime, setCustomTime
 }: BookPickupAgentStepProps) {
+  const [agentSearchQuery, setAgentSearchQuery] = useState('');
+  const agentSearchResults = agentSearchQuery.length >= 2
+    ? liveAgents.filter(a => {
+        const q = agentSearchQuery.toLowerCase();
+        return (
+          a.name?.toLowerCase().includes(q) ||
+          a.companyName?.toLowerCase().includes(q) ||
+          a.fleetInviteCode?.toLowerCase().includes(q) ||
+          a.phone?.toLowerCase().includes(q) ||
+          a.klinflowId?.toLowerCase().includes(q)
+        );
+      }).slice(0, 5)
+    : [];
+
   return (
     <motion.div key="p2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
       <div className="space-y-4">
@@ -181,30 +196,54 @@ export default function BookPickupAgentStep({
         )}
 
         {/* Preferred Agent Search */}
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mt-3.5">
-          <h2 className="text-[10px] font-semibold capitalize tracking-widest text-slate-400 mb-2.5">Search by Name or Invite Code (Optional)</h2>
-          <input
-            type="text"
-            placeholder="e.g. Klinflow Hub, Agent John..."
-            className="w-full bg-slate-50 dark:bg-slate-900 py-2.5 px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all"
-            onChange={(e) => {
-              const query = e.target.value.toLowerCase();
-              if (!query) return;
-              const match = liveAgents.find(a =>
-                a.name?.toLowerCase().includes(query) ||
-                a.companyName?.toLowerCase().includes(query) ||
-                a.fleetInviteCode?.toLowerCase() === query
-              );
-              if (match) {
-                if (match.agentAccountType === 'company_admin') {
-                  setSelectedCompanyId(match.id);
-                  setSelectedAgent(null);
-                } else {
-                  setSelectedAgent(match);
-                }
-              }
-            }}
-          />
+        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mt-3.5 relative">
+          <h2 className="text-[10px] font-semibold capitalize tracking-widest text-slate-400 mb-2.5">Search by Name, Phone, or Klin ID (Optional)</h2>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+            <input
+              type="text"
+              value={agentSearchQuery}
+              placeholder="e.g. KLN-A1B2C3, 07xx..., Agent John"
+              className="w-full bg-slate-50 dark:bg-slate-900 py-2.5 pl-9 pr-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all"
+              onChange={(e) => setAgentSearchQuery(e.target.value)}
+            />
+          </div>
+          {agentSearchResults.length > 0 && (
+            <div className="mt-2 space-y-1.5 max-h-48 overflow-y-auto">
+              {agentSearchResults.map(agent => (
+                <button
+                  key={agent.id}
+                  onClick={() => {
+                    if (agent.agentAccountType === 'company_admin') {
+                      setSelectedCompanyId(agent.id);
+                      setSelectedAgent(null);
+                    } else {
+                      setSelectedAgent(agent);
+                    }
+                    setAgentSearchQuery('');
+                    toast.success(`${agent.name || agent.companyName || 'Agent'} selected`);
+                  }}
+                  className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 hover:border-primary/50 transition-all text-left"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-sm shrink-0">
+                    {agent.agentAccountType === 'company_admin' ? '🏢' : '🚛'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">
+                      {agent.agentAccountType === 'company_admin' ? (agent.companyName || agent.name) : (agent.name || 'Agent')}
+                    </p>
+                    <p className="text-[10px] font-medium text-slate-400 truncate">
+                      {agent.klinflowId || agent.phone || 'Available'}
+                    </p>
+                  </div>
+                  <Star className="w-3 h-3 fill-emerald-500 text-emerald-500 shrink-0" />
+                </button>
+              ))}
+            </div>
+          )}
+          {agentSearchQuery.length >= 2 && agentSearchResults.length === 0 && (
+            <p className="text-[10px] font-semibold text-slate-400 mt-2 text-center py-2">No agents found matching "{agentSearchQuery}"</p>
+          )}
         </div>
       </div>
 

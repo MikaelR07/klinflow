@@ -82,8 +82,8 @@ export default function AgentHome() {
       const { data: pickupData } = await supabase
         .from('fulfillment_orders')
         .select(`
-          id, status, pickup_address, created_at,
-          rfq:rfqs(category, material_grade)
+          id, status, pickup_address, created_at, actual_weight,
+          rfq:rfqs(category, material_grade, requested_weight)
         `)
         .eq('assigned_agent_id', profile.id)
         .not('status', 'in', '(completed,cancelled,delivered,disputed,pickup_completed)')

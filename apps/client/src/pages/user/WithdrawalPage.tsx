@@ -102,7 +102,7 @@ export default function WithdrawalPage() {
           <div className="space-y-4 animate-slide-up">
             <div className="card p-6 bg-primary dark:bg-primary text-white border-none rounded-xl">
               <p className="text-xs font-semibold text-emerald-100 capitalize tracking-[0.2em] mb-1">Available for Withdrawal</p>
-              <h2 className="text-xl font-semibold text-white tracking-tight">KSh {cashBalance.toLocaleString()}.00</h2>
+              <h2 className="text-xl font-semibold text-white tracking-tight">KSh {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
               <div className="flex items-center gap-2 mt-4 text-xs font-semibold bg-white/10 w-fit px-3 py-1.5 rounded-full">
                 <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
               </div>

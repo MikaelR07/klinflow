@@ -360,6 +360,7 @@ export default function NavigateJobPage() {
                   p_payout_amount: activeJob.total_price || activeJob.pay || 0
                 });
                 if (error) throw error;
+                await useAuthStore.getState().fetchProfile();
                 toast.success("Verification Complete!", { description: "Funds transferred to seller." });
                 navigate('/trades');
                 return;
@@ -370,6 +371,7 @@ export default function NavigateJobPage() {
                 ...data,
                 ownerId: activeJob.userId || activeJob.user_id
               });
+              await useAuthStore.getState().fetchProfile();
               toast.success("Verification Complete!", { description: "Moving to next mission." });
               navigate('/jobs');
             }

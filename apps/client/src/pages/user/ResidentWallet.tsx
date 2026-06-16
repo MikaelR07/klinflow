@@ -26,15 +26,21 @@ export default function ResidentWallet() {
   const [balanceVisible, setBalanceVisible] = useState(true);
   const [gfpBalance, setGfpBalance] = useState(0);
   const [cashBalance, setCashBalance] = useState(0);
+  const [walletStats, setWalletStats] = useState<any>(null);
+  const [walletTxns, setWalletTxns] = useState<any[]>([]);
 
   // Fetch real wallet balance and bookings
   useEffect(() => {
     if (userId) {
       walletService.getWalletDetails(userId).then(data => {
         if (data) {
-          setGfpBalance(data.available_points);
-          setCashBalance(data.cash_balance);
+          setGfpBalance(data.available_points || 0);
+          setCashBalance(data.cash_balance || 0);
+          setWalletStats(data);
         }
+      });
+      walletService.getWalletTransactions(userId).then(data => {
+        setWalletTxns(data || []);
       });
       fetchBookings();
     }
@@ -60,15 +66,8 @@ export default function ResidentWallet() {
     [bookings]
   );
 
-  const kgRecoveredThisMonth = useMemo(() =>
-    thisMonthPickups.reduce((sum: number, b: any) => sum + (Number(b.actualWeightKg) || Number(b.weightKg) || 0), 0),
-    [thisMonthPickups]
-  );
-
-  const totalEarnedThisMonth = useMemo(() =>
-    thisMonthPickups.reduce((sum: number, b: any) => sum + (Number(b.payout) || Number(b.agreedPrice) || 0), 0),
-    [thisMonthPickups]
-  );
+  const kgRecoveredThisMonth = walletStats?.kg_recovered_this_month || 0;
+  const totalEarnedThisMonth = walletStats?.savings_this_month || 0;
 
   const sparklineData = useMemo(() => {
     const days = 10;
@@ -81,7 +80,7 @@ export default function ResidentWallet() {
       const diffTime = today.getTime() - date.getTime();
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
       if (diffDays >= 0 && diffDays < days) {
-        data[days - 1 - diffDays] += (Number(b.payout) || Number(b.agreedPrice) || 0);
+        data[days - 1 - diffDays] += (Number(b.totalPrice) || 0);
       }
     });
 
@@ -89,26 +88,18 @@ export default function ResidentWallet() {
     return data.map(val => Math.max((val / max) * 100, 5));
   }, [completedBookings]);
 
-  // Transactions derived from bookings
+  // True Transactions from ledger
   const transactions = useMemo(() => {
-    return completedBookings
-      .map((b: any) => {
-        const earnings = Number(b.payout) || Number(b.agreedPrice) || 0;
-        return {
-          id: b.id,
-          type: earnings > 0 ? 'earned' : 'reward',
-          label: `${b.wasteType || 'Recycling'} Pickup`,
-          amount: earnings,
-          date: new Date(b.completedAt || b.updatedAt || b.createdAt),
-          status: 'completed' as const,
-          reference: `#PKP-${String(b.id).slice(0, 4).toUpperCase()}`,
-          wasteType: b.wasteType,
-          weight: Number(b.actualWeightKg) || Number(b.weightKg) || 0,
-        };
-      })
-      .filter(t => t.amount > 0)
-      .sort((a, b) => b.date.getTime() - a.date.getTime());
-  }, [completedBookings]);
+    return walletTxns.map((t: any) => ({
+      id: t.id,
+      type: t.amount > 0 ? 'earned' : 'reward',
+      label: t.metadata?.type === 'material_buyback' ? 'Recycling Pickup' : 'Wallet Transaction',
+      amount: t.amount,
+      date: new Date(t.created_at),
+      status: 'completed' as const,
+      reference: `TRX-${String(t.id).substring(0, 6).toUpperCase()}`
+    })).sort((a, b) => b.date.getTime() - a.date.getTime());
+  }, [walletTxns]);
 
   // Impact level calculation
   const getImpactLevel = () => {
@@ -122,7 +113,7 @@ export default function ResidentWallet() {
   const progressPercent = Math.min(((gfpBalance || 0) / impact.nextThreshold) * 100, 100);
 
   return (
-    <div className="space-y-4 pb-8">
+    <div className="space-y-4 pb-2">
 
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-600">
@@ -158,7 +149,7 @@ export default function ResidentWallet() {
             </p>
             <div className="flex items-center gap-2 mb-1.5">
               <h2 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight leading-none">
-                {balanceVisible ? `KSH ${cashBalance.toLocaleString()}.00` : '••••••••'}
+                {balanceVisible ? `KSH ${Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '••••••••'}
               </h2>
               <button
                 onClick={() => setBalanceVisible(!balanceVisible)}
@@ -335,7 +326,7 @@ export default function ResidentWallet() {
           </p>
 
           <p className="text-xl font-black text-slate-900 dark:text-white mb-1.5">
-            KES {totalEarnedThisMonth.toLocaleString()}.00
+            KES {Number(totalEarnedThisMonth).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
 
           <div className="flex items-center gap-1.5">
@@ -448,7 +439,7 @@ export default function ResidentWallet() {
             </h3>
 
             <button
-              onClick={() => navigate('/wallet-history')}
+              onClick={() => navigate('/transactions-history')}
               className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
             >
               View History
@@ -461,7 +452,7 @@ export default function ResidentWallet() {
         <div className="divide-y divide-slate-100 dark:divide-slate-800">
           <AnimatePresence mode="popLayout">
             {transactions.length > 0 ? (
-              transactions.slice(0, 6).map((txn, i) => (
+              transactions.slice(0, 4).map((txn, i) => (
                 <motion.div
                   key={txn.id}
                   initial={{ opacity: 0, x: -10 }}
@@ -496,13 +487,13 @@ export default function ResidentWallet() {
                   </div>
                   <div className="text-right shrink-0 ml-3">
                     <p className={`text-sm font-bold ${txn.type === 'earned'
-                      ? 'text-red-500'
-                      : 'text-emerald-600 dark:text-emerald-400'
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-purple-600 dark:text-purple-400'
                       }`}>
-                      {txn.type === 'earned' ? '- ' : '+ '}KES {txn.amount.toLocaleString()}.00
+                      + KES {Number(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </p>
                     <p className="text-[9px] font-semibold text-slate-400 mt-0.5 capitalize">
-                      {txn.type === 'earned' ? 'Paid' : 'Credited'}
+                      {txn.type === 'earned' ? 'Received' : 'Credited'}
                     </p>
                   </div>
                 </motion.div>

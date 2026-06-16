@@ -39,34 +39,84 @@ interface AIScannerModalProps {
 }
 
 export default function AIScannerModal({ isOpen, onClose, onVerify, booking, role = 'agent' }: AIScannerModalProps) {
-  const { categories } = useServiceStore();
+  const { categories, materialPrices } = useServiceStore();
   const { agentConfig, getEffectivePrice } = useAgentStore();
   const { profile } = useAuthStore();
   const [step, setStep] = useState('result'); 
   const [grade, setGrade] = useState(null);
 
-  // Derive agent's custom catalog if available
-  const customCatalog = (profile as any)?.service_profile?.custom_services || [];
-  const hasCustomCatalog = customCatalog.length > 0;
+  const uiCategories = React.useMemo(() => {
+    const serviceProfile = (profile as any)?.service_profile;
+    const customServices = serviceProfile?.custom_services || [];
+    
+    let acceptedSlugs: string[] = [];
+    if (serviceProfile?.categories && Array.isArray(serviceProfile.categories)) {
+      acceptedSlugs = serviceProfile.categories.filter((c: any) => c.enabled).map((c: any) => c.name.toLowerCase());
+    } else if (agentConfig?.accepted_materials && Array.isArray(agentConfig.accepted_materials)) {
+      acceptedSlugs = agentConfig.accepted_materials.map((m: string) => m.toLowerCase());
+    }
 
-  // Map custom catalog to standard format for the UI
-  const uiCategories = hasCustomCatalog ? customCatalog.map((cat: any) => ({
-    id: cat.category.toLowerCase(),
-    label: `${cat.icon} ${cat.category}`,
-    subcategories: (cat.subcategories || []).map((sub: any) => ({
-      id: sub.name.toLowerCase().replace(/\s+/g, '_'),
-      label: sub.name,
-      rate: sub.rate_per_kg
-    }))
-  })) : WASTE_CATEGORIES;
+    const customSlugs = customServices.map((c: any) => c.category.toLowerCase().replace(/\s+/g, '_'));
+    const allSlugs = [...new Set([...acceptedSlugs, ...customSlugs])];
+
+    if (!agentConfig && !serviceProfile) return []; 
+    if (allSlugs.length === 0) return [];
+
+    const filteredDB = categories.filter((cat: any) => allSlugs.includes(cat.slug) || allSlugs.includes(cat.id));
+    
+    const customCats = customServices.map((c: any) => ({
+      id: c.category.toLowerCase().replace(/\s+/g, '_'),
+      label: c.category,
+      icon: c.icon || '📦',
+      slug: c.category.toLowerCase().replace(/\s+/g, '_')
+    }));
+    
+    const newCustom = customCats.filter((cc: any) => !filteredDB.some((db: any) => db.id === cc.id || db.label.toLowerCase() === cc.label.toLowerCase()));
+    
+    return [...filteredDB, ...newCustom];
+  }, [categories, agentConfig, profile]);
   
-  // Material State
-  const initialMaterial = (booking?.material || booking?.wasteType || (hasCustomCatalog ? uiCategories[0].id : 'recyclable')).toLowerCase();
+  const initialMaterial = (booking?.material || booking?.wasteType || uiCategories[0]?.id || 'recyclable').toLowerCase();
   const [material, setMaterial] = useState(initialMaterial);
   
-  const currentCategory = uiCategories.find((c: any) => c.id === material) || uiCategories[0];
-  const initialSub = currentCategory?.subcategories?.[0]?.id || 'pet';
+  const currentCategory = uiCategories.find((c: any) => c.id === material || (c as any).slug === material) || uiCategories[0];
+
+  const activeSubcategories = React.useMemo(() => {
+    if (!currentCategory) return [];
+    
+    const customServices = (profile as any)?.service_profile?.custom_services || [];
+    const customMatch = customServices.find((c: any) => 
+      c.category.toLowerCase().replace(/\s+/g, '_') === currentCategory.id || 
+      c.category.toLowerCase() === currentCategory.label.toLowerCase()
+    );
+
+    if (customMatch && customMatch.subcategories?.length > 0) {
+      return customMatch.subcategories.map((s: any) => ({
+        id: s.name.toLowerCase().replace(/\s+/g, '_'),
+        label: s.name,
+        rate: s.rate_per_kg
+      }));
+    }
+
+    return materialPrices
+      .filter(m => m.category === currentCategory.id || m.category === (currentCategory as any).slug || m.category === currentCategory.label)
+      .map(m => ({
+        id: m.material_name.toLowerCase().replace(/\s+/g, '_'),
+        label: m.material_name,
+        rate: m.price_per_kg
+      }));
+  }, [currentCategory, materialPrices, profile]);
+
+  const initialSub = activeSubcategories[0]?.id || 'pet';
   const [subcategory, setSubcategory] = useState(initialSub);
+
+  React.useEffect(() => {
+    if (activeSubcategories.length > 0) {
+      if (!activeSubcategories.some((s: any) => s.id === subcategory)) {
+        setSubcategory(activeSubcategories[0].id);
+      }
+    }
+  }, [activeSubcategories]);
 
   const [weight, setWeight] = useState(booking?.actual_weight_kg || booking?.weightKg || booking?.bags || 10); // weight in KG
   
@@ -93,11 +143,8 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
   
   // Pricing logic
   const getRate = () => {
-    if (hasCustomCatalog) {
-      const cat = uiCategories.find((c: any) => c.id === material);
-      const sub = cat?.subcategories?.find((s: any) => s.id === subcategory);
-      return sub?.rate || 10;
-    }
+    const sub = activeSubcategories.find((s: any) => s.id === subcategory);
+    if (sub && sub.rate > 0) return sub.rate;
     return getEffectivePrice(material, subcategory);
   };
 
@@ -235,7 +282,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
     <div className="fixed inset-0 z-[2000] flex items-end justify-center p-0 md:p-4">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
       
-      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-[3rem] md:rounded-[3rem] shadow-2xl overflow-hidden animate-slide-up pb-[env(safe-area-inset-bottom)]">
+      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-[1rem] md:rounded-[1rem] shadow-2xl overflow-hidden animate-slide-up pb-[env(safe-area-inset-bottom)]">
         <div className="p-6 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
@@ -251,9 +298,9 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
           </button>
         </div>
 
-        <div className="max-h-[70vh] overflow-y-auto py-6">
+        <div className="max-h-[70vh] overflow-y-auto py-2">
           {step === 'result' && (
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div className="p-6 bg-slate-50 dark:bg-slate-800/40 border-y border-slate-100 dark:border-slate-800">
                 <div className="grid grid-cols-1 gap-4">
                   <div className="flex gap-4">
@@ -262,10 +309,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                       <select 
                         value={material}
                         onChange={(e) => {
-                          const newCat = e.target.value;
-                          setMaterial(newCat);
-                          const catData = getCategoryBySlug(newCat);
-                          if (catData?.subcategories?.length) setSubcategory((catData as any).subcategories[0].id);
+                          setMaterial(e.target.value);
                         }}
                         className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-black dark:text-white outline-none focus:ring-2 focus:ring-primary/20"
                       >
@@ -281,7 +325,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                         onChange={(e) => setSubcategory(e.target.value)}
                         className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-black dark:text-white outline-none focus:ring-2 focus:ring-primary/20"
                       >
-                        {currentCategory?.subcategories?.map((sub: any) => (
+                        {activeSubcategories.map((sub: any) => (
                           <option key={sub.id} value={sub.id}>{sub.label} {sub.rate ? `(KSh ${sub.rate})` : ''}</option>
                         ))}
                       </select>
@@ -307,7 +351,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
               </div>
 
               {/* Digital ID & AI Insight Display */}
-              <div className="mx-6 space-y-3">
+              <div className="mx-4 space-y-3">
                 <div className="p-4 bg-white dark:bg-black rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none flex items-center justify-between group overflow-hidden relative">
                    <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl -mr-5 -mt-5" />
                    <div className="flex items-center gap-3 relative z-10">
@@ -357,11 +401,12 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                   )}
                 </div>
                 
-                <div className="space-y-4">
-                  <div className="flex justify-between items-start text-sm font-bold">
+                <div className="space-y-3">
+                  {/* Total Value (White) */}
+                  <div className="flex justify-between items-start text-sm font-bold border-b border-white/10 pb-3">
                     <div className="flex flex-col pt-1">
-                       <span className="text-emerald-300 uppercase text-xs tracking-widest">{isMarketTrade ? 'Agreed Deal Value' : 'Material Payout'}</span>
-                      <span className="text-xs text-white/40 font-black uppercase tracking-tighter mt-1">
+                       <span className="text-white uppercase text-xs tracking-widest">{isMarketTrade ? 'Agreed Deal Value' : 'Total Material Value'}</span>
+                      <span className="text-[10px] text-white/40 font-black uppercase tracking-tighter mt-0.5">
                         {isCounterOffer ? 'Counter-Offer Mode' : isMarketTrade ? 'Marketplace Handshake' : `(${weight}kg @ KSh ${agentRate}/kg)`}
                       </span>
                     </div>
@@ -372,24 +417,36 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                           type="number"
                           value={customPayoutAmount === null ? basePayoutAmount : customPayoutAmount}
                           onChange={(e) => setCustomPayoutAmount(Number(e.target.value))}
-                          className="w-32 bg-slate-900 border border-emerald-500/50 rounded-xl px-3 py-1.5 text-right text-emerald-400 font-mono text-xl outline-none focus:border-emerald-400 shadow-inner"
+                          className="w-32 bg-slate-900 border border-emerald-500/50 rounded-xl px-3 py-1 text-right text-white font-mono text-xl outline-none focus:border-emerald-400 shadow-inner"
                           autoFocus
                         />
                       ) : (
-                        <span className={`font-mono text-2xl mt-0.5 ${isCounterOffer ? 'text-amber-400' : 'text-emerald-400'}`}>
-                          +KSh {(payoutAmount * 0.90).toLocaleString()}
+                        <span className="font-mono text-xl mt-0.5 text-white">
+                          KSh {payoutAmount.toLocaleString()}
                         </span>
                       )}
                     </div>
                   </div>
                   
-                  <div className="flex justify-between items-start text-sm font-bold pt-2">
+                  {/* Platform Fee (Red) */}
+                  <div className="flex justify-between items-center text-sm font-bold border-b border-white/10 pb-3">
                     <div className="flex flex-col">
-                       <span className="text-rose-400 uppercase text-xs tracking-widest">Platform Commission</span>
-                       <span className="text-xs text-white/40 font-black uppercase tracking-tighter mt-1">(10% System Fee)</span>
+                       <span className="text-rose-400 uppercase text-[11px] tracking-widest">Platform Commission</span>
+                       <span className="text-[10px] text-white/40 font-black uppercase tracking-tighter">(10% System Fee)</span>
                     </div>
-                    <span className="font-mono text-lg text-rose-400">
-                      -KSh {(payoutAmount * 0.10).toLocaleString()}
+                    <span className="font-mono text-base text-rose-400">
+                      - KSh {(payoutAmount * 0.10).toLocaleString()}
+                    </span>
+                  </div>
+
+                  {/* Net Payout (Green) */}
+                  <div className="flex justify-between items-center text-sm font-bold pt-1">
+                    <div className="flex flex-col">
+                       <span className="text-emerald-400 uppercase text-xs tracking-widest">Final Net Payout</span>
+                       <span className="text-[10px] text-emerald-400/50 font-black uppercase tracking-tighter">Amount sent to user</span>
+                    </div>
+                    <span className="font-mono text-2xl text-emerald-400">
+                      KSh {(payoutAmount * 0.90).toLocaleString()}
                     </span>
                   </div>
                   <div className="pt-4 border-t border-white/10 flex justify-between items-center">

@@ -149,7 +149,7 @@ export default function FleetManagement() {
                       <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-0.5">Balance</p>
                       <div className="flex items-center gap-1">
                         <Wallet className="w-3 h-3 text-primary/60" />
-                        <p className="text-xs font-bold text-slate-900 dark:text-white">KES {Number(agent.wallet_balance || 0).toLocaleString()}</p>
+                        <p className="text-xs font-bold text-slate-900 dark:text-white">KES {Number(agent.user_wallets?.cash_balance || agent.user_wallets?.[0]?.cash_balance || 0).toLocaleString()}</p>
                       </div>
                     </div>
                     <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl px-3 py-2">
@@ -223,7 +223,7 @@ export default function FleetManagement() {
                       <td className="p-6">
                         <div className="flex items-center gap-2">
                           <Wallet className="w-4 h-4 text-primary/60" />
-                          <p className="text-sm font-semibold text-slate-900 dark:text-white">KES {Number(agent.wallet_balance || 0).toLocaleString()}</p>
+                          <p className="text-sm font-semibold text-slate-900 dark:text-white">KES {Number(agent.user_wallets?.cash_balance || agent.user_wallets?.[0]?.cash_balance || 0).toLocaleString()}</p>
                         </div>
                       </td>
                       <td className="p-6">

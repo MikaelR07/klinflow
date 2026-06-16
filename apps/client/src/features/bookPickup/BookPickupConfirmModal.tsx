@@ -22,8 +22,8 @@ export default function BookPickupConfirmModal({
     <AnimatePresence>
       {showEscrowModal && (
         <div className="fixed inset-0 z-[100] flex items-end justify-center p-4 pb-28">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowEscrowModal(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
-          <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2rem] p-8 pb-10 shadow-2xl overflow-hidden">
+          <div onClick={() => setShowEscrowModal(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+          <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", stiffness: 400, damping: 35, mass: 0.8 }} className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2rem] p-8 pb-10 shadow-2xl overflow-hidden">
             <div className="relative space-y-6">
               <div className="w-16 h-16 bg-primary/10 rounded-[2rem] flex items-center justify-center">
                 {preselectedCompanyName ? <span className="text-3xl">🏢</span> : <CheckCircle2 className="w-8 h-8 text-primary" />}

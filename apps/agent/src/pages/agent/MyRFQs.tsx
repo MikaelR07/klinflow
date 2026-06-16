@@ -93,7 +93,7 @@ export default function MyRFQs() {
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-amber-500 transition-colors" />
             </button>
             <div>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">My RFQ Requests</h1>
+              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">My RFQ Requests</h1>
               <p className="text-[10px] font-bold text-amber-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 " /> Sourcing Pipeline
               </p>
@@ -188,12 +188,12 @@ export default function MyRFQs() {
                         {/* Row 1: Material & Budget */}
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5 min-w-0">
-                            <h3 className="text-[11px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">
+                            <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate tracking-tight">
                               {materialPrices?.find(m => m.id === rfq.material)?.material_name || getSubcategoryLabel(rfq.category, rfq.material) || rfq.material}
                             </h3>
                             <div className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border} shrink-0`}>
                               <StatusIcon className="w-2.5 h-2.5" />
-                              <span className="text-[7px] font-bold uppercase tracking-wider leading-none">{statusConfig.label}</span>
+                              <span className="text-[8px] font-semibold uppercase tracking-wider leading-none">{statusConfig.label}</span>
                             </div>
                           </div>
                           <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {rfq.targetPrice}/kg</span>

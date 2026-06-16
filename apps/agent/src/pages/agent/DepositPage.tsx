@@ -148,7 +148,7 @@ export default function DepositPage() {
           >
             <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
           </button>
-          <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-md font-bold text-slate-900 dark:text-white tracking-tight">
             {isFleetDriver ? 'Fleet Wallet' : 'Agent Wallet'}
           </h1>
           <div className="w-10" /> {/* spacer */}
@@ -158,30 +158,40 @@ export default function DepositPage() {
       {/* ── CONTENT ── */}
       <div className="max-w-lg mx-auto px-1.5 pt-[calc(env(safe-area-inset-top,0.5rem)+4rem)] pb-5 space-y-5">
 
-        {/* ── WALLET BALANCE CARD ── */}
-        <div className="bg-gradient-to-b from-primary  to-emerald-800 rounded-[1rem] p-4 text-white relative overflow-hidden">
-
-          <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                <Wallet className="w-5 h-5 text-emerald-200" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-emerald-200 uppercase tracking-[0.2em]">Current Balance</p>
-                <p className="text-[10px] font-medium text-emerald-300/70">{profile?.name || 'Agent'}</p>
+          {/* ── WALLET BALANCE CARD ── */}
+        <div className="relative overflow-hidden bg-primary rounded-[1rem] p-5 text-white shadow-lg shadow-primary/20">
+          {/* Subtle gradient overlay for depth */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col h-full">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md">
+                  <Wallet className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-[14px] font-semibold text-white/80 uppercase tracking-wider mb-0.5">Available Balance</p>
+                  <p className="text-base font-medium text-white/90">{profile?.name || 'Agent'} </p>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-baseline gap-2 mb-3">
-              <span className="text-lg font-bold text-emerald-300">KSh</span>
-              <h2 className="text-4xl font-black tracking-tight">
-                {(profile?.walletBalance || 0).toLocaleString()}
+            <div className="flex items-baseline gap-1.5 mb-1">
+              <span className="text-sm font-semibold text-white/90">KSh</span>
+              <h2 className="text-2xl  text-white font-bold tracking-tight">
+                {(profile?.walletBalance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </h2>
             </div>
 
-            <div className="flex items-center gap-2 text-[10px] font-semibold text-emerald-200/80">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              Secure Klinflow Payment Gateway
+            <div className="flex items-center justify-between mt-4 border-t border-white/20 pt-3">
+              <div className="flex items-center gap-1.5 text-[11px] font-medium text-white/90">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                Secure Klinflow Payment Gateway
+              </div>
+              
+              <div className="text-[10px] font-mono text-white/70 bg-black/10 px-2 py-0.5 rounded border border-white/10">
+                ID: {profile?.id?.split('-')[0].toUpperCase() || 'CF-WLT'}
+              </div>
             </div>
           </div>
         </div>

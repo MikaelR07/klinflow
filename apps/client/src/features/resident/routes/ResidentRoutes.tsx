@@ -17,6 +17,7 @@ const TransferGFP = lazy(() => import('../../../pages/user/TransferGFP'));
 const TransferHistory = lazy(() => import('../../../pages/user/TransferHistory'));
 const RedemptionHistory = lazy(() => import('../../../pages/user/RedemptionHistory'));
 const NotificationsFeed = lazy(() => import('../../../pages/user/NotificationsFeed'));
+const TransactionsHistory = lazy(() => import('../../../pages/user/TransactionsHistory'));
 
 export function getResidentRoutes() {
   return (
@@ -37,6 +38,7 @@ export function getResidentRoutes() {
       <Route path="/company/:agentId/reviews" element={<AgentReviews />} />
       <Route path="/analytics" element={<ImpactAnalytics />} />
       <Route path="/notifications" element={<NotificationsFeed />} />
+      <Route path="/transactions-history" element={<TransactionsHistory />} />
     </>
   );
 }

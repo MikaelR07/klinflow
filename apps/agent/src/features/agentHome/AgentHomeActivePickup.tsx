@@ -33,7 +33,7 @@ export default function AgentHomeActivePickup({ activePickup, navigate }: AgentH
 
   return (
     <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-[1rem] p-2 border border-slate-200/60 dark:border-slate-700">
-      <div className="flex items-center justify-between mb-3 mt-1 px-1">
+      <div className="flex items-center justify-between mb-2 mt-1 px-1">
         <p className="text-[12px] font-semibold text-emerald-500 dark:text-slate-400 tracking-wide">
           Active Quotes Pickups
         </p>
@@ -50,19 +50,24 @@ export default function AgentHomeActivePickup({ activePickup, navigate }: AgentH
       </div>
 
       {activePickup ? (
-        <button onClick={() => navigate(`/pickups`)} className="w-full bg-slate-100 dark:bg-slate-800/40 border border-slate-300 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between group active:scale-[0.98] transition-all mb-1">
+        <button onClick={() => navigate(`/pickups`)} className="w-full bg-slate-200 dark:bg-slate-800/40 border border-slate-300 dark:border-slate-800 rounded-xl p-2 flex items-center justify-between group active:scale-[0.98] transition-all mb-1">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0">
               <Package className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <div className="text-left">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">Pickup #{activePickup.id.slice(0, 8).toUpperCase()}</h4>
-              <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1.5 capitalize">{resolveMaterialName(activePickup.rfq)}</p>
+            <div className="text-left flex-1 min-w-0">
+              <h4 className="text-[12px] font-bold text-slate-900 dark:text-white mb-0.5 capitalize truncate">{resolveMaterialName(activePickup.rfq)}</h4>
+              <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 mb-0.5">
+               Weight: {activePickup.actual_weight || activePickup.rfq?.requested_weight || 0} KG
+              </p>
+              <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-0.5">
+                ID: {activePickup.id.slice(0, 8)}
+              </p>
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 truncate max-w-[100px]">
-                  <MapPin className="w-3 h-3 shrink-0" /> {activePickup.pickup_address || 'TBD'}
+                <div className="flex items-center gap-1 text-[10px] font-bold text-slate-600 truncate max-w-[100px]">
+                  <MapPin className="w-2.5 h-2.5 shrink-0" /> {activePickup.pickup_address || 'TBD'}
                 </div>
-                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 shrink-0">
+                <div className="flex items-center gap-1 text-[9px] font-bold text-slate-600 shrink-0">
                   <Clock className="w-3 h-3 shrink-0" /> {new Date(activePickup.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
               </div>

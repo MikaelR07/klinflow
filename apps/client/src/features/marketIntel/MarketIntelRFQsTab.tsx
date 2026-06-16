@@ -27,7 +27,7 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
           <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Buy Requests</h3>
           <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-400 ml-0.5 bg-emerald-50 dark:bg-emerald-900/30 px-1 py-0.5 rounded">Live</span>
         </div>
-        <button className="flex items-center gap-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700">
+        <button className="flex items-center gap-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700">
           {filteredRFQs.length} Open <ArrowUpRight className="w-3 h-3" />
         </button>
       </div>
@@ -61,7 +61,7 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
                 <div className="flex items-start gap-2 mt-4">
                   <div className="text-right">
                     <p className="text-sm font-black text-emerald-500  leading-none">
-                      KSh {rfq.price} <span className="text-[9px] text-slate-400 font-semibold">/kg</span>
+                      KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
                     </p>
                   </div>
                   <button className="text-slate-300 hover:text-slate-400 dark:text-slate-600 transition-colors">
@@ -71,7 +71,7 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
               </div>
 
               {/* Row 2: Buyer Profile */}
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
                   {(rfq as any).sellerImage || (rfq as any).avatar ? (
                     <img src={getThumbnailUrl((rfq as any).sellerImage || (rfq as any).avatar, { width: 150 })} className="w-full h-full object-cover" alt={rfq.company} />
@@ -81,10 +81,10 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
                 </div>
                 <div>
                   <div className="flex items-center gap-1 mb-0.5">
-                    <h4 className="text-[11px] font-bold text-slate-900 dark:text-white leading-none">{rfq.company}</h4>
-                    {rfq.verified && <CircleCheck className="w-3.5 h-3.5 text-blue-500" fill="currentColor" stroke="white" strokeWidth={2} />}
+                    <h4 className="text-[14px] font-semibold text-slate-900 dark:text-white leading-none">{rfq.company}</h4>
+                    {rfq.verified && <CircleCheck className="w-4 h-4 text-blue-500" fill="currentColor" stroke="white" strokeWidth={2} />}
                   </div>
-                  <div className="flex items-center gap-1.5 text-[9px] font-semibold text-slate-500">
+                  <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500">
                     {rfq.verified && (
                       <span className="flex items-center gap-0.5 ">
                         <ShieldCheck className="w-2.5 h-2.5 text-emerald-600" /> Verified Buyer
@@ -102,8 +102,8 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
                     <Scale className="w-3.5 h-3.5 text-slate-400" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-none mb-0.5">{rfq.quantity}</p>
-                    <p className="text-[8px] font-semibold text-slate-400 leading-none">Quantity</p>
+                    <p className="text-[11px] font-semibold text-slate-900 dark:text-white leading-none mb-0.5">{rfq.quantity}</p>
+                    <p className="text-[9px] font-semibold text-slate-400 leading-none">Quantity</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -111,8 +111,8 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
                     <MapPin className="w-3.5 h-3.5 text-slate-400" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-none mb-0.5">{rfq.region}</p>
-                    <p className="text-[8px] font-semibold text-slate-400 leading-none">Location</p>
+                    <p className="text-[11px] font-semibold text-slate-900 dark:text-white leading-none mb-0.5">{rfq.region}</p>
+                    <p className="text-[9px] font-semibold text-slate-400 leading-none">Location</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -120,8 +120,8 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
                     <Clock className="w-3.5 h-3.5 text-rose-500" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold text-rose-500 leading-none mb-0.5">{rfq.deadline}</p>
-                    <p className="text-[8px] font-semibold text-slate-400 leading-none">Deadline</p>
+                    <p className="text-[11px] font-semibold text-rose-500 leading-none mb-0.5">{rfq.deadline}</p>
+                    <p className="text-[9px] font-semibold text-slate-400 leading-none">Deadline</p>
                   </div>
                 </div>
                 
@@ -129,14 +129,14 @@ export default function MarketIntelRFQsTab({ filteredRFQs, navigate }: MarketInt
 
               {/* Row 4: Footer Actions */}
               <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-2">
-                <div className="flex items-center gap-1.5 text-[9px] font-semibold text-slate-400">
+                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
                   {(rfq as any).postedAt ? `Posted ${(rfq as any).postedAt}` : 'Posted 3 hrs ago'}
                 </div>
                 <div className="flex items-center gap-1.5">
                   
                   <button 
                     onClick={() => navigate(`/rfq/${rfq.id}`)}
-                    className="px-3 py-1.5 bg-primary text-white text-[10px] font-bold rounded-lg flex items-center gap-1 transition-colors "
+                    className="px-3 py-1.5 bg-primary text-white text-[12px] font-bold rounded-lg flex items-center gap-1 transition-colors "
                   >
                     Respond <ArrowUpRight className="w-3 h-3" />
                   </button>
