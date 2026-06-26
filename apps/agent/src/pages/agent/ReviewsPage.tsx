@@ -115,48 +115,34 @@ export default function ReviewsPage() {
   }, [recentReviews]);
 
   return (
-    <div className={`space-y-6 animate-fade-in ${isCompanyOwner ? '' : 'px-1.5 pb-20'}`}>
-      {isCompanyOwner ? (
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
-              <div className="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center shrink-0">
-                <Star className="w-6 h-6 fill-amber-500" />
-              </div>
-              Reviews & Feedback
-            </h1>
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-[0.2em] md:ml-15">
-              Customer Feedback Analytics
-            </p>
-          </div>
-        </div>
-      ) : (
-        /* Sticky Top Nav */
-        <div className="sticky top-0 z-50 -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white/80 dark:bg-slate-800/80  border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-          <div className="pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-4 px-4 max-w-lg mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => navigate(-1)}
-                className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center  active:scale-95 transition-all"
+    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-900 min-h-screen pb-2">
+      {/* FIXED TOP NAV */}
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-white dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-800">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate(-1)} 
+                className="p-2 -ml-2 bg-[#F8F8FF] dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all shadow-sm"
               >
-                <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                <ArrowLeft className="w-5 h-5" />
               </button>
               <div>
-                <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white capitalize">Reviews and Feedback</h1>
-                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5 flex items-center gap-1.5 leading-none">
-                   View feedback from clients
-                </p>
+                <h1 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">Reviews & Feedback</h1>
+                <p className="text-[11px] font-semibold text-slate-500 mt-0.5">customer feedback analytics</p>
               </div>
             </div>
           </div>
         </div>
-      )}
+      </div>
+
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+6rem)] px-1.5 mx-auto max-w-lg w-full space-y-6">
 
       {/* Rating & Breakdown */}
-      <div className={`bg-white dark:bg-slate-900/60 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700/50 !mt-2 ${isCompanyOwner ? 'max-w-2xl' : ''}`}>
-        <div className={`flex ${isCompanyOwner ? 'gap-8 md:gap-12' : 'gap-5'}`}>
+      <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700/50">
+        <div className="flex gap-5 sm:gap-8">
           {/* Left: Rating Summary */}
-          <div className={`flex flex-col items-center justify-center shrink-0 border-r border-slate-100 dark:border-slate-800 ${isCompanyOwner ? 'pr-8 md:pr-12' : 'pr-5'}`}>
+          <div className="flex flex-col items-center justify-center shrink-0 border-r border-slate-100 dark:border-slate-800 pr-5 sm:pr-8">
             <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-[0.2em] mb-1">Rating</p>
             <div className="flex items-baseline gap-1">
               <h2 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
@@ -217,13 +203,14 @@ export default function ReviewsPage() {
             subtitle="Complete more missions to start receiving feedback from the community."
           />
         ) : (
-          <div className={`grid gap-4 ${isCompanyOwner ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}>
+          <div className="grid gap-4 grid-cols-1">
             {recentReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} isCompanyOwner={isCompanyOwner} />
+              <ReviewCard key={review.id} review={review} />
             ))}
           </div>
         )}
       </div>
+      </main>
     </div>
   );
 }

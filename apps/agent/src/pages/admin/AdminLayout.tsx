@@ -24,11 +24,11 @@ export default function AdminLayout() {
   ];
 
   return (
-    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-white dark:bg-slate-950 transition-colors duration-200">
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-white dark:bg-slate-950">
       
       {/* Fixed Top Bar — Only on homepage */}
       {isHomePage && (
-        <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-950 backdrop-blur-xl border-b border-slate-100 dark:border-slate-900 shadow-sm transition-all duration-300">
+        <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-950 backdrop-blur-xl border-b border-slate-100 dark:border-slate-900 shadow-sm">
           <div className="pt-[calc(env(safe-area-inset-top,1rem)+1.1rem)] pb-0.5 px-4 flex items-center justify-between">
             
             <div className="flex items-center gap-2">
@@ -111,7 +111,7 @@ export default function AdminLayout() {
       </div>
 
       {/* Fixed Bottom Nav */}
-      <div className="fixed bottom-0 left-0 right-0 z-[100] max-w-lg mx-auto pb-[env(safe-area-inset-bottom,0px)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 transition-colors duration-200">
+      <div className="fixed bottom-0 left-0 right-0 z-[100] max-w-lg mx-auto pb-[env(safe-area-inset-bottom,0px)] bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800">
         <BottomNav items={OWNER_NAV} />
       </div>
       

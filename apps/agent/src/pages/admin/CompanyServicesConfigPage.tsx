@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
@@ -17,11 +18,13 @@ import {
   Plus,
   Trash2,
   X,
-  Tag
+  Tag,
+  ArrowLeft
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function CompanyServicesConfigPage() {
+  const navigate = useNavigate();
   const { profile, fetchProfile } = useAuthStore();
   const { agentConfig, fetchAgentConfig, updateAgentConfig } = useAgentStore();
   const { categories, fetchCategories, materialPrices = [], fetchMaterialPrices } = useServiceStore();
@@ -197,24 +200,36 @@ export default function CompanyServicesConfigPage() {
   };
 
   return (
-    <div className="space-y-8 animate-slide-up pb-20">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <h1 className="text-xl font-bold dark:text-white tracking-tighter">Services & Pricing</h1>
-          <p className="font-medium text-xs text-slate-400 uppercase tracking-[0.2em]">Manage Fleet Capabilities & Rates</p>
+    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-900 min-h-screen pb-20">
+      {/* FIXED TOP NAV */}
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-white dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-800">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate('/settings')} 
+                className="p-2 -ml-2 bg-[#F8F8FF] dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all shadow-sm"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div>
+                <h1 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">Services & Pricing</h1>
+                <p className="text-[11px] font-semibold text-slate-500 mt-0.5">manage fleet capabilities</p>
+              </div>
+            </div>
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-xl text-[10px] font-bold tracking-wider hover:bg-primary/90 active:scale-95 transition-all shadow-sm disabled:opacity-50"
+            >
+              {isSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+              {isSaving ? 'SAVING...' : 'SAVE'}
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="font-medium flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl text-sm hover:bg-primary/90 active:scale-95 transition-all shadow-none shadow-primary/20 disabled:opacity-50"
-          >
-            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            {isSaving ? 'Deploying...' : 'Save Configuration'}
-          </button>
-        </div>
-      </header>
+      </div>
 
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+6rem)] px-4 mx-auto max-w-lg w-full space-y-6">
       {isFleetDriver && (
         <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/50 rounded-[1rem] flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-orange-500 shrink-0" />
@@ -543,6 +558,7 @@ export default function CompanyServicesConfigPage() {
 
         </div>
       </div>
+      </main>
     </div>
   );
 }

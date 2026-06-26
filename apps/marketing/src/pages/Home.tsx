@@ -429,6 +429,7 @@ export default function Home() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.8, ease: "easeInOut" }}
+                      fetchPriority="high"
                       className="absolute inset-0 w-full h-full object-fill object-center"
                     />
                   </AnimatePresence>
@@ -974,7 +975,7 @@ export default function Home() {
                 <img
                   src="/landing-page/HygeneX.webp"
                   alt="HygeneX Sustainomics Engine"
-                  className="w-full h-full object-contain scale-125 md:scale-[1.1] relative z-10"
+                  className="w-full h-full object-cover md:scale-[1.1] relative z-10"
                 />
               </div>
             </div>

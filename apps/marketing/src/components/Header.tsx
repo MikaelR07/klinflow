@@ -54,7 +54,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="flex items-center justify-center group-hover:scale-110 transition-transform">
-            <img src="/landing-page/app-logo.webp" alt="Klinflow Logo" className="h-14 w-auto object-contain -my-2" />
+            <img src="/landing-page/app-logo.webp" alt="Klinflow Logo" fetchPriority="high" className="h-14 w-auto object-contain -my-2" />
           </div>
           <span className={`text-2xl font-bold tracking-tighter ${isDarkMode ? 'text-green-400' : 'text-green-700'}`}>Klinflow</span>
         </Link>

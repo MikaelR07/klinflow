@@ -48,8 +48,7 @@ export default function SettingsMenu() {
   ];
 
   const quickActions = [
-    { label: 'Dashboard', icon: BarChart3, path: '/earnings', color: 'bg-emerald-500' },
-    { label: 'Warehouse', icon: Package, path: '/warehouse', color: 'bg-indigo-500' },
+    { label: 'Finance', icon: Wallet, path: '/finance', color: 'bg-emerald-500' },
     { label: 'Pricing', icon: Settings, path: isCompanyOwner ? '/admin/services' : '/settings/configuration', color: 'bg-blue-500' },
     { label: 'Reviews', icon: Star, path: '/reviews', color: 'bg-amber-500' },
   ];
