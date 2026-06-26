@@ -37,7 +37,7 @@ export default function PrivacySecurityPage() {
   return (
     <div className="animate-slide-up pb-20">
       <header className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+        <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h1 className="text-xl font-semibold dark:text-white">Privacy & Security</h1>
@@ -49,20 +49,20 @@ export default function PrivacySecurityPage() {
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-slate-800 dark:text-white">Change Security PIN</div>
-              <div className="text-xs text-slate-500">Update your 4-digit access code</div>
+              <div className="text-sm font-semibold text-slate-900 dark:text-white">Change Security PIN</div>
+              <div className="text-xs text-slate-800">Update your 4-digit access code</div>
             </div>
           </div>
           <div>
-             <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">Current PIN</label>
+             <label className="block text-xs font-semibold text-slate-800 mb-1.5 uppercase tracking-wider">Current PIN</label>
              <input type="password" required maxLength={6} inputMode="numeric" value={pins.current} onChange={(e) => setPins({...pins, current: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50 tracking-widest text-lg" />
           </div>
           <div>
-             <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">New PIN</label>
+             <label className="block text-xs font-semibold text-slate-800 mb-1.5 uppercase tracking-wider">New PIN</label>
              <input type="password" required maxLength={6} inputMode="numeric" value={pins.new} onChange={(e) => setPins({...pins, new: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50 tracking-widest text-lg" />
           </div>
           <div>
-             <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">Confirm New PIN</label>
+             <label className="block text-xs font-semibold text-slate-800 mb-1.5 uppercase tracking-wider">Confirm New PIN</label>
              <input type="password" required maxLength={6} inputMode="numeric" value={pins.confirm} onChange={(e) => setPins({...pins, confirm: e.target.value})} className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-blue-500/50 tracking-widest text-lg" />
           </div>
 
@@ -72,13 +72,13 @@ export default function PrivacySecurityPage() {
         </form>
 
         <div className="card p-5 mt-6">
-           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Recent Activity</h2>
+           <h2 className="text-sm font-semibold text-slate-900 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Recent Activity</h2>
            <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <Smartphone className="w-5 h-5 text-slate-400 mt-0.5 flex-none" />
+                <Smartphone className="w-5 h-5 text-slate-700 mt-0.5 flex-none" />
                 <div>
-                  <div className="text-sm font-semibold text-slate-700 dark:text-slate-300">Android Application</div>
-                  <div className="text-xs text-slate-500">Nairobi, Kenya • Today, 14:30 PM</div>
+                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-300">Android Application</div>
+                  <div className="text-xs text-slate-800">Nairobi, Kenya • Today, 14:30 PM</div>
                   <div className="text-xs font-semibold text-green-500 uppercase mt-1 tracking-wider">Active Session</div>
                 </div>
               </div>

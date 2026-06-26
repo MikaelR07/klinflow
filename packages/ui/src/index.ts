@@ -28,3 +28,4 @@ export { default as ProtectedRoute } from './components/ProtectedRoute';
 
 // Styles
 import './index.css';
+export { default as DisputeModal } from './components/DisputeModal';

@@ -543,7 +543,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       register: async (userData: any) => {
-        const { name, phone, email: userEmail, pin, location, role, businessType, specializations, agent_account_type, fleet_invite_code, company_name, gender } = userData;
+        const { name, phone, email: userEmail, pin, location, role, businessType, specializations, agent_account_type, fleet_invite_code, company_name, gender, documents } = userData;
         const email = phoneToEmail(phone);
         
         let user: any = null;
@@ -622,12 +622,42 @@ export const useAuthStore = create<AuthState>()(
 
         // If fleet driver, insert into company_join_requests
         if (role === ROLES.AGENT && agent_account_type === 'fleet_driver' && companyId) {
+           let submittedDocsMap: Record<string, string> = {};
+           let documentsUploadedCount = 0;
+
+           // Upload Documents
+           if (documents && Object.keys(documents).length > 0) {
+             for (const [docName, file] of Object.entries(documents)) {
+               try {
+                 const fileExt = (file as File).name.split('.').pop();
+                 const fileName = `${docName.replace(/\s+/g, '_')}_${Date.now()}.${fileExt}`;
+                 const filePath = `${companyId}/${user.id}/${fileName}`;
+                 
+                 const { error: uploadError } = await supabase.storage
+                   .from('agent_documents')
+                   .upload(filePath, file as File);
+                 
+                 if (!uploadError) {
+                   const { data: { publicUrl } } = supabase.storage
+                     .from('agent_documents')
+                     .getPublicUrl(filePath);
+                   submittedDocsMap[docName] = publicUrl;
+                   documentsUploadedCount++;
+                 }
+               } catch (err) {
+                 console.error(`Failed to upload ${docName}:`, err);
+               }
+             }
+           }
+
            const { error: requestError } = await supabase
              .from('company_join_requests')
              .insert([{
                 driver_id: user.id,
                 company_id: companyId,
-                status: 'pending'
+                status: 'pending',
+                submitted_documents: submittedDocsMap,
+                documents_complete: documentsUploadedCount
              }]);
            
            if (requestError) console.error("Error creating join request:", requestError);
@@ -636,7 +666,7 @@ export const useAuthStore = create<AuthState>()(
            await supabase.from('notifications').insert([{
              target_user: companyId,
              title: 'New Fleet Driver Request',
-             body: `${name} has requested to join your fleet.`,
+             body: `${name} has requested to join your fleet and submitted ${documentsUploadedCount} document(s).`,
              type: 'info',
              is_read: false
            }]);

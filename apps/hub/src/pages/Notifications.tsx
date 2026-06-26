@@ -87,7 +87,7 @@ export default function Notifications() {
         ) : notifications.length === 0 ? (
           <div className="bg-white dark:bg-slate-900 rounded-[3rem] p-20 text-center border border-slate-100 dark:border-white/5">
              <div className="w-20 h-20 bg-slate-50 dark:bg-white/5 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
-                <Bell className="w-10 h-10 text-slate-300" />
+                <Bell className="font-medium w-10 h-10 text-slate-300" />
              </div>
              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">All Clear!</h2>
              <p className="text-sm text-slate-500 font-medium mt-2">No new operational alerts for this terminal.</p>
@@ -124,7 +124,7 @@ export default function Notifications() {
                       <div className="w-2 h-2 bg-primary rounded-full mt-2 animate-pulse" />
                     )}
                     
-                    <ChevronRight className="w-4 h-4 text-slate-300 mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ChevronRight className="font-medium w-4 h-4 text-slate-300 mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 );
               })}
@@ -137,7 +137,7 @@ export default function Notifications() {
       <div className="p-8 bg-slate-900 rounded-[2.5rem] text-center">
          <ShieldAlert className="w-6 h-6 text-primary mx-auto mb-4" />
          <p className="text-xs font-semibold text-white uppercase tracking-[0.2em] mb-2">Automated Audit Trail</p>
-         <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
+         <p className="font-medium text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
            Notifications are cryptographically logged and cannot be deleted for NEMA compliance reasons.
          </p>
       </div>

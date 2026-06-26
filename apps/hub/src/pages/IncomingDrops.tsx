@@ -120,7 +120,7 @@ export default function IncomingDrops() {
                 
                 {/* Agent & Material */}
                 <div className="flex items-center gap-5">
-                   <div className="w-16 h-16 rounded-[1.5rem] bg-slate-100 dark:bg-white/5 flex items-center justify-center relative text-slate-400 group-hover:text-primary transition-colors">
+                   <div className="font-medium w-16 h-16 rounded-[1.5rem] bg-slate-100 dark:bg-white/5 flex items-center justify-center relative text-slate-400 group-hover:text-primary transition-colors">
                       <Truck className="w-8 h-8" />
                       <div className="absolute -top-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center">
                          <div className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
@@ -160,7 +160,7 @@ export default function IncomingDrops() {
 
         {!isLoading && incoming.length === 0 && (
           <div className="p-20 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-[3rem] text-center">
-             <Clock className="w-12 h-12 text-slate-200 dark:text-white/5 mx-auto mb-4" />
+             <Clock className="font-medium w-12 h-12 text-slate-200 dark:text-white/5 mx-auto mb-4" />
              <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">No Incoming Agents Tracked</p>
           </div>
         )}

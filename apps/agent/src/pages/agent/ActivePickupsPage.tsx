@@ -144,6 +144,136 @@ export default function ActivePickupsPage() {
     }
   };
 
+  if (isCompanyAdmin) {
+    return (
+      <div className="space-y-8 animate-fade-in">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+              <div className="w-12 h-12 bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center shrink-0">
+                <Truck className="w-6 h-6" />
+              </div>
+              Active Fleet Pickups
+            </h1>
+            <p className="text-slate-500 mt-2 font-medium max-w-xl">
+              Monitor your fleet drivers in real-time as they fulfill open RFQ material collections and group drives.
+            </p>
+          </div>
+        </div>
+
+        {/* Desktop Tabs */}
+        <div className="flex items-center gap-2 bg-white dark:bg-slate-900/60 p-2 rounded-xl border border-slate-200 dark:border-slate-700 w-fit shadow-sm">
+          <button onClick={() => setActiveTab('individual')} className={`px-6 py-2.5 rounded-xl text-xs font-semibold capitalize tracking-widest transition-all ${activeTab === 'individual' ? 'bg-emerald-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}>
+             Individual Pickups <span className="ml-1 opacity-70">({individualFulfillments.length})</span>
+          </button>
+          <button onClick={() => setActiveTab('group')} className={`px-6 py-2.5 rounded-xl text-xs font-semibold capitalize tracking-widest transition-all ${activeTab === 'group' ? 'bg-blue-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'}`}>
+             Group Pickups <span className="ml-1 opacity-70">({groupFulfillments.length})</span>
+          </button>
+        </div>
+
+        {/* Content Grid */}
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-24 text-slate-400 bg-white dark:bg-slate-900/40 rounded-3xl border border-slate-200 dark:border-slate-700/50 shadow-sm">
+             <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+             <p className="text-sm font-bold uppercase tracking-widest">Loading Pickups...</p>
+          </div>
+        ) : currentList.length === 0 ? (
+          <div className="bg-white dark:bg-slate-900/40 rounded-3xl py-24 border border-slate-200 dark:border-slate-700/50 text-center shadow-sm">
+             <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                <PackageCheck className="w-10 h-10" />
+             </div>
+             <h3 className="text-base font-bold text-slate-900 dark:text-white">No active pickups</h3>
+             <p className="text-sm font-medium text-slate-500 mt-2">There are currently no fulfillments in progress for this category.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {activeTab === 'individual' ? currentList.map((order: any) => {
+               const statusConfig = getStatusDisplay(order.status);
+               return (
+                 <div key={order.id} onClick={() => navigate(`/pickups/${order.id}`)} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-md transition-all flex flex-col cursor-pointer overflow-hidden relative group">
+                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500 group-hover:w-1.5 transition-all" />
+                   <div className="p-5 flex-1 flex flex-col">
+                     <div className="flex justify-between items-start mb-4">
+                       <div className="min-w-0 flex-1 pr-2">
+                         <h3 className="text-[15px] font-extrabold text-slate-900 dark:text-white capitalize leading-tight mb-1 truncate">{resolveMaterialName(order.rfq)}</h3>
+                         <p className="text-[10px] font-semibold text-slate-500 flex items-center gap-1 truncate"><MapPin className="w-3 h-3 text-indigo-400 shrink-0"/> {order.pickup_address || order.rfq?.pickup_area || 'TBD'}</p>
+                       </div>
+                       <div className={`shrink-0 px-2 py-1 rounded-md border ${statusConfig.bg} ${statusConfig.color} ${statusConfig.border} flex items-center gap-1`}>
+                         <statusConfig.icon className="w-3 h-3" />
+                         <span className="text-[8px] font-bold uppercase tracking-wider">{statusConfig.label}</span>
+                       </div>
+                     </div>
+                     
+                     <div className="grid grid-cols-2 gap-2 mb-4">
+                       <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
+                         <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Volume</p>
+                         <p className="text-xs font-black text-slate-900 dark:text-white">{order.proposal?.offered_weight} KG</p>
+                       </div>
+                       <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
+                         <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Price</p>
+                         <p className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {order.proposal?.offered_price}/kg</p>
+                       </div>
+                     </div>
+
+                     <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800/60">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400">
+                            Step {Math.max(STATUS_PIPELINE.indexOf(order.status) + 1, 1)} of {STATUS_PIPELINE.length}
+                          </p>
+                          <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-blue-500">
+                            <Eye className="w-3 h-3" /> Monitoring
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          {STATUS_PIPELINE.map((step, i) => {
+                            const currentIdx = STATUS_PIPELINE.indexOf(order.status);
+                            const isCompleted = i < currentIdx;
+                            const isCurrent = i === currentIdx;
+                            return <div key={step} className={`h-1 w-full rounded-full ${isCompleted ? 'bg-emerald-500' : isCurrent ? 'bg-blue-500 animate-pulse' : 'bg-slate-100 dark:bg-slate-800'}`} />
+                          })}
+                        </div>
+                     </div>
+                   </div>
+                 </div>
+               )
+            }) : currentList.map((group: any) => {
+               const statusConfig = getStatusDisplay(group.status);
+               return (
+                 <div key={group.rfq_id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-sm flex flex-col overflow-hidden relative group">
+                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 group-hover:w-1.5 transition-all" />
+                   <div className="p-5 flex-1 flex flex-col">
+                     <div className="flex justify-between items-start mb-4">
+                       <div className="min-w-0 flex-1 pr-2">
+                         <h3 className="text-[15px] font-extrabold text-slate-900 dark:text-white capitalize leading-tight mb-1 truncate">{resolveMaterialName(group.rfq)}</h3>
+                         <p className="text-[10px] font-semibold text-slate-500 flex items-center gap-1 truncate"><Users className="w-3 h-3 text-indigo-400 shrink-0"/> {group.sellerCount} Sellers in Group Drive</p>
+                       </div>
+                       <div className={`shrink-0 px-2 py-1 rounded-md border ${statusConfig.bg} ${statusConfig.color} ${statusConfig.border} flex items-center gap-1`}>
+                         <statusConfig.icon className="w-3 h-3" />
+                         <span className="text-[8px] font-bold uppercase tracking-wider">{statusConfig.label}</span>
+                       </div>
+                     </div>
+                     
+                     <div className="grid grid-cols-2 gap-2 mb-4">
+                       <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
+                         <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Volume</p>
+                         <p className="text-xs font-black text-slate-900 dark:text-white">{group.totalWeight} KG</p>
+                       </div>
+                       <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
+                         <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est Payout</p>
+                         <p className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {group.totalPrice.toLocaleString()}</p>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               )
+            })}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}

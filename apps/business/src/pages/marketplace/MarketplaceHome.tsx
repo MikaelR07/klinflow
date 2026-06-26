@@ -158,7 +158,7 @@ export default function MarketplaceHome() {
   return (
     <div className="space-y-6">
       {/* ── MISSION CONTROL HEADER (UNIFIED) ── */}
-      <div className="bg-[#F4F4F4] dark:bg-slate-900 pt-2 pb-4 px-0 relative overflow-hidden">
+      <div className="bg-slate-50 dark:bg-slate-900 pt-2 pb-4 px-0 relative overflow-hidden">
         {/* Landing Page Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.05] dark:opacity-[0.1] pointer-events-none" 
           style={{ 
@@ -186,7 +186,7 @@ export default function MarketplaceHome() {
               className="w-full pl-10 pr-4 py-2.5 bg-white/30 dark:bg-white/5 backdrop-blur-2xl border border-slate-200/50 dark:border-white/5 rounded-lg text-sm focus:outline-none focus:border-emerald-500/30 transition-all text-slate-900 dark:text-white"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery('')} className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 uppercase tracking-wider hover:text-slate-600 transition-colors">Clear</button>
+              <button onClick={() => setSearchQuery('')} className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-700 uppercase tracking-wider hover:text-slate-900 transition-colors">Clear</button>
             )}
           </div>
 
@@ -197,7 +197,7 @@ export default function MarketplaceHome() {
               className={`flex-1 flex items-center gap-2.5 px-3 py-3 rounded-xl border active:scale-95 transition-all ${
                 showCategories 
                   ? 'bg-emerald-600 border-emerald-600 text-white' 
-                  : 'bg-white dark:bg-slate-800/50 border-slate-100 dark:border-slate-800 text-slate-700 dark:text-white'
+                  : 'bg-white dark:bg-slate-800/50 border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white'
               }`}
             >
               <LayoutGrid className="w-4 h-4 shrink-0" />
@@ -205,14 +205,14 @@ export default function MarketplaceHome() {
             </button>
             <button 
               onClick={() => navigate('/procurement')}
-              className="flex-1 flex items-center gap-2.5 px-3 py-3 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl active:scale-95 transition-all text-slate-700 dark:text-white"
+              className="flex-1 flex items-center gap-2.5 px-3 py-3 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl active:scale-95 transition-all text-slate-900 dark:text-white"
             >
               <FileText className="w-4 h-4 shrink-0" />
               <span className="text-xs font-bold uppercase tracking-wider">Bulk Sourcing</span>
             </button>
             <button 
               onClick={() => navigate('/listings')}
-              className="flex-1 flex items-center gap-2.5 px-3 py-3 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl active:scale-95 transition-all text-slate-700 dark:text-white"
+              className="flex-1 flex items-center gap-2.5 px-3 py-3 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl active:scale-95 transition-all text-slate-900 dark:text-white"
             >
               <ListOrdered className="w-4 h-4 shrink-0" />
               <span className="text-xs font-bold uppercase tracking-wider">Listings</span>
@@ -233,7 +233,7 @@ export default function MarketplaceHome() {
                   <ArrowUpRight className="w-3 h-3 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">Plastic</p>
+                  <p className="text-xs font-bold text-slate-700 dark:text-white/40 uppercase tracking-widest">Plastic</p>
                   <p className="text-xs text-slate-900 dark:text-white">PET & HDPE</p>
                 </div>
               </button>
@@ -245,7 +245,7 @@ export default function MarketplaceHome() {
               >
                 <span className="text-lg">🥫</span>
                 <div>
-                  <p className="text-xs font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest">Metal</p>
+                  <p className="text-xs font-bold text-slate-700 dark:text-white/40 uppercase tracking-widest">Metal</p>
                   <p className="text-xs text-slate-900 dark:text-white">Industrial Aluminium</p>
                 </div>
               </button>
@@ -291,7 +291,7 @@ export default function MarketplaceHome() {
                 onClick={() => navigate('/buy')}
                 className="col-span-2 row-span-1 bg-white dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-[0.45rem] p-2 flex flex-col justify-center items-center text-center group active:scale-95 transition-all"
               >
-                <PlusCircle className="w-4 h-4 text-slate-400" />
+                <PlusCircle className="w-4 h-4 text-slate-700" />
                 <p className="text-xs font-bold text-slate-900 dark:text-white uppercase mt-1">Others</p>
               </button>
             </div>
@@ -307,7 +307,7 @@ export default function MarketplaceHome() {
           <div className="flex items-center justify-between px-1 pt-4">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-              <h2 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Live material arrivals</h2>
+              <h2 className="text-xs font-bold text-slate-700 uppercase tracking-[0.2em]">Live material arrivals</h2>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -377,7 +377,7 @@ export default function MarketplaceHome() {
         {/* ── FAIRE-STYLE DISCOVERY SHELVES ── */}
         <section className="space-y-8">
           <div className="px-1">
-            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <h2 className="text-xs font-semibold text-slate-700 uppercase tracking-widest mb-4 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-500" /> Curated Collections
             </h2>
             <div className="grid grid-cols-2 gap-3">
@@ -403,7 +403,7 @@ export default function MarketplaceHome() {
         <section className="space-y-6">
           <div className="flex items-center justify-between px-1">
             <div>
-              <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+              <h2 className="text-xs font-semibold text-slate-700 uppercase tracking-widest flex items-center gap-2">
                 {searchQuery ? (
                   <><Search className="w-3.5 h-3.5" /> Results for "{searchQuery}"</>
                 ) : hasPersonalization ? (
@@ -413,7 +413,7 @@ export default function MarketplaceHome() {
                 )}
               </h2>
               {hasPersonalization && !searchQuery && (
-                <p className="text-xs text-slate-400 mt-1">Based on your specializations: {mySpecializations.join(', ')}</p>
+                <p className="text-xs text-slate-700 mt-1">Based on your specializations: {mySpecializations.join(', ')}</p>
               )}
             </div>
             <button 
@@ -426,9 +426,9 @@ export default function MarketplaceHome() {
 
           {smartFeed.length === 0 && searchQuery && (
             <div className="py-12 text-center">
-              <Package className="w-12 h-12 text-slate-200 mx-auto mb-3" />
-              <p className="text-sm font-bold text-slate-400">No results for "{searchQuery}"</p>
-              <p className="text-xs text-slate-400 mt-1">Try a different material, location, or seller name</p>
+              <Package className="w-12 h-12 text-slate-500 mx-auto mb-3" />
+              <p className="text-sm font-bold text-slate-700">No results for "{searchQuery}"</p>
+              <p className="text-xs text-slate-700 mt-1">Try a different material, location, or seller name</p>
             </div>
           )}
 
@@ -439,12 +439,12 @@ export default function MarketplaceHome() {
                 onClick={() => navigate(`/listings/${listing.id}`)}
                 className="bg-white dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden active:scale-[0.97] transition-all group"
               >
-                <div className="aspect-square bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
+                <div className="aspect-square bg-white shadow-sm dark:bg-slate-800 overflow-hidden relative">
                   {listing.photo ? (
                     <img src={getThumbnailUrl(listing.photo, { width: 400 })} loading="lazy" alt={listing.material} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Package className="w-10 h-10 text-slate-200" />
+                      <Package className="w-10 h-10 text-slate-500" />
                     </div>
                   )}
                   <div className="absolute top-2 left-2 px-2 py-0.5 bg-black/40 backdrop-blur-sm rounded-md text-xs font-bold text-white uppercase tracking-wider">
@@ -461,13 +461,13 @@ export default function MarketplaceHome() {
                 </div>
                 <div className="p-3 space-y-1.5">
                   <h3 className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-tight truncate">{listing.material}</h3>
-                  <div className="flex items-center justify-between text-xs text-slate-400 font-medium">
+                  <div className="flex items-center justify-between text-xs text-slate-700 font-medium">
                     <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {listing.location}</span>
                     <span className="flex items-center gap-1"><Scale className="w-3 h-3" /> {listing.quantity} KG</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-black text-emerald-600 italic">KSh {listing.pricePerKg}<span className="text-xs text-slate-400 font-medium not-italic ml-0.5">/KG</span></p>
-                    <p className="text-xs text-slate-400 font-bold uppercase">MOQ {listing.moq || Math.max(1, Math.round(listing.quantity * 0.1))}kg</p>
+                    <p className="text-sm font-black text-emerald-600 italic">KSh {listing.pricePerKg}<span className="text-xs text-slate-700 font-medium not-italic ml-0.5">/KG</span></p>
+                    <p className="text-xs text-slate-700 font-bold uppercase">MOQ {listing.moq || Math.max(1, Math.round(listing.quantity * 0.1))}kg</p>
                   </div>
                 </div>
               </div>

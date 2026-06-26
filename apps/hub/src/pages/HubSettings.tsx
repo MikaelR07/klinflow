@@ -265,7 +265,7 @@ export default function HubSettings() {
                         onChange={handleChange}
                         className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
                       />
-                      <p className="text-xs text-slate-400 mt-2">Pickups below this weight will be ignored by matching.</p>
+                      <p className="font-medium text-xs text-slate-400 mt-2">Pickups below this weight will be ignored by matching.</p>
                    </div>
                    <div>
                       <label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Maximum Fleet Capacity (KG)</label>
@@ -276,7 +276,7 @@ export default function HubSettings() {
                         onChange={handleChange}
                         className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none"
                       />
-                      <p className="text-xs text-slate-400 mt-2">Maximum weight your fleet can handle in a single trip.</p>
+                      <p className="font-medium text-xs text-slate-400 mt-2">Maximum weight your fleet can handle in a single trip.</p>
                    </div>
                 </div>
 
@@ -303,7 +303,7 @@ export default function HubSettings() {
                             <p className="text-xs font-semibold uppercase tracking-tight">{cat.label}</p>
                             <p className={`text-xs font-semibold ${isActive ? 'text-white/70' : 'text-slate-400'}`}>Enable for fleet collection</p>
                           </div>
-                          {isActive && <CheckCircle2 className="w-5 h-5 ml-auto text-white" />}
+                          {isActive && <CheckCircle2 className="font-medium w-5 h-5 ml-auto text-white" />}
                         </button>
                       );
                     })}

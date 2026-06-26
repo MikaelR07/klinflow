@@ -23,7 +23,7 @@ export default function Welcome() {
           <span className="text-primary italic">Verified</span> Recyclables.
         </h1>
 
-        <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-sm mb-8 leading-relaxed">
+        <p className="text-lg text-slate-800 dark:text-slate-400 font-medium max-w-sm mb-8 leading-relaxed">
           Klinflow connects verified collectors with industrial recyclers through secure, escrow-backed trades.
         </p>
 
@@ -40,7 +40,7 @@ export default function Welcome() {
               </div>
               <div>
                 <p className="font-semibold text-slate-900 dark:text-white text-sm">{feat.title}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">{feat.desc}</p>
+                <p className="text-xs text-slate-800 dark:text-slate-400">{feat.desc}</p>
               </div>
             </div>
           ))}
@@ -56,7 +56,7 @@ export default function Welcome() {
           Get Started <ArrowRight className="w-5 h-5" />
         </button>
         
-        <p className="text-center text-sm text-slate-400 font-medium">
+        <p className="text-center text-sm text-slate-700 font-medium">
           Already have a business account? <span onClick={() => navigate('/login')} className="text-primary font-semibold cursor-pointer">Log In</span>
         </p>
       </div>

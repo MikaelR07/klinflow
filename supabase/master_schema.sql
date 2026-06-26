@@ -142,7 +142,24 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.notifications;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
 
 -- ════════════════════════════════════════════════════════════════
--- 5. BOOKINGS TABLE (Logistics & Agent Tracking)
+-- 5. DISPUTES TABLE
+-- ════════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS public.disputes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    fulfillment_id UUID REFERENCES public.fulfillment_orders(id) ON DELETE CASCADE,
+    booking_id UUID REFERENCES public.bookings(id) ON DELETE CASCADE,
+    raised_by UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+    dispute_type TEXT NOT NULL,
+    evidence_photos TEXT[] DEFAULT '{}',
+    description TEXT,
+    status TEXT DEFAULT 'open' CHECK (status IN ('open', 'investigating', 'resolved')),
+    resolution_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    resolved_at TIMESTAMPTZ
+);
+
+-- ════════════════════════════════════════════════════════════════
+-- 6. BOOKINGS TABLE (Logistics & Agent Tracking)
 -- ════════════════════════════════════════════════════════════════
 CREATE TABLE public.bookings (
   id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

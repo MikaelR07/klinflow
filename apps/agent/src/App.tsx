@@ -58,12 +58,21 @@ import Register from './pages/auth/Register';
 
 // Admin Pages
 import AdminLayout from './pages/admin/AdminLayout';
-const CompanyAdminDashboard = lazy(() => import('./pages/admin/CompanyAdminDashboard'));
-const FleetManagement = lazy(() => import('./pages/admin/FleetManagement'));
-const FleetFinance = lazy(() => import('./pages/admin/FleetFinance'));
-const FleetRFQs = lazy(() => import('./pages/admin/FleetRFQs'));
-const DispatchDashboard = lazy(() => import('./pages/admin/DispatchDashboard'));
 const CompanyServicesConfigPage = lazy(() => import('./pages/admin/CompanyServicesConfigPage'));
+
+// Owner Mobile App Pages
+const OwnerOverview = lazy(() => import('./pages/admin/mobile/OwnerOverview'));
+const OwnerApprovals = lazy(() => import('./pages/admin/mobile/OwnerApprovals'));
+const DepositRequestDetail = lazy(() => import('./pages/admin/mobile/DepositRequestDetail'));
+const OnboardingRequestDetail = lazy(() => import('./pages/admin/mobile/OnboardingRequestDetail'));
+const OverrideRequestDetail = lazy(() => import('./pages/admin/mobile/OverrideRequestDetail'));
+const OwnerFleet = lazy(() => import('./pages/admin/mobile/OwnerFleet'));
+const OwnerAgentDetail = lazy(() => import('./pages/admin/mobile/OwnerAgentDetail'));
+const OwnerAlerts = lazy(() => import('./pages/admin/mobile/OwnerAlerts'));
+const OwnerDisputes = lazy(() => import('./pages/admin/mobile/OwnerDisputes'));
+const OwnerDisputeDetail = lazy(() => import('./pages/admin/mobile/OwnerDisputeDetail'));
+const OwnerFinance = lazy(() => import('./pages/admin/mobile/OwnerFinance'));
+
 
 
 function MobileLayout() {
@@ -118,7 +127,7 @@ function DynamicRoleLayout() {
 function RoleBasedIndex() {
   const { profile } = useAuthStore();
   if (profile?.agentAccountType === 'company_admin') {
-    return <CompanyAdminDashboard />;
+    return <OwnerOverview />;
   }
   return <AgentHome />;
 }
@@ -211,13 +220,22 @@ export default function App() {
             <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/notifications" element={<NotificationsFeed />} />
 
-            <Route path="/admin/agents" element={<FleetManagement />} />
-            <Route path="/admin/earnings" element={<EarningsPage />} />
-            <Route path="/admin/finance" element={<FleetFinance />} />
-            <Route path="/admin/rfqs" element={<FleetRFQs />} />
-            <Route path="/admin/dispatch" element={<DispatchDashboard />} />
             <Route path="/admin/services" element={<CompanyServicesConfigPage />} />
             <Route path="/admin/driver-requests" element={<CompanyStaffRequests />} />
+
+            {/* Owner Mobile App Routes */}
+            <Route path="/approvals" element={<OwnerApprovals />} />
+            <Route path="/approvals/deposit/:id" element={<DepositRequestDetail />} />
+            <Route path="/approvals/onboarding/:id" element={<OnboardingRequestDetail />} />
+            <Route path="/approvals/override/:id" element={<OverrideRequestDetail />} />
+            <Route path="/fleet" element={<OwnerFleet />} />
+            <Route path="/fleet/:id" element={<OwnerAgentDetail />} />
+            <Route path="/alerts" element={<OwnerAlerts />} />
+            <Route path="/disputes" element={<OwnerDisputes />} />
+            <Route path="/disputes/:id" element={<OwnerDisputeDetail />} />
+            <Route path="/finance" element={<OwnerFinance />} />
+            <Route path="/market-prices" element={<MarketPulse />} />
+
             <Route path="/settings">
               <Route index element={<SettingsMenu />} />
               <Route path="configuration" element={<AgentConfigurationPage />} />

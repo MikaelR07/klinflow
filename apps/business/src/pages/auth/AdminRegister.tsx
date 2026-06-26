@@ -87,7 +87,7 @@ export default function AdminRegister() {
           <p className="text-sm border border-rose-500/30 bg-rose-500/10 text-rose-300 py-1.5 px-3 rounded-full mt-3 font-medium inline-block shadow-lg">
             Authorized Personnel Only
           </p>
-          <p className="text-xs text-slate-400 mt-4 leading-relaxed px-4">
+          <p className="text-xs text-slate-700 mt-4 leading-relaxed px-4">
             This page is for administrators only. Contact the founder if you need access.
           </p>
         </div>
@@ -96,41 +96,41 @@ export default function AdminRegister() {
         <form onSubmit={handleAdminRegister} className="bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-2xl space-y-4">
           
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Full Name</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">Full Name</label>
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-800" />
               <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Admin Name" className="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 text-base focus:ring-rose-500/50 text-sm" required />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Phone Number</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">Phone Number</label>
             <div className="relative">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-800" />
               <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="07XX XXX XXX" className="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 text-base focus:ring-rose-500/50 text-sm" required />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Email (Optional)</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">Email (Optional)</label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-800" />
               <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="admin@klinflow.app" className="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 text-base focus:ring-rose-500/50 text-sm" />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">6-Digit PIN</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">6-Digit PIN</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-800" />
                 <input type="password" name="pin" value={formData.pin} onChange={handleInputChange} placeholder="••••••" maxLength={6} inputMode="numeric" className="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 text-base focus:ring-rose-500/50 tracking-widest text-sm" required />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Confirm PIN</label>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">Confirm PIN</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-800" />
                 <input type="password" name="confirmPin" value={formData.confirmPin} onChange={handleInputChange} placeholder="••••••" maxLength={6} inputMode="numeric" className="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:ring-2 text-base focus:ring-rose-500/50 tracking-widest text-sm" required />
               </div>
             </div>
@@ -160,7 +160,7 @@ export default function AdminRegister() {
           </button>
 
           <div className="text-center pt-4 border-t border-slate-700 mt-6">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-700">
               Already have an admin account?{' '}
               <Link to="/admin/login" className="text-rose-400 font-semibold hover:text-rose-300 transition-colors">
                 Secure Login

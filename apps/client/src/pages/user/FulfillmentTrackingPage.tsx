@@ -107,8 +107,8 @@ export default function FulfillmentTrackingPage() {
             {(() => {
               const rfq = (order as any).rfq;
               if (!rfq) return 'Material Pickup';
-              const matName = materialPrices?.find(m => m.id === rfq.material_grade)?.material_name
-                || getSubcategoryLabel(rfq.category, rfq.material_grade)
+              const matName = materialPrices?.find(m => m.id === rfq.material_grade || `${rfq.category}_${m.id}` === rfq.material_grade)?.material_name
+                || getSubcategoryLabel(rfq.category, rfq.material_grade, materialPrices || [])
                 || categories?.find(c => c.id === rfq.category)?.label
                 || rfq.category
                 || 'Material';

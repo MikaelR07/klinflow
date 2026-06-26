@@ -127,7 +127,7 @@ export default function SupplyTerminal() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F4F4] dark:bg-slate-900 pb-24">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-24">
 
       <div className="w-full">
         {/* ── AI MARKET PULSE (ANIMATED STOCK TICKER) ── */}
@@ -147,7 +147,7 @@ export default function SupplyTerminal() {
             }
           `}
         </style>
-        <div className="pt-1.5 pb-1 bg-[#F4F4F4] dark:bg-slate-900 overflow-hidden border-b border-slate-100 dark:border-slate-800">
+        <div className="pt-1.5 pb-1 bg-slate-50 dark:bg-slate-900 overflow-hidden border-b border-slate-100 dark:border-slate-800">
           <div className="animate-marquee flex gap-1.5 px-3">
             {[...marketIndices, ...marketIndices].map((m, i) => (
               <div key={i} className="flex-shrink-0 w-26 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 p-1.5 rounded-lg shadow-sm">
@@ -157,7 +157,7 @@ export default function SupplyTerminal() {
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-xs font-black text-slate-900 dark:text-white">KSh {m.price}</span>
-                  <span className="text-[6px] text-slate-400 font-bold uppercase tracking-widest">/KG</span>
+                  <span className="text-[6px] text-slate-700 font-bold uppercase tracking-widest">/KG</span>
                 </div>
                 {/* Mini Sparkline */}
                 <div className="h-2.5 flex items-end gap-0.5">
@@ -175,16 +175,16 @@ export default function SupplyTerminal() {
         </div>
 
         {/* ── SEARCH & NAV TERMINAL (UNIFIED) ── */}
-        <div className="px-3 pt-2 pb-3 bg-[#F4F4F4] dark:bg-slate-900 sticky top-0 z-50 backdrop-blur-md">
+        <div className="px-3 pt-2 pb-3 bg-slate-50 dark:bg-slate-900 sticky top-0 z-50 backdrop-blur-md">
           <div className="flex items-center gap-2">
             <button 
               onClick={() => navigate(-1)} 
               className="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl active:scale-95 transition-all shadow-sm"
             >
-              <ArrowLeft className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+              <ArrowLeft className="w-4 h-4 text-slate-900 dark:text-slate-300" />
             </button>
             <div className="relative flex-1 group">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-700 group-focus-within:text-emerald-500 transition-colors" />
               <input 
                 type="text" 
                 placeholder={`Filter ${isWeaver ? 'pickups' : 'bulk inventory'}...`}
@@ -210,7 +210,7 @@ export default function SupplyTerminal() {
                   <img src={getThumbnailUrl(item.photo_url || item.photo, { width: 200 })} loading="lazy" className="w-full h-full object-cover" alt="Material" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700">
-                    {item.sourceType === 'weaver' ? <Building2 className="w-8 h-8 text-slate-300/50" /> : <Truck className="w-8 h-8 text-slate-300/50" />}
+                    {item.sourceType === 'weaver' ? <Building2 className="w-8 h-8 text-slate-600/50" /> : <Truck className="w-8 h-8 text-slate-600/50" />}
                   </div>
                 )}
                 <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-black/60 backdrop-blur-md text-[7px] font-black text-white rounded uppercase tracking-widest shadow-lg">
@@ -227,25 +227,25 @@ export default function SupplyTerminal() {
                     </h3>
                     <div className="flex items-center gap-1.5">
                       <span className={`w-2 h-2 rounded-full bg-gradient-to-br ${getMaterialColor(item.displayTitle)} shadow-sm`} />
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest truncate">{item.typeLabel}</p>
+                      <p className="text-xs font-bold text-slate-700 uppercase tracking-widest truncate">{item.typeLabel}</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0 flex flex-col items-end">
-                    <p className="text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1 mb-0.5">
+                    <p className="text-xs font-bold text-slate-600 uppercase tracking-widest flex items-center gap-1 mb-0.5">
                       <Clock className="w-2.5 h-2.5" />
                       {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                     </p>
                     <p className="text-sm font-black text-slate-900 dark:text-white italic tracking-tighter leading-none">
                       {item.weight_kg} <span className="text-xs uppercase not-italic opacity-40">KG</span>
                     </p>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1 bg-slate-50 dark:bg-slate-800 px-1 py-0.5 rounded">Grade {item.grade || 'A'}</p>
+                    <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mt-1 bg-slate-50 dark:bg-slate-800 px-1 py-0.5 rounded">Grade {item.grade || 'A'}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-800/50 pt-1.5 mt-auto">
                   <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                    <MapPin className="w-3 h-3 text-slate-300" />
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest truncate">
+                    <MapPin className="w-3 h-3 text-slate-600" />
+                    <p className="text-xs font-bold text-slate-700 uppercase tracking-widest truncate">
                       {item.location || 'Logistics Hub'}
                     </p>
                   </div>
@@ -254,7 +254,7 @@ export default function SupplyTerminal() {
                       {item.pricePerKg || (item.estimated_value && item.weight_kg ? Math.round(item.estimated_value / item.weight_kg) : null) ? 
                         `KSh ${item.pricePerKg || Math.round(item.estimated_value / item.weight_kg)}` : 
                         'Quoting'}
-                      <span className="text-[7px] text-slate-400 ml-0.5">/KG</span>
+                      <span className="text-[7px] text-slate-700 ml-0.5">/KG</span>
                     </p>
                   </div>
                 </div>

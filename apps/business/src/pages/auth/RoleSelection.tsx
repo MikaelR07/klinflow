@@ -13,7 +13,7 @@ export default function RoleSelection() {
       {/* Header */}
       <button 
         onClick={() => navigate(-1)} 
-        className="p-2 -ml-2 w-fit rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors mb-6"
+        className="p-2 -ml-2 w-fit rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 transition-colors mb-6"
       >
         <ArrowLeft className="w-5 h-5" />
       </button>
@@ -23,7 +23,7 @@ export default function RoleSelection() {
           How do you want to <br />
           <span className="text-primary italic">use Klinflow?</span>
         </h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+        <p className="text-sm text-slate-800 dark:text-slate-400 font-medium">
           Choose the identity that best describes your business goals.
         </p>
       </div>
@@ -44,7 +44,7 @@ export default function RoleSelection() {
           </div>
           
           <h3 className="text-2xl font-semibold text-slate-900 dark:text-white mb-2">I am a Weaver</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[80%]">
+          <p className="text-sm text-slate-800 dark:text-slate-400 font-medium leading-relaxed max-w-[80%]">
             I collect, sort, and aggregate verified waste to sell to industrial buyers in bulk.
           </p>
           
@@ -67,7 +67,7 @@ export default function RoleSelection() {
           </div>
           
           <h3 className="text-2xl font-semibold text-slate-900 dark:text-white mb-2">I am a Buyer</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[80%]">
+          <p className="text-sm text-slate-800 dark:text-slate-400 font-medium leading-relaxed max-w-[80%]">
             I want to source high-quality, verified recyclable materials for my manufacturing plant.
           </p>
           

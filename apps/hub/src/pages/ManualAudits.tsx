@@ -106,8 +106,8 @@ export default function ManualAudits() {
         </div>
         <div className="flex items-center gap-3">
            <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 px-4 py-2 rounded-2xl flex items-center gap-2">
-              <Search className="w-4 h-4 text-slate-400" />
-              <input type="text" placeholder="Filter queue..." className="bg-transparent border-none text-xs focus:ring-0" />
+              <Search className="font-medium w-4 h-4 text-slate-400" />
+              <input type="text" placeholder="Filter queue..." className="font-medium bg-transparent border-none text-xs focus:ring-0" />
            </div>
         </div>
       </div>
@@ -178,7 +178,7 @@ export default function ManualAudits() {
         {!isLoading && audits.length === 0 && (
           <div className="p-24 border-2 border-dashed border-slate-200 dark:border-white/5 rounded-[3.5rem] text-center">
              <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-900/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+                <CheckCircle2 className="font-medium w-8 h-8 text-emerald-500" />
              </div>
              <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Audit Queue Clear</h2>
              <p className="text-sm text-slate-500 font-semibold max-w-xs mx-auto">All current en-route agents have been verified by HygeneX AI.</p>

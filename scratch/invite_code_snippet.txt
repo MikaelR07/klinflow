@@ -1,0 +1,14 @@
+{/* Invite Code */}
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-700/50">
+              <p className="font-medium text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Fleet Invite Code</p>
+              <button
+                onClick={handleCopyCode}
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-dashed border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 rounded-lg p-2 flex items-center justify-between transition-all"
+              >
+                <span className="font-medium text-sm tracking-[0.15em] text-slate-900 dark:text-white">
+                  {profile?.fleetInviteCode || '------'}
+                </span>
+                <Copy className="font-medium w-3.5 h-3.5 text-slate-500 hover:text-emerald-500 transition-colors" />
+              </button>
+            </div>
+          </div>

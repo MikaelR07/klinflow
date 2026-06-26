@@ -142,7 +142,7 @@ export default function Register() {
         {/* Header */}
         <div className="flex flex-col items-center mb-10">
           <div className="w-full flex items-center justify-between mb-6">
-            <Link to="/login" className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-400 hover:text-indigo-600 transition-colors">
+            <Link to="/login" className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-700 hover:text-indigo-600 transition-colors">
               <ArrowLeft className="w-4 h-4" /> Back to Sign In
             </Link>
           </div>
@@ -150,7 +150,7 @@ export default function Register() {
 
         <div className="mb-10">
           <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">Join the Marketplace</h1>
-          <p className="text-xs text-slate-500 font-semibold uppercase tracking-widest mt-2">Business Registration • Kenya's B2B Recycling Network</p>
+          <p className="text-xs text-slate-800 font-semibold uppercase tracking-widest mt-2">Business Registration • Kenya's B2B Recycling Network</p>
         </div>
 
         <form onSubmit={initiateRegistration} className="space-y-6">
@@ -161,12 +161,12 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
               </div>
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Business Identity</h3>
+              <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Business Identity</h3>
             </div>
 
             {/* Business Name */}
             <div className="relative group">
-              <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+              <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-700 group-focus-within:text-indigo-600 transition-colors" />
               <input
                 type="text"
                 name="businessName"
@@ -180,7 +180,7 @@ export default function Register() {
 
             {/* Contact Person Name */}
             <div className="relative group">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-700 group-focus-within:text-indigo-600 transition-colors" />
               <input
                 type="text"
                 name="name"
@@ -194,7 +194,7 @@ export default function Register() {
 
             {/* Business Type Selector */}
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">Business Category</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-700 mb-2">Business Category</p>
               <div className="grid grid-cols-2 gap-2">
                 {BUSINESS_TYPES.map(type => (
                   <button
@@ -204,7 +204,7 @@ export default function Register() {
                     className={`px-3 py-2.5 rounded-xl text-[11px] font-semibold text-left transition-all border ${
                       formData.businessType === type.id
                         ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-500/20'
-                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-indigo-300'
+                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-400 hover:border-indigo-300'
                     }`}
                   >
                     {type.label}
@@ -232,7 +232,7 @@ export default function Register() {
                       className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                         formData.specializations?.includes(spec)
                           ? 'bg-emerald-500 border-emerald-500 text-white'
-                          : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500'
+                          : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-800'
                       }`}
                     >
                       {spec}
@@ -249,12 +249,12 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-violet-500" />
               </div>
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Contact & Security</h3>
+              <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Contact & Security</h3>
             </div>
 
             {/* Phone */}
             <div className="relative group">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-700 group-focus-within:text-indigo-600 transition-colors" />
               <input
                 type="tel"
                 name="phone"
@@ -274,7 +274,7 @@ export default function Register() {
             {/* Passcode */}
             <div className="grid grid-cols-2 gap-4">
               <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-700 group-focus-within:text-indigo-600 transition-colors" />
                 <input
                   type="password"
                   name="pin"
@@ -286,7 +286,7 @@ export default function Register() {
                 />
               </div>
               <div className="relative group">
-                <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+                <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-700 group-focus-within:text-indigo-600 transition-colors" />
                 <input
                   type="password"
                   name="confirmPin"
@@ -306,7 +306,7 @@ export default function Register() {
               <div className="w-5 h-5 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
               </div>
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Operation Area</h3>
+              <h3 className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Operation Area</h3>
             </div>
             <div className="min-h-[140px]">
               <LocationSelector
@@ -325,7 +325,7 @@ export default function Register() {
           </button>
         </form>
 
-        <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-400 mt-10">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-700 mt-10">
           Already registered?{' '}
           <Link to="/login" className="text-indigo-600 hover:underline underline-offset-4">Sign In Instead</Link>
         </p>
@@ -337,7 +337,7 @@ export default function Register() {
           <div className="max-w-sm w-full bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative animate-in zoom-in slide-in-from-bottom-8 duration-500 ease-out">
             <button
               onClick={() => setIsVerifying(false)}
-              className="absolute right-6 top-6 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors"
+              className="absolute right-6 top-6 p-2 rounded-full hover:bg-white shadow-sm dark:hover:bg-slate-800 text-slate-700 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -349,7 +349,7 @@ export default function Register() {
 
               <div>
                 <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">Verify Phone</h3>
-                <p className="text-sm text-slate-500 font-medium mt-2">
+                <p className="text-sm text-slate-800 font-medium mt-2">
                   Enter the 6-digit code sent to <br />
                   <span className="text-indigo-600 font-semibold tracking-widest">{formData.phone}</span>
                 </p>
@@ -364,10 +364,10 @@ export default function Register() {
                   value={formData.otp}
                   onChange={(e) => setFormData(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
                   placeholder="000000"
-                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-indigo-500 outline-none transition-all placeholder:text-slate-200"
+                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl focus:border-indigo-500 outline-none transition-all placeholder:text-slate-500"
                 />
                 <div className="flex flex-col items-center mt-4 space-y-3">
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>
+                  <p className="text-xs font-semibold text-slate-700 uppercase tracking-[0.2em]">Code sent via SMS to your phone</p>
                   <button
                     type="button"
                     onClick={async () => {
@@ -378,7 +378,7 @@ export default function Register() {
                         toast.error('Resend Failed', { description: err.message });
                       }
                     }}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 rounded-full text-xs font-semibold uppercase tracking-widest transition-all"
+                    className="flex items-center gap-2 px-4 py-2 bg-white shadow-sm dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-600 rounded-full text-xs font-semibold uppercase tracking-widest transition-all"
                   >
                     Resend Code
                   </button>

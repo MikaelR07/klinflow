@@ -156,10 +156,10 @@ export default function HygeneXPage() {
   };
 
   return (
-    <div className={`flex flex-col absolute inset-0 bg-[#F4F4F4] dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300 ${role === ROLES.ADMIN ? 'lg:static lg:h-[calc(100dvh-56px)]' : 'lg:static lg:h-[calc(100dvh-56px-70px)]'}`}>
+    <div className={`flex flex-col absolute inset-0 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300 ${role === ROLES.ADMIN ? 'lg:static lg:h-[calc(100dvh-56px)]' : 'lg:static lg:h-[calc(100dvh-56px-70px)]'}`}>
       
       {/* ── HEADER ── */}
-      <div className="relative z-20 bg-[#F4F4F4]/80 dark:bg-slate-900/80 backdrop-blur-2xl border-b border-black/5 dark:border-white/5 pt-2">
+      <div className="relative z-20 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-2xl border-b border-black/5 dark:border-white/5 pt-2">
         <TopTabs active="/hygenex" />
       </div>
 
@@ -187,7 +187,7 @@ export default function HygeneXPage() {
                 animate={{ opacity: 1 }}
                 className="mb-4 pl-1"
               >
-                <span className="text-[13px] font-bold uppercase tracking-[0.1em] text-slate-400 dark:text-slate-500">
+                <span className="text-[13px] font-bold uppercase tracking-[0.1em] text-slate-700 dark:text-slate-500">
                   Smart sourcing in <span className="text-blue-600 dark:text-blue-400">AI mode</span>
                 </span>
               </motion.div>
@@ -203,7 +203,7 @@ export default function HygeneXPage() {
                 <h1 className="text-[15px] font-black leading-tight text-slate-900 dark:text-transparent dark:bg-gradient-to-r dark:from-white dark:to-white/60 dark:bg-clip-text whitespace-nowrap overflow-hidden text-ellipsis">
                   Your Next Reliable Supplier Is Here
                 </h1>
-                <p className="text-xs text-slate-400 dark:text-slate-500 font-bold mt-1 uppercase tracking-widest">
+                <p className="text-xs text-slate-700 dark:text-slate-500 font-bold mt-1 uppercase tracking-widest">
                   Look no further for your custom inquiries
                 </p>
               </motion.div>
@@ -232,7 +232,7 @@ export default function HygeneXPage() {
                     </div>
                     <div>
                       <div className="text-[11px] font-bold uppercase tracking-wider leading-none mb-0.5">{item.title}</div>
-                      <div className="text-xs text-slate-500 font-medium leading-none">{item.desc}</div>
+                      <div className="text-xs text-slate-800 font-medium leading-none">{item.desc}</div>
                     </div>
                   </button>
                 ))}
@@ -250,7 +250,7 @@ export default function HygeneXPage() {
                     className={`flex gap-3 ${isAi ? '' : 'flex-row-reverse'}`}
                   >
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
-                      isAi ? 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-slate-200 dark:bg-white/5 border-black/5 dark:border-white/10 text-slate-500 dark:text-slate-400'
+                      isAi ? 'bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-slate-200 dark:bg-white/5 border-black/5 dark:border-white/10 text-slate-800 dark:text-slate-400'
                     }`}>
                       {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
                     </div>
@@ -258,7 +258,7 @@ export default function HygeneXPage() {
                     <div className="flex flex-col gap-2 max-w-[85%]">
                       <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${
                         isAi 
-                          ? 'bg-white dark:bg-white/5 border-black/5 dark:border-white/10 text-slate-700 dark:text-slate-200 rounded-tl-none shadow-sm dark:shadow-none' 
+                          ? 'bg-white dark:bg-white/5 border-black/5 dark:border-white/10 text-slate-900 dark:text-slate-200 rounded-tl-none shadow-sm dark:shadow-none' 
                           : 'bg-blue-600 border-blue-500 text-white rounded-tr-none shadow-md'
                       }`}>
                         {renderMessageText(msg.text)}
@@ -310,14 +310,14 @@ export default function HygeneXPage() {
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={isListening ? "Listening..." : "Command HygeneX..."}
-              className="w-full bg-transparent border-none py-3 pl-12 pr-16 text-[14px] text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-0 resize-none min-h-[50px] max-h-[150px]"
+              className="w-full bg-transparent border-none py-3 pl-12 pr-16 text-[14px] text-slate-900 dark:text-white placeholder:text-slate-700 dark:placeholder:text-slate-800 focus:outline-none focus:ring-0 resize-none min-h-[50px] max-h-[150px]"
               rows={1}
             />
             
             <button 
               onClick={toggleMic}
               className={`absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all z-20 ${
-                isListening ? 'bg-blue-500 text-white animate-pulse' : 'text-slate-400 dark:text-slate-500 hover:text-blue-500 bg-black/5 dark:bg-white/5'
+                isListening ? 'bg-blue-500 text-white animate-pulse' : 'text-slate-700 dark:text-slate-500 hover:text-blue-500 bg-black/5 dark:bg-white/5'
               }`}
             >
               {isListening ? <StopCircle className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
@@ -327,7 +327,7 @@ export default function HygeneXPage() {
               onClick={handleSend}
               disabled={!inputText.trim()}
               className={`absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full transition-all ${
-                inputText.trim() ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-300 dark:text-slate-700 pointer-events-none'
+                inputText.trim() ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-600 dark:text-slate-700 pointer-events-none'
               }`}
             >
               <Send className="w-5 h-5" />

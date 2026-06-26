@@ -7,20 +7,9 @@ export default function Footer() {
 
   const sections = [
     {
-      title: "Products",
-      links: [
-        { name: "For Residents", path: "/for-residents" },
-        { name: "For Agents", path: "/for-agents" },
-        { name: "Fleet Management", path: "/products/fleet" },
-        { name: "Hub Operations", path: "/products/hub" },
-        { name: "Marketplace", path: "/marketplace" },
-      ],
-    },
-    {
       title: "Resources",
       links: [
-        { name: "How It Works", path: "/system" },
-        { name: "Ecosystem Map", path: "/ecosystem" },
+        { name: "Klin Api", path: "/ecosystem" },
         // { name: "Pricing Model", path: "/pricing" },
         // { name: "Documentation", path: "/docs" },
       ],
@@ -38,12 +27,12 @@ export default function Footer() {
 
   return (
     <footer
-      className={`py-16 md:py-32 px-6 border-t transition-colors relative z-20 ${isDarkMode ? "border-white/5 bg-surface-950 text-white" : "border-slate-200 bg-white text-slate-900"}`}
+      className={`py-10 md:py-16 px-6 border-t transition-colors relative z-20 ${isDarkMode ? "border-white/5 bg-surface-950 text-white" : "border-slate-200 bg-white text-slate-900"}`}
     >
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
-          <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2.5 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-8 mb-10">
+          <div className="col-span-2 lg:col-span-2">
+            <Link to="/" className="flex items-center gap-2.5 mb-5">
               <div className="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center">
                 <Leaf className="w-6 h-6 text-white" />
               </div>
@@ -54,7 +43,7 @@ export default function Footer() {
               </span>
             </Link>
             <p
-              className={`font-medium leading-relaxed max-w-sm italic mb-8 ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}
+              className={`text-sm sm:text-base font-medium leading-relaxed max-w-sm italic mb-5 ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}
             >
               The financial engine for the circular economy. Transforming
               Africa's waste management into a high-yield digital asset
@@ -74,9 +63,9 @@ export default function Footer() {
           </div>
 
           {sections.map((section) => (
-            <div key={section.title}>
+            <div key={section.title} className="col-span-1">
               <h5
-                className={`text-xs font-bold uppercase tracking-[0.2em] mb-8 ${isDarkMode ? "text-white" : "text-slate-900"}`}
+                className={`text-xs font-bold uppercase tracking-[0.2em] mb-5 ${isDarkMode ? "text-white" : "text-slate-900"}`}
               >
                 {section.title}
               </h5>
@@ -97,10 +86,10 @@ export default function Footer() {
         </div>
 
         <div className="pt-12 border-t border-slate-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 italic">
+          <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-slate-500 italic text-center md:text-left w-full md:w-auto mb-4 md:mb-0">
             © 2026 Klinflow . All Rights Reserved.
           </p>
-          <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-slate-500">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-slate-500">
             <span className="cursor-pointer hover:text-primary transition-colors">
               Security
             </span>

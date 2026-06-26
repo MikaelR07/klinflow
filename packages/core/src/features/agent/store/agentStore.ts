@@ -55,14 +55,45 @@ export const useAgentStore = create<AgentStore>()(
   // ── Fleet Management ──────────────────────────────
   fleetDrivers: [],
   isLoadingFleet: false,
+  lastFleetFetch: 0,
   fetchFleetDrivers: async () => {
     const { userId, profile } = useAuthStore.getState();
     if (!userId || profile?.agentAccountType !== 'company_admin') return;
 
+    // Cache for 2 minutes to prevent spamming
+    if (Date.now() - get().lastFleetFetch < 120000 && get().fleetDrivers.length > 0) return;
+
     set({ isLoadingFleet: true });
     try {
       const data = await AgentService.fetchFleetDrivers(userId);
-      set({ fleetDrivers: data });
+      
+      // Also fetch their aggregate stats (disputes, completed jobs, collected kg, payouts)
+      const { data: disputesData } = await supabase.from('disputes').select('raised_by').eq('status', 'open');
+      const { data: bookingsData } = await supabase.from('bookings').select('agent_id, actual_weight_kg, payout_amount').eq('status', 'completed');
+      
+      const disputesCount: Record<string, number> = {};
+      (disputesData || []).forEach((d: any) => {
+        disputesCount[d.raised_by] = (disputesCount[d.raised_by] || 0) + 1;
+      });
+      
+      const fleetStats: Record<string, { jobs: number, kg: number, payout: number }> = {};
+      (bookingsData || []).forEach((b: any) => {
+        if (!b.agent_id) return;
+        if (!fleetStats[b.agent_id]) fleetStats[b.agent_id] = { jobs: 0, kg: 0, payout: 0 };
+        fleetStats[b.agent_id].jobs += 1;
+        fleetStats[b.agent_id].kg += Number(b.actual_weight_kg || 0);
+        fleetStats[b.agent_id].payout += Number(b.payout_amount || 0);
+      });
+
+      const enrichedDrivers = data.map(driver => ({
+        ...driver,
+        dispute_count: disputesCount[driver.id!] || 0,
+        completed_jobs: fleetStats[driver.id!]?.jobs || 0,
+        collected_kg: fleetStats[driver.id!]?.kg || 0,
+        payout_amount: fleetStats[driver.id!]?.payout || 0
+      }));
+
+      set({ fleetDrivers: enrichedDrivers, lastFleetFetch: Date.now() });
     } catch (err) {
       console.error('Fetch fleet drivers error:', err);
     } finally {
@@ -425,7 +456,7 @@ export const useAgentStore = create<AgentStore>()(
       // 2. Fetch Job History (Last 50 for the UI list)
       const { data: historyData, error: historyError } = await supabase
         .from('bookings')
-        .select('*')
+        .select('*, profiles!user_id(name, phone)')
         .eq('agent_id', userId) // For individual agents. For companies, we might want fleet history.
         .in('status', ['completed', 'cancelled', 'confirmed', 'in_progress', 'picked_up'])
         .order('updated_at', { ascending: false })
@@ -439,10 +470,13 @@ export const useAgentStore = create<AgentStore>()(
             ...get().earnings,
             total: stats.total || 0,
             todayPayout: stats.todayPayout || 0,
+            yesterdayPayout: stats.yesterdayPayout || 0,
             totalJobs: stats.totalJobs || 0,
             completedToday: stats.completedToday || 0,
+            yesterdayJobs: stats.yesterdayJobs || 0,
             totalKg: stats.totalKgRecovered || 0,
             todayKg: stats.todayKg || 0,
+            yesterdayKg: stats.yesterdayKg || 0,
             inventoryValue: stats.inventoryValue || 0,
             thisWeekKg: stats.thisWeekKg || 0,
             weeklyData: stats.weeklyData || [],

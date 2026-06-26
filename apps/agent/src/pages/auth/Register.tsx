@@ -23,11 +23,14 @@ export default function Register() {
     agent_account_type: accountType,
     fleet_invite_code: '',
     company_name: '',
-    gender: ''
+    gender: '',
+    documents: {} as Record<string, File>
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [phoneAvailable, setPhoneAvailable] = useState(null);
+  const [phoneAvailable, setPhoneAvailable] = useState<boolean | null>(null);
+  const [companyDocs, setCompanyDocs] = useState<string[]>([]);
+  const [isCheckingCode, setIsCheckingCode] = useState(false);
   const navigate = useNavigate();
   const { register, checkAvailability, sendOtp, verifyOtp } = useAuthStore();
 
@@ -73,7 +76,59 @@ export default function Register() {
       return;
     }
 
+    if (name === 'fleet_invite_code') {
+      const upper = value.toUpperCase();
+      setFormData(prev => ({ ...prev, fleet_invite_code: upper }));
+      if (upper.length >= 5) {
+        verifyInviteCode(upper);
+      } else {
+        setCompanyDocs([]);
+      }
+      return;
+    }
+
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const verifyInviteCode = async (code: string) => {
+    setIsCheckingCode(true);
+    try {
+      const { supabase } = await import('@klinflow/supabase');
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('required_documents')
+        .eq('fleet_invite_code', code)
+        .single();
+      
+      if (!error && data) {
+        setCompanyDocs((data.required_documents as string[]) || []);
+      } else {
+        setCompanyDocs([]);
+      }
+    } catch (err) {
+      setCompanyDocs([]);
+    } finally {
+      setIsCheckingCode(false);
+    }
+  };
+
+  const handleFileUpload = (docName: string, file: File | null) => {
+    if (!file) {
+      const newDocs = { ...formData.documents };
+      delete newDocs[docName];
+      setFormData(prev => ({ ...prev, documents: newDocs }));
+      return;
+    }
+    
+    if (file.size > 5242880) { // 5MB limit
+      toast.error('File too large', { description: 'Please upload a file smaller than 5MB.' });
+      return;
+    }
+    
+    setFormData(prev => ({
+      ...prev,
+      documents: { ...prev.documents, [docName]: file }
+    }));
   };
 
   const initiateRegistration = async (e) => {
@@ -91,6 +146,13 @@ export default function Register() {
     if ((formData.agent_account_type === 'independent' || formData.agent_account_type === 'fleet_driver') && !formData.gender) return toast.error('Field Missing', { description: 'Please select your gender.' });
     if (formData.agent_account_type === 'fleet_driver' && formData.fleet_invite_code.trim().length < 5) return toast.error('Missing Code', { description: 'Please enter a valid Company Invite Code.' });
     if (formData.agent_account_type === 'company_admin' && formData.company_name.trim().length < 3) return toast.error('Incomplete Business Info', { description: 'Please provide a valid Company/Business name.' });
+
+    if (formData.agent_account_type === 'fleet_driver' && companyDocs.length > 0) {
+      const missingDocs = companyDocs.filter(doc => !formData.documents[doc]);
+      if (missingDocs.length > 0) {
+        return toast.error('Missing Documents', { description: `Please upload: ${missingDocs.join(', ')}` });
+      }
+    }
 
     // Send real OTP via Africa's Talking
     setIsLoading(true);
@@ -269,13 +331,40 @@ export default function Register() {
             )}
 
             {formData.agent_account_type === 'fleet_driver' && (
-              <div className="pt-2 animate-slide-up">
-                <label className="block text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1.5 capitalize tracking-wider">Company Invite Code</label>
-                <div className="relative">
-                  <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-orange-400" />
-                  <input type="text" name="fleet_invite_code" value={formData.fleet_invite_code} onChange={handleInputChange} placeholder="CF-XXXXXX" className="w-full pl-11 pr-4 py-3 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-orange-500/50 text-sm tracking-widest capitalize" required />
+              <div className="pt-2 animate-slide-up space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1.5 capitalize tracking-wider">Company Invite Code</label>
+                  <div className="relative">
+                    <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-orange-400" />
+                    <input type="text" name="fleet_invite_code" value={formData.fleet_invite_code} onChange={handleInputChange} placeholder="CF-XXXXXX" className="w-full pl-11 pr-4 py-3 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-orange-500/50 text-sm tracking-widest capitalize" required />
+                    {isCheckingCode && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-orange-400" />}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-1.5 ml-1">Ask your Company Admin for this 6-character code.</p>
                 </div>
-                <p className="text-xs text-slate-500 mt-1.5 ml-1">Ask your Company Admin for this 6-character code.</p>
+
+                {companyDocs.length > 0 && (
+                  <div className="p-4 bg-orange-50 dark:bg-orange-500/5 border border-orange-200 dark:border-orange-500/20 rounded-xl space-y-4">
+                    <h3 className="text-xs font-bold text-orange-700 dark:text-orange-400 flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4" /> Required Documents
+                    </h3>
+                    <p className="text-[10px] text-orange-600 dark:text-orange-300 font-medium">Please upload the following documents requested by your company (Images or PDF, max 5MB).</p>
+                    
+                    <div className="space-y-3">
+                      {companyDocs.map(doc => (
+                        <div key={doc} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-3">
+                          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-2">{doc}</label>
+                          <input 
+                            type="file" 
+                            accept="image/jpeg, image/png, application/pdf"
+                            onChange={(e) => handleFileUpload(doc, e.target.files?.[0] || null)}
+                            className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            required
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

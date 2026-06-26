@@ -1,7 +1,7 @@
 import {
   User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle,
   Truck, BadgeCheck, Clock, DollarSign, Brain, Settings,
-  Wallet, ArrowUpRight, ArrowDownLeft, History, Package,
+  Wallet, ArrowUpRight, ArrowDownLeft, ArrowLeft, History, Package,
   Search, Briefcase, Star, ShieldCheck, HelpCircle, X, Loader2, Zap, BarChart3, Copy
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SettingsMenu() {
-  const { profile, logout, fetchProfile, depositToWallet } = useAuthStore();
+  const { profile, logout, fetchProfile, depositToWallet, updateProfile } = useAuthStore();
   const { earnings, fetchEarnings } = useAgentStore();
   const { isDarkMode, toggleTheme } = useThemeStore();
   const navigate = useNavigate();
@@ -64,29 +64,35 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors pb-24">
+    <div className="flex flex-col bg-white dark:bg-slate-900 transition-colors pb-5">
       {/* FIXED TOP NAV */}
-      {!isCompanyOwner && (
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all duration-300">
-          <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
-            <div className="flex flex-col">
-              <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Profile & Settings</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shadow-sm shadow-primary/10">
-                <p className="text-[10px] font-black text-primary capitalize tracking-[0.2em]">{agentTypeLabel}</p>
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-white dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-800">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate('/')} 
+                className="p-2 -ml-2 bg-[#F8F8FF] dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all shadow-sm"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div>
+                <h1 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">Settings</h1>
+                <p className="text-[11px] font-semibold text-slate-500 mt-0.5">profile & preferences</p>
               </div>
+            </div>
+            <div className="px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 rounded-full border border-emerald-100 dark:border-emerald-500/20">
+              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-wider">{agentTypeLabel}</p>
             </div>
           </div>
         </div>
-      )}
+      </div>
 
-      <main className={`flex-1 ${isCompanyOwner ? 'pt-8 max-w-6xl w-full' : 'pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] max-w-lg w-full px-1.5'} pb-6 mx-auto`}>
+      <main className={`flex-1 ${isCompanyOwner ? 'pt-8 max-w-6xl w-full' : 'pt-[calc(env(safe-area-inset-top,1rem)+7.5rem)] max-w-lg w-full px-1.5'} pb-6 mx-auto`}>
         <div className={isCompanyOwner ? 'grid lg:grid-cols-12 gap-8' : 'space-y-6'}>
           <div className={isCompanyOwner ? 'lg:col-span-5 space-y-6 h-fit' : 'space-y-6 h-fit'}>
         {/* ── HERO BENTO CARD ── */}
-        <div className="relative overflow-hidden rounded-[1rem] bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white mb-6 group">
+        <div className="relative overflow-hidden mt-16 rounded-[1rem] bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white  group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 dark:bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32 transition-transform group-hover:scale-110 duration-700" />
 
           <div className="relative z-10 space-y-2.5">
@@ -135,82 +141,66 @@ export default function SettingsMenu() {
             {/* Divider */}
             <div className="border-t border-white/15" />
 
-            {/* Wallet Section */}
-            <div className="text-center">
-              <div className="flex flex-col items-center gap-1.5 mb-3">
-                <div className="flex items-center gap-2 opacity-95">
-                  <Wallet className="w-4 h-4 text-white" />
-                  <span className="text-xs font-black capitalize tracking-widest text-emerald-100">{balanceLabel}</span>
-                </div>
-                {isFleetDriver && (
-                  <div className="bg-white/20 dark:bg-white/10 px-3 py-1 rounded-full text-[10px] font-bold capitalize tracking-tighter border border-white/20 backdrop-blur-md text-white">
-                    Fleet Account
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-0.5">
-                <p className="text-3xl font-black tracking-tighter text-white">
-                  <span className="text-lg font-medium opacity-80 mr-1.5">KSh</span>
-                  {isLoadingBalance ? '...' : displayBalance.toLocaleString()}
-                </p>
-              </div>
-
-              <div className="flex gap-3 mt-5">
-                {!isFleetDriver ? (
-                  <>
-                    <button
-                      onClick={() => navigate('/deposit')}
-                      className="flex-1 bg-white text-emerald-700 dark:text-slate-900 h-12 rounded-xl font-bold text-xs capitalize tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md hover:bg-slate-50"
-                    >
-                      <ArrowDownLeft className="w-4 h-4" /> DEPOSIT
-                    </button>
-                    <button className="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/20 transition-all text-white active:scale-95">
-                      <History className="w-5 h-5" />
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => navigate('/deposit')}
-                      className="flex-1 bg-white text-emerald-700 dark:text-slate-900 h-12 rounded-xl font-bold text-xs capitalize tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md hover:bg-slate-50"
-                    >
-                      <Zap className="w-4 h-4" /> REQUEST DEPOSIT
-                    </button>
-                    <button className="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/20 transition-all text-white active:scale-95">
-                      <History className="w-5 h-5" />
-                    </button>
-                  </>
-                )}
+            {/* Quick Access inside hero */}
+            <div className="space-y-3">
+              <h3 className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Quick Access</h3>
+              <div className="grid grid-cols-4 gap-3">
+                {quickActions.map((action, i) => (
+                  <button
+                    key={i}
+                    onClick={() => navigate(action.path)}
+                    className="flex flex-col items-center gap-2 active:scale-90 transition-all"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-emerald-800 text-white flex items-center justify-center border border-emerald-900">
+                      <action.icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-[9px] font-bold text-white/80 capitalize tracking-wide">{action.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
-
-        {/* ── QUICK ACTIONS ── */}
-        <div className="space-y-4 mb-10">
-          <div className="flex items-center justify-between px-2">
-            <h3 className="font-bold text-slate-900 dark:text-white capitalize tracking-widest text-[11px]">Quick Access</h3>
-          </div>
-          <div className="grid grid-cols-4 gap-4">
-            {quickActions.map((action, i) => (
-              <button
-                key={i}
-                onClick={() => navigate(action.path)}
-                className="flex flex-col items-center gap-3 active:scale-90 transition-all"
-              >
-                <div className={`w-14 h-14 rounded-[1rem] ${action.color} text-white flex items-center justify-center shadow-lg shadow-black/5`}>
-                  <action.icon className="w-6 h-6" />
-                </div>
-                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-tighter">{action.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
           </div>
           <div className={isCompanyOwner ? 'lg:col-span-7 space-y-6 h-fit' : 'space-y-6 h-fit'}>
+
+        {/* ── AGENT STATUS ── */}
+        {!isCompanyOwner && (
+          <div className="space-y-3 mb-6">
+            <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Agent Status</p>
+            <div className="bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+              <div className="p-5 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600">
+                    <Truck className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Maintenance Mode</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5 max-w-[200px]">Mark your vehicle as out-of-service for repairs</p>
+                  </div>
+                </div>
+                <button
+                  onClick={async () => {
+                    const isMaintenance = (profile?.location as any)?.status === 'maintenance';
+                    const newLocation = { ...(profile?.location as any), status: isMaintenance ? 'idle' : 'maintenance' };
+                    try {
+                      await updateProfile({ location: newLocation as any });
+                      toast.success(`Maintenance Mode ${isMaintenance ? 'Disabled' : 'Enabled'}`);
+                      fetchProfile();
+                    } catch (err) {
+                      toast.error('Failed to update status');
+                    }
+                  }}
+                  className={`w-11 h-6 rounded-full p-1 transition-all ${(profile?.location as any)?.status === 'maintenance' ? 'bg-amber-500 shadow-lg shadow-amber-500/20' : 'bg-slate-200 dark:bg-slate-700'}`}
+                >
+                  <div className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${(profile?.location as any)?.status === 'maintenance' ? 'translate-x-5' : 'translate-x-0'}`} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3 mb-10">
           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>

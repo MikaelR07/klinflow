@@ -7,11 +7,11 @@ import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import EmptyState from '@klinflow/ui/components/EmptyState';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function ReviewCard({ review }: { review: any }) {
+function ReviewCard({ review, isCompanyOwner }: { review: any, isCompanyOwner?: boolean }) {
   const isPositive = review.rating >= 4;
 
   return (
-    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-[1.5rem] shadow-sm hover:shadow-md transition-all overflow-hidden group p-5">
+    <div className={`bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700/50 rounded-2xl shadow-sm hover:shadow-md transition-all overflow-hidden group p-5 ${isCompanyOwner ? 'h-full flex flex-col' : ''}`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
@@ -58,7 +58,7 @@ function ReviewCard({ review }: { review: any }) {
       </div>
 
       {/* Review Content */}
-      <div className="pl-4 border-l-2 border-primary/20 bg-slate-50/50 dark:bg-white/5 p-4 rounded-r-2xl">
+      <div className={`pl-4 border-l-2 border-primary/20 bg-slate-50/50 dark:bg-slate-800/40 p-4 rounded-r-2xl ${isCompanyOwner ? 'flex-1 mt-4' : ''}`}>
         {review.feedback ? (
           <p className="text-sm text-slate-600 dark:text-slate-300 font-medium leading-relaxed italic">
             "{review.feedback}"
@@ -117,11 +117,16 @@ export default function ReviewsPage() {
   return (
     <div className={`space-y-6 animate-fade-in ${isCompanyOwner ? '' : 'px-1.5 pb-20'}`}>
       {isCompanyOwner ? (
-        <div className="mb-6 flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Reviews and Feedback</h1>
-            <p className="text-sm font-medium text-slate-500 mt-1 flex items-center gap-1.5">
-              <TrendingUp className="w-4 h-4 text-primary" /> Live Feedback reports
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
+              <div className="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center shrink-0">
+                <Star className="w-6 h-6 fill-amber-500" />
+              </div>
+              Reviews & Feedback
+            </h1>
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-[0.2em] md:ml-15">
+              Customer Feedback Analytics
             </p>
           </div>
         </div>
@@ -148,10 +153,10 @@ export default function ReviewsPage() {
       )}
 
       {/* Rating & Breakdown */}
-      <div className="bg-white dark:bg-slate-900/70 rounded-[1rem] p-4 border border-slate-200 dark:border-white/5 !mt-2">
-        <div className="flex gap-5">
+      <div className={`bg-white dark:bg-slate-900/60 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700/50 !mt-2 ${isCompanyOwner ? 'max-w-2xl' : ''}`}>
+        <div className={`flex ${isCompanyOwner ? 'gap-8 md:gap-12' : 'gap-5'}`}>
           {/* Left: Rating Summary */}
-          <div className="flex flex-col items-center justify-center shrink-0 pr-5 border-r border-slate-100 dark:border-slate-800">
+          <div className={`flex flex-col items-center justify-center shrink-0 border-r border-slate-100 dark:border-slate-800 ${isCompanyOwner ? 'pr-8 md:pr-12' : 'pr-5'}`}>
             <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-[0.2em] mb-1">Rating</p>
             <div className="flex items-baseline gap-1">
               <h2 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
@@ -212,9 +217,9 @@ export default function ReviewsPage() {
             subtitle="Complete more missions to start receiving feedback from the community."
           />
         ) : (
-          <div className="grid grid-cols-1 gap-3">
+          <div className={`grid gap-4 ${isCompanyOwner ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}>
             {recentReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+              <ReviewCard key={review.id} review={review} isCompanyOwner={isCompanyOwner} />
             ))}
           </div>
         )}

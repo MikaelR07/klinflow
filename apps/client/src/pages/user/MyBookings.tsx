@@ -12,6 +12,8 @@ import { OptimizedImage } from '@klinflow/ui';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import AssetJourney from '@klinflow/ui/components/AssetJourney';
 import { toast } from 'sonner';
+import { DisputeModal } from '@klinflow/ui';
+import { useDisputeStore } from '@klinflow/core/stores/disputeStore';
 
 const statusConfig = {
   'completed': { label: 'completed', color: 'bg-green-100 text-green-700', icon: CheckCircle2 },
@@ -109,6 +111,10 @@ export default function MyBookings() {
   const [newTime, setNewTime] = useState('09:00 AM');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Dispute Modal State
+  const [disputeBooking, setDisputeBooking] = useState<any>(null);
+  const { createDispute } = useDisputeStore();
+
   const { categories, fetchCategories } = useServiceStore();
 
   useEffect(() => {
@@ -199,6 +205,26 @@ export default function MyBookings() {
       });
     } catch (err) {
       toast.error('Clear failed');
+    }
+  };
+
+  const handleCreateDispute = async (reason: string, description: string) => {
+    if (!disputeBooking) return;
+    try {
+      await createDispute({
+        booking_id: disputeBooking.id,
+        raised_by: profile?.id,
+        dispute_type: reason,
+        description,
+        status: 'open'
+      });
+      toast.success('Dispute Raised', {
+        description: 'Our team will investigate and get back to you.'
+      });
+    } catch (err: any) {
+      toast.error('Failed to raise dispute', {
+        description: err?.message || String(err)
+      });
     }
   };
 
@@ -576,6 +602,17 @@ export default function MyBookings() {
                     </div>
                   )}
 
+                  {b.status === 'completed' && (
+                    <div className="pt-2">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setDisputeBooking(b); }}
+                        className="w-full py-3 bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-500 rounded-2xl font-bold text-[11px] capitalize active:scale-95 transition-all"
+                      >
+                        Report an Issue with this Pickup
+                      </button>
+                    </div>
+                  )}
+
                   <button
                     onClick={() => setSelectedBooking(null)}
                     className="w-full py-4 text-slate-800 font-bold text-[11px] capitalize tracking-[0.3em] active:opacity-50"
@@ -588,6 +625,14 @@ export default function MyBookings() {
           );
         })()}
       </AnimatePresence>
+
+      <DisputeModal
+        isOpen={!!disputeBooking}
+        onClose={() => setDisputeBooking(null)}
+        onSubmit={handleCreateDispute}
+        title="Report Pickup Issue"
+        subtitle={`Please let us know what went wrong with pickup ${disputeBooking?.id?.slice(0, 8) || ''}.`}
+      />
     </div>
   );
 }

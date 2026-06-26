@@ -200,14 +200,14 @@ export default function CompanyServicesConfigPage() {
     <div className="space-y-8 animate-slide-up pb-20">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-semibold dark:text-white tracking-tighter">Services & Pricing</h1>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-[0.2em]">Manage Fleet Capabilities & Rates</p>
+          <h1 className="text-xl font-bold dark:text-white tracking-tighter">Services & Pricing</h1>
+          <p className="font-medium text-xs text-slate-400 uppercase tracking-[0.2em]">Manage Fleet Capabilities & Rates</p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary/90 active:scale-95 transition-all shadow-lg shadow-primary/20 disabled:opacity-50"
+            className="font-medium flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl text-sm hover:bg-primary/90 active:scale-95 transition-all shadow-none shadow-primary/20 disabled:opacity-50"
           >
             {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {isSaving ? 'Deploying...' : 'Save Configuration'}
@@ -218,7 +218,7 @@ export default function CompanyServicesConfigPage() {
       {isFleetDriver && (
         <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/50 rounded-[1rem] flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-orange-500 shrink-0" />
-          <p className="text-xs font-semibold text-orange-700 dark:text-orange-300">
+          <p className="font-medium text-xs text-orange-700 dark:text-orange-300">
             Pricing is managed by your company admin. You can view rates but cannot change them.
           </p>
         </div>
@@ -230,15 +230,15 @@ export default function CompanyServicesConfigPage() {
         <div className="lg:col-span-5 space-y-8">
           
           {/* HUB MODE */}
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${hubData.active ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
                   <Building2 className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold dark:text-white tracking-widest">Company Hub Mode</h3>
-                  <p className="text-xs text-slate-400 font-semibold tracking-tight">Accept Drop-offs at HQ</p>
+                  <h3 className="text-sm font-bold dark:text-white tracking-widest">Company Hub Mode</h3>
+                  <p className="font-medium text-xs text-slate-400 tracking-tight">Accept Drop-offs at HQ</p>
                 </div>
               </div>
               <button
@@ -251,17 +251,17 @@ export default function CompanyServicesConfigPage() {
             {hubData.active && (
               <div className="space-y-4 animate-in fade-in slide-in-from-top-2">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">HQ Physical Address</label>
+                  <label className="font-medium text-xs text-slate-400 capitalize tracking-widest ml-1">HQ Physical Address</label>
                   <input
                     type="text"
                     placeholder="e.g. Langata Rd, Opp T-Mall"
                     value={hubData.address}
                     onChange={(e) => setHubData(prev => ({ ...prev, address: e.target.value }))}
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-[1rem] font-semibold text-sm outline-none focus:border-emerald-500"
+                    className="font-medium w-full p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div className="p-4 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/50 rounded-[1rem]">
-                  <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 leading-tight">
+                  <p className="font-medium text-xs text-emerald-700 dark:text-emerald-400 leading-tight">
                     By enabling Hub Mode, your location will appear on the marketplace as a verified drop-off point.
                   </p>
                 </div>
@@ -271,56 +271,56 @@ export default function CompanyServicesConfigPage() {
 
           {/* LOGISTICS FEE & CAPACITY GRID */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-4">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
+                <div className="font-medium w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
                   <Truck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold dark:text-white tracking-widest">Base Fee</h3>
+                  <h3 className="text-sm font-bold dark:text-white tracking-widest">Base Fee</h3>
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Amount (KSh)</label>
+                <label className="font-medium text-[10px] text-slate-400 uppercase tracking-widest">Amount (KSh)</label>
                 <input
                   type="text"
                   inputMode="decimal"
                   disabled={isFleetDriver}
                   value={formData.base_logistics_fee}
                   onChange={(e) => setFormData({ ...formData, base_logistics_fee: e.target.value.replace(/[^0-9.]/g, '') })}
-                  className="w-full p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-[1rem] font-semibold text-sm outline-none focus:border-amber-500"
+                  className="font-medium w-full p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] text-sm outline-none focus:border-amber-500"
                 />
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-800 p-6 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
                   <Scale className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold dark:text-white tracking-widest">Capacity</h3>
+                  <h3 className="text-sm font-bold dark:text-white tracking-widest">Capacity</h3>
                 </div>
               </div>
               <div className="flex gap-2">
                 <div className="space-y-1.5 flex-1">
-                  <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Min (KG)</label>
+                  <label className="font-medium text-[10px] text-slate-400 uppercase tracking-widest">Min (KG)</label>
                   <input
                     type="number"
                     disabled={isFleetDriver}
                     value={formData.min_weight}
                     onChange={(e) => setFormData({ ...formData, min_weight: e.target.value })}
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-[1rem] font-semibold text-sm outline-none focus:border-indigo-500"
+                    className="font-medium w-full p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] text-sm outline-none focus:border-indigo-500"
                   />
                 </div>
                 <div className="space-y-1.5 flex-1">
-                  <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Max (KG)</label>
+                  <label className="font-medium text-[10px] text-slate-400 uppercase tracking-widest">Max (KG)</label>
                   <input
                     type="number"
                     disabled={isFleetDriver}
                     value={formData.max_weight}
                     onChange={(e) => setFormData({ ...formData, max_weight: e.target.value })}
-                    className="w-full p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-[1rem] font-semibold text-sm outline-none focus:border-indigo-500"
+                    className="font-medium w-full p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] text-sm outline-none focus:border-indigo-500"
                   />
                 </div>
               </div>
@@ -328,10 +328,10 @@ export default function CompanyServicesConfigPage() {
           </div>
 
           {/* GLOBAL CATEGORIES */}
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-4">
             <div>
-              <h3 className="text-sm font-semibold dark:text-white capitalize tracking-widest">Collection Services</h3>
-              <p className="text-xs text-slate-400 font-semibold mt-1">Select materials your fleet handles.</p>
+              <h3 className="text-sm font-bold dark:text-white capitalize tracking-widest">Collection Services</h3>
+              <p className="font-medium text-xs text-slate-400 mt-1">Select materials your fleet handles.</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {categories.map((cat) => {
@@ -345,11 +345,11 @@ export default function CompanyServicesConfigPage() {
                     onClick={() => handleToggleMaterial(slug)}
                     className={`p-4 rounded-[1rem] border-2 text-left transition-all ${isSelected
                       ? 'border-primary bg-primary/10'
-                      : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 hover:border-primary/40'
+                      : 'border-[#e0e3eb] dark:border-slate-800 bg-white dark:bg-slate-800/50 hover:border-primary/40'
                       } disabled:opacity-50 relative overflow-hidden`}
                   >
-                    <div className="text-2xl mb-2">{cat.icon || '📦'}</div>
-                    <div className={`text-xs font-semibold capitalize tracking-widest ${isSelected ? 'text-primary' : 'text-slate-500'}`}>
+                    <div className="font-medium text-2xl mb-2">{cat.icon || '📦'}</div>
+                    <div className={`text-xs capitalize tracking-widest ${isSelected ? 'text-primary' : 'text-slate-500'}`}>
                       {cat.label}
                     </div>
                   </button>
@@ -364,20 +364,20 @@ export default function CompanyServicesConfigPage() {
         <div className="lg:col-span-7 space-y-8">
           
           {/* PRICING RATES */}
-          <div className="bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-6">
-            <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-6">
+            <div className="flex items-center gap-3 border-b border-[#e0e3eb] dark:border-slate-800 pb-4">
+              <div className="font-medium w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
                 <Truck className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-base font-semibold dark:text-white tracking-widest">Fleet Market Rates</h3>
-                <p className="text-xs text-slate-400 font-semibold tracking-tight">Set your purchasing prices (KSh/KG)</p>
+                <p className="font-medium text-xs text-slate-400 tracking-tight">Set your purchasing prices (KSh/KG)</p>
               </div>
             </div>
 
             {formData.accepted_materials.length === 0 ? (
-              <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-[1rem] border-2 border-dashed border-slate-200 dark:border-slate-700">
-                <p className="text-xs font-semibold text-slate-400 tracking-widest">Select materials to set rates.</p>
+              <div className="p-8 text-center bg-white dark:bg-slate-800/50 rounded-[1rem] border-2 border-dashed border-[#e0e3eb] dark:border-slate-700">
+                <p className="font-medium text-xs text-slate-400 tracking-widest">Select materials to set rates.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -388,16 +388,16 @@ export default function CompanyServicesConfigPage() {
                   const subcats = materialPrices.filter(m => m.category === category.id || m.category === category.slug || m.category === category.label);
 
                   return (
-                    <div key={slug} className="flex flex-col bg-slate-50 dark:bg-slate-800/50 rounded-[1rem] border border-slate-200 dark:border-slate-700 overflow-hidden h-fit">
+                    <div key={slug} className="flex flex-col bg-white dark:bg-slate-800/50 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-700 overflow-hidden h-fit">
                       <div className="flex items-center justify-between p-4">
-                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-200 tracking-widest">{category.label}</span>
+                        <span className="font-medium text-sm text-slate-700 dark:text-slate-200 tracking-widest">{category.label}</span>
                         <div className="flex items-center gap-2">
                           <input
                             type="number"
                             disabled={isFleetDriver}
                             value={formData.custom_rates?.[slug] ?? 0}
                             onChange={(e) => updateRate(slug, e.target.value)}
-                            className="w-16 p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-center font-bold text-primary outline-none"
+                            className="w-16 p-2 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 rounded-xl text-center text-primary outline-none"
                           />
                         </div>
                       </div>
@@ -405,34 +405,34 @@ export default function CompanyServicesConfigPage() {
                       <button
                         type="button"
                         onClick={() => setExpandedCategory(isExpanded ? null : slug)}
-                        className="flex items-center justify-between px-4 py-2 bg-slate-100/50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-700 group"
+                        className="flex items-center justify-between px-4 py-2 bg-slate-100/50 dark:bg-slate-800/80 border-t border-[#e0e3eb] dark:border-slate-700 group"
                       >
-                        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                        <span className="font-medium text-[10px] text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
                           <Settings2 className="w-3 h-3" />
                           {isExpanded ? 'Hide Sub-grades' : 'Manage Sub-grades'}
                         </span>
-                        {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                        {isExpanded ? <ChevronUp className="font-medium w-4 h-4 text-slate-400" /> : <ChevronDown className="font-medium w-4 h-4 text-slate-400" />}
                       </button>
 
                       {isExpanded && (
-                        <div className="p-4 bg-white dark:bg-slate-800/90 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                        <div className="p-4 bg-white dark:bg-slate-800/90 border-t border-[#e0e3eb] dark:border-slate-700 space-y-3">
                           {subcats.length > 0 ? subcats.map(sub => {
                             const subSlug = `${slug}_${sub.id}`;
                             return (
                               <div key={sub.id} className="flex items-center justify-between pl-3 border-l-2 border-primary/30">
-                                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 pr-2">{sub.material_name}</p>
+                                <p className="font-medium text-xs text-slate-700 dark:text-slate-300 pr-2">{sub.material_name}</p>
                                 <input
                                   type="number"
                                   disabled={isFleetDriver}
                                   value={formData.custom_rates?.[subSlug] ?? ''}
                                   onChange={(e) => updateRate(subSlug, e.target.value)}
                                   placeholder={formData.custom_rates?.[slug] || 0}
-                                  className="w-16 p-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-center font-bold text-xs outline-none focus:border-primary"
+                                  className="font-medium w-16 p-1.5 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 rounded-lg text-center text-xs outline-none focus:border-primary"
                                 />
                               </div>
                             );
                           }) : (
-                            <p className="text-[10px] text-slate-400 uppercase tracking-widest">No sub-grades defined</p>
+                            <p className="font-medium text-[10px] text-slate-400 uppercase tracking-widest">No sub-grades defined</p>
                           )}
                         </div>
                       )}
@@ -445,48 +445,48 @@ export default function CompanyServicesConfigPage() {
 
           {/* CUSTOM CATEGORIES */}
           {!isFleetDriver && (
-            <div className="bg-white dark:bg-slate-900 p-8 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="bg-white dark:bg-slate-800 p-8 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-6">
+              <div className="flex items-center justify-between border-b border-[#e0e3eb] dark:border-slate-800 pb-4">
                 <div>
                   <h3 className="text-base font-semibold dark:text-white tracking-widest">Custom Categories</h3>
-                  <p className="text-xs text-slate-400 font-semibold tracking-tight">Add niche materials to your catalog</p>
+                  <p className="font-medium text-xs text-slate-400 tracking-tight">Add niche materials to your catalog</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowAddCategory(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                  className="font-medium flex items-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                 >
                   <Plus className="w-3 h-3" /> Add Custom
                 </button>
               </div>
 
               {showAddCategory && (
-                <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-[1rem] space-y-3">
+                <div className="p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] space-y-3">
                   <div className="flex items-center gap-2">
                     <input
                       placeholder="Icon"
                       value={newCategory.icon}
                       onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })}
-                      className="w-16 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-center text-xl outline-none"
+                      className="font-medium w-16 p-3 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 rounded-xl text-center text-xl outline-none"
                     />
                     <input
                       placeholder="Category name (e.g. Copper)"
                       value={newCategory.category}
                       onChange={e => setNewCategory({ ...newCategory, category: e.target.value })}
-                      className="flex-1 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold outline-none focus:border-primary"
+                      className="font-medium flex-1 p-3 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 rounded-xl text-sm outline-none focus:border-primary"
                     />
                   </div>
                   <div className="flex gap-2">
-                    <button type="button" onClick={handleAddCustomCategory} className="flex-1 py-2.5 bg-primary text-white rounded-xl text-xs font-semibold tracking-widest">Confirm</button>
-                    <button type="button" onClick={() => setShowAddCategory(false)} className="px-4 py-2.5 bg-slate-200 dark:bg-slate-700 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300"><X className="w-4 h-4" /></button>
+                    <button type="button" onClick={handleAddCustomCategory} className="font-medium flex-1 py-2.5 bg-primary text-white rounded-xl text-xs tracking-widest">Confirm</button>
+                    <button type="button" onClick={() => setShowAddCategory(false)} className="font-medium px-4 py-2.5 bg-slate-200 dark:bg-slate-700 rounded-xl text-xs text-slate-600 dark:text-slate-300"><X className="font-medium w-4 h-4" /></button>
                   </div>
                 </div>
               )}
 
               {formData.custom_services.length === 0 && !showAddCategory && (
-                <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-[1rem] border-2 border-dashed border-slate-200 dark:border-slate-700">
-                  <Tag className="w-6 h-6 mx-auto mb-3 text-slate-400" />
-                  <p className="text-xs font-semibold text-slate-500 tracking-widest uppercase">No custom categories yet</p>
+                <div className="p-8 text-center bg-white dark:bg-slate-800/50 rounded-[1rem] border-2 border-dashed border-[#e0e3eb] dark:border-slate-700">
+                  <Tag className="font-medium w-6 h-6 mx-auto mb-3 text-slate-400" />
+                  <p className="font-medium text-xs text-slate-500 tracking-widest uppercase">No custom categories yet</p>
                 </div>
               )}
 
@@ -495,42 +495,42 @@ export default function CompanyServicesConfigPage() {
                   const isExpanded = expandedCustomCat === catIndex;
                   const subInput = newSubItem[catIndex] || { name: '', rate_per_kg: '' };
                   return (
-                    <div key={catIndex} className="rounded-[1rem] border border-slate-200 dark:border-slate-700 overflow-hidden h-fit bg-slate-50 dark:bg-slate-800/50">
+                    <div key={catIndex} className="rounded-[1rem] border border-[#e0e3eb] dark:border-slate-700 overflow-hidden h-fit bg-white dark:bg-slate-800/50">
                       <div className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-3">
-                          <span className="text-xl">{svc.icon}</span>
+                          <span className="font-medium text-xl">{svc.icon}</span>
                           <div>
-                            <p className="text-sm font-semibold dark:text-white tracking-widest">{svc.category}</p>
-                            <p className="text-[10px] text-slate-400 uppercase font-semibold">{svc.subcategories?.length || 0} items</p>
+                            <p className="font-medium text-sm dark:text-white tracking-widest">{svc.category}</p>
+                            <p className="font-medium text-[10px] text-slate-400 uppercase">{svc.subcategories?.length || 0} items</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
-                          <button type="button" onClick={() => setExpandedCustomCat(isExpanded ? null : catIndex)} className="p-2 text-slate-500 hover:text-primary">
+                          <button type="button" onClick={() => setExpandedCustomCat(isExpanded ? null : catIndex)} className="font-medium p-2 text-slate-500 hover:text-primary">
                             {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                           </button>
-                          <button type="button" onClick={() => handleDeleteCustomCategory(catIndex)} className="p-2 text-rose-400 hover:text-rose-600">
+                          <button type="button" onClick={() => handleDeleteCustomCategory(catIndex)} className="font-medium p-2 text-rose-400 hover:text-rose-600">
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </div>
 
                       {isExpanded && (
-                        <div className="p-4 bg-white dark:bg-slate-800/90 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                        <div className="p-4 bg-white dark:bg-slate-800/90 border-t border-[#e0e3eb] dark:border-slate-700 space-y-3">
                           {(svc.subcategories || []).map((sub, subIndex) => (
                             <div key={subIndex} className="flex items-center justify-between pl-3 border-l-2 border-primary/30">
                               <div>
-                                <p className="text-xs font-semibold dark:text-white">{sub.name}</p>
-                                <p className="text-[10px] text-emerald-500 font-bold uppercase tracking-widest">KSh {sub.rate_per_kg}/KG</p>
+                                <p className="font-medium text-xs dark:text-white">{sub.name}</p>
+                                <p className="font-medium text-[10px] text-emerald-500 uppercase tracking-widest">KSh {sub.rate_per_kg}/KG</p>
                               </div>
-                              <button type="button" onClick={() => handleDeleteSubItem(catIndex, subIndex)} className="p-1.5 text-rose-400 hover:text-rose-600">
+                              <button type="button" onClick={() => handleDeleteSubItem(catIndex, subIndex)} className="font-medium p-1.5 text-rose-400 hover:text-rose-600">
                                 <Trash2 className="w-3 h-3" />
                               </button>
                             </div>
                           ))}
-                          <div className="flex items-center gap-2 pt-3 border-t border-slate-100 dark:border-slate-700">
-                            <input placeholder="Name" value={subInput.name} onChange={e => setNewSubItem(prev => ({ ...prev, [catIndex]: { ...subInput, name: e.target.value } }))} className="flex-1 p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold outline-none focus:border-primary" />
-                            <input type="number" placeholder="KSh" value={subInput.rate_per_kg} onChange={e => setNewSubItem(prev => ({ ...prev, [catIndex]: { ...subInput, rate_per_kg: e.target.value } }))} className="w-16 p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold text-primary outline-none focus:border-primary text-center" />
-                            <button type="button" onClick={() => handleAddSubItem(catIndex)} className="p-2 bg-primary text-white rounded-lg"><Plus className="w-4 h-4" /></button>
+                          <div className="flex items-center gap-2 pt-3 border-t border-[#e0e3eb] dark:border-slate-700">
+                            <input placeholder="Name" value={subInput.name} onChange={e => setNewSubItem(prev => ({ ...prev, [catIndex]: { ...subInput, name: e.target.value } }))} className="font-medium flex-1 p-2 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-600 rounded-lg text-xs outline-none focus:border-primary" />
+                            <input type="number" placeholder="KSh" value={subInput.rate_per_kg} onChange={e => setNewSubItem(prev => ({ ...prev, [catIndex]: { ...subInput, rate_per_kg: e.target.value } }))} className="font-medium w-16 p-2 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-600 rounded-lg text-xs text-primary outline-none focus:border-primary text-center" />
+                            <button type="button" onClick={() => handleAddSubItem(catIndex)} className="font-medium p-2 bg-primary text-white rounded-lg"><Plus className="font-medium w-4 h-4" /></button>
                           </div>
                         </div>
                       )}

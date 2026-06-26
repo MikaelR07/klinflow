@@ -105,7 +105,7 @@ export default function RFQDetailsPage() {
           // Resolve material ID to name
           const storeMaterials = useServiceStore.getState().materialPrices;
           const materialRecord = storeMaterials.find(
-            (m) => m.id === data.material_grade,
+            (m) => m.id === data.material_grade || `${data.category}_${m.id}` === data.material_grade
           );
           const materialName = materialRecord
             ? materialRecord.material_name

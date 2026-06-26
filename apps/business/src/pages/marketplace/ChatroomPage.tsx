@@ -46,9 +46,9 @@ export default function ChatroomPage() {
   };
 
   return (
-    <div className="flex flex-col absolute inset-0 bg-[#F4F4F4] dark:bg-slate-900 overflow-hidden">
+    <div className="flex flex-col absolute inset-0 bg-slate-50 dark:bg-slate-900 overflow-hidden">
       {/* Header Area */}
-      <div className="bg-[#F4F4F4]/80 dark:bg-slate-900/80 backdrop-blur-xl pt-2 pb-2 px-0 relative z-10 border-b border-slate-200 dark:border-slate-800">
+      <div className="bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-xl pt-2 pb-2 px-0 relative z-10 border-b border-slate-200 dark:border-slate-800">
         <TopTabs active="/chatroom" />
         <div className="px-3 py-1 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export default function ChatroomPage() {
                 </div>
               ))}
             </div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">42 Online</span>
+            <span className="text-xs font-bold text-slate-700 uppercase tracking-widest">42 Online</span>
           </div>
           <div className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/10 rounded-md">
             <TrendingUp className="w-3 h-3 text-emerald-500" />
@@ -74,13 +74,13 @@ export default function ChatroomPage() {
           {messages.map((msg) => (
             <div key={msg.id} className={`flex flex-col ${msg.isMe ? 'items-end' : 'items-start'}`}>
               <div className="flex items-center gap-2 mb-1">
-                {!msg.isMe && <span className="text-xs font-bold text-slate-500 uppercase tracking-tighter">{msg.user}</span>}
-                <span className="text-xs text-slate-400 font-medium">{msg.time}</span>
+                {!msg.isMe && <span className="text-xs font-bold text-slate-800 uppercase tracking-tighter">{msg.user}</span>}
+                <span className="text-xs text-slate-700 font-medium">{msg.time}</span>
               </div>
               <div className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-xs font-medium ${
                 msg.isMe 
                   ? 'bg-indigo-600 text-white rounded-tr-none shadow-lg shadow-indigo-600/10' 
-                  : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-tl-none'
+                  : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-800 text-slate-900 dark:text-slate-200 rounded-tl-none'
               }`}>
                 {msg.text}
               </div>
@@ -94,7 +94,7 @@ export default function ChatroomPage() {
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-24 z-20">
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center gap-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl border border-slate-200 dark:border-slate-700 rounded-3xl p-1.5 shadow-xl">
-            <button className="p-2.5 text-slate-400 hover:text-indigo-500 transition-colors">
+            <button className="p-2.5 text-slate-700 hover:text-indigo-500 transition-colors">
               <ImageIcon className="w-5 h-5" />
             </button>
             <input 
@@ -103,7 +103,7 @@ export default function ChatroomPage() {
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Broadcast to trade floor..."
-              className="flex-1 bg-transparent border-none py-2 px-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none"
+              className="flex-1 bg-transparent border-none py-2 px-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-700 focus:outline-none"
             />
             <button 
               onClick={handleSend}
@@ -111,7 +111,7 @@ export default function ChatroomPage() {
               className={`p-2.5 rounded-full transition-all ${
                 inputText.trim() 
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/40' 
-                  : 'text-slate-300 pointer-events-none'
+                  : 'text-slate-600 pointer-events-none'
               }`}
             >
               <Send className="w-5 h-5" />

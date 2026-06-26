@@ -7,6 +7,7 @@ interface RatingModalProps {
   onSubmit: (rating: number, comment?: string) => Promise<void> | void;
   onSkip?: () => void;
   agentName?: string;
+  onDispute?: () => void;
 }
 
 export default function RatingModal({ 
@@ -14,7 +15,8 @@ export default function RatingModal({
   onClose, 
   onSubmit, 
   onSkip, 
-  agentName = 'your agent' 
+  agentName = 'your agent',
+  onDispute
 }: RatingModalProps) {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -34,6 +36,11 @@ export default function RatingModal({
 
   const handleSkip = () => {
     onSkip?.();
+    onClose();
+  };
+
+  const handleDispute = () => {
+    onDispute?.();
     onClose();
   };
 
@@ -89,10 +96,19 @@ export default function RatingModal({
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Optional: Tell us what you loved (or what needs work)..."
-            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none h-24 transition-all shadow-inner"
+            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none h-24 transition-all shadow-inner mb-2"
           />
+          {onDispute && (
+            <div className="flex justify-end">
+              <button
+                onClick={handleDispute}
+                className="text-xs font-bold text-rose-500 hover:text-rose-600 transition-colors"
+              >
+                Report an issue with this pickup?
+              </button>
+            </div>
+          )}
         </div>
-
 
         {/* Footer */}
         <div className="p-6 bg-slate-50 dark:bg-slate-800/30 flex gap-3">

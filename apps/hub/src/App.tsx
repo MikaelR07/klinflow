@@ -1,67 +1,81 @@
-import React, { useState } from 'react';
-import { 
-  LayoutDashboard, 
-  ScanLine, 
-  Warehouse, 
-  RefreshCcw, 
-  Truck, 
-  Settings,
-  Bell,
-  Search,
-  Menu,
-  X,
-  Sun,
-  Moon,
-  ShieldAlert
-} from 'lucide-react';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
-import { Toaster } from 'sonner';
-import HubDashboard from './pages/HubDashboard';
-import Inventory from './pages/Inventory';
-import CheckIn from './pages/CheckIn';
-import IncomingDrops from './pages/IncomingDrops';
-import ManualAudits from './pages/ManualAudits';
+
 import HubLanding from './pages/HubLanding';
-import HubSettings from './pages/HubSettings';
-import Notifications from './pages/Notifications';
+import HubLayout from './layouts/HubLayout';
+
+// Existing Pages
+import ExecutiveCommandCenter from './pages/ExecutiveCommandCenter';
+import IntakeChannelSelector from './pages/IntakeChannelSelector';
+import IntakeReceiving from './pages/IntakeReceiving';
+import IntakeVerification from './pages/IntakeVerification';
+import IndividualAgentIntake from './pages/IndividualAgentIntake';
+import WalkInIntake from './pages/WalkInIntake';
+import QueueManagement from './pages/QueueManagement';
+import DisputeControl from './pages/DisputeControl';
+import InventoryCommand from './pages/InventoryCommand';
+import ProcessingAnalytics from './pages/ProcessingAnalytics';
+import ContractManagement from './pages/ContractManagement';
+import PricingEngine from './pages/PricingEngine';
+import SupplierCRM from './pages/SupplierCRM';
+import SupplierIntelligence from './pages/SupplierIntelligence';
+import AutomatedPayouts from './pages/AutomatedPayouts';
+import ESGImpact from './pages/ESGImpact';
+import NationalIntelligence from './pages/NationalIntelligence';
+import AIOperations from './pages/AIOperations';
+import Settings from './pages/Settings';
+import WalletTreasury from './pages/WalletTreasury';
+import Traceability from './pages/Traceability';
+import FleetOverview from './pages/FleetOverview';
+import DispatchManagement from './pages/DispatchManagement';
+import KlinMarket from './pages/KlinMarket';
+import RFQs from './pages/RFQs';
+import PriceDashboard from './pages/PriceDashboard';
+import AgentDisbursements from './pages/AgentDisbursements';
+
+
+// Placeholder Pages
+const PlaceholderPage = ({ title }: { title: string }) => (
+  <div className="p-8 flex flex-col items-center justify-center min-h-[60vh] text-center">
+    <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-6">
+      <svg className="w-10 h-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+      </svg>
+    </div>
+    <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-4">{title}</h1>
+    <p className="text-slate-500 dark:text-slate-400 max-w-md">This module is currently under construction for the next implementation phase.</p>
+  </div>
+);
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { isDarkMode, toggleTheme } = useThemeStore();
+  const { isDarkMode } = useThemeStore();
   const { profile, isAuthenticated, isInitializing, initializeAuth, checkAppRole } = useAuthStore();
   const { 
-    notifications, 
     subscribeToRealtime, 
     fetchNotifications, 
     cleanup: cleanupNotifs 
   } = useNotificationStore();
 
-  const unreadCount = notifications.filter(n => !n.read).length;
-
-  // Redirect to Landing if not an admin/hub manager
   const isAuthorized = isAuthenticated && (profile?.role === 'admin' || profile?.agentAccountType === 'company_admin');
 
-  // Boot sequence
-  React.useEffect(() => {
+  useEffect(() => {
     checkAppRole('admin');
     initializeAuth();
-  }, []);
+  }, [checkAppRole, initializeAuth]);
 
-  // Sync real-time notifications
-  React.useEffect(() => {
+  useEffect(() => {
     if (isAuthenticated && profile?.id) {
       fetchNotifications(profile.id, 'hub');
       subscribeToRealtime(profile.id, 'hub');
     }
     return () => cleanupNotifs();
-  }, [isAuthenticated, profile?.id]);
+  }, [isAuthenticated, profile?.id, fetchNotifications, subscribeToRealtime, cleanupNotifs]);
 
-  // Sync theme class with document
-  React.useEffect(() => {
+  useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -69,160 +83,107 @@ export default function App() {
     }
   }, [isDarkMode]);
 
-  if (!isAuthorized && !isInitializing) {
+  if (isInitializing) {
+    return <div className="fixed inset-0 z-[9999] bg-slate-900 flex items-center justify-center text-white font-medium">Loading KLINFLOW MOS...</div>;
+  }
+
+  if (!isAuthorized) {
     return <HubLanding />;
   }
 
-  const navigation = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'incoming', label: 'Live Radar', icon: Truck },
-    { id: 'checkin', label: 'Gate Check-In', icon: ScanLine },
-    { id: 'audits', label: 'Manual Audits', icon: ShieldAlert },
-    { id: 'inventory', label: 'Inventory', icon: Warehouse },
-    { id: 'processing', label: 'Processing', icon: RefreshCcw },
-    { id: 'settings', label: 'Hub Settings', icon: Settings },
-  ];
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'dashboard': return <HubDashboard onNavigate={setActiveTab} />;
-      case 'incoming': return <IncomingDrops />;
-      case 'inventory': return <Inventory />;
-      case 'checkin': return <CheckIn />;
-      case 'audits': return <ManualAudits />;
-      case 'settings': return <HubSettings />;
-      case 'notifications': return <Notifications />;
-      default: return <HubDashboard onNavigate={setActiveTab} />;
-    }
-  };
-
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans selection:bg-primary/20">
-      {isInitializing && (
-        <div className="fixed inset-0 z-[9999] bg-slate-900 flex items-center justify-center text-white">Loading OS...</div>
-      )}
-      
-      {/* ── SIDEBAR ── */}
-      <aside className={`
-        fixed inset-y-0 left-0 z-50 w-72 glass border-r border-slate-200 dark:border-white/5 
-        transition-transform duration-300 lg:translate-x-0
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
-        <div className="flex flex-col h-full p-6">
-          
-          <div className="flex items-center justify-between mb-10">
-            <div className="flex items-center gap-2">
-               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Warehouse className="w-5 h-5 text-white" />
-               </div>
-               <span className="text-xl font-semibold tracking-tighter">Klinflow <span className="text-primary">Hub</span></span>
-            </div>
-            <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden p-2 text-slate-400">
-              <X className="w-6 h-6" />
-            </button>
-          </div>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<HubLayout />}>
+          {/* Dashboard */}
+          <Route path="/" element={<ExecutiveCommandCenter />} />
 
-          <nav className="flex-1 space-y-2">
-            {navigation.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setIsSidebarOpen(false);
-                }}
-                className={`
-                  w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-semibold uppercase tracking-widest transition-all
-                  ${activeTab === item.id 
-                    ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-[1.02]' 
-                    : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5'}
-                `}
-              >
-                <item.icon className={`w-5 h-5 ${activeTab === item.id ? 'text-white' : 'text-slate-400'}`} />
-                {item.label}
-              </button>
-            ))}
-          </nav>
+          {/* Operations */}
+          <Route path="/operations/intake" element={<IntakeChannelSelector />} />
+          <Route path="/operations/intake/fleet" element={<IntakeReceiving />} />
+          <Route path="/operations/intake/verify" element={<IntakeVerification />} />
+          <Route path="/operations/intake/individual" element={<IndividualAgentIntake />} />
+          <Route path="/operations/intake/walkin" element={<WalkInIntake />} />
+          <Route path="/operations/queue" element={<QueueManagement />} />
+          <Route path="/operations/dispatch" element={<DispatchManagement />} />
+          <Route path="/operations/disputes" element={<DisputeControl />} />
+          <Route path="/operations/inventory" element={<InventoryCommand />} />
+          <Route path="/operations/quality" element={<PlaceholderPage title="Quality Inspection" />} />
+          <Route path="/operations/sorting" element={<PlaceholderPage title="Sorting Workspace" />} />
+          <Route path="/operations/processing" element={<ProcessingAnalytics />} />
+          <Route path="/operations/transfers" element={<PlaceholderPage title="Transfer Orders" />} />
+          <Route path="/operations/batch" element={<PlaceholderPage title="Batch Tracking" />} />
 
-          <div className="mt-auto p-5 bg-primary/5 rounded-3xl border border-primary/10">
-             <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-semibold text-slate-500 overflow-hidden">
-                  {profile?.avatarUrl ? (
-                    <img src={profile.avatarUrl} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    profile?.name ? profile.name.charAt(0) : 'U'
-                  )}
-                </div>
-                <div>
-                   <p className="text-xs font-semibold text-slate-900 dark:text-white">{profile?.name || 'Unknown User'}</p>
-                   <p className="text-xs font-semibold text-slate-400 uppercase">
-                     {profile?.agentAccountType === 'company_admin' ? 'Company Admin' : 'Hub Manager'}
-                   </p>
-                </div>
-             </div>
-          </div>
+          {/* Fleet Management */}
+          <Route path="/fleet/overview" element={<FleetOverview />} />
+          <Route path="/fleet/onboarding" element={<PlaceholderPage title="Onboarding Management" />} />
+          <Route path="/fleet/dispatch" element={<PlaceholderPage title="Dispatch Management" />} />
+          <Route path="/fleet/vehicles" element={<PlaceholderPage title="Vehicles" />} />
+          <Route path="/fleet/agents" element={<PlaceholderPage title="Agents" />} />
+          <Route path="/fleet/routing" element={<PlaceholderPage title="Route Optimizer" />} />
+          <Route path="/fleet/fuel" element={<PlaceholderPage title="Fuel Analytics" />} />
+          <Route path="/fleet/maintenance" element={<PlaceholderPage title="Maintenance" />} />
+          <Route path="/fleet/tracking" element={<PlaceholderPage title="Live Tracking" />} />
 
-        </div>
-      </aside>
+          {/* Marketplace */}
+          <Route path="/marketplace/market" element={<KlinMarket />} />
+          <Route path="/marketplace/rfqs" element={<RFQs />} />
+          <Route path="/marketplace/contracts" element={<ContractManagement />} />
+          <Route path="/marketplace/auctions" element={<PlaceholderPage title="Auctions" />} />
+          <Route path="/marketplace/buyers" element={<PlaceholderPage title="Buyers" />} />
+          <Route path="/marketplace/sellers" element={<PlaceholderPage title="Sellers" />} />
+          <Route path="/marketplace/analytics" element={<PlaceholderPage title="Market Analytics" />} />
 
-      {/* ── MAIN CONTENT ── */}
-      <main className="flex-1 lg:ml-72 min-h-screen">
-        
-        {/* Top Navbar */}
-        <header className="sticky top-0 z-40 h-20 glass border-b border-slate-200 dark:border-white/5 px-6 flex items-center justify-between">
-           <button 
-             onClick={() => setIsSidebarOpen(true)}
-             className="p-2 lg:hidden"
-           >
-             <Menu className="w-6 h-6 text-slate-900 dark:text-white" />
-           </button>
+          {/* Market Intelligence */}
+          <Route path="/intelligence/pricing" element={<PriceDashboard />} />
+          <Route path="/intelligence/trends" element={<PlaceholderPage title="Price Trends" />} />
+          <Route path="/intelligence/commodity" element={<PlaceholderPage title="Commodity Intelligence" />} />
+          <Route path="/intelligence/supply" element={<PlaceholderPage title="Supply & Demand Analysis" />} />
+          <Route path="/intelligence/forecasting" element={<PlaceholderPage title="Forecasting" />} />
 
-           <div className="hidden md:flex items-center gap-2 bg-slate-100 dark:bg-white/5 px-4 py-2 rounded-2xl border border-slate-200 dark:border-white/5">
-              <Search className="w-4 h-4 text-slate-400" />
-              <input type="text" placeholder="Global Hub Search..." className="bg-transparent border-none text-xs focus:ring-0 w-64" />
-           </div>
+          {/* Suppliers */}
+          <Route path="/suppliers/directory" element={<SupplierCRM />} />
+          <Route path="/suppliers/performance" element={<SupplierIntelligence />} />
+          <Route path="/suppliers/onboarding" element={<PlaceholderPage title="Supplier Onboarding" />} />
+          <Route path="/suppliers/risk" element={<PlaceholderPage title="Supplier Risk" />} />
+          <Route path="/suppliers/compliance" element={<PlaceholderPage title="Supplier Compliance" />} />
 
-           <div className="flex items-center gap-4">
-              <button 
-                onClick={toggleTheme}
-                className="p-2 text-slate-400 hover:text-primary transition-colors"
-              >
-                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-              <button 
-                onClick={() => setActiveTab('notifications')}
-                className={`relative p-2 transition-colors ${activeTab === 'notifications' ? 'text-primary' : 'text-slate-400 hover:text-primary'}`}
-              >
-                 <Bell className="w-6 h-6" />
-                 {unreadCount > 0 && (
-                   <span className="absolute top-2 right-2 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-slate-900 text-xs font-semibold text-white flex items-center justify-center animate-bounce-in">
-                     {unreadCount}
-                   </span>
-                 )}
-              </button>
-              <div className="w-10 h-10 rounded-2xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center overflow-hidden font-semibold text-slate-500">
-                {profile?.avatarUrl ? (
-                  <img src={profile.avatarUrl} alt="Profile" className="w-full h-full object-cover" />
-                ) : (
-                  profile?.name ? profile.name.charAt(0) : 'U'
-                )}
-              </div>
-           </div>
-        </header>
+          {/* Finance */}
+          <Route path="/finance/revenue" element={<PlaceholderPage title="Revenue Analytics" />} />
+          <Route path="/finance/disbursements" element={<AgentDisbursements />} />
+          <Route path="/finance/payouts" element={<AutomatedPayouts />} />
+          <Route path="/finance/invoices" element={<PlaceholderPage title="Invoices" />} />
+          <Route path="/finance/procurement" element={<PlaceholderPage title="Procurement Spend" />} />
+          <Route path="/finance/profitability" element={<PlaceholderPage title="Profitability" />} />
+          <Route path="/finance/reports" element={<PlaceholderPage title="Financial Reports" />} />
 
-        <div className="p-6 md:p-10 max-w-7xl mx-auto">
-           {renderContent()}
-        </div>
-      </main>
+          {/* ESG & Compliance */}
+          <Route path="/esg/dashboard" element={<PlaceholderPage title="Sustainability Dashboard" />} />
+          <Route path="/esg/carbon" element={<ESGImpact />} />
+          <Route path="/esg/impact" element={<PlaceholderPage title="Environmental Impact" />} />
+          <Route path="/esg/reporting" element={<PlaceholderPage title="ESG Reporting" />} />
+          <Route path="/esg/certifications" element={<PlaceholderPage title="Certifications" />} />
+          <Route path="/esg/compliance" element={<PlaceholderPage title="Regulatory Compliance" />} />
 
-      {/* Overlay */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-slate-900/20 backdrop-blur-sm lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
-      
-      <Toaster position="top-right" richColors />
-    </div>
+          {/* Analytics */}
+          <Route path="/analytics/executive" element={<NationalIntelligence />} />
+          <Route path="/analytics/material" element={<PlaceholderPage title="Material Analytics" />} />
+          <Route path="/analytics/collection" element={<PlaceholderPage title="Collection Analytics" />} />
+          <Route path="/analytics/fleet" element={<PlaceholderPage title="Fleet Analytics" />} />
+          <Route path="/analytics/procurement" element={<PlaceholderPage title="Procurement Analytics" />} />
+          <Route path="/analytics/predictive" element={<AIOperations />} />
+
+          {/* Administration */}
+          <Route path="/admin/users" element={<PlaceholderPage title="Users" />} />
+          <Route path="/admin/roles" element={<PlaceholderPage title="Roles" />} />
+          <Route path="/admin/permissions" element={<PlaceholderPage title="Permissions" />} />
+          <Route path="/admin/integrations" element={<PlaceholderPage title="Integrations" />} />
+          <Route path="/settings" element={<Settings />} />
+
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }

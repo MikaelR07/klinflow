@@ -40,7 +40,7 @@ export default function BusinessLogin() {
       
       <Link 
         to="/login" 
-        className="absolute top-6 left-4 p-3 rounded-full bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors z-10"
+        className="absolute top-6 left-4 p-3 rounded-full bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 text-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors z-10"
       >
         <ArrowLeft className="w-5 h-5" />
       </Link>
@@ -56,7 +56,7 @@ export default function BusinessLogin() {
             Clean<span className="text-primary">Flow</span>
             <span className="text-primary-dark ml-2 text-lg">Business</span>
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">
+          <p className="text-sm text-slate-800 dark:text-slate-400 mt-2 font-medium">
             Marketplace Access for Partners
           </p>
         </div>
@@ -65,10 +65,10 @@ export default function BusinessLogin() {
         <div className="glass p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none">
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Phone Number</label>
+              <label className="block text-sm font-semibold text-slate-900 dark:text-slate-300 mb-1.5">Phone Number</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Phone className="h-5 w-5 text-slate-400" />
+                  <Phone className="h-5 w-5 text-slate-700" />
                 </div>
                 <input
                   type="tel"
@@ -82,10 +82,10 @@ export default function BusinessLogin() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">6-Digit PIN</label>
+              <label className="block text-sm font-semibold text-slate-900 dark:text-slate-300 mb-1.5">6-Digit PIN</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-400" />
+                  <Lock className="h-5 w-5 text-slate-700" />
                 </div>
                 <input
                   type="password"
@@ -111,7 +111,7 @@ export default function BusinessLogin() {
           </form>
         </div>
 
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8 font-medium">
+        <p className="text-center text-sm text-slate-800 dark:text-slate-400 mt-8 font-medium">
           New business partner?{' '}
           <Link to="/business/register" className="text-primary font-semibold hover:underline">
             Register Business

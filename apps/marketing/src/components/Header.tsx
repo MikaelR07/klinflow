@@ -35,10 +35,10 @@ export default function Header() {
   }, [location]);
 
   const productLinks = [
-    { name: 'Resident / Seller App', desc: 'Household waste & B2B listings', path: '/products/client', icon: User, color: 'text-primary' },
-    { name: 'Agent Terminal', desc: 'Mission control for collectors', path: '/products/agent', icon: Truck, color: 'text-blue-500' },
+    { name: 'Resident / Seller App', desc: 'Post and sell your waste materials', path: '/products/client', icon: User, color: 'text-primary' },
+    { name: 'Agent/Fleet App', desc: 'Locate and buy Materials', path: '/products/agent', icon: Truck, color: 'text-blue-500' },
     { name: 'Fleet Manager', desc: 'Admin dashboard for company owners', path: '/products/fleet', icon: Building2, color: 'text-indigo-500' },
-    { name: 'Hub Logistics', desc: 'Intake and processing system', path: '/products/hub', icon: Warehouse, color: 'text-rose-500' },
+    { name: 'MOS Software', desc: 'Intake and processing system', path: '/products/hub', icon: Warehouse, color: 'text-rose-500' },
   ];
 
   const getPortalLink = (app: 'client' | 'agent' | 'business' | 'admin') => {
@@ -100,8 +100,9 @@ export default function Header() {
             </AnimatePresence>
           </div>
 
-          <Link to="/system" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>System</Link>
+          <Link to="/ecosystem" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Klin API</Link>
           <Link to="/marketplace" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Marketplace</Link>
+          <Link to="/contact" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Contact</Link>
           
           <div className="flex items-center gap-4 ml-4">
             <button onClick={toggleTheme} className={`p-2.5 rounded-full transition-colors ${isDarkMode ? 'bg-surface-800 text-yellow-400 hover:bg-slate-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}>
@@ -134,24 +135,27 @@ export default function Header() {
               <div className="grid gap-6">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Our Products</p>
                 {productLinks.map((link) => (
-                  <Link key={link.path} to={link.path} className="flex items-center gap-4">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDarkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
-                      <link.icon className={`w-5 h-5 ${link.color}`} />
+                  <Link key={link.path} to={link.path} className="flex items-center gap-3 sm:gap-4">
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${isDarkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                      <link.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${link.color}`} />
                     </div>
                     <div>
-                      <p className={`font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{link.name}</p>
-                      <p className="text-xs text-slate-500 font-medium">{link.desc}</p>
+                      <p className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{link.name}</p>
+                      <p className="text-[10px] sm:text-xs text-slate-500 font-medium leading-tight">{link.desc}</p>
                     </div>
                   </Link>
                 ))}
               </div>
               
-              <div className={`flex flex-col gap-3 pt-8 border-t ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
-                <Link to="/system" className={`px-5 py-3.5 rounded-xl border text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
-                  System Architecture <ChevronRight className="w-4 h-4 text-primary" />
+              <div className={`grid grid-cols-2 gap-2 pt-6 border-t ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
+                <Link to="/ecosystem" className={`px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                  <span>Klin API</span> <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
-                <Link to="/marketplace" className={`px-5 py-3.5 rounded-xl border text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
-                  B2B Marketplace <ChevronRight className="w-4 h-4 text-primary" />
+                <Link to="/marketplace" className={`px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                  <span>Marketplace</span> <ChevronRight className="w-4 h-4 text-primary" />
+                </Link>
+                <Link to="/contact" className={`col-span-2 px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                  <span>Contact Us</span> <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
               </div>
             </div>

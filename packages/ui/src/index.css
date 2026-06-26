@@ -12,7 +12,7 @@
   }
 
   body {
-    @apply antialiased text-slate-800 dark:text-slate-50 bg-[#F4F4F4] dark:bg-slate-900 transition-colors duration-300;
+    @apply text-slate-900 dark:text-slate-50 bg-[#F4F4F4] dark:bg-slate-900 transition-colors duration-300 font-medium;
     /* Native App Feel Optimizations */
     /* GESTURE LOCK: Prevents browser-native back/forward gestures */
     overscroll-behavior-x: none;
@@ -33,7 +33,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-800 dark:text-white;
+    @apply text-slate-900 dark:text-white font-bold;
   }
 }
 

@@ -99,7 +99,7 @@ export default function BulkSourcingHub() {
       {/* ── TOP NAV ── */}
       <div className="flex items-center justify-between px-4 py-4 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 relative">
         <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center shadow-sm border border-slate-200 dark:border-slate-700 active:scale-95 transition-all z-10">
-          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+          <ArrowLeft className="w-5 h-5 text-slate-900 dark:text-slate-300" />
         </button>
         
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -119,7 +119,7 @@ export default function BulkSourcingHub() {
           </div>
           
           <div className="bg-white dark:bg-slate-800 rounded-[0.45rem] p-3 border border-slate-200 dark:border-slate-700 shadow-sm">
-            <p className="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Market</p>
+            <p className="text-[7px] font-bold text-slate-700 uppercase tracking-widest mb-1">Market</p>
             <div className="flex items-center gap-1">
               <h3 className="text-sm font-black text-slate-900 dark:text-white leading-none uppercase">Bullish</h3>
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -142,7 +142,7 @@ export default function BulkSourcingHub() {
         {/* ── SEARCH ── */}
         <div className="px-4">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-700" />
             <input 
               type="text" 
               placeholder="Search material requests..." 
@@ -155,13 +155,13 @@ export default function BulkSourcingHub() {
         <div className="flex bg-slate-200/50 dark:bg-slate-800 p-1 rounded-[0.45rem] mx-4">
           <button 
             onClick={() => setActiveTab('open')}
-            className={`flex-1 py-2 rounded-[0.4rem] text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'open' ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-sm' : 'text-slate-500'}`}
+            className={`flex-1 py-2 rounded-[0.4rem] text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'open' ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-sm' : 'text-slate-800'}`}
           >
             Global Requests
           </button>
           <button 
             onClick={() => setActiveTab('my-requests')}
-            className={`flex-1 py-2 rounded-[0.4rem] text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'my-requests' ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-sm' : 'text-slate-500'}`}
+            className={`flex-1 py-2 rounded-[0.4rem] text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'my-requests' ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-sm' : 'text-slate-800'}`}
           >
             My Sourcing
           </button>
@@ -191,7 +191,7 @@ export default function BulkSourcingHub() {
                     </span>
                   )}
                 </div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="text-xs font-bold text-slate-700 uppercase tracking-widest flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5" /> Ends in {rfq.deadline}
                 </span>
               </div>
@@ -200,9 +200,9 @@ export default function BulkSourcingHub() {
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">{rfq.material}</h3>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-500">{rfq.buyer}</span>
+                    <span className="text-xs font-bold text-slate-800">{rfq.buyer}</span>
                     <div className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
-                    <span className="text-xs font-bold text-slate-400">{rfq.location}</span>
+                    <span className="text-xs font-bold text-slate-700">{rfq.location}</span>
                     {rfq.isVerified && (
                       <div className="flex items-center gap-1 ml-1 bg-blue-500/5 px-1.5 py-0.5 rounded-full">
                         <BadgeCheck className="w-3 h-3 text-blue-500" />
@@ -212,22 +212,22 @@ export default function BulkSourcingHub() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Target Price</p>
+                  <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mb-1">Target Price</p>
                   <p className="text-lg font-bold text-blue-600 font-mono">KSh {rfq.targetPrice}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3 pt-5 border-t border-slate-50 dark:border-slate-700/50">
                 <div className="text-center">
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Volume</p>
-                  <div className="flex items-center justify-center gap-1 text-slate-700 dark:text-slate-300">
+                  <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mb-1">Volume</p>
+                  <div className="flex items-center justify-center gap-1 text-slate-900 dark:text-slate-300">
                     <Scale className="w-3 h-3" />
                     <span className="text-[11px] font-bold">{rfq.quantity.toLocaleString()}</span>
                   </div>
                 </div>
                 <div className="text-center border-x border-slate-50 dark:border-slate-700/50">
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Quotes</p>
-                  <div className="flex items-center justify-center gap-1 text-slate-700 dark:text-slate-300">
+                  <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mb-1">Quotes</p>
+                  <div className="flex items-center justify-center gap-1 text-slate-900 dark:text-slate-300">
                     <FileText className="w-3 h-3" />
                     <span className="text-[11px] font-bold">{rfq.quotes} Bids</span>
                   </div>

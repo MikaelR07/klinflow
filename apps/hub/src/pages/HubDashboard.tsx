@@ -248,7 +248,7 @@ export default function HubDashboard({ onNavigate }: HubDashboardProps) {
                 <p className="text-lg font-semibold text-primary leading-none">{visit.totalWeight.toFixed(1)} <span className="text-xs">KG</span></p>
              </div>
              <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-                <ChevronDown className="w-5 h-5 text-slate-300" />
+                <ChevronDown className="font-medium w-5 h-5 text-slate-300" />
              </div>
           </div>
         </div>
@@ -336,11 +336,11 @@ export default function HubDashboard({ onNavigate }: HubDashboardProps) {
       {incomingAlerts.filter(a => !dismissedAlerts.includes(a.id)).length > 0 && (
         <div className="space-y-3">
           {incomingAlerts.filter(a => !dismissedAlerts.includes(a.id)).map((alert) => (
-            <div key={alert.id} className="relative bg-emerald-600 rounded-[2rem] p-4 text-white shadow-xl shadow-emerald-600/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-bounce-in">
+            <div key={alert.id} className="font-medium relative bg-emerald-600 rounded-[2rem] p-4 text-white shadow-xl shadow-emerald-600/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-bounce-in">
                {/* Dismiss Button - Badge Style */}
                <button 
                  onClick={() => setDismissedAlerts(prev => [...prev, alert.id])}
-                 className="absolute -top-2 -right-2 w-7 h-7 bg-white text-emerald-600 rounded-full flex items-center justify-center shadow-lg hover:bg-emerald-50 transition-all z-50 border-2 border-emerald-600"
+                 className="font-medium absolute -top-2 -right-2 w-7 h-7 bg-white text-emerald-600 rounded-full flex items-center justify-center shadow-lg hover:bg-emerald-50 transition-all z-50 border-2 border-emerald-600"
                  title="Dismiss Alert"
                >
                  <X className="w-4 h-4" />
@@ -380,7 +380,7 @@ export default function HubDashboard({ onNavigate }: HubDashboardProps) {
              <stat.icon className={`w-8 h-8 ${stat.color} mb-4`} />
              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{stat.label}</p>
              <h3 className="text-2xl font-semibold text-slate-900 dark:text-white mt-1">
-               {isLoading ? <Loader2 className="w-6 h-6 animate-spin text-slate-300" /> : stat.value}
+               {isLoading ? <Loader2 className="font-medium w-6 h-6 animate-spin text-slate-300" /> : stat.value}
              </h3>
           </div>
         ))}
@@ -398,7 +398,7 @@ export default function HubDashboard({ onNavigate }: HubDashboardProps) {
           <div className="space-y-3">
              {isLoading ? (
                 <div className="glass p-10 flex justify-center rounded-[2rem]">
-                   <Loader2 className="w-8 h-8 animate-spin text-slate-300" />
+                   <Loader2 className="font-medium w-8 h-8 animate-spin text-slate-300" />
                 </div>
              ) : recentArrivals.length === 0 ? (
                 <div className="glass p-10 text-center rounded-[2rem]">
@@ -419,7 +419,7 @@ export default function HubDashboard({ onNavigate }: HubDashboardProps) {
               {/* Note: Ideally we use setActiveTab('checkin') if this was inside App.jsx, but since it's a child component, we'll keep it as a UI button for now or pass props */}
               <button 
                 onClick={() => onNavigate?.('checkin')}
-                className="w-full p-6 bg-primary text-white rounded-[2rem] flex items-center justify-between group hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95"
+                className="font-medium w-full p-6 bg-primary text-white rounded-[2rem] flex items-center justify-between group hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95"
               >
                  <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
@@ -427,30 +427,30 @@ export default function HubDashboard({ onNavigate }: HubDashboardProps) {
                     </div>
                     <div className="text-left">
                        <p className="font-semibold text-sm">Gate Check-In</p>
-                       <p className="text-xs opacity-70">Verify Agent Secure PIN</p>
+                       <p className="font-medium text-xs opacity-70">Verify Agent Secure PIN</p>
                     </div>
                  </div>
                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <button className="w-full p-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] flex items-center justify-between group hover:shadow-xl transition-all active:scale-95">
+              <button className="font-medium w-full p-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] flex items-center justify-between group hover:shadow-xl transition-all active:scale-95">
                  <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-2xl bg-white/10 dark:bg-slate-100 flex items-center justify-center">
                        <Box className="w-6 h-6" />
                     </div>
                     <div className="text-left">
                        <p className="font-semibold text-sm">B2B Outbound</p>
-                       <p className="text-xs opacity-70">Log shipment to factory</p>
+                       <p className="font-medium text-xs opacity-70">Log shipment to factory</p>
                     </div>
                  </div>
                  <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
 
               <div className="p-5 bg-amber-500/5 border border-amber-500/10 rounded-[2rem] flex items-start gap-4">
-                 <AlertCircle className="w-5 h-5 text-amber-500 mt-1 shrink-0" />
+                 <AlertCircle className="font-medium w-5 h-5 text-amber-500 mt-1 shrink-0" />
                  <div>
                     <p className="text-xs font-semibold text-amber-600 uppercase tracking-widest">Storage Monitoring</p>
-                    <p className="text-xs text-amber-700/70 mt-1">
+                    <p className="font-medium text-xs text-amber-700/70 mt-1">
                       Current physical inventory is at {inventoryWeight.toFixed(1)} KG. Manage processing soon.
                     </p>
                  </div>

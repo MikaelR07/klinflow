@@ -73,7 +73,7 @@ export default function RFQDetails() {
   };
 
   return (
-    <div className="bg-slate-100 dark:bg-slate-900 min-h-screen">
+    <div className="bg-white shadow-sm dark:bg-slate-900 min-h-screen">
       <div className="max-w-lg mx-auto bg-white dark:bg-slate-900 min-h-screen relative animate-fade-in overflow-hidden shadow-sm">
         
         {/* ── IMMERSIVE HERO IMAGE (KILIMALL STYLE) ── */}
@@ -105,16 +105,16 @@ export default function RFQDetails() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-xs font-black uppercase tracking-widest">Live RFQ</span>
-              <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-black uppercase tracking-widest flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-md bg-white shadow-sm dark:bg-slate-800 text-slate-800 text-xs font-black uppercase tracking-widest flex items-center gap-1">
                 <Clock className="w-3 h-3" /> Ends in {rfq.deadline}
               </span>
             </div>
             <h2 className="text-2xl font-black text-slate-900 dark:text-white leading-tight">{rfq.material}</h2>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{rfq.buyer}</span>
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">{rfq.buyer}</span>
               <BadgeCheck className="w-3.5 h-3.5 text-blue-500" />
               <div className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-600" />
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{rfq.location}</span>
+              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">{rfq.location}</span>
             </div>
           </div>
           
@@ -128,10 +128,10 @@ export default function RFQDetails() {
               />
               {stages.map((stage, i) => (
                 <div key={stage} className="relative z-10 flex flex-col items-center">
-                  <div className={`w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center text-xs font-black transition-all duration-300 ${i <= currentStage ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
+                  <div className={`w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center text-xs font-black transition-all duration-300 ${i <= currentStage ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-800'}`}>
                     {i + 1}
                   </div>
-                  <span className={`text-xs font-black uppercase tracking-[0.1em] mt-3 ${i <= currentStage ? 'text-blue-600' : 'text-slate-400'}`}>
+                  <span className={`text-xs font-black uppercase tracking-[0.1em] mt-3 ${i <= currentStage ? 'text-blue-600' : 'text-slate-700'}`}>
                     {stage}
                   </span>
                 </div>
@@ -142,14 +142,14 @@ export default function RFQDetails() {
           {/* Quick Metrics */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-[0.45rem] border border-slate-100 dark:border-slate-700">
-              <p className="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Requirement</p>
+              <p className="text-[7px] font-bold text-slate-700 uppercase tracking-widest mb-1">Total Requirement</p>
               <div className="flex items-center gap-2">
                 <Scale className="w-4 h-4 text-blue-500" />
                 <span className="text-xl font-black text-slate-900 dark:text-white">{rfq.quantity.toLocaleString()} <span className="text-xs opacity-40">KG</span></span>
               </div>
             </div>
             <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-[0.45rem] border border-slate-100 dark:border-slate-700">
-              <p className="text-[7px] font-bold text-slate-400 uppercase tracking-widest mb-1">Target Price</p>
+              <p className="text-[7px] font-bold text-slate-700 uppercase tracking-widest mb-1">Target Price</p>
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-emerald-500" />
                 <span className="text-xl font-black text-slate-900 dark:text-white">KSh {rfq.targetPrice} <span className="text-xs opacity-40">/KG</span></span>
@@ -184,8 +184,8 @@ export default function RFQDetails() {
 
           {/* Requirement Description */}
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Buyer's Brief</p>
-            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+            <p className="text-xs font-black text-slate-700 uppercase tracking-widest mb-3">Buyer's Brief</p>
+            <p className="text-sm text-slate-900 dark:text-slate-300 leading-relaxed font-medium">
               {rfq.description}
             </p>
           </div>
@@ -199,7 +199,7 @@ export default function RFQDetails() {
             <div className="p-0">
               {rfq.specs.map((spec, i) => (
                 <div key={i} className="flex items-center justify-between px-5 py-3 border-b border-slate-50 dark:border-slate-700/50 last:border-0 bg-slate-50/20 dark:bg-transparent">
-                  <span className="text-xs font-bold text-slate-400 uppercase">{spec.label}</span>
+                  <span className="text-xs font-bold text-slate-700 uppercase">{spec.label}</span>
                   <span className="text-xs font-black text-slate-900 dark:text-white">{spec.value}</span>
                 </div>
               ))}
@@ -217,7 +217,7 @@ export default function RFQDetails() {
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Loading Port</p>
+                  <p className="text-[7px] font-bold text-slate-700 uppercase tracking-widest">Loading Port</p>
                   <p className="text-xs font-black text-slate-900 dark:text-white">{rfq.logistics.port}</p>
                 </div>
               </div>
@@ -226,7 +226,7 @@ export default function RFQDetails() {
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Inspection Policy</p>
+                  <p className="text-[7px] font-bold text-slate-700 uppercase tracking-widest">Inspection Policy</p>
                   <p className="text-xs font-black text-slate-900 dark:text-white">{rfq.logistics.inspection}</p>
                 </div>
               </div>
@@ -235,7 +235,7 @@ export default function RFQDetails() {
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Payment Terms</p>
+                  <p className="text-[7px] font-bold text-slate-700 uppercase tracking-widest">Payment Terms</p>
                   <p className="text-xs font-black text-slate-900 dark:text-white">{rfq.logistics.payment}</p>
                 </div>
               </div>
@@ -250,20 +250,20 @@ export default function RFQDetails() {
               </div>
               <div>
                 <h4 className="text-sm font-bold leading-none">{rfq.buyer}</h4>
-                <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest">Verified Trader • Since {rfq.buyerHistory.joined}</p>
+                <p className="text-xs text-slate-700 mt-1 uppercase tracking-widest">Verified Trader • Since {rfq.buyerHistory.joined}</p>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-2 border-t border-white/5 pt-4">
               <div className="text-center">
-                <p className="text-xs text-slate-500 uppercase mb-1">Trades</p>
+                <p className="text-xs text-slate-800 uppercase mb-1">Trades</p>
                 <p className="text-xs font-black">{rfq.buyerHistory.totalTrades}</p>
               </div>
               <div className="text-center border-x border-white/5">
-                <p className="text-xs text-slate-500 uppercase mb-1">Rating</p>
+                <p className="text-xs text-slate-800 uppercase mb-1">Rating</p>
                 <p className="text-xs font-black text-emerald-400">★ {rfq.buyerHistory.rating}</p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-slate-500 uppercase mb-1">Status</p>
+                <p className="text-xs text-slate-800 uppercase mb-1">Status</p>
                 <p className="text-xs font-black text-blue-400 uppercase">Trusted</p>
               </div>
             </div>
@@ -276,7 +276,7 @@ export default function RFQDetails() {
           <div className="max-w-lg mx-auto">
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div className="relative">
-                <p className="absolute top-2 left-3 text-[7px] font-black text-slate-400 uppercase">Your Offer /KG</p>
+                <p className="absolute top-2 left-3 text-[7px] font-black text-slate-700 uppercase">Your Offer /KG</p>
                 <input 
                   type="number" 
                   value={bidData.price}
@@ -286,7 +286,7 @@ export default function RFQDetails() {
                 />
               </div>
               <div className="relative">
-                <p className="absolute top-2 left-3 text-[7px] font-black text-slate-400 uppercase">Earliest Ship</p>
+                <p className="absolute top-2 left-3 text-[7px] font-black text-slate-700 uppercase">Earliest Ship</p>
                 <input 
                   type="date" 
                   value={bidData.deliveryDate}
@@ -299,7 +299,7 @@ export default function RFQDetails() {
               onClick={handleBidSubmit}
               disabled={isSubmitting}
               className={`w-full py-4 rounded-xl flex items-center justify-center gap-2 text-sm font-black uppercase tracking-widest transition-all ${
-                isSubmitting ? 'bg-slate-100 text-slate-400' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 active:scale-95'
+                isSubmitting ? 'bg-white shadow-sm text-slate-700' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 active:scale-95'
               }`}
             >
               {isSubmitting ? (

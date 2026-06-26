@@ -84,7 +84,7 @@ export default function BusinessRegister() {
         
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <Link to="/login" className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+          <Link to="/login" className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 transition-colors">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
@@ -95,7 +95,7 @@ export default function BusinessRegister() {
 
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Business Registration</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 font-medium">Connect your business to the green circular economy.</p>
+          <p className="text-sm text-slate-800 dark:text-slate-400 mt-1 mb-6 font-medium">Connect your business to the green circular economy.</p>
         </div>
 
         {/* Form */}
@@ -103,9 +103,9 @@ export default function BusinessRegister() {
           
           {/* Business Name */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Business Name</label>
+            <label className="block text-xs font-semibold text-slate-900 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Business Name</label>
             <div className="relative">
-              <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+              <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-700" />
               <input 
                 type="text" 
                 name="name" 
@@ -120,9 +120,9 @@ export default function BusinessRegister() {
 
           {/* Business Type */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Type of Business</label>
+            <label className="block text-xs font-semibold text-slate-900 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Type of Business</label>
             <div className="relative">
-              <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+              <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-700" />
               <select 
                 name="businessType" 
                 value={formData.businessType} 
@@ -141,9 +141,9 @@ export default function BusinessRegister() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Phone */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Phone Number</label>
+              <label className="block text-xs font-semibold text-slate-900 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Phone Number</label>
               <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-700" />
                 <input 
                   type="tel" 
                   name="phone" 
@@ -157,9 +157,9 @@ export default function BusinessRegister() {
             </div>
             {/* Email */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Email (Optional)</label>
+              <label className="block text-xs font-semibold text-slate-900 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Email (Optional)</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-700" />
                 <input 
                   type="email" 
                   name="email" 
@@ -175,9 +175,9 @@ export default function BusinessRegister() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* PIN */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">6-Digit PIN</label>
+              <label className="block text-xs font-semibold text-slate-900 dark:text-slate-300 mb-1.5 uppercase tracking-wider">6-Digit PIN</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-700" />
                 <input 
                   type="password" 
                   name="pin" 
@@ -194,9 +194,9 @@ export default function BusinessRegister() {
             </div>
             {/* Confirm PIN */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Confirm PIN</label>
+              <label className="block text-xs font-semibold text-slate-900 dark:text-slate-300 mb-1.5 uppercase tracking-wider">Confirm PIN</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-700" />
                 <input 
                   type="password" 
                   name="confirmPin" 
@@ -230,7 +230,7 @@ export default function BusinessRegister() {
           </button>
         </form>
 
-        <p className="text-center mt-6 text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-center mt-6 text-sm text-slate-800 dark:text-slate-400">
           Already have a business account?{' '}
           <Link to="/business/login" className="text-primary font-semibold hover:underline">Log In</Link>
         </p>

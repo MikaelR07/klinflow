@@ -251,7 +251,7 @@ export default function CheckIn() {
               <div className="space-y-4">
                   <div className="p-5 bg-slate-50 dark:bg-white/5 rounded-2xl flex justify-between items-center border border-slate-100 dark:border-white/5">
                      <div className="flex items-center gap-3">
-                        <div className="p-3 bg-emerald-500/10 rounded-xl text-emerald-600">
+                        <div className="font-medium p-3 bg-emerald-500/10 rounded-xl text-emerald-600">
                            <Scale className="w-5 h-5" />
                         </div>
                         <div>
@@ -325,7 +325,7 @@ export default function CheckIn() {
            <div className="relative w-32 h-32 mx-auto">
               <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping" />
               <div className="relative w-32 h-32 bg-primary rounded-full flex items-center justify-center shadow-2xl shadow-primary/40">
-                 <ShieldCheck className="w-16 h-16 text-white" />
+                 <ShieldCheck className="font-medium w-16 h-16 text-white" />
               </div>
            </div>
  
@@ -365,7 +365,7 @@ export default function CheckIn() {
 
               <div className="p-4 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/5">
                  <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <CheckCircle2 className="font-medium w-4 h-4 text-emerald-500" />
                     <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Audit logged successfully</span>
                  </div>
               </div>

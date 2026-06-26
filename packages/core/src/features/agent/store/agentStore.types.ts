@@ -61,10 +61,13 @@ export interface Earnings {
   inventoryValue?: number;
   totalKg?: number;
   todayKg?: number;
+  yesterdayKg?: number;
+  yesterdayPayout?: number;
+  yesterdayJobs?: number;
   thisWeekKg?: number;
   residentPickups?: number;
   marketTrades?: number;
-  weeklyData: { day: string; weight: number }[];
+  weeklyData: { day: string; weight: number; payout: number; revenue: number }[];
 }
 
 export interface AgentReview {
@@ -93,8 +96,9 @@ export interface AgentStore {
   currentInsightIndex: number;
   jobSubscription: { unsubscribe: () => void } | null;
   reviewSubscription: { unsubscribe: () => void } | null;
-  fleetDrivers: Partial<ProfileRow>[];
+  fleetDrivers: (Partial<ProfileRow> & { dispute_count?: number; completed_jobs?: number; collected_kg?: number; payout_amount?: number })[];
   isLoadingFleet: boolean;
+  lastFleetFetch: number;
   fetchFleetDrivers: () => Promise<void>;
   agentConfig: AgentConfiguration | null;
   isLoadingConfig: boolean;

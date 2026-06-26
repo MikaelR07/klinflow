@@ -109,7 +109,7 @@ export default function GroupCollectionRFQs() {
           if (r.delivery_method === 'agent_pickup') deliveryText = 'Agent Pickup';
           else if (r.delivery_method === 'self_drop') deliveryText = 'Self Drop-off';
 
-          const materialRecord = storeMaterials.find(m => m.id === r.material_grade);
+          const materialRecord = storeMaterials.find(m => m.id === r.material_grade || `${r.category}_${m.id}` === r.material_grade);
           const materialName = materialRecord ? materialRecord.material_name : r.material_grade;
 
           const categoryRecord = storeCategories.find(c => c.id === r.category);

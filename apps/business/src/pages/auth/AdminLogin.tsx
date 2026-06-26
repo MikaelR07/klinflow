@@ -43,7 +43,7 @@ export default function AdminLogin() {
           <h1 className="text-2xl font-semibold text-white tracking-tight">
             Klinflow <span className="text-rose-500">Security</span>
           </h1>
-          <p className="text-sm text-slate-400 mt-2 font-medium">
+          <p className="text-sm text-slate-700 mt-2 font-medium">
             Administrative Access Portal
           </p>
         </div>
@@ -52,27 +52,27 @@ export default function AdminLogin() {
         <form onSubmit={handleAdminLogin} className="bg-slate-800 p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-2xl">
           <div className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-1.5">Authorized Phone</label>
+              <label className="block text-sm font-semibold text-slate-600 mb-1.5">Authorized Phone</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Phone className="h-5 w-5 text-slate-500" />
+                  <Phone className="h-5 w-5 text-slate-800" />
                 </div>
                 <input
                   type="tel"
                   placeholder="HQ Phone Number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:ring-2 text-base focus:ring-rose-500/50 focus:border-rose-500 transition-colors placeholder:text-slate-500"
+                  className="w-full pl-11 pr-4 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:ring-2 text-base focus:ring-rose-500/50 focus:border-rose-500 transition-colors placeholder:text-slate-800"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-1.5">Security PIN</label>
+              <label className="block text-sm font-semibold text-slate-600 mb-1.5">Security PIN</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-500" />
+                  <Lock className="h-5 w-5 text-slate-800" />
                 </div>
                 <input
                   type="password"
@@ -81,7 +81,7 @@ export default function AdminLogin() {
                   inputMode="numeric"
                   value={pin}
                   onChange={(e) => setPin(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:ring-2 text-base focus:ring-rose-500/50 focus:border-rose-500 transition-colors tracking-widest placeholder:tracking-normal placeholder:text-slate-500"
+                  className="w-full pl-11 pr-4 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:ring-2 text-base focus:ring-rose-500/50 focus:border-rose-500 transition-colors tracking-widest placeholder:tracking-normal placeholder:text-slate-800"
                   required
                 />
               </div>

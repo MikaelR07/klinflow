@@ -50,7 +50,7 @@ export default function Login() {
           <h1 className="text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter">
             Clean<span className="text-indigo-600 italic">Business</span>
           </h1>
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500 mt-2 font-semibold">
+          <p className="text-xs uppercase tracking-[0.3em] text-slate-700 dark:text-slate-500 mt-2 font-semibold">
             Kenya's B2B Recycling Marketplace
           </p>
         </div>
@@ -59,17 +59,17 @@ export default function Login() {
         <div className="glass p-8 sm:p-10 rounded-[1rem] border border-slate-200 dark:border-slate-800 shadow-2xl shadow-slate-200/50 dark:shadow-none">
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-slate-800 dark:text-white pb-1 tracking-tight">Business Portal</h2>
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white pb-1 tracking-tight">Business Portal</h2>
               <div className="w-8 h-1 bg-indigo-600 mx-auto rounded-full mt-1" />
             </div>
 
             <div className="space-y-4">
               {/* Phone */}
               <div>
-                <label className="block text-xs font-semibold text-slate-400 dark:text-slate-500 mb-2 uppercase tracking-widest">Business Phone</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-500 mb-2 uppercase tracking-widest">Business Phone</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+                    <Phone className="h-5 w-5 text-slate-700 group-focus-within:text-indigo-600 transition-colors" />
                   </div>
                   <input
                     id="business-phone"
@@ -86,7 +86,7 @@ export default function Login() {
               {/* Passcode */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Security Passcode</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-500 uppercase tracking-widest">Security Passcode</label>
                   <button
                     type="button"
                     onClick={() => toast.info('Recovery initiated', { description: 'Reset link sent to your registered phone.' })}
@@ -97,7 +97,7 @@ export default function Login() {
                 </div>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+                    <Lock className="h-5 w-5 text-slate-700 group-focus-within:text-indigo-600 transition-colors" />
                   </div>
                   <input
                     id="business-pin"
@@ -111,7 +111,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setShowPin(!showPin)}
-                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-indigo-600 transition-colors"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-700 hover:text-indigo-600 transition-colors"
                   >
                     {showPin ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -135,7 +135,7 @@ export default function Login() {
           </form>
         </div>
 
-        <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 mt-10">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest text-slate-700 dark:text-slate-500 mt-10">
           New to the marketplace?{' '}
           <Link to="/roles" className="text-indigo-600 hover:underline underline-offset-4">Register Now</Link>
         </p>

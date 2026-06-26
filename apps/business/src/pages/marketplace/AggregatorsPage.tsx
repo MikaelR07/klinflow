@@ -62,9 +62,9 @@ export default function AggregatorsPage() {
   );
 
   return (
-    <div className="animate-fade-in -mt-5 -mx-2 pb-12 min-h-screen bg-[#F4F4F4] dark:bg-slate-900">
+    <div className="animate-fade-in -mt-5 -mx-2 pb-12 min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Header Area */}
-      <div className="bg-[#F4F4F4] dark:bg-slate-900 pt-2 pb-4 px-0 relative overflow-hidden">
+      <div className="bg-slate-50 dark:bg-slate-900 pt-2 pb-4 px-0 relative overflow-hidden">
         {/* Ambient Glows */}
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-indigo-500/5 dark:bg-indigo-500/10 blur-[100px] rounded-full" />
         
@@ -88,7 +88,7 @@ export default function AggregatorsPage() {
       {/* Directory Section */}
       <div className="px-2 space-y-4">
         <div className="flex items-center justify-between px-1">
-          <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Partner Directory</h2>
+          <h2 className="text-xs font-black text-slate-700 uppercase tracking-[0.2em]">Partner Directory</h2>
           <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{filteredAggregators.length} Found</span>
         </div>
 
@@ -100,7 +100,7 @@ export default function AggregatorsPage() {
             >
               <div className="flex p-3 gap-4">
                 {/* Image */}
-                <div className="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+                <div className="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-white shadow-sm">
                   <img src={aggregator.image} alt={aggregator.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
 
@@ -112,31 +112,31 @@ export default function AggregatorsPage() {
                       {aggregator.verified && <ShieldCheck className="w-4 h-4 text-indigo-500 shrink-0" />}
                     </div>
                     <div className="flex items-center gap-1.5 mt-1">
-                      <MapPin className="w-3 h-3 text-slate-400" />
-                      <span className="text-xs text-slate-500 font-medium truncate">{aggregator.location}</span>
+                      <MapPin className="w-3 h-3 text-slate-700" />
+                      <span className="text-xs text-slate-800 font-medium truncate">{aggregator.location}</span>
                     </div>
                     <div className="mt-2 flex items-center gap-2">
                       <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-amber-50 dark:bg-amber-500/10 rounded text-amber-600 dark:text-amber-400">
                         <Star className="w-2.5 h-2.5 fill-current" />
                         <span className="text-xs font-black">{aggregator.rating}</span>
                       </div>
-                      <span className="text-xs text-slate-400 font-medium">({aggregator.reviews} reviews)</span>
+                      <span className="text-xs text-slate-700 font-medium">({aggregator.reviews} reviews)</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 mt-2">
-                    <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-700/50 rounded-md text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tight">
+                    <span className="px-2 py-0.5 bg-white shadow-sm dark:bg-slate-700/50 rounded-md text-xs font-bold text-slate-900 dark:text-slate-400 uppercase tracking-tight">
                       {aggregator.specialization.split(' ')[0]}
                     </span>
-                    <span className="text-xs text-slate-300">|</span>
-                    <span className="text-xs text-slate-400 font-bold">{aggregator.capacity}</span>
+                    <span className="text-xs text-slate-600">|</span>
+                    <span className="text-xs text-slate-700 font-bold">{aggregator.capacity}</span>
                   </div>
                 </div>
               </div>
 
               {/* Actions */}
               <div className="flex border-t border-slate-50 dark:border-slate-800/50">
-                <button className="flex-1 py-3 flex items-center justify-center gap-2 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <button className="flex-1 py-3 flex items-center justify-center gap-2 text-xs font-bold text-slate-900 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                   <MessageSquare className="w-3.5 h-3.5" /> Chat
                 </button>
                 <div className="w-[1px] bg-slate-50 dark:bg-slate-800/50" />
@@ -150,9 +150,9 @@ export default function AggregatorsPage() {
 
         {filteredAggregators.length === 0 && (
           <div className="py-20 text-center">
-            <Building2 className="w-12 h-12 text-slate-200 mx-auto mb-4" />
-            <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Partners Found</p>
-            <p className="text-xs text-slate-400 mt-1">Try searching for different materials or areas.</p>
+            <Building2 className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+            <p className="text-sm font-bold text-slate-700 uppercase tracking-widest">No Partners Found</p>
+            <p className="text-xs text-slate-700 mt-1">Try searching for different materials or areas.</p>
           </div>
         )}
       </div>

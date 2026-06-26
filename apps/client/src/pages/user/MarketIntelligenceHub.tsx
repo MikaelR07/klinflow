@@ -74,7 +74,7 @@ export default function MarketIntelligenceHub() {
 
           // Resolve material ID to name
           const storeMaterials = useServiceStore.getState().materialPrices;
-          const materialRecord = storeMaterials.find(m => m.id === r.material_grade);
+          const materialRecord = storeMaterials.find(m => m.id === r.material_grade || `${r.category}_${m.id}` === r.material_grade);
           const materialName = materialRecord ? materialRecord.material_name : r.material_grade;
 
           // Resolve category ID to name

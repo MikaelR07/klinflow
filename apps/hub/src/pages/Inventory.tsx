@@ -193,18 +193,18 @@ export default function Inventory() {
                   <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1">Industrial Inventory Management</p>
                </div>
                <button onClick={fetchInventory} className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center border border-slate-100 dark:border-white/5 active:scale-90 transition-all">
-                  {isLoading ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <RefreshCw className="w-4 h-4 text-slate-400" />}
+                  {isLoading ? <Loader2 className="font-medium w-4 h-4 animate-spin text-primary" /> : <RefreshCw className="font-medium w-4 h-4 text-slate-400" />}
                </button>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-               <div className="bg-emerald-600 rounded-[2rem] p-5 text-white shadow-xl shadow-emerald-600/20 relative overflow-hidden">
+               <div className="font-medium bg-emerald-600 rounded-[2rem] p-5 text-white shadow-xl shadow-emerald-600/20 relative overflow-hidden">
                   <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/10 rounded-full blur-2xl" />
                   <Package className="w-5 h-5 mb-4 opacity-60" />
                   <p className="text-xs font-semibold uppercase tracking-widest opacity-60 mb-1">Stock Weight</p>
                   <h3 className="text-2xl font-semibold">{totalHubWeight.toFixed(1)} <span className="text-xs">KG</span></h3>
                </div>
-               <div className="bg-slate-900 dark:bg-slate-900 rounded-[2rem] p-5 text-white shadow-xl relative overflow-hidden border border-white/5">
+               <div className="font-medium bg-slate-900 dark:bg-slate-900 rounded-[2rem] p-5 text-white shadow-xl relative overflow-hidden border border-white/5">
                   <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full blur-2xl" />
                   <CircleDollarSign className="w-5 h-5 mb-4 text-primary" />
                   <p className="text-xs font-semibold uppercase tracking-widest opacity-60 mb-1">Total Asset Value</p>
@@ -284,7 +284,7 @@ export default function Inventory() {
               <div className="pt-4 space-y-4">
                <div className="flex items-center justify-between mb-2">
                   <button onClick={goBack} className="p-3 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 active:scale-90 transition-all">
-                     <ArrowLeft className="w-5 h-5 text-slate-400" />
+                     <ArrowLeft className="font-medium w-5 h-5 text-slate-400" />
                   </button>
                   <div className="text-right">
                      <h2 className="text-xl font-semibold text-slate-800 dark:text-white leading-none">{selectedCategory?.label}</h2>
@@ -303,7 +303,7 @@ export default function Inventory() {
                           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                              <TrendingUp className="w-5 h-5" />
                           </div>
-                          <ChevronRight className="w-4 h-4 text-slate-300" />
+                          <ChevronRight className="font-medium w-4 h-4 text-slate-300" />
                        </div>
                        
                        <div>
@@ -333,7 +333,7 @@ export default function Inventory() {
               <div className="pt-4 space-y-4">
                <div className="flex items-center justify-between mb-2">
                   <button onClick={goBack} className="p-3 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-white/5 active:scale-90 transition-all">
-                     <ArrowLeft className="w-5 h-5 text-slate-400" />
+                     <ArrowLeft className="font-medium w-5 h-5 text-slate-400" />
                   </button>
                   <div className="text-right">
                      <h2 className="text-xl font-semibold text-slate-800 dark:text-white leading-none">{selectedSub?.label}</h2>
@@ -346,12 +346,12 @@ export default function Inventory() {
                     <div key={asset.id} className="glass p-5 rounded-[2rem] border border-slate-100 dark:border-white/5 flex items-center justify-between">
                        <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center">
-                             <User className="w-5 h-5 text-slate-400" />
+                             <User className="font-medium w-5 h-5 text-slate-400" />
                           </div>
                           <div>
                              <p className="text-sm font-semibold text-slate-800 dark:text-white leading-none mb-1">{(asset as any).profiles?.name || 'Agent'}</p>
                              <div className="flex items-center gap-2">
-                                <Calendar className="w-3 h-3 text-slate-400" />
+                                <Calendar className="font-medium w-3 h-3 text-slate-400" />
                                 <p className="text-xs font-medium text-slate-400 uppercase tracking-widest">{new Date(asset.createdAt).toLocaleDateString()}</p>
                              </div>
                           </div>
@@ -359,7 +359,7 @@ export default function Inventory() {
                        <div className="text-right">
                           <p className="text-base font-semibold text-slate-800 dark:text-white">{asset.weightKg} KG</p>
                           <div className="flex items-center justify-end gap-1 mt-0.5">
-                             <ShieldCheck className="w-3 h-3 text-emerald-500" />
+                             <ShieldCheck className="font-medium w-3 h-3 text-emerald-500" />
                              <p className="text-xs font-semibold text-emerald-500 uppercase tracking-widest">Audited</p>
                           </div>
                        </div>

@@ -46,7 +46,7 @@ export default function FeedbackPage() {
   return (
     <div className="animate-slide-up pb-20">
       <header className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+        <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h1 className="text-xl font-semibold dark:text-white">Give Feedback</h1>
@@ -56,7 +56,7 @@ export default function FeedbackPage() {
         
         {/* Rating Selector */}
         <div className="card p-6 text-center">
-           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4">Rate Your Experience</h2>
+           <h2 className="text-sm font-semibold text-slate-900 dark:text-white mb-4">Rate Your Experience</h2>
            <div className="flex justify-center gap-2">
              {[1, 2, 3, 4, 5].map((star) => (
                <button
@@ -71,7 +71,7 @@ export default function FeedbackPage() {
                    className={`w-10 h-10 transition-colors ${
                      (hoveredRating || rating) >= star 
                        ? 'fill-amber-400 text-amber-400' 
-                       : 'text-slate-300 dark:text-slate-700'
+                       : 'text-slate-600 dark:text-slate-700'
                    }`} 
                  />
                </button>
@@ -82,7 +82,7 @@ export default function FeedbackPage() {
         {/* Details Form */}
         <div className="card p-5 space-y-4">
            <div>
-             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Feedback Category</label>
+             <label className="block text-xs font-semibold text-slate-800 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Feedback Category</label>
              <select 
                value={category} 
                onChange={(e) => setCategory(e.target.value)} 
@@ -95,7 +95,7 @@ export default function FeedbackPage() {
            </div>
 
            <div>
-             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Your Thoughts</label>
+             <label className="block text-xs font-semibold text-slate-800 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Your Thoughts</label>
              <textarea 
                required 
                rows={5} 

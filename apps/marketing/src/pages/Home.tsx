@@ -1,6 +1,6 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion,AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   Users,
@@ -64,7 +64,7 @@ const loopSteps = [
     bg: "bg-rose-500/10",
   },
 ];
-     // ECOSYSTEM DATA
+// ECOSYSTEM DATA
 const ecosystemNodes = [
   {
     id: "communities",
@@ -75,10 +75,22 @@ const ecosystemNodes = [
     description:
       "Households and community members can easily pool their recyclable waste, request pickups, and get rewarded instantly, fostering a cleaner and greener environment.",
     features: [
-      { title: "Pickup Requests", desc: "Schedule convenient waste pickups directly from your location." },
-      { title: "Community Swarms", desc: "Join local community efforts to pool recyclables and increase value." },
-      { title: "Rewards & Wallet", desc: "Earn digital tokens or cash instantly for your sorted materials." },
-      { title: "Impact Tracking", desc: "Monitor your personal environmental contribution and carbon offset." },
+      {
+        title: "Pickup Requests",
+        desc: "Schedule convenient waste pickups directly from your location.",
+      },
+      {
+        title: "Community Swarms",
+        desc: "Join local community efforts to pool recyclables and increase value.",
+      },
+      {
+        title: "Rewards & Wallet",
+        desc: "Earn digital tokens or cash instantly for your sorted materials.",
+      },
+      {
+        title: "Impact Tracking",
+        desc: "Monitor your personal environmental contribution and carbon offset.",
+      },
     ],
   },
   {
@@ -90,10 +102,22 @@ const ecosystemNodes = [
     description:
       "Agents coordinate pickups, manage fleet routes, and ensure swift transportation of materials from residents to the aggregation hubs.",
     features: [
-      { title: "Route Optimization", desc: "AI-driven mapping to find the most efficient pickup paths." },
-      { title: "Job Marketplace", desc: "Access a live feed of available pickup requests in your vicinity." },
-      { title: "Instant Settlements", desc: "Get paid immediately upon successful material delivery to hubs." },
-      { title: "Fleet Management", desc: "Monitor vehicle status, driver performance, and operational costs." },
+      {
+        title: "Route Optimization",
+        desc: "AI-driven mapping to find the most efficient pickup paths.",
+      },
+      {
+        title: "Job Marketplace",
+        desc: "Access a live feed of available pickup requests in your vicinity.",
+      },
+      {
+        title: "Instant Settlements",
+        desc: "Get paid immediately upon successful material delivery to hubs.",
+      },
+      {
+        title: "Fleet Management",
+        desc: "Monitor vehicle status, driver performance, and operational costs.",
+      },
     ],
   },
   {
@@ -105,10 +129,22 @@ const ecosystemNodes = [
     description:
       "Recyclers gain steady access to high-quality, pre-sorted materials with full supply chain visibility and streamlined procurement.",
     features: [
-      { title: "Material Sourcing", desc: "Procure verified and graded recyclables directly from the platform." },
-      { title: "Inventory Visibility", desc: "Track incoming shipments and manage your warehouse stock." },
-      { title: "Supply Analytics", desc: "Analyze procurement trends, pricing patterns, and volume metrics." },
-      { title: "Verified Suppliers", desc: "Work with vetted hubs and agents for consistent material quality." },
+      {
+        title: "Material Sourcing",
+        desc: "Procure verified and graded recyclables directly from the platform.",
+      },
+      {
+        title: "Inventory Visibility",
+        desc: "Track incoming shipments and manage your warehouse stock.",
+      },
+      {
+        title: "Supply Analytics",
+        desc: "Analyze procurement trends, pricing patterns, and volume metrics.",
+      },
+      {
+        title: "Verified Suppliers",
+        desc: "Work with vetted hubs and agents for consistent material quality.",
+      },
     ],
   },
   {
@@ -120,10 +156,22 @@ const ecosystemNodes = [
     description:
       "Corporate businesses can manage their ESG reporting, comply with environmental regulations, and achieve zero-waste goals transparently.",
     features: [
-      { title: "ESG Reporting", desc: "Generate automated, verifiable sustainability and compliance reports." },
-      { title: "Compliance Tracking", desc: "Stay ahead of local and international environmental regulations." },
-      { title: "Impact Analytics", desc: "Measure the exact volume of waste diverted from landfills." },
-      { title: "Carbon Visibility", desc: "Calculate and monitor carbon emissions saved through recycling." },
+      {
+        title: "ESG Reporting",
+        desc: "Generate automated, verifiable sustainability and compliance reports.",
+      },
+      {
+        title: "Compliance Tracking",
+        desc: "Stay ahead of local and international environmental regulations.",
+      },
+      {
+        title: "Impact Analytics",
+        desc: "Measure the exact volume of waste diverted from landfills.",
+      },
+      {
+        title: "Carbon Visibility",
+        desc: "Calculate and monitor carbon emissions saved through recycling.",
+      },
     ],
   },
   {
@@ -135,10 +183,22 @@ const ecosystemNodes = [
     description:
       "Hub owners and aggregators can list their sorted materials on the marketplace to connect with top-tier buyers and recyclers.",
     features: [
-      { title: "RFQ Marketplace", desc: "Publish and respond to Requests for Quotation seamlessly." },
-      { title: "Verified Listings", desc: "Showcase graded materials to a network of trusted buyers." },
-      { title: "Market Intelligence", desc: "Access real-time pricing data to sell at the best possible rates." },
-      { title: "Secure Transactions", desc: "Guarantee safe, escrow-backed payments for large volume trades." },
+      {
+        title: "RFQ Marketplace",
+        desc: "Publish and respond to Requests for Quotation seamlessly.",
+      },
+      {
+        title: "Verified Listings",
+        desc: "Showcase graded materials to a network of trusted buyers.",
+      },
+      {
+        title: "Market Intelligence",
+        desc: "Access real-time pricing data to sell at the best possible rates.",
+      },
+      {
+        title: "Secure Transactions",
+        desc: "Guarantee safe, escrow-backed payments for large volume trades.",
+      },
     ],
   },
   {
@@ -150,14 +210,25 @@ const ecosystemNodes = [
     description:
       "Platform administrators have a bird's-eye view of the entire circular ecosystem, managing operations, finance, and platform growth.",
     features: [
-      { title: "Ecosystem Oversight", desc: "Monitor all transactions, material flows, and user activities globally." },
-      { title: "Financial Controls", desc: "Manage escrow systems, payouts, and platform revenue." },
-      { title: "System Analytics", desc: "Deep-dive into performance metrics and macro-level impact data." },
-      { title: "User Governance", desc: "Verify new partners, handle disputes, and maintain platform integrity." },
+      {
+        title: "Ecosystem Oversight",
+        desc: "Monitor all transactions, material flows, and user activities globally.",
+      },
+      {
+        title: "Financial Controls",
+        desc: "Manage escrow systems, payouts, and platform revenue.",
+      },
+      {
+        title: "System Analytics",
+        desc: "Deep-dive into performance metrics and macro-level impact data.",
+      },
+      {
+        title: "User Governance",
+        desc: "Verify new partners, handle disputes, and maintain platform integrity.",
+      },
     ],
   },
 ];
-
 
 const appCards = [
   {
@@ -201,19 +272,33 @@ export default function Home() {
   >(null);
   const [activeNode, setActiveNode] = useState(0);
   const [isAutoPaused, setIsAutoPaused] = useState(false);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  const heroCarouselImages = [
+    "/products/fleet-manager/manager-dashboard.webp",
+    "/landing-page/hero/hero1.webp",
+    "/products/fleet-manager/marketplace-view.webp",
+    "/products/fleet-manager/market-prices.webp",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroImageIndex((prev) => (prev + 1) % heroCarouselImages.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (isAutoPaused) return;
-    
+
     const interval = setInterval(() => {
       setActiveNode((prev) =>
-        prev === ecosystemNodes.length - 1 ? 0 : prev + 1
+        prev === ecosystemNodes.length - 1 ? 0 : prev + 1,
       );
     }, 5000);
 
     return () => clearInterval(interval);
   }, [isAutoPaused]);
-
 
   const screenshots = [
     {
@@ -257,208 +342,127 @@ export default function Home() {
   return (
     <Layout>
       {/* HERO SECTION ─────────────────────────────────────────── */}
-      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden min-h-[70vh] md:min-h-[85vh] flex items-center">
-        {/* Background Image */}
+      <section className={`relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden min-h-[70vh] md:min-h-[85vh] flex items-center ${isDarkMode ? "bg-surface-950" : "bg-white"}`}>
+        {/* Subtle background pattern */}
         <div className="absolute inset-0 z-0">
-          <img
-            src="/landing-page/marketing-banner.webp"
-            alt=""
-            className="absolute right-0 top-0 h-full w-full object-cover object-right"
+          <div
+            className={`absolute inset-0 ${isDarkMode ? "opacity-[0.2]" : "opacity-[0.8]"}`}
+            style={{
+              backgroundImage: `linear-gradient(${isDarkMode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)"} 1px, transparent 1px), linear-gradient(90deg, ${isDarkMode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)"} 1px, transparent 1px)`,
+              backgroundSize: "60px 60px",
+            }}
           />
-          {/* Theme-aware gradient overlay from left */}
-          <div className={`absolute inset-0 z-10 ${isDarkMode
-            ? "bg-gradient-to-r from-surface-950 via-surface-950/90 to-surface-950/20"
-            : "bg-gradient-to-r from-surface-50 via-surface-50/70 to-surface-50/20"
-          }`} />
-          {/* Bottom fade for seamless transition */}
-          <div className={`absolute bottom-0 left-0 right-0 h-40 z-10 ${isDarkMode
-            ? "bg-gradient-to-t from-surface-950 to-transparent"
-            : "bg-gradient-to-t from-surface-50 to-transparent"
-          }`} />
+          <div className="absolute top-20 right-20 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 left-10 w-[400px] h-[400px] bg-emerald-500/8 blur-[120px] rounded-full pointer-events-none" />
         </div>
 
-        <div className="max-w-[1600px] mx-auto pl-6 md:pl-12 lg:pl-20 pr-6 relative z-20 w-full -translate-y-10 md:-translate-y-16">
-          <div className="max-w-xl lg:max-w-2xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-8 ${isDarkMode ? "bg-primary/10 border-primary/20" : "bg-emerald-50 border-primary/20"}`}
-            >
-              <Zap className="w-3 h-3 text-primary" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary-dark dark:text-primary">
-                The Infrastructure for Circular Assets
-              </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className={`text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 leading-[1.1] ${isDarkMode ? "text-white" : "text-slate-900"}`}
-            >
-              Technical infrastructure defining{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-dark">
-                the next generation of circular recovery.
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className={`text-base md:text-lg font-medium leading-relaxed mb-10 ${isDarkMode ? "text-slate-300" : "text-slate-700"}`}
-            >
-              Klinflow aims to redefine how recyclable materials are collected, traded, and monetized. Through integrated mobile applications, smart logistics tools, marketplace technology, and community-driven collection networks, we empower residents, sellers, agents, and recycling businesses to participate in a transparent and efficient recycling ecosystem. By transforming waste streams into economic opportunities, Klinflow unlocks new value chains while supporting environmental impact, job creation, and sustainable urban development.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-start gap-4"
-            >
-              <Link
-                to="/ecosystem"
-                className="w-full sm:w-auto btn-primary flex items-center justify-center gap-2 text-sm uppercase tracking-widest"
+        <div className="max-w-[1600px] mx-auto pl-6 md:pl-12 lg:pl-20 pr-6 relative z-20 w-full">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* Left Column: Text */}
+            <div className="lg:col-span-5 max-w-xl lg:max-w-2xl -translate-y-8 lg:-translate-y-16">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-8 ${isDarkMode ? "bg-primary/10 border-primary/20" : "bg-emerald-50 border-primary/20"}`}
               >
-                Explore the Ecosystem <ChevronRight className="w-5 h-5" />
-              </Link>
-              <Link
-                to="/system"
-                className={`w-full sm:w-auto btn-secondary flex items-center justify-center gap-2 text-sm uppercase tracking-widest`}
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-primary-dark dark:text-primary">
+                  The Infrastructure for Circular Assets
+                </span>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 leading-[1.1] ${isDarkMode ? "text-white" : "text-slate-900"}`}
               >
-                See the Infrastructure <ArrowRight className="w-5 h-5" />
-              </Link>
-            </motion.div>
+                Technical infrastructure defining{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-dark">
+                  the next generation of circular recovery.
+                </span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className={`text-sm sm:text-base md:text-base font-medium leading-relaxed mb-10 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}
+              >
+                Klinflow aims to redefine how recyclable materials are collected, traded, and monetized. Through integrated mobile applications, smart logistics tools, marketplace technology, and community-driven collection networks, we empower residents, sellers, agents, and recycling businesses to participate in a transparent and efficient recycling ecosystem. By transforming waste streams into economic opportunities, Klinflow unlocks new value chains while supporting environmental impact, job creation, and sustainable urban development.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="flex flex-row items-stretch gap-2 sm:gap-4 w-full"
+              >
+                <Link
+                  to="/contact"
+                  className="flex-1 sm:flex-none btn-primary flex flex-row items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm capitalize tracking-wide px-2 py-3 sm:px-6 text-center leading-tight"
+                >
+                  <span>Contact Us</span> <ArrowRight className="w-3 h-3 sm:w-5 sm:h-5 hidden sm:inline" />
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Right Column: 3D Perspective Hero Image Carousel */}
+            <div className="lg:col-span-7 relative w-full mt-16 lg:mt-0 z-20 lg:ml-12 lg:translate-x-10">
+              <div
+                style={{ perspective: "1200px" }}
+                className="w-full"
+              >
+                <div
+                  className={`rounded-[1rem] border relative flex items-center justify-center overflow-hidden shadow-slate-600 dark:shadow-none shadow-2xl scale-105 lg:scale-[1.12] origin-center w-full aspect-[4/3] sm:aspect-video lg:aspect-[16/11] ${isDarkMode ? "bg-white/5 border-white/10 shadow-black/40" : "bg-slate-50 border-slate-200 shadow-slate-300/50"}`}
+                  style={{
+                    transform: "rotateY(-12deg) rotateX(4deg)",
+                    transformOrigin: "top center",
+                    transition: "transform 0.5s ease",
+                  }}
+                >
+                  <AnimatePresence>
+                    <motion.img
+                      key={heroImageIndex}
+                      src={heroCarouselImages[heroImageIndex]}
+                      alt="Klinflow Platform Preview"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
+                      className="absolute inset-0 w-full h-full object-fill object-center"
+                    />
+                  </AnimatePresence>
+                </div>
+              </div>
+              {/* Subtle shadow beneath the 3D card */}
+              <div className={`absolute -bottom-4 left-[15%] right-[5%] h-10 blur-2xl rounded-full ${isDarkMode ? "bg-primary/10" : "bg-slate-300/30"}`} />
+            </div>
           </div>
-        </div>
-      </section>
-
-     
-
-      {/* ── BUILT FOR EVERYONE ─────────────────────────────────────────── */}
-      <section className={`relative z-20 pb-12 md:pb-20 ${isDarkMode ? "bg-surface-950" : "bg-surface-50"}`}>
-        <div className="max-w-7xl mx-auto px-6 ">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className={`rounded-2xl border p-6 md:p-8 ${isDarkMode ? "bg-white/5 border-white/10" : "bg-white border-slate-200 shadow-lg"}`}
-          >
-            <p className={`text-xs font-bold uppercase tracking-[0.2em] mb-6 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
-              Built for every player in the ecosystem
-            </p>
-            {(() => {
-              const players = [
-                { role: "Sellers", desc: "Request Pickups, manage collections, increase earnings, and grow your recycling business", img: "/landing-page/avatar-collector.webp", color: "emerald" },
-                { role: "Agents", desc: "Manage pickup requests, optimize routes, track earnings & scale your operations with us", img: "/landing-page/avatar-transporter.webp", color: "blue" },
-                { role: "Recyclers", desc: "Access reliable material supply, manage procurement workflows, and gain visibility into recycling operations.", img: "/landing-page/avatar-recycler.webp", color: "rose" },
-                { role: "Enterprises", desc: "Digitize waste management, track sustainability impact, and achieve environmental compliance goals", img: "/landing-page/avatar-enterprise.webp", color: "indigo" },
-                { role: "Residents", desc: "Pool recyclable waste, unlock collective value, and contribute to a thriving circular economy.", img: "/landing-page/avatar-community.webp", color: "amber" },
-              ];
-
-              return (
-                <>
-                  {/* MOBILE FLOW */}
-                  <div className="flex md:hidden flex-col w-full gap-4 relative">
-                    {/* Row 1: 3 items */}
-                    <div className="flex items-start justify-between w-full">
-                      {[0, 1, 2].map((idx, i) => (
-                        <div className="contents" key={idx}>
-                          <div className="flex flex-col items-center text-center gap-2 w-[28%]">
-                            <div className={`w-12 h-12 rounded-full bg-${players[idx].color}-500/10 flex items-center justify-center shrink-0 border-2 ${isDarkMode ? `border-${players[idx].color}-500/20` : `border-${players[idx].color}-100`}`}>
-                              <img src={players[idx].img} alt={players[idx].role} className="w-full h-full object-cover rounded-full" />
-                            </div>
-                            <div className="min-w-0">
-                              <p className={`text-[11px] font-bold leading-tight ${isDarkMode ? "text-white" : "text-slate-900"}`}>{players[idx].role}</p>
-                              <p className="text-[9px] text-slate-500 font-medium leading-tight mt-1 line-clamp-3">{players[idx].desc}</p>
-                            </div>
-                          </div>
-                          {i < 2 && (
-                            <div className="flex items-center justify-center h-12">
-                              <ArrowRight className="w-4 h-4 text-primary shrink-0" />
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Row 2: 2 items */}
-                    <div className="flex items-start justify-center gap-8 w-full mt-2">
-                      {[3, 4].map((idx, i) => (
-                        <div className="contents" key={idx}>
-                          <div className="flex flex-col items-center text-center gap-2 w-[28%]">
-                            <div className={`w-12 h-12 rounded-full bg-${players[idx].color}-500/10 flex items-center justify-center shrink-0 border-2 ${isDarkMode ? `border-${players[idx].color}-500/20` : `border-${players[idx].color}-100`}`}>
-                              <img src={players[idx].img} alt={players[idx].role} className="w-full h-full object-cover rounded-full" />
-                            </div>
-                            <div className="min-w-0">
-                              <p className={`text-[11px] font-bold leading-tight ${isDarkMode ? "text-white" : "text-slate-900"}`}>{players[idx].role}</p>
-                              <p className="text-[9px] text-slate-500 font-medium leading-tight mt-1 line-clamp-3">{players[idx].desc}</p>
-                            </div>
-                          </div>
-                          {i === 0 && (
-                            <div className="flex items-center justify-center h-12">
-                              <ArrowRight className="w-4 h-4 text-primary shrink-0" />
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* DESKTOP GRID */}
-                  <div className="hidden md:grid md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
-                    {players.map((item, i) => (
-                      <div key={i} className={`flex items-start gap-3 p-3 rounded-xl transition-colors ${isDarkMode ? "hover:bg-white/5" : "hover:bg-slate-50"}`}>
-                        <div className={`w-9 h-9 rounded-full bg-${item.color}-500/10 flex items-center justify-center shrink-0 overflow-hidden border-2 ${isDarkMode ? `border-${item.color}-500/20` : `border-${item.color}-100`}`}>
-                          <img src={item.img} alt={item.role} className="w-full h-full object-cover" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className={`text-sm font-bold leading-tight ${isDarkMode ? "text-white" : "text-slate-900"}`}>{item.role}</p>
-                          <p className="text-[13px] text-slate-500 font-medium leading-snug mt-0.5">{item.desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              );
-            })()}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── SHOWCASE BANNER ────────────────────────────────────────────── */}
-      <section className={`hidden md:flex w-full relative z-10 px-4 md:px-6 mt-8 md:mt-16 mb-16 md:mb-32 justify-center`}>
-        <div className={`max-w-7xl w-full rounded-[2rem] border overflow-hidden relative shadow-2xl ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`}>
-          <img
-            src="/landing-page/banner3.webp"
-            alt="Klinflow Platform Showcase"
-            className="w-full h-auto object-cover"
-          />
         </div>
       </section>
 
       {/* ── STRATEGIC VISION ────────────────────────────────────── */}
       <section
         id="vision"
-        className={`py-16 md:py-32 px-6 relative overflow-hidden transition-colors ${isDarkMode ? "bg-surface-950 border-b border-white/5" : "bg-white border-b border-slate-200"}`}
+        className={`py-16 md:py-32 relative overflow-hidden transition-colors ${isDarkMode ? "bg-surface-900 border-b border-white/5" : "bg-white border-b border-slate-200"}`}
       >
         <div
           className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] blur-[120px] opacity-20 rounded-full bg-primary/5 pointer-events-none`}
         />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
+        <div className="max-w-[1600px] mx-auto pl-6 md:pl-12 lg:pl-20 pr-6 relative z-10">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             <motion.div
+              className="lg:col-span-5 max-w-xl lg:max-w-2xl"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-sm font-black uppercase tracking-widest text-primary mb-6 font-mono">
-                The Thesis
+              <h2 className="text-sm font-black uppercase tracking-widest text-primary mb-2 font-mono">
+                Our Goal
               </h2>
               <h3
-                className={`text-3xl md:text-4xl font-black mb-8 tracking-tighter ${isDarkMode ? "text-white" : "text-slate-900"}`}
+                className={`text-2xl sm:text-3xl md:text-4xl font-black mb-8 tracking-tighter ${isDarkMode ? "text-white" : "text-slate-900"}`}
               >
                 A Future Where <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-dark italic">
@@ -466,10 +470,17 @@ export default function Home() {
                 </span>
               </h3>
               <p
-                className={`text-lg font-medium leading-relaxed mb-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}
+                className={`text-sm sm:text-base md:text-lg font-medium leading-relaxed mb-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}
               >
-                Klinflow is more than a recycling platform—it is the infrastructure powering a modern circular economy. By connecting households, waste collectors, recyclers, and industrial buyers through a single digital ecosystem, Klinflow transforms waste from an overlooked liability into a traceable, monetizable resource. Through real-time tracking, intelligent logistics, automated incentives, and transparent marketplace transactions, we are building the systems that make sustainable resource recovery scalable, profitable, and accessible to everyone.
-
+                Klinflow is more than a recycling platform—it is the
+                infrastructure powering a modern circular economy. By connecting
+                households, waste collectors, recyclers, and industrial buyers
+                through a single digital ecosystem, Klinflow transforms waste
+                from an overlooked liability into a traceable, monetizable
+                resource. Through real-time tracking, intelligent logistics,
+                automated incentives, and transparent marketplace transactions,
+                we are building the systems that make sustainable resource
+                recovery scalable, profitable, and accessible to everyone.
               </p>
 
               <div className="grid grid-cols-3 gap-2 sm:gap-6">
@@ -506,12 +517,14 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <div className="relative w-full">
-              <div className={`rounded-[2rem] border relative flex items-center justify-center overflow-hidden ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200 shadow-xl"}`}>
+            <div className="lg:col-span-7 relative w-full mt-12 lg:mt-0 z-20 lg:ml-8">
+              <div
+                className={`rounded-[2rem] border relative flex items-center justify-center overflow-hidden shadow-2xl scale-105 lg:scale-[1.15] origin-center lg:origin-left w-full aspect-[4/3] sm:aspect-video lg:aspect-[16/11] ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`}
+              >
                 <img
                   src="/landing-page/asset.webp"
                   alt="Thesis Asset"
-                  className="w-full h-auto object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
             </div>
@@ -519,66 +532,59 @@ export default function Home() {
         </div>
       </section>
 
+      {/* INTERCONNECTED ECOSYSTEM SECTION */}
       <section
-        className={`relative overflow-hidden py-16 md:py-24 ${
-          isDarkMode
-            ? "bg-surface-950"
-            : "bg-slate-50"
+        className={`relative overflow-hidden py-16 md:py-16 ${
+          isDarkMode ? "bg-surface-950" : "bg-slate-50"
         }`}
-        >
-          {/* DOT GRID */}
+      >
+        {/* DOT GRID */}
 
-          <div
-            className="absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle, currentColor 1px, transparent 1px)",
-              backgroundSize: "28px 28px",
-            }}
-          />
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, currentColor 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+          }}
+        />
 
-          <div className="relative max-w-7xl mx-auto px-6">
+        <div className="relative max-w-7xl mx-auto px-6">
+          <header className="text-left max-w-2xl mb-8 md:mb-3">
+            <span className="uppercase tracking-[0.3em] text-primary text-[10px] md:text-xs font-bold mb-3 block">
+              Interconnected Ecosystem
+            </span>
 
-            <header className="text-left max-w-2xl mb-8 md:mb-3">
+            <h2
+              className={`text-2xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] mb-4 ${
+                isDarkMode ? "text-white" : "text-slate-900"
+              }`}
+            >
+              One Platform.{" "}
+              <span className="text-primary">Every Stakeholder.</span>
+            </h2>
 
-              <span className="uppercase tracking-[0.3em] text-primary text-[10px] md:text-xs font-bold mb-3 block">
-                Connected Ecosystem
-              </span>
+            <p
+              className={`text-sm md:text-base max-w-xl leading-relaxed ${
+                isDarkMode ? "text-slate-400" : "text-slate-600"
+              }`}
+            >
+              Klinflow powers the entire circular economy by connecting
+              communities, collectors, transporters, recyclers, enterprises and
+              buyers through one intelligent platform.
+            </p>
+          </header>
 
-              <h2
-                className={`text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] mb-4 ${
-                  isDarkMode ? "text-white" : "text-slate-900"
-                }`}
-              >
-                One Platform.{" "}
-                <span className="text-primary">Every Stakeholder.</span>
-              </h2>
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* ECOSYSTEM */}
 
-              <p
-                className={`text-sm md:text-base max-w-xl leading-relaxed ${
-                  isDarkMode ? "text-slate-400" : "text-slate-600"
-                }`}
-              >
-                Klinflow powers the entire circular economy by connecting communities, collectors, transporters, recyclers, enterprises and buyers through one intelligent platform.
-              </p>
-
-            </header>
-
-
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-              {/* ECOSYSTEM */}
-
-              <figure className="relative h-[460px] sm:h-[500px] lg:h-[650px] w-full flex items-center justify-center -mt-10 lg:mt-0 overflow-visible">
-                <div className="absolute inset-0 flex items-center justify-center transform scale-[0.65] sm:scale-[0.75] lg:scale-[0.95] origin-center transition-transform duration-500">
-
+            <figure className="relative h-[460px] sm:h-[500px] lg:h-[650px] w-full flex items-center justify-center -mt-10 lg:mt-0 overflow-visible">
+              <div className="absolute inset-0 flex items-center justify-center transform scale-[0.55] sm:scale-[0.70] lg:scale-[0.90] origin-center transition-transform duration-500">
                 {/* RING */}
 
                 <div
                   className={`absolute w-[520px] h-[520px] rounded-full border ${
-                    isDarkMode
-                      ? "border-white/10"
-                      : "border-green-300"
+                    isDarkMode ? "border-white/10" : "border-green-300"
                   }`}
                 />
 
@@ -608,82 +614,85 @@ export default function Home() {
                     className="w-24 h-24 md:w-28 md:h-28 object-contain"
                   />
                   <span className="mt-1 text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-primary text-center leading-wide">
-                    Klinflow<br />Ecosystem
+                    Klinflow
+                    <br />
+                    Ecosystem
                   </span>
                 </motion.div>
-                
 
-                {
-          ecosystemNodes.map((node, index) => {
-            const angle = (node.angle * Math.PI) / 180;
-            const ORBIT_RADIUS = 240;
-            const x = Math.cos(angle) * ORBIT_RADIUS;
-            const y = Math.sin(angle) * ORBIT_RADIUS;
+                {ecosystemNodes.map((node, index) => {
+                  const angle = (node.angle * Math.PI) / 180;
+                  const ORBIT_RADIUS = 240;
+                  const x = Math.cos(angle) * ORBIT_RADIUS;
+                  const y = Math.sin(angle) * ORBIT_RADIUS;
 
-            const active = activeNode === index;
+                  const active = activeNode === index;
 
-            const Icon = node.icon;
+                  const Icon = node.icon;
 
-            return (
-              <div
-                key={node.id}
-                className="absolute"
-                style={{
-                  left: "50%",
-                  top: "50%",
-                  transform: `
+                  return (
+                    <div
+                      key={node.id}
+                      className="absolute"
+                      style={{
+                        left: "50%",
+                        top: "50%",
+                        transform: `
                     translate(-50%, -50%)
                     translate(${x}px, ${y}px)
                   `,
-                }}
-              >
-                {/* CENTER CONNECTOR */}
+                      }}
+                    >
+                      {/* CENTER CONNECTOR */}
 
-                <div
-                  className={`absolute left-1/2 top-1/2 origin-left  ${
-                    active
-                      ? "bg-primary"
-                      : isDarkMode
-                      ? "bg-white/10"
-                      : "bg-slate-200"
-                  }`}
-                  style={{
-                    width: `${ORBIT_RADIUS}px`,
-                    height: "2px",
-                    transform: `
+                      <div
+                        className={`absolute left-1/2 top-1/2 origin-left  ${
+                          active
+                            ? "bg-primary"
+                            : isDarkMode
+                              ? "bg-white/10"
+                              : "bg-slate-200"
+                        }`}
+                        style={{
+                          width: `${ORBIT_RADIUS}px`,
+                          height: "2px",
+                          transform: `
                       rotate(${node.angle}deg)
                       translateX(-${ORBIT_RADIUS}px)
                     `,
-                  }}
-                >
-                  {active && (
-                    <>
-                      {[0, 1, 2].map((i) => (
-                        <motion.div
-                          key={i}
-                          className="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.8)]"
-                          initial={{ left: "0%", opacity: 0 }}
-                          animate={{ left: "100%", opacity: [0, 1, 1, 0] }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: "linear",
-                            delay: i * 0.5,
-                          }}
-                        />
-                      ))}
-                    </>
-                  )}
-                </div>
+                        }}
+                      >
+                        {active && (
+                          <>
+                            {[0, 1, 2].map((i) => (
+                              <motion.div
+                                key={i}
+                                className="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_2px_rgba(255,255,255,0.8)]"
+                                initial={{ left: "0%", opacity: 0 }}
+                                animate={{
+                                  left: "100%",
+                                  opacity: [0, 1, 1, 0],
+                                }}
+                                transition={{
+                                  duration: 1.5,
+                                  repeat: Infinity,
+                                  ease: "linear",
+                                  delay: i * 0.5,
+                                }}
+                              />
+                            ))}
+                          </>
+                        )}
+                      </div>
 
-                {/* NODE */}
+                      {/* NODE */}
 
-                <button
-                  onClick={() => {
-                    setActiveNode(index);
-                    setIsAutoPaused(true);
-                  }}
-                  className={`
+                      <button
+                        onClick={() => {
+                          setActiveNode(index);
+                          setIsAutoPaused(true);
+                        }}
+                        className={`
                     relative z-20
                     w-24 h-24 rounded-full
                     flex flex-col items-center justify-center
@@ -693,122 +702,118 @@ export default function Home() {
                       active
                         ? "bg-primary text-white scale-110 shadow-[0_0_40px_rgba(34,197,94,0.45)]"
                         : isDarkMode
-                        ? "bg-surface-900 border border-white/10 text-white"
-                        : "bg-white border border-slate-200 text-slate-700 shadow-lg"
+                          ? "bg-surface-900 border border-white/10 text-white"
+                          : "bg-white border border-slate-200 text-slate-700 shadow-lg"
                     }
                   `}
-                >
-                  <Icon className="w-6 h-6 mb-1" />
+                      >
+                        <Icon className="w-6 h-6 mb-1" />
 
-                  <span className="text-[10px] font-semibold">
-                    {node.label}
-                  </span>
-                </button>
-              </div>
-            );
-          })
-        }
-                </div>
-              </figure>
-
-              {/* CONTENT PANEL */}
-
-              <article
-                className={`rounded-[32px] p-6 md:p-6 ${
-                  isDarkMode
-                    ? "bg-surface-900 border border-white/10"
-                    : "bg-white border border-slate-200 shadow-2xl"
-                }`}
-              >
-                <AnimatePresence mode="wait">
-
-                  <motion.div
-                    key={ecosystemNodes[activeNode].id}
-                    initial={{
-                      opacity: 0,
-                      y: 20,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: -20,
-                    }}
-                    transition={{
-                      duration: 0.4,
-                    }}
-                  >
-                    <span className="uppercase tracking-[0.2em] text-primary text-xs font-bold">
-                      Ecosystem Participant
-                    </span>
-
-                    <h3
-                      className={`mt-1 text-xl md:text-xl lg:text-xl font-black ${
-                        isDarkMode
-                          ? "text-white"
-                          : "text-slate-900"
-                      }`}
-                    >
-                      {ecosystemNodes[activeNode].title}
-                    </h3>
-
-                    <p
-                      className={`mt-2 md:mt-2 text-sm md:text-base leading-relaxed ${
-                        isDarkMode
-                          ? "text-slate-400"
-                          : "text-slate-600"
-                      }`}
-                    >
-                      {ecosystemNodes[activeNode].description}
-                    </p>
-
-                    <div className="mt-6 md:mt-8 grid gap-3 md:gap-4">
-
-                      {ecosystemNodes[activeNode].features.map(
-                        (feature) => (
-                          <div
-                            key={feature.title}
-                            className="flex items-start gap-4"
-                          >
-                            <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
-
-                            <div className="flex flex-col">
-                              <span
-                                className={`text-sm md:text-base font-bold leading-none ${
-                                  isDarkMode
-                                    ? "text-slate-200"
-                                    : "text-slate-800"
-                                }`}
-                              >
-                                {feature.title}
-                              </span>
-                              <span
-                                className={`text-xs md:text-sm mt-1.5 leading-relaxed ${
-                                  isDarkMode
-                                    ? "text-slate-400"
-                                    : "text-slate-500"
-                                }`}
-                              >
-                                {feature.desc}
-                              </span>
-                            </div>
-                          </div>
-                        )
-                      )}
+                        <span className="text-[10px] font-semibold">
+                          {node.label}
+                        </span>
+                      </button>
                     </div>
+                  );
+                })}
+              </div>
+            </figure>
 
-              
-                  </motion.div>
+            {/* CONTENT PANEL */}
 
-                </AnimatePresence>
-              </article>
+            <article
+              className={`rounded-[32px] p-6 md:p-6 ${
+                isDarkMode
+                  ? "bg-surface-900 border border-white/10"
+                  : "bg-white border border-slate-200 shadow-2xl"
+              }`}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={ecosystemNodes[activeNode].id}
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: -20,
+                  }}
+                  transition={{
+                    duration: 0.4,
+                  }}
+                >
+                  <span className="uppercase tracking-[0.2em] text-primary text-xs font-bold">
+                    Ecosystem Participant
+                  </span>
 
-            </div>
+                  <h3
+                    className={`mt-1 text-xl md:text-xl lg:text-xl font-black ${
+                      isDarkMode ? "text-white" : "text-slate-900"
+                    }`}
+                  >
+                    {ecosystemNodes[activeNode].title}
+                  </h3>
+
+                  <p
+                    className={`mt-2 md:mt-2 text-sm md:text-base leading-relaxed ${
+                      isDarkMode ? "text-slate-400" : "text-slate-600"
+                    }`}
+                  >
+                    {ecosystemNodes[activeNode].description}
+                  </p>
+
+                  <div className="mt-6 md:mt-8 grid gap-3 md:gap-4">
+                    {ecosystemNodes[activeNode].features.map((feature) => (
+                      <div
+                        key={feature.title}
+                        className="flex items-start gap-4"
+                      >
+                        <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
+
+                        <div className="flex flex-col">
+                          <span
+                            className={`text-sm md:text-base font-bold leading-none ${
+                              isDarkMode ? "text-slate-200" : "text-slate-800"
+                            }`}
+                          >
+                            {feature.title}
+                          </span>
+                          <span
+                            className={`text-xs md:text-sm mt-1.5 leading-relaxed ${
+                              isDarkMode ? "text-slate-400" : "text-slate-500"
+                            }`}
+                          >
+                            {feature.desc}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </article>
           </div>
-       </section>
-
+        </div>
+      </section>
+      {/* ── SHOWCASE BANNER ────────────────────────────────────────────── */}
+      <section
+        className={`hidden md:flex w-full relative z-10 px-4 md:px-6 mt-8 md:mt-16 mb-16 md:mb-20 justify-center`}
+      >
+        <div
+          className={`max-w-7xl w-full rounded-[2rem] border overflow-hidden relative shadow-2xl ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`}
+        >
+          <img
+            src="/landing-page/banner3.webp"
+            alt="Klinflow Platform Showcase"
+            className="w-full h-auto object-cover"
+          />
+        </div>
+      </section>
       {/* CORE PRODUCT SUITE ──────────────────────────────────── */}
       <section
         className={`py-16 md:py-32 relative z-10 ${isDarkMode ? "bg-surface-900" : "bg-slate-50/50"}`}
@@ -832,28 +837,28 @@ export default function Home() {
               {
                 title: "Seller App",
                 desc: "Book pickups, track earnings, and manage collections effortlessly.",
-                img: "/grid/seller-home.webp"
+                img: "/grid/seller-home.webp",
               },
               {
                 title: "Agent App",
                 desc: "Optimize routes, manage bookings, and update in real-time.",
-                img: "/grid/agent-home.webp"
+                img: "/grid/agent-home.webp",
               },
               {
                 title: "Impact Analysis",
                 desc: "Track buyer & seller behaviour and price patterns using our AI",
-                img: "/grid/agent-dashboard.webp"
+                img: "/grid/agent-dashboard.webp",
               },
               {
                 title: "Business App",
                 desc: "Manage inventory, sort materials, and track hub performance reports.",
-                img: "/grid/business-home.webp"
+                img: "/grid/business-home.webp",
               },
               {
                 title: "Market Intelligence",
                 desc: "Monitor the klinflow marketplace prices and sell at your preferred time",
-                img: "/grid/prices.webp"
-              }
+                img: "/grid/prices.webp",
+              },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
@@ -862,7 +867,9 @@ export default function Home() {
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true }}
                 className="flex flex-col text-left group cursor-pointer"
-                onClick={() => setSelectedImage({ src: item.img, alt: item.title })}
+                onClick={() =>
+                  setSelectedImage({ src: item.img, alt: item.title })
+                }
               >
                 <div
                   className={`rounded-[2rem] border overflow-hidden mb-6 transition-all duration-500 ${isDarkMode ? "border-white/5 bg-surface-950" : "border-slate-200 bg-white shadow-xl group-hover:shadow-2xl"}`}
@@ -874,10 +881,14 @@ export default function Home() {
                     className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                   />
                 </div>
-                <h4 className={`text-base md:text-xl font-bold mb-2 md:mb-3 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
+                <h4
+                  className={`text-base md:text-xl font-bold mb-2 md:mb-3 ${isDarkMode ? "text-white" : "text-slate-900"}`}
+                >
                   {item.title}
                 </h4>
-                <p className={`text-xs md:text-sm font-medium leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}>
+                <p
+                  className={`text-xs md:text-sm font-medium leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                >
                   {item.desc}
                 </p>
               </motion.div>
@@ -897,15 +908,15 @@ export default function Home() {
 
       {/* ── HYGENEX AI: Material Valuation ───────────────────────────────── */}
       <section
-        className={`py-40 px-6 relative overflow-hidden ${isDarkMode ? "bg-surface-950" : "bg-white"}`}
+        className={`py-24 relative overflow-hidden ${isDarkMode ? "bg-surface-950" : "bg-white"}`}
       >
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
-          <div>
+        <div className="max-w-[1600px] mx-auto pl-6 md:pl-12 lg:pl-20 pr-6 grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          <div className="lg:col-span-5 max-w-xl lg:max-w-2xl">
             <div className="inline-flex items-center gap-2 text-indigo-500 font-bold uppercase tracking-widest text-xs mb-6">
               <Brain className="w-5 h-5" /> The Sustainomics Engine
             </div>
             <h3
-              className={`text-3xl md:text-5xl font-bold mb-8 tracking-tighter ${isDarkMode ? "text-white" : "text-slate-900"}`}
+              className={`text-2xl sm:text-3xl md:text-5xl font-bold mb-8 tracking-tighter ${isDarkMode ? "text-white" : "text-slate-900"}`}
             >
               The Source of <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 italic">
@@ -913,7 +924,7 @@ export default function Home() {
               </span>
             </h3>
             <p
-              className={`text-xl font-medium leading-relaxed mb-12 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}
+              className={`text-sm sm:text-base md:text-xl font-medium leading-relaxed mb-12 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}
             >
               HygeneX is our proprietary AI engine that powers the entire
               ecosystem. It identifies 50+ material types, grades quality
@@ -921,7 +932,7 @@ export default function Home() {
               you collect.
             </p>
 
-            <div className="grid gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-2 sm:gap-4">
               {[
                 {
                   title:
@@ -941,12 +952,12 @@ export default function Home() {
               ].map((f, i) => (
                 <div
                   key={i}
-                  className={`p-6 rounded-3xl border flex gap-6 items-start ${isDarkMode ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-100"}`}
+                  className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border flex flex-col lg:flex-row gap-3 lg:gap-6 items-start ${isDarkMode ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-100"}`}
                 >
-                  <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
-                    <f.icon className="w-5 h-5" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                    <f.icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <p className="text-sm text-slate-500 font-semibold leading-relaxed">
+                  <p className="text-[10px] sm:text-sm text-slate-500 font-semibold leading-tight sm:leading-relaxed">
                     {f.title}
                   </p>
                 </div>
@@ -955,13 +966,17 @@ export default function Home() {
           </div>
 
           {/* Sustainomics Engine Image */}
-          <div className="relative w-full scale-105 lg:scale-[1.15] transform origin-center">
-            <div className={`aspect-square lg:aspect-auto rounded-[2rem] border relative flex items-center justify-center overflow-hidden ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200 shadow-xl"}`}>
-              <img
-                src="/landing-page/HygeneX.webp"
-                alt="HygeneX Sustainomics Engine"
-                className="w-full h-full object-cover scale-[1.15] md:scale-125"
-              />
+          <div className="lg:col-span-7 relative w-full perspective-[2000px] z-20 mt-12 lg:mt-0">
+            <div className="relative transform rotate-y-[-10deg] rotate-x-[5deg] scale-105 md:scale-110 lg:scale-[1.2] transition-all duration-700 ease-out lg:ml-12 origin-center lg:origin-left">
+              <div
+                className={`w-full h-[400px] md:h-[600px] rounded-[2rem] border relative flex items-center justify-center overflow-hidden shadow-2xl ${isDarkMode ? "bg-[#0F172A] border-white/10 shadow-indigo-500/10" : "bg-slate-50 border-slate-200 shadow-slate-200/50"}`}
+              >
+                <img
+                  src="/landing-page/HygeneX.webp"
+                  alt="HygeneX Sustainomics Engine"
+                  className="w-full h-full object-contain scale-125 md:scale-[1.1] relative z-10"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -969,7 +984,7 @@ export default function Home() {
 
       {/* ── CONVERSION CTA ────────────────────────────────────────────────── */}
       <section
-        className={`py-32 px-6 relative overflow-hidden ${isDarkMode ? "bg-surface-900 border-t border-white/5" : "bg-slate-900"}`}
+        className={`py-24 px-6 relative overflow-hidden ${isDarkMode ? "bg-surface-900 border-t border-white/5" : "bg-slate-900"}`}
       >
         <div
           className="absolute inset-0 opacity-[0.05]"
@@ -981,22 +996,14 @@ export default function Home() {
         />
 
         <div className="max-w-4xl mx-auto text-center relative z-10 text-white">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8">
             Ready to <br /> Scale with Us?
           </h2>
-          <p className="text-xl md:text-2xl font-medium mb-12 opacity-80 leading-relaxed text-slate-300">
+          <p className="text-sm sm:text-base md:text-2xl font-medium mb-12 opacity-80 leading-relaxed text-slate-300">
             Join the network that is defining the next generation of circular
             logistics. Deploy your fleet, process your waste, or trade verified
             assets at scale.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <button className="btn-primary shadow-lg shadow-black/20 text-lg px-10 py-5">
-              Contact Enterprise Sales
-            </button>
-            <button className="btn-secondary text-lg px-10 py-5 border-white/10 bg-white/5 hover:bg-white/10 text-white">
-              Download Investor Deck
-            </button>
-          </div>
         </div>
       </section>
       {/* LIGHTBOX MODAL */}

@@ -1,0 +1,43 @@
+src/pages/admin/CompanyAdminDashboard.tsx(268,13): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(324,19): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/pages/admin/CompanyAdminDashboard.tsx(324,170): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+src/pages/admin/CompanyAdminDashboard.tsx(326,25): error TS17002: Expected corresponding JSX closing tag for 'Card'.
+src/pages/admin/CompanyAdminDashboard.tsx(327,22): error TS1005: ',' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(334,17): error TS1005: ')' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(334,19): error TS17002: Expected corresponding JSX closing tag for 'div'.
+src/pages/admin/CompanyAdminDashboard.tsx(335,17): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+src/pages/admin/CompanyAdminDashboard.tsx(338,10): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(338,12): error TS1109: Expression expected.
+src/pages/admin/CompanyAdminDashboard.tsx(338,13): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(340,7): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(345,12): error TS1005: ';' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(348,15): error TS1005: ';' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(349,11): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(366,9): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(370,11): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(408,9): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(411,15): error TS1005: ';' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(412,11): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(450,9): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(453,7): error TS1109: Expression expected.
+src/pages/admin/CompanyAdminDashboard.tsx(458,12): error TS1005: ';' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(461,15): error TS1005: ';' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(462,11): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(522,9): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(525,15): error TS1005: ';' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(526,11): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(588,9): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(591,15): error TS1005: ';' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(592,11): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(648,9): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(649,7): error TS1109: Expression expected.
+src/pages/admin/CompanyAdminDashboard.tsx(654,12): error TS1005: ';' expected.
+src/pages/admin/CompanyAdminDashboard.tsx(658,11): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(702,9): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(706,11): error TS2657: JSX expressions must have one parent element.
+src/pages/admin/CompanyAdminDashboard.tsx(747,9): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(748,7): error TS1109: Expression expected.
+src/pages/admin/CompanyAdminDashboard.tsx(808,7): error TS1128: Declaration or statement expected.
+src/pages/admin/CompanyAdminDashboard.tsx(809,5): error TS1109: Expression expected.
+src/pages/admin/CompanyAdminDashboard.tsx(810,3): error TS1109: Expression expected.
+src/pages/admin/CompanyAdminDashboard.tsx(811,1): error TS1128: Declaration or statement expected.

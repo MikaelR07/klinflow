@@ -49,13 +49,13 @@ export default function CreateRFQ() {
   };
 
   return (
-    <div className="bg-slate-100 dark:bg-slate-900 min-h-screen">
+    <div className="bg-white shadow-sm dark:bg-slate-900 min-h-screen">
       <div className="max-w-lg mx-auto bg-white dark:bg-slate-900 min-h-screen relative animate-fade-in flex flex-col">
         
         {/* ── HEADER ── */}
         <div className="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 px-4 py-4 flex items-center justify-between">
           <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-800 active:scale-95 transition-all">
-            <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+            <ArrowLeft className="w-5 h-5 text-slate-900 dark:text-slate-300" />
           </button>
           <h1 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">Broadcast Request</h1>
           <div className="w-10" />
@@ -66,13 +66,13 @@ export default function CreateRFQ() {
           
           <div className="space-y-1">
             <h2 className="text-2xl font-black text-slate-900 dark:text-white leading-tight">Create Sourcing Request</h2>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Broadcast your requirements to verified suppliers</p>
+            <p className="text-xs font-bold text-slate-700 uppercase tracking-widest">Broadcast your requirements to verified suppliers</p>
           </div>
 
           {/* Core Details */}
           <div className="space-y-4">
             <div className="relative">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Material Category</label>
+              <label className="text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5 block">Material Category</label>
               <div className="relative">
                 <Package className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
                 <input 
@@ -87,7 +87,7 @@ export default function CreateRFQ() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="relative">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Target Volume (KG)</label>
+                <label className="text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5 block">Target Volume (KG)</label>
                 <div className="relative">
                   <Scale className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-500" />
                   <input 
@@ -100,7 +100,7 @@ export default function CreateRFQ() {
                 </div>
               </div>
               <div className="relative">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Target Price /KG</label>
+                <label className="text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5 block">Target Price /KG</label>
                 <div className="relative">
                   <TrendingUp className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
                   <input 
@@ -137,12 +137,12 @@ export default function CreateRFQ() {
                 </div>
               ) : (
                 <div className="h-48 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 bg-slate-50/50 dark:bg-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                  <div className="w-12 h-12 rounded-full bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-slate-700 group-hover:text-blue-500 transition-colors">
                     <Plus className="w-6 h-6" />
                   </div>
                   <div className="text-center">
                     <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest">Upload Material Photo</p>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">High-quality images increase bid rates</p>
+                    <p className="text-xs font-bold text-slate-700 uppercase tracking-widest mt-1">High-quality images increase bid rates</p>
                   </div>
                 </div>
               )}
@@ -156,7 +156,7 @@ export default function CreateRFQ() {
             </h3>
             
             <div className="relative">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Loading Location</label>
+              <label className="text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5 block">Loading Location</label>
               <input 
                 type="text"
                 placeholder="e.g. Mombasa Port, KE"
@@ -167,7 +167,7 @@ export default function CreateRFQ() {
             </div>
 
             <div className="relative">
-              <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1.5 block">Closing Date</label>
+              <label className="text-xs font-black text-slate-700 uppercase tracking-widest mb-1.5 block">Closing Date</label>
               <div className="relative">
                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500" />
                 <input 
@@ -211,7 +211,7 @@ export default function CreateRFQ() {
               onClick={handleSubmit}
               disabled={isSubmitting}
               className={`w-full py-4 rounded-xl flex items-center justify-center gap-3 text-sm font-black uppercase tracking-[0.2em] transition-all ${
-                isSubmitting ? 'bg-slate-100 text-slate-400' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 active:scale-95'
+                isSubmitting ? 'bg-white shadow-sm text-slate-700' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 active:scale-95'
               }`}
             >
               {isSubmitting ? (

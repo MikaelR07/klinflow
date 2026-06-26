@@ -20,7 +20,7 @@ export default function SupportPage() {
   return (
     <div className="animate-slide-up pb-20">
       <header className="flex items-center gap-3 mb-6">
-        <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+        <button onClick={() => navigate('/settings')} className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-800 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h1 className="text-xl font-semibold dark:text-white">Contact Support</h1>
@@ -35,8 +35,8 @@ export default function SupportPage() {
                <PhoneCall className="w-6 h-6" />
              </div>
              <div>
-               <div className="text-sm font-semibold text-slate-800 dark:text-white">Call Us</div>
-               <div className="text-xs text-slate-500 mt-0.5">Toll Free</div>
+               <div className="text-sm font-semibold text-slate-900 dark:text-white">Call Us</div>
+               <div className="text-xs text-slate-800 mt-0.5">Toll Free</div>
              </div>
            </a>
 
@@ -45,23 +45,23 @@ export default function SupportPage() {
                <MessageCircle className="w-6 h-6" />
              </div>
              <div>
-               <div className="text-sm font-semibold text-slate-800 dark:text-white">WhatsApp</div>
-               <div className="text-xs text-slate-500 mt-0.5">24/7 Chat</div>
+               <div className="text-sm font-semibold text-slate-900 dark:text-white">WhatsApp</div>
+               <div className="text-xs text-slate-800 mt-0.5">24/7 Chat</div>
              </div>
            </a>
         </div>
 
         {/* Support Message Form */}
         <form onSubmit={handleSubmit} className="card p-5 space-y-4">
-           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-2">Send us a message</h2>
+           <h2 className="text-sm font-semibold text-slate-900 dark:text-white mb-2">Send us a message</h2>
            
            <div>
-             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Subject</label>
+             <label className="block text-xs font-semibold text-slate-800 dark:text-slate-400 mb-1.5 uppercase tracking-wider">Subject</label>
              <input type="text" required value={form.subject} onChange={(e) => setForm({...form, subject: e.target.value})} placeholder="e.g., Missed pickup, Payment issue" className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" />
            </div>
 
            <div>
-             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">How can we help?</label>
+             <label className="block text-xs font-semibold text-slate-800 dark:text-slate-400 mb-1.5 uppercase tracking-wider">How can we help?</label>
              <textarea required rows={4} value={form.message} onChange={(e) => setForm({...form, message: e.target.value})} placeholder="Please describe your issue..." className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm resize-none" />
            </div>
 

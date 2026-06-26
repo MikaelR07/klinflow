@@ -4,17 +4,14 @@ import { Toaster } from 'sonner';
 
 // Lazy loading all pages to dramatically reduce initial JavaScript bundle size
 const Home = lazy(() => import('./pages/Home'));
-const HowItWorks = lazy(() => import('./pages/HowItWorks'));
+const Contact = lazy(() => import('./pages/Contact'));
 const ProductClient = lazy(() => import('./pages/ProductClient'));
 const ProductAgent = lazy(() => import('./pages/ProductAgent'));
 const ProductFleet = lazy(() => import('./pages/ProductFleet'));
 const ProductHub = lazy(() => import('./pages/ProductHub'));
 const Marketplace = lazy(() => import('./pages/Marketplace'));
 const Ecosystem = lazy(() => import('./pages/Ecosystem'));
-const EcosystemGallery = lazy(() => import('./pages/EcosystemGallery'));
-const ForResidents = lazy(() => import('./pages/ForResidents'));
-const ForAgents = lazy(() => import('./pages/ForAgents'));
-const ForBusinesses = lazy(() => import('./pages/ForBusinesses'));
+  const EcosystemGallery = lazy(() => import('./pages/EcosystemGallery'));
 
 const Loader = () => (
   <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center">
@@ -41,7 +38,7 @@ function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/system" element={<HowItWorks />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/products/client" element={<ProductClient />} />
             <Route path="/products/agent" element={<ProductAgent />} />
             <Route path="/products/fleet" element={<ProductFleet />} />
@@ -49,9 +46,6 @@ function App() {
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/ecosystem" element={<Ecosystem />} />
             <Route path="/gallery" element={<EcosystemGallery />} />
-            <Route path="/for-residents" element={<ForResidents />} />
-            <Route path="/for-agents" element={<ForAgents />} />
-            <Route path="/for-businesses" element={<ForBusinesses />} />
           </Routes>
         </Suspense>
       </div>

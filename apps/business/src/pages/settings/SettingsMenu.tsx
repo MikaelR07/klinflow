@@ -39,18 +39,18 @@ export default function SettingsMenu() {
                   navigator.clipboard.writeText(profile.klinflowId!);
                   toast.success('Klinflow ID copied');
                 }}
-                className="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-md text-[10px] font-bold tracking-widest border border-slate-200 dark:border-slate-700 flex items-center gap-1 transition-colors"
+                className="px-2 py-0.5 bg-white shadow-sm hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-400 rounded-md text-[10px] font-bold tracking-widest border border-slate-200 dark:border-slate-700 flex items-center gap-1 transition-colors"
               >
                 <Database className="w-2.5 h-2.5" /> 
                 ID: {profile.klinflowId}
                 <Copy className="w-2.5 h-2.5 ml-1 opacity-70" />
               </button>
             )}
-            <span className="text-xs text-slate-400 font-medium">| {profile?.phone}</span>
+            <span className="text-xs text-slate-700 font-medium">| {profile?.phone}</span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">📍 {profile?.estate || 'Kenya'}</p>
+          <p className="text-xs text-slate-700 mt-1">📍 {profile?.estate || 'Kenya'}</p>
         </div>
-        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
+        <ChevronRight className="w-5 h-5 text-slate-700 group-hover:text-primary transition-colors" />
       </button>
 
       {/* Menu Options */}
@@ -62,13 +62,13 @@ export default function SettingsMenu() {
             className="w-full flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
           >
             <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex items-center justify-center group-hover:border-primary/30 transition-colors shadow-sm">
-              <item.icon className="w-5 h-5 text-slate-500 dark:text-slate-400 group-hover:text-primary transition-colors" />
+              <item.icon className="w-5 h-5 text-slate-800 dark:text-slate-400 group-hover:text-primary transition-colors" />
             </div>
             <div className="flex-1 text-left">
               <p className="text-sm font-semibold dark:text-slate-200">{item.label}</p>
-              <p className="text-xs text-slate-400 dark:text-slate-500">{item.subtitle}</p>
+              <p className="text-xs text-slate-700 dark:text-slate-500">{item.subtitle}</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-slate-300 dark:text-slate-600 group-hover:text-primary" />
+            <ChevronRight className="w-4 h-4 text-slate-600 dark:text-slate-600 group-hover:text-primary" />
           </button>
         ))}
         <ThemeToggleRow />
@@ -86,7 +86,7 @@ export default function SettingsMenu() {
         <LogOut className="w-5 h-5" /> Secure Sign Out
       </button>
 
-      <p className="text-center text-xs text-slate-400 font-medium pb-20 pt-4">Klinflow V1.0</p>
+      <p className="text-center text-xs text-slate-700 font-medium pb-20 pt-4">Klinflow V1.0</p>
     </div>
   );
 }

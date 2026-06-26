@@ -451,8 +451,8 @@ export default function MarketPulse() {
 
       {/* ── CONTENT AREA ── */}
       <main className={`flex-1 pb-5 max-w-lg mx-auto w-full px-1.5 space-y-0.5 transition-all duration-300 ${activeTab === 'trends' || activeTab === 'tips'
-        ? 'pt-[calc(env(safe-area-inset-top,1rem)+6.5rem)]'
-        : 'pt-[calc(env(safe-area-inset-top,1rem)+9.25rem)]'
+        ? 'pt-[calc(env(safe-area-inset-top,1rem)+8rem)]'
+        : 'pt-[calc(env(safe-area-inset-top,1rem)+11rem)]'
         }`}>
         <AnimatePresence mode="wait">
           {activeTab === 'prices' && (
