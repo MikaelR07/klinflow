@@ -55,9 +55,9 @@ export default function NotificationsFeed() {
   };
 
   return (
-    <div className="animate-slide-up pb-24">
+    <div className="pb-4 bg-white dark:bg-slate-900 min-h-screen">
       {/* ── FIXED TOPNAV ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#F8F8FF]/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#F8F8FF]/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-6">
         <div className="flex items-center justify-between px-4 h-10">
           <div className="flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">
@@ -69,14 +69,14 @@ export default function NotificationsFeed() {
             {notifications.length > 0 && (
               <button 
                 onClick={clearAll}
-                className="text-[10px] font-bold capitalize tracking-widest text-rose-500 bg-rose-50 hover:bg-rose-100 dark:bg-rose-500/10 dark:hover:bg-rose-500/20 px-2.5 py-1.5 rounded-lg transition-colors"
+                className="text-[11px] font-bold capitalize tracking-widest text-white bg-rose-500    px-2.5 py-1.5 rounded-lg transition-colors"
               >
                 Clear
               </button>
             )}
             <button 
               onClick={() => navigate('/settings/notifications')}
-              className="text-[10px] font-bold capitalize tracking-widest text-slate-600 dark:text-slate-300 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 px-2.5 py-1.5 rounded-lg transition-colors"
+              className="text-[11px] font-bold capitalize tracking-widest text-slate-600 dark:text-slate-300 bg-slate-300 dark:bg-slate-800 px-2.5 py-1.5 rounded-lg transition-colors"
             >
               Settings
             </button>
@@ -85,7 +85,7 @@ export default function NotificationsFeed() {
       </header>
 
       {/* ── NOTIFICATIONS FEED ── */}
-      <div className="max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)] divide-y divide-slate-100 dark:divide-slate-800">
+      <div className="max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+4rem)] animate-slide-up divide-y divide-slate-100 dark:divide-slate-800">
         {notifications.map((n: any) => (
           <div key={n.id} className={`p-4 flex gap-4 transition-colors ${!n.read ? 'bg-primary/5 dark:bg-primary/10' : ''}`}>
              <div className="mt-1 shrink-0">{getIcon(n.type)}</div>

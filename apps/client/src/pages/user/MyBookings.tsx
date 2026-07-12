@@ -353,7 +353,6 @@ export default function MyBookings() {
                           <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
                             Pickup ID: <span className="text-primary font-mono text-[11px]">{b.id.slice(0, 8).toUpperCase()}</span>
                           </p>
-                         
                         </div>
                       </div>
                       <div className="text-right flex flex-col items-end gap-1.5">
@@ -526,7 +525,7 @@ export default function MyBookings() {
                         <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                         <div>
                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight Booked</p>
-                          <p className="text-[11px] font-black text-slate-900 dark:text-white capitalize">{b.bags ? `${b.bags} Bags` : 'Est at Pickup'}</p>
+                          <p className="text-[11px] font-black text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg ? `${b.actualWeightKg || b.weightKg} KG` : 'Est at Pickup'}</p>
                         </div>
                       </div>
                     </div>
@@ -554,7 +553,7 @@ export default function MyBookings() {
                         <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest mb-2">Est. Weight</p>
                         <div className="flex items-center gap-2 justify-end">
                           <Scale className="w-4 h-4 text-emerald-200" />
-                          <p className="text-lg font-black text-white capitalize leading-none">{b.actualWeightKg || b.bags || 0} KG</p>
+                          <p className="text-lg font-black text-white capitalize leading-none">{b.actualWeightKg || b.weightKg || 0} KG</p>
                         </div>
                       </div>
                     </div>
@@ -575,7 +574,7 @@ export default function MyBookings() {
                   )}
 
                   {(b.notes || b.wasteType) && (
-                    <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+                    <div className="bg-slate-200 dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm">
                       <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
                         <Info className="w-4 h-4 text-primary" /> Collector Instructions
                       </h4>
@@ -603,19 +602,27 @@ export default function MyBookings() {
                   )}
 
                   {b.status === 'completed' && (
-                    <div className="pt-2">
+                    <div className="pt-2 flex flex-row gap-2">
+                      {!b.agentRating && (
+                        <button
+                          onClick={(e) => { e.stopPropagation(); useBookingStore.getState().setActiveVerificationBooking(b); }}
+                          className="flex-1 py-3 bg-emerald-500 text-white rounded-xl font-bold text-[12px] capitalize active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                        >
+                          <Star className="w-3.5 h-3.5" /> Rate Pickup
+                        </button>
+                      )}
                       <button
                         onClick={(e) => { e.stopPropagation(); setDisputeBooking(b); }}
-                        className="w-full py-3 bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-500 rounded-2xl font-bold text-[11px] capitalize active:scale-95 transition-all"
+                        className="flex-1 py-3 bg-rose-500 text-white rounded-xl font-bold text-[12px] capitalize active:scale-95 transition-all"
                       >
-                        Report an Issue with this Pickup
+                        Report Issue
                       </button>
                     </div>
                   )}
 
                   <button
                     onClick={() => setSelectedBooking(null)}
-                    className="w-full py-4 text-slate-800 font-bold text-[11px] capitalize tracking-[0.3em] active:opacity-50"
+                    className="w-full py-4 bg-slate-400 text-white rounded-xl font-bold text-[14px] capitalize active:opacity-50"
                   >
                     Close Detail
                   </button>

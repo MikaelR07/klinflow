@@ -6,7 +6,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from '../lib/supabaseClient';
 import { ROLES } from '@klinflow/constants';
-import { UserRole } from '@klinflow/types';
+import { UserRole, HubRole, MembershipRole, HubPermission } from '@klinflow/types';
 import { compressImage } from '../utils/imageUtils';
 import { useNotificationStore } from './notificationStore';
 import { AuthState, ProfileRow } from './authStore.types';
@@ -86,15 +86,25 @@ export const useAuthStore = create<AuthState>()(
       profileSubscription: null,
       isInitializing: false,
       appRole: null,
+      _isLoggingIn: false,
+      
+      // Hub Multi-Role Properties (from implementation plan)
+      currentCompanyId: '',
+      currentCompanyName: '',
+      membershipRole: 'member', // default to member
+      hubRoles: [], // department responsibilities
+      hubPermissions: [],
 
+      // Session / Hydration
       initializeAuth: async () => {
         if (get().isInitializing) return;
-        if (get().isAuthenticated) return;
-        
         set({ isInitializing: true });
         try {
+          // Always validate the Supabase session — even if persisted state says authenticated
           const { data: { session } } = await supabase.auth.getSession();
+
           if (session) {
+            // Session is valid — refresh profile from server (not from stale persist)
             const { data: profileData } = await supabase
               .from('profiles')
               .select('*')
@@ -104,19 +114,39 @@ export const useAuthStore = create<AuthState>()(
             if (profileData) {
               const uiProfile = get()._mapProfile(profileData as ProfileRow);
               if (uiProfile) {
+                // Fetch hub data BEFORE setting isAuthenticated to prevent flash
+                set({ userId: session.user.id });
+                await get().fetchHubData();
+
                 set({ 
                   isAuthenticated: true, 
                   userId: session.user.id, 
                   profile: uiProfile,
-                  role: uiProfile.role || 'user'
+                  role: uiProfile.role || 'user',
+                  token: session.access_token,
                 });
                 get().subscribeToProfileChanges(session.user.id);
+              } else {
+                // Profile validation failed — clear everything
+                set({ isAuthenticated: false, token: null, profile: null, userId: null,
+                  currentCompanyId: '', currentCompanyName: '', membershipRole: 'member',
+                  hubRoles: [], hubPermissions: [] });
               }
+            } else {
+              // No profile row — sign out the Supabase session too
+              await supabase.auth.signOut();
+              set({ isAuthenticated: false, token: null, profile: null, userId: null,
+                currentCompanyId: '', currentCompanyName: '', membershipRole: 'member',
+                hubRoles: [], hubPermissions: [] });
             }
           } else {
-            set({ isAuthenticated: false, token: null, profile: null, userId: null });
+            // No valid Supabase session — clear persisted state
+            set({ isAuthenticated: false, token: null, profile: null, userId: null,
+              currentCompanyId: '', currentCompanyName: '', membershipRole: 'member',
+              hubRoles: [], hubPermissions: [] });
           }
 
+          // Always set up visibility listener (de-duped via window flag)
           if (typeof window !== 'undefined' && !(window as any)._cfAuthVisibilitySetup) {
             (window as any)._cfAuthVisibilitySetup = true;
             window.addEventListener('visibilitychange', async () => {
@@ -128,7 +158,7 @@ export const useAuthStore = create<AuthState>()(
                     const { data: refreshData, error: refreshError } = await supabase.auth.refreshSession();
                     if (refreshError || !refreshData.session) {
                       get().logout();
-                      toast.error('Connection Lost', { description: 'Your session has expired. Please sign in again.' });
+                      toast.error('Session Expired', { description: 'Your session has expired. Please sign in again.' });
                       return;
                     }
                   }
@@ -141,7 +171,7 @@ export const useAuthStore = create<AuthState>()(
 
                   if (dbError || !profileCheck) {
                     get().logout();
-                    toast.error('Account Sync Error', { description: 'Please log in again to refresh your profile.' });
+                    toast.error('Account Error', { description: 'Your account could not be verified. Please sign in again.' });
                   }
                 } catch (e) {
                   console.warn('[AuthGate] Background sync failed:', e);
@@ -150,9 +180,15 @@ export const useAuthStore = create<AuthState>()(
             });
           }
 
+          // Always set up auth state listener (de-duped internally by Supabase)
           supabase.auth.onAuthStateChange(async (event, session) => {
+            // Skip events fired during an explicit login() call — login() manages its own state
+            if (get()._isLoggingIn) return;
+
             if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
-              set({ isAuthenticated: false, token: null, profile: null, userId: null });
+              set({ isAuthenticated: false, token: null, profile: null, userId: null,
+                currentCompanyId: '', currentCompanyName: '', membershipRole: 'member',
+                hubRoles: [], hubPermissions: [] });
               if (get().profileSubscription) {
                 supabase.removeChannel(get().profileSubscription);
                 set({ profileSubscription: null });
@@ -189,6 +225,11 @@ export const useAuthStore = create<AuthState>()(
                   console.error('[Klinflow Auth] Profile validation failed for ID:', session.user.id);
                   return;
                 }
+
+                // Fetch hub data before setting authenticated
+                set({ userId: session.user.id });
+                await get().fetchHubData();
+
                 set({ 
                   isAuthenticated: true, 
                   userId: session.user.id, 
@@ -201,9 +242,89 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (err) {
           console.error('[Klinflow Auth] Initialization failed:', err);
+          // On init failure, clear everything so user gets a clean login
+          set({ isAuthenticated: false, token: null, profile: null, userId: null,
+            currentCompanyId: '', currentCompanyName: '', membershipRole: 'member',
+            hubRoles: [], hubPermissions: [] });
         } finally {
           set({ isInitializing: false });
         }
+      },
+
+      // Hub Multi-Role Methods (from implementation plan)
+      fetchHubData: async () => {
+        const { userId } = get();
+        if (!userId) return;
+
+        try {
+          // Get user's company memberships via RPC
+          const { data: companies, error: companiesError } = await supabase.rpc('rpc_get_user_companies' as any);
+          if (companiesError) throw companiesError;
+
+          if (companies && companies.length > 0) {
+            // User has at least one company - select the first one for now
+            const company = companies[0] as any;
+            
+            // Get their membership role (owner/member)
+            const { data: membershipData, error: membershipError } = await supabase
+              .rpc('rpc_get_user_membership_role' as any, { p_company_id: company.id });
+            if (membershipError) throw membershipError;
+            
+            // Aggressive parsing to ensure 'owner' is caught regardless of how Supabase JS returns it
+            let membershipRole = 'member';
+            if (membershipData === 'owner') membershipRole = 'owner';
+            else if (Array.isArray(membershipData) && membershipData[0]?.membership_role === 'owner') membershipRole = 'owner';
+            else if ((membershipData as any)?.membership_role === 'owner') membershipRole = 'owner';
+
+            // Get their specific hub roles (finance_manager, etc)
+            const { data: rolesData, error: rolesError } = await supabase
+              .rpc('rpc_get_my_hub_roles' as any, { p_company_id: company.id });
+            if (rolesError) throw rolesError;
+            const hubRoles = (rolesData as any)?.map((r: any) => r.role) || [];
+
+            set({
+              currentCompanyId: company.id,
+              currentCompanyName: company.name,
+              membershipRole: membershipRole as MembershipRole,
+              hubRoles: hubRoles as HubRole[],
+            });
+
+            // Get permissions
+            const { data: permissions, error: permissionsError } = await supabase
+              .rpc('rpc_get_my_hub_permissions' as any, { p_company_id: company.id });
+            if (permissionsError) throw permissionsError;
+            const hubPermissions = (permissions as any)?.map((p: any) => p.permission) || [];
+            
+            set({ hubPermissions: hubPermissions as HubPermission[] });
+          } else {
+            // No company memberships found
+            set({
+              currentCompanyId: '',
+              currentCompanyName: '',
+              membershipRole: 'member',
+              hubRoles: [],
+              hubPermissions: [],
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching hub data:', error);
+          // Set default values on error
+          set({
+            currentCompanyId: '',
+            currentCompanyName: '',
+            membershipRole: 'member',
+            hubRoles: [],
+            hubPermissions: [],
+          });
+        }
+      },
+
+      hasHubRole: (role: HubRole) => {
+        return get().hubRoles.includes(role);
+      },
+
+      hasHubPermission: (perm: HubPermission) => {
+        return get().hubPermissions.includes(perm);
       },
 
       fetchProfile: async () => {
@@ -303,17 +424,23 @@ export const useAuthStore = create<AuthState>()(
       },
 
 
-
       logout: async () => {
         const { profileSubscription } = get();
         
+        // Clear ALL state atomically — including hub data
         set({ 
           isAuthenticated: false, 
           token: null, 
           role: ROLES.USER, 
           profile: null, 
           userId: null, 
-          profileSubscription: null 
+          profileSubscription: null,
+          currentCompanyId: '',
+          currentCompanyName: '',
+          membershipRole: 'member',
+          hubRoles: [],
+          hubPermissions: [],
+          _isLoggingIn: false,
         });
 
         localStorage.removeItem('cf_auth_session');
@@ -329,7 +456,7 @@ export const useAuthStore = create<AuthState>()(
         try {
           await supabase.auth.signOut();
         } catch (err) {
-          // Ignore
+          // Ignore sign-out errors
         }
       },
 
@@ -421,7 +548,7 @@ export const useAuthStore = create<AuthState>()(
 
         if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage
+        const { data: { publicUrl } } = await supabase.storage
           .from('avatars')
           .getPublicUrl(filePath);
 
@@ -470,7 +597,7 @@ export const useAuthStore = create<AuthState>()(
           p_method: 'M-PESA',
           p_account: profile?.phone || ''
         });
-          
+           
         if (error) throw new Error(error.message);
         await get().fetchProfile();
       },
@@ -482,13 +609,10 @@ export const useAuthStore = create<AuthState>()(
         const { error } = await supabase.rpc('deposit_to_wallet', {
           p_amount: amount
         });
-          
+           
         if (error) throw new Error(error.message);
         await get().fetchProfile();
       },
-
-
-
 
 
       checkAvailability: async (phone: string) => {
@@ -499,7 +623,7 @@ export const useAuthStore = create<AuthState>()(
           .from('profiles')
           .select('id')
           .or(`email.eq.${email},phone.eq.${phone},phone.eq.${normalized}`);
-          
+        
         if (error) {
           return true;
         }
@@ -526,7 +650,6 @@ export const useAuthStore = create<AuthState>()(
         if (error || !data?.success) {
           throw new Error(error?.message || data?.error || 'Incorrect code. Please try again.');
         }
-
         return data;
       },
 
@@ -538,7 +661,6 @@ export const useAuthStore = create<AuthState>()(
         if (error || !data?.success) {
           throw new Error(error?.message || data?.error || 'Failed to reset PIN. Please try again.');
         }
-
         return data;
       },
 
@@ -574,16 +696,30 @@ export const useAuthStore = create<AuthState>()(
 
         let companyId = null;
         if (agent_account_type === 'fleet_driver' && fleet_invite_code) {
+          // Find the admin profile first
           const { data: adminData, error: adminError } = await supabase
             .from('profiles')
             .select('id')
             .eq('fleet_invite_code', fleet_invite_code.toUpperCase())
             .single();
-            
+          
           if (adminError || !adminData) {
-             throw new Error("Invalid Company Invite Code. Please verify with your Admin.");
+            throw new Error("Invalid Company Invite Code. Please verify with your Admin.");
           }
-          companyId = (adminData as any).id;
+          
+          // Then find their Hub company
+          const { data: userCompanyData, error: userCompanyError } = await supabase
+            .from('user_companies')
+            .select('company_id')
+            .eq('user_id', (adminData as any).id)
+            .eq('membership_role', 'owner')
+            .maybeSingle();
+
+          if (userCompanyError || !userCompanyData) {
+            throw new Error("Company Admin has not yet set up their Hub organization.");
+          }
+          
+          companyId = (userCompanyData as any).company_id;
         }
 
         const profileInsert: any = {
@@ -602,9 +738,9 @@ export const useAuthStore = create<AuthState>()(
         };
 
         if (role === ROLES.AGENT && agent_account_type) {
-           profileInsert.agent_account_type = agent_account_type;
-           // If they are a company admin, their profile stands alone. 
-           // If they are a fleet driver, they must be approved. DO NOT set company_id yet.
+          profileInsert.agent_account_type = agent_account_type;
+          // If they are a company admin, their profile stands alone. 
+          // If they are a fleet driver, they must be approved. DO NOT set company_id yet.
         }
 
         if (role === ROLES.BUSINESS) {
@@ -619,6 +755,18 @@ export const useAuthStore = create<AuthState>()(
           .insert([profileInsert]);
 
         if (profileError) throw profileError;
+
+        // If they are a company owner, instantly provision their Hub organization
+        if (role === ROLES.AGENT && agent_account_type === 'company_admin') {
+          const { error: rpcError } = await supabase.rpc('rpc_setup_hub_company', {
+            p_company_name: company_name || 'My Company',
+            p_owner_id: user.id
+          });
+          
+          if (rpcError) {
+             console.error("Failed to provision Hub company:", rpcError);
+          }
+        }
 
         // If fleet driver, insert into company_join_requests
         if (role === ROLES.AGENT && agent_account_type === 'fleet_driver' && companyId) {
@@ -638,7 +786,7 @@ export const useAuthStore = create<AuthState>()(
                    .upload(filePath, file as File);
                  
                  if (!uploadError) {
-                   const { data: { publicUrl } } = supabase.storage
+                   const { data: { publicUrl } } = await supabase.storage
                      .from('agent_documents')
                      .getPublicUrl(filePath);
                    submittedDocsMap[docName] = publicUrl;
@@ -678,44 +826,84 @@ export const useAuthStore = create<AuthState>()(
 
 
 
-
-      
       login: async (phone: string, pin: string, forcedRole?: UserRole | string | string[]) => {
         const email = phoneToEmail(phone);
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password: pin });
-        if (authError) throw new Error('Invalid credentials.');
-        const user = authData.user;
-        const { data: profileData, error: profileError } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
+
+        // Set flag to suppress onAuthStateChange listener during login
+        set({ _isLoggingIn: true });
+
+        try {
+          // Clear any stale session before authenticating
+          try { await supabase.auth.signOut(); } catch (_) {}
+
+          const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password: pin });
+          if (authError) {
+            // Provide user-friendly error messages
+            const msg = authError.message?.toLowerCase() || '';
+            if (msg.includes('invalid login') || msg.includes('invalid credentials') || msg.includes('wrong password')) {
+              throw new Error('Incorrect phone number or PIN. Please try again.');
+            }
+            if (msg.includes('email not confirmed')) {
+              throw new Error('Your account is pending verification. Please contact support.');
+            }
+            if (msg.includes('too many requests') || msg.includes('rate limit')) {
+              throw new Error('Too many login attempts. Please wait a moment and try again.');
+            }
+            if (msg.includes('user not found') || msg.includes('no user')) {
+              throw new Error('No account found with this phone number.');
+            }
+            throw new Error('Authentication failed. Please check your credentials and try again.');
+          }
+
+          const user = authData.user;
+          const { data: profileData, error: profileError } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
           if (profileError || !profileData) {
             await supabase.auth.signOut();
-            throw new Error('This user account does not exist.');
+            throw new Error('No Klinflow profile found for this account. Please register first.');
           }
 
           if (forcedRole) {
-            const isRoleValid = Array.isArray(forcedRole) 
+            const isRoleValid = Array.isArray(forcedRole)
               ? forcedRole.includes((profileData as ProfileRow).role)
               : (profileData as ProfileRow).role === forcedRole;
 
             if (!isRoleValid) {
               await supabase.auth.signOut();
-              throw new Error('This user account does not exist.');
+              throw new Error('Your account does not have access to this application.');
             }
           }
-          
-        const uiProfile = get()._mapProfile(profileData as ProfileRow);
-        if (!uiProfile) throw new Error('Profile corruption detected.');
 
-        set({ 
-          isAuthenticated: true, 
-          token: authData.session?.access_token, 
-          userId: user.id, 
-          role: uiProfile.role || 'user', 
-          profile: uiProfile, 
-          rewardPoints: uiProfile.rewardPoints || 0, 
-          walletBalance: uiProfile.walletBalance || 0, 
-          notificationPrefs: uiProfile.notificationPrefs 
-        });
-        get().subscribeToProfileChanges(user.id);
+          const uiProfile = get()._mapProfile(profileData as ProfileRow);
+          if (!uiProfile) {
+            await supabase.auth.signOut();
+            throw new Error('Your profile data could not be loaded. Please contact support.');
+          }
+
+          // Fetch Hub multi-tenant data BEFORE setting isAuthenticated
+          // This prevents the flash where isAuthenticated=true but currentCompanyId=''
+          set({ userId: user.id });
+          await get().fetchHubData();
+
+          // Now set everything atomically — React will only see the final state
+          set({
+            isAuthenticated: true,
+            token: authData.session?.access_token,
+            userId: user.id,
+            role: uiProfile.role || 'user',
+            profile: uiProfile,
+            rewardPoints: uiProfile.rewardPoints || 0,
+            walletBalance: uiProfile.walletBalance || 0,
+            notificationPrefs: uiProfile.notificationPrefs
+          });
+          get().subscribeToProfileChanges(user.id);
+        } finally {
+          // Always clear the login flag
+          set({ _isLoggingIn: false });
+        }
+      },
+
+      refreshProfile: async () => {
+        await get().fetchProfile();
       },
 
       getGFPMetrics: () => {
@@ -727,11 +915,11 @@ export const useAuthStore = create<AuthState>()(
           { name: 'Oak', min: 2001, max: 5000, icon: '🌳' },
           { name: 'Forest Keeper', min: 5001, max: Infinity, icon: '🌲' }
         ];
-
+        
         const currentTierIdx = tiers.findIndex(t => points <= t.max);
         const currentTier = tiers[currentTierIdx] || tiers[tiers.length - 1]!;
         const nextTier = tiers[currentTierIdx + 1] || null;
-
+        
         let progress = 0;
         if (nextTier) {
           const range = nextTier.min - currentTier.min;
@@ -740,7 +928,7 @@ export const useAuthStore = create<AuthState>()(
         } else {
           progress = 100;
         }
-
+        
         return {
           tier: currentTier.name,
           icon: currentTier.icon,
@@ -780,17 +968,6 @@ export const useAuthStore = create<AuthState>()(
       },
 
 
-
-
-
-      refreshProfile: async () => {
-        await get().fetchProfile();
-      },
-
-
-
-
-
       getRole: () => {
         return (get().profile?.role as UserRole) || null;
       },
@@ -801,10 +978,16 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'cf_auth_session',
-      partialize: (state) => {
-        const { profileSubscription, ...rest } = state;
-        return rest;
-      }
+      partialize: (state) => ({
+        // Only persist essential session data — hub data is always fetched fresh
+        isAuthenticated: state.isAuthenticated,
+        token: state.token,
+        userId: state.userId,
+        role: state.role,
+        profile: state.profile,
+        appRole: state.appRole,
+        notificationPrefs: state.notificationPrefs,
+      })
     }
   )
 );

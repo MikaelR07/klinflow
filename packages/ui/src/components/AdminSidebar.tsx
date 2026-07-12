@@ -2,7 +2,7 @@
  * Admin Sidebar — desktop sidebar navigation for admin panel
  */
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileText, Users, Settings, Recycle, Brain, MessageSquare, Network, Coins, UserCheck, Building2, Globe, Cpu, Leaf, DollarSign, ArrowLeftRight, Gift } from 'lucide-react';
+import { LayoutDashboard, FileText, Users, Settings, Recycle, Brain, MessageSquare, Network, Coins, UserCheck, Building2, Globe, Cpu, Leaf, DollarSign, ArrowLeftRight, Gift, Landmark } from 'lucide-react';
 
 const links = [
   { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -17,6 +17,7 @@ const links = [
   { path: '/oracle', icon: Cpu, label: 'Network Oracle' },
   { path: '/environmental-report', icon: Leaf, label: 'Environmental Report' },
   { path: '/financial-report', icon: DollarSign, label: 'Financial Report' },
+  { path: '/treasury', icon: Landmark, label: 'Platform Treasury' },
   { path: '/reports', icon: FileText, label: 'System Reports' },
   { path: '/reviews', icon: MessageSquare, label: 'Feedback' },
   { path: '/hygenex', icon: Brain, label: 'HygeneX AI' },

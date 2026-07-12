@@ -220,26 +220,26 @@ export default function NavigateJobPage() {
           onClick={() => setIsExpanded(!isExpanded)}
           className="w-full flex flex-col items-center pb-4 group"
         >
-          <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-1 group-hover:bg-primary transition-colors" />
-          <div className="text-xs font-semibold text-slate-300 capitalize tracking-[0.3em] group-hover:text-primary transition-colors">
+          <div className="w-12 h-1.5 bg-slate-400 dark:bg-slate-800 rounded-full mb-1 group-hover:bg-primary transition-colors" />
+          <div className="text-xs font-semibold text-slate-600 capitalize tracking-[0.3em] group-hover:text-primary transition-colors">
             {isExpanded ? 'Slide Down to Map' : 'Slide Up for Details'}
           </div>
         </button>
         
         {/* Main Content */}
         <div className="max-w-md mx-auto">
-          <div className="flex gap-2 mb-6">
+          <div className="flex gap-2 mb-2">
             <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Client</span>
-              <span className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{activeJob.customerName?.split(' ')[0] || activeJob.customer?.split(' ')[0] || 'Client'}</span>
+              <span className="text-[12px] font-bold text-slate-400 capitalize tracking-widest mb-1">Client</span>
+              <span className="text-[11px] font-black text-slate-600 dark:text-white capitalize truncate w-full">{activeJob.customerName?.split(' ')[0] || activeJob.customer?.split(' ')[0] || 'Client'}</span>
             </div>
             <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Location</span>
-              <span className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{activeJob.location}</span>
+              <span className="text-[12px] font-bold text-slate-400 capitalize tracking-widest mb-1">Location</span>
+              <span className="text-[11px] font-black text-slate-600 dark:text-white capitalize truncate w-full">{activeJob.location}</span>
             </div>
             <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-1">Material</span>
-              <span className="text-[10px] font-black text-slate-900 dark:text-white capitalize truncate w-full">{activeJob.material}</span>
+              <span className="text-[12px] font-bold text-slate-400 capitalize tracking-widest mb-1">Material</span>
+              <span className="text-[11px] font-black text-slate-600 dark:text-white capitalize truncate w-full">{activeJob.material}</span>
             </div>
             
             <button 
@@ -251,10 +251,10 @@ export default function NavigateJobPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-3 mb-6 font-semibold text-xs capitalize tracking-widest">
-             <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-3">
+             <div className="bg-slate-200 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-3">
                 <Clock className="w-4 h-4 text-accent" />
                 <div className="flex flex-col">
-                   <span className="text-xs text-slate-400">Scheduled Pickup Window</span>
+                   <span className="text-xs text-slate-600">Scheduled Pickup Window</span>
                    <span className="dark:text-white leading-none mt-0.5">{activeJob.time}</span>
                 </div>
              </div>
@@ -279,19 +279,55 @@ export default function NavigateJobPage() {
             {!hasArrived ? (
               <div className="space-y-4">
                 <button 
-                  onClick={() => {
-                    addNotification(
-                      "Agent has Arrived!",
-                      `${profile?.name || 'Agent'} has arrived at your location. Please meet them to begin the pickup.`,
-                      NOTIFICATION_TYPES.SUCCESS,
-                      'client',
-                      activeJob.user_id || activeJob.userId
-                    );
+                  onClick={async () => {
+                    const isGroup = activeJob.is_group_pickup && activeJob.swarm_id;
+                    const agentName = profile?.name || 'Agent';
+                    
+                    if (isGroup) {
+                      // Notify ALL swarm participants
+                      try {
+                        const { data: participants } = await supabase
+                          .from('swarm_participants')
+                          .select('user_id')
+                          .eq('swarm_id', activeJob.swarm_id!)
+                          .neq('status', 'withdrawn');
+                        
+                        const participantIds = participants?.map((p: any) => p.user_id).filter(Boolean) || [];
+                        const allTargets = [...new Set([...participantIds, activeJob.user_id || activeJob.userId])].filter(Boolean);
+                        
+                        addNotification(
+                          "Agent has Arrived at your Community! 🏘️",
+                          `${agentName} has arrived for your community group pickup. Please meet them with your materials ready.`,
+                          NOTIFICATION_TYPES.SUCCESS,
+                          'user',
+                          allTargets
+                        );
+                      } catch (err) {
+                        console.error('[NavigateJob] Failed to notify group participants:', err);
+                        // Fallback: notify just the booking owner
+                        addNotification(
+                          "Agent has Arrived!",
+                          `${agentName} has arrived at your location. Please meet them to begin the pickup.`,
+                          NOTIFICATION_TYPES.SUCCESS,
+                          'client',
+                          activeJob.user_id || activeJob.userId
+                        );
+                      }
+                    } else {
+                      addNotification(
+                        "Agent has Arrived!",
+                        `${agentName} has arrived at your location. Please meet them to begin the pickup.`,
+                        NOTIFICATION_TYPES.SUCCESS,
+                        'client',
+                        activeJob.user_id || activeJob.userId
+                      );
+                    }
+                    
                     setHasArrived(true);
                     setJobArrived(activeJob.id);
-                    toast.success("Welcome to Mission Site!", { description: "Please weigh the recyclables to complete pickup." });
+                    toast.success("Welcome to Mission Site!", { description: isGroup ? "Please coordinate with the community to weigh each participant's materials." : "Please weigh the recyclables to complete pickup." });
                   }}
-                  className="w-full py-5 bg-primary text-white font-semibold text-sm rounded-2xl shadow-xl shadow-primary/30 flex items-center justify-center gap-3 active:scale-95 transition-all group tracking-widest"
+                  className="w-full py-5 bg-primary text-white font-semibold text-sm rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all group tracking-widest"
                 >
                   <CheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   I HAVE ARRIVED
@@ -361,6 +397,8 @@ export default function NavigateJobPage() {
                 });
                 if (error) throw error;
                 await useAuthStore.getState().fetchProfile();
+                await useAgentStore.getState().fetchActiveJobs();
+                await useAgentStore.getState().fetchEarnings();
                 toast.success("Verification Complete!", { description: "Funds transferred to seller." });
                 navigate('/trades');
                 return;
@@ -372,6 +410,37 @@ export default function NavigateJobPage() {
                 ownerId: activeJob.userId || activeJob.user_id
               });
               await useAuthStore.getState().fetchProfile();
+              await useAgentStore.getState().fetchActiveJobs();
+              await useAgentStore.getState().fetchEarnings();
+              
+              // For group pickups, notify ALL swarm participants about completion & payout
+              if (activeJob.is_group_pickup && activeJob.swarm_id) {
+                try {
+                  const { data: participants } = await supabase
+                    .from('swarm_participants')
+                    .select('user_id')
+                    .eq('swarm_id', activeJob.swarm_id)
+                    .neq('status', 'withdrawn');
+                  
+                  const participantIds = participants?.map((p: any) => p.user_id).filter(Boolean) || [];
+                  // Exclude booking owner since the RPC already notified them
+                  const bookingOwner = activeJob.userId || activeJob.user_id;
+                  const otherParticipants = participantIds.filter((uid: string) => uid !== bookingOwner);
+                  
+                  if (otherParticipants.length > 0) {
+                    addNotification(
+                      "Community Pickup Completed! 💰",
+                      `Your group pickup of ${data.weightKg}kg has been verified. Payouts and GFP are being distributed to all contributors.`,
+                      NOTIFICATION_TYPES.SUCCESS,
+                      'user',
+                      otherParticipants
+                    );
+                  }
+                } catch (err) {
+                  console.error('[NavigateJob] Failed to notify group participants on completion:', err);
+                }
+              }
+              
               toast.success("Verification Complete!", { description: "Moving to next mission." });
               navigate('/jobs');
             }

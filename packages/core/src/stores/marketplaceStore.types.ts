@@ -11,6 +11,7 @@ export type Offer = Database['public']['Tables']['marketplace_offers']['Row'];
 
 export interface MarketplaceStore {
   listings: MarketplaceListing[];
+  targetedDropoffs: MarketplaceListing[];
   myListings: MarketplaceListing[];
   myOrders: MarketplaceOrder[];
   receivedOrders: MarketplaceOrder[];
@@ -19,6 +20,7 @@ export interface MarketplaceStore {
   categories: any[];
   isLoading: boolean;
   fetchListings: () => Promise<void>;
+  fetchTargetedDropoffs: () => Promise<void>;
   fetchMyActivity: () => Promise<void>;
   fetchReceivedOrders: () => Promise<void>;
   createListing: (listingData: Partial<MarketplaceListing>) => Promise<MarketplaceListing | null>;

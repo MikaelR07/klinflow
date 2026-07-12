@@ -4,17 +4,15 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { 
   Wallet, UserPlus, Tag, Clock, ChevronDown, ChevronUp, 
-  ArrowLeft, Filter, ChevronRight, Users, Receipt, DollarSign,
-  Search
+  ArrowLeft, ChevronRight, Users, Receipt, DollarSign,
+  Search, History
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-type ApprovalTab = 'Pending' | 'Completed' | 'History';
-
 export default function OwnerApprovals() {
   const navigate = useNavigate();
-  const { profile } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<ApprovalTab>('Pending');
+  const { profile, currentCompanyId } = useAuthStore() as any;
+  const [searchQuery, setSearchQuery] = useState('');
   
   const [fundRequests, setFundRequests] = useState<any[]>([]);
   const [joinRequests, setJoinRequests] = useState<any[]>([]);
@@ -50,12 +48,12 @@ export default function OwnerApprovals() {
   ];
 
   const fetchData = async () => {
-    if (!profile?.id) return;
+    if (!currentCompanyId) return;
     setIsLoading(true);
     try {
       const [funds, joins] = await Promise.all([
-        supabase.from('fund_requests').select('*').eq('company_id', profile.id).order('created_at', { ascending: false }),
-        supabase.from('company_join_requests').select('*').eq('company_id', profile.id).order('created_at', { ascending: false })
+        supabase.from('fund_requests').select('*').eq('company_id', currentCompanyId).order('created_at', { ascending: false }),
+        supabase.from('company_join_requests').select('*').eq('company_id', currentCompanyId).order('created_at', { ascending: false })
       ]);
       setFundRequests(funds.data || []);
       setJoinRequests(joins.data || []);
@@ -69,32 +67,35 @@ export default function OwnerApprovals() {
 
   useEffect(() => {
     fetchData();
-  }, [profile?.id]);
+  }, [currentCompanyId]);
 
   // Combine real + mock data
   const allOnboarding = [...joinRequests.map(r => ({ ...r, reqType: 'join' })), ...mockJoinRequests];
   const allDeposits = [...fundRequests.map(r => ({ ...r, reqType: 'fund' })), ...mockFundRequests];
   const allOverrides = [...mockPriceOverrides];
 
-  // Filter by tab
-  const filterByTab = (items: any[]) => {
-    if (activeTab === 'Pending') return items.filter(r => r.status === 'pending');
-    if (activeTab === 'Completed') return items.filter(r => r.status === 'approved' || r.status === 'issued');
-    if (activeTab === 'History') return items.filter(r => r.status === 'rejected' || r.status === 'approved');
-    return items;
+  // Always show pending items on this page
+  const pendingOnboarding = allOnboarding.filter(r => r.status === 'pending');
+  const pendingDeposits = allDeposits.filter(r => r.status === 'pending');
+  const pendingOverrides = allOverrides.filter(r => r.status === 'pending');
+  const totalPending = pendingOnboarding.length + pendingDeposits.length + pendingOverrides.length;
+
+  // Search filter
+  const filterBySearch = (items: any[]) => {
+    if (!searchQuery.trim()) return items;
+    const q = searchQuery.toLowerCase();
+    return items.filter(item =>
+      (item.agent_name || '').toLowerCase().includes(q) ||
+      (item.status || '').toLowerCase().includes(q) ||
+      (item.role || '').toLowerCase().includes(q) ||
+      (item.purpose || '').toLowerCase().includes(q) ||
+      (item.item || '').toLowerCase().includes(q)
+    );
   };
 
-  const filteredOnboarding = filterByTab(allOnboarding);
-  const filteredDeposits = filterByTab(allDeposits);
-  const filteredOverrides = filterByTab(allOverrides);
-
-  // Counts for summary cards
-  const pendingOnboarding = allOnboarding.filter(r => r.status === 'pending').length;
-  const pendingDeposits = allDeposits.filter(r => r.status === 'pending').length;
-  const pendingOverrides = allOverrides.filter(r => r.status === 'pending').length;
-  const totalPending = pendingOnboarding + pendingDeposits + pendingOverrides;
-
-  const tabs: ApprovalTab[] = ['Pending', 'Completed', 'History'];
+  const filteredOnboarding = filterBySearch(pendingOnboarding);
+  const filteredDeposits = filterBySearch(pendingDeposits);
+  const filteredOverrides = filterBySearch(pendingOverrides);
 
   const getTimeAgo = (dateStr: string) => {
     const diff = Date.now() - new Date(dateStr).getTime();
@@ -132,10 +133,10 @@ export default function OwnerApprovals() {
   };
 
   const summaryCards = [
-    { label: 'All Pending', count: totalPending, color: 'text-white', bg: 'bg-emerald-700 dark:bg-emerald-500', borderColor: 'border-emerald-200 dark:border-emerald-500/20', icon: Receipt },
-    { label: 'Onboarding', count: pendingOnboarding, color: 'text-white', bg: 'bg-blue-500 dark:bg-blue-500', borderColor: 'border-blue-200 dark:border-blue-500/20', icon: Users },
-    { label: 'Deposit', count: pendingDeposits, color: 'text-white', bg: 'bg-amber-500 dark:bg-amber-500', borderColor: 'border-amber-200 dark:border-amber-500/20', icon: Wallet },
-    { label: 'Override', count: pendingOverrides, color: 'text-white', bg: 'bg-rose-500 dark:bg-rose-500', borderColor: 'border-rose-200 dark:border-rose-500/20', icon: DollarSign },
+    { label: 'All Pending', count: totalPending, color: 'text-white', bg: 'bg-emerald-500 dark:bg-emerald-500', borderColor: 'border-emerald-200 dark:border-emerald-500/20', icon: Receipt },
+    { label: 'Onboarding', count: pendingOnboarding.length, color: 'text-blue-500', bg: 'bg-[#F8F8FF] dark:bg-blue-500', borderColor: 'border-[#F8F8FF  ] dark:border-blue-500/20', icon: Users },
+    { label: 'Deposit', count: pendingDeposits.length, color: 'text-amber-500', bg: 'bg-[#F8F8FF] dark:bg-amber-500', borderColor: 'border-[#F8F8FF] dark:border-amber-500/20', icon: Wallet },
+    { label: 'Override', count: pendingOverrides.length, color: 'text-rose-500', bg: 'bg-[#F8F8FF] dark:bg-rose-500', borderColor: 'border-[#F8F8FF] dark:border-rose-500/20', icon: DollarSign },
   ];
 
   // Render a section
@@ -212,11 +213,15 @@ export default function OwnerApprovals() {
               </button>
               <div>
                 <h1 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">Request Approvals</h1>
-                <p className="text-[11px] font-medium text-slate-500 mt-0.5">Review and manage pending agent requests</p>
+                <p className="text-[12px] font-medium text-slate-500 mt-0.5">Review and manage pending agent requests</p>
               </div>
             </div>
-            <button className="p-2 bg-white dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all shadow-sm">
-              <Search className="w-4.5 h-4.5" />
+            <button 
+              // onClick={() => navigate('/approvals/category/deposits?tab=History')}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 rounded-xl text-slate-500 active:scale-95 shadow-sm border border-slate-100 dark:border-slate-700"
+            >
+              <History className="w-3.5 h-3.5" />
+              <span className="text-[10px] font-bold">History</span>
             </button>
           </div>
         </div>
@@ -233,45 +238,32 @@ export default function OwnerApprovals() {
               className={`flex-1 min-w-0 rounded-xl border ${card.borderColor} ${card.bg} p-3 flex flex-col gap-2`}
             >
               <div className="flex items-start justify-between">
-                <span className="text-base font-semibold text-slate-50 dark:text-white leading-none">{card.count}</span>
+                <span className="text-base font-semibold text-slate-600 dark:text-white leading-none">{card.count}</span>
                 <card.icon className={`w-4 h-4 ${card.color} opacity-80 shrink-0`} />
               </div>
               <span className={`text-[9px] font-bold capitalize tracking-widest ${card.color} truncate mt-auto`}>{card.label}</span>
             </div>
           ))}
         </div>
-
-        {/* ── TABS ── */}
-        <div className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-0 border-b border-slate-200 dark:border-slate-700">
-            {tabs.map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2.5 text-xs font-bold transition-all relative ${
-                  activeTab === tab 
-                    ? 'text-slate-600 dark:text-white' 
-                    : 'text-slate-400 dark:text-slate-500'
-                }`}
-              >
-                {tab}
-                {activeTab === tab && (
-                  <div className="absolute bottom-0 left-1 right-1 h-[2.5px] bg-slate-900 dark:bg-white rounded-full" />
-                )}
-              </button>
-            ))}
+        {/* ── SEARCH ── */}
+        <div className="px-1">
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search pending requests..."
+              className="w-full pl-10 pr-4 py-3 bg-[#F8F8FF] dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-white placeholder:text-slate-400 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+            />
           </div>
-          <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 active:scale-95 transition-all">
-            <Filter className="w-3.5 h-3.5" />
-            <span className="text-[10px] font-bold">Filter</span>
-          </button>
         </div>
 
         {/* ── GROUPED SECTIONS ── */}
         {isLoading ? (
           <div className="text-center py-10 text-slate-400 text-sm font-medium">Loading requests...</div>
         ) : (
-          <div className="space-y-3 px-0.5">
+          <div className="space-y-3 px-0.5 !mt-2">
 
             {/* Onboarding Requests */}
             {renderSection(
@@ -285,7 +277,7 @@ export default function OwnerApprovals() {
                 <button 
                   key={i}
                   onClick={() => navigate(`/approvals/onboarding/${item.id}`, { state: { request: item } })}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:bg-slate-800 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:bg-slate-800"
                 >
                   <div className={`w-9 h-9 rounded-full flex items-center  justify-center text-xs font-bold shrink-0 ${getInitialsColor(item.agent_name)}`}>
                     {getInitials(item.agent_name)}
@@ -310,7 +302,7 @@ export default function OwnerApprovals() {
                   <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
                 </button>
               ),
-              '/approvals'
+              '/approvals/category/onboarding'
             )}
 
             {/* Deposit Requests */}
@@ -325,7 +317,7 @@ export default function OwnerApprovals() {
                 <button 
                   key={i}
                   onClick={() => navigate(`/approvals/deposit/${item.id}`, { state: { request: item } })}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 >
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-black shrink-0 ${getInitialsColor(item.agent_name)}`}>
                     {getInitials(item.agent_name)}
@@ -354,7 +346,7 @@ export default function OwnerApprovals() {
                   <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
                 </button>
               ),
-              '/approvals'
+              '/approvals/category/deposits'
             )}
 
             {/* Override Requests */}
@@ -369,7 +361,7 @@ export default function OwnerApprovals() {
                 <button 
                   key={i}
                   onClick={() => navigate(`/approvals/override/${item.id}`, { state: { request: item } })}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 >
                   <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-black shrink-0 ${getInitialsColor(item.agent_name)}`}>
                     {getInitials(item.agent_name)}
@@ -402,7 +394,7 @@ export default function OwnerApprovals() {
                   <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
                 </button>
               ),
-              '/approvals'
+              '/approvals/category/overrides'
             )}
 
             {/* Empty state */}

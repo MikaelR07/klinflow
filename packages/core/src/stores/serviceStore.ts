@@ -206,7 +206,6 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
           slug, 
           parent_category: category, 
           price_per_kg: pricePerKg,
-          price_per_unit: pricePerKg,
           is_active: true
         })
         .select()
@@ -216,7 +215,7 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
       const mapped = {
         id: data.id,
         material_name: data.label,
-        category: data.category,
+        category: data.parent_category,
         price_per_kg: data.price_per_kg
       };
       set(state => ({ materialPrices: [...state.materialPrices, mapped] }));
@@ -236,7 +235,6 @@ export const useServiceStore = create<ServiceStore>((set, get) => ({
       }
       if (updates.price_per_kg !== undefined) {
         dbUpdates.price_per_kg = updates.price_per_kg;
-        dbUpdates.price_per_unit = updates.price_per_kg;
       }
 
       const { data, error } = await supabase

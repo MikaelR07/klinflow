@@ -97,16 +97,23 @@ function calculateStreak(bookings: Booking[]) {
 export default function ImpactHub() {
   const navigate = useNavigate();
   const { profile, getGFPMetrics } = useAuthStore() as any;
-  const { bookings } = useBookingStore();
+  const { bookings, fetchBookings } = useBookingStore();
   const metrics = getGFPMetrics();
+
+  useEffect(() => {
+    fetchBookings();
+  }, [fetchBookings]);
 
   const [showBadgeModal, setShowBadgeModal] = useState(false);
 
   // Calculate streak from bookings
   const streak = useMemo(() => calculateStreak(bookings), [bookings]);
 
-  // Calculate kg recovered from GFP
-  const kgRecovered = Math.floor((profile?.rewardPoints || 0) / 2);
+  // Calculate kg recovered accurately from completed bookings
+  const kgRecovered = useMemo(() => {
+    const completed = bookings.filter(b => b.status === 'completed');
+    return completed.reduce((sum, b) => sum + (Number((b as any).actualWeightKg) || Number((b as any).weightKg) || 0), 0);
+  }, [bookings]);
 
   // Build badge unlock stats
   const badgeStats = useMemo(() => {
@@ -122,7 +129,7 @@ export default function ImpactHub() {
       metalKg: wasteTypes.filter(w => w.includes('metal') || w.includes('can')).length * 5,
       glassKg: wasteTypes.filter(w => w.includes('glass') || w.includes('bottle')).length * 5,
       eWasteKg: wasteTypes.filter(w => w.includes('e-waste') || w.includes('electronic')).length * 5,
-      totalKg: completed.reduce((acc, b) => acc + ((b as any).weight || 0), 0) || Math.floor((profile?.rewardPoints || 0) / 2),
+      totalKg: completed.reduce((acc, b) => acc + (Number((b as any).actualWeightKg) || Number((b as any).weightKg) || 0), 0),
       uniqueCategories: [
         wasteTypes.some(w => w.includes('plastic') || w.includes('recyclable')),
         wasteTypes.some(w => w.includes('organic')),
@@ -153,7 +160,7 @@ export default function ImpactHub() {
         </div>
       </div>
 
-      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-3 pb-10 space-y-6">
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-1.5 pb-10 space-y-6">
 
         {/* Main Stats Card */}
         <div className="card bg-gradient-to-br from-primary to-emerald-600 p-6 text-white border-0 overflow-hidden relative">
@@ -232,7 +239,7 @@ export default function ImpactHub() {
               <div
                 key={badge.id}
                 onClick={() => setShowBadgeModal(true)}
-                className={`card p-3 text-center transition-all cursor-pointer ${!badge.unlocked ? 'grayscale opacity-40' : 'border-amber-100 bg-amber-50/10'}`}
+                className={`card p-3 text-center transition-all cursor-pointer ${!badge.unlocked ? 'grayscale opacity-60' : 'border-primary/60 bg-primary/10'}`}
               >
                 <div className={`text-3xl mb-1.5 ${badge.unlocked ? 'transform hover:scale-110 transition-transform' : ''}`}>
                   {badge.icon}
@@ -251,7 +258,7 @@ export default function ImpactHub() {
         {showBadgeModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center pb-20 p-2">
             <div className="absolute inset-0 bg-slate-900/60" onClick={() => setShowBadgeModal(false)} />
-            <div className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in duration-300">
+            <div className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[1rem] border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in duration-300">
               <div className="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center">
@@ -316,7 +323,7 @@ export default function ImpactHub() {
             <h3 className="text-lg font-semibold tracking-tight mb-2">The Path to Mastery 🏆</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
               You've unlocked <span className="text-primary font-semibold">{unlockedCount} of {badges.length}</span> badges.
-              Keep recycling to become a <span className="text-slate-900 dark:text-white font-semibold italic">Certified Sustainability Hero</span> and unlock exclusive M-Pesa reward multipliers!
+              Keep recycling to become a <span className="text-emerald-600 dark:text-emerald-400 font-semibold ">Certified Sustainability Hero</span> and unlock exclusive M-Pesa reward multipliers!
             </p>
             <button
               onClick={() => navigate('/book-pickup')}

@@ -94,7 +94,7 @@ export default function ActivePickupDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-800">
+      <div className="flex items-center justify-center min-h-screen bg-[#F8F8FF] dark:bg-slate-800">
         <div className="w-8 h-8 border-3 border-slate-200 border-t-amber-500 rounded-full animate-spin" />
       </div>
     );
@@ -102,7 +102,7 @@ export default function ActivePickupDetailsPage() {
 
   if (!order) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-800 p-4">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#F8F8FF] dark:bg-slate-800 p-4">
         <PackageCheck className="w-12 h-12 text-slate-400 mb-4" />
         <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Pickup Not Found</h2>
         <button onClick={() => navigate(-1)} className="px-6 py-2 bg-blue-500 text-white rounded-xl font-bold">Go Back</button>
@@ -115,11 +115,11 @@ export default function ActivePickupDetailsPage() {
   const images = verification?.photos || order.rfq?.images || [];
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-16 transition-colors">
+    <div className="flex flex-col max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-800 pb-16 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-amber-500 transition-colors" />
           </button>
           <div>

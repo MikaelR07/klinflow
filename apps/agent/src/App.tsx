@@ -21,7 +21,8 @@ import { OfflineBanner } from '@klinflow/ui';
 // LAZY LOADED PAGES
 const AgentHome = lazy(() => import('./pages/agent/AgentHome'));
 const AvailableJobs = lazy(() => import('./pages/agent/AvailableJobs'));
-const EarningsPage = lazy(() => import('./pages/agent/EarningsPage'));
+const AgentWallet = lazy(() => import('./pages/agent/AgentWallet'));
+const PayoutHistory = lazy(() => import('./pages/agent/PayoutHistory'));
 const MyRoutes = lazy(() => import('./pages/agent/MyRoutes'));
 const ReviewsPage = lazy(() => import('./pages/agent/ReviewsPage'));
 const NavigateJobPage = lazy(() => import('./pages/agent/NavigateJobPage'));
@@ -38,6 +39,7 @@ const ActivePickupsPage = lazy(() => import('./pages/agent/ActivePickupsPage'));
 const ActivePickupDetailsPage = lazy(() => import('./pages/agent/ActivePickupDetailsPage'));
 const NavigatePickupPage = lazy(() => import('./pages/agent/NavigatePickupPage'));
 const NavigateGroupPickupPage = lazy(() => import('./pages/agent/NavigateGroupPickupPage'));
+const ExpectedArrivalsPage = lazy(() => import('./pages/agent/ExpectedArrivalsPage'));
 const MarketPulse = lazy(() => import('./pages/agent/MarketPulse'));
 const DepositPage = lazy(() => import('./pages/agent/DepositPage'));
 
@@ -50,7 +52,6 @@ const NotificationsFeed = lazy(() => import('./pages/agent/NotificationsFeed'));
 const PrivacySecurityPage = lazy(() => import('./pages/settings/PrivacySecurityPage'));
 const SupportPage = lazy(() => import('./pages/settings/SupportPage'));
 const FeedbackPage = lazy(() => import('./pages/settings/FeedbackPage'));
-const CompanyStaffRequests = lazy(() => import('./pages/settings/CompanyStaffRequests'));
 import Welcome from './pages/auth/Welcome';
 import RoleSelection from './pages/auth/RoleSelection';
 import Login from './pages/auth/Login';
@@ -63,6 +64,7 @@ const CompanyServicesConfigPage = lazy(() => import('./pages/admin/CompanyServic
 // Owner Mobile App Pages
 const OwnerOverview = lazy(() => import('./pages/admin/mobile/OwnerOverview'));
 const OwnerApprovals = lazy(() => import('./pages/admin/mobile/OwnerApprovals'));
+const ApprovalCategoryPage = lazy(() => import('./pages/admin/mobile/ApprovalCategoryPage'));
 const DepositRequestDetail = lazy(() => import('./pages/admin/mobile/DepositRequestDetail'));
 const OnboardingRequestDetail = lazy(() => import('./pages/admin/mobile/OnboardingRequestDetail'));
 const OverrideRequestDetail = lazy(() => import('./pages/admin/mobile/OverrideRequestDetail'));
@@ -214,17 +216,19 @@ export default function App() {
             <Route path="/rfqs/:rfqId/offers/:offerId" element={<RFQOfferDetailsPage />} />
             <Route path="/pickups" element={<ActivePickupsPage />} />
             <Route path="/pickups/:id" element={<ActivePickupDetailsPage />} />
+            <Route path="/expected-arrivals" element={<ExpectedArrivalsPage />} />
             <Route path="/trades" element={<MyTrades />} />
-            <Route path="/earnings" element={<EarningsPage />} />
+            <Route path="/wallet" element={<AgentWallet />} />
+            <Route path="/payout-history" element={<PayoutHistory />} />
             <Route path="/deposit" element={<DepositPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/notifications" element={<NotificationsFeed />} />
 
             <Route path="/admin/services" element={<CompanyServicesConfigPage />} />
-            <Route path="/admin/driver-requests" element={<CompanyStaffRequests />} />
 
             {/* Owner Mobile App Routes */}
             <Route path="/approvals" element={<OwnerApprovals />} />
+            <Route path="/approvals/category/:category" element={<ApprovalCategoryPage />} />
             <Route path="/approvals/deposit/:id" element={<DepositRequestDetail />} />
             <Route path="/approvals/onboarding/:id" element={<OnboardingRequestDetail />} />
             <Route path="/approvals/override/:id" element={<OverrideRequestDetail />} />

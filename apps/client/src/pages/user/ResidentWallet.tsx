@@ -11,7 +11,11 @@ import {
   Gift, Send, Recycle, Leaf, Trophy,
   ArrowRight, Package, CheckCircle,
   Landmark,
-  ArrowRightLeft
+  ArrowRightLeft,
+  ArrowDownSquare,
+  ArrowUpSquare,
+  ArrowUpCircle,
+  ArrowDownCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -51,7 +55,7 @@ export default function ResidentWallet() {
   const currentMonthStart = useMemo(() => new Date(now.getFullYear(), now.getMonth(), 1), []);
 
   const completedBookings = useMemo(() =>
-    bookings.filter((b: any) => b.status === 'completed'),
+    bookings.filter((b: any) => ['completed', 'paid', 'verified'].includes(b.status)),
     [bookings]
   );
 
@@ -60,14 +64,33 @@ export default function ResidentWallet() {
     [completedBookings, currentMonthStart]
   );
 
-  const totalPickups = completedBookings.length;
+  const totalPickups = bookings.length;
   const upcomingPickups = useMemo(() =>
     bookings.filter((b: any) => ['pending', 'accepted', 'in_progress'].includes(b.status)).length,
     [bookings]
   );
 
-  const kgRecoveredThisMonth = walletStats?.kg_recovered_this_month || 0;
-  const totalEarnedThisMonth = walletStats?.savings_this_month || 0;
+  // True Transactions from ledger (Moved up to be used by metrics)
+  const transactions = useMemo(() => {
+    return walletTxns.map((t: any) => ({
+      id: t.id,
+      type: t.amount > 0 ? 'earned' : 'reward',
+      label: (t.metadata?.type === 'material_buyback' || t.metadata?.type === 'swarm_payout' || t.metadata?.action === 'payout') ? 'Recycling Pickup' : 'Wallet Transaction',
+      amount: t.amount,
+      date: new Date(t.created_at),
+      status: 'completed' as const,
+      reference: `TRX-${String(t.id).substring(0, 6).toUpperCase()}`,
+      metadata: t.metadata
+    })).sort((a, b) => b.date.getTime() - a.date.getTime());
+  }, [walletTxns]);
+
+  const kgRecoveredThisMonth = useMemo(() => {
+    return thisMonthPickups.reduce((sum, b) => sum + (Number(b.actualWeightKg) || Number(b.weightKg) || 0), 0);
+  }, [thisMonthPickups]);
+
+  const totalEarnedThisMonth = useMemo(() => {
+    return thisMonthPickups.reduce((sum, b) => sum + (Number(b.totalPrice) || 0), 0);
+  }, [thisMonthPickups]);
 
   const sparklineData = useMemo(() => {
     const days = 10;
@@ -88,18 +111,7 @@ export default function ResidentWallet() {
     return data.map(val => Math.max((val / max) * 100, 5));
   }, [completedBookings]);
 
-  // True Transactions from ledger
-  const transactions = useMemo(() => {
-    return walletTxns.map((t: any) => ({
-      id: t.id,
-      type: t.amount > 0 ? 'earned' : 'reward',
-      label: t.metadata?.type === 'material_buyback' ? 'Recycling Pickup' : 'Wallet Transaction',
-      amount: t.amount,
-      date: new Date(t.created_at),
-      status: 'completed' as const,
-      reference: `TRX-${String(t.id).substring(0, 6).toUpperCase()}`
-    })).sort((a, b) => b.date.getTime() - a.date.getTime());
-  }, [walletTxns]);
+  // True Transactions from ledger moved up
 
   // Impact level calculation
   const getImpactLevel = () => {
@@ -461,13 +473,13 @@ export default function ResidentWallet() {
                   className="px-4 py-3.5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${txn.type === 'earned'
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${txn.type === 'earned'
                       ? 'bg-emerald-50 dark:bg-emerald-900/30'
-                      : 'bg-purple-50 dark:bg-purple-900/30'
+                      : 'bg-red-50 dark:bg-red-900/30'
                       }`}>
                       {txn.type === 'earned'
-                        ? <ArrowDownLeft className="w-5 h-5 text-emerald-500" />
-                        : <Sparkles className="w-5 h-5 text-purple-500" />
+                        ? <ArrowDownCircle className="w-5 h-5 text-emerald-500" />
+                        : <ArrowUpCircle className="w-5 h-5 text-red-500" />
                       }
                     </div>
                     <div className="min-w-0 flex-1">
@@ -488,9 +500,9 @@ export default function ResidentWallet() {
                   <div className="text-right shrink-0 ml-3">
                     <p className={`text-sm font-bold ${txn.type === 'earned'
                       ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-purple-600 dark:text-purple-400'
+                      : 'text-red-500 dark:text-red-400'
                       }`}>
-                      + KES {Number(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      KES {Number(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </p>
                     <p className="text-[9px] font-semibold text-slate-400 mt-0.5 capitalize">
                       {txn.type === 'earned' ? 'Received' : 'Credited'}

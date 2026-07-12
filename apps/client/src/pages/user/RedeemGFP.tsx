@@ -12,7 +12,7 @@ import {
   Copy, ArrowRight, Clock
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
-import { walletService, WALLET_CONFIG, RedemptionResult } from '@klinflow/core';
+import { walletService, WALLET_CONFIG, RedemptionResult, RedemptionRecord } from '@klinflow/core';
 import { toast } from 'sonner';
 
 type RedeemOption = 'money' | 'safaricom' | 'airtel' | 'khetias' | 'naivas';
@@ -40,8 +40,10 @@ export default function RedeemGFP() {
 
   const [viewState, setViewState] = useState<ViewState>('options');
   const [redemptionResult, setRedemptionResult] = useState<RedemptionResult | null>(null);
+  const [recentRedemptions, setRecentRedemptions] = useState<RedemptionRecord[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
 
-  // Fetch real wallet balance
+  // Fetch real wallet balance & history
   useEffect(() => {
     if (userId) {
       setIsLoadingWallet(true);
@@ -49,11 +51,15 @@ export default function RedeemGFP() {
         if (data) setGfpBalance(data.available_points);
         setIsLoadingWallet(false);
       });
+      walletService.getRedemptionHistory(userId, 'all', 'all', 3).then(data => {
+        setRecentRedemptions(data);
+        setIsLoadingHistory(false);
+      });
     }
   }, [userId]);
 
   const { GFP_TO_KES_RATE, MIN_REDEMPTION_POINTS, MAX_REDEMPTION_PER_TX } = WALLET_CONFIG;
-  const maxKsh = Math.floor(gfpBalance * GFP_TO_KES_RATE);
+  const maxKsh = gfpBalance * GFP_TO_KES_RATE;
 
   const activeOption = useMemo(
     () => REDEEM_OPTIONS.find((o) => o.id === selectedOption),
@@ -61,7 +67,7 @@ export default function RedeemGFP() {
   );
 
   const numericGfp = Number(gfpAmount) || 0;
-  const kesEquivalent = Math.floor(numericGfp * GFP_TO_KES_RATE);
+  const kesEquivalent = numericGfp * GFP_TO_KES_RATE;
   const isValidAmount = numericGfp >= MIN_REDEMPTION_POINTS && numericGfp <= gfpBalance && numericGfp <= MAX_REDEMPTION_PER_TX;
 
   const requiresPhone = activeOption?.type === 'airtime';
@@ -121,118 +127,160 @@ export default function RedeemGFP() {
     }
   };
 
+  const getStatusColor = (status: string) => {
+    switch(status) {
+      case 'completed': return 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10';
+      case 'pending': return 'text-amber-500 bg-amber-50 dark:bg-amber-500/10';
+      case 'failed': return 'text-rose-500 bg-rose-50 dark:bg-rose-500/10';
+      default: return 'text-slate-500 bg-slate-50 dark:bg-slate-500/10';
+    }
+  };
+
   return (
-    <div className=" bg-[#F8F8FF] dark:bg-slate-800 text-slate-900 dark:text-white pb-5">
+    <div className="-mx-1 px-1 bg-[#F8F8FF] dark:bg-slate-900 text-slate-900 dark:text-white pb-5 relative  overflow-x-hidden">
+      {/* AMBER TOP BACKGROUND (Perfectly fills edges by scaling and clipping overflow) */}
+      <div className="absolute top-0 left-0 right-0 h-[330px] bg-gradient-to-b from-amber-500 to-amber-600 rounded-b-[40%] scale-x-[1.5] z-0 shadow-sm" />
+
       {/* HEADER */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#F8F8FF] dark:bg-slate-800 dark:border-slate-600 border-b border-gray-200 pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-2 -ml-2 active:scale-95 transition-all">
-            <ArrowLeft className="w-5 h-5 text-slate-900 dark:text-white" />
-          </button>
-          <h1 className="text-[18px] font-semibold tracking-wide text-slate-600 dark:text-white">Redeem GFP</h1>
+      <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 dark:bg-amber-600 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-start justify-between">
+        <button onClick={() => navigate(-1)} className="p-2 -ml-2 active:scale-95 transition-all relative z-10">
+          <ArrowLeft className="w-5 h-5 text-white" />
+        </button>
+
+        <div className="absolute left-0 right-0 bottom-2 flex flex-col items-center pointer-events-none text-center px-12">
+          <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Redeem GFP</h1>
+          <p className="text-[9px] text-slate-50 font-medium tracking-wider uppercase mt-0.5">Turn  Green fuel points to rewards</p>
         </div>
+
         <button 
           onClick={() => navigate('/redemption-history')}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 transition-colors"
+          className="relative z-10 flex items-center gap-1.5 px-2 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm mt-0.5"
         >
-          <Clock className="w-3.5 h-3.5 text-slate-500 dark:text-slate-300" />
-          <span className="text-xs font-medium text-slate-700 dark:text-slate-300">History</span>
+          <Clock className="w-3.5 h-3.5 text-white" />
+          <span className="text-xs font-bold text-white">History</span>
         </button>
       </div>
 
-      <div className="pt-[calc(env(safe-area-inset-top,1rem)+3rem)] px-1.5 max-w-lg mx-auto space-y-6">
+      <div className="relative z-10 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] px-1.5 max-w-lg mx-auto space-y-4">
 
-        {/* HERO CARD (Banner Image Only) */}
-        <div className="relative overflow-hidden rounded-xl shadow-sm bg-emerald-800 border border-emerald-900/40 h-[240px]">
-          {/* Background Image */}
-          <div
-            className="absolute inset-0 w-full h-full z-0"
-            style={{ 
-              backgroundImage: "url('/vectors/redeem-gfp.webp')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat"
-            }}
+        {/* HERO IMAGE CARD */}
+        <div className="relative overflow-hidden rounded-2xl  shadow-lg bg-emerald-900 border border-amber-400/30 flex items-center justify-center">
+          <img 
+            src="/vectors/redeem-gfp.webp" 
+            alt="Redeem GFP" 
+            className="w-full h-auto opacity-90"
           />
         </div>
 
-        {/* COMPACT COMBINED STATS CARD */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl !mt-2 border border-slate-200 dark:border-slate-800 p-2 shadow-sm">
+        {/* STATS CARD */}
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-2 shadow-sm border border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
-                <Wallet className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-0.5">Available Balance</p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-black text-slate-700 dark:text-white leading-none tracking-tight">
-                    {isLoadingWallet ? '...' : gfpBalance.toLocaleString()}
-                  </span>
-                  <span className="text-xs font-bold text-emerald-500">GFP</span>
-                </div>
+            <div className="text-center flex-1">
+              <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5">Available GFP</p>
+              <div className="flex items-baseline justify-center gap-1 text-emerald-600 dark:text-emerald-400">
+                <span className="text-base font-black leading-none">
+                  {isLoadingWallet ? '...' : gfpBalance.toLocaleString()}
+                </span>
               </div>
             </div>
             
-            <div className="text-right border-l border-slate-100 dark:border-slate-800 pl-4">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Equivalent To</p>
-              <p className="text-lg font-bold text-slate-900 dark:text-white tracking-tight leading-none">
-                <span className="text-[10px] text-slate-500 mr-0.5">KES</span>
-                {maxKsh.toLocaleString()}
-              </p>
+            <div className="w-[1px] h-10 bg-slate-200 dark:bg-slate-200" />
+
+            <div className="text-center flex-1">
+              <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5">Worth (KES)</p>
+              <div className="flex items-baseline justify-center gap-1 text-amber-600 dark:text-amber-500">
+                <span className="text-base font-black leading-none">
+                  {maxKsh.toLocaleString()}
+                </span>
+              </div>
             </div>
-          </div>
-          
-          <div className="mt-2 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
-            <Receipt className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-tight">
-              Rate: <span className="font-bold text-slate-700 dark:text-slate-200">2 GFP = KES 1</span>. Redeem for airtime, tokens, or cash.
-            </p>
           </div>
         </div>
 
         {/* OPTIONS GRID */}
-        <div>
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">Redeem your points</h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">Choose from the rewards below and enjoy.</p>
+        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
+          <div className="text-center mb-5">
+            <h3 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">Redeem your points</h3>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Choose a reward to claim instantly</p>
+          </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-2">
             {REDEEM_OPTIONS.map((opt) => (
               <button
                 key={opt.id}
                 onClick={() => handleCardClick(opt.id)}
                 disabled={isLoadingWallet}
-                className={`flex flex-col p-4 rounded-2xl text-left transition-colors disabled:opacity-50 ${selectedOption === opt.id
-                  ? 'bg-slate-100 dark:bg-slate-800 border-2 border-emerald-500'
-                  : 'bg-white dark:bg-slate-900/50 border-2 border-slate-200 dark:border-transparent '
+                className={`flex flex-col items-center justify-center p-3 rounded-2xl text-center transition-all disabled:opacity-50 ${selectedOption === opt.id
+                  ? 'bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-500 shadow-md scale-[1.02]'
+                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-200 dark:hover:border-emerald-800/50 shadow-sm'
                   }`}
               >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 ${opt.bg}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 shadow-sm ${opt.bg}`}>
                   <opt.icon className={`w-5 h-5 ${opt.color}`} />
                 </div>
-                <h4 className="text-[13px] font-bold text-slate-900 dark:text-white mb-1">{opt.title}</h4>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug mb-4 h-8">{opt.desc}</p>
-
-                <div className="flex items-center justify-between mt-auto w-full">
-                  <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-bold bg-[#1f2937] ${opt.color}`}>
-                    Min {MIN_REDEMPTION_POINTS} GFP
-                  </div>
-                  <div className="w-5 h-5 rounded-full border border-slate-600 flex items-center justify-center">
-                    <ChevronRight className="w-3 h-3 text-slate-400" />
-                  </div>
-                </div>
+                <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-0.5 leading-tight">{opt.title}</h4>
+                <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-tight line-clamp-2">{opt.desc}</p>
               </button>
             ))}
 
-            {/* Secure & Instant Card */}
-            <div className="flex flex-col p-4 rounded-2xl text-left bg-white dark:bg-slate-900/60 border border-dashed border-slate-300 dark:border-slate-700 relative overflow-hidden">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-3 bg-green-700">
-                <ShieldCheck className="w-5 h-5 text-emerald-500" />
+            {/* Secure & Instant Card (6th slot) */}
+            <div className="flex flex-col items-center justify-center p-3 rounded-2xl text-center bg-blue-700 dark:bg-blue-700 border border-white dark:border-blue-500/50 relative overflow-hidden">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-2 bg-white dark:bg-blue-500">
+                <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-white" />
               </div>
-              <h4 className="text-[13px] font-bold text-emerald-600 dark:text-emerald-500 mb-1">Secure & Instant</h4>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">All rewards are delivered instantly and securely.</p>
-              <Lock className="w-8 h-8 text-slate-200 dark:text-slate-800 absolute bottom-3 right-3 opacity-50" />
+              <h4 className="text-[11px] font-bold text-white dark:text-white mb-0.5 leading-tight">Secure</h4>
+              <p className="text-[9px] text-white/70 dark:text-white/70 leading-tight">Instant delivery</p>
             </div>
+          </div>
+        </div>
+
+        {/* RECENT REDEMPTIONS */}
+        <div className="px-1">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-wider">Recent Redemptions</h3>
+            <button onClick={() => navigate('/redemption-history')} className="text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:underline">
+              View All
+            </button>
+          </div>
+          
+          <div className="space-y-2">
+            {isLoadingHistory ? (
+              <div className="py-6 text-center text-slate-500">
+                <Loader2 className="w-5 h-5 animate-spin mx-auto" />
+              </div>
+            ) : recentRedemptions.length > 0 ? (
+              recentRedemptions.map((txn) => {
+                const opt = REDEEM_OPTIONS.find(o => o.type === txn.type);
+                const Icon = opt?.icon || Receipt;
+                return (
+                  <div key={txn.id} className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${opt ? opt.bg : 'bg-slate-200 dark:bg-slate-800'}`}>
+                      <Icon className={`w-5 h-5 ${opt ? opt.color : 'text-slate-500'}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                        {opt?.title || 'Redemption'}
+                      </p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <span className="text-[10px] text-slate-500">{new Date(txn.created_at).toLocaleDateString()}</span>
+                        <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+                        <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${getStatusColor(txn.status)}`}>
+                          {txn.status}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-black text-slate-900 dark:text-white">-{txn.amount}</p>
+                      <p className="text-[10px] font-bold text-green-600">KES {txn.kes_equivalent}</p>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-center py-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                <p className="text-xs text-slate-500 dark:text-slate-400">No recent redemptions</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

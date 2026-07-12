@@ -34,6 +34,7 @@ import PointRedemptions from './pages/admin/PointRedemptions';
 import AdminB2B from './pages/admin/AdminB2B';
 import CompanyMetrics from './pages/admin/CompanyMetrics';
 import EnvironmentalReport from './pages/admin/EnvironmentalReport';
+import PlatformTreasury from './pages/admin/PlatformTreasury';
 
 // Settings Pages
 import SettingsMenu from './pages/settings/SettingsMenu';
@@ -109,6 +110,7 @@ export default function App() {
             <Route path="/company-metrics" element={<CompanyMetrics />} />
             <Route path="/environmental-report" element={<EnvironmentalReport />} />
             <Route path="/financial-report" element={<FinancialReport />} />
+            <Route path="/treasury" element={<PlatformTreasury />} />
             <Route path="/sovereign-impact" element={<SovereignImpact />} />
             <Route path="/oracle" element={<NetworkOracle />} />
             <Route path="/transfers" element={<PointTransfers />} />

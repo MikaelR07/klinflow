@@ -25,7 +25,7 @@ import { toast } from 'sonner';
 
 export default function AgentSellStock() {
   const navigate = useNavigate();
-  const { profile } = useAuthStore();
+  const { profile, currentCompanyId } = useAuthStore() as any;
   const { agentConfig, fetchAgentConfig } = useAgentStore();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,8 +50,8 @@ export default function AgentSellStock() {
       
       let query = supabase.from('assets').select('*').eq('status', 'verified');
       
-      if (profile.agentAccountType === 'company_admin') {
-        const { data: drivers } = await supabase.from('profiles').select('id').eq('company_id', profile.id);
+      if (profile.agentAccountType === 'company_admin' && currentCompanyId) {
+        const { data: drivers } = await supabase.from('profiles').select('id').eq('company_id', currentCompanyId);
         const driverIds = drivers?.map(d => d.id) || [];
         query = query.in('verifier_id', [profile.id, ...driverIds]);
       } else {
@@ -62,7 +62,7 @@ export default function AgentSellStock() {
       setWarehouseAssets(data || []);
     };
     fetchWarehouse();
-  }, [profile?.id]);
+  }, [profile?.id, currentCompanyId]);
 
   // 2. Map Dynamic Categories (Accepted + Custom)
   const availableCategories = useMemo(() => {

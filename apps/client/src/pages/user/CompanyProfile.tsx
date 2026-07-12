@@ -20,6 +20,7 @@ export default function CompanyProfile() {
   const { agentId } = useParams();
 
   const [company, setCompany] = useState<any>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAllMaterials, setShowAllMaterials] = useState(false);
 
@@ -31,10 +32,55 @@ export default function CompanyProfile() {
       .select('*, agent_configurations(*)')
       .eq('id', agentId)
       .single()
-      .then(({ data, error }) => {
+      .then(async ({ data, error }) => {
         if (error || !data) { toast.error('Company not found'); navigate('/'); return; }
         setCompany(data);
         setLoading(false);
+
+        const isFleet = data.agent_account_type === 'company_admin' || data.role === 'admin' || data.role === 'company_admin';
+        let targetAgentIds: string[] = [agentId!];
+        if (isFleet) {
+          const { data: fleetAgents } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('company_id', agentId);
+          if (fleetAgents && fleetAgents.length > 0) {
+            targetAgentIds = [...fleetAgents.map((a: any) => a.id), agentId!];
+          }
+        }
+
+        // Fetch reviews
+        const { data: reviewData } = await supabase
+          .from('bookings')
+          .select('id, agent_rating, agent_rating_comment, updated_at, user_id')
+          .in('agent_id', targetAgentIds)
+          .not('agent_rating', 'is', null)
+          .order('updated_at', { ascending: false });
+
+        if (reviewData && reviewData.length > 0) {
+          const userIds = [...new Set(reviewData.map((r: any) => r.user_id).filter(Boolean))];
+          if (userIds.length > 0) {
+            const { data: profilesData } = await supabase
+              .from('profiles')
+              .select('id, name, avatar_url')
+              .in('id', userIds);
+            
+            const profileMap: any = {};
+            if (profilesData) {
+              profilesData.forEach((p: any) => { profileMap[p.id] = p; });
+            }
+
+            const enrichedReviews = reviewData.map((r: any) => ({
+              ...r,
+              profiles: profileMap[r.user_id]
+            }));
+            setReviews(enrichedReviews);
+          } else {
+            setReviews(reviewData);
+          }
+        } else {
+          setReviews([]);
+        }
       });
   }, [agentId]);
 
@@ -51,7 +97,13 @@ export default function CompanyProfile() {
     ? config.accepted_materials
     : (company?.service_profile?.categories?.filter((c: any) => c.enabled).map((c: any) => c.name) || []);
   const logisticsFee = config.base_logistics_fee ?? company?.service_profile?.base_logistics_fee ?? 0;
-  const isFleetAdmin = company?.role === 'admin';
+  const isFleetAdmin = company?.agent_account_type === 'company_admin' || company?.role === 'admin' || company?.role === 'company_admin';
+
+  // Compute dynamic rating and review count from fetched reviews
+  const reviewCount = reviews.length;
+  const computedRating = reviewCount > 0
+    ? (reviews.reduce((sum: number, r: any) => sum + (r.agent_rating || 0), 0) / reviewCount).toFixed(1)
+    : (company?.rating > 0 ? company.rating.toFixed(1) : '0.0');
 
   return (
     <div className="bg-[#F8F8FF] dark:bg-slate-800 transition-colors min-h-screen">
@@ -113,9 +165,9 @@ export default function CompanyProfile() {
                 <div className="flex items-center gap-1 mb-1.5">
                   <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                   <span className="text-[12px] font-bold text-white">
-                    {company?.rating > 0 ? company.rating.toFixed(1) : '4.8'}
+                    {computedRating}
                   </span>
-                  <span className="text-[11px] text-emerald-200/80">({company?.total_reviews || 0} reviews)</span>
+                  <span className="text-[11px] text-emerald-200/80">({reviewCount} reviews)</span>
                 </div>
                 
                 <div className="flex items-center gap-1">
@@ -133,7 +185,7 @@ export default function CompanyProfile() {
               </div>
               <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-100 dark:border-slate-800 last:border-0">
                 <Star className="w-4 h-4 text-amber-400 mb-1" />
-                <p className="text-sm font-bold text-white dark:text-white leading-none mb-0.5">{company?.rating > 0 ? company.rating.toFixed(1) : '4.8'}</p>
+                <p className="text-sm font-bold text-white dark:text-white leading-none mb-0.5">{computedRating}</p>
                 <p className="text-[9px] text-slate-200 font-medium">Rating</p>
               </div>
               <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-100 dark:border-slate-800 last:border-0">
@@ -255,45 +307,48 @@ export default function CompanyProfile() {
           </div>
           
           <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
-            {/* Review 1 */}
-            <div className="flex gap-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0 text-emerald-700 dark:text-emerald-400 font-bold text-lg">
-                M
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-0.5">
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">Mary Wanjiku</h4>
-                  <span className="text-[10px] text-slate-400">2 days ago</span>
-                </div>
-                <div className="flex items-center gap-0.5 mb-2">
-                  {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />)}
-                </div>
-                <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Very reliable and professional. Came on time and handled everything smoothly.
-                </p>
-              </div>
-            </div>
+            {reviews.length === 0 ? (
+              <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">No reviews yet.</p>
+            ) : (
+              reviews.slice(0, 2).map((review, index) => {
+                const profile = Array.isArray(review.profiles) ? review.profiles[0] : review.profiles;
+                const reviewerName = profile?.full_name || profile?.first_name || 'Anonymous User';
+                const initial = reviewerName.charAt(0).toUpperCase();
+                const rating = review.agent_rating || 5;
+                const dateObj = new Date(review.updated_at);
+                const dateString = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const isPositive = rating >= 4;
 
-            <div className="h-px bg-slate-100 dark:bg-slate-800 w-full" />
-
-            {/* Review 2 */}
-            <div className="flex gap-3">
-              <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0 text-blue-700 dark:text-blue-400 font-bold text-lg">
-                J
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-0.5">
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">James O.</h4>
-                  <span className="text-[10px] text-slate-400">1 week ago</span>
-                </div>
-                <div className="flex items-center gap-0.5 mb-2">
-                  {[1, 2, 3, 4, 5].map(i => <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />)}
-                </div>
-                <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Great service! The agent was very friendly and helped me sort out my recyclables. Will definitely use them again.
-                </p>
-              </div>
-            </div>
+                return (
+                  <div key={review.id || index}>
+                    {index > 0 && <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-4" />}
+                    <div className="flex gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-bold text-lg ${isPositive ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400' : 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400'}`}>
+                        {profile?.avatar_url ? (
+                          <img src={getThumbnailUrl(profile.avatar_url, { width: 100 })} alt={reviewerName} className="w-full h-full rounded-full object-cover" />
+                        ) : (
+                          initial
+                        )}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <h4 className="text-xs font-bold text-slate-900 dark:text-white">{reviewerName}</h4>
+                          <span className="text-[10px] text-slate-400">{dateString}</span>
+                        </div>
+                        <div className="flex items-center gap-0.5 mb-2">
+                          {[1, 2, 3, 4, 5].map(i => (
+                            <Star key={i} className={`w-3 h-3 ${i <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-200 dark:text-slate-700'}`} />
+                          ))}
+                        </div>
+                        <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed italic">
+                          {review.agent_rating_comment ? `"${review.agent_rating_comment}"` : 'No written feedback provided.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
         {/* Book Action Card */}

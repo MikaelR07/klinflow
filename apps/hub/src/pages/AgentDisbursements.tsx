@@ -62,7 +62,7 @@ const playNotificationSound = () => {
 
 export default function AgentDisbursements() {
   const navigate = useNavigate();
-  const { profile, refreshProfile } = useAuthStore();
+  const { profile, refreshProfile, currentCompanyId } = useAuthStore();
   const [requests, setRequests] = useState<any[]>([]);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [materialSpend, setMaterialSpend] = useState<{ name: string; value: number }[]>(MOCK_MATERIAL_SPEND);
@@ -73,50 +73,50 @@ export default function AgentDisbursements() {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchData();
+useEffect(() => {
+     fetchData();
 
-    if (!profile?.id) return;
+     if (!profile?.id) return;
 
-    const channel = supabase
-      .channel('fund-requests-realtime')
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'fund_requests',
-        filter: `company_id=eq.${profile.id}`
-      }, async (payload) => {
-        playNotificationSound();
-        const newReq = payload.new as any;
-        const { data: driverData } = await supabase
-          .from('profiles')
-          .select('name, avatar_url, phone')
-          .eq('id', newReq.driver_id)
-          .single();
+     const channel = supabase
+       .channel('fund-requests-realtime')
+       .on('postgres_changes', {
+         event: 'INSERT',
+         schema: 'public',
+         table: 'fund_requests',
+         filter: `company_id=eq.${currentCompanyId}` // Use currentCompanyId for multi-tenancy
+       }, async (payload) => {
+         playNotificationSound();
+         const newReq = payload.new as any;
+         const { data: driverData } = await supabase
+           .from('profiles')
+           .select('name, avatar_url, phone')
+           .eq('id', newReq.driver_id)
+           .single();
 
-        const enrichedRequest = {
-          id: newReq.id,
-          amount: newReq.amount,
-          reason: newReq.reason,
-          status: newReq.status,
-          created_at: newReq.created_at,
-          driver_name: driverData?.name || 'Fleet Driver',
-          driver_avatar: driverData?.avatar_url || null,
-          driver_phone: driverData?.phone || null,
-        };
+         const enrichedRequest = {
+           id: newReq.id,
+           amount: newReq.amount,
+           reason: newReq.reason,
+           status: newReq.status,
+           created_at: newReq.created_at,
+           driver_name: driverData?.name || 'Fleet Driver',
+           driver_avatar: driverData?.avatar_url || null,
+           driver_phone: driverData?.phone || null,
+         };
 
-        setRequests(prev => [enrichedRequest, ...prev]);
-        toast.info(`💰 New Fund Request`, {
-          description: `${driverData?.name || 'A driver'} is requesting KSh ${Number(newReq.amount).toLocaleString()}`,
-          duration: 8000,
-        });
-      })
-      .subscribe();
+         setRequests(prev => [enrichedRequest, ...prev]);
+         toast.info(`💰 New Fund Request`, {
+           description: `${driverData?.name || 'A driver'} is requesting KSh ${Number(newReq.amount).toLocaleString()}`,
+           duration: 8000,
+         });
+       })
+       .subscribe();
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [profile?.id]);
+     return () => {
+       supabase.removeChannel(channel);
+     };
+   }, [profile?.id, currentCompanyId]); // Added currentMovieId to dependencies
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -127,72 +127,72 @@ export default function AgentDisbursements() {
       });
       if (!error && reqs) setRequests(reqs);
 
-      // 2. Fetch Transactions (Sent to agents)
-      if (profile?.id) {
-        const { data: approvedRequests } = await supabase
-          .from('fund_requests')
-          .select(`
-            id,
-            amount,
-            status,
-            created_at,
-            driver:profiles!driver_id(name, klinflow_id)
-          `)
-          .eq('company_id', profile.id)
-          .eq('status', 'approved')
-          .order('updated_at', { ascending: false })
-          .limit(50);
-          
-        const mappedTx = (approvedRequests || []).map((req: any) => ({
-          id: req.id,
-          amount: req.amount,
-          status: 'completed', // Map 'approved' to 'completed' for UI styling
-          created_at: req.created_at,
-          receiver_name: req.driver?.name,
-          receiver_klinflow_id: req.driver?.klinflow_id,
-          fee: 0
-        }));
-        
-        setTransactions(mappedTx);
-
-        // Calculate total sent
-        const sentSum = mappedTx.reduce((acc: number, t: any) => acc + (Number(t.amount) || 0), 0);
-        setTotalMoneySent(sentSum);
-
-        // 3. Material spend breakdown
-        // Use mock data for now
-        /*
-        const { data: agentData } = await supabase.from('profiles').select('id').eq('company_id', profile.id);
-        const agentIds = agentData?.map(a => a.id) || [];
-
-        if (agentIds.length > 0) {
-          const { data: bookings } = await supabase
-            .from('bookings')
-            .select('waste_type, fee, total_price')
-            .in('status', ['completed'])
-            .in('agent_id', agentIds);
-
-          if (bookings) {
-            let totalSpend = 0;
-            const spendMap: Record<string, number> = {};
-
-            bookings.forEach(b => {
-              const amt = Number(b.fee) || Number(b.total_price) || 0;
-              totalSpend += amt;
-              const type = b.waste_type ? String(b.waste_type).toUpperCase() : 'OTHER';
-              spendMap[type] = (spendMap[type] || 0) + amt;
-            });
-
-            setTotalSpentOnMaterials(totalSpend);
-            setMaterialSpend(
-              Object.entries(spendMap)
-                .map(([name, value]) => ({ name, value }))
-                .sort((a, b) => b.value - a.value)
-            );
-          }
-        }
-        */
-      }
+// 2. Fetch Transactions (Sent to agents)
+       if (profile?.id) {
+         const { data: approvedRequests } = await supabase
+           .from('fund_requests')
+           .select(`
+             id,
+             amount,
+             status,
+             created_at,
+             driver:profiles!driver_id(name, klinflow_id)
+           `)
+           .eq('company_id', currentCompanyId)
+           .eq('status', 'approved')
+           .order('updated_at', { ascending: false })
+           .limit(50);
+           
+         const mappedTx = (approvedRequests || []).map((req: any) => ({
+           id: req.id,
+           amount: req.amount,
+           status: 'completed', // Map 'approved' to 'completed' for UI styling
+           created_at: req.created_at,
+           receiver_name: req.driver?.name,
+           receiver_klinflow_id: req.driver?.klinflow_id,
+           fee: 0
+         }));
+         
+         setTransactions(mappedTx);
+ 
+         // Calculate total sent
+         const sentSum = mappedTx.reduce((acc: number, t: any) => acc + (Number(t.amount) || 0), 0);
+         setTotalMoneySent(sentSum);
+ 
+// 3. Material spend breakdown
+         // Use mock data for now
+         /*
+         const { data: agentData } = await supabase.from('profiles').select('id').eq('company_id', currentCompanyId);
+         const agentIds = agentData?.map(a => a.id) || [];
+ 
+         if (agentIds.length > 0) {
+           const { data: bookings } = await supabase
+             .from('bookings')
+             .select('waste_type, fee, total_price')
+             .in('status', ['completed'])
+             .in('agent_id', agentIds);
+ 
+           if (bookings) {
+             let totalSpend = 0;
+             const spendMap: Record<string, number> = {};
+ 
+             bookings.forEach(b => {
+               const amt = Number(b.fee) || Number(b.total_price) || 0;
+               totalSpend += amt;
+               const type = b.waste_type ? String(b.waste_type).toUpperCase() : 'OTHER';
+               spendMap[type] = (spendMap[type] || 0) + amt;
+             });
+ 
+             setTotalSpentOnMaterials(totalSpend);
+             setMaterialSpend(
+               Object.entries(spendMap)
+                 .map(([name, value]) => ({ name, value }))
+                 .sort((a, b) => b.value - a.value)
+             );
+           }
+         }
+         */
+       }
     } catch (err) {
       console.error('Fetch data error:', err);
     } finally {
@@ -260,7 +260,7 @@ export default function AgentDisbursements() {
              <div className="font-medium w-6 h-6 rounded bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                <Wallet className="w-3.5 h-3.5" />
              </div>
-             <p className="font-medium text-[11px] text-slate-500 dark:text-slate-400">Available Cash</p>
+             <p className="font-bold text-[12px] text-slate-600 uppercase dark:text-slate-200">Available Cash</p>
            </div>
            <h3 className="text-sm font-bold text-[#131722] dark:text-white tracking-tight">KES {Number(profile?.walletBalance || 0).toLocaleString()}</h3>
            <p className="font-medium text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-0.5"><TrendingUp className="font-medium w-3 h-3"/> +14% vs last month</p>
@@ -271,7 +271,7 @@ export default function AgentDisbursements() {
              <div className="font-medium w-6 h-6 rounded bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
                <ShieldCheck className="w-3.5 h-3.5" />
              </div>
-             <p className="font-medium text-[11px] text-slate-500 dark:text-slate-400">Total Disbursed</p>
+             <p className="font-bold text-[12px] text-slate-600 uppercase dark:text-slate-200">Total Disbursed</p>
            </div>
            <h3 className="text-sm font-bold text-[#131722] dark:text-white tracking-tight">KES {totalMoneySent.toLocaleString()}</h3>
            <p className="font-medium text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-0.5"><TrendingUp className="font-medium w-3 h-3"/> +8% vs last month</p>
@@ -282,7 +282,7 @@ export default function AgentDisbursements() {
              <div className="font-medium w-6 h-6 rounded bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-400">
                <Clock className="w-3.5 h-3.5" />
              </div>
-             <p className="font-medium text-[11px] text-slate-500 dark:text-slate-400">Pending Approvals</p>
+             <p className="font-bold text-[12px] text-slate-600 uppercase dark:text-slate-200">Pending Approvals</p>
            </div>
            <h3 className="text-sm font-bold text-[#131722] dark:text-white tracking-tight">KES {requests.reduce((acc, r) => acc + Number(r.amount), 0).toLocaleString()}</h3>
            <p className="font-medium text-[10px] text-amber-600 dark:text-amber-400 mt-1">{requests.length} requests</p>
@@ -293,7 +293,7 @@ export default function AgentDisbursements() {
              <div className="w-6 h-6 rounded bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-purple-600 dark:text-purple-400">
                <Package className="w-3.5 h-3.5" />
              </div>
-             <p className="font-medium text-[11px] text-slate-500 dark:text-slate-400">Material Spend</p>
+             <p className="font-bold text-[12px] text-slate-600 uppercase dark:text-slate-200">Material Spend</p>
            </div>
            <h3 className="text-sm font-bold text-[#131722] dark:text-white tracking-tight">KES {totalSpentOnMaterials.toLocaleString()}</h3>
            <p className="font-medium text-[10px] text-rose-500 dark:text-rose-400 mt-1 flex items-center gap-0.5"><TrendingDown className="font-medium w-3 h-3"/> -6% vs last month</p>
@@ -304,7 +304,7 @@ export default function AgentDisbursements() {
              <div className="w-6 h-6 rounded bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                <LineChartIcon className="w-3.5 h-3.5" />
              </div>
-             <p className="font-medium text-[11px] text-slate-500 dark:text-slate-400">Gross Margin</p>
+             <p className="font-bold text-[12px] text-slate-600 uppercase dark:text-slate-200">Gross Margin</p>
            </div>
            <h3 className="text-sm font-bold text-[#131722] dark:text-white tracking-tight">28.4%</h3>
            <p className="font-medium text-[10px] text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-0.5"><TrendingUp className="font-medium w-3 h-3"/> +4.6% vs last month</p>
@@ -312,7 +312,7 @@ export default function AgentDisbursements() {
       </div>
 
       {/* ── SECOND ROW: 3 CARDS ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
          {/* Cash Flow Overview */}
          <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-lg p-5 shadow-none flex flex-col h-[400px]">
             <div className="flex items-center justify-between mb-4">
@@ -500,7 +500,7 @@ export default function AgentDisbursements() {
       </div>
 
       {/* ── THIRD ROW: 2 CARDS ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 !mt-2">
          <div className="lg:col-span-2">
             {/* Recent Transactions Ledger */}
             <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-lg p-6 shadow-none flex flex-col h-full">

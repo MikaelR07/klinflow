@@ -48,6 +48,7 @@ export default function SettingsMenu() {
   ];
 
   const quickActions = [
+    ...(isFleet ? [] : [{ label: 'Wallet', icon: DollarSign, path: '/wallet', color: 'bg-indigo-500' }]),
     { label: 'Finance', icon: Wallet, path: '/finance', color: 'bg-emerald-500' },
     { label: 'Pricing', icon: Settings, path: isCompanyOwner ? '/admin/services' : '/settings/configuration', color: 'bg-blue-500' },
     { label: 'Reviews', icon: Star, path: '/reviews', color: 'bg-amber-500' },
@@ -87,11 +88,9 @@ export default function SettingsMenu() {
         </div>
       </div>
 
-      <main className={`flex-1 ${isCompanyOwner ? 'pt-8 max-w-6xl w-full' : 'pt-[calc(env(safe-area-inset-top,1rem)+7.5rem)] max-w-lg w-full px-1.5'} pb-6 mx-auto`}>
-        <div className={isCompanyOwner ? 'grid lg:grid-cols-12 gap-8' : 'space-y-6'}>
-          <div className={isCompanyOwner ? 'lg:col-span-5 space-y-6 h-fit' : 'space-y-6 h-fit'}>
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] pb-6 max-w-lg mx-auto w-full px-1.5 space-y-6">
         {/* ── HERO BENTO CARD ── */}
-        <div className="relative overflow-hidden mt-16 rounded-[1rem] bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white  group">
+        <div className="relative overflow-hidden rounded-[1rem] bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white  group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 dark:bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32 transition-transform group-hover:scale-110 duration-700" />
 
           <div className="relative z-10 space-y-2.5">
@@ -160,9 +159,6 @@ export default function SettingsMenu() {
             </div>
           </div>
         </div>
-
-          </div>
-          <div className={isCompanyOwner ? 'lg:col-span-7 space-y-6 h-fit' : 'space-y-6 h-fit'}>
 
         {/* ── AGENT STATUS ── */}
         {!isCompanyOwner && (
@@ -267,9 +263,7 @@ export default function SettingsMenu() {
           </button>
         </div>
 
-                  </div>
-        </div>
-        <div className={`text-center space-y-1 opacity-40 ${isCompanyOwner ? 'mt-12' : 'mt-8'}`}>
+        <div className="text-center space-y-1 opacity-40 mt-8">
           <p className="text-[10px] font-bold capitalize tracking-[0.3em]">Klinflow Operating System</p>
           <p className="text-[9px] font-medium italic">Empowering the Circular Economy • V1.4.2</p>
         </div>

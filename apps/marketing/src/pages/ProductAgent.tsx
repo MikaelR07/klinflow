@@ -247,7 +247,7 @@ export default function ProductAgent() {
                 <br />
                 Earn More.
                 <br />
-                <span className="text-blue-500">Every Single Shift.</span>
+                <span className="text-blue-500">with Klinflow.</span>
               </h1>
 
               <p
@@ -318,33 +318,6 @@ export default function ProductAgent() {
                   alt="Agent Jobs View"
                   className="w-full h-full object-cover"
                 />
-              </motion.div>
-
-              {/* Floating stats card */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className={`absolute bottom-12 sm:bottom-16 left-0 sm:-left-4 z-30 px-4 py-3 rounded-2xl border backdrop-blur-xl ${isDarkMode ? "bg-surface-800/90 border-white/10" : "bg-white/90 border-slate-200 shadow-lg"}`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4 text-blue-500" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-blue-500 uppercase tracking-wider">
-                      Today's Earnings
-                    </p>
-                    <p
-                      className={`text-sm font-bold ${isDarkMode ? "text-white" : "text-slate-900"}`}
-                    >
-                      KES 4,280
-                    </p>
-                  </div>
-                </div>
               </motion.div>
             </div>
           </div>

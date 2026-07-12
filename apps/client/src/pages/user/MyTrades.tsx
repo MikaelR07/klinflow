@@ -3,7 +3,7 @@
  */
 import { useState, useEffect } from "react";
 import {
-  Clock, CheckCircle2, Truck, XCircle, Zap, HandCoins, Store, Info, ChevronDown, ChevronUp, Tag, Coins, Scale, MapPin, ArrowLeft, Trash2, Check, X, MessageSquareQuote, Package, User, ChevronRight, Search, Filter
+  Clock, CheckCircle2, Truck, XCircle, Zap, HandCoins, Store, Info, ChevronDown, ChevronUp, Tag, Coins, Scale, MapPin, ArrowLeft, Trash2, Check, X, MessageSquareQuote, Package, User, ChevronRight, Search, Filter, Home
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -282,6 +282,9 @@ export default function MyTrades() {
                         <div className="flex items-center gap-1.5 min-w-0">
                           <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate tracking-tight">{offer.material}</h3>
                           <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 flex items-center gap-0.5 shrink-0">BID</span>
+                          {(offer.listing?.pickupMode === 'dropoff' || offer.listing?.pickup_mode === 'dropoff') && (
+                            <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 flex items-center gap-0.5 shrink-0"><Home className="w-2.5 h-2.5" />DROP-OFF</span>
+                          )}
                         </div>
                         <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {offer.offeredPrice}/kg</span>
                       </div>
@@ -328,9 +331,15 @@ export default function MyTrades() {
                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Type</p>
                         <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">{selectedOffer.material}</h2>
                       </div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 dark:bg-amber-500/10 text-amber-500 border border-amber-200 dark:border-amber-500/20">
-                        <Clock className="w-3.5 h-3.5" /><span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">Pending</span>
-                      </div>
+                      {(selectedOffer.listing?.pickupMode === 'dropoff' || selectedOffer.listing?.pickup_mode === 'dropoff') ? (
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400 border border-violet-200 dark:border-violet-500/20">
+                          <Home className="w-3.5 h-3.5" /><span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">Self Drop-off</span>
+                        </div>
+                      ) : (
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 dark:bg-amber-500/10 text-amber-500 border border-amber-200 dark:border-amber-500/20">
+                          <Clock className="w-3.5 h-3.5" /><span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">Pending</span>
+                        </div>
+                      )}
                     </div>
                     <hr className="border-slate-100 dark:border-slate-800/60" />
                     <div className="grid grid-cols-2 gap-4">
@@ -457,10 +466,17 @@ export default function MyTrades() {
                             <span className={`text-sm font-black tracking-tighter shrink-0 ml-2 ${b.status === 'cancelled' ? 'text-slate-400 line-through' : 'text-emerald-600 dark:text-emerald-400'}`}>KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</span>
                           </div>
                           <div className="flex items-center justify-between mt-0.5">
-                            <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest ${status.color} shrink-0`}>
-                              <status.icon className="w-2.5 h-2.5" />
-                              <span className="mt-px">{status.label}</span>
-                            </div>
+                            {b.bookingType === 'dropoff' ? (
+                              <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 shrink-0">
+                                <Home className="w-2.5 h-2.5" />
+                                <span className="mt-px">DROP-OFF</span>
+                              </div>
+                            ) : (
+                              <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest ${status.color} shrink-0`}>
+                                <status.icon className="w-2.5 h-2.5" />
+                                <span className="mt-px">{status.label}</span>
+                              </div>
+                            )}
                             <span className="text-[11px] font-bold text-slate-400 truncate max-w-[100px]"><MapPin className="w-3 h-3 inline mr-0.5" /> {b.estate || "Pickup"}</span>
                           </div>
                           <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
@@ -515,9 +531,15 @@ export default function MyTrades() {
                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
                             <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">{waste?.label || formatMaterial(materialVal)}</h2>
                           </div>
-                          <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${status.color} border border-current/20 bg-current/10`}>
-                            <status.icon className="w-3.5 h-3.5" /><span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{status.label}</span>
-                          </div>
+                          {b.bookingType === 'dropoff' ? (
+                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-violet-50 text-violet-600 dark:bg-violet-500/10 dark:text-violet-400 border border-violet-200 dark:border-violet-500/20`}>
+                              <Home className="w-3.5 h-3.5" /><span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">Self Drop-off</span>
+                            </div>
+                          ) : (
+                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${status.color} border border-current/20 bg-current/10`}>
+                              <status.icon className="w-3.5 h-3.5" /><span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{status.label}</span>
+                            </div>
+                          )}
                         </div>
                         <hr className="border-slate-100 dark:border-slate-800/60" />
                         <div className="grid grid-cols-2 gap-4">

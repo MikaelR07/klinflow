@@ -30,7 +30,7 @@ const CLAIM_STATUS = {
 
 export default function AgentWarehouse() {
   const navigate = useNavigate();
-  const { profile, subscribeToProfileChanges } = useAuthStore();
+  const { profile, subscribeToProfileChanges, currentCompanyId } = useAuthStore() as any;
   const { assets } = useAssetStore();
   const { addNotification } = useNotificationStore();
   const [realAssets, setRealAssets] = useState([]);
@@ -47,8 +47,8 @@ export default function AgentWarehouse() {
     try {
       let query = supabase.from('assets').select('*').eq('status', 'verified');
 
-      if (profile.agentAccountType === 'company_admin') {
-        const { data: drivers } = await supabase.from('profiles').select('id').eq('company_id', profile.id);
+      if (profile.agentAccountType === 'company_admin' && currentCompanyId) {
+        const { data: drivers } = await supabase.from('profiles').select('id').eq('company_id', currentCompanyId);
         const driverIds = drivers?.map(d => d.id) || [];
         query = query.in('verifier_id', [profile.id, ...driverIds]);
       } else {
@@ -67,7 +67,7 @@ export default function AgentWarehouse() {
 
   useEffect(() => {
     fetchCargo();
-  }, [profile?.id, profile?.hubTransferPin]);
+  }, [profile?.id, profile?.hubTransferPin, currentCompanyId]);
 
   useEffect(() => {
     if (!profile?.id) return;
@@ -150,7 +150,7 @@ export default function AgentWarehouse() {
     }
 
     try {
-      const pin = Math.floor(1000 + Math.random() * 9000).toString();
+      const pin = Math.floor(100000 + Math.random() * 900000).toString();
 
       const { error: profileError } = await supabase
         .from('profiles')
@@ -161,6 +161,9 @@ export default function AgentWarehouse() {
         .eq('id', profile.id);
 
       if (profileError) throw profileError;
+
+      const { updateProfile } = useAuthStore.getState() as any;
+      await updateProfile({ hubTransferPin: pin, isEnRoute: true });
 
       addNotification(
         "Incoming Bulk Drop! 🚚",

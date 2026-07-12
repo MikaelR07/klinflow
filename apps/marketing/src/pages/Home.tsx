@@ -366,7 +366,7 @@ export default function Home() {
                 className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-8 ${isDarkMode ? "bg-primary/10 border-primary/20" : "bg-emerald-50 border-primary/20"}`}
               >
                 <span className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-primary-dark dark:text-primary">
-                  The Infrastructure for Circular Assets
+                  The ecosystem for Circular Assets
                 </span>
               </motion.div>
 
@@ -376,9 +376,9 @@ export default function Home() {
                 transition={{ delay: 0.1 }}
                 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter mb-8 leading-[1.1] ${isDarkMode ? "text-white" : "text-slate-900"}`}
               >
-                Technical infrastructure defining{" "}
+                Technical Infrastructure for{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-dark">
-                  the next generation of circular recovery.
+                  Modern Recycling.
                 </span>
               </motion.h1>
 
@@ -388,7 +388,7 @@ export default function Home() {
                 transition={{ delay: 0.2 }}
                 className={`text-sm sm:text-base md:text-base font-medium leading-relaxed mb-10 ${isDarkMode ? "text-slate-200" : "text-slate-800"}`}
               >
-                Klinflow aims to redefine how recyclable materials are collected, traded, and monetized. Through integrated mobile applications, smart logistics tools, marketplace technology, and community-driven collection networks, we empower residents, sellers, agents, and recycling businesses to participate in a transparent and efficient recycling ecosystem. By transforming waste streams into economic opportunities, Klinflow unlocks new value chains while supporting environmental impact, job creation, and sustainable urban development.
+                Klinflow is a unified platform redefining how recyclable materials are collected, traded, and monetized. Through integrated mobile applications, intelligent logistics ,Digital marketplace, and connected collection networks, we empower residents, sellers, agents, Businesses and recycling facilities to participate in a transparent,efficient and data-driven circular economy. By transforming recyclable materials into economic opportunities, Klinflow creates new value chains while driving environmental sustainability, job creation, and sustainable urban development.
               </motion.p>
 
               <motion.div
@@ -407,13 +407,13 @@ export default function Home() {
             </div>
 
             {/* Right Column: 3D Perspective Hero Image Carousel */}
-            <div className="lg:col-span-7 relative w-full mt-16 lg:mt-0 z-20 lg:ml-12 lg:translate-x-10">
+            <div className="lg:col-span-7 relative w-full mt-12 lg:mt-0 z-20 lg:ml-16">
               <div
                 style={{ perspective: "1200px" }}
                 className="w-full"
               >
                 <div
-                  className={`rounded-[1rem] border relative flex items-center justify-center overflow-hidden shadow-slate-600 dark:shadow-none shadow-2xl scale-105 lg:scale-[1.12] origin-center w-full aspect-[4/3] sm:aspect-video lg:aspect-[16/11] ${isDarkMode ? "bg-white/5 border-white/10 shadow-black/40" : "bg-slate-50 border-slate-200 shadow-slate-300/50"}`}
+                  className={`rounded-[1rem] border relative flex items-center justify-center overflow-hidden shadow-slate-600 dark:shadow-none shadow-2xl scale-105 lg:scale-[1.15] origin-center lg:origin-left w-full aspect-[4/3] sm:aspect-video lg:aspect-[16/11] ${isDarkMode ? "bg-white/5 border-white/10 shadow-black/40" : "bg-slate-50 border-slate-200 shadow-slate-300/50"}`}
                   style={{
                     transform: "rotateY(-12deg) rotateX(4deg)",
                     transformOrigin: "top center",
@@ -460,7 +460,7 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <h2 className="text-sm font-black uppercase tracking-widest text-primary mb-2 font-mono">
-                Our Goal
+                Strategic Vision
               </h2>
               <h3
                 className={`text-2xl sm:text-3xl md:text-4xl font-black mb-8 tracking-tighter ${isDarkMode ? "text-white" : "text-slate-900"}`}
@@ -473,15 +473,7 @@ export default function Home() {
               <p
                 className={`text-sm sm:text-base md:text-lg font-medium leading-relaxed mb-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}
               >
-                Klinflow is more than a recycling platform—it is the
-                infrastructure powering a modern circular economy. By connecting
-                households, waste collectors, recyclers, and industrial buyers
-                through a single digital ecosystem, Klinflow transforms waste
-                from an overlooked liability into a traceable, monetizable
-                resource. Through real-time tracking, intelligent logistics,
-                automated incentives, and transparent marketplace transactions,
-                we are building the systems that make sustainable resource
-                recovery scalable, profitable, and accessible to everyone.
+               Our Platform exists to modernize the recycling industry through artificial intelligence and intelligent digital infrastructure. Our AI-powered ecosystem unifies material collection, recovery, logistics, processing, and marketplace trading into a single connected ecosystem. By seamlessly connecting every participant in the value chain, Klinflow transforms recyclable materials from an overlooked liability into a traceable, valuable, and monetizable resource accelerating the transition to a smarter, more transparent, and sustainable circular economy.
               </p>
 
               <div className="grid grid-cols-3 gap-2 sm:gap-6">
@@ -491,11 +483,11 @@ export default function Home() {
                     val: "100%",
                     sub: "Source to Recycler",
                   },
-                  { label: "Rewards", val: "Instant", sub: "Digital Payouts" },
+                  { label: "Payouts", val: "Instant", sub: "Digital Wallet & Cash" },
                   {
-                    label: "AI Operations",
+                    label: "Marketplace",
                     val: "24/7",
-                    sub: "Predictive Analytics",
+                    sub: "Sell at your price",
                   },
                 ].map((stat, i) => (
                   <div
@@ -520,7 +512,7 @@ export default function Home() {
 
             <div className="lg:col-span-7 relative w-full mt-12 lg:mt-0 z-20 lg:ml-8">
               <div
-                className={`rounded-[2rem] border relative flex items-center justify-center overflow-hidden shadow-2xl scale-105 lg:scale-[1.15] origin-center lg:origin-left w-full aspect-[4/3] sm:aspect-video lg:aspect-[16/11] ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`}
+                className={`rounded-[1rem] border relative flex items-center justify-center overflow-hidden shadow-2xl scale-105 lg:scale-[1.15] origin-center lg:origin-left w-full aspect-[4/3] sm:aspect-video lg:aspect-[16/11] ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`}
               >
                 <img
                   src="/landing-page/asset.webp"
@@ -570,9 +562,7 @@ export default function Home() {
                 isDarkMode ? "text-slate-400" : "text-slate-600"
               }`}
             >
-              Klinflow powers the entire circular economy by connecting
-              communities, collectors, transporters, recyclers, enterprises and
-              buyers through one intelligent platform.
+             Every participant in the recycling value chain operates more effectively when connected.Klinflow synchronizes the movement of materials, logistics, inventory, payments, and marketplace transactions across the entire value chain, enabling every stakeholder to operate within one connected, transparent, and intelligent ecosystem.
             </p>
           </header>
 
@@ -801,20 +791,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* ── SHOWCASE BANNER ────────────────────────────────────────────── */}
-      <section
-        className={`hidden md:flex w-full relative z-10 px-4 md:px-6 mt-8 md:mt-16 mb-16 md:mb-20 justify-center`}
-      >
-        <div
-          className={`max-w-7xl w-full rounded-[2rem] border overflow-hidden relative shadow-2xl ${isDarkMode ? "bg-white/5 border-white/10" : "bg-slate-50 border-slate-200"}`}
-        >
-          <img
-            src="/landing-page/banner3.webp"
-            alt="Klinflow Platform Showcase"
-            className="w-full h-auto object-cover"
-          />
-        </div>
-      </section>
+      
       {/* CORE PRODUCT SUITE ──────────────────────────────────── */}
       <section
         className={`py-16 md:py-32 relative z-10 ${isDarkMode ? "bg-surface-900" : "bg-slate-50/50"}`}
@@ -953,7 +930,7 @@ export default function Home() {
               ].map((f, i) => (
                 <div
                   key={i}
-                  className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border flex flex-col lg:flex-row gap-3 lg:gap-6 items-start ${isDarkMode ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-100"}`}
+                  className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border flex flex-col lg:flex-row gap-3 lg:gap-6 items-start ${isDarkMode ? "bg-slate-900 border-slate-600" : "bg-slate-200 border-slate-100"}`}
                 >
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
                     <f.icon className="w-4 h-4 sm:w-5 sm:h-5" />

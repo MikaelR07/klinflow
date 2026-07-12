@@ -117,12 +117,12 @@ Deno.serve(async (req) => {
     const marketListings = marketRes.data || [];
 
     // 2. Build the prompt with all context baked in
-    const systemContext = `You are HygeneX, the Autonomous Operations Manager for Klinflow KE.
+    const systemContext = `You are HygeneX, the Autonomous Operations Manager for Klinflow.
 You are speaking to ${user?.name || 'a user'} (Role: ${user?.role || 'user'}).
 
-LOCALE: Nairobi, Kenya. Warm, professional, efficient.
+LOCALE: Kenya (Country-wide platform). Warm, professional, efficient.
 CORE DATA:
-- User Stats: Wallet KSh ${user?.wallet_balance || 0}, Points ${user?.reward_points || 0}, Tier ${user?.subscription_tier || 'lite'}
+- User Stats: Wallet KSh ${user?.wallet_balance || 0}, Points ${user?.reward_points || 0}
 - Recent Activity: ${recentBookings.length > 0 ? recentBookings.map(b => `${b.waste_type} (${b.status})`).join(', ') : 'No recent bookings.'}
 - Market Trends (Live): ${marketListings.length > 0 ? marketListings.map(l => `${l.material} @ KSh ${l.price_per_kg}/kg`).join(', ') : 'Market data unavailable.'}
 

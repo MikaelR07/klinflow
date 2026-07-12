@@ -7,35 +7,65 @@ import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 
 import HubLanding from './pages/HubLanding';
 import HubLayout from './layouts/HubLayout';
+import { DashboardRedirect } from './components/DashboardRedirect';
 
 // Existing Pages
-import ExecutiveCommandCenter from './pages/ExecutiveCommandCenter';
-import IntakeChannelSelector from './pages/IntakeChannelSelector';
+import ExecutiveDashboard from './pages/dashboards/ExecutiveDashboard';
+import OperationsDashboard from './pages/dashboards/OperationsDashboard';
+import FleetDashboard from './pages/dashboards/FleetDashboard';
+import SalesDashboard from './pages/dashboards/SalesDashboard';
+import FinanceDashboard from './pages/dashboards/FinanceDashboard';
 import IntakeReceiving from './pages/IntakeReceiving';
 import IntakeVerification from './pages/IntakeVerification';
 import IndividualAgentIntake from './pages/IndividualAgentIntake';
 import WalkInIntake from './pages/WalkInIntake';
-import QueueManagement from './pages/QueueManagement';
+import IntakeManagement from './pages/IntakeManagement';
 import DisputeControl from './pages/DisputeControl';
 import InventoryCommand from './pages/InventoryCommand';
-import ProcessingAnalytics from './pages/ProcessingAnalytics';
-import ContractManagement from './pages/ContractManagement';
-import PricingEngine from './pages/PricingEngine';
-import SupplierCRM from './pages/SupplierCRM';
-import SupplierIntelligence from './pages/SupplierIntelligence';
+import BatchTracking from './pages/BatchTracking';
+import TransferOrders from './pages/TransferOrders';
+import MaterialsReceived from './pages/MaterialsReceived';
 import AutomatedPayouts from './pages/AutomatedPayouts';
 import ESGImpact from './pages/ESGImpact';
 import NationalIntelligence from './pages/NationalIntelligence';
 import AIOperations from './pages/AIOperations';
+import ProfileSettings from './pages/ProfileSettings';
+import AccountSecurity from './pages/settings/AccountSecurity';
+import Feedback from './pages/settings/Feedback';
+import Support from './pages/settings/Support';
+import NotificationPreferences from './pages/settings/NotificationPreferences';
+import TimezoneRegions from './pages/settings/TimezoneRegions';
+import Notifications from './pages/Notifications';
+import HubSettings from './pages/HubSettings';
 import Settings from './pages/Settings';
-import WalletTreasury from './pages/WalletTreasury';
-import Traceability from './pages/Traceability';
+import HubAnalyticsDashboard from './pages/dashboards/HubAnalyticsDashboard';
+import CustomReports from './pages/analytics/CustomReports';
 import FleetOverview from './pages/FleetOverview';
+import FleetMaintenance from './pages/FleetMaintenance';
+import RouteOptimizer from './pages/RouteOptimizer';
+import FleetOnboarding from './pages/FleetOnboarding';
+import FleetAgents from './pages/FleetAgents';
+import FleetVehicles from './pages/FleetVehicles';
 import DispatchManagement from './pages/DispatchManagement';
+import DispatchQueue from './pages/DispatchQueue';
+import AgentPickups from './pages/AgentPickups';
+import SalesDelivery from './pages/SalesDelivery';
 import KlinMarket from './pages/KlinMarket';
+import AgentComplaints from './pages/AgentComplaints';
 import RFQs from './pages/RFQs';
+import RFQDetails from './pages/RFQDetails';
+import Auctions from './pages/Auctions';
+import SalesPipeline from './pages/SalesPipeline';
+import BuyerNetwork from './pages/BuyerNetwork';
+import SellerNetwork from './pages/SellerNetwork';
+import SalesOrders from './pages/SalesOrders';
+import InventoryListings from './pages/InventoryListings';
+import SalesContracts from './pages/SalesContracts';
 import PriceDashboard from './pages/PriceDashboard';
 import AgentDisbursements from './pages/AgentDisbursements';
+import TeamManagement from './pages/admin/Users';
+
+// Orphan / Sample Pages removed
 
 
 // Placeholder Pages
@@ -53,19 +83,19 @@ const PlaceholderPage = ({ title }: { title: string }) => (
 
 export default function App() {
   const { isDarkMode } = useThemeStore();
-  const { profile, isAuthenticated, isInitializing, initializeAuth, checkAppRole } = useAuthStore();
+  const { profile, isAuthenticated, isInitializing, initializeAuth, currentCompanyId } = useAuthStore();
   const { 
     subscribeToRealtime, 
     fetchNotifications, 
     cleanup: cleanupNotifs 
   } = useNotificationStore();
 
-  const isAuthorized = isAuthenticated && (profile?.role === 'admin' || profile?.agentAccountType === 'company_admin');
+  // User is authorized if they have a Hub company membership
+  const isAuthorized = isAuthenticated && !!currentCompanyId;
 
   useEffect(() => {
-    checkAppRole('admin');
     initializeAuth();
-  }, [checkAppRole, initializeAuth]);
+  }, [initializeAuth]);
 
   useEffect(() => {
     if (isAuthenticated && profile?.id) {
@@ -84,105 +114,134 @@ export default function App() {
   }, [isDarkMode]);
 
   if (isInitializing) {
-    return <div className="fixed inset-0 z-[9999] bg-slate-900 flex items-center justify-center text-white font-medium">Loading KLINFLOW MOS...</div>;
+    return (
+      <div className="fixed inset-0 z-[9999] bg-slate-900 flex flex-col items-center justify-center">
+        <img src="/app-logo.webp" alt="Klinflow" className="w-20 h-20 mb-6 opacity-80 animate-pulse" />
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce [animation-delay:0ms]" />
+          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce [animation-delay:150ms]" />
+          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce [animation-delay:300ms]" />
+        </div>
+        <p className="mt-4 text-xs font-semibold text-slate-400 uppercase tracking-widest">Securing Session</p>
+      </div>
+    );
   }
 
   if (!isAuthorized) {
     return <HubLanding />;
   }
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<HubLayout />}>
-          {/* Dashboard */}
-          <Route path="/" element={<ExecutiveCommandCenter />} />
+return (
+     <BrowserRouter>
+       <Routes>
+<Route element={<HubLayout />}>
+           {/* Dashboard redirect based on user role */}
+           <Route path="/" element={<DashboardRedirect />} />
+           
+           {/* Executive Dashboard (accessible to owners and executive_viewer) */}
+           <Route path="/dashboard/executive" element={<ExecutiveDashboard />} />
+           
+           {/* Operations Dashboard */}
+           <Route path="/dashboard/operations" element={<OperationsDashboard />} />
+           
+           {/* Fleet Dashboard */}
+           <Route path="/dashboard/fleet" element={<FleetDashboard />} />
+           
+           {/* Sales Dashboard */}
+           <Route path="/dashboard/sales" element={<SalesDashboard />} />
+           
+           {/* Finance Dashboard */}
+           <Route path="/dashboard/finance" element={<FinanceDashboard />} />
+           
+           {/* Operations */}
+           <Route path="/operations/intake" element={<IntakeManagement />} />
+           <Route path="/operations/received" element={<MaterialsReceived />} />
+           <Route path="/operations/intake/fleet" element={<IntakeReceiving />} />
+           <Route path="/operations/intake/verify" element={<IntakeVerification />} />
+           <Route path="/operations/intake/individual" element={<IndividualAgentIntake />} />
+           <Route path="/operations/intake/walkin" element={<WalkInIntake />} />
+           <Route path="/operations/dispatch" element={<DispatchQueue />} />
+           <Route path="/operations/disputes" element={<DisputeControl />} />
+           <Route path="/operations/inventory" element={<InventoryCommand />} />
+           <Route path="/operations/batch" element={<BatchTracking />} />
+           <Route path="/operations/transfers" element={<TransferOrders />} />
+           <Route path="/operations/reports" element={<PlaceholderPage title="Operations Reports" />} />
+           
+           {/* Fleet Management */}
+           <Route path="/fleet/overview" element={<FleetOverview />} />
+           <Route path="/fleet/onboarding" element={<FleetOnboarding />} />
+           <Route path="/fleet/vehicles" element={<FleetVehicles />} />
+           <Route path="/fleet/dispatch" element={<DispatchManagement />} />
+           <Route path="/fleet/pickups" element={<AgentPickups />} />
+           <Route path="/fleet/deliveries" element={<SalesDelivery />} />
+           <Route path="/fleet/agents" element={<FleetAgents />} />
+           <Route path="/fleet/routing" element={<RouteOptimizer />} />
+           <Route path="/fleet/maintenance" element={<FleetMaintenance />} />
+           <Route path="/fleet/complaints" element={<AgentComplaints />} />
+           <Route path="/fleet/reports" element={<PlaceholderPage title="Fleet Reports" />} />
+           
+           {/* Marketplace */}
+           <Route path="/marketplace/market" element={<KlinMarket />} />
+           <Route path="/marketplace/listings" element={<InventoryListings />} />
+           <Route path="/marketplace/orders" element={<SalesOrders />} />
+           <Route path="/marketplace/contracts" element={<SalesContracts />} />
+           <Route path="/marketplace/rfqs" element={<RFQs />} />
+           <Route path="/marketplace/rfqs/:id" element={<RFQDetails />} />
+           <Route path="/marketplace/auctions" element={<Auctions />} />
+           <Route path="/marketplace/buyers" element={<BuyerNetwork />} />
+           <Route path="/marketplace/sellers" element={<SellerNetwork />} />
+           <Route path="/marketplace/pipeline" element={<SalesPipeline />} />
+           <Route path="/marketplace/reports" element={<PlaceholderPage title="Marketplace Reports" />} />
+           
+           {/* Market Intelligence */}
+           <Route path="/intelligence/pricing" element={<PriceDashboard />} />
+           
 
-          {/* Operations */}
-          <Route path="/operations/intake" element={<IntakeChannelSelector />} />
-          <Route path="/operations/intake/fleet" element={<IntakeReceiving />} />
-          <Route path="/operations/intake/verify" element={<IntakeVerification />} />
-          <Route path="/operations/intake/individual" element={<IndividualAgentIntake />} />
-          <Route path="/operations/intake/walkin" element={<WalkInIntake />} />
-          <Route path="/operations/queue" element={<QueueManagement />} />
-          <Route path="/operations/dispatch" element={<DispatchManagement />} />
-          <Route path="/operations/disputes" element={<DisputeControl />} />
-          <Route path="/operations/inventory" element={<InventoryCommand />} />
-          <Route path="/operations/quality" element={<PlaceholderPage title="Quality Inspection" />} />
-          <Route path="/operations/sorting" element={<PlaceholderPage title="Sorting Workspace" />} />
-          <Route path="/operations/processing" element={<ProcessingAnalytics />} />
-          <Route path="/operations/transfers" element={<PlaceholderPage title="Transfer Orders" />} />
-          <Route path="/operations/batch" element={<PlaceholderPage title="Batch Tracking" />} />
+           
+           {/* Finance */}
+           <Route path="/finance/operations" element={<PlaceholderPage title="Financial Operations" />} />
+           <Route path="/finance/revenue" element={<PlaceholderPage title="Revenue Analytics" />} />
+           <Route path="/finance/disbursements" element={<AgentDisbursements />} />
+           <Route path="/finance/seller-payouts" element={<PlaceholderPage title="Seller Payouts" />} />
+           <Route path="/finance/payouts" element={<AutomatedPayouts />} />
+           <Route path="/finance/agent-wallets" element={<PlaceholderPage title="Agent Wallets" />} />
+           <Route path="/finance/payment-approvals" element={<PlaceholderPage title="Payment Approvals" />} />
+           <Route path="/finance/receivables" element={<PlaceholderPage title="Receivables" />} />
+           <Route path="/finance/payables" element={<PlaceholderPage title="Payables" />} />
+           <Route path="/finance/expense-management" element={<PlaceholderPage title="Expense Management" />} />
+           <Route path="/finance/purchase-orders" element={<PlaceholderPage title="Purchase Orders" />} />
+           <Route path="/finance/procurement" element={<PlaceholderPage title="Procurement Spend" />} />
+           <Route path="/finance/invoices" element={<PlaceholderPage title="Invoices" />} />
+           <Route path="/finance/reports" element={<PlaceholderPage title="Reports" />} />
+           <Route path="/finance/risk-insights" element={<PlaceholderPage title="Risk & AI Insights" />} />
+           
+           {/* ESG & Compliance */}
+           <Route path="/esg/dashboard" element={<PlaceholderPage title="Sustainability Dashboard" />} />
+           <Route path="/esg/carbon" element={<ESGImpact />} />
+           <Route path="/esg/impact" element={<PlaceholderPage title="Environmental Impact" />} />
+           <Route path="/esg/reporting" element={<PlaceholderPage title="ESG Reporting" />} />
+           <Route path="/esg/certifications" element={<PlaceholderPage title="Certifications" />} />
+           <Route path="/esg/compliance" element={<PlaceholderPage title="Regulatory Compliance" />} />
+           
+           {/* Administration */}
+           <Route path="/admin/users" element={<TeamManagement />} />
 
-          {/* Fleet Management */}
-          <Route path="/fleet/overview" element={<FleetOverview />} />
-          <Route path="/fleet/onboarding" element={<PlaceholderPage title="Onboarding Management" />} />
-          <Route path="/fleet/dispatch" element={<PlaceholderPage title="Dispatch Management" />} />
-          <Route path="/fleet/vehicles" element={<PlaceholderPage title="Vehicles" />} />
-          <Route path="/fleet/agents" element={<PlaceholderPage title="Agents" />} />
-          <Route path="/fleet/routing" element={<PlaceholderPage title="Route Optimizer" />} />
-          <Route path="/fleet/fuel" element={<PlaceholderPage title="Fuel Analytics" />} />
-          <Route path="/fleet/maintenance" element={<PlaceholderPage title="Maintenance" />} />
-          <Route path="/fleet/tracking" element={<PlaceholderPage title="Live Tracking" />} />
+           {/* Settings */}
+           <Route path="/settings/profile" element={<ProfileSettings />} />
+           <Route path="/settings/security" element={<AccountSecurity />} />
+           <Route path="/settings/feedback" element={<Feedback />} />
+           <Route path="/settings/support" element={<Support />} />
+           <Route path="/settings/notification-preferences" element={<NotificationPreferences />} />
+           <Route path="/settings/regions" element={<TimezoneRegions />} />
+           <Route path="/settings/notifications" element={<Notifications />} />
+           <Route path="/settings/hub" element={<HubSettings />} />
+           <Route path="/settings" element={<Settings />} />
 
-          {/* Marketplace */}
-          <Route path="/marketplace/market" element={<KlinMarket />} />
-          <Route path="/marketplace/rfqs" element={<RFQs />} />
-          <Route path="/marketplace/contracts" element={<ContractManagement />} />
-          <Route path="/marketplace/auctions" element={<PlaceholderPage title="Auctions" />} />
-          <Route path="/marketplace/buyers" element={<PlaceholderPage title="Buyers" />} />
-          <Route path="/marketplace/sellers" element={<PlaceholderPage title="Sellers" />} />
-          <Route path="/marketplace/analytics" element={<PlaceholderPage title="Market Analytics" />} />
-
-          {/* Market Intelligence */}
-          <Route path="/intelligence/pricing" element={<PriceDashboard />} />
-          <Route path="/intelligence/trends" element={<PlaceholderPage title="Price Trends" />} />
-          <Route path="/intelligence/commodity" element={<PlaceholderPage title="Commodity Intelligence" />} />
-          <Route path="/intelligence/supply" element={<PlaceholderPage title="Supply & Demand Analysis" />} />
-          <Route path="/intelligence/forecasting" element={<PlaceholderPage title="Forecasting" />} />
-
-          {/* Suppliers */}
-          <Route path="/suppliers/directory" element={<SupplierCRM />} />
-          <Route path="/suppliers/performance" element={<SupplierIntelligence />} />
-          <Route path="/suppliers/onboarding" element={<PlaceholderPage title="Supplier Onboarding" />} />
-          <Route path="/suppliers/risk" element={<PlaceholderPage title="Supplier Risk" />} />
-          <Route path="/suppliers/compliance" element={<PlaceholderPage title="Supplier Compliance" />} />
-
-          {/* Finance */}
-          <Route path="/finance/revenue" element={<PlaceholderPage title="Revenue Analytics" />} />
-          <Route path="/finance/disbursements" element={<AgentDisbursements />} />
-          <Route path="/finance/payouts" element={<AutomatedPayouts />} />
-          <Route path="/finance/invoices" element={<PlaceholderPage title="Invoices" />} />
-          <Route path="/finance/procurement" element={<PlaceholderPage title="Procurement Spend" />} />
-          <Route path="/finance/profitability" element={<PlaceholderPage title="Profitability" />} />
-          <Route path="/finance/reports" element={<PlaceholderPage title="Financial Reports" />} />
-
-          {/* ESG & Compliance */}
-          <Route path="/esg/dashboard" element={<PlaceholderPage title="Sustainability Dashboard" />} />
-          <Route path="/esg/carbon" element={<ESGImpact />} />
-          <Route path="/esg/impact" element={<PlaceholderPage title="Environmental Impact" />} />
-          <Route path="/esg/reporting" element={<PlaceholderPage title="ESG Reporting" />} />
-          <Route path="/esg/certifications" element={<PlaceholderPage title="Certifications" />} />
-          <Route path="/esg/compliance" element={<PlaceholderPage title="Regulatory Compliance" />} />
-
-          {/* Analytics */}
-          <Route path="/analytics/executive" element={<NationalIntelligence />} />
-          <Route path="/analytics/material" element={<PlaceholderPage title="Material Analytics" />} />
-          <Route path="/analytics/collection" element={<PlaceholderPage title="Collection Analytics" />} />
-          <Route path="/analytics/fleet" element={<PlaceholderPage title="Fleet Analytics" />} />
-          <Route path="/analytics/procurement" element={<PlaceholderPage title="Procurement Analytics" />} />
-          <Route path="/analytics/predictive" element={<AIOperations />} />
-
-          {/* Administration */}
-          <Route path="/admin/users" element={<PlaceholderPage title="Users" />} />
-          <Route path="/admin/roles" element={<PlaceholderPage title="Roles" />} />
-          <Route path="/admin/permissions" element={<PlaceholderPage title="Permissions" />} />
-          <Route path="/admin/integrations" element={<PlaceholderPage title="Integrations" />} />
-          <Route path="/settings" element={<Settings />} />
-
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
+           {/* SAMPLE - Orphan Pages for Review - Removed */}
+           
+           {/* Fallback */}
+           <Route path="*" element={<Navigate to="/" replace />} />
+         </Route>
       </Routes>
     </BrowserRouter>
   );

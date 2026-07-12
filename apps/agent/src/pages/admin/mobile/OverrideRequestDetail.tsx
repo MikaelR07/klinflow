@@ -165,7 +165,6 @@ export default function OverrideRequestDetail() {
                 </div>
                 <span className="text-sm font-bold text-slate-800 dark:text-white">{req.item || 'PET'}</span>
               </div>
-              
               <div className="flex items-center justify-between px-4 py-3.5">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   ArrowLeft, HelpCircle, Leaf, Users, TrendingUp, ShieldCheck,
-  CheckCircle2, ChevronRight, Trophy, Gift, Award, Handshake, Target, DollarSign, X
+  CheckCircle2, ChevronRight, Trophy, Gift, Award, Handshake, Target, DollarSign, X, Search
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { OptimizedImage } from '@klinflow/ui';
@@ -84,21 +84,21 @@ export default function CommunityCollective() {
           <Leaf className="w-4 h-4 text-[#329845] scale-x-[-1]" />
         </div>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-4">
+        <div className="space-y-3">
+          <div className="grid grid-cols-1 gap-1">
             {/* SWARMS CARD */}
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
               <div className="flex">
                 {/* Left side: Illustration */}
-                <div className="w-1/2 shrink-0 relative bg-emerald-50/50 dark:bg-slate-800/50">
+                <div className="w-[40%] shrink-0 relative bg-emerald-50/50 dark:bg-slate-800/50">
                   <img
                     src="/vectors/goals.webp"
                     alt="Swarms"
-                    className="absolute inset-0 w-full h-full object-fit "
+                    className="absolute inset-0 w-full h-full object-cover object-center"
                   />
                 </div>
                 {/* Right side: Info + Steps */}
-                <div className="w-1/2 flex flex-col justify-center gap-3 p-4 pl-5">
+                <div className="w-[60%] flex flex-col justify-center items-center gap-2 p-3 pl-3">
                   <div>
                     <div className="flex items-center gap-1 mb-1.5">
                       <div className="w-8 h-8 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center shrink-0">
@@ -112,7 +112,7 @@ export default function CommunityCollective() {
                   </div>
                   
                   {/* 3 Steps */}
-                  <div className="flex flex-col gap-1.5 pl-0.5">
+                  <div className="flex flex-col gap-1 pl-0.5">
                     <div className="flex items-center gap-2">
                       <Users className="w-3 h-3 text-[#329845] dark:text-green-400 shrink-0" />
                       <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">1. Join others</span>
@@ -129,7 +129,7 @@ export default function CommunityCollective() {
                   
                   <Link
                     to="/swarms"
-                    className="w-full py-2 mt-2 bg-[#329845] hover:bg-[#287d37] text-white rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors relative shadow-sm"
+                    className="w-full py-1.5 mt-1 bg-[#329845] hover:bg-[#287d37] text-white rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors relative shadow-sm"
                   >
                     <span>Explore Swarms</span>
                     <ChevronRight className="w-3.5 h-3.5 absolute right-2" />
@@ -143,21 +143,21 @@ export default function CommunityCollective() {
               <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
                 <div className="flex">
                   {/* Left side: Illustration */}
-                  <div className="w-1/2 shrink-0 relative bg-emerald-50/50 dark:bg-slate-800/50">
+                  <div className="w-[40%] shrink-0 relative bg-emerald-50/50 dark:bg-slate-800/50">
                     <img
                       src="/vectors/klin-challenges.webp"
                       alt="Group Contracts"
-                      className="absolute inset-0 w-full h-full object-fit"
+                      className="absolute inset-0 w-full h-full object-cover object-center"
                     />
                   </div>
                   {/* Right side: Info + Steps */}
-                  <div className="w-1/2 flex flex-col justify-center gap-3 p-4 pl-5">
+                  <div className="w-[60%] flex flex-col justify-center items-center gap-2 p-3 pl-3">
                     <div>
                       <div className="flex items-center gap-1 mb-1.5">
                         <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0">
                           <Handshake className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Group Contracts</h3>
+                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Group RFQs</h3>
                       </div>
                       <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-1">
                         Pool resources.<br />Fulfill large volume orders.
@@ -165,7 +165,7 @@ export default function CommunityCollective() {
                     </div>
                     
                     {/* 3 Steps */}
-                    <div className="flex flex-col gap-1.5 pl-0.5">
+                    <div className="flex flex-col gap-1 pl-0.5">
                       <div className="flex items-center gap-2">
                         <Users className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
                         <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">1. Take a contract</span>
@@ -182,9 +182,63 @@ export default function CommunityCollective() {
 
                     <Link
                       to="/group-rfqs"
-                      className="w-full py-2 mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors relative shadow-sm"
+                      className="w-full py-1.5 mt-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors relative shadow-sm"
                     >
                       <span>View Contracts</span>
+                      <ChevronRight className="w-3.5 h-3.5 absolute right-2" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* INDIVIDUAL RFQS CARD (ONLY FOR SELLERS) */}
+            {profile?.role === 'seller' && (
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
+                <div className="flex">
+                  {/* Left side: Illustration */}
+                  <div className="w-[40%] shrink-0 relative bg-emerald-50/50 dark:bg-slate-800/50">
+                    <img
+                      src="/vectors/individual-rfq.webp"
+                      alt="Individual RFQs"
+                      className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                  </div>
+                  {/* Right side: Info + Steps */}
+                  <div className="w-[60%] flex flex-col justify-center items-center gap-2 p-3 pl-3">
+                    <div>
+                      <div className="flex items-center gap-1 mb-1.5">
+                        <div className="w-8 h-8 rounded-full bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center shrink-0">
+                          <Target className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                        </div>
+                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Individual RFQs</h3>
+                      </div>
+                      <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-1">
+                        Go solo.<br />Fulfill direct buyer requests.
+                      </p>
+                    </div>
+                    
+                    {/* 3 Steps */}
+                    <div className="flex flex-col gap-1 pl-0.5 w-full">
+                      <div className="flex items-center gap-2">
+                        <Search className="w-3 h-3 text-rose-600 dark:text-rose-400 shrink-0" />
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">1. Find a request</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Handshake className="w-3 h-3 text-rose-600 dark:text-rose-400 shrink-0" />
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">2. Submit your bid</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-3 h-3 text-rose-600 dark:text-rose-400 shrink-0" />
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">3. Win the contract</span>
+                      </div>
+                    </div>
+
+                    <Link
+                      to="/individual-rfqs"
+                      className="w-full py-1.5 mt-1 bg-purple-600 text-white rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors relative shadow-sm"
+                    >
+                      <span>View Open RFQs</span>
                       <ChevronRight className="w-3.5 h-3.5 absolute right-2" />
                     </Link>
                   </div>

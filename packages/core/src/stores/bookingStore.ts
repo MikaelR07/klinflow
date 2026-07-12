@@ -77,7 +77,8 @@ export const useBookingStore = create<BookingStore>()(
     const existing = get().bookingSubscription;
     if (existing) supabase.removeChannel(existing);
 
-    const channel = supabase.channel(`bookings-${userId}`)
+    const channelName = `bookings-${userId}-${Date.now()}`;
+    const channel = supabase.channel(channelName)
       .on('postgres_changes', { 
         event: '*', 
         schema: 'public', 
@@ -103,8 +104,12 @@ export const useBookingStore = create<BookingStore>()(
           const validBooking = safeParseOrNull(BookingSchema, normalized, 'Realtime Booking Update');
           
           if (validBooking) {
+            // Find existing booking in local state to check its previous status
+            const existingBooking = get().bookings.find(b => b.id === validBooking.id);
+            const justCompleted = validBooking.status === 'completed' && (!existingBooking || existingBooking.status !== 'completed');
+            
             // Trigger Rating Modal if status just changed to completed
-            if (validBooking.status === 'completed' && oldNormalized.status !== 'completed') {
+            if (justCompleted && !validBooking.agentRating) {
               set({ activeVerificationBooking: validBooking });
             }
 
@@ -127,12 +132,13 @@ export const useBookingStore = create<BookingStore>()(
     set({ bookingSubscription: null });
   },
 
-  fetchNearbyAgents: async () => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('role', 'agent')
-      .eq('is_online', true);
+  fetchNearbyAgents: async (lat: number, lng: number) => {
+    const { data, error } = await supabase.rpc('get_nearby_agents_dynamic', {
+      p_lat: lat,
+      p_lng: lng,
+      p_max_results: 15,
+      p_max_radius_km: 50
+    });
 
     if (!error && data) {
       const rawAgents = (data as any[]).map(a => normalizeKeys(a));
@@ -146,16 +152,20 @@ export const useBookingStore = create<BookingStore>()(
         agentAccountType: p.agentAccountType,
         companyName: p.companyName,
         companyId: p.companyId,
+        isHubActive: p.isHubActive,
+        hubAddress: p.hubAddress,
+        hubLocation: p.hubLocation,
         fleetInviteCode: p.fleetInviteCode,
         rating: p.rating || 4.9,
         phone: p.phone,
         klinflowId: p.klinflow_id,
-        config: p.config
+        config: p.config,
+        distance_km: (p as any).distanceKm // Added distance_km mapping
       } as NearbyAgent)) });
     }
   },
 
-  subscribeToAgents: () => {
+  subscribeToAgents: (lat: number, lng: number) => {
     const existing = get().agentSubscription;
     if (existing) supabase.removeChannel(existing);
 
@@ -166,7 +176,7 @@ export const useBookingStore = create<BookingStore>()(
         table: 'profiles', 
         filter: 'role=eq.agent' 
       }, () => {
-        get().fetchNearbyAgents();
+        get().fetchNearbyAgents(lat, lng);
       })
       .subscribe();
 
@@ -190,7 +200,7 @@ export const useBookingStore = create<BookingStore>()(
       const dbPayload: any = {
         user_id: userId,
         waste_type: bookingData.wasteType,
-        bags: Number(bookingData.weight || bookingData.bags || 0),
+        weight_kg: Number(bookingData.weight || bookingData.weightKg || bookingData.bags || 0),
         status: 'pending',
         total_price: Number(bookingData.totalPrice || 0),
         estate: bookingData.estate,

@@ -278,7 +278,7 @@ export default function ProductHub() {
 
               <h1 className={`text-5xl md:text-6xl xl:text-6xl font-bold tracking-tight mb-6 leading-[1.1] ${isDarkMode ? "text-white" : "text-slate-900"}`}>
                 The Operating System for <br className="hidden lg:block" />
-                <span className="text-slate-500">Modern Recycling Hubs.</span>
+                <span className="text-slate-500">Modern Recycling.</span>
               </h1>
               <p className={`text-lg md:text-xl font-medium max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
                 Digitize intake, automate supplier payments, manage inventory, optimize material flows, and fulfill enterprise contracts from a single platform. Built for high-volume operations, Klinflow Hub eliminates paperwork and brings total financial and operational transparency to your facility.
@@ -330,7 +330,7 @@ export default function ProductHub() {
       <section className={`relative py-20 lg:py-32 overflow-hidden ${isDarkMode ? "bg-[#050505]" : "bg-slate-50"}`}>
         {/* Line Grid Background */}
         <div 
-          className={`absolute inset-0 opacity-[0.03] ${isDarkMode ? "invert" : ""}`}
+          className={`absolute inset-0 opacity-[0.02] ${isDarkMode ? "invert" : ""}`}
           style={{ backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)", backgroundSize: "40px 40px" }}
         />
         <div className="max-w-[90rem] mx-auto px-6 space-y-20 lg:space-y-28 relative z-10">

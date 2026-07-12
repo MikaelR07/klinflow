@@ -311,7 +311,7 @@ export default function AvailableJobs() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-800 overflow-y-auto no-scrollbar pb-6"
+                className="fixed inset-0 z-[9999] bg-[#F8F8FF] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-6"
               >
                 {(() => {
                   const job = currentJobs.find(j => j.id === expandedId);
@@ -461,12 +461,20 @@ export default function AvailableJobs() {
                               </>
                             )}
 
-                            <div className="flex items-start gap-3 col-span-2">
-                              <Package className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
-                              <div>
-                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup ID / Type</p>
+                            <div className="flex items-start justify-between col-span-2">
+                              <div className="flex items-start gap-3">
+                                <Package className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+                                <div>
+                                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup ID</p>
+                                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                                    {job.id.slice(0, 8).toUpperCase()}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Type</p>
                                 <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                                  {job.id.slice(0, 8).toUpperCase()} • {job.is_group_pickup ? 'Group Pickup' : (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) ? 'Seller Trade' : 'Resident Pickup'}
+                                  {job.is_group_pickup ? 'Group Pickup' : (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) ? 'Seller Trade' : 'Resident Pickup'}
                                 </span>
                               </div>
                             </div>

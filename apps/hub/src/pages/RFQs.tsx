@@ -329,7 +329,8 @@ export default function RFQs() {
 
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-8 animate-fade-in pb-10 max-w-[1600px] mx-auto">
+    <div className="flex h-full w-full relative bg-transparent overflow-hidden">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-6 animate-fade-in pb-10 space-y-6">
 
       {/* ── HEADER ── */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -356,7 +357,7 @@ export default function RFQs() {
 
       
       {/* ── ROW 1: KPI CARDS ── */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
         {[
           { name: 'Total Broadcasted', value: stats.total, color: 'text-blue-500', bg: 'bg-blue-500/10' },
           { name: 'Open RFQs', value: stats.open, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
@@ -378,7 +379,7 @@ export default function RFQs() {
       </div>
 
       {/* ── ROW 2: ANALYSIS CARDS ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 mt-6">
         {/* Chart 1: Sent vs Accepted */}
         <div className="bg-white dark:bg-slate-900 border border-[#e0e3eb] dark:border-slate-800 rounded-xl p-5 shadow-none flex flex-col">
           <div className="flex items-center justify-between mb-4">
@@ -497,7 +498,7 @@ export default function RFQs() {
       </div>
 
       {/* ── ROW 3: MAIN RFQ TABLE & SIDEBAR ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mt-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 !mt-2">
         
         {/* Left Col: Main RFQ Table */}
         <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-[#e0e3eb] dark:border-slate-800 rounded-[1rem] shadow-none flex flex-col overflow-hidden">
@@ -619,7 +620,7 @@ export default function RFQs() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <button 
-                        onClick={() => navigate(`/rfqs/${rfq.id}`)}
+                        onClick={() => navigate(`/marketplace/rfqs/${rfq.id}`)}
                         className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-[#131722] dark:text-white rounded-lg text-xs font-bold transition-colors"
                       >
                         View Bids
@@ -961,6 +962,7 @@ export default function RFQs() {
           </div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );  
 }

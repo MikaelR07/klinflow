@@ -15,6 +15,8 @@ import {
   Receipt
 } from 'lucide-react';
 import { useThemeStore } from '@klinflow/core/stores/themeStore';
+import { supabase } from '@klinflow/supabase';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useNavigate } from 'react-router-dom';
 
 interface ManualMaterialLine {
@@ -41,23 +43,38 @@ export default function WalkInIntake() {
 
   // Material Entry State
   const [materials, setMaterials] = useState<ManualMaterialLine[]>([
-    { id: '1', category: 'Plastics', subcategory: 'PET Clear', grade: 'A', weight: '', basePricePerKg: '30', pricePerKg: '30' }
+    { id: '1', category: 'Plastic', subcategory: 'PET Clear', grade: 'A', weight: '', basePricePerKg: '30', pricePerKg: '30' }
   ]);
 
-  // Payment Modal State
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const { currentCompanyId } = useAuthStore() as any;
+
+  // Checkout State
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'processing' | 'success'>('pending');
   const [waybillId] = useState(`#WB-${(Math.random() * 99999).toFixed(0).padStart(5, '0')}`);
   const [mpesaReceipt] = useState(`Q${Math.random().toString(36).substring(2, 10).toUpperCase()}`);
 
-  const handlePhoneSearch = () => {
+  const handlePhoneSearch = async () => {
     if (sellerPhone.length < 9) return;
     setIsSearchingUser(true);
-    setTimeout(() => {
-      setIsKlinflowUser(true);
-      setSellerName('Grace Njoroge');
+    
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('name')
+        .eq('phone', sellerPhone)
+        .maybeSingle();
+        
+      if (data) {
+        setIsKlinflowUser(true);
+        setSellerName(data.name);
+      } else {
+        setIsKlinflowUser(false);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
       setIsSearchingUser(false);
-    }, 1000);
+    }
   };
 
   const handleProceedToMaterials = () => {
@@ -68,7 +85,7 @@ export default function WalkInIntake() {
   const addMaterialLine = () => {
     setMaterials(prev => [
       ...prev,
-      { id: Math.random().toString(), category: 'Plastics', subcategory: '', grade: 'B', weight: '', basePricePerKg: '25', pricePerKg: '25' }
+      { id: Math.random().toString(), category: 'Plastic', subcategory: '', grade: 'B', weight: '', basePricePerKg: '25', pricePerKg: '25' }
     ]);
   };
 
@@ -101,15 +118,42 @@ export default function WalkInIntake() {
 
   const gfpPointsAwarded = Math.floor(calculatedTotals.totalPayout / 10);
 
-  const processMpesaPayment = () => {
+  const processCheckout = async (method: 'cash' | 'mpesa') => {
     setPaymentStatus('processing');
-    setTimeout(() => {
+    
+    try {
+      const items = materials.filter(m => m.subcategory && m.weight && m.pricePerKg).map(m => ({
+        category: m.category,
+        subcategory: m.subcategory,
+        grade: m.grade,
+        weight: parseFloat(m.weight),
+        basePricePerKg: parseFloat(m.basePricePerKg),
+        pricePerKg: parseFloat(m.pricePerKg),
+        total: parseFloat(m.weight) * parseFloat(m.pricePerKg)
+      }));
+
+      const { error } = await supabase.rpc('hub_process_walkin_intake', {
+        p_hub_id: currentCompanyId,
+        p_seller_phone: sellerPhone,
+        p_seller_name: sellerName,
+        p_items: items,
+        p_payment_method: method,
+        p_total_payout: calculatedTotals.totalPayout
+      });
+
+      if (error) throw error;
+      
       setPaymentStatus('success');
-    }, 2500);
+    } catch (err) {
+      console.error(err);
+      setPaymentStatus('pending');
+      alert('Failed to process intake.');
+    }
   };
 
   return (
-    <div className="p-6 md:p-8 w-full max-w-[1600px] mx-auto space-y-8 animate-fade-in">
+    <div className="flex h-full w-full relative bg-transparent overflow-hidden">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-6 animate-fade-in pb-10 space-y-6">
       
       {/* Header */}
       <div className="flex items-center gap-4">
@@ -126,7 +170,7 @@ export default function WalkInIntake() {
       </div>
 
       {step === 1 && (
-        <div className={`max-w-xl mx-auto mt-12 p-8 rounded-3xl border ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200 shadow-xl shadow-slate-200/50'}`}>
+        <div className={`max-w-xl mx-auto mt-12 p-8 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200 shadow-xl shadow-slate-200/50'}`}>
           <div className="text-center mb-8">
             <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto mb-4">
               <Store className="font-medium w-8 h-8 text-amber-500" />
@@ -206,10 +250,11 @@ export default function WalkInIntake() {
       )}
 
       {step === 2 && (
-        <div className="space-y-6 animate-slide-up">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 animate-slide-up">
           
-          {/* Seller Banner */}
-          <div className={`p-6 md:p-8 rounded-3xl border flex items-center justify-between gap-6 flex-wrap ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200'}`}>
+          <div className="lg:col-span-3 space-y-6">
+            {/* Seller Banner */}
+          <div className={`p-6 md:p-8 rounded-xl border flex items-center justify-between gap-6 flex-wrap ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200'}`}>
             <div className="flex items-center gap-6">
               <div className="font-medium w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500">
                 <User className="w-8 h-8" />
@@ -231,7 +276,7 @@ export default function WalkInIntake() {
           </div>
 
           {/* Manual Entry Table */}
-          <div className={`rounded-3xl border overflow-hidden ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200'}`}>
+          <div className={`rounded-xl border overflow-hidden ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200'}`}>
             <div className={`px-6 py-4 border-b flex items-center justify-between ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
               <h2 className={`font-semibold flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
                 <Store className="font-medium w-5 h-5 text-amber-500" /> Manual Material Entry
@@ -273,9 +318,9 @@ export default function WalkInIntake() {
                             className={`w-full px-3 py-2 text-xs font-medium rounded-lg border outline-none ${isDarkMode ? 'bg-slate-800 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'}`}
                             style={{ color: isDarkMode ? 'white' : 'black' }}
                           >
-                            <option>Plastics</option>
+                            <option>Plastic</option>
                             <option>Paper</option>
-                            <option>Metals</option>
+                            <option>Metal</option>
                             <option>Glass</option>
                           </select>
                         </td>
@@ -347,7 +392,7 @@ export default function WalkInIntake() {
           </div>
 
           {/* Footer Totals */}
-          <div className={`p-6 rounded-3xl border flex flex-col md:flex-row items-center justify-between gap-6 ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200'}`}>
+          <div className={`p-6 rounded-xl border flex flex-col md:flex-row items-center justify-between gap-6 ${isDarkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-slate-200'}`}>
             <div className="flex gap-8">
               <div>
                 <p className={`text-[10px] font-medium uppercase tracking-wider mb-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Total Weight Received</p>
@@ -359,171 +404,149 @@ export default function WalkInIntake() {
                 <p className="text-2xl font-medium font-mono text-amber-500">KES {calculatedTotals.totalPayout.toLocaleString()}</p>
               </div>
             </div>
-            <button
-              onClick={() => { setPaymentStatus('pending'); setShowPaymentModal(true); }}
-              disabled={!calculatedTotals.allFilled}
-              className="px-8 py-4 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white rounded-xl font-medium text-sm transition-all shadow-lg shadow-amber-500/20 flex items-center gap-2"
-            >
-              <Receipt className="w-5 h-5" /> Generate Payout Receipt
-            </button>
+
           </div>
-        </div>
-      )}
+          </div>
 
-      {/* ── PROFESSIONAL PAYMENT CHECKOUT MODAL (STEP 3) ── */}
-      {showPaymentModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
-          
-          <div className={`relative w-full max-w-lg rounded-[2rem] border overflow-hidden shadow-2xl ${isDarkMode ? 'bg-slate-900 border-white/10' : 'bg-white border-slate-200'}`}>
-            
-            {/* Header */}
-            <div className={`px-6 py-4 flex items-center justify-between border-b ${isDarkMode ? 'border-white/5 bg-slate-800/50' : 'border-slate-100 bg-slate-50/50'}`}>
-              <div className="flex items-center gap-2">
-                <Receipt className="font-medium w-5 h-5 text-amber-500" />
-                <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Checkout & Payout</span>
-              </div>
-              <button
-                onClick={() => { setShowPaymentModal(false); if(paymentStatus === 'success') navigate('/operations/intake'); }}
-                className="font-medium p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {paymentStatus === 'pending' && (
-              <div className="p-6 md:p-8">
-                
-                {/* Payee Info */}
-                <div className={`p-5 rounded-2xl mb-6 flex items-center gap-4 border ${isDarkMode ? 'bg-slate-800 border-white/5' : 'bg-slate-50 border-slate-200'}`}>
-                  <div className="font-medium w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500">
-                    <User className="w-6 h-6" />
-                  </div>
-                  <div className="flex-1">
-                    <p className={`text-[10px] font-medium uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Paying To</p>
-                    <p className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{sellerName}</p>
-                    <p className={`text-xs font-mono font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{sellerPhone}</p>
-                  </div>
+          {/* ── PROFESSIONAL PAYMENT CHECKOUT SIDE PANEL ── */}
+          <div className="lg:col-span-1 border-l border-[#e0e3eb] dark:border-slate-700/50 pl-0 lg:pl-6 animate-slide-left">
+            <div className={`w-full rounded-xl border shadow-sm ${isDarkMode ? 'bg-slate-900 border-white/10' : 'bg-white border-slate-200'}`}>
+              
+              {/* Header */}
+              <div className={`px-6 py-4 flex items-center justify-between border-b ${isDarkMode ? 'border-white/5 bg-slate-800/50' : 'border-slate-100 bg-slate-50/50'} rounded-t-3xl`}>
+                <div className="flex items-center gap-2">
+                  <Receipt className="font-medium w-5 h-5 text-amber-500" />
+                  <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Live Receipt</span>
                 </div>
+              </div>
 
-                {/* Receipt Breakdown */}
-                <div className="mb-8">
-                  <h3 className={`text-xs font-semibold uppercase tracking-wider mb-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Receipt Breakdown</h3>
-                  <div className={`rounded-xl border divide-y ${isDarkMode ? 'border-white/5 divide-white/5' : 'border-slate-200 divide-slate-100'}`}>
-                    
-                    {/* Material List (max 3, then scroll) */}
-                    <div className="max-h-[180px] overflow-y-auto p-2">
-                      {materials.filter(m => m.subcategory && m.weight && m.pricePerKg).map(m => {
-                        const lineTotal = parseFloat(m.weight) * parseFloat(m.pricePerKg);
-                        return (
-                          <div key={m.id} className="flex justify-between items-center p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-white/[0.02]">
-                            <div>
-                              <p className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{m.subcategory} <span className="text-xs font-normal opacity-70">({m.grade})</span></p>
-                              <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{m.weight}kg @ {m.pricePerKg} KES</p>
+              {paymentStatus === 'pending' && (
+                <div className="p-6">
+                  
+                  {/* Payee Info */}
+                  <div className={`p-4 rounded-xl mb-6 flex items-center gap-3 border ${isDarkMode ? 'bg-slate-800 border-white/5' : 'bg-slate-50 border-slate-200'}`}>
+                    <div className="font-medium w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 shrink-0">
+                      <User className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-[10px] font-medium uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Paying To</p>
+                      <p className={`text-sm font-semibold truncate ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{sellerName}</p>
+                      <p className={`text-xs font-mono font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>{sellerPhone}</p>
+                    </div>
+                  </div>
+
+                  {/* Receipt Breakdown */}
+                  <div className="mb-6">
+                    <h3 className={`text-xs font-semibold uppercase tracking-wider mb-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Receipt Breakdown</h3>
+                    <div className={`rounded-xl border divide-y ${isDarkMode ? 'border-white/5 divide-white/5' : 'border-slate-200 divide-slate-100'}`}>
+                      
+                      {/* Material List (max 3, then scroll) */}
+                      <div className="max-h-[180px] overflow-y-auto p-2">
+                        {materials.filter(m => m.subcategory && m.weight && m.pricePerKg).map(m => {
+                          const lineTotal = parseFloat(m.weight) * parseFloat(m.pricePerKg);
+                          return (
+                            <div key={m.id} className="flex justify-between items-center p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-white/[0.02]">
+                              <div>
+                                <p className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{m.subcategory}</p>
+                                <p className={`text-[10px] ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{m.weight}kg @ {m.pricePerKg} KES</p>
+                              </div>
+                              <p className={`text-sm font-medium font-mono ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{lineTotal.toLocaleString()}</p>
                             </div>
-                            <p className={`font-medium font-mono ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{lineTotal.toLocaleString()}</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Total Row */}
-                    <div className={`p-4 flex justify-between items-end bg-amber-500/5 ${isDarkMode ? '' : ''}`}>
-                      <div>
-                        <p className={`text-[10px] font-medium uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Total Due</p>
-                        <p className={`text-xs font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{calculatedTotals.totalWeight.toFixed(1)} KG total weight</p>
+                          );
+                        })}
                       </div>
-                      <p className="text-2xl font-medium font-mono text-amber-500">KES {calculatedTotals.totalPayout.toLocaleString()}</p>
+
+                      {/* Total Row */}
+                      <div className={`p-4 flex justify-between items-end bg-amber-500/5 ${isDarkMode ? '' : ''}`}>
+                        <div>
+                          <p className={`text-[10px] font-medium uppercase tracking-wider ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Total Due</p>
+                          <p className={`text-xs font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{calculatedTotals.totalWeight.toFixed(1)} KG</p>
+                        </div>
+                        <p className="text-xl font-bold font-mono text-amber-500">KES {calculatedTotals.totalPayout.toLocaleString()}</p>
+                      </div>
+
                     </div>
+                  </div>
 
+                  {/* Action Buttons */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => processCheckout('cash')}
+                      disabled={!calculatedTotals.allFilled}
+                      className={`py-3.5 rounded-xl font-medium uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 border disabled:opacity-50 ${
+                        isDarkMode 
+                          ? 'bg-slate-800 border-white/10 text-white hover:bg-slate-700' 
+                          : 'bg-white border-slate-200 text-slate-900 hover:bg-slate-50'
+                      }`}
+                    >
+                      Paid Cash
+                    </button>
+                    <button
+                      onClick={() => processCheckout('mpesa')}
+                      disabled={!calculatedTotals.allFilled}
+                      className="py-3.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white rounded-xl font-medium uppercase tracking-wider text-xs transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                    >
+                      <Banknote className="w-4 h-4" /> Send M-PESA
+                    </button>
                   </div>
                 </div>
+              )}
 
-                {/* Action Buttons */}
-                <div className="grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setPaymentStatus('success')}
-                    className={`py-4 rounded-xl font-medium uppercase tracking-wider text-sm transition-all flex items-center justify-center gap-2 border ${
-                      isDarkMode 
-                        ? 'bg-slate-800 border-white/10 text-white hover:bg-slate-700' 
-                        : 'bg-white border-slate-200 text-slate-900 hover:bg-slate-50'
-                    }`}
-                  >
-                    Paid Cash
-                  </button>
-                  <button
-                    onClick={processMpesaPayment}
-                    className="py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-medium uppercase tracking-wider text-sm transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
-                  >
-                    <Banknote className="w-5 h-5" /> Send M-PESA
-                  </button>
+              {paymentStatus === 'processing' && (
+                <div className="p-12 text-center flex flex-col items-center justify-center">
+                  <Loader2 className="w-8 h-8 animate-spin text-emerald-500 mb-4" />
+                  <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Processing Intake...</h2>
+                  <p className={`text-xs mt-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Recording assets to ledger.</p>
                 </div>
-              </div>
-            )}
+              )}
 
-            {paymentStatus === 'processing' && (
-              <div className="p-16 text-center flex flex-col items-center justify-center min-h-[400px]">
-                <div className="relative w-20 h-20 mb-6">
-                  <div className="absolute inset-0 border-4 border-emerald-500/20 rounded-full"></div>
-                  <div className="absolute inset-0 border-4 border-emerald-500 rounded-full border-t-transparent animate-spin"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Banknote className="font-medium w-8 h-8 text-emerald-500" />
-                  </div>
-                </div>
-                <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Processing Payment...</h2>
-                <p className={`text-sm mt-2 max-w-[250px] mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Connecting to Safaricom Daraja API to disburse B2C funds.</p>
-              </div>
-            )}
-
-            {paymentStatus === 'success' && (
-              <div className="p-8 text-center space-y-6">
-                <div className="w-24 h-24 bg-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-emerald-500/40 relative">
-                  <div className="absolute inset-0 bg-emerald-500/30 rounded-full animate-ping"></div>
-                  <CheckCircle2 className="font-medium w-12 h-12 text-white relative z-10" />
-                </div>
-                
-                <div>
-                  <h2 className={`text-3xl font-semibold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Payment Sent!</h2>
-                  <p className={`text-sm mt-2 font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                    KES {calculatedTotals.totalPayout.toLocaleString()} has been sent to {sellerName}.
-                  </p>
-                </div>
-                
-                <div className="space-y-3 text-left max-w-sm mx-auto mt-8">
-                  <div className={`p-4 rounded-xl border flex justify-between items-center ${isDarkMode ? 'bg-slate-800 border-white/5' : 'bg-slate-50 border-slate-200'}`}>
-                    <span className={`text-xs font-medium uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Digital Waybill</span>
-                    <span className={`text-sm font-medium font-mono ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{waybillId}</span>
+              {paymentStatus === 'success' && (
+                <div className="p-6 text-center space-y-6">
+                  <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-xl shadow-emerald-500/40 relative">
+                    <CheckCircle2 className="font-medium w-8 h-8 text-white relative z-10" />
                   </div>
                   
-                  {isKlinflowUser && (
-                    <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-4 relative overflow-hidden">
-                      <div className="absolute -right-4 -top-4 opacity-10">
-                        <Leaf className="font-medium w-24 h-24 text-emerald-500" />
-                      </div>
-                      <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0 relative z-10">
-                        <Leaf className="font-medium w-6 h-6 text-emerald-500" />
-                      </div>
-                      <div className="relative z-10">
-                        <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-0.5">Eco-Reward Granted</p>
-                        <p className={`text-lg font-medium ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>+{gfpPointsAwarded} GFP Points</p>
-                      </div>
+                  <div>
+                    <h2 className={`text-2xl font-semibold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Success!</h2>
+                    <p className={`text-xs mt-1 font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      KES {calculatedTotals.totalPayout.toLocaleString()} paid to {sellerName}.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-3 text-left w-full mt-6">
+                    <div className={`p-3 rounded-xl border flex justify-between items-center ${isDarkMode ? 'bg-slate-800 border-white/5' : 'bg-slate-50 border-slate-200'}`}>
+                      <span className={`text-[10px] font-medium uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Digital Waybill</span>
+                      <span className={`text-xs font-bold font-mono ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{waybillId}</span>
                     </div>
-                  )}
-                </div>
+                    
+                    {isKlinflowUser && (
+                      <div className="p-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
+                          <Leaf className="font-medium w-4 h-4 text-emerald-500" />
+                        </div>
+                        <div>
+                          <p className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-0.5">Eco-Reward Granted</p>
+                          <p className={`text-sm font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>+{gfpPointsAwarded} GFP Points</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
-                <div className="pt-6 mt-6 border-t border-slate-200 dark:border-white/5">
-                  <button
-                    onClick={() => { setShowPaymentModal(false); navigate('/operations/intake'); }}
-                    className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-medium uppercase tracking-wider text-sm transition-all shadow-xl active:scale-[0.98]"
-                  >
-                    Close & Next Seller
-                  </button>
+                  <div className="pt-4 mt-4 border-t border-slate-200 dark:border-white/5">
+                    <button
+                      onClick={() => { setStep(1); setMaterials([]); setSellerPhone(''); setSellerName(''); setPaymentStatus('pending'); }}
+                      className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-medium uppercase tracking-wider text-xs transition-all shadow-xl active:scale-[0.98]"
+                    >
+                      Close & Next
+                    </button>
+                  </div>
                 </div>
+              )}
               </div>
-            )}
-          </div>
+            </div>
         </div>
       )}
+    </div>
     </div>
   );
 }

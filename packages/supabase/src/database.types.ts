@@ -901,11 +901,10 @@ export type Database = {
           p_agent_uuid: string
           p_client_uuid: string
           p_weight_kg: number
-          p_estimated_value: number
-          p_client_gfp: number
+          p_rate_per_kg: number
           p_is_manual: boolean
         }
-        Returns: boolean
+        Returns: string
       }
       weaver_claim_asset: {
         Args: {
@@ -914,6 +913,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      get_nearby_agents_dynamic: {
+        Args: {
+          p_lat: number
+          p_lng: number
+          p_max_results?: number
+          p_max_radius_km?: number
+        }
+        Returns: Json
+      }
       client_releases_funds: {
         Args: {
           p_booking_uuid: string
@@ -921,6 +929,20 @@ export type Database = {
           p_client_gfp: number
         }
         Returns: boolean
+      }
+      search_pickup_agent_exact_v2: {
+        Args: {
+          p_core_digits: string
+        }
+        Returns: {
+          id: string
+          full_name: string
+          profile_photo: string | null
+          rating: number
+          completed_pickups: number
+          online: boolean
+          agent_type: string
+        }[]
       }
 
     }

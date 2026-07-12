@@ -24,6 +24,7 @@ export default function SwarmDetails() {
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
+  const [isRequested, setIsRequested] = useState(false);
   const [expandedParticipantId, setExpandedParticipantId] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -42,6 +43,17 @@ export default function SwarmDetails() {
 
     if (data) {
       setIsPosted(true);
+    }
+
+    const { data: bookingData } = await supabase
+      .from('bookings')
+      .select('id, status')
+      .eq('swarm_id', id)
+      .neq('status', 'cancelled')
+      .maybeSingle();
+
+    if (bookingData) {
+      setIsRequested(true);
     }
 
     setLoading(false);
@@ -234,7 +246,7 @@ export default function SwarmDetails() {
             </p>
           </div>
 
-          <div className="h-2 w-full bg-slate-800 dark:bg-slate-900 rounded-full overflow-hidden mt-3 border border-slate-700/50">
+          <div className="h-2 w-full bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden mt-3 border border-slate-700/50">
             <div
               className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 shadow-[0_0_10px_rgba(52,211,153,0.5)]"
               style={{ width: `${percentage}%` }}
@@ -331,6 +343,13 @@ export default function SwarmDetails() {
                 <Truck className="w-6 h-6 text-white mx-auto mb-2" />
                 <p className="text-sm font-semibold text-indigo-100 dark:text-indigo-300 leading-relaxed">
                   Material posted awaiting buyer response you'll be notified. Check on your inventory page for response.
+                </p>
+              </div>
+            ) : isRequested ? (
+              <div className="w-full bg-emerald-600 dark:bg-emerald-900/20 p-5 rounded-3xl border border-emerald-100 dark:border-emerald-800 text-center">
+                <Truck className="w-6 h-6 text-white mx-auto mb-2" />
+                <p className="text-sm font-semibold text-emerald-100 dark:text-emerald-300 leading-relaxed">
+                  Group pickup has been requested. Check your bookings page to track its status.
                 </p>
               </div>
             ) : (

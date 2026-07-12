@@ -23,10 +23,13 @@ export default function CreateSwarm() {
   const [material, setMaterial] = useState('');
   const [targetWeight, setTargetWeight] = useState('');
   const [initialWeight, setInitialWeight] = useState('');
+  const [pledgeMaterial, setPledgeMaterial] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
   const [photos, setPhotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const isMixed = selectedCategory.toLowerCase().includes('mixed');
 
   useEffect(() => {
     fetchCategories();
@@ -57,6 +60,7 @@ export default function CreateSwarm() {
     if (!material) return toast.error('Select a material type');
     if (!targetWeight || Number(targetWeight) < 10) return toast.error('Target must be at least 10 KG');
     if (Number(initialWeight) < 0 || Number(initialWeight) > Number(targetWeight)) return toast.error('Initial weight cannot exceed target weight');
+    if (isMixed && Number(initialWeight) > 0 && !pledgeMaterial) return toast.error('Select what material you are pledging');
     if (photos.length < 1) return toast.error('Please upload at least 1 photo');
 
     let uploadToastId: string | number | null = null;
@@ -95,6 +99,7 @@ export default function CreateSwarm() {
               swarm_id: newSwarm.id,
               user_id: profile?.id,
               pledged_weight: Number(initialWeight),
+              material: isMixed ? pledgeMaterial : material,
               status: 'pledged'
             });
           if (joinError) console.error("Error adding initial participant:", joinError);
@@ -183,7 +188,15 @@ export default function CreateSwarm() {
               return (
                 <button
                   key={cat.id}
-                  onClick={() => { setSelectedCategory(cat.label); setMaterial(''); }}
+                  onClick={() => {
+                    setSelectedCategory(cat.label);
+                    setMaterial('');
+                    setPledgeMaterial('');
+                    // Auto-set material for Mixed Recyclables
+                    if (cat.label.toLowerCase().includes('mixed')) {
+                      setMaterial(cat.label);
+                    }
+                  }}
                   className={`relative h-20 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all group overflow-hidden border-2 ${isSelected
                     ? 'border-indigo-500 ring-2 ring-indigo-500/20'
                     : 'border-slate-100 dark:border-slate-800 hover:border-indigo-500/40'
@@ -204,7 +217,8 @@ export default function CreateSwarm() {
             })}
           </div>
 
-          {selectedCategory && (
+          {/* Sub-material picker: only for non-mixed categories */}
+          {selectedCategory && !isMixed && (
             <div className="mt-4 animate-in fade-in slide-in-from-top-2 duration-300">
               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1 mb-2">2. Specific Material Type</p>
               <select
@@ -217,6 +231,15 @@ export default function CreateSwarm() {
                   <option key={m.id} value={m.material_name}>{m.material_name}</option>
                 ))}
               </select>
+            </div>
+          )}
+
+          {/* Mixed info banner */}
+          {isMixed && (
+            <div className="mt-4 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-xl p-3 animate-in fade-in slide-in-from-top-2 duration-300">
+              <p className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                🌍 This swarm will accept <span className="font-black">all types of recyclables</span>. Each participant will specify what material they are bringing when they join.
+              </p>
             </div>
           )}
         </div>
@@ -258,6 +281,28 @@ export default function CreateSwarm() {
               className="w-full p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-base font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-slate-300"
             />
           </div>
+
+        {/* Creator's own pledge material (only for Mixed swarms with initial weight) */}
+        {isMixed && Number(initialWeight) > 0 && (
+          <div className="bg-white dark:bg-slate-900/60 rounded-xl p-3 border border-slate-200 dark:border-slate-700 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-6 h-6 rounded-md bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+                <Truck className="w-3.5 h-3.5 text-emerald-600" />
+              </div>
+              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">What Are You Pledging?</p>
+            </div>
+            <select
+              value={pledgeMaterial}
+              onChange={(e) => setPledgeMaterial(e.target.value)}
+              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none"
+            >
+              <option value="" disabled>Select material type...</option>
+              {categories.filter(c => !c.label?.toLowerCase().includes('mixed')).map(c => (
+                <option key={c.id} value={c.label}>{c.icon} {c.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
         </div>
 
         {/* Deadline */}

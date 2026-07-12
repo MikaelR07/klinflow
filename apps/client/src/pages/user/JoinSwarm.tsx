@@ -2,9 +2,9 @@
  * JoinSwarm.tsx — Form for a seller to join a swarm with detailed pledge information.
  */
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Truck, Scale, ChevronRight, Camera, X, FileText, Image as ImageIcon, Zap } from 'lucide-react';
+import { ArrowLeft, Truck, Scale, ChevronRight, Camera, X, FileText, Image as ImageIcon, Zap, Package } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAuthStore, useCollectiveStore } from '@klinflow/core';
+import { useAuthStore, useCollectiveStore, useServiceStore } from '@klinflow/core';
 import { supabase } from '@klinflow/supabase';
 import { compressImage } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
@@ -18,13 +18,19 @@ export default function JoinSwarm() {
 
   const [swarm, setSwarm] = useState<any>(null);
   const [targetWeight, setTargetWeight] = useState('');
+  const [selectedMaterial, setSelectedMaterial] = useState('');
   const [description, setDescription] = useState('');
   const [photos, setPhotos] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [showWarning, setShowWarning] = useState(false);
+  const categories = useServiceStore(s => s.categories);
+  const fetchCategories = useServiceStore(s => s.fetchCategories);
+
+  const isMixed = swarm?.material?.toLowerCase()?.includes('mixed');
 
   useEffect(() => {
+    fetchCategories();
     if (id) {
       fetchSwarmById(id).then(res => {
         setSwarm(res.swarm);
@@ -55,6 +61,7 @@ export default function JoinSwarm() {
 
   const handleSubmit = async () => {
     if (!targetWeight || Number(targetWeight) <= 0) return toast.error('Please enter a valid weight');
+    if (isMixed && !selectedMaterial) return toast.error('Please select what material you are pledging');
     if (photos.length < 1) return toast.error('Please upload at least 1 photo for visual proof');
     if (!id || !profile?.id) return;
 
@@ -85,7 +92,7 @@ export default function JoinSwarm() {
         swarm_id: id,
         user_id: profile.id,
         pledged_weight: Number(targetWeight),
-        material: swarm?.material,
+        material: isMixed ? selectedMaterial : swarm?.material,
         description: description.trim(),
         images: imageUrls,
         status: 'pledged'
@@ -178,6 +185,28 @@ export default function JoinSwarm() {
             </p>
           )}
         </div>
+
+        {/* Material Selection (only for Mixed swarms) */}
+        {isMixed && (
+          <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="flex items-center gap-2.5 mb-1">
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+                <Package className="w-4 h-4 text-emerald-600" />
+              </div>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">What Material Are You Bringing?</p>
+            </div>
+            <select
+              value={selectedMaterial}
+              onChange={(e) => setSelectedMaterial(e.target.value)}
+              className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none"
+            >
+              <option value="" disabled>Select your material type...</option>
+              {categories.filter(c => !c.label?.toLowerCase().includes('mixed')).map(c => (
+                <option key={c.id} value={c.label}>{c.icon} {c.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {/* Description */}
         <div className="bg-white dark:bg-slate-900/60 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 space-y-3">

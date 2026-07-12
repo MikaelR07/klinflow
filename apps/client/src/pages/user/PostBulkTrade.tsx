@@ -76,17 +76,11 @@ export default function PostBulkTrade() {
   const [selectedHub, setSelectedHub] = useState<any>(null);
   const [drillDownCompany, setDrillDownCompany] = useState<any>(null);
 
-  const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    if (!lat1 || !lon1 || !lat2 || !lon2) return 999;
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-  };
-
   const center: [number, number] = [customLocation.latitude || -1.2635, customLocation.longitude || 36.8048];
-  const nearbyHubs = liveAgents.filter((a: any) => a.isHubActive && a.hubLocation?.lat).map((hub: any) => ({ ...hub, distance: getDistance(center[0], center[1], hub.hubLocation!.lat, hub.hubLocation!.lng) })).sort((a: any, b: any) => a.distance - b.distance);
+  const nearbyHubs = liveAgents
+    .filter((a: any) => a.isHubActive && a.hubLocation?.lat)
+    .map((hub: any) => ({ ...hub, distance: hub.distance_km || 999 }))
+    .sort((a: any, b: any) => a.distance - b.distance);
 
   const hubIcon = L.divIcon({ className: 'custom-hub-icon', html: `<div class="w-8 h-8 rounded-xl bg-emerald-600 border-2 border-white shadow-xl flex items-center justify-center animate-bounce-slow"><span class="text-xs">🏢</span></div>`, iconSize: [32, 32], iconAnchor: [16, 32] });
 
@@ -113,8 +107,10 @@ export default function PostBulkTrade() {
     fetchCategories();
     fetchPrices();
     fetchConfig();
-    fetchNearbyAgents();
-    subscribeToAgents();
+    const lat = customLocation.latitude || -1.2635;
+    const lng = customLocation.longitude || 36.8048;
+    fetchNearbyAgents(lat, lng);
+    subscribeToAgents(lat, lng);
     loadSwarm();
 
     return () => cleanupAgents();

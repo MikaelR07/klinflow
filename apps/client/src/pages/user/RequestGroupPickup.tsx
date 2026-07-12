@@ -61,6 +61,7 @@ export default function RequestGroupPickup() {
   const [selectedCompanyId, setSelectedCompanyId] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showEscrowModal, setShowEscrowModal] = useState(false);
+  const [showAllContributors, setShowAllContributors] = useState(false);
 
   const [isManualTime, setIsManualTime] = useState(false);
   const [customDate, setCustomDate] = useState(new Date().toLocaleDateString('en-CA'));
@@ -84,9 +85,12 @@ export default function RequestGroupPickup() {
     fetchCategories();
     fetchPrices();
     fetchConfig();
-    fetchNearbyAgents();
+    const lat = customLocation.latitude || -1.2635;
+    const lng = customLocation.longitude || 36.8048;
+    
+    fetchNearbyAgents(lat, lng);
     generateTimeSuggestions();
-    subscribeToAgents();
+    subscribeToAgents(lat, lng);
     loadSwarm();
 
     return () => cleanupAgents();
@@ -94,24 +98,22 @@ export default function RequestGroupPickup() {
 
   const quantity = swarm?.current_weight || 0;
 
-  // Filter Agents for step 2
-  const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-  };
-
   const center: [number, number] = [customLocation.latitude || -1.2635, customLocation.longitude || 36.8048];
 
   const filteredAgents = liveAgents.filter((agent: any) => {
     let lat = agent.location?.latitude;
     let lon = agent.location?.longitude;
     if (!lat || !lon) return false;
-    const distance = getDistance(center[0], center[1], lat, lon);
-    if (distance > 20) return false;
-    return true;
+
+    // Hierarchy: show hubs & independents on map, fleet drivers only when their hub is selected
+    const isFleetDriver = agent.agentAccountType === 'fleet_driver';
+    const isCompany = agent.agentAccountType === 'company_admin';
+    const isIndependent = agent.agentAccountType === 'independent';
+
+    if (isCompany || isIndependent) return true;
+    if (isFleetDriver && agent.companyId === selectedCompanyId) return true;
+
+    return false;
   });
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,7 +150,7 @@ export default function RequestGroupPickup() {
 
       const prices = usePriceStore.getState().prices;
       const matchedCategory = prices.find((p: any) => p.label === swarm.material || p.material_name === swarm.material);
-      const wasteTypeSlug = (matchedCategory?.parent_category || matchedCategory?.slug || matchedCategory?.id || swarm.material).toLowerCase().replace(/\s+/g, '-');
+      const wasteTypeSlug = matchedCategory?.slug || matchedCategory?.id || swarm.material.toLowerCase().replace(/\s+/g, '-');
 
       const bookingData = {
         wasteType: wasteTypeSlug,
@@ -316,63 +318,122 @@ export default function RequestGroupPickup() {
             </motion.div>
           )}
 
-          {step === 3 && (
-            <div className="px-3">
-              <PostTradeSummaryStep
-                key="step-3"
-                wasteType={{ label: swarm?.material }}
-                quantity={quantity}
-                pickupMode={'pickup'}
-                profile={profile}
-                isManualTime={isManualTime}
-                customDate={customDate}
-                customTime={customTime}
-                selectedHub={null}
-                assetValue={Math.round(quantity * (getCategoryPrice(swarm.material) || 0))}
-                photos={photos}
-                askingPrice={null}
-                hideFinancials={true}
-              />
+          {step === 3 && (() => {
+            const isMixed = swarm?.material === 'Mixed Recyclables';
+            const estimatedRevenue = isMixed
+              ? participants.reduce((acc, p) => acc + (p.pledged_weight * (getCategoryPrice(p.material) || 0)), 0)
+              : quantity * (getCategoryPrice(swarm?.material) || 0);
 
-              {/* ── REVENUE CALCULATION BREAKDOWN (merged into green) ── */}
-              <div className="bg-emerald-600 dark:bg-primary rounded-[1rem] p-5 -mt-10 relative overflow-hidden border border-white/20">
-                <div className="relative z-10 space-y-3">
-                  <h4 className="text-[10px] font-black text-white/70 capitalize tracking-widest">How EST. Revenue is Calculated</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-semibold text-white/70">Market Rate</span>
-                      <span className="text-xs font-bold text-white">KSh {(getCategoryPrice(swarm.material) || 0).toLocaleString()} /kg</span>
+            const estimatedGFP = quantity * 2;
+
+            return (
+              <motion.div key="p3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6 pb-6 px-1.5">
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight italic px-2">Group Pickup Summary</h2>
+                
+                {/* ── MATERIAL PREVIEW ── */}
+                <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+                  {photos.length > 0 ? (
+                    <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 relative">
+                      <img
+                        src={typeof photos[0] === 'string' ? photos[0] : URL.createObjectURL(photos[0])}
+                        alt="Material Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      {photos.length > 1 && (
+                        <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-md">
+                          + {photos.length - 1} More
+                        </div>
+                      )}
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-semibold text-white/70">Total Weight</span>
-                      <span className="text-xs font-bold text-white">× {quantity} KG</span>
+                  ) : (
+                    <div className="w-full aspect-video bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
+                      <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">No Image Provided</span>
                     </div>
-                    <div className="h-px bg-white/20" />
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-bold text-white">Gross Value</span>
-                      <span className="text-xs font-black text-white">= KSh {Math.round(quantity * (getCategoryPrice(swarm.material) || 0)).toLocaleString()}</span>
+                  )}
+                </div>
+
+                <div className="bg-white dark:bg-slate-900 p-2 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm space-y-0">
+                  <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-4">Logistics Breakdown</p>
+
+                  <div className="flex justify-between items-center py-3 border-b border-slate-50 dark:border-white/5">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Community Pickup</span>
+                      <span className="text-xs font-bold text-slate-700 dark:text-white mt-0.5">{participants.length} Residents</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-semibold text-white/70">Logistics Fee</span>
-                      <span className="text-xs font-bold text-white">- KSh 0</span>
+                    <span className="text-sm font-semibold text-primary capitalize tracking-widest font-mono">{quantity} KG</span>
+                  </div>
+
+                  <div className="flex justify-between items-center py-3 border-b border-slate-50 dark:border-white/5">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Agent Assigned</span>
+                      <span className="text-xs text-slate-400 mt-0.5">
+                        {selectedAgent ? (selectedAgent.name || selectedAgent.full_name || 'Selected Agent') : (selectedCompanyId ? 'Selected Partner' : 'Open Pool (Fastest Available)')}
+                      </span>
                     </div>
-                    <div className="h-px bg-white/40" />
-                    <div className="pt-2 flex justify-between items-center">
-                      <span className="text-[10px] font-black text-white capitalize tracking-widest">EST. REVENUE</span>
-                      <div className="text-right">
-                        <h3 className="text-3xl font-black text-white tracking-tighter">KSh {Math.round(quantity * (getCategoryPrice(swarm.material) || 0)).toLocaleString()}</h3>
-                        <p className="text-[10px] font-bold text-white/95 capitalize tracking-widest mt-1 flex items-center justify-end gap-1.5">
-                          PAYOUT: AWAITING VERIFICATION
-                        </p>
+                    <span className="text-[11px] font-semibold text-emerald-500 capitalize tracking-widest px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 rounded-md">Awaiting Dispatch</span>
+                  </div>
+
+                  <div className="bg-emerald-600 dark:bg-primary rounded-xl p-4 mt-6 relative overflow-hidden shadow-sm">
+                    <div className="relative z-10 space-y-3">
+                      <div className="flex justify-between items-center pb-2 border-b border-white/20">
+                        <span className="text-[10px] font-black text-white capitalize tracking-widest">Total Value</span>
+                        <span className="text-xs font-bold text-white/90">
+                          {isMixed ? 'Multi-Material Rates' : `KSh ${(getCategoryPrice(swarm?.material) || 0).toLocaleString()} /kg`}
+                        </span>
+                      </div>
+                      
+                      {/* Breakdown List */}
+                      <div className="space-y-2 pb-2 border-b border-white/20">
+                        {(showAllContributors ? participants : participants.slice(0, 4)).map((p, idx) => {
+                          const rate = getCategoryPrice(p.material || swarm?.material) || 0;
+                          const userTotal = p.pledged_weight * rate;
+                          const userGfp = p.pledged_weight * 2;
+                          return (
+                            <div key={idx} className="flex justify-between items-center text-white">
+                              <div className="flex flex-col">
+                                <span className="text-[11px] font-bold capitalize truncate max-w-[100px]">{p.profiles?.name || 'Resident'}</span>
+                                <span className="text-[10px] text-slate-50 capitalize">{p.pledged_weight}kg {p.material || swarm?.material} @ {rate}/kg</span>
+                              </div>
+                              <div className="text-right">
+                                <span className="text-[11px] font-black block">KSh {Math.round(userTotal).toLocaleString()}</span>
+                                <span className="text-[9px] text-white font-semibold">+{userGfp} GFP</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                        {participants.length > 4 && (
+                          <button 
+                            onClick={() => setShowAllContributors(!showAllContributors)}
+                            className="w-full text-center py-1.5 mt-1 bg-white/10 hover:bg-white/20 rounded-lg text-[10px] font-bold text-white transition-colors"
+                          >
+                            {showAllContributors ? 'Show Less' : `View ${participants.length - 4} More Contributors`}
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="flex justify-between items-end pt-1">
+                        <div>
+                          <p className="text-[10px] font-black text-white capitalize tracking-widest mb-1">GRAND TOTAL</p>
+                          <h3 className="text-2xl font-black text-white tracking-tighter">KSh {Math.round(estimatedRevenue).toLocaleString()}</h3>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-black text-white capitalize tracking-widest mb-1">TOTAL GFP</p>
+                          <h3 className="text-lg font-black text-white/90 tracking-tighter">{estimatedGFP}</h3>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <p className="text-[10px] font-semibold text-green-300 leading-relaxed mt-2">Revenue will be split among {participants.length} contributors after agent verification. Each contributor also earns 2 GFP per verified KG.</p>
-                </div>
 
-              </div>
-            </div>
-          )}
+                  <div className="pt-4 flex gap-2">
+                    <Info className="w-4 h-4 text-slate-400 shrink-0" />
+                    <p className="text-[11px] font-medium text-slate-400 leading-relaxed italic">
+                      The Agent will weigh and verify each participant's contribution upon arrival. Payouts and GFP will be automatically distributed to individual Klinflow wallets based on their specific verified weight.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })()}
         </AnimatePresence>
 
         <div className="h-14" />

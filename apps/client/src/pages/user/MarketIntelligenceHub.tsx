@@ -20,7 +20,6 @@ import { toast } from 'sonner';
 
 import MarketIntelPricesTab from '../../features/marketIntel/MarketIntelPricesTab';
 import MarketIntelTrendsTab from '../../features/marketIntel/MarketIntelTrendsTab';
-import MarketIntelRFQsTab from '../../features/marketIntel/MarketIntelRFQsTab';
 import MarketIntelTipsTab from '../../features/marketIntel/MarketIntelTipsTab';
 import type { MarketIntelRFQ, MarketIntelData, MarketIntelCommodityTrend } from '../../features/marketIntel/marketIntel.types';
 
@@ -43,76 +42,7 @@ export default function MarketIntelligenceHub() {
   const [rfqsList, setRfqsList] = useState<MarketIntelRFQ[]>([]);
   const [marketData, setMarketData] = useState<MarketIntelData>({ commodity_trends: [] });
 
-  const fetchRFQs = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('rfqs')
-        .select(`
-          *,
-          buyer:profiles!rfqs_buyer_id_fkey(company_name, name, avatar_url),
-          rfq_offers(count)
-        `)
-        .eq('status', 'open')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      if (data) {
-        const mapped = data.map((r: any) => {
-          let deadlineText = 'Open';
-          if (r.deadline) {
-            const daysLeft = Math.ceil((new Date(r.deadline).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
-            if (daysLeft < 0) deadlineText = 'Expired';
-            else if (daysLeft === 0) deadlineText = 'Today';
-            else if (daysLeft === 1) deadlineText = 'Tomorrow';
-            else deadlineText = `${daysLeft} days`;
-          }
-
-          let deliveryText = 'Flexible';
-          if (r.delivery_method === 'agent_pickup') deliveryText = 'Agent Pickup';
-          else if (r.delivery_method === 'self_drop') deliveryText = 'Self Drop-off';
-
-          // Resolve material ID to name
-          const storeMaterials = useServiceStore.getState().materialPrices;
-          const materialRecord = storeMaterials.find(m => m.id === r.material_grade || `${r.category}_${m.id}` === r.material_grade);
-          const materialName = materialRecord ? materialRecord.material_name : r.material_grade;
-
-          // Resolve category ID to name
-          const storeCategories = useServiceStore.getState().categories;
-          const categoryRecord = storeCategories.find(c => c.id === r.category);
-          const categoryName = categoryRecord ? categoryRecord.label : r.category;
-
-          return {
-            id: r.id,
-            company: r.buyer?.company_name || r.buyer?.name || 'Unknown Buyer',
-            material: materialName,
-            quantity: `${r.requested_weight}kg`,
-            price: r.target_price || 0,
-            deadline: deadlineText,
-            verified: true, // Assuming true for now
-            region: r.pickup_area,
-            category: categoryName,
-            delivery: deliveryText,
-            offersSubmitted: r.rfq_offers?.[0]?.count || 0,
-            avatar: r.buyer?.avatar_url || null,
-            postedAt: r.created_at ? (() => {
-              const diffMs = new Date().getTime() - new Date(r.created_at).getTime();
-              const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-              const diffDays = Math.floor(diffHours / 24);
-              if (diffDays > 0) return `${diffDays} days ago`;
-              if (diffHours > 0) return `${diffHours} hrs ago`;
-              return 'Just now';
-            })() : undefined,
-            isGroupCollection: r.is_group_collection
-          };
-        });
-        setRfqsList(mapped);
-      }
-    } catch (err: any) {
-      console.error('Failed to fetch RFQs:', err);
-    }
-  };
-
+  // Fetch Market Intelligence Data
   const fetchIntelligence = async () => {
     try {
       const { data, error } = await supabase.rpc('get_market_intelligence');
@@ -136,9 +66,7 @@ export default function MarketIntelligenceHub() {
     Promise.all([
       useServiceStore.getState().fetchMaterialPrices(),
       useServiceStore.getState().fetchCategories()
-    ]).then(() => {
-      fetchRFQs();
-    });
+    ]);
     fetchIntelligence();
 
     const channel = supabase.channel('public:rfqs-feed')
@@ -146,10 +74,6 @@ export default function MarketIntelligenceHub() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'rfqs' },
         (payload) => {
-          if (payload.eventType === 'INSERT') {
-            toast.success('New Market Request!', { description: 'A buyer just posted a new material request.' });
-          }
-          fetchRFQs();
           fetchIntelligence();
         }
       )
@@ -157,7 +81,6 @@ export default function MarketIntelligenceHub() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'rfq_offers' },
         () => {
-          fetchRFQs();
           fetchIntelligence();
         }
       )
@@ -179,44 +102,6 @@ export default function MarketIntelligenceHub() {
     return matchesSearch && matchesRegion && matchesDemand && matchesCategory;
   });
 
-  const filteredRFQs = rfqsList.filter(rfq => {
-    if (rfq.isGroupCollection) return false;
-
-    const matchesSearch = rfq.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      rfq.material.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesRegion = selectedRegion === 'All' || rfq.region === selectedRegion;
-    const matchesCategory = selectedCategory === 'All' || rfq.category === selectedCategory;
-
-    // Quantity filter logic
-    let matchesQuantity = true;
-    if (selectedQuantity !== 'All') {
-      const qtyNum = parseInt(rfq.quantity.replace(/[^0-9]/g, ''));
-      if (selectedQuantity === 'small') {
-        matchesQuantity = qtyNum < 500;
-      } else if (selectedQuantity === 'medium') {
-        matchesQuantity = qtyNum >= 500 && qtyNum <= 1000;
-      } else if (selectedQuantity === 'large') {
-        matchesQuantity = qtyNum > 1000;
-      }
-    }
-
-    // Urgency filter logic
-    let matchesUrgency = true;
-    if (selectedUrgency !== 'All') {
-      const deadlineLower = rfq.deadline.toLowerCase();
-      const isUrgent = deadlineLower.includes('tomorrow') ||
-        deadlineLower.includes('1 day') ||
-        deadlineLower.includes('2 days');
-      if (selectedUrgency === 'urgent') {
-        matchesUrgency = isUrgent;
-      } else if (selectedUrgency === 'normal') {
-        matchesUrgency = !isUrgent;
-      }
-    }
-
-    return matchesSearch && matchesRegion && matchesCategory && matchesQuantity && matchesUrgency;
-  });
-
   return (
     <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
@@ -229,7 +114,7 @@ export default function MarketIntelligenceHub() {
             <div>
               <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Market Intelligence</h1>
               <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Price Ticker & RFQs
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Price Ticker
               </p>
             </div>
           </div>
@@ -239,7 +124,6 @@ export default function MarketIntelligenceHub() {
         <div className="flex px-4 pb-3 gap-1.5 overflow-x-auto no-scrollbar">
           {([
             { id: 'prices', label: 'Prices', icon: TrendingUp },
-            profile?.role === 'seller' ? { id: 'rfqs', label: 'Live RFQs', icon: Target } : null,
             { id: 'trends', label: 'AI Trends', icon: Sparkles },
             { id: 'tips', label: 'Insights', icon: Zap },
           ].filter(Boolean) as Array<{ id: string, label: string, icon: any }>).map(tab => (
@@ -376,84 +260,6 @@ export default function MarketIntelligenceHub() {
                 </div>
               )}
 
-              {activeTab === 'rfqs' && (
-                <div className="p-4 grid grid-cols-2 gap-3">
-                  {/* Category Filter */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Category</label>
-                    <div className="relative">
-                      <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-emerald-500"
-                      >
-                        <option value="All">All Categories</option>
-                        <option value="Plastic">Plastic</option>
-                        <option value="Metal">Metal</option>
-                        <option value="Paper">Paper</option>
-                        <option value="Organic">Organic</option>
-                        <option value="Glass">Glass</option>
-                        <option value="E-waste">E-waste</option>
-                      </select>
-                      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* Region Filter */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Region</label>
-                    <div className="relative">
-                      <select
-                        value={selectedRegion}
-                        onChange={(e) => setSelectedRegion(e.target.value)}
-                        className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-emerald-500"
-                      >
-                        <option value="All">All Regions</option>
-                        <option value="Nairobi">Nairobi</option>
-                        <option value="Western">Western</option>
-                        <option value="Coast">Coast</option>
-                      </select>
-                      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* Quantity Filter */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Quantity Goal</label>
-                    <div className="relative">
-                      <select
-                        value={selectedQuantity}
-                        onChange={(e) => setSelectedQuantity(e.target.value)}
-                        className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-emerald-500"
-                      >
-                        <option value="All">All Quantities</option>
-                        <option value="small">&lt; 500kg</option>
-                        <option value="medium">500kg - 1,000kg</option>
-                        <option value="large">&gt; 1,000kg</option>
-                      </select>
-                      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
-                    </div>
-                  </div>
-
-                  {/* Urgency Filter */}
-                  <div className="flex flex-col gap-1">
-                    <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Urgency</label>
-                    <div className="relative">
-                      <select
-                        value={selectedUrgency}
-                        onChange={(e) => setSelectedUrgency(e.target.value)}
-                        className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-emerald-500"
-                      >
-                        <option value="All">All Urgency</option>
-                        <option value="urgent">Urgent (&lt;= 2 days)</option>
-                        <option value="normal">Normal</option>
-                      </select>
-                      <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Clear filters bar */}
               {(selectedCategory !== 'All' || selectedRegion !== 'All' || selectedDemand !== 'All' || selectedQuantity !== 'All' || selectedUrgency !== 'All') && (
                 <div className="px-4 pb-3 flex justify-end">
@@ -488,10 +294,6 @@ export default function MarketIntelligenceHub() {
 
           {activeTab === 'trends' && (
             <MarketIntelTrendsTab marketData={marketData} />
-          )}
-
-          {activeTab === 'rfqs' && (
-            <MarketIntelRFQsTab filteredRFQs={filteredRFQs} navigate={navigate} />
           )}
 
           {activeTab === 'tips' && (

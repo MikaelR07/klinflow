@@ -65,7 +65,8 @@ export default function MyTrades() {
       }
 
       console.log('[MyTrades] Found Trades:', data?.length || 0, data);
-      setActiveTrades((data || []) as unknown as TradeWithListing[]);
+      const filteredData = (data || []).filter(d => d.booking_type !== 'dropoff');
+      setActiveTrades(filteredData as unknown as TradeWithListing[]);
     } catch (err) {
       console.error('Fetch trades failed:', err);
       toast.error('Failed to load active trades');

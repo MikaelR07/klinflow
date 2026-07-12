@@ -167,6 +167,7 @@ export default function SwarmsList() {
         <div className="flex flex-col gap-1.5">
           {filteredSwarms.map((swarm: any) => {
             const progress = Math.min(100, Math.round((swarm.current_weight / swarm.target_weight) * 100));
+            const isMixed = swarm.material?.toLowerCase().includes('mixed');
             const marketRate = materialPrices.find(m => m.material_name === swarm.material)?.price_per_kg || 0;
             const rewardPool = swarm.target_weight * marketRate;
 
@@ -267,7 +268,7 @@ export default function SwarmsList() {
                     {/* Reward Pool */}
                     <div>
                       <p className="text-[12px] text-[#868e96] dark:text-slate-400 mb-0.5">Reward</p>
-                      <p className="text-[11px] font-bold text-[#2e7d32] dark:text-green-500">ksh {rewardPool.toLocaleString()}</p>
+                      <p className="text-[11px] font-bold text-[#2e7d32] dark:text-green-500">{isMixed ? 'Varies' : `ksh ${rewardPool.toLocaleString()}`}</p>
                     </div>
 
                     <div className="w-px h-6 bg-[#f1f3f5] dark:bg-slate-800" />

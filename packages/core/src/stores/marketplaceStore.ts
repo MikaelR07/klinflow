@@ -28,6 +28,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
   persist(
     (set, get) => ({
   listings: [],
+  targetedDropoffs: [],
   myListings: [],
   myOrders: [],
   receivedOrders: [],
@@ -43,6 +44,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
         .from('marketplace_listings')
         .select('*')
         .eq('status', 'active')
+        .is('target_agent_id', null)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -69,6 +71,47 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
       }
     } catch (error) {
       console.error('Error fetching listings:', error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  fetchTargetedDropoffs: async () => {
+    const { userId } = useAuthStore.getState();
+    if (!userId) return;
+
+    set({ isLoading: true });
+    try {
+      const { data, error } = await supabase
+        .from('marketplace_listings')
+        .select('*')
+        .eq('status', 'active')
+        .eq('target_agent_id', userId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (data) {
+        const sellerIds = [...new Set(data.map((l) => l.seller_id))];
+        const { data: sellers } = await supabase
+          .from('profiles')
+          .select('id, name, is_verified')
+          .in('id', sellerIds);
+        
+        const sellerMap = Object.fromEntries(sellers?.map((s) => [s.id, s]) || []);
+
+        const rawMapped = (data as Listing[]).map((l) => {
+          const normalized = normalizeKeys(l);
+          normalized.sellerName = sellerMap[l.seller_id]?.name || 'Verified Seller';
+          normalized.isVerified = sellerMap[l.seller_id]?.is_verified || false;
+          return normalized;
+        });
+        
+        const validListings = safeParseArray(MarketplaceListingSchema, rawMapped, 'Targeted Dropoffs Fetch');
+        set({ targetedDropoffs: validListings });
+      }
+    } catch (error) {
+      console.error('Error fetching targeted dropoffs:', error);
     } finally {
       set({ isLoading: false });
     }
@@ -173,7 +216,9 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           grade: (listingData as any).grade,
           swarm_id: (listingData as any).swarmId || (listingData as any).swarm_id,
           is_bulk_drive: (listingData as any).isBulkDrive || (listingData as any).is_bulk_drive || false,
-          group_metadata: (listingData as any).groupMetadata || (listingData as any).group_metadata
+          group_metadata: (listingData as any).groupMetadata || (listingData as any).group_metadata,
+          target_agent_id: (listingData as any).targetAgentId || (listingData as any).target_agent_id,
+          pickup_mode: (listingData as any).pickupMode || (listingData as any).pickup_mode || 'pickup'
         })
         .select()
         .single();
@@ -185,10 +230,16 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
       
       if (!newListing) throw new Error('Invalid listing data returned from server.');
 
-      set(state => ({
-        listings: [newListing, ...state.listings],
-        myListings: [newListing, ...state.myListings]
-      }));
+      set(state => {
+        const newState: any = {
+          myListings: [newListing, ...state.myListings]
+        };
+        // Only add to public listings if it's not a targeted drop-off
+        if (!newListing.targetAgentId) {
+          newState.listings = [newListing, ...state.listings];
+        }
+        return newState;
+      });
 
       // NOTE: Notification to agents is dispatched by PostTrade.tsx after createListing succeeds.
       // Do NOT add a duplicate addNotification call here.
@@ -554,6 +605,14 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
 
       if (offerError) throw offerError;
 
+      // 1.5 Update listing status to sold to remove from public/targeted markets
+      const { error: listingError } = await supabase
+        .from('marketplace_listings')
+        .update({ status: 'sold' })
+        .eq('id', offer.listingId);
+        
+      if (listingError) console.error("Failed to update listing status to sold:", listingError);
+
       // 2. Create actual order
       // 2. Create actual order
       const { data: orderData, error: orderError } = await supabase
@@ -568,7 +627,8 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           total_price: offer.offeredPrice * offer.quantity,
           status: 'pending',
           message: 'Offer accepted',
-          swarm_id: offer.listing?.swarmId || offer.listing?.swarm_id
+          swarm_id: offer.listing?.swarmId || offer.listing?.swarm_id,
+          pickup_mode: offer.listing?.pickupMode || offer.listing?.pickup_mode || 'pickup'
         })
         .select()
         .single();
@@ -591,7 +651,8 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
             actual_weight_kg: offer.quantity,
             estate: offer.listing?.location || undefined,
             latitude: offer.listing?.latitude || undefined,
-            longitude: offer.listing?.longitude || undefined
+            longitude: offer.listing?.longitude || undefined,
+            booking_type: (offer.listing?.pickupMode || offer.listing?.pickup_mode) === 'dropoff' ? 'dropoff' : 'marketplace_pickup'
           })
           .select()
           .single();
@@ -628,7 +689,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
     try {
       const { error } = await supabase
         .from('marketplace_offers')
-        .update({ status: 'declined' })
+        .update({ status: 'rejected' })
         .eq('id', offerId);
 
       if (error) throw error;

@@ -17,6 +17,9 @@ import {
 } from 'lucide-react';
 import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { supabase } from '@klinflow/supabase';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { toast } from 'sonner';
 
 interface MaterialEntry {
   id: string;
@@ -43,6 +46,7 @@ export default function IntakeVerification() {
   const { isDarkMode } = useThemeStore();
   const location = useLocation();
   const navigate = useNavigate();
+  const { profile } = useAuthStore();
   const agentData = (location.state as any)?.agentData as AgentPayload | undefined;
 
   const [manualWeights, setManualWeights] = useState<Record<string, string>>({});
@@ -75,12 +79,42 @@ export default function IntakeVerification() {
   const discrepancy = totalActual - agentData.totalClaimedWeight;
   const allFilled = agentData.materials.every(m => manualWeights[m.id] && parseFloat(manualWeights[m.id]) > 0);
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
+    try {
+      if (!profile) throw new Error("No profile");
+      
+      const assetIds = agentData.materials.map(m => m.id).filter(id => !id.startsWith('m'));
+
+      if (assetIds.length > 0) {
+        const { error: assetError } = await (supabase
+          .from('assets')
+          .update({ 
+            status: 'transferred_to_hub',
+            hub_manager_id: profile.id
+          } as any)
+          .in('id', assetIds) as any);
+          
+        if (assetError) throw assetError;
+      }
+      
+      if (agentData.agentId) {
+        const { error: profileError } = await (supabase
+          .from('profiles')
+          .update({ is_en_route: false, hub_transfer_pin: null } as any)
+          .eq('id', agentData.agentId) as any);
+
+        if (profileError) throw profileError;
+      }
+
+      toast.success("Cargo Received!", { description: `Successfully transferred to Hub Inventory.` });
       setShowSuccessModal(true);
-    }, 1500);
+    } catch (err) {
+      toast.error("Transfer failed");
+      console.error(err);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const formatTime = (iso: string) => {

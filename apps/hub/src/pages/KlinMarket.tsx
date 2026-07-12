@@ -59,6 +59,7 @@ export default function KlinMarket() {
   const [selectedCategoryTab, setSelectedCategoryTab] = useState('All Materials');
   const [offerPrice, setOfferPrice] = useState('');
   const [offerQty, setOfferQty] = useState<number>(1);
+  const [isSendingOffer, setIsSendingOffer] = useState(false);
 
   useEffect(() => {
     fetchListings();
@@ -132,6 +133,7 @@ export default function KlinMarket() {
       return;
     }
 
+    setIsSendingOffer(true);
     try {
       await makeOffer(selectedListing, parseFloat(offerPrice), offerQty);
       setSelectedId(null);
@@ -139,6 +141,8 @@ export default function KlinMarket() {
       toast.success('Offer Sent! 🚀', { description: 'The seller will be notified of your bid.' });
     } catch (err: any) {
       toast.error(err.message);
+    } finally {
+      setIsSendingOffer(false);
     }
   };
 
@@ -180,11 +184,11 @@ export default function KlinMarket() {
     <div className="font-medium space-y-6 animate-fade-in w-full pb-10 p-2 sm:p-6 rounded-xl min-h-screen">
       {/* ── DESCRIPTION ── */}
       <div className="mb-4">
-        <p className="font-bold text-[10px] text-slate-500 uppercase tracking-widest mt-2">Manage public orders, accept RFQs, and fulfill on-demand pickups.</p>
+        <p className="font-bold text-[10px] text-slate-500 uppercase tracking-widest mt-2">View Market Listings from sellers,Buy and Manage market Movements.</p>
       </div>
 
       {/* ── KPI CARDS ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-2">
         {[
           { label: 'Active Listings', value: '1,246', icon: Box, color: 'text-indigo-600', bg: 'bg-indigo-50 dark:bg-indigo-900/20', trend: '↑ 14%', trendLabel: 'vs last week', trendColor: 'text-emerald-500' },
           { label: 'Total Volume', value: '482.6 t', icon: Package, color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-900/20', trend: '↑ 18%', trendLabel: 'vs last week', trendColor: 'text-emerald-500' },
@@ -197,7 +201,7 @@ export default function KlinMarket() {
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${kpi.bg} ${kpi.color}`}>
                   <kpi.icon className="w-4 h-4" />
                 </div>
-                <p className="font-medium text-[12px] text-slate-500 dark:text-slate-400">{kpi.label}</p>
+                <p className="font-bold text-[14px] text-slate-500 dark:text-slate-400">{kpi.label}</p>
               </div>
               <div className="flex flex-col items-end">
                  <h3 className="text-base font-semibold text-slate-700 dark:text-slate-200 leading-none">{kpi.value}</h3>
@@ -211,24 +215,24 @@ export default function KlinMarket() {
         <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-xl p-3 shadow-none flex flex-col justify-center col-span-1 md:col-span-2 lg:col-span-1">
            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                 <p className="font-medium text-[12px] text-slate-500 dark:text-slate-400">Price Trend</p>
+                 <p className="font-bold text-[14px] text-slate-500 dark:text-slate-400">Price Trend</p>
                  <span className="font-medium text-[10px] text-rose-500">↓ 4%</span>
               </div>
               <div className="flex flex-col items-end">
-                 <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-200 leading-none">Mixed Paper</h4>
-                 <p className="font-medium text-[10px] text-slate-500 mt-1">KES 20/kg avg</p>
+                 <h4 className="text-[12px] font-semibold text-slate-700 dark:text-slate-200 leading-none">Mixed Paper</h4>
+                 <p className="font-medium text-[12px] text-slate-500 mt-1">KES 20/kg avg</p>
               </div>
            </div>
         </div>
       </div>
 
       
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-2 !mt-2">
         
         {/* ── MAIN COLUMN (LEFT) ── */}
         <div className="xl:col-span-3 space-y-6">
-{/* ── SEARCH & FILTERS ROW ── */}
-      <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-lg p-4 shadow-none flex flex-col gap-4">
+       {/* ── SEARCH & FILTERS ROW ── */}
+      <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-lg p-4 shadow-none flex flex-col gap-2 ">
         <div className="flex flex-col lg:flex-row justify-between items-center gap-4">
           <div className="relative w-full lg:max-w-md shrink-0">
             <Search className="font-medium absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -247,7 +251,7 @@ export default function KlinMarket() {
                  <button
                    key={tab}
                    onClick={() => setSelectedCategoryTab(tab)}
-                   className={`text-[11px] whitespace-nowrap flex items-center gap-1 pb-1 border-b-2 transition-all ${selectedCategoryTab === tab ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-[#131722] dark:hover:text-slate-200'}`}
+                   className={`text-[14px] whitespace-nowrap flex items-center gap-1 pb-1 border-b-2 transition-all ${selectedCategoryTab === tab ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-slate-500 hover:text-[#131722] dark:hover:text-slate-200'}`}
                  >
                     {tab === 'All Materials' && <CheckCircle2 className="w-3 h-3" />}
                     {tab}
@@ -264,7 +268,7 @@ export default function KlinMarket() {
                      <button 
                        key={type}
                        onClick={() => setSelectedListingType(type)}
-                       className={`px-3 py-1.5 rounded-lg text-[12px] transition-all ${selectedListingType === type ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-none' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                       className={`px-3 py-1.5 rounded-lg text-[14px] transition-all ${selectedListingType === type ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-400 shadow-none' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
                      >
                        {type}
                      </button>
@@ -273,13 +277,13 @@ export default function KlinMarket() {
                
                {/* Right side dropdowns */}
                <div className="flex items-center gap-2 lg:ml-auto shrink-0">
-                  <button className="font-medium flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 px-3 py-1.5 rounded-lg text-[12px] text-slate-700 dark:text-slate-200 whitespace-nowrap">
+                  <button className="font-medium flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 px-3 py-1.5 rounded-lg text-[14px] text-slate-700 dark:text-slate-200 whitespace-nowrap">
                     Category <ChevronDown className="font-medium w-3 h-3 text-slate-400" />
                   </button>
-                  <button className="font-medium flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 px-3 py-1.5 rounded-lg text-[12px] text-slate-700 dark:text-slate-200 whitespace-nowrap">
+                  <button className="font-medium flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 px-3 py-1.5 rounded-lg text-[14px] text-slate-700 dark:text-slate-200 whitespace-nowrap">
                     Location <ChevronDown className="font-medium w-3 h-3 text-slate-400" />
                   </button>
-                  <button className="font-medium flex items-center gap-1.5 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 px-3 py-1.5 rounded-lg text-[12px] text-slate-700 dark:text-slate-200 whitespace-nowrap">
+                  <button className="font-medium flex items-center gap-1.5 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 px-3 py-1.5 rounded-lg text-[14px] text-slate-700 dark:text-slate-200 whitespace-nowrap">
                     <span className="font-medium text-slate-400">Sort by</span> Newest <ChevronDown className="font-medium w-3 h-3 text-slate-400" />
                   </button>
                </div>
@@ -302,10 +306,10 @@ export default function KlinMarket() {
             <Search className="w-10 h-10" />
           </div>
           <h3 className="text-base font-semibold text-[#131722] dark:text-white">No materials found</h3>
-          <p className="font-medium text-xs font-medium text-slate-500 mt-2">Try adjusting your filters or search criteria.</p>
+          <p className="font-medium text-base font-medium text-slate-500 mt-2">Try adjusting your filters or search criteria.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
           {filteredListings.map((listing: any) => {
             const hasBid = getHasOffer(listing.id);
             const category = listing.materialCategory || (listing.materialSubcategory ? listing.material : null) || 'Material';
@@ -355,11 +359,11 @@ export default function KlinMarket() {
                        </span>
                      </div>
                      <div className="flex items-center justify-between gap-2 mt-1">
-                       <p className="font-medium text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 capitalize truncate">
+                       <p className="font-bold text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 capitalize truncate">
                          <MapPin className="font-medium w-3 h-3 text-slate-400" />
                          {listing.location || 'Nairobi'}
                        </p>
-                       <p className="font-medium text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 capitalize truncate text-right">
+                       <p className="font-bold text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 capitalize truncate text-right">
                          <User className="font-medium w-3 h-3 text-emerald-500" />
                          {listing.isBulkDrive ? 'Community Bulk' : (listing.sellerName || 'GreenCycle Ltd')}
                        </p>
@@ -369,15 +373,15 @@ export default function KlinMarket() {
                   {/* Stats Row */}
                   <div className="grid grid-cols-3 gap-2 mb-4">
                     <div className="text-center bg-slate-200 dark:bg-slate-800/80 rounded-lg p-2">
-                      <p className="font-medium text-[9px] text-slate-500 uppercase tracking-widest mb-0.5">Price</p>
-                      <p className="font-medium text-xs text-emerald-600 dark:text-emerald-400">KES {listing.pricePerKg}</p>
+                      <p className="font-bold text-[10px] text-slate-500 uppercase tracking-widest mb-0.5">Price</p>
+                      <p className="font-bold text-xs text-emerald-600 dark:text-emerald-400">KES {listing.pricePerKg}</p>
                     </div>
                     <div className="text-center bg-slate-200 dark:bg-slate-800/80 rounded-lg p-2">
-                      <p className="font-medium text-[9px] text-slate-500 uppercase tracking-widest mb-0.5">Available</p>
-                      <p className="font-medium text-xs text-[#131722] dark:text-white">{listing.quantity?.toLocaleString() || 0} kg</p>
+                      <p className="font-bold text-[10px] text-slate-500 uppercase tracking-widest mb-0.5">Available</p>
+                      <p className="font-bold text-xs text-[#131722] dark:text-white">{listing.quantity?.toLocaleString() || 0} kg</p>
                     </div>
                     <div className="text-center bg-slate-200 dark:bg-slate-800/80 rounded-lg p-2">
-                      <p className="font-medium text-[9px] text-slate-500 uppercase tracking-widest mb-0.5">Quality</p>
+                      <p className="font-medium text-[10px] text-slate-500 uppercase tracking-widest mb-0.5">Quality</p>
                       <p className="font-medium text-xs text-[#131722] dark:text-white">{listing.grade || 'Grade A'}</p>
                     </div>
                   </div>
@@ -475,10 +479,10 @@ export default function KlinMarket() {
       </div>
 
 
-      {/* ── LISTING MODAL (PRESERVED EXACTLY) ── */}
+      {/* ── LISTING MODAL ── */}
       <AnimatePresence>
         {selectedId && selectedListing && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -490,10 +494,11 @@ export default function KlinMarket() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-800 rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-[#e0e3eb] dark:border-slate-700/50"
+              className="relative w-full max-w-5xl bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-[#e0e3eb] dark:border-slate-700/50"
+              style={{ maxHeight: 'calc(100vh - 4rem)' }}
             >
               {/* Left Side: Images */}
-              <div className="md:w-1/2 bg-slate-100 dark:bg-slate-950 relative h-64 md:h-auto border-r border-[#e0e3eb] dark:border-slate-800">
+              <div className="md:w-[55%] bg-slate-100 dark:bg-slate-950 relative h-72 md:h-auto shrink-0 border-r border-[#e0e3eb] dark:border-slate-800">
                 <div className="absolute inset-0">
                    {(selectedListing.photos?.length > 0 ? selectedListing.photos : [selectedListing.photoUrl || selectedListing.photo]).map((imgUrl: string, idx: number) => (
                       <div key={idx} className="w-full h-full">
@@ -524,11 +529,16 @@ export default function KlinMarket() {
               </div>
 
               {/* Right Side: Details & Bidding */}
-              <div className="md:w-1/2 flex flex-col h-full max-h-[90vh] overflow-y-auto">
-                <div className="sticky top-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-[#e0e3eb] dark:border-slate-800 p-6 flex items-center justify-between z-10">
-                  <h2 className="text-xl font-bold text-[#131722] dark:text-white capitalize tracking-tight">
-                    {selectedListing.materialSubcategory || selectedListing.material}
-                  </h2>
+              <div className="md:w-[55%] flex flex-col min-h-0">
+                <div className="shrink-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-[#e0e3eb] dark:border-slate-800 px-6 py-5 flex items-center justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-[#131722] dark:text-white capitalize tracking-tight">
+                      {selectedListing.materialSubcategory || selectedListing.material}
+                    </h2>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live on Klin Market
+                    </p>
+                  </div>
                   <button
                     onClick={() => setSelectedId(null)}
                     className="font-medium w-10 h-10 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full flex items-center justify-center text-slate-500 transition-colors hidden md:flex"
@@ -537,45 +547,89 @@ export default function KlinMarket() {
                   </button>
                 </div>
 
-                <div className="p-5 space-y-4 flex-1">
+                {/* Scrollable content area */}
+                <div className="flex-1 overflow-y-auto p-6 space-y-5">
+                  {/* Pricing Highlight Card */}
+                  <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-xl p-5 text-white relative overflow-hidden">
+                    <div className="absolute -top-3 -right-3 w-20 h-20 bg-white/5 rounded-full" />
+                    <div className="absolute bottom-1 right-6 w-12 h-12 bg-white/5 rounded-full" />
+                    <div className="flex items-end justify-between relative z-10">
+                      <div>
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100 mb-1">Asking Price</p>
+                        <p className="text-lg font-black">KSh {selectedListing.pricePerKg} <span className="text-sm font-medium text-emerald-200">/kg</span></p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100 mb-1">Total Value</p>
+                        <p className="text-lg font-black">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Specifications Grid */}
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-white dark:bg-slate-800/50 p-3 rounded-xl border border-[#e0e3eb] dark:border-slate-700/50">
-                      <p className="font-medium text-[9px] text-slate-400 uppercase tracking-widest mb-1 flex items-center gap-1.5">
-                        <Scale className="w-3 h-3" /> Total Stock
+                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-[#e0e3eb] dark:border-slate-700/50">
+                      <p className="font-bold text-[9px] text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                        <Scale className="w-3 h-3" /> Available Stock
                       </p>
-                      <p className="font-medium text-sm text-[#131722] dark:text-white">
-                        {selectedListing.quantity} KG
+                      <p className="font-bold text-base text-[#131722] dark:text-white">
+                        {selectedListing.quantity?.toLocaleString()} KG
                       </p>
                     </div>
-                    <div className="bg-white dark:bg-slate-800/50 p-3 rounded-xl border border-[#e0e3eb] dark:border-slate-700/50">
-                      <p className="font-medium text-[9px] text-slate-400 uppercase tracking-widest mb-1 flex items-center gap-1.5">
+                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-[#e0e3eb] dark:border-slate-700/50">
+                      <p className="font-bold text-[9px] text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                         <User className="w-3 h-3" /> Posted By
                       </p>
-                      <p className="font-medium text-sm text-slate-700 dark:text-slate-300 capitalize truncate">{selectedListing.isBulkDrive ? 'Community Bulk Drive' : (selectedListing.sellerName || 'Verified Seller')}</p>
+                      <p className="font-bold text-sm text-slate-700 dark:text-slate-300 capitalize truncate">{selectedListing.isBulkDrive ? 'Community Bulk Drive' : (selectedListing.sellerName || 'Verified Seller')}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 p-3 bg-white dark:bg-slate-800/30 rounded-xl border border-[#e0e3eb] dark:border-slate-800">
+                  {/* Location */}
+                  <div className="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-[#e0e3eb] dark:border-slate-800">
                     <MapPin className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-medium text-[9px] text-slate-400 uppercase tracking-widest mb-0.5">Location</p>
-                      <p className="font-medium text-xs text-slate-700 dark:text-slate-300">{selectedListing.location}</p>
+                      <p className="font-bold text-[9px] text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
+                      <p className="font-bold text-xs text-slate-700 dark:text-slate-300">{selectedListing.location}</p>
                     </div>
                   </div>
-
+                  {/* Seller Notes */}
                   {selectedListing.description && (
                      <div>
-                       <p className="font-medium text-[9px] text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                       <p className="font-bold text-[9px] text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                          <Info className="w-3 h-3" /> Seller Notes
                        </p>
-                       <p className="font-medium text-xs text-slate-600 dark:text-slate-400 italic p-3 bg-amber-50/50 dark:bg-amber-900/10 rounded-xl border border-amber-100 dark:border-amber-900/20">
-"{selectedListing.description}"
+                       <p className="font-medium text-xs text-slate-600 dark:text-slate-400 italic p-4 bg-amber-50/50 dark:bg-amber-900/10 rounded-xl border border-amber-100 dark:border-amber-900/20 leading-relaxed">
+                        {selectedListing.description}"
                        </p>
                      </div>
                   )}
+                  
+                  {/* Material Details Table */}
+                  <div className="bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700/50 rounded-xl divide-y divide-slate-100 dark:divide-slate-700/50 overflow-hidden">
+                    <div className="px-4 py-3 bg-slate-50/50 dark:bg-slate-800/80">
+                      <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                        <Info className="w-3 h-3" /> Material Specifications
+                      </h4>
+                    </div>
+                    {[
+                      { label: 'Material Type', value: selectedListing.material || '—' },
+                      { label: 'Category', value: selectedListing.materialCategory || '—' },
+                      { label: 'Sub-Category', value: selectedListing.materialSubcategory || '—' },
+                      { label: 'Grade / Quality', value: selectedListing.grade || selectedListing.quality || 'Standard' },
+                      { label: 'Listing Status', value: selectedListing.status === 'active' ? 'Live' : selectedListing.status || '—' },
+                      { label: 'Posted On', value: selectedListing.createdAt ? new Date(selectedListing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—' },
+                    ].map((row, idx) => (
+                      <div key={idx} className="flex justify-between items-center px-4 py-2.5">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{row.label}</span>
+                        <span className="text-xs font-bold text-[#131722] dark:text-white capitalize">{row.value}</span>
+                      </div>
+                    ))}
+                  </div>
 
+                  
+
+                  {/* Community Bulk Drive Info */}
                   {selectedListing.isBulkDrive && selectedListing.groupMetadata && (
-                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-3 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
+                    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-4 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
                       <div className="flex items-center gap-2 mb-2">
                         <Users className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                         <h4 className="text-[9px] font-semibold text-indigo-900 dark:text-indigo-300 uppercase tracking-widest">Community Contribution</h4>
@@ -596,92 +650,103 @@ export default function KlinMarket() {
                   )}
                 </div>
 
-                <div className="p-4 bg-white dark:bg-slate-800/80 border-t border-[#e0e3eb] dark:border-slate-700/50 shrink-0">
+                {/* Fixed Bottom Bid Section */}
+                <div className="shrink-0 p-5 bg-white dark:bg-slate-800/80 border-t border-[#e0e3eb] dark:border-slate-700/50">
                   {/* Premium Bid Section */}
-                  <div className={`${getHasOffer(selectedListing.id) ? 'bg-indigo-600' : 'bg-emerald-700'} p-3 rounded-lg border border-white/10 space-y-4 transition-colors duration-500 shadow-xl`}>
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                  <div className={`${getHasOffer(selectedListing.id) ? 'bg-indigo-600' : 'bg-emerald-700'} p-4 rounded-xl border border-white/10 space-y-4 transition-colors duration-500 shadow-xl`}>
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                         {getHasOffer(selectedListing.id) ? (
-                          <CheckCircle2 className="font-medium w-3 h-3 text-white" />
+                          <CheckCircle2 className="w-4 h-4 text-white" />
                         ) : (
-                          <MessageSquare className="font-medium w-3 h-3 text-white" />
+                          <MessageSquare className="w-4 h-4 text-white" />
                         )}
                       </div>
-                      <h3 className="text-[9px] font-semibold text-white uppercase tracking-[0.2em]">
+                      <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">
                         {getHasOffer(selectedListing.id) ? 'Bid Active' : 'Ready to negotiate?'}
                       </h3>
                     </div>
 
                     {getHasOffer(selectedListing.id) ? (
-                      <div className="text-center py-2 space-y-1">
-                        <p className="font-medium text-[10px] text-white/90 leading-relaxed italic px-2">
-"Your offer has been sent. You'll be notified if they accept."
+                      <div className="text-center py-3 space-y-2">
+                        <p className="font-medium text-xs text-white/90 leading-relaxed italic px-4">
+                          "Your offer for this material has been sent to the merchant. You'll be notified if they accept your bid."
                         </p>
                       </div>
                     ) : (
                       <>
                         {/* Detailed Seller Asking Info */}
-                        <div className="bg-black/20 rounded-xl p-2.5 border border-white/10">
-                          <p className="font-medium text-[8px] text-white/70 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
-                            <DollarSign className="w-3 h-3" /> Seller's Asking Price
+                        <div className="bg-black/20 rounded-xl p-3 border border-white/10">
+                          <p className="font-bold text-[9px] text-white/70 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                            <Info className="w-3.5 h-3.5" /> Seller's Asking Price
                           </p>
                           
                           <div className="flex items-end justify-between mb-1">
                              <div>
-                               <p className="font-medium text-[9px] text-white/60 mb-0.5">Price Per KG</p>
-                               <p className="font-medium text-sm text-white">KSh {selectedListing.pricePerKg}</p>
+                               <p className="text-[10px] text-white/60 font-semibold mb-0.5">Price Per KG</p>
+                               <p className="text-base font-black text-white">KSh {selectedListing.pricePerKg}</p>
                              </div>
-                             <div className="font-medium text-white/40 pb-1 text-xs">×</div>
+                             <div className="text-white/40 pb-1 font-black text-sm">×</div>
                              <div className="text-right">
-                               <p className="font-medium text-[9px] text-white/60 mb-0.5">Quantity</p>
-                               <p className="font-medium text-sm text-white">{selectedListing.quantity} KG</p>
+                               <p className="text-[10px] text-white/60 font-semibold mb-0.5">Total Quantity</p>
+                               <p className="text-base font-black text-white">{selectedListing.quantity} KG</p>
                              </div>
                           </div>
                           
-                          <div className="h-px bg-white/10 my-1.5" />
+                          <div className="h-px bg-white/20 my-2" />
                           
                           <div className="flex items-center justify-between">
-                             <p className="font-medium text-[10px] text-white/80">Total Asking</p>
-                             <p className="font-medium text-base text-green-400">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
+                             <p className="text-xs font-bold text-white/80">Total Asking Price</p>
+                             <p className="text-xl font-black text-green-400">KSh {(selectedListing.pricePerKg * selectedListing.quantity).toLocaleString()}</p>
                           </div>
                         </div>
                         
-                        <div className="grid grid-cols-2 gap-2">
-                          <div className="space-y-1">
-                            <label className="font-medium text-[8px] text-white uppercase tracking-widest ml-1">My Bid (/KG)</label>
-                            <input
-                              type="number"
-                              value={offerPrice}
-                              onChange={(e) => setOfferPrice(e.target.value)}
-                              className="font-medium w-full bg-black/20 border border-white/20 h-9 rounded-lg px-3 text-xs text-white outline-none transition-all placeholder:text-white/40 focus:border-white/40"
-                              placeholder="0.00"
-                            />
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1.5">
+                            <label className="font-bold text-[9px] text-white uppercase tracking-widest ml-1">My Price Offer</label>
+                            <div className="relative">
+                              <input
+                                type="number"
+                                value={offerPrice}
+                                onChange={(e) => setOfferPrice(e.target.value)}
+                                className="font-bold w-full bg-black/20 border border-white/20 h-12 rounded-xl px-4 text-sm text-white outline-none transition-all placeholder:text-white/40 focus:border-white/40"
+                                placeholder="0.00"
+                              />
+                              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/50">/KG</span>
+                            </div>
                           </div>
-                          <div className="space-y-1">
-                            <label className="font-medium text-[8px] text-white uppercase tracking-widest ml-1">Weight (KG)</label>
-                            <input
-                              type="number"
-                              max={selectedListing.quantity}
-                              value={offerQty}
-                              onChange={(e) => setOfferQty(Number(e.target.value))}
-                              className="font-medium w-full bg-black/20 border border-white/20 h-9 rounded-lg px-3 text-xs text-white outline-none transition-all placeholder:text-white/40 focus:border-white/40"
-                              placeholder="0"
-                            />
+                          <div className="space-y-1.5">
+                            <label className="font-bold text-[9px] text-white uppercase tracking-widest ml-1">Total Weight</label>
+                            <div className="relative">
+                              <input
+                                type="number"
+                                max={selectedListing.quantity}
+                                value={offerQty}
+                                onChange={(e) => setOfferQty(Number(e.target.value))}
+                                className="font-bold w-full bg-black/20 border border-white/20 h-12 rounded-xl px-4 text-sm text-white outline-none transition-all placeholder:text-white/40 focus:border-white/40"
+                                placeholder="0"
+                              />
+                              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-white/50">KG</span>
+                            </div>
                           </div>
                         </div>
 
-                        <div className="pt-2 border-t border-white/10 flex items-center justify-between">
-                          <div>
-                            <p className="font-medium text-[8px] text-white/80 uppercase tracking-widest mb-0.5">Total Bid Value</p>
-                            <p className="font-medium text-sm text-white">KSh {(parseFloat(offerPrice || '0') * (offerQty || 0)).toLocaleString()}</p>
+                        <div className="pt-2 border-t border-white/10">
+                          <div className="flex items-center justify-between mb-4 px-1">
+                            <p className="text-[10px] font-bold text-white/80 uppercase tracking-widest">Total Bid Value</p>
+                            <p className="text-base font-black text-white">KSh {(parseFloat(offerPrice || '0') * (offerQty || 0)).toLocaleString()}</p>
                           </div>
 
                           <button
                             onClick={handleMakeOffer}
-                            disabled={isLoading || !offerPrice || !offerQty}
-                            className="font-medium px-5 py-2.5 bg-white text-emerald-800 rounded-xl text-[10px] uppercase tracking-widest shadow-none active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                            disabled={isSendingOffer || !offerPrice || !offerQty}
+                            className="w-full py-3.5 bg-white text-emerald-800 rounded-xl font-black text-xs uppercase tracking-[0.15em] shadow-xl shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                           >
-                            {isLoading ? 'Sending...' : 'Send Offer'}
+                            {isSendingOffer ? 'Processing...' : (
+                              <>
+                                <CheckCircle2 className="w-5 h-5" /> Send Offer Now
+                              </>
+                            )}
                           </button>
                         </div>
                       </>

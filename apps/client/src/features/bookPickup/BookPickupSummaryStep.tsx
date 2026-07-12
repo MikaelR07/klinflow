@@ -26,7 +26,7 @@ export default function BookPickupSummaryStep({
       <h2 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight italic px-2">Marketplace Summary</h2>
       
       {/* ── MATERIAL PREVIEW ── */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
         {photo ? (
           <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 relative">
             <img
@@ -52,6 +52,17 @@ export default function BookPickupSummaryStep({
             <span className="text-xs text-slate-400">{selected?.label || 'Waste'}</span>
           </div>
           <span className="text-sm font-semibold text-primary capitalize tracking-widest font-mono">{quantity} KG</span>
+        </div>
+
+        {/* Agent Info */}
+        <div className="flex justify-between items-center py-3 border-b border-slate-50 dark:border-white/5">
+          <div className="flex flex-col">
+            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">Agent Assigned</span>
+            <span className="text-xs text-slate-400">
+              {selectedAgent ? (selectedAgent.name || selectedAgent.full_name || 'Selected Agent') : (selectedCompanyId ? 'Selected Partner' : 'Open Pool (Fastest Available)')}
+            </span>
+          </div>
+          <span className="text-xs font-semibold text-primary capitalize tracking-widest">{selectedAgent || selectedCompanyId ? 'Direct Request' : 'Open Request'}</span>
         </div>
 
         {/* Wallet Status */}

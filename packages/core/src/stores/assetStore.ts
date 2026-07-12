@@ -124,9 +124,8 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
         .maybeSingle();
       
       if (existing) {
-        console.log('[AssetStore] Asset already exists for this booking:', existing.id);
-        set({ isLoading: false });
-        return existing;
+        console.log('[AssetStore] Asset already exists, bypassing duplicate insert, but checking if payout needs to be triggered.');
+        // Don't return early. We will skip creating the asset but still run the payout!
       }
 
       // 1. Calculate Payout Value (Using new Hierarchical Pricing)
@@ -135,11 +134,9 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
       const subcategorySlug = verificationData.grade?.toLowerCase();
       
       const agentRate = agentStore.getEffectivePrice(materialSlug, subcategorySlug);
+      const grossValue = verificationData.estimatedValue ?? (verificationData.weightKg * agentRate);
       
-      const materialValue = verificationData.estimatedValue ?? (verificationData.weightKg * agentRate);
-      const netPayout = materialValue; 
-      const clientEarnedCash = materialValue * 0.90; // Resident receives 90% (10% platform fee)
-      const clientGFP = Math.floor(verificationData.weightKg * 2);
+      const rateToUse = verificationData.weightKg > 0 ? (grossValue / verificationData.weightKg) : agentRate;
 
       const isManual = verificationData.isManual || false;
       
@@ -152,53 +149,55 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
       
       console.log('[AssetStore] Starting verification payload processing.', {
           bookingId,
-          ownerId: finalOwnerId,
-          clientEarnedCash
+          ownerId: finalOwnerId
       });
 
-      // 2. Create Asset Record
-      console.log('[AssetStore] Inserting into assets table...');
-      const digitalBatchId = get().generateDigitalBatchId(verificationData.materialType);
-      const carbonOffset = get().calculateCarbonOffset(verificationData.materialType, verificationData.weightKg);
-      
-      const { data: asset, error: assetError } = await supabase
-        .from('assets')
-        .insert({
-          booking_id: bookingId,
-          verifier_id: userId,
-          material_type: verificationData.materialType,
-          grade: verificationData.grade,
-          weight_kg: verificationData.weightKg,
-          estimated_value: materialValue, // Gross value of material
-          purity_score: verificationData.purityScore || 85,
-          photo_url: verificationData.photoUrl || null,
-          is_manual: isManual,
-          status: 'verified',
-          digital_batch_id: digitalBatchId,
-          metadata: {
-            carbon_offset_kg: carbonOffset,
-            chain_of_custody: [
-              { action: 'verified', actor: profile?.fullName || 'Agent', timestamp: new Date().toISOString(), id: userId }
-            ]
-          }
-        })
-        .select()
-        .single();
+      let asset = existing;
+      if (!existing) {
+        // 2. Create Asset Record
+        console.log('[AssetStore] Inserting into assets table...');
+        const digitalBatchId = get().generateDigitalBatchId(verificationData.materialType);
+        const carbonOffset = get().calculateCarbonOffset(verificationData.materialType, verificationData.weightKg);
+        
+        const { data: newAsset, error: assetError } = await supabase
+          .from('assets')
+          .insert({
+            booking_id: bookingId,
+            verifier_id: userId,
+            material_type: verificationData.materialType,
+            grade: verificationData.grade,
+            weight_kg: verificationData.weightKg,
+            estimated_value: grossValue, // Gross value of material
+            purity_score: verificationData.purityScore || 85,
+            photo_url: verificationData.photoUrl || null,
+            is_manual: isManual,
+            status: 'verified',
+            digital_batch_id: digitalBatchId,
+            metadata: {
+              carbon_offset_kg: carbonOffset,
+              chain_of_custody: [
+                { action: 'verified', actor: profile?.fullName || 'Agent', timestamp: new Date().toISOString(), id: userId }
+              ]
+            }
+          })
+          .select()
+          .single();
 
-      if (assetError) {
-        console.error('[AssetStore] Asset INSERT ERROR:', assetError);
-        throw assetError;
+        if (assetError) {
+          console.error('[AssetStore] Asset INSERT ERROR:', assetError);
+          throw assetError;
+        }
+        asset = newAsset;
       }
 
       // 4. Trigger Payout & Complete Booking
-      console.log('[AssetStore] Triggering Payout RPC (Pure Trade)...', { clientEarnedCash, clientGFP, weightKg: verificationData.weightKg });
+      console.log('[AssetStore] Triggering Secure Payout RPC...', { weightKg: verificationData.weightKg, rate: rateToUse });
       const { error: payoutError } = await supabase.rpc('complete_booking_split_payout', {
         p_booking_uuid: bookingId,
         p_agent_uuid: userId,
         p_client_uuid: finalOwnerId,
         p_weight_kg: verificationData.weightKg,
-        p_estimated_value: materialValue,
-        p_client_gfp: clientGFP,
+        p_rate_per_kg: rateToUse,
         p_is_manual: isManual
       });
 
@@ -211,7 +210,7 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
 
       // 5. User Feedback
       toast.success('Earnings Confirmed! 💰', {
-        description: `KSh ${clientEarnedCash.toLocaleString()} has been sent to the resident's wallet.`
+        description: `Pickup completed successfully. View ledger for exact amounts.`
       });
 
       set(state => ({ assets: [asset as any, ...state.assets], isLoading: false }));

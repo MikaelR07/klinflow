@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Global Grid Background */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div
-          className={`absolute inset-0 ${isDarkMode ? 'opacity-[0.05] text-white' : 'opacity-[0.09] text-slate-900'}`}
+          className={`absolute inset-0 ${isDarkMode ? 'opacity-[0.03] text-white' : 'opacity-[0.1] text-slate-900'}`}
           style={{
             backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(to right, currentColor 1px, transparent 1px)`,
             backgroundSize: '64px 64px'

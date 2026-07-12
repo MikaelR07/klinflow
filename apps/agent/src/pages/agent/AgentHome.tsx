@@ -134,12 +134,15 @@ export default function AgentHome() {
     if (profile?.id) {
       supabase
         .from('bookings')
-        .select('id')
+        .select('id, booking_type')
         .eq('agent_id', profile.id)
         .or('is_market_trade.eq.true,booking_type.eq.marketplace_pickup')
         .neq('status', 'completed')
         .neq('status', 'cancelled')
-        .then(({ data }) => setAcceptedTradesCount(data?.length || 0));
+        .then(({ data }) => {
+          const count = (data || []).filter(d => d.booking_type !== 'dropoff').length;
+          setAcceptedTradesCount(count);
+        });
     }
 
     if (profile?.id) {

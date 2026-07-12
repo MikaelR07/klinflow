@@ -19,6 +19,7 @@ import {
   TrendingUp,
   CheckCircle2,
   Ban,
+  Home,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useMarketplaceStore } from "@klinflow/core/stores/marketplaceStore";
@@ -264,7 +265,11 @@ export default function MarketplaceInventory() {
                         {selectedListing.material}
                       </h2>
                     </div>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 border border-emerald-200 dark:border-emerald-500/20">
+                    <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border ${
+                      selectedListing.status === 'cancelled'
+                        ? 'bg-red-50 dark:bg-red-500/10 text-red-600 border-red-200 dark:border-red-500/20'
+                        : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 border-emerald-200 dark:border-emerald-500/20'
+                    }`}>
                       <Tag className="w-3.5 h-3.5" />
                       <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">
                         {selectedListing.status === "active"
@@ -272,6 +277,14 @@ export default function MarketplaceInventory() {
                           : selectedListing.status}
                       </span>
                     </div>
+                    {(selectedListing.pickupMode === 'dropoff' || (selectedListing as any).pickup_mode === 'dropoff') && (
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border bg-violet-50 dark:bg-violet-500/10 text-violet-600 border-violet-200 dark:border-violet-500/20 ml-2">
+                        <Home className="w-3.5 h-3.5" />
+                        <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">
+                          Self Drop-off
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <hr className="border-slate-100 dark:border-slate-800/60" />
@@ -397,7 +410,7 @@ export default function MarketplaceInventory() {
                   )}
                   <button
                     onClick={() => setSelectedId(null)}
-                    className="w-full py-3.5 bg-white dark:bg-slate-900/50 text-slate-400 rounded-2xl font-black text-[10px] capitalize tracking-[0.2em] active:scale-95 transition-all"
+                    className="w-full py-3.5 bg-slate-200 dark:bg-slate-900/50 text-slate-400 rounded-2xl font-black text-[10px] capitalize tracking-[0.2em] active:scale-95 transition-all"
                   >
                     Return to Inventory
                   </button>
@@ -467,6 +480,9 @@ export default function MarketplaceInventory() {
                                     ? "Live"
                                     : listing.status}
                                 </span>
+                                {(listing.pickupMode === 'dropoff' || (listing as any).pickup_mode === 'dropoff') && (
+                                  <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 flex items-center gap-0.5 shrink-0"><Home className="w-2.5 h-2.5" />DROP-OFF</span>
+                                )}
                               </div>
                               <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">
                                 KSh {listing.pricePerKg}/kg
@@ -477,7 +493,7 @@ export default function MarketplaceInventory() {
                             <div className="flex items-center justify-between mt-0.5">
                               <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
                                 <Tag className="w-2.5 h-2.5 text-indigo-500" />{" "}
-                                CF-{listing.id?.slice(0, 8)}
+                                KF-{listing.id?.slice(0, 8)}
                               </p>
                             </div>
 

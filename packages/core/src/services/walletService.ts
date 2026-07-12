@@ -12,7 +12,7 @@ export const WALLET_CONFIG = {
   MAX_REDEMPTION_PER_TX: 10000,
   MAX_DAILY_REDEMPTION: 50000,
   // Conversion rate
-  GFP_TO_KES_RATE: 0.5, // 2 GFP = 1 KES
+  GFP_TO_KES_RATE: 0.01, // 100 GFP = 1 KES
 };
 
 export interface WalletRecipientSearchResult {
@@ -114,6 +114,8 @@ export interface SellerWalletStats {
     material: string;
     amount_sold: number;
   }>;
+  total_deals: number;
+  total_sold_kg: number;
 }
 
 export const walletService = {

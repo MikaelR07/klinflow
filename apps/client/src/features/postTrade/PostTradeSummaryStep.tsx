@@ -119,7 +119,14 @@ export default function PostTradeSummaryStep({
                 </div>
               )}
               <div className="flex justify-between items-center text-white">
-                <span className="text-[10px] font-black capitalize tracking-widest">Gross Value</span>
+                <span className="text-[10px] font-black capitalize tracking-widest flex items-center gap-2">
+                  Gross Value
+                  {askingPrice != null && (
+                    <span className="text-[9px] font-bold text-white/70 lowercase tracking-normal bg-white/10 px-1.5 py-0.5 rounded">
+                      ({askingPrice.toLocaleString()} × {quantity}kg)
+                    </span>
+                  )}
+                </span>
                 <span className="text-sm font-bold">KSh {assetValue.toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center text-white/90">

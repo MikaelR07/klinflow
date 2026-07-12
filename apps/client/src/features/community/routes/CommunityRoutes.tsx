@@ -8,6 +8,7 @@ const EditSwarm = lazy(() => import('../../../pages/user/EditSwarm'));
 const JoinSwarm = lazy(() => import('../../../pages/user/JoinSwarm'));
 const SwarmsList = lazy(() => import('../../../pages/user/SwarmsList'));
 const GroupCollectionRFQs = lazy(() => import('../../../pages/user/GroupCollectionRFQs'));
+const IndividualRFQs = lazy(() => import('../../../pages/user/IndividualRFQs'));
 
 const SwarmDetails = lazy(() => import('../../../pages/user/SwarmDetails'));
 const GroupCollectionRFQDetails = lazy(() => import('../../../pages/user/GroupCollectionRFQDetails'));
@@ -21,6 +22,7 @@ export function getCommunityRoutes() {
       <Route path="/community-collective" element={<ProtectedRoute><CommunityCollective /></ProtectedRoute>} />
       <Route path="/swarms" element={<ProtectedRoute><SwarmsList /></ProtectedRoute>} />
       <Route path="/group-rfqs" element={<ProtectedRoute><GroupCollectionRFQs /></ProtectedRoute>} />
+      <Route path="/individual-rfqs" element={<ProtectedRoute><IndividualRFQs /></ProtectedRoute>} />
       <Route path="/community-collective/swarm/create" element={<ProtectedRoute><CreateSwarm /></ProtectedRoute>} />
       <Route path="/community-collective/swarm/:id/edit" element={<ProtectedRoute><EditSwarm /></ProtectedRoute>} />
       <Route path="/community-collective/swarm/:id/join" element={<ProtectedRoute><JoinSwarm /></ProtectedRoute>} />

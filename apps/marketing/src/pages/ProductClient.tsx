@@ -419,17 +419,16 @@ export default function ProductClient() {
               <h1
                 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-[1.1] ${isDarkMode ? "text-white" : "text-[#0f172a]"}`}
               >
-                Recycle your materials<br />
-                 and get paid for it<br />
-                <span className="text-primary">the Klin way.</span>
+                Recycling Made Simple,<br />
+                 Rewarding<br />
+                <span className="text-primary">and Transparent.</span>
               </h1>
               
               {/* Subheading */}
               <p
                 className={`text-base md:text-lg font-medium leading-relaxed mb-10 max-w-xl ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}
               >
-                Stop throwing away value. Klinflow makes it effortless for residents to schedule pickups, verify their impact, and earn rewards for every kilogram of recyclables recovered.
-                .The Klinflow Client app empowers residents and sellers to discover live market prices, connect with verified buyers, request collections, join local swarms for Group Pickups, and receive secure payouts—all from a single platform —making participation in the circular economy simple, accessible, and profitable.
+               The Klinflow Client App empowers residents,Businesses, and material sellers to participate in the circular economy through a seamless digital experience. Schedule collections, access real-time market prices, connect with verified buyers, join community Group Pickups, track your environmental impact, and receive secure payouts—all from a single, intelligent platform designed to make recycling simple, transparent, and rewarding.
               </p>
               
               {/* Buttons */}
@@ -608,7 +607,7 @@ export default function ProductClient() {
       <section className={`py-20 md:py-24 px-6 overflow-hidden relative ${isDarkMode ? "bg-surface-950" : "bg-white"}`}>
         {/* LINE GRID background */}
         <div
-          className={`absolute inset-0 ${isDarkMode ? "opacity-[0.3]" : "opacity-[0.4]"}`}
+          className={`absolute inset-0 ${isDarkMode ? "opacity-[0.05]" : "opacity-[0.3]"}`}
           style={{
             backgroundImage: `linear-gradient(${isDarkMode ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.06)"} 1px, transparent 1px), linear-gradient(90deg, ${isDarkMode ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.06)"} 1px, transparent 1px)`,
             backgroundSize: "60px 60px",
@@ -692,10 +691,10 @@ export default function ProductClient() {
       </section>
 
       {/* 5. DEEP DIVE CAROUSEL 2 */}
-      <section className={`py-20 md:py-24 px-6 overflow-hidden relative ${isDarkMode ? "bg-surface-950" : "bg-white"}`}>
+      <section className={`py-20 md:py-24 px-6 overflow-hidden relative ${isDarkMode ? "bg-surface-950" : "bg-slate-50"}`}>
         {/* LINE GRID background */}
         <div
-          className={`absolute inset-0 ${isDarkMode ? "opacity-[0.3]" : "opacity-[0.5]"}`}
+          className={`absolute inset-0 ${isDarkMode ? "opacity-[0.05]" : "opacity-[0.3]"}`}
           style={{
             backgroundImage: `linear-gradient(${isDarkMode ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.06)"} 1px, transparent 1px), linear-gradient(90deg, ${isDarkMode ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.06)"} 1px, transparent 1px)`,
             backgroundSize: "60px 60px",

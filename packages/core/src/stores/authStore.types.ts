@@ -1,6 +1,7 @@
 import { UserRole } from '@klinflow/types';
 import { Database } from '@klinflow/supabase';
 import { Profile, NotificationPrefs } from '../validation';
+import { HubRole, HubPermission, MembershipRole, HubContext } from '@klinflow/types';
 
 export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
 
@@ -17,6 +18,13 @@ export interface AuthState {
   isInitializing: boolean;
   appRole: string | null;
   
+  // Hub Multi-Role Properties (from implementation plan)
+  currentCompanyId: string;
+  currentCompanyName: string;
+  membershipRole: MembershipRole; // 'owner' | 'member'
+  hubRoles: HubRole[]; // department responsibilities
+  hubPermissions: HubPermission[];
+  
   // Session / Hydration
   initializeAuth: () => Promise<void>;
   setSession: (session: any) => Promise<void>;
@@ -32,7 +40,7 @@ export interface AuthState {
   depositToWallet: (amount: number) => Promise<void>;
   
   // Auth Actions
-  login: (phone: string, pin: string, forcedRole?: UserRole) => Promise<void>;
+  login: (phone: string, pin: string, forcedRole?: UserRole | string | string[]) => Promise<void>;
   register: (userData: any) => Promise<boolean>;
   checkAvailability: (phone: string) => Promise<boolean>;
   sendOtp: (phone: string) => Promise<boolean>;
@@ -41,6 +49,14 @@ export interface AuthState {
   changePin: (currentPin: string, newPin: string) => Promise<void>;
   deleteAccount: () => Promise<void>;
   
+  // Hub Multi-Role Methods (from implementation plan)
+  fetchHubData: () => Promise<void>;
+  hasHubRole: (role: HubRole) => boolean;
+  hasHubPermission: (perm: HubPermission) => boolean;
+  
+  // Internal State (not persisted)
+  _isLoggingIn: boolean;
+
   // Internal Helpers (exposed for store logic)
   _mapProfile: (data: ProfileRow) => Profile | null;
   subscribeToProfileChanges: (uid: string) => void;

@@ -90,25 +90,13 @@ export default function PostTrade() {
   const query = new URLSearchParams(useLocation().search);
   const initialMode = query.get('mode'); // 'service' | 'sell'
 
-  const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    if (!lat1 || !lon1 || !lat2 || !lon2) return 999;
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  };
-
   const center: [number, number] = [customLocation.latitude || -1.2635, customLocation.longitude || 36.8048];
 
   const nearbyHubs = liveAgents
-    .filter((a: any) => a.isHubActive && a.hubLocation?.lat)
+    .filter((a: any) => a.isHubActive && (a.hubLocation?.latitude || a.location?.latitude))
     .map((hub: any) => ({
       ...hub,
-      distance: getDistance(center[0], center[1], hub.hubLocation!.lat, hub.hubLocation!.lng)
+      distance: hub.distance_km || 999
     }))
     .sort((a: any, b: any) => a.distance - b.distance);
 
@@ -129,8 +117,10 @@ export default function PostTrade() {
     fetchMaterialPrices();
     fetchPrices();
     fetchConfig();
-    fetchNearbyAgents();
-    subscribeToAgents();
+    const lat = customLocation.latitude || -1.2635;
+    const lng = customLocation.longitude || 36.8048;
+    fetchNearbyAgents(lat, lng);
+    subscribeToAgents(lat, lng);
 
     if (initialMode === 'service') {
       const generalCat = categories.find(c => c.id === 'general');
@@ -205,12 +195,14 @@ export default function PostTrade() {
         materialSubcategory: selectedSubcategory || null,
         quantity: quantity,
         pricePerKg: askingPrice,
-        location: pickupMode === 'dropoff' ? (selectedHub?.name || 'Klinflow Hub') : customLocation.estate,
-        latitude: pickupMode === 'dropoff' ? selectedHub?.lat : customLocation.latitude,
-        longitude: pickupMode === 'dropoff' ? selectedHub?.lng : customLocation.longitude,
+        location: customLocation.estate || 'Global Market',
+        latitude: pickupMode === 'dropoff' ? (selectedHub?.lat || customLocation.latitude) : customLocation.latitude,
+        longitude: pickupMode === 'dropoff' ? (selectedHub?.lng || customLocation.longitude) : customLocation.longitude,
         photoUrl: photoUrls.length > 0 ? photoUrls[0] : null, // Principal photo
         description: customDescription,
-        grade: 'Standard'
+        grade: 'Standard',
+        targetAgentId: pickupMode === 'dropoff' ? (selectedHub?.id || null) : (selectedAgent?.id || null),
+        pickupMode: pickupMode,
       });
 
       // 3. Notify the Market (Agents & Weavers)
@@ -349,8 +341,7 @@ export default function PostTrade() {
               disabled={
                 isSubmitting ||
                 (step === 1 && (!wasteType || !quantity)) ||
-                (step === 3 && pickupMode === 'pickup' && !selectedTime && !isManualTime) ||
-                (step === 3 && pickupMode === 'dropoff' && !selectedHub)
+                (step === 3 && pickupMode === 'pickup' && !selectedTime && !isManualTime)
               }
               onClick={() => setStep(step + 1)}
               className="w-full p-5 bg-primary text-white rounded-2xl font-semibold text-sm active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30"

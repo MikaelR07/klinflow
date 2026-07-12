@@ -71,20 +71,21 @@ export default function DisputeControl() {
   const selectedData = disputes.find(d => d.id === selectedDispute);
 
   return (
-    <div className="p-4 md:p-2 max-w-[1600px] mx-auto space-y-6">
+    <div className="flex h-full w-full relative bg-transparent overflow-hidden">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-6 animate-fade-in pb-10 space-y-6">
       {/* Header Description */}
       <div className="mb-4">
-        <p className="font-bold text-[10px] text-slate-500 uppercase tracking-widest mt-2">
+        <p className="font-bold text-[12px] text-slate-500 uppercase tracking-widest mt-2">
           Monitor, investigate and resolve operational, client and staff disputes across your network.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-2">
         
         {/* LEFT MAIN COLUMN */}
         <div className="lg:col-span-3 space-y-6">
           {/* ROW 1: KPI CARDS */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
         {[
           { name: 'Open Disputes', value: stats.open, color: 'text-rose-500', bg: 'bg-rose-500/10', icon: ShieldAlert },
           { name: 'Critical Issues', value: stats.critical, color: 'text-amber-500', bg: 'bg-amber-500/10', icon: Flag },
@@ -107,7 +108,7 @@ export default function DisputeControl() {
       
           
           {/* ROW 2: ANALYSIS CARDS */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
         {/* Chart 1: Disputes by Type Donut */}
         <div className="bg-white dark:bg-slate-900 border border-[#e0e3eb] dark:border-slate-800 rounded-xl p-5 shadow-none flex flex-col">
           <div className="flex items-center justify-between mb-2">
@@ -182,7 +183,7 @@ export default function DisputeControl() {
       
           
           {/* ROW 3 & 4: TABLES */}
-          <div className="space-y-6">
+          <div className="space-y-6 !mt-2">
             {/* Needs Immediate Attention */}
           <div className="bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/50 rounded-xl shadow-none overflow-hidden">
             <div className="px-5 py-4 border-b border-rose-100 dark:border-rose-900/50 flex items-center justify-between bg-rose-50/50 dark:bg-rose-900/20">
@@ -583,6 +584,7 @@ export default function DisputeControl() {
           </div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }

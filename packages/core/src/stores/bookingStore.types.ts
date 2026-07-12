@@ -19,6 +19,7 @@ export interface NearbyAgent {
   phone?: string;
   klinflowId?: string;
   config?: any;
+  distance_km?: number;
 }
 
 export interface AISuggestion {
@@ -47,8 +48,8 @@ export interface BookingStore {
   clearActiveVerification: () => void;
   subscribeToBookings: (userId: string) => Promise<void>;
   cleanupBookings: () => void;
-  fetchNearbyAgents: () => Promise<void>;
-  subscribeToAgents: () => void;
+  fetchNearbyAgents: (lat: number, lng: number) => Promise<void>;
+  subscribeToAgents: (lat: number, lng: number) => void;
   cleanupAgents: () => void;
   fetchBookings: () => Promise<void>;
   clearBookingHistory: (type: string) => Promise<void>;

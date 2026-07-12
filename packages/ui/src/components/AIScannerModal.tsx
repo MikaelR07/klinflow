@@ -39,43 +39,52 @@ interface AIScannerModalProps {
 }
 
 export default function AIScannerModal({ isOpen, onClose, onVerify, booking, role = 'agent' }: AIScannerModalProps) {
-  const { categories, materialPrices } = useServiceStore();
-  const { agentConfig, getEffectivePrice } = useAgentStore();
+  const { categories, materialPrices, fetchMaterialPrices, fetchCategories } = useServiceStore();
+  const { agentConfig, getEffectivePrice, companyProfile } = useAgentStore();
   const { profile } = useAuthStore();
   const [step, setStep] = useState('result'); 
   const [grade, setGrade] = useState(null);
 
+  React.useEffect(() => {
+    if (categories.length === 0) fetchCategories();
+    if (materialPrices.length === 0 && fetchMaterialPrices) {
+      fetchMaterialPrices();
+    }
+  }, [categories.length, materialPrices.length, fetchCategories, fetchMaterialPrices]);
+
   const uiCategories = React.useMemo(() => {
-    const serviceProfile = (profile as any)?.service_profile;
-    const customServices = serviceProfile?.custom_services || [];
-    
     let acceptedSlugs: string[] = [];
-    if (serviceProfile?.categories && Array.isArray(serviceProfile.categories)) {
-      acceptedSlugs = serviceProfile.categories.filter((c: any) => c.enabled).map((c: any) => c.name.toLowerCase());
-    } else if (agentConfig?.accepted_materials && Array.isArray(agentConfig.accepted_materials)) {
+    let customCats: any[] = [];
+    
+    // 1. Prioritize agentConfig (Company/Fleet Config)
+    if (agentConfig?.accepted_materials && Array.isArray(agentConfig.accepted_materials) && agentConfig.accepted_materials.length > 0) {
       acceptedSlugs = agentConfig.accepted_materials.map((m: string) => m.toLowerCase());
+    } 
+    // 2. Fallback to own profile service_profile (Independent Agents)
+    else {
+      const targetProfile = companyProfile || profile;
+      const serviceProfile = (targetProfile as any)?.service_profile;
+      const customServices = serviceProfile?.custom_services || [];
+      if (serviceProfile?.categories && Array.isArray(serviceProfile.categories)) {
+        acceptedSlugs = serviceProfile.categories.filter((c: any) => c.enabled).map((c: any) => c.name.toLowerCase());
+      }
+      customCats = customServices.map((c: any) => ({
+        id: c.category.toLowerCase().replace(/\s+/g, '_'),
+        label: c.category,
+        icon: c.icon || '📦',
+        slug: c.category.toLowerCase().replace(/\s+/g, '_')
+      }));
+      acceptedSlugs = [...new Set([...acceptedSlugs, ...customCats.map((c: any) => c.id)])];
     }
 
-    const customSlugs = customServices.map((c: any) => c.category.toLowerCase().replace(/\s+/g, '_'));
-    const allSlugs = [...new Set([...acceptedSlugs, ...customSlugs])];
+    if (acceptedSlugs.length === 0) return categories; // Fallback to all if none configured
 
-    if (!agentConfig && !serviceProfile) return []; 
-    if (allSlugs.length === 0) return [];
-
-    const filteredDB = categories.filter((cat: any) => allSlugs.includes(cat.slug) || allSlugs.includes(cat.id));
-    
-    const customCats = customServices.map((c: any) => ({
-      id: c.category.toLowerCase().replace(/\s+/g, '_'),
-      label: c.category,
-      icon: c.icon || '📦',
-      slug: c.category.toLowerCase().replace(/\s+/g, '_')
-    }));
-    
+    const filteredDB = categories.filter((cat: any) => acceptedSlugs.includes(cat.slug) || acceptedSlugs.includes(cat.id));
     const newCustom = customCats.filter((cc: any) => !filteredDB.some((db: any) => db.id === cc.id || db.label.toLowerCase() === cc.label.toLowerCase()));
     
     return [...filteredDB, ...newCustom];
   }, [categories, agentConfig, profile]);
-  
+
   const initialMaterial = (booking?.material || booking?.wasteType || uiCategories[0]?.id || 'recyclable').toLowerCase();
   const [material, setMaterial] = useState(initialMaterial);
   
@@ -84,7 +93,9 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
   const activeSubcategories = React.useMemo(() => {
     if (!currentCategory) return [];
     
-    const customServices = (profile as any)?.service_profile?.custom_services || [];
+    // First, check if there's a custom service match in profile
+    const targetProfile = companyProfile || profile;
+    const customServices = (targetProfile as any)?.service_profile?.custom_services || [];
     const customMatch = customServices.find((c: any) => 
       c.category.toLowerCase().replace(/\s+/g, '_') === currentCategory.id || 
       c.category.toLowerCase() === currentCategory.label.toLowerCase()
@@ -98,14 +109,24 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
       }));
     }
 
+    // Default: map over DB materials and use getEffectivePrice which correctly checks agentConfig
+    const categoryKey = (currentCategory as any).slug || currentCategory.id;
+
     return materialPrices
       .filter(m => m.category === currentCategory.id || m.category === (currentCategory as any).slug || m.category === currentCategory.label)
-      .map(m => ({
-        id: m.material_name.toLowerCase().replace(/\s+/g, '_'),
-        label: m.material_name,
-        rate: m.price_per_kg
-      }));
-  }, [currentCategory, materialPrices, profile]);
+      .map(m => {
+        const textSlug = m.material_name.toLowerCase().replace(/\s+/g, '_');
+        // The company config pages save rates using `${category.slug || category.id}_${sub.id}`
+        // So we must pass m.id to getEffectivePrice for DB materials!
+        const effectiveRate = getEffectivePrice(categoryKey, m.id);
+        
+        return {
+          id: textSlug, // Keep the UI/DB grade value as text
+          label: m.material_name,
+          rate: effectiveRate > 0 ? effectiveRate : m.price_per_kg
+        };
+      });
+  }, [currentCategory, companyProfile, profile, materialPrices, getEffectivePrice]);
 
   const initialSub = activeSubcategories[0]?.id || 'pet';
   const [subcategory, setSubcategory] = useState(initialSub);
@@ -126,7 +147,9 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
   // Sync state when booking data loads
   React.useEffect(() => {
     if (booking?.material || booking?.wasteType) {
-      const slug = (booking.material || booking.wasteType).toLowerCase();
+      const rawSlug = (booking.material || booking.wasteType).toLowerCase();
+      const match = categories.find(c => c.id === rawSlug || c.slug === rawSlug);
+      const slug = match ? match.slug : rawSlug;
       // Normalize legacy names
       if (slug === 'plastic') setMaterial('recyclable');
       else if (slug === 'e-waste') setMaterial('ewaste');
@@ -158,20 +181,62 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
     booking?.bookingType === 'marketplace_pickup'
   );
   const agentRate = getRate();
+  const [backendPreview, setBackendPreview] = useState<{gross: number, fee: number, net: number, gfp: number} | null>(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+
   const basePayoutAmount = isMarketTrade 
     ? (booking?.total_price || booking?.amount || 0) 
     : Number(weight) * agentRate;
   
   const payoutAmount = customPayoutAmount !== null ? customPayoutAmount : basePayoutAmount;
   const isCounterOffer = isMarketTrade && customPayoutAmount !== null && customPayoutAmount !== basePayoutAmount;
-  const estimatedGFP = isMarketTrade ? 0 : Math.floor(Number(weight) * 2);
-  
+
+  React.useEffect(() => {
+    let active = true;
+    const fetchPreview = async () => {
+      setIsPreviewLoading(true);
+      
+      const rateToUse = customPayoutAmount !== null 
+        ? (Number(weight) > 0 ? customPayoutAmount / Number(weight) : 0)
+        : isMarketTrade 
+          ? (Number(weight) > 0 ? basePayoutAmount / Number(weight) : 0)
+          : agentRate;
+
+      const { data, error } = await supabase.rpc('preview_payout', {
+        p_weight_kg: Number(weight) || 0,
+        p_rate_per_kg: rateToUse,
+        p_is_market_trade: isMarketTrade
+      });
+      
+      if (active) {
+        if (error) {
+          console.error('[AIScannerModal] preview_payout error:', error);
+        } else if (data) {
+          setBackendPreview(data as any);
+        }
+        setIsPreviewLoading(false);
+      }
+    };
+    
+    const timeoutId = setTimeout(fetchPreview, 400);
+    return () => {
+      active = false;
+      clearTimeout(timeoutId);
+    };
+  }, [weight, agentRate, isMarketTrade, customPayoutAmount, basePayoutAmount]);
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [isManual, setIsManual] = useState(true); 
   const [aiReason, setAiReason] = useState(null);
+
+  const [digitalBatchId] = useState(() => {
+    const mat = String(booking?.material || booking?.wasteType || 'PLA').substring(0,3).toUpperCase();
+    const suffix = Math.random().toString(36).substring(2,6).toUpperCase();
+    return `KF-${mat}-${suffix}`;
+  });
 
   if (!isOpen) return null;
 
@@ -254,7 +319,6 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
     }
   };
 
-
   const handleFinalConfirm = async () => {
     setIsProcessing(true);
     try {
@@ -268,7 +332,8 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
         photo_url: photoUrl,
         payout_method: selectedProvider?.id,
         payout_target: payoutTarget,
-        status: 'verified'
+        status: 'verified',
+        digitalBatchId: digitalBatchId
       });
       onClose();
     } catch (err) {
@@ -283,14 +348,14 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
       
       <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-[1rem] md:rounded-[1rem] shadow-2xl overflow-hidden animate-slide-up pb-[env(safe-area-inset-bottom)]">
-        <div className="p-6 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">
+        <div className="p-6 border-b border-slate-300 dark:border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
                 <Sparkles className="w-6 h-6" />
              </div>
              <div>
                 <h3 className="text-xl font-black text-slate-900 dark:text-white leading-none">Smart Verification</h3>
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Asset Intake & Payout</p>
+                <p className="text-xs font-bold text-slate-400 capitalize tracking-widest mt-1">Asset Intake & Payout</p>
              </div>
           </div>
           <button onClick={onClose} className="p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl text-slate-400">
@@ -303,32 +368,38 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
             <div className="space-y-4">
               <div className="p-6 bg-slate-50 dark:bg-slate-800/40 border-y border-slate-100 dark:border-slate-800">
                 <div className="grid grid-cols-1 gap-4">
-                  <div className="flex gap-4">
-                    <div className="flex-1 space-y-1">
-                      <label className="text-xs font-black text-slate-400 uppercase">Category</label>
+                  <div className="flex gap-2 items-end w-full overflow-hidden">
+                    <div className="flex-[1.2] min-w-0 space-y-1">
+                      <label className="text-[11px] font-black text-slate-400 capitalize truncate block">Category</label>
                       <select 
                         value={material}
                         onChange={(e) => {
                           setMaterial(e.target.value);
                         }}
-                        className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-black dark:text-white outline-none focus:ring-2 focus:ring-primary/20"
+                        className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold dark:text-white outline-none focus:ring-2 focus:ring-primary/20 truncate"
                       >
                         {uiCategories.map((cat: any) => (
                           <option key={cat.id} value={cat.id}>{cat.label}</option>
                         ))}
                       </select>
                     </div>
-                    <div className="flex-1 space-y-1">
-                      <label className="text-xs font-black text-slate-400 uppercase">Grade / Sub-type</label>
+                    <div className="flex-[1.5] min-w-0 space-y-1">
+                      <label className="text-[11px] font-black text-slate-400 capitalize truncate block">Grade</label>
                       <select 
                         value={subcategory}
                         onChange={(e) => setSubcategory(e.target.value)}
-                        className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-black dark:text-white outline-none focus:ring-2 focus:ring-primary/20"
+                        className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold dark:text-white outline-none focus:ring-2 focus:ring-primary/20 truncate"
                       >
                         {activeSubcategories.map((sub: any) => (
-                          <option key={sub.id} value={sub.id}>{sub.label} {sub.rate ? `(KSh ${sub.rate})` : ''}</option>
+                          <option key={sub.id} value={sub.id}>{sub.label}</option>
                         ))}
                       </select>
+                    </div>
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <label className="text-[11px] font-bold text-slate-400 capitalize text-center block">Rate</label>
+                      <div className="w-full p-3 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-white/5 rounded-xl text-sm font-black text-emerald-600 dark:text-emerald-400 flex items-center justify-center truncate">
+                        <span className="text-[10px] text-emerald-600/50 dark:text-emerald-400/50 mr-1">KSh</span> {getRate()}
+                      </div>
                     </div>
                   </div>
 
@@ -343,7 +414,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                           const val = e.target.value;
                           setWeight(val === '' ? '' : val.replace(/^0+(?=\d)/, ''));
                         }}
-                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-lg font-black focus:ring-2 focus:ring-primary/20 outline-none"
+                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-lg font-bold focus:ring-2 focus:ring-primary/20 outline-none"
                       />
                     </div>
                   </div>
@@ -352,15 +423,15 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
 
               {/* Digital ID & AI Insight Display */}
               <div className="mx-4 space-y-3">
-                <div className="p-4 bg-white dark:bg-black rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none flex items-center justify-between group overflow-hidden relative">
+                <div className="p-4 bg-white dark:bg-black rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none flex items-center justify-between group overflow-hidden relative">
                    <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl -mr-5 -mt-5" />
                    <div className="flex items-center gap-3 relative z-10">
                       <div className="w-8 h-8 bg-emerald-50 dark:bg-white/10 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                          <ShieldCheck className="w-4 h-4" />
                       </div>
                       <div>
-                         <p className="text-[8px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] leading-none mb-1">Digital Batch ID</p>
-                         <p className="text-[10px] font-mono font-bold text-slate-900 dark:text-white tracking-widest uppercase">CF-{material.substring(0,3).toUpperCase()}-{Math.random().toString(36).substring(2,6).toUpperCase()}</p>
+                         <p className="text-[8px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-[0.2em] leading-none mb-1">Digital Batch ID</p>
+                         <p className="text-[10px] font-mono font-bold text-slate-900 dark:text-white tracking-widest uppercase">{digitalBatchId}</p>
                       </div>
                    </div>
                    <div className="px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 text-[8px] font-black uppercase rounded border border-emerald-200 dark:border-emerald-500/20 relative z-10">
@@ -432,10 +503,10 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                   <div className="flex justify-between items-center text-sm font-bold border-b border-white/10 pb-3">
                     <div className="flex flex-col">
                        <span className="text-rose-400 uppercase text-[11px] tracking-widest">Platform Commission</span>
-                       <span className="text-[10px] text-white/40 font-black uppercase tracking-tighter">(10% System Fee)</span>
+                       <span className="text-[10px] text-white/40 font-black uppercase tracking-tighter">(5% System Fee)</span>
                     </div>
                     <span className="font-mono text-base text-rose-400">
-                      - KSh {(payoutAmount * 0.10).toLocaleString()}
+                      - KSh {isPreviewLoading ? '...' : (backendPreview?.fee || 0).toLocaleString()}
                     </span>
                   </div>
 
@@ -446,14 +517,14 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                        <span className="text-[10px] text-emerald-400/50 font-black uppercase tracking-tighter">Amount sent to user</span>
                     </div>
                     <span className="font-mono text-2xl text-emerald-400">
-                      KSh {(payoutAmount * 0.90).toLocaleString()}
+                      KSh {isPreviewLoading ? '...' : (backendPreview?.net || 0).toLocaleString()}
                     </span>
                   </div>
                   <div className="pt-4 border-t border-white/10 flex justify-between items-center">
                     <div>
                       <p className="text-xs font-black text-white/40 uppercase tracking-widest">Sustainability Rewards</p>
-                      <p className={`text-sm font-black flex items-center gap-2 ${isMarketTrade ? 'text-white/20' : 'text-emerald-300'}`}>
-                        <Sparkles className="w-4 h-4" /> {isMarketTrade ? 'NONE' : `${estimatedGFP} GFP`}
+                      <p className="text-sm font-black flex items-center gap-2 text-emerald-300">
+                        <Sparkles className="w-4 h-4" /> {backendPreview?.gfp || 5} GFP
                       </p>
                     </div>
                   </div>

@@ -36,97 +36,108 @@ export default function NotificationsPage() {
   };
 
   const ToggleSwitch = ({ label, description, checked, onChange }) => (
-    <div className="flex items-center justify-between py-3">
-      <div className="pr-4">
-        <div className="text-sm font-semibold text-slate-800 dark:text-white">{label}</div>
-        <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{description}</div>
+    <div className="flex items-center justify-between p-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-sm transition-all hover:border-emerald-100 dark:hover:border-emerald-900/30 group">
+      <div className="pr-4 flex-1">
+        <h4 className="text-[13px] font-bold text-slate-900 dark:text-white capitalize tracking-wide">{label}</h4>
+        {description && <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{description}</p>}
       </div>
       <button 
         onClick={onChange}
-        className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${checked ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'}`}
+        className={`relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-emerald-500/30 ${checked ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-800'}`}
       >
-        <span className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${checked ? 'translate-x-5' : 'translate-x-0'}`} />
+        <span className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition duration-300 ease-in-out ${checked ? 'translate-x-5' : 'translate-x-0'}`} />
       </button>
     </div>
   );
 
   return (
-    <div className=" bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-950 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
-        <div className="flex items-center gap-4">
-          <button onClick={() => navigate('/settings')} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
-            <ArrowLeft className="w-4 h-4 dark:text-white" />
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto">
+        <div className="flex items-center justify-between max-w-lg mx-auto">
+          <button onClick={() => navigate('/settings')} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-500 transition-colors" />
           </button>
-          <div>
-            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none mb-1">Notifications</h1>
-            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Preferences & Channels</p>
+          <div className="text-center">
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tight leading-none">Notifications</h1>
+            <p className="text-[10px] font-bold text-emerald-500 capitalize tracking-widest mt-1">System Alerts</p>
+          </div>
+          <div className="w-10 h-10 shrink-0" />
+        </div>
+      </div>
+
+      <div className="pt-[calc(env(safe-area-inset-top,1rem)+5rem)] px-1.5 space-y-6 max-w-lg mx-auto">
+        
+        {/* Native Push Authorization (Hero Style) */}
+        <div className="relative overflow-hidden bg-emerald-600 dark:bg-emerald-900/40 rounded-3xl p-6 shadow-lg shadow-emerald-500/10 border border-emerald-500/20">
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 blur-2xl rounded-full pointer-events-none" />
+          <div className="relative z-10 flex flex-col items-center text-center">
+            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-4">
+              <BellRing className="w-6 h-6 text-white" />
+            </div>
+            <h2 className="text-lg font-bold text-white tracking-tight mb-2">Native System Alerts</h2>
+            <p className="text-xs text-emerald-100 mb-6 font-medium leading-relaxed px-4">
+              Critical for mission dispatch. Receive background alerts even when the app is closed.
+            </p>
+            <button 
+              onClick={async () => {
+                const ok = await useNotificationStore.getState().subscribeToPush();
+                if (ok) {
+                  toast.success('Agent Radar Ready! 🛰️', { description: 'Native mission alerts are now active.' });
+                } else {
+                  toast.error('Auth Failed', { description: 'Please enable notifications in device settings.' });
+                }
+              }}
+              className="w-full py-3.5 bg-white text-emerald-600 rounded-xl text-[13px] font-bold tracking-widest uppercase active:scale-95 transition-all shadow-md shadow-black/5 flex items-center justify-center gap-2"
+            >
+              <Smartphone className="w-4 h-4" />
+              Enable Push
+            </button>
+          </div>
+        </div>
+
+        {/* Delivery Channels */}
+        <div className="space-y-3">
+          <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-2">Delivery Method</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <button 
+              onClick={() => setPrefs({...prefs, channel: 'push'})} 
+              className={`p-4 rounded-2xl border-2 flex flex-col items-center justify-center gap-3 transition-all ${prefs.channel === 'push' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 hover:border-slate-200 dark:hover:border-slate-700'}`}
+            >
+              <Smartphone className="w-6 h-6" />
+              <span className="text-[11px] font-bold uppercase tracking-wider">App Push</span>
+            </button>
+            <button 
+              onClick={() => setPrefs({...prefs, channel: 'sms'})} 
+              className={`p-4 rounded-2xl border-2 flex flex-col items-center justify-center gap-3 transition-all ${prefs.channel === 'sms' ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 hover:border-slate-200 dark:hover:border-slate-700'}`}
+            >
+              <MessageSquare className="w-6 h-6" />
+              <span className="text-[11px] font-bold uppercase tracking-wider">SMS Text</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Triggers */}
+        <div className="space-y-3">
+          <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-2 mt-6">Alert Preferences</h3>
+          <div className="space-y-3">
+            <ToggleSwitch label="Job Requests" description="Alerts before a new pickup is available." checked={prefs.agentJobAlerts} onChange={() => handleToggle('agentJobAlerts')} />
+            <ToggleSwitch label="HygeneX Insights" description="Professional tips on logistics & safety." checked={prefs.aiInsights} onChange={() => handleToggle('aiInsights')} />
+            <ToggleSwitch label="Emergency Alerts" description="Real-time alerts for road hazards or bad weather." checked={prefs.emergencyAlerts} onChange={() => handleToggle('emergencyAlerts')} />
           </div>
         </div>
       </div>
 
-      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)] pb-24 px-1.5 space-y-6 max-w-lg mx-auto">
-        
-        {/* Channels */}
-        <div className="card p-5">
-           <h2 className="text-sm font-semibold text-slate-800 dark:text-white mb-4 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-              <Smartphone className="w-4 h-4 text-slate-400" /> Delivery Channels
-           </h2>
-
-           {/* Native Push Authorization */}
-           <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
-             <div className="flex items-center gap-3 mb-3">
-               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                 <BellRing className="w-5 h-5" />
-               </div>
-               <div>
-                 <h3 className="text-[10px] font-bold capitalize tracking-widest text-slate-900 dark:text-white">Native System Alerts</h3>
-                 <p className="text-[9px] text-slate-400 font-medium mt-0.5 capitalize">Critical for mission dispatch</p>
-               </div>
-             </div>
-             
-             <button 
-               onClick={async () => {
-                 const ok = await useNotificationStore.getState().subscribeToPush();
-                 if (ok) {
-                   toast.success('Agent Radar Ready! 🛰️', { description: 'Native mission alerts are now active.' });
-                 } else {
-                   toast.error('Auth Failed', { description: 'Please enable notifications in device settings.' });
-                 }
-               }}
-               className="w-full py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-[10px] font-bold capitalize tracking-widest text-slate-600 dark:text-slate-300 active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2"
-             >
-               Enable Native Push
-             </button>
-           </div>
-
-           <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => setPrefs({...prefs, channel: 'push'})} className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${prefs.channel === 'push' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}>
-                <Smartphone className="w-6 h-6" />
-                <span className="text-sm font-semibold">Push Alerts</span>
-              </button>
-              <button onClick={() => setPrefs({...prefs, channel: 'sms'})} className={`p-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${prefs.channel === 'sms' ? 'border-primary bg-primary/5 text-primary' : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}>
-                <MessageSquare className="w-6 h-6" />
-                <span className="text-sm font-semibold">SMS Texts</span>
-              </button>
-           </div>
-        </div>
-
-        {/* Triggers */}
-        <div className="card p-5 divide-y divide-slate-100 dark:divide-slate-800">
-          <ToggleSwitch label="Job Requests" description="Get notified before a new pickup is available." checked={prefs.agentJobAlerts} onChange={() => handleToggle('agentJobAlerts')} />
-          <ToggleSwitch label="HygeneX Insights" description="Weekly professional tips on logistics and safety." checked={prefs.aiInsights} onChange={() => handleToggle('aiInsights')} />
-          <ToggleSwitch label="Emergency Alerts" description="Real-time alerts for road hazards or bad weather." checked={prefs.emergencyAlerts} onChange={() => handleToggle('emergencyAlerts')} />
-        </div>
-
+      {/* Save Button (Scrolls with page) */}
+      <div className="pt-6 pb-12 px-4 max-w-lg mx-auto">
         <button
           onClick={handleSave}
           disabled={isLoading}
-          className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70"
+          className="w-full py-4 bg-slate-900 dark:bg-emerald-600 text-white rounded-2xl text-[13px] font-bold capitalize tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-70 shadow-xl shadow-slate-900/20 dark:shadow-emerald-900/20"
         >
-          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Save Preferences
+          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} 
+          Save Configuration
         </button>
-
       </div>
     </div>
   );

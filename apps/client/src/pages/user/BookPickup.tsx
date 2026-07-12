@@ -157,9 +157,13 @@ export default function BookPickup() {
     fetchCategories();
     fetchPrices();
     fetchConfig();
-    fetchNearbyAgents();
     generateTimeSuggestions();
-    subscribeToAgents();
+    
+    const lat = customLocation.latitude || -1.2635;
+    const lng = customLocation.longitude || 36.8048;
+    
+    fetchNearbyAgents(lat, lng);
+    subscribeToAgents(lat, lng);
 
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
@@ -168,7 +172,7 @@ export default function BookPickup() {
       cleanupAgents();
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [categories.length, cleanupAgents, fetchCategories, fetchConfig, fetchNearbyAgents, fetchPrices, generateTimeSuggestions, subscribeToAgents]);
+  }, [categories.length, cleanupAgents, fetchCategories, fetchConfig, fetchNearbyAgents, fetchPrices, generateTimeSuggestions, subscribeToAgents, customLocation.latitude, customLocation.longitude]);
 
   // Pre-select agent if coming from CompanyProfile
   useEffect(() => {
@@ -182,20 +186,8 @@ export default function BookPickup() {
   const selected = selectedSubItem || wasteType;
   const [selectedCompanyId, setSelectedCompanyId] = useState(preselectedAgentId);
 
-  // ── PROXIMITY UTILITY ──
-  const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const R = 6371; // Radius of the earth in km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance in km
-  };
-
   const filteredAgents = liveAgents.filter(agent => {
-    // 0. GPS & Distance Filter (Prevent "Far Away" Agents)
+    // Distance filtering is now handled by the backend geospatial RPC.
     let lat = agent.location?.latitude;
     let lon = agent.location?.longitude;
 
@@ -217,14 +209,6 @@ export default function BookPickup() {
 
     const hasValidGPS = lat && lon;
     if (!hasValidGPS) return false;
-
-    const distance = getDistance(
-      customLocation.latitude, customLocation.longitude,
-      lat, lon
-    );
-
-    // Only show agents within 20km (Standard Logistics Range)
-    if (distance > 20) return false;
 
     const isFleetDriver = agent.agentAccountType === 'fleet_driver';
     const isCompany = agent.agentAccountType === 'company_admin';
@@ -251,6 +235,29 @@ export default function BookPickup() {
     const config = Array.isArray(configToUse) ? configToUse[0] : configToUse;
     if (!config || !config.accepted_materials || config.accepted_materials.length === 0) return true;
     return config.accepted_materials.includes(selected?.slug || '');
+  });
+
+  // ── ANTI-OVERLAP MAP JITTER ──
+  const seenCoords = new Set<string>();
+  const finalAgents = filteredAgents.map(agent => {
+    if (!agent.location?.latitude || !agent.location?.longitude) return agent;
+    
+    let lat = agent.location.latitude;
+    let lng = agent.location.longitude;
+    const coordKey = `${lat.toFixed(4)},${lng.toFixed(4)}`;
+    
+    if (seenCoords.has(coordKey)) {
+      // If someone is already sitting here, add a small offset so both pins are visible
+      lat += (Math.random() - 0.5) * 0.003;
+      lng += (Math.random() - 0.5) * 0.003;
+    } else {
+      seenCoords.add(coordKey);
+    }
+    
+    return {
+      ...agent,
+      location: { ...agent.location, latitude: lat, longitude: lng }
+    };
   });
 
   // ── PRICING (Powered by Market Hub & Agent Overrides) ──
@@ -397,7 +404,7 @@ export default function BookPickup() {
             <BookPickupAgentStep
               center={center as [number, number]}
               userIcon={userIcon}
-              filteredAgents={filteredAgents}
+              filteredAgents={finalAgents}
               liveAgents={liveAgents}
               selectedAgent={selectedAgent}
               setSelectedAgent={setSelectedAgent}

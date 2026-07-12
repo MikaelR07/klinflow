@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useMarketStore } from '@klinflow/core/stores/marketStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { supabase } from '@klinflow/supabase';
 import {
   Search, Filter, ChevronDown, ChevronRight, Bell, Sparkles, DownloadCloud,
   ArrowUpRight, ArrowDownRight, TrendingUp, TrendingDown, Minus,
@@ -61,7 +62,8 @@ const MOCK_AI_SIGNALS = [
 ];
 
 export default function PriceDashboard() {
-  const { materialPrices, fetchMaterialPrices } = useMarketStore();
+  const { materialPrices, fetchMaterialPrices } = useServiceStore();
+  const [mergedPrices, setMergedPrices] = useState<any[]>([]);
   
   const [alerts, setAlerts] = useState([
     { id: 1, material: 'PET Plastic', type: 'Above', threshold: '70.00', enabled: true },
@@ -74,17 +76,54 @@ export default function PriceDashboard() {
     fetchMaterialPrices();
   }, [fetchMaterialPrices]);
 
+  useEffect(() => {
+    const fetchIntelligence = async () => {
+      try {
+        const { data, error } = await supabase.rpc('get_market_intelligence');
+        if (!error && data) {
+          const trends = (data as any).commodity_trends || [];
+          
+          const merged = materialPrices.map(material => {
+            const trend = trends.find((t: any) => t.id === material.id || t.label === material.material_name) || {};
+            const changeStr = trend.change || '0%';
+            const changePct = parseFloat(changeStr.replace('%', '').replace('+', '')) || 0;
+            const changeKsh = material.price_per_kg * (changePct / 100);
+
+            return {
+              ...material,
+              demand: trend.demand || 'Stable',
+              supply: trend.supply || 'Stable',
+              change_pct: changePct,
+              change_ksh: changeKsh,
+              top_buyer: trend.topBuyer || 'Unknown'
+            };
+          });
+          setMergedPrices(merged);
+        } else {
+           setMergedPrices(materialPrices);
+        }
+      } catch (err) {
+        console.error('Failed to fetch market intelligence:', err);
+        setMergedPrices(materialPrices);
+      }
+    };
+
+    if (materialPrices.length > 0) {
+      fetchIntelligence();
+    }
+  }, [materialPrices]);
+
   // Derived KPIs
-  const totalTracked = materialPrices.length;
-  const avgPrice = materialPrices.reduce((sum, m) => sum + m.price_per_kg, 0) / (totalTracked || 1);
-  const rising = materialPrices.filter(m => (m.change_pct || 0) > 0).length;
-  const falling = materialPrices.filter(m => (m.change_pct || 0) < 0).length;
-  const highestDemandItem = [...materialPrices].sort((a, b) => {
+  const totalTracked = mergedPrices.length;
+  const avgPrice = mergedPrices.reduce((sum, m) => sum + m.price_per_kg, 0) / (totalTracked || 1);
+  const rising = mergedPrices.filter(m => (m.change_pct || 0) > 0).length;
+  const falling = mergedPrices.filter(m => (m.change_pct || 0) < 0).length;
+  const highestDemandItem = [...mergedPrices].sort((a, b) => {
     const score = (val: string) => val === 'High' ? 3 : val === 'Medium' ? 2 : 1;
     return score(b.demand || '') - score(a.demand || '');
   })[0];
 
-  const sortedByChange = [...materialPrices].sort((a, b) => (b.change_pct || 0) - (a.change_pct || 0));
+  const sortedByChange = [...mergedPrices].sort((a, b) => (b.change_pct || 0) - (a.change_pct || 0));
   const gainers = sortedByChange.filter(m => (m.change_pct || 0) > 0).slice(0, 5);
 
   const handleAlertToggle = (id: number) => {
@@ -96,8 +135,8 @@ export default function PriceDashboard() {
   };
 
   return (
-    <div className="font-medium min-h-screen text-[#131722] dark:text-slate-100 font-sans pb-12">
-      <div className="p-1 max-w-[1600px] mx-auto">
+    <div className="flex h-full w-full relative bg-transparent overflow-hidden">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-6 animate-fade-in pb-10">
         
         {/* HEADER */}
         {/* ── DESCRIPTION ── */}
@@ -257,7 +296,7 @@ export default function PriceDashboard() {
                 {/* Scrollable Body */}
                 <div className="overflow-y-auto max-h-[600px] custom-scrollbar">
                   <div className="flex flex-col divide-y divide-slate-100 dark:divide-slate-800/60">
-                    {materialPrices.map(item => {
+                    {mergedPrices.map(item => {
                       const style = getCategoryStyle(item.material_name);
                       const changeKsh = item.change_ksh || 0;
                       const changePct = item.change_pct || 0;
@@ -328,7 +367,7 @@ export default function PriceDashboard() {
 
               {/* Table Footer */}
               <div className="p-4 border-t border-[#e0e3eb] dark:border-slate-800 bg-white dark:bg-slate-800/30 flex items-center justify-between">
-                <span className="font-medium text-xs text-slate-500">Showing 1 to {materialPrices.length} of {materialPrices.length} materials</span>
+                <span className="font-medium text-xs text-slate-500">Showing 1 to {mergedPrices.length} of {mergedPrices.length} materials</span>
                 <button className="font-medium flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-700 rounded-lg text-xs text-slate-700 dark:text-slate-300 shadow-none hover:bg-white">
                   Load More <ChevronDown className="w-3.5 h-3.5" />
                 </button>
@@ -435,11 +474,12 @@ export default function PriceDashboard() {
           </div>
 
           {/* SIDEBAR (RIGHT) */}
-          <div className="xl:col-span-1 space-y-6">
+          <div className="xl:col-span-1">
+            <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-lg shadow-none flex flex-col">
             
-            {/* Top Movers */}
-            <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-lg shadow-none flex flex-col p-5">
-              <div className="flex items-center justify-between mb-4">
+              {/* Top Movers */}
+              <div className="p-5 border-b border-[#e0e3eb] dark:border-slate-800 flex flex-col">
+                <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-bold text-[#131722] dark:text-white">Top Movers <span className="text-slate-400 font-medium">(This Week)</span></h3>
                 <ChevronDown className="font-medium w-4 h-4 text-slate-400" />
               </div>
@@ -467,11 +507,11 @@ export default function PriceDashboard() {
               <button className="font-medium mt-5 text-[11px] text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 flex items-center gap-1 transition-colors">
                 View full market movers <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
-            </div>
+              </div>
 
-            {/* Demand by Region */}
-            <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-lg shadow-none flex flex-col p-5">
-              <h3 className="text-sm font-bold text-[#131722] dark:text-white mb-5">Demand by Region</h3>
+              {/* Demand by Region */}
+              <div className="p-5 border-b border-[#e0e3eb] dark:border-slate-800 flex flex-col">
+                <h3 className="text-sm font-bold text-[#131722] dark:text-white mb-5">Demand by Region</h3>
               
               <div className="space-y-3.5">
                 {DEMAND_REGIONS.map((region, idx) => (
@@ -485,11 +525,11 @@ export default function PriceDashboard() {
               <button className="font-medium mt-5 text-[11px] text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 flex items-center gap-1 transition-colors">
                 View full regional report <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
-            </div>
+              </div>
 
-            {/* Price Alerts */}
-            <div className="bg-white dark:bg-slate-800 border border-[#e0e3eb] dark:border-slate-800 rounded-lg shadow-none flex flex-col p-5">
-              <h3 className="text-sm font-bold text-[#131722] dark:text-white flex items-center gap-2 mb-5">
+              {/* Price Alerts */}
+              <div className="p-5 flex flex-col">
+                <h3 className="text-sm font-bold text-[#131722] dark:text-white flex items-center gap-2 mb-5">
                 <Bell className="font-medium w-4 h-4 text-slate-400" /> Price Alerts
               </h3>
               
@@ -535,6 +575,7 @@ export default function PriceDashboard() {
               <button className="font-medium mt-5 text-[11px] text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 flex items-center gap-1 transition-colors">
                 Manage alerts <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
+              </div>
             </div>
 
           </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -19,9 +20,52 @@ import {
   Trash2,
   X,
   Tag,
-  ArrowLeft
+  ArrowLeft,
+  MapPin,
+  Navigation,
+  CheckCircle2
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
+import L from 'leaflet';
+// @ts-ignore
+window.L = L;
+
+// ── HUB PIN ICON ──
+const hubPinIcon = L.divIcon({
+  className: 'custom-hub-pin',
+  html: `<div class="w-10 h-10 rounded-2xl bg-emerald-600 border-3 border-white shadow-2xl flex items-center justify-center animate-bounce" style="animation-duration:1.5s"><span class="text-lg">📍</span></div>`,
+  iconSize: [40, 40],
+  iconAnchor: [20, 40]
+});
+
+function MapClickHandler({ onLocationSelect }: { onLocationSelect: (lat: number, lng: number) => void }) {
+  useMapEvents({
+    click: (e) => {
+      onLocationSelect(e.latlng.lat, e.latlng.lng);
+    }
+  });
+  return null;
+}
+
+function FlyToLocation({ lat, lng }: { lat: number; lng: number }) {
+  const map = useMap();
+  useEffect(() => { 
+    if (lat && lng) map.flyTo([lat, lng], 16, { duration: 1 }); 
+  }, [lat, lng, map]);
+  return null;
+}
+
+function MapInvalidator() {
+  const map = useMap();
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      map.invalidateSize();
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [map]);
+  return null;
+}
 
 export default function CompanyServicesConfigPage() {
   const navigate = useNavigate();
@@ -46,6 +90,7 @@ export default function CompanyServicesConfigPage() {
 
   const [isSaving, setIsSaving] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const [showHubMapModal, setShowHubMapModal] = useState(false);
 
   const [hubData, setHubData] = useState({
     active: profile?.isHubActive || false,
@@ -89,7 +134,7 @@ export default function CompanyServicesConfigPage() {
     setHubData({
       active: profile.isHubActive || false,
       address: profile.hubAddress || '',
-      coords: profile.hubLocation || null
+      coords: profile.hubLocation || profile.location || null
     });
   }, [profile]);
 
@@ -200,7 +245,7 @@ export default function CompanyServicesConfigPage() {
   };
 
   return (
-    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-900 min-h-screen pb-20">
+    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-900 min-h-screen pb-4">
       {/* FIXED TOP NAV */}
       <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-white dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-800">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
@@ -229,7 +274,7 @@ export default function CompanyServicesConfigPage() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+6rem)] px-4 mx-auto max-w-lg w-full space-y-6">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+6rem)] px-1.5 mx-auto max-w-lg w-full space-y-4">
       {isFleetDriver && (
         <div className="p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/50 rounded-[1rem] flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-orange-500 shrink-0" />
@@ -257,85 +302,127 @@ export default function CompanyServicesConfigPage() {
                 </div>
               </div>
               <button
-                onClick={() => setHubData(prev => ({ ...prev, active: !prev.active }))}
+                onClick={() => {
+                  const newActive = !hubData.active;
+                  setHubData(prev => ({ ...prev, active: newActive }));
+                  if (newActive) setShowHubMapModal(true);
+                }}
                 className={`w-12 h-6 rounded-full relative transition-colors ${hubData.active ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-700'}`}
               >
                 <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${hubData.active ? 'right-1' : 'left-1'}`} />
               </button>
             </div>
             {hubData.active && (
-              <div className="space-y-4 animate-in fade-in slide-in-from-top-2">
-                <div className="space-y-1.5">
-                  <label className="font-medium text-xs text-slate-400 capitalize tracking-widest ml-1">HQ Physical Address</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Langata Rd, Opp T-Mall"
-                    value={hubData.address}
-                    onChange={(e) => setHubData(prev => ({ ...prev, address: e.target.value }))}
-                    className="font-medium w-full p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] text-sm outline-none focus:border-emerald-500"
-                  />
-                </div>
+              <div className="space-y-3 animate-in fade-in slide-in-from-top-2">
+                {/* Location Preview Card */}
+                {hubData.coords?.latitude ? (
+                  <div className="rounded-xl overflow-hidden border border-emerald-200 dark:border-emerald-800/40">
+                    <div className="h-32 relative">
+                      <MapContainer
+                        center={[hubData.coords.latitude, hubData.coords.longitude]}
+                        zoom={16}
+                        zoomControl={false}
+                        dragging={false}
+                        scrollWheelZoom={false}
+                        doubleClickZoom={false}
+                        className="h-full w-full z-0"
+                      >
+                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        <Marker position={[hubData.coords.latitude, hubData.coords.longitude]} {...({ icon: hubPinIcon } as any)} />
+                      </MapContainer>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+                      <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <MapPin className="w-3 h-3 text-emerald-400" />
+                          <span className="text-[10px] font-bold text-white/90 tracking-wide">
+                            {hubData.coords.latitude.toFixed(4)}, {hubData.coords.longitude.toFixed(4)}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setShowHubMapModal(true)}
+                          className="px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-white/30 transition-colors"
+                        >
+                          Edit Pin
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setShowHubMapModal(true)}
+                    className="w-full p-6 border-2 border-dashed border-emerald-300 dark:border-emerald-700 rounded-xl bg-emerald-50/50 dark:bg-emerald-900/10 text-center space-y-2 hover:border-emerald-500 transition-colors active:scale-[0.98]"
+                  >
+                    <MapPin className="w-8 h-8 text-emerald-500 mx-auto" />
+                    <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400">Tap to Pin Your HQ Location</p>
+                    <p className="text-[10px] font-semibold text-slate-400">Required for sellers to find you on the map</p>
+                  </button>
+                )}
+
                 <div className="p-4 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/50 rounded-[1rem]">
                   <p className="font-medium text-xs text-emerald-700 dark:text-emerald-400 leading-tight">
-                    By enabling Hub Mode, your location will appear on the marketplace as a verified drop-off point.
+                    By enabling Hub Mode, your pinned location will appear on the marketplace as a verified drop-off point.
                   </p>
                 </div>
               </div>
             )}
           </div>
 
+
+
           {/* LOGISTICS FEE & CAPACITY GRID */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white dark:bg-slate-800 p-6 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="font-medium w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center">
-                  <Truck className="w-5 h-5" />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-3">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="font-medium w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                  <Truck className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold dark:text-white tracking-widest">Base Fee</h3>
+                  <h3 className="text-xs font-bold dark:text-white tracking-widest">Base Fee</h3>
                 </div>
               </div>
-              <div className="space-y-1.5">
-                <label className="font-medium text-[10px] text-slate-400 uppercase tracking-widest">Amount (KSh)</label>
+              <div className="space-y-1">
+                <label className="font-medium text-[9px] text-slate-400 uppercase tracking-widest">Amount (KSh)</label>
                 <input
                   type="text"
                   inputMode="decimal"
                   disabled={isFleetDriver}
                   value={formData.base_logistics_fee}
                   onChange={(e) => setFormData({ ...formData, base_logistics_fee: e.target.value.replace(/[^0-9.]/g, '') })}
-                  className="font-medium w-full p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] text-sm outline-none focus:border-amber-500"
+                  className="font-medium w-full p-3 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-xl text-xs outline-none focus:border-amber-500 transition-colors"
                 />
               </div>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 p-6 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
-                  <Scale className="w-5 h-5" />
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-3">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="font-medium w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                  <Scale className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold dark:text-white tracking-widest">Capacity</h3>
+                  <h3 className="text-xs font-bold dark:text-white tracking-widest">Capacity</h3>
                 </div>
               </div>
               <div className="flex gap-2">
-                <div className="space-y-1.5 flex-1">
-                  <label className="font-medium text-[10px] text-slate-400 uppercase tracking-widest">Min (KG)</label>
+                <div className="space-y-1 flex-1">
+                  <label className="font-medium text-[9px] text-slate-400 uppercase tracking-widest">Min (KG)</label>
                   <input
                     type="number"
                     disabled={isFleetDriver}
                     value={formData.min_weight}
                     onChange={(e) => setFormData({ ...formData, min_weight: e.target.value })}
-                    className="font-medium w-full p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] text-sm outline-none focus:border-indigo-500"
+                    className="font-medium w-full p-3 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-xl text-xs outline-none focus:border-indigo-500 transition-colors"
                   />
                 </div>
-                <div className="space-y-1.5 flex-1">
-                  <label className="font-medium text-[10px] text-slate-400 uppercase tracking-widest">Max (KG)</label>
+                <div className="space-y-1 flex-1">
+                  <label className="font-medium text-[9px] text-slate-400 uppercase tracking-widest">Max (KG)</label>
                   <input
                     type="number"
                     disabled={isFleetDriver}
                     value={formData.max_weight}
                     onChange={(e) => setFormData({ ...formData, max_weight: e.target.value })}
-                    className="font-medium w-full p-4 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-[1rem] text-sm outline-none focus:border-indigo-500"
+                    className="font-medium w-full p-3 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-xl text-xs outline-none focus:border-indigo-500 transition-colors"
                   />
                 </div>
               </div>
@@ -559,6 +646,130 @@ export default function CompanyServicesConfigPage() {
         </div>
       </div>
       </main>
+          {/* ── HUB LOCATION PICKER MODAL ── */}
+          {showHubMapModal && createPortal(
+            <div className="fixed inset-0 z-[99999] flex flex-col bg-white dark:bg-slate-900 max-w-lg mx-auto w-full">
+              {/* Modal Header */}
+              <div className="pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-4 px-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 shrink-0 shadow-sm z-10">
+                <button
+                  type="button"
+                  onClick={() => setShowHubMapModal(false)}
+                  className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all"
+                >
+                  <X className="w-5 h-5 text-slate-500" />
+                </button>
+                <div className="flex-1">
+                  <h2 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">Pin HQ Location</h2>
+                  <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest mt-0.5">Tap the map to place your hub</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (navigator.geolocation) {
+                      navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                          setHubData(prev => ({
+                            ...prev,
+                            coords: { latitude: pos.coords.latitude, longitude: pos.coords.longitude }
+                          }));
+                          toast.success('Moved to your current location');
+                        },
+                        () => toast.error('GPS access denied'),
+                        { enableHighAccuracy: true }
+                      );
+                    }
+                  }}
+                  className="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center active:scale-95 transition-all"
+                >
+                  <Navigation className="w-4 h-4 text-emerald-600" />
+                </button>
+              </div>
+
+              {/* Map */}
+              <div className="flex-1 relative">
+                <MapContainer
+                  center={[
+                    hubData.coords?.latitude || profile?.location?.latitude || -1.2635,
+                    hubData.coords?.longitude || profile?.location?.longitude || 36.8048
+                  ]}
+                  zoom={15}
+                  zoomControl={false}
+                  className="h-full w-full z-0"
+                >
+                  <MapInvalidator />
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <MapClickHandler
+                    onLocationSelect={(lat, lng) => {
+                      setHubData(prev => ({
+                        ...prev,
+                        coords: { latitude: lat, longitude: lng }
+                      }));
+                    }}
+                  />
+                  {hubData.coords?.latitude && (
+                    <>
+                      <Marker
+                        position={[hubData.coords.latitude, hubData.coords.longitude]}
+                        {...({ icon: hubPinIcon } as any)}
+                      />
+                      <FlyToLocation lat={hubData.coords.latitude} lng={hubData.coords.longitude} />
+                    </>
+                  )}
+                </MapContainer>
+
+                {/* Floating Coords Badge */}
+                {hubData.coords?.latitude && (
+                  <div className="absolute top-4 left-4 right-4 z-[400] flex items-center gap-2 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl px-3.5 py-2.5 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center shrink-0">
+                      <MapPin className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest leading-none">Pinned Location</p>
+                      <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mt-0.5 truncate">
+                        {hubData.coords.latitude.toFixed(5)}, {hubData.coords.longitude.toFixed(5)}
+                      </p>
+                    </div>
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                  </div>
+                )}
+
+                {/* Floating Instruction */}
+                {!hubData.coords?.latitude && (
+                  <div className="absolute top-4 left-4 right-4 z-[400] bg-amber-50 dark:bg-amber-900/30 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-xl border border-amber-200 dark:border-amber-800 flex items-center gap-3">
+                    <MapPin className="w-5 h-5 text-amber-600 shrink-0 animate-bounce" />
+                    <p className="text-xs font-bold text-amber-800 dark:text-amber-300 leading-snug">Tap on the map to pin your HQ's exact location</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom Panel */}
+              <div className="shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 pb-[calc(env(safe-area-inset-bottom,1rem)+0.5rem)] space-y-3">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Physical Address / Landmark</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Industrial Area, Likoni Rd, Gate 3"
+                    value={hubData.address}
+                    onChange={(e) => setHubData(prev => ({ ...prev, address: e.target.value }))}
+                    className="w-full p-3.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-colors"
+                  />
+                </div>
+                <button
+                  type="button"
+                  disabled={!hubData.coords?.latitude}
+                  onClick={() => {
+                    setShowHubMapModal(false);
+                    toast.success('HQ location pinned!', { description: hubData.address || 'Location saved' });
+                  }}
+                  className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-sm uppercase tracking-widest shadow-lg shadow-emerald-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-40"
+                >
+                  <CheckCircle2 className="w-5 h-5" />
+                  Confirm HQ Location
+                </button>
+              </div>
+            </div>,
+            document.body
+          )}
     </div>
   );
 }

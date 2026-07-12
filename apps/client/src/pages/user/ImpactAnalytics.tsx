@@ -21,6 +21,7 @@ import {
   Wallet,
   Star,
   Leaf,
+  Lock,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@klinflow/core/stores/authStore";
@@ -343,6 +344,7 @@ export default function ImpactAnalytics() {
 
   return (
     <div className=" bg-slate-50 dark:bg-slate-800 transition-colors pb-10">
+      
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-slate-50/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-600/50">
         <div className="flex items-center justify-between">
@@ -386,17 +388,8 @@ export default function ImpactAnalytics() {
                 <h2 className="text-5xl font-black text-white tracking-tighter leading-none">{stats.totalWeight}</h2>
                 <span className="text-sm font-bold text-emerald-400">KG</span>
               </div>
-              
-              <div className={`flex items-center gap-1 text-[11px] font-bold mb-1.5 ${stats.monthlyGrowth >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                <TrendingUp className={`w-3.5 h-3.5 ${stats.monthlyGrowth < 0 ? 'rotate-180' : ''}`} /> 
-                <span>
-                  {Math.abs(stats.monthlyGrowth)}% 
-                  <span className="font-medium text-emerald-100/70 text-[10px] ml-1">vs last month</span>
-                </span>
-              </div>
             </div>
           </div>
-
           <div className="relative z-10 pt-4 border-t border-white/10">
             <p className="text-[9px] font-medium text-emerald-100/70 mb-3">This is equivalent to:</p>
             <div className="flex items-center justify-between gap-2">
@@ -546,9 +539,9 @@ export default function ImpactAnalytics() {
             </button>
           </div>
 
-          <div className="bg-white dark:bg-slate-900/60 rounded-[1.5rem] p-5 border border-slate-200 dark:border-slate-800 ">
+          <div className="bg-gradient-to-br from-blue-600 to-blue-900 rounded-[1rem] p-5 border border-slate-200 dark:border-slate-800 ">
             <div className="flex items-center justify-between mb-8">
-              <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-500 dark:text-slate-400 flex items-center gap-2">
+              <h3 className="font-semibold text-xs capitalize tracking-widest text-white dark:text-slate-400 flex items-center gap-2">
                 <BarChart className="w-4 h-4 text-emerald-500" /> Recovered Weight
               </h3>
               <div className="flex items-center gap-2">
@@ -587,7 +580,7 @@ export default function ImpactAnalytics() {
                         </div>
                       )}
                     </div>
-                    <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 capitalize tracking-tighter">
+                    <p className="text-[10px] font-black text-slate-100 dark:text-slate-400 capitalize tracking-tighter">
                       {dayName}
                     </p>
                   </div>
@@ -609,43 +602,83 @@ export default function ImpactAnalytics() {
             </button>
           </div>
           <div className="grid grid-cols-4 gap-2">
-            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 bg-white dark:bg-slate-900 rounded-2xl p-2.5 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 ${stats.totalPickups >= 1 ? '' : 'opacity-50 grayscale'}`}>
-              <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl rotate-45 flex items-center justify-center border border-emerald-100 dark:border-emerald-500/20">
-                <Leaf className="w-4 h-4 text-emerald-600 dark:text-emerald-500 -rotate-45" />
+            {/* First Step */}
+            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 rounded-2xl p-2.5 border flex flex-col items-center justify-center gap-2 ${stats.totalPickups >= 1 ? 'bg-emerald-500 dark:bg-emerald-800 border-emerald-300 dark:border-emerald-700/50' : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 opacity-80 grayscale'}`}>
+              <div className={`w-10 h-10 rounded-xl rotate-45 flex items-center justify-center border shadow-sm ${stats.totalPickups >= 1 ? 'bg-emerald-50 dark:bg-emerald-500/20 border-emerald-300 dark:border-emerald-500/30' : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600'}`}>
+                {stats.totalPickups >= 1 ? (
+                  <Leaf className="w-5 h-5 text-emerald-600 dark:text-emerald-400 -rotate-45" />
+                ) : (
+                  <Lock className="w-6 h-6 text-slate-400 dark:text-slate-500 -rotate-45" />
+                )}
               </div>
               <div className="text-center mt-1">
                 <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">First Step</p>
-                <p className="text-[7px] text-slate-500 dark:text-slate-400 flex items-center justify-center gap-0.5">1 Pickup {stats.totalPickups >= 1 && <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>}</p>
+                <div className="flex items-center justify-center gap-0.5">
+                  <p className="text-[7px] font-semibold text-slate-100 dark:text-slate-400">1 Pickup</p>
+                  {stats.totalPickups >= 1 && (
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 bg-white dark:bg-slate-900 rounded-2xl p-2.5 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 ${stats.totalPickups >= 10 ? '' : 'opacity-50 grayscale'}`}>
-              <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/10 rounded-xl rotate-45 flex items-center justify-center border border-blue-100 dark:border-blue-500/20">
-                <Recycle className="w-4 h-4 text-blue-600 dark:text-blue-500 -rotate-45" />
+            {/* Green Neighbor */}
+            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 rounded-2xl p-2.5 border flex flex-col items-center justify-center gap-2 ${stats.totalPickups >= 10 ? 'bg-blue-500 dark:bg-blue-800 border-blue-300 dark:border-blue-700/50' : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 opacity-80 grayscale'}`}>
+              <div className={`w-10 h-10 rounded-xl rotate-45 flex items-center justify-center border shadow-sm ${stats.totalPickups >= 10 ? 'bg-blue-50 dark:bg-blue-500/20 border-blue-300 dark:border-blue-500/30' : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600'}`}>
+                {stats.totalPickups >= 10 ? (
+                  <Recycle className="w-5 h-5 text-blue-600 dark:text-blue-400 -rotate-45" />
+                ) : (
+                  <Lock className="w-6 h-6 text-slate-400 dark:text-slate-500 -rotate-45" />
+                )}
               </div>
               <div className="text-center mt-1">
                 <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Green Neighbor</p>
-                <p className="text-[7px] text-slate-500 dark:text-slate-400 flex items-center justify-center gap-0.5">10 Pickups {stats.totalPickups >= 10 && <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>}</p>
+                <div className="flex items-center justify-center gap-0.5">
+                  <p className="text-[7px] font-semibold text-slate-500 dark:text-slate-400">10 Pickups</p>
+                  {stats.totalPickups >= 10 && (
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 bg-white dark:bg-slate-900 rounded-2xl p-2.5 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 ${stats.plasticKg >= 100 ? '' : 'opacity-50 grayscale'}`}>
-              <div className="w-10 h-10 bg-purple-50 dark:bg-purple-500/10 rounded-xl rotate-45 flex items-center justify-center border border-purple-100 dark:border-purple-500/20">
-                <Trophy className="w-4 h-4 text-purple-600 dark:text-purple-500 -rotate-45" />
+            {/* Plastic Warrior */}
+            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 rounded-2xl p-2.5 border flex flex-col items-center justify-center gap-2 ${stats.plasticKg >= 100 ? 'bg-purple-500 dark:bg-purple-800 border-purple-300 dark:border-purple-700/50' : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 opacity-80 grayscale'}`}>
+              <div className={`w-10 h-10 rounded-xl rotate-45 flex items-center justify-center border shadow-sm ${stats.plasticKg >= 100 ? 'bg-purple-50 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/30' : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600'}`}>
+                {stats.plasticKg >= 100 ? (
+                  <Trophy className="w-5 h-5 text-purple-600 dark:text-purple-400 -rotate-45" />
+                ) : (
+                  <Lock className="w-6 h-6 text-slate-400 dark:text-slate-500 -rotate-45" />
+                )}
               </div>
               <div className="text-center mt-1">
                 <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Plastic Warrior</p>
-                <p className="text-[7px] text-slate-500 dark:text-slate-400 flex items-center justify-center gap-0.5">100 KG {stats.plasticKg >= 100 && <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>}</p>
+                <div className="flex items-center justify-center gap-0.5">
+                  <p className="text-[7px] font-semibold text-slate-100 dark:text-slate-400">100 KG</p>
+                  {stats.plasticKg >= 100 && (
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 bg-white dark:bg-slate-900 rounded-2xl p-2.5 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-2 ${stats.totalWeight >= 500 ? '' : 'opacity-50 grayscale'}`}>
-              <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 rounded-xl rotate-45 flex items-center justify-center border border-amber-100 dark:border-amber-500/20">
-                <Star className="w-4 h-4 text-amber-600 dark:text-amber-500 -rotate-45" />
+            {/* Eco-Titan */}
+            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 rounded-2xl p-2.5 border flex flex-col items-center justify-center gap-2 ${stats.totalWeight >= 500 ? 'bg-amber-400 dark:bg-amber-800 border-amber-300 dark:border-amber-700/50' : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 opacity-80 grayscale'}`}>
+              <div className={`w-10 h-10 rounded-xl rotate-45 flex items-center justify-center border shadow-sm ${stats.totalWeight >= 500 ? 'bg-amber-50 dark:bg-amber-500/20 border-amber-300 dark:border-amber-500/30' : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600'}`}>
+                {stats.totalWeight >= 500 ? (
+                  <Star className="w-5 h-5 text-amber-600 dark:text-amber-400 -rotate-45" />
+                ) : (
+                  <Lock className="w-6 h-6 text-slate-400 dark:text-slate-500 -rotate-45" />
+                )}
               </div>
               <div className="text-center mt-1">
                 <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Eco-Titan</p>
-                <p className="text-[7px] text-slate-500 dark:text-slate-400 flex items-center justify-center gap-0.5">500 KG {(stats.totalWeight >= 500) && <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>}</p>
+                <div className="flex items-center justify-center gap-0.5">
+                  <p className="text-[7px] font-semibold text-slate-500 dark:text-slate-400">500 KG</p>
+                  {stats.totalWeight >= 500 && (
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>
+                  )}
+                </div>
               </div>
             </div>
           </div>

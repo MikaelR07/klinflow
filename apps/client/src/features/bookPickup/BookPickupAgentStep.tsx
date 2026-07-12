@@ -4,11 +4,12 @@
  */
 import { useState } from 'react';
 import {
-  Zap, Star, ChevronRight, X, Clock, Truck, AlertCircle, Search
+  Zap, Star, ChevronRight, X, Clock, Truck, AlertCircle, Search, Loader2, User, ShieldCheck
 } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { supabase } from '@klinflow/supabase';
 import type { BookPickupAgent } from './bookPickup.types';
 
 interface BookPickupAgentStepProps {
@@ -41,18 +42,47 @@ export default function BookPickupAgentStep({
   customDate, setCustomDate, customTime, setCustomTime
 }: BookPickupAgentStepProps) {
   const [agentSearchQuery, setAgentSearchQuery] = useState('');
-  const agentSearchResults = agentSearchQuery.length >= 2
-    ? liveAgents.filter(a => {
-        const q = agentSearchQuery.toLowerCase();
-        return (
-          a.name?.toLowerCase().includes(q) ||
-          a.companyName?.toLowerCase().includes(q) ||
-          a.fleetInviteCode?.toLowerCase().includes(q) ||
-          a.phone?.toLowerCase().includes(q) ||
-          a.klinflowId?.toLowerCase().includes(q)
-        );
-      }).slice(0, 5)
-    : [];
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [searchedAgent, setSearchedAgent] = useState<any | null>(null);
+  const [searchAttempted, setSearchAttempted] = useState(false);
+
+  const handleAgentSearch = async () => {
+    setSearchError(null);
+    setSearchedAgent(null);
+    setSearchAttempted(true);
+
+    let normPhone = agentSearchQuery.replace(/\s+/g, '');
+    if (normPhone.startsWith('0')) {
+      normPhone = normPhone.slice(1);
+    } else if (normPhone.startsWith('+254')) {
+      normPhone = normPhone.slice(4);
+    } else if (normPhone.startsWith('254')) {
+      normPhone = normPhone.slice(3);
+    }
+
+    if (!/^(7|1)\d{8}$/.test(normPhone)) {
+      setSearchError('Enter a valid phone number.');
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const { data, error } = await supabase.rpc('search_pickup_agent_exact_v2', { p_core_digits: normPhone });
+      if (error) throw error;
+      
+      if (data && data.length > 0) {
+        setSearchedAgent(data[0]);
+      } else {
+        setSearchedAgent(null);
+      }
+    } catch (err) {
+      console.error(err);
+      setSearchError('Something went wrong. Please try again.');
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   return (
     <motion.div key="p2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
@@ -71,7 +101,7 @@ export default function BookPickupAgentStep({
         </div>
 
         {filteredAgents?.length > 0 && (
-          <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-primary/5 border border-primary/20 rounded-2xl flex items-center gap-3">
+          <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="p-3 bg-primary/5 border border-primary/20 rounded-xl flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center relative shrink-0">
               <div className="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-20"></div>
               <Zap className="w-4 h-4 text-primary" />
@@ -79,7 +109,7 @@ export default function BookPickupAgentStep({
             <div>
               <h4 className="text-xs font-semibold capitalize tracking-widest text-primary mb-0.5">Collectors Nearby</h4>
               <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 leading-tight">
-                {filteredAgents.length} {filteredAgents.length === 1 ? 'collector' : 'collectors'} found in your area. ETA: ~{Math.max(4, 12 - filteredAgents.length * 2)} mins.
+                {filteredAgents.length} {filteredAgents.length === 1 ? 'collector' : 'collectors'} found in your area.
               </p>
             </div>
           </motion.div>
@@ -90,14 +120,31 @@ export default function BookPickupAgentStep({
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <Marker position={center as any} {...({ icon: userIcon } as any)} />
 
-            {filteredAgents.map(agent => {
+            {filteredAgents.map((agent, index) => {
               const isCompany = agent.agentAccountType === 'company_admin';
               const isSelected = selectedAgent?.id === agent.id || selectedCompanyId === agent.id;
+
+              // Offset overlapping markers so they fan out instead of stacking
+              const baseLat = agent.location?.latitude || center[0];
+              const baseLng = agent.location?.longitude || center[1];
+              const hasDuplicate = filteredAgents.some((other, otherIdx) =>
+                otherIdx !== index &&
+                Math.abs((other.location?.latitude || center[0]) - baseLat) < 0.001 &&
+                Math.abs((other.location?.longitude || center[1]) - baseLng) < 0.001
+              );
+              let markerLat = baseLat;
+              let markerLng = baseLng;
+              if (hasDuplicate) {
+                const angle = (2 * Math.PI * index) / filteredAgents.length;
+                const offsetRadius = 0.003; // ~300m spread
+                markerLat = baseLat + offsetRadius * Math.cos(angle);
+                markerLng = baseLng + offsetRadius * Math.sin(angle);
+              }
 
               return (
                 <Marker
                   key={agent.id}
-                  position={[agent.location?.latitude || center[0], agent.location?.longitude || center[1]]}
+                  position={[markerLat, markerLng]}
                   {...({ icon: agentIcon(isSelected, isCompany) } as any)}
                   eventHandlers={{
                     click: () => {
@@ -196,53 +243,109 @@ export default function BookPickupAgentStep({
         )}
 
         {/* Preferred Agent Search */}
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm mt-3.5 relative">
-          <h2 className="text-[10px] font-semibold capitalize tracking-widest text-slate-400 mb-2.5">Search by Name, Phone, or Klin ID (Optional)</h2>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-            <input
-              type="text"
-              value={agentSearchQuery}
-              placeholder="e.g. KLN-A1B2C3, 07xx..., Agent John"
-              className="w-full bg-slate-50 dark:bg-slate-900 py-2.5 pl-9 pr-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all"
-              onChange={(e) => setAgentSearchQuery(e.target.value)}
-            />
-          </div>
-          {agentSearchResults.length > 0 && (
-            <div className="mt-2 space-y-1.5 max-h-48 overflow-y-auto">
-              {agentSearchResults.map(agent => (
-                <button
-                  key={agent.id}
-                  onClick={() => {
-                    if (agent.agentAccountType === 'company_admin') {
-                      setSelectedCompanyId(agent.id);
-                      setSelectedAgent(null);
-                    } else {
-                      setSelectedAgent(agent);
-                    }
-                    setAgentSearchQuery('');
-                    toast.success(`${agent.name || agent.companyName || 'Agent'} selected`);
-                  }}
-                  className="w-full flex items-center gap-3 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 hover:border-primary/50 transition-all text-left"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-sm shrink-0">
-                    {agent.agentAccountType === 'company_admin' ? '🏢' : '🚛'}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">
-                      {agent.agentAccountType === 'company_admin' ? (agent.companyName || agent.name) : (agent.name || 'Agent')}
-                    </p>
-                    <p className="text-[10px] font-medium text-slate-400 truncate">
-                      {agent.klinflowId || agent.phone || 'Available'}
-                    </p>
-                  </div>
-                  <Star className="w-3 h-3 fill-emerald-500 text-emerald-500 shrink-0" />
-                </button>
-              ))}
+        <div className="bg-white dark:bg-slate-800 p-5 rounded-[1.5rem] border border-slate-100 dark:border-slate-700/50 shadow-sm mt-3.5 relative overflow-hidden">
+          <h2 className="text-xs font-bold text-slate-900 dark:text-white tracking-tight mb-4 flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-primary" /> Find an Agent by Phone
+          </h2>
+          
+          <div className="relative flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                type="tel"
+                value={agentSearchQuery}
+                placeholder="07XX..."
+                className={`w-full bg-slate-50 dark:bg-slate-900/50 py-3.5 pl-10 pr-4 rounded-xl border ${searchError ? 'border-red-300 dark:border-red-900/50 focus:border-red-500 focus:ring-red-200' : 'border-slate-200 dark:border-slate-700/50 focus:border-primary/50 focus:ring-primary/20'} text-sm font-semibold dark:text-white outline-none focus:ring-4 transition-all`}
+                onChange={(e) => {
+                  setAgentSearchQuery(e.target.value);
+                  setSearchError(null);
+                  setSearchAttempted(false);
+                  setSearchedAgent(null);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleAgentSearch();
+                }}
+              />
             </div>
+            <button
+              onClick={handleAgentSearch}
+              disabled={isSearching || !agentSearchQuery}
+              className="px-5 py-3.5 bg-slate-900 dark:bg-primary text-white rounded-xl text-sm font-bold tracking-wide disabled:opacity-50 hover:bg-slate-800 dark:hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2"
+            >
+              {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
+            </button>
+          </div>
+
+          {searchError && (
+            <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-xs font-bold text-red-500 mt-3 flex items-center gap-1.5">
+              <AlertCircle className="w-3.5 h-3.5" /> {searchError}
+            </motion.p>
           )}
-          {agentSearchQuery.length >= 2 && agentSearchResults.length === 0 && (
-            <p className="text-[10px] font-semibold text-slate-400 mt-2 text-center py-2">No agents found matching "{agentSearchQuery}"</p>
+
+          {searchAttempted && !isSearching && !searchError && (
+            <div className="mt-5 border-t border-slate-100 dark:border-slate-700/50 pt-5">
+              {searchedAgent ? (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0 border-2 border-white dark:border-slate-700 shadow-sm">
+                      {searchedAgent.profile_photo ? (
+                        <img src={searchedAgent.profile_photo} alt={searchedAgent.full_name} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-sm font-black text-slate-500 dark:text-slate-400">{searchedAgent.full_name?.charAt(0) || 'A'}</span>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{searchedAgent.full_name}</h4>
+                        <span className="px-2 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[9px] font-black uppercase tracking-widest rounded-md">
+                          {searchedAgent.agent_type === 'fleet_driver' ? 'Fleet Agent' : 'Independent'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                        <span className="flex items-center gap-1"><Star className="w-3 h-3 text-emerald-500 fill-emerald-500" /> {searchedAgent.rating}</span>
+                        <span>•</span>
+                        <span>{searchedAgent.completed_pickups} Pickups</span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1.5">
+                          <span className={`w-2 h-2 rounded-full ${searchedAgent.online ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`} />
+                          {searchedAgent.online ? 'Online' : 'Offline'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const agentAdapter = {
+                        id: searchedAgent.id,
+                        name: searchedAgent.full_name,
+                        rating: searchedAgent.rating,
+                        isOnline: searchedAgent.online,
+                        agentAccountType: searchedAgent.agent_type,
+                        avatarUrl: searchedAgent.profile_photo
+                      };
+                      setSelectedAgent(agentAdapter);
+                      setSelectedCompanyId(null);
+                      setSearchAttempted(false);
+                      setSearchedAgent(null);
+                      setAgentSearchQuery('');
+                      toast.success(`${searchedAgent.full_name} selected`);
+                    }}
+                    className="w-full mt-4 py-2.5 bg-primary/10 text-primary font-bold text-xs rounded-xl hover:bg-primary/20 transition-colors"
+                  >
+                    Select Agent
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4 px-2">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 mx-auto flex items-center justify-center mb-3">
+                    <User className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed">
+                    No Klinflow pickup agent was found with that phone number.
+                  </p>
+                </motion.div>
+              )}
+            </div>
           )}
         </div>
       </div>

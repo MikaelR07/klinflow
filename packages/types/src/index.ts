@@ -1,3 +1,50 @@
+export type HubRole = 
+  | 'operations_manager'
+  | 'fleet_manager'
+  | 'sales_manager'
+  | 'finance_manager'
+  | 'executive_viewer';
+
+export type MembershipRole = 'owner' | 'member';
+
+export interface HubContext {
+  companyId: string;
+  companyName: string;
+  membershipRole: MembershipRole;  // 'owner' or 'member'
+  hubRoles: HubRole[];         // department responsibilities
+  hubPermissions: HubPermission[];
+}
+
+export type HubPermission = 
+  | 'agent.view' | 'agent.create' | 'agent.update' | 'agent.approve' | 'agent.suspend' | 'agent.export'
+  | 'vehicle.view' | 'vehicle.create' | 'vehicle.update' | 'vehicle.delete' | 'vehicle.assign'
+  | 'dispatch.view' | 'dispatch.create' | 'dispatch.update' | 'dispatch.delete' | 'dispatch.reassign'
+  | 'fuel.view' | 'fuel.manage'
+  | 'maintenance.view' | 'maintenance.create' | 'maintenance.update' | 'maintenance.delete'
+  | 'tracking.view'
+  | 'fleet.settings'
+  | 'fund_request.view' | 'fund_request.create' | 'fund_request.approve' | 'fund_request.reject' | 'fund_request.export'
+  | 'payout.view' | 'payout.create' | 'payout.execute' | 'payout.export'
+  | 'wallet.view' | 'wallet.transfer' | 'wallet.topup' | 'wallet.withdraw'
+  | 'invoice.view' | 'invoice.create' | 'invoice.update' | 'invoice.delete'
+  | 'procurement.view' | 'report.export' | 'treasury.view' | 'treasury.manage'
+  | 'supplier.view' | 'supplier.create' | 'supplier.update' | 'supplier.onboard' | 'supplier.suspend' | 'supplier.risk' | 'supplier.compliance' | 'supplier.export'
+  | 'rfq.view' | 'rfq.create' | 'rfq.update' | 'rfq.delete' | 'rfq.approve' | 'rfq.export'
+  | 'contract.view' | 'contract.create' | 'contract.update' | 'contract.delete' | 'contract.approve' | 'contract.export'
+  | 'marketplace.view' | 'marketplace.sell' | 'marketplace.buy' | 'marketplace.manage'
+  | 'pricing.view' | 'pricing.set' | 'pricing.export'
+  | 'buyer.view' | 'buyer.create' | 'buyer.update' | 'buyer.export'
+  | 'intake.view' | 'intake.manage'
+  | 'queue.view' | 'queue.manage'
+  | 'inventory.view' | 'inventory.manage' | 'inventory.export'
+  | 'dispute.view' | 'dispute.resolve' | 'dispute.escalate' | 'dispute.export'
+  | 'processing.view'
+  | 'user.view' | 'user.create' | 'user.update' | 'user.delete' | 'user.impersonate'
+  | 'role.assign' | 'role.view' | 'role.update' | 'role.delete'
+  | 'integration.view' | 'integration.manage'
+  | 'settings.view' | 'settings.manage'
+  | 'analytics.view' | 'analytics.export';
+
 export enum UserRole {
   USER = 'user',
   AGENT = 'agent',

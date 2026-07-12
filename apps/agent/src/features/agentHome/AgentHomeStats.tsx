@@ -4,7 +4,8 @@
  */
 import { useState, useEffect } from 'react';
 import {
-  Handshake, Truck, Star, Zap, Briefcase, Receipt, PlusSquare
+  Handshake, Truck, Star, Zap, Briefcase, Receipt, PlusSquare,
+  MapPinPlus
 } from 'lucide-react';
 import { supabase } from '@klinflow/supabase';
 import type { AgentEarningsData } from './agentHome.types';
@@ -68,7 +69,7 @@ export default function AgentHomeStats({
   const handlePickupsClick = () => {
     localStorage.setItem(`last_viewed_pickups_${profile?.id}`, new Date().toISOString());
     setNewPickupsCount(0);
-    navigate('/jobs');
+    navigate(profile?.agentAccountType !== 'fleet_driver' ? '/expected-arrivals' : '/jobs');
   };
 
   const handleBidsClick = () => {
@@ -93,7 +94,7 @@ export default function AgentHomeStats({
             {/* LEFT */}
             <div className="flex-1 min-w-0 pl-1">
               <p className="text-[12px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
-                Assets Value
+                Stock Value
               </p>
 
               <div className="flex items-baseline gap-1 mb-2 min-w-0">
@@ -101,7 +102,7 @@ export default function AgentHomeStats({
                   KSh
                 </span>
                 <h2 className="text-xl sm:text-xl font-black text-white truncate">
-                  {earnings?.today}
+                  {(earnings?.inventoryValue || 0).toLocaleString()}
                 </h2>
               </div>
 
@@ -116,7 +117,7 @@ export default function AgentHomeStats({
             {/* RIGHT */}
             <div className="flex-1 min-w-0 flex flex-col items-end text-right pr-1">
               <p className="text-[12px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
-                Wallet Balance
+                Trading Balance
               </p>
 
               <div className="flex items-baseline justify-end gap-1 mb-2 min-w-0 w-full">
@@ -130,10 +131,10 @@ export default function AgentHomeStats({
 
               <div className="w-full flex justify-end">
                 <button
-                  onClick={() => navigate('/deposit')}
+                  onClick={() => navigate(profile?.agentAccountType === 'fleet_driver' ? '/deposit' : '/wallet')}
                   className="bg-primary text-white px-8 py-2 min-h-[44px] rounded-xl font-bold text-xs tracking-wider flex items-center justify-center active:scale-95 transition-all  whitespace-nowrap"
                 >
-                  Deposit
+                  Wallet
                 </button>
               </div>
             </div>
@@ -208,10 +209,10 @@ export default function AgentHomeStats({
               </span>
             )}
             <div className="w-10 h-10 shrink-0 bg-blue-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Briefcase className="w-5 h-5" />
+              <MapPinPlus className="w-5 h-5" />
             </div>
             <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
-              View Pickups
+              {profile?.agentAccountType !== 'fleet_driver' ? 'Drop-Offs' : 'View Pickups'}
             </p>
           </button>
 

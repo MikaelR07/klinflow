@@ -84,6 +84,7 @@ export const ProfileSchema = z.object({
   hubAddress: z.string().nullable().optional(),
   hubLocation: LocationSchema.nullable().optional(),
   isEnRoute: z.boolean().default(false),
+  hubTransferPin: z.string().nullable().optional(),
   hubConfig: z.record(z.string(), z.any()).nullable().optional(),
   serviceProfile: z.record(z.string(), z.any()).nullable().optional(),
   config: z.any().nullable().optional(),
@@ -153,6 +154,8 @@ export const MarketplaceListingSchema = z.object({
   swarmId: z.string().uuid().nullable().optional(),
   isBulkDrive: z.boolean().default(false),
   groupMetadata: z.any().nullable().optional(),
+  targetAgentId: z.string().uuid().nullable().optional(),
+  pickupMode: z.string().default('pickup'),
   createdAt: z.string(),
 });
 
@@ -167,6 +170,7 @@ export const MarketplaceOrderSchema = z.object({
   totalPrice: z.number().nonnegative(),
   status: z.enum(['pending', 'confirmed', 'processing', 'completed', 'cancelled', 'disputed']),
   bookingId: z.string().uuid().nullable().optional(),
+  pickupMode: z.string().default('pickup'),
   createdAt: z.string(),
 });
 
@@ -175,13 +179,13 @@ export const MarketplaceOfferSchema = z.object({
   listingId: z.string().uuid(),
   buyerId: z.string().uuid(),
   sellerId: z.string().uuid(),
-  offeredPrice: z.number().nonnegative(),
-  quantity: z.number().nonnegative(),
-  status: z.enum(['pending', 'accepted', 'declined', 'cancelled', 'completed', 'paid']),
+  offeredPrice: z.coerce.number().nonnegative(),
+  quantity: z.coerce.number().nonnegative(),
+  status: z.enum(['pending', 'accepted', 'declined', 'cancelled', 'completed', 'paid', 'rejected']),
   material: z.string().optional(),
   photo: z.string().nullable().optional(),
   buyerName: z.string().optional(),
-  createdAt: z.string(),
+  createdAt: z.string().optional(),
   listing: z.any().optional(),
   emoji: z.string().optional(),
   price: z.number().optional(),

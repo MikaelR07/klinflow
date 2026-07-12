@@ -184,9 +184,9 @@ export default function SellerHome() {
   // ── MERCHANT METRICS (Marketplace Centric) ──
   const marketplaceBookings = bookings.filter((b: any) => b.booking_type === 'marketplace' || b.booking_type === 'marketplace_pickup');
 
-  const totalDeals = marketplaceBookings.filter(b => b.status === 'completed').length;
+  const totalDeals = stats?.total_deals || marketplaceBookings.filter(b => b.status === 'completed').length;
 
-  const totalSoldKg = marketplaceBookings
+  const totalSoldKg = stats?.total_sold_kg || marketplaceBookings
     .filter(b => b.status === 'completed')
     .reduce((acc, b: any) => acc + (parseFloat(String(b.actualWeightKg || b.weightKg || 0)) || 0), 0);
 
@@ -285,7 +285,7 @@ export default function SellerHome() {
 
                 <button
                   onClick={() => navigate('/withdraw')}
-                  className="bg-primary hover:bg-slate-50 text-white  dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold capitalise tracking-widest active:scale-95 transition-all "
+                  className="bg-primary  text-white  dark:text-white dark:hover:bg-emerald-500 px-5 py-3 rounded-xl text-xs font-semibold capitalise tracking-widest active:scale-95 transition-all "
                 >
                   Withdraw
                 </button>

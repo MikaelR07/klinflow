@@ -32,24 +32,24 @@ export default function PayoutsBarchart() {
   const avgPayout = Math.round(activeChartData.reduce((acc, curr) => acc + curr.payouts, 0) / activeChartData.length);
 
   return (
-    <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl shadow-sm p-4 space-y-4">
+    <div className="bg-blue-600 rounded-2xl shadow-md p-4 space-y-4">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-sm font-bold text-slate-800 dark:text-white">
+          <h3 className="text-sm font-bold text-white">
             Payout Trends
           </h3>
-          <p className="text-[10px] text-slate-500 mt-0.5">
+          <p className="text-[10px] text-blue-100 mt-0.5">
             {chartView === 'daily' ? 'Mon – Sun, this week' : 'Last 8 weeks'}
           </p>
         </div>
-        <div className="flex bg-slate-50 dark:bg-slate-800 rounded-lg p-0.5 gap-0.5">
+        <div className="flex bg-blue-700/50 rounded-lg p-0.5 gap-0.5">
           <button
             onClick={() => setChartView('daily')}
             className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${
               chartView === 'daily'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'text-slate-500 hover:text-slate-700'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-blue-200 hover:text-white'
             }`}
           >
             Daily
@@ -58,8 +58,8 @@ export default function PayoutsBarchart() {
             onClick={() => setChartView('weekly')}
             className={`px-3 py-1 text-[10px] font-bold rounded-md transition-all ${
               chartView === 'weekly'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'text-slate-500 hover:text-slate-700'
+                ? 'bg-white text-blue-600 shadow-sm'
+                : 'text-blue-200 hover:text-white'
             }`}
           >
             Weekly
@@ -68,8 +68,8 @@ export default function PayoutsBarchart() {
       </div>
 
       {/* Chart */}
-      <div className="h-40 w-full -ml-2">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="h-40 w-full">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart
             data={activeChartData}
             margin={{ top: 4, right: 0, left: -20, bottom: 0 }}
@@ -77,21 +77,20 @@ export default function PayoutsBarchart() {
           >
             <CartesianGrid
               vertical={false}
-              stroke="#f1f5f9"
+              stroke="rgba(255,255,255,0.1)"
               strokeDasharray="0"
-              className="dark:[&>line]:stroke-slate-800"
             />
             <XAxis
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: '#94A3B8', fontWeight: 600 }}
+              tick={{ fontSize: 10, fill: '#bfdbfe', fontWeight: 600 }}
               dy={6}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: '#94A3B8', fontWeight: 600 }}
+              tick={{ fontSize: 10, fill: '#bfdbfe', fontWeight: 600 }}
               tickFormatter={(val) => `${val/1000}K`}
               tickCount={4}
             />
@@ -100,11 +99,13 @@ export default function PayoutsBarchart() {
               contentStyle={{
                 borderRadius: '10px',
                 fontSize: '12px',
-                border: '0.5px solid #e2e8f0',
-                boxShadow: 'none',
+                border: 'none',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                 padding: '8px 12px',
-                backgroundColor: 'white',
+                backgroundColor: '#1e3a8a',
+                color: 'white',
               }}
+              itemStyle={{ color: 'white' }}
               formatter={(value: number) => [`KES ${value.toLocaleString()}`, 'Payout']}
             />
             <Bar
@@ -116,7 +117,7 @@ export default function PayoutsBarchart() {
                 return (
                   <Cell
                     key={index}
-                    fill={entry.payouts === maxPayout ? '#059669' : '#34d399'}
+                    fill={entry.payouts === maxPayout ? '#ffffff' : 'rgba(255,255,255,0.4)'}
                   />
                 );
               })}
@@ -126,21 +127,19 @@ export default function PayoutsBarchart() {
       </div>
 
       {/* Footer Metrics */}
-      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-        <div className="text-center border-r border-slate-100 dark:border-slate-800">
-          <p className="text-[9px] font-bold text-slate-400 mb-0.5">Highest</p>
-          <p className="text-[13px] font-black text-slate-800 dark:text-white"><span className="text-[9px] text-slate-500 mr-0.5">KES</span>{maxPayout.toLocaleString()}</p>
-          <p className="text-[8px] font-bold text-emerald-500 uppercase tracking-widest mt-0.5">Peak</p>
+      <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10">
+        <div className="text-center border-r border-white/10">
+          <p className="text-[10px] font-bold text-blue-200 mb-0.5">Highest</p>
+          <p className="text-[13px] font-black text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{maxPayout.toLocaleString()}</p>
         </div>
-        <div className="text-center border-r border-slate-100 dark:border-slate-800">
-          <p className="text-[9px] font-bold text-slate-400 mb-0.5">Lowest</p>
-          <p className="text-[13px] font-black text-slate-800 dark:text-white"><span className="text-[9px] text-slate-500 mr-0.5">KES</span>{minPayout.toLocaleString()}</p>
-          <p className="text-[8px] font-bold text-rose-500 uppercase tracking-widest mt-0.5">Min</p>
+        <div className="text-center border-r border-white/10">
+          <p className="text-[10px] font-bold text-blue-200 mb-0.5">Lowest</p>
+          <p className="text-[13px] font-black text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{minPayout.toLocaleString()}</p>
+          
         </div>
         <div className="text-center">
-          <p className="text-[9px] font-bold text-slate-400 mb-0.5">Average</p>
-          <p className="text-[13px] font-black text-slate-800 dark:text-white"><span className="text-[9px] text-slate-500 mr-0.5">KES</span>{avgPayout.toLocaleString()}</p>
-          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{chartView === 'daily' ? 'This week' : 'Last 8 wks'}</p>
+          <p className="text-[10px] font-bold text-blue-200 mb-0.5">Average</p>
+          <p className="text-[13px] font-black text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{avgPayout.toLocaleString()}</p>
         </div>
       </div>
     </div>

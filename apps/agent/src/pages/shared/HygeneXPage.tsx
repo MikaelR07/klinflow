@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Brain, Mic, Send, Lightbulb, MapPin, Loader2, StopCircle, ShieldCheck, Activity, User, ArrowLeft } from 'lucide-react';
+import { Brain, Mic, Send, Lightbulb, MapPin, Loader2, StopCircle, ShieldCheck, Activity, User, ArrowLeft, BrainCircuit } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { ROLES } from '@klinflow/constants';
@@ -203,75 +203,106 @@ export default function HygeneXPage() {
       {/* 1. CHAT ENGINE (FULL WIDTH) */}
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3rem)] pb-[env(safe-area-inset-bottom,1.5rem)] flex flex-col relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-        
-        {/* Messages */}
+         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-6 py-10 space-y-10">
           <div className="max-w-3xl mx-auto space-y-10">
-            {messages.map((msg, idx) => {
-              const isAi = msg.role === 'ai';
-              return (
-                <motion.div 
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex gap-6 ${isAi ? '' : 'flex-row-reverse'}`}
-                >
-                  <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border ${
-                    isAi 
-                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' 
-                      : 'bg-slate-200 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
-                  }`}>
-                    {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                  </div>
-                  
-                  <div className="flex flex-col gap-2 max-w-[85%]">
-                    <div className={`relative px-4 py-3 rounded-2xl text-[13px] border ${
-                      isAi 
-                        ? 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-none shadow-sm' 
-                        : 'bg-primary border-primary text-white font-medium rounded-tr-none shadow-lg shadow-primary/20'
-                    }`}>
-                      {renderMessageText(msg.text)}
+            {messages.length <= 1 && !isTyping ? (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center justify-center pt-8 pb-12">
+                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mb-6">
+                  <BrainCircuit className="w-10 h-10 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-white tracking-tight mb-2 text-center">How can I help you today?</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-10 text-center max-w-sm">
+                  I'm HygeneX, your smart waste intelligence assistant. Select a topic or ask me anything.
+                </p>
+                <div className="flex flex-col gap-3 w-full max-w-lg">
+                  {[
+                    { icon: <Activity className="w-5 h-5 text-white" />, title: "Predict Waste", desc: "Forecast waste generation for next week.", color: "bg-emerald-500 border-emerald-500" },
+                    { icon: <Lightbulb className="w-5 h-5 text-white" />, title: "Market Prices", desc: "Check live rates for recyclables.", color: "bg-teal-500 border-teal-500" },
+                    { icon: <MapPin className="w-5 h-5 text-white" />, title: "Logistics", desc: "Find nearest hubs and dispatch routes.", color: "bg-green-500 border-green-500" },
+                    { icon: <ShieldCheck className="w-5 h-5 text-white" />, title: "Safety Protocol", desc: "Review hazardous waste guidelines.", color: "bg-amber-500 border-amber-500" },
+                  ].map((cap, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => sendMessage(cap.title)}
+                      className={`p-2 rounded-3xl border text-left transition-all active:scale-95 hover:shadow-md flex items-center gap-4 ${cap.color}`}
+                    >
+                      <div className="w-12 h-12 shrink-0 rounded-2xl flex items-center justify-center bg-white/20 dark:bg-black/20 shadow-sm">
+                        {cap.icon}
+                      </div>
+                      <div>
+                        <h4 className="text-[14px] font-bold text-white mb-0.5 tracking-tight">{cap.title}</h4>
+                        <p className="text-[11px] font-medium text-white/90 leading-relaxed">{cap.desc}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              messages.filter((msg: any) => msg.id !== 'initial-1').map((msg: any, idx: number) => {
+                const isAi = msg.role === 'ai';
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`flex gap-4 ${isAi ? '' : 'flex-row-reverse'}`}
+                  >
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border shadow-sm ${isAi
+                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'
+                      : 'bg-slate-200 dark:bg-primary border-slate-300 dark:border-slate-700 text-slate-600 dark:text-white'
+                      }`}>
+                      {isAi ? <Brain className="w-4 h-4" /> : <User className="w-4 h-4" />}
                     </div>
 
-                    {/* AI ACTION CARD: BOOKING */}
-                    {isAi && msg.metadata?.action?.type === 'BOOK_PICKUP' && (
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 space-y-3"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white">
-                            <ShieldCheck className="w-5 h-5" />
-                          </div>
-                          <div>
-                            <div className="text-xs font-semibold capitalize text-emerald-500 tracking-widest">Draft Pickup</div>
-                            <div className="text-xs font-semibold">{msg.metadata.action.payload.waste_type} • {msg.metadata.action.payload.scheduled_date}</div>
-                          </div>
-                        </div>
-                        <button 
-                          onClick={() => alert('Booking confirmed in database!')}
-                          className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-semibold capitalize tracking-widest rounded-xl transition-all"
+                    <div className="flex flex-col gap-1.5 max-w-[85%]">
+                      <div className={`relative px-4 py-3 rounded-2xl text-[13px] shadow-sm leading-relaxed whitespace-pre-wrap ${isAi
+                        ? 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-tl-none'
+                        : 'bg-emerald-600 text-white font-medium rounded-tr-none'
+                        }`}>
+                        {renderMessageText(msg.text)}
+                      </div>
+
+                      {/* AI ACTION CARD: BOOKING */}
+                      {isAi && msg.metadata?.action?.type === 'BOOK_PICKUP' && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 space-y-3 mt-2"
                         >
-                          Confirm & Schedule
-                        </button>
-                      </motion.div>
-                    )}
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-white">
+                              <ShieldCheck className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <div className="text-xs font-semibold capitalize text-emerald-500 tracking-widest">Draft Pickup</div>
+                              <div className="text-xs font-bold text-slate-800 dark:text-white">{msg.metadata.action.payload.wasteType} • {msg.metadata.action.payload.scheduled_date}</div>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => alert('Booking confirmed in database!')}
+                            className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold capitalize tracking-widest rounded-xl transition-all shadow-md shadow-emerald-500/20"
+                          >
+                            Confirm & Schedule
+                          </button>
+                        </motion.div>
+                      )}
 
-                    <div className={`text-xs font-semibold capitalize tracking-widest opacity-30 ${isAi ? 'text-left' : 'text-right'}`}>
-                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      <div className={`text-[10px] font-bold tracking-widest opacity-40 mt-1 ${isAi ? 'text-left' : 'text-right'}`}>
+                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-            
+                  </motion.div>
+                );
+              })
+            )}
+
             {isTyping && (
               <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
                   <Brain className="w-4 h-4" />
                 </div>
-                <div className="flex items-center gap-1.5 px-4 py-3 bg-slate-50 dark:bg-white/[0.03] border border-slate-100 dark:border-white/5 rounded-2xl rounded-tl-none">
+                <div className="flex items-center gap-1.5 px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl rounded-tl-none shadow-sm h-[46px]">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '150ms' }} />
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -280,10 +311,7 @@ export default function HygeneXPage() {
             )}
             <div ref={chatBottomRef} className="h-4" />
           </div>
-        </div>
-
-        {/* Input Control */}
-      </div>
+        </div>    </div>
 
       <div className="shrink-0 w-full z-30 px-4 pb-4 lg:pb-10 pt-2 bg-transparent">
         <div className="w-full max-w-4xl mx-auto bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2rem] shadow-2xl overflow-hidden">

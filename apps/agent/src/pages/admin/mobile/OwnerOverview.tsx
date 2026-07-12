@@ -5,7 +5,9 @@ import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useFulfillmentStore } from '@klinflow/core/stores/fulfillmentStore';
 import { 
   PackageCheck, Scale, DollarSign, Clock, Users, 
-  AlertTriangle, ShieldAlert, BarChart3, Receipt, ArrowRight, TrendingUp, MessageSquare
+  AlertTriangle, ShieldAlert, BarChart3, Receipt, ArrowRight, TrendingUp, MessageSquare,
+  BrickWall,
+  Coins
 } from 'lucide-react';
 import { CartesianGrid, BarChart,Cell, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import { MaterialsPieChart } from './MaterialsPieChart';
@@ -32,7 +34,7 @@ export default function OwnerOverview() {
   // 1. KPI Cards data
   const kpis = [
     { label: 'Completed Pickups', value: totalCompletedJobs.toString(), subtext: '98% success rate', icon: PackageCheck, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
-    { label: 'Collection Value', value: `KES ${collectionValue.toLocaleString()}`, subtext: '+5% vs last week', icon: DollarSign, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
+    { label: 'Collection Value', value: `KES ${collectionValue.toLocaleString()}`, subtext: '+5% vs last week', icon: Coins, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
     { label: 'Collection Today', value: `${totalCollections.toLocaleString()} kg`, subtext: '+12% vs yesterday', icon: Scale, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
     { label: 'Active Dispatches', value: activeFulfillments.length.toString(), subtext: 'On time delivery', icon: Clock, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
     { label: 'Active Agents', value: onlineDrivers.length.toString(), subtext: '1 offline', icon: Users, color: 'text-teal-600 dark:text-teal-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
@@ -46,7 +48,6 @@ export default function OwnerOverview() {
 
   const scrollableQuickActions = [
     { title: 'Deposit Requests', icon: Receipt, path: '/finance', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
-    { title: 'Broadcast Message', icon: MessageSquare, path: '/broadcast', color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
     { title: 'View Disputes', icon: ShieldAlert, path: '/disputes', color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10' },
     { title: 'Critical Alerts', icon: AlertTriangle, path: '/alerts', color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10' },
     { title: 'Price Override', icon: DollarSign, path: '/approvals', color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-500/10' },
@@ -120,7 +121,7 @@ export default function OwnerOverview() {
           {scrollableQuickActions.map((action, i) => (
             <button key={i} onClick={() => navigate(action.path)} className="snap-start shrink-0 flex items-center gap-2 bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl p-2 pr-3 shadow-sm active:scale-95 transition-all w-[120px]">
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${action.bg} ${action.color}`}>
-                <action.icon className="w-5 h-5 " />
+                <action.icon className="w-4 h-4 " />
               </div>
               <span className="text-[11px] font-bold text-slate-600 dark:text-slate-200 whitespace-normal leading-tight">{action.title}</span>
             </button>
@@ -147,7 +148,7 @@ export default function OwnerOverview() {
                 <div className="relative z-10 mt-auto">
                   <span className={`text-[9px] font-bold ${kpi.color} leading-tight`}>{kpi.subtext}</span>
                 </div>
-                <kpi.icon className={`absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 ${kpi.color} opacity-30`} strokeWidth={1.5} />
+                <kpi.icon className={`absolute right-2 top-4 -translate-y-1/2 w-5 h-5 ${kpi.color} opacity-20`} strokeWidth={1.5} />
               </div>
             ))}
           </div>
@@ -165,7 +166,7 @@ export default function OwnerOverview() {
                 <div className="relative z-10 mt-auto">
                   <span className={`text-[9px] font-bold ${kpi.color} leading-tight`}>{kpi.subtext}</span>
                 </div>
-                <kpi.icon className={`absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 ${kpi.color} opacity-30`} strokeWidth={1.5} />
+                <kpi.icon className={`absolute right-2 top-4 -translate-y-1/2 w-5 h-5 ${kpi.color} opacity-20`} strokeWidth={1.5} />
               </div>
             ))}
           </div>

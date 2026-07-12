@@ -101,7 +101,8 @@ export default function Header() {
           </div>
 
           <Link to="/ecosystem" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Klin API</Link>
-          {/* <Link to="/marketplace" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Marketplace</Link> */}
+          <Link to="/about" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>About Us</Link>
+          <Link to="/faq" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>FAQ</Link>
           <Link to="/contact" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Contact</Link>
           
           <div className="flex items-center gap-4 ml-4">
@@ -151,10 +152,13 @@ export default function Header() {
                 <Link to="/ecosystem" className={`px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
                   <span>Klin API</span> <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
-                {/* <Link to="/marketplace" className={`px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
-                  <span>Marketplace</span> <ChevronRight className="w-4 h-4 text-primary" />
-                </Link> */}
-                <Link to="/contact" className={`col-span-2 px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                <Link to="/about" className={`px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                  <span>About Us</span> <ChevronRight className="w-4 h-4 text-primary" />
+                </Link>
+                <Link to="/faq" className={`px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                  <span>FAQ</span> <ChevronRight className="w-4 h-4 text-primary" />
+                </Link>
+                <Link to="/contact" className={`px-3 py-3 rounded-xl border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
                   <span>Contact Us</span> <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
               </div>

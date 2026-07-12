@@ -37,17 +37,20 @@ const getCategoryStyle = (category: string) => {
 export default function Sourcing() {
   const navigate = useNavigate();
   const listings = useMarketplaceStore(s => s.listings);
+  const targetedDropoffs = useMarketplaceStore(s => s.targetedDropoffs);
   const fetchListings = useMarketplaceStore(s => s.fetchListings);
+  const fetchTargetedDropoffs = useMarketplaceStore(s => s.fetchTargetedDropoffs);
   const makeOffer = useMarketplaceStore(s => s.makeOffer);
   const sentOffers = useMarketplaceStore(s => s.sentOffers);
   const fetchSentOffers = useMarketplaceStore(s => s.fetchSentOffers);
   const isLoading = useMarketplaceStore(s => s.isLoading);
 
   const profile = useAuthStore(s => s.profile);
+  const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedId, setSelectedId] = useState(null);
-  const [selectedTab, setSelectedTab] = useState<'All' | 'Individual' | 'Bulk Sells'>('All');
+  const [selectedTab, setSelectedTab] = useState<'All' | 'Individual' | 'Bulk Sells' | 'Drop-offs'>('All');
   const [offerPrice, setOfferPrice] = useState('');
   const [offerQty, setOfferQty] = useState(1);
 
@@ -84,6 +87,7 @@ export default function Sourcing() {
   useEffect(() => {
     fetchListings();
     fetchSentOffers();
+    if (!isFleetDriver) fetchTargetedDropoffs();
 
     const mapListing = (l) => ({
       id: l.id,
@@ -98,6 +102,7 @@ export default function Sourcing() {
       photo: l.photo_url,
       photoUrl: l.photo_url,
       grade: l.grade,
+      pickupMode: l.pickup_mode,
       sellerName: l.seller_id, // Simplified for realtime, actual name needs join
       createdAt: l.created_at || new Date().toISOString()
     });
@@ -109,12 +114,22 @@ export default function Sourcing() {
         (payload) => {
           if (payload.eventType === 'INSERT') {
             const mapped = mapListing(payload.new);
-            useMarketplaceStore.setState(s => ({ listings: [mapped, ...s.listings] }));
+            if (!payload.new.target_agent_id) {
+              useMarketplaceStore.setState(s => ({ listings: [mapped, ...s.listings] }));
+            } else if (payload.new.target_agent_id === profile?.id) {
+              useMarketplaceStore.setState(s => ({ targetedDropoffs: [mapped, ...s.targetedDropoffs] }));
+            }
           } else if (payload.eventType === 'UPDATE') {
             const mapped = mapListing(payload.new);
-            useMarketplaceStore.setState(s => ({
-              listings: s.listings.map(l => l.id === payload.new.id ? { ...l, ...mapped } : l)
-            }));
+            if (!payload.new.target_agent_id) {
+              useMarketplaceStore.setState(s => ({
+                listings: s.listings.map(l => l.id === payload.new.id ? { ...l, ...mapped } : l)
+              }));
+            } else if (payload.new.target_agent_id === profile?.id) {
+              useMarketplaceStore.setState(s => ({
+                targetedDropoffs: s.targetedDropoffs.map(l => l.id === payload.new.id ? { ...l, ...mapped } : l)
+              }));
+            }
           } else if (payload.eventType === 'DELETE') {
             useMarketplaceStore.setState(s => ({
               listings: s.listings.filter(l => l.id !== payload.old.id)
@@ -133,7 +148,9 @@ export default function Sourcing() {
     };
   }, [fetchListings, fetchSentOffers]);
 
-  const selectedListing = listings.find(l => l.id === selectedId);
+  const selectedListing = useMemo(() => {
+    return listings.find(l => l.id === selectedId) || targetedDropoffs.find(l => l.id === selectedId);
+  }, [listings, targetedDropoffs, selectedId]);
 
   // Initialize offer fields when a listing is selected
   useEffect(() => {
@@ -168,7 +185,22 @@ export default function Sourcing() {
   };
 
   const filteredListings = useMemo(() => {
+    // If the Drop-offs tab is active, show targeted dropoffs instead
+    if (selectedTab === 'Drop-offs') {
+      let result = targetedDropoffs;
+      if (!searchTerm) return result;
+      const term = searchTerm.toLowerCase();
+      return result.filter(l =>
+        (l.material && l.material.toLowerCase().includes(term)) ||
+        (l.location && l.location.toLowerCase().includes(term))
+      );
+    }
+
     let result = listings;
+
+    if (isFleetDriver) {
+      result = result.filter(l => (l as any).pickupMode !== 'dropoff');
+    }
 
     if (selectedTab === 'Individual') {
       result = result.filter(l => !l.isBulkDrive);
@@ -209,7 +241,7 @@ export default function Sourcing() {
       (l.material && l.material.toLowerCase().includes(term)) ||
       (l.location && l.location.toLowerCase().includes(term))
     );
-  }, [listings, searchTerm, selectedTab, filterMaterial, filterWeight, filterPriceRange]);
+  }, [listings, targetedDropoffs, searchTerm, selectedTab, filterMaterial, filterWeight, filterPriceRange]);
 
   return (
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
@@ -360,16 +392,19 @@ export default function Sourcing() {
 
             {/* Tabs */}
             <div className="mt-1 flex bg-slate-100 dark:bg-slate-900/80 p-1.5 rounded-xl">
-              {(['All', 'Individual', 'Bulk Sells'] as const).map(tab => (
+              {([...(['All', 'Individual', 'Bulk Sells'] as const), ...(!isFleetDriver ? ['Drop-offs' as const] : [])] ).map(tab => (
                 <button
                   key={tab}
                   onClick={() => setSelectedTab(tab)}
-                  className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 ${selectedTab === tab
-                    ? 'bg-indigo-600 shadow-sm text-white font-black'
+                  className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 relative ${selectedTab === tab
+                    ? tab === 'Drop-offs' ? 'bg-amber-600 shadow-sm text-white font-black' : 'bg-indigo-600 shadow-sm text-white font-black'
                     : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                 >
                   <span className="truncate">{tab}</span>
+                  {tab === 'Drop-offs' && targetedDropoffs.length > 0 && selectedTab !== 'Drop-offs' && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[8px] font-black rounded-full flex items-center justify-center">{targetedDropoffs.length > 9 ? '9+' : targetedDropoffs.length}</span>
+                  )}
                 </button>
               ))}
             </div>
@@ -475,10 +510,16 @@ export default function Sourcing() {
                     </div>
 
                     <div className="flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                      <MapPin className={`w-4 h-4 shrink-0 mt-0.5 ${(selectedListing as any).pickupMode === 'dropoff' ? 'text-amber-500' : 'text-rose-500'}`} />
                       <div>
                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Location</p>
-                        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{selectedListing.location}</span>
+                        {(selectedListing as any).pickupMode === 'dropoff' ? (
+                          <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 mt-0.5">
+                            Seller-Drop-off
+                          </span>
+                        ) : (
+                          <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{selectedListing.location}</span>
+                        )}
                       </div>
                     </div>
 
@@ -711,9 +752,15 @@ export default function Sourcing() {
 
                           {/* Row 2: Location & Optional Badge */}
                           <div className="flex items-center justify-between mt-0.5">
-                            <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                              <MapPin className="w-2.5 h-2.5 text-green-500" /> {listing.location}
-                            </p>
+                            {(listing as any).pickupMode === 'dropoff' ? (
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 flex items-center gap-1 shrink-0">
+                                <MapPin className="w-2.5 h-2.5" /> Seller-Drop-off
+                              </span>
+                            ) : (
+                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                                <MapPin className="w-2.5 h-2.5 text-green-500" /> {listing.location}
+                              </p>
+                            )}
                             {getHasOffer(listing.id) && (
                               <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[6px] font-black capitalize tracking-[0.2em] rounded shrink-0">
                                 ACTIVE BID

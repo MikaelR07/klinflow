@@ -24,11 +24,11 @@ export default function OwnerAlerts() {
   // Alerts by type
   const alertTypes = [
     { label: 'Disputes', icon: ShieldAlert, count: alerts.filter(a => a.type === 'dispute').length, color: 'text-rose-600', bg: 'bg-rose-50 dark:bg-rose-500/10', borderColor: 'border-rose-600 ' },
-    { label: 'Deposits', icon: DollarSign, count: Math.floor(alerts.length * 0.3), color: 'text-emerald-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-emerald-600 ' },
-    { label: 'Fleet', icon: Users, count: Math.floor(alerts.length * 0.2), color: 'text-blue-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-blue-600 ' },
-    { label: 'Performance', icon: TrendingDown, count: Math.floor(alerts.length * 0.15), color: 'text-violet-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-violet-600 ' },
-    { label: 'Security', icon: Shield, count: Math.floor(alerts.length * 0.1), color: 'text-amber-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-amber-600 ' },
-    { label: 'System', icon: Settings, count: Math.floor(alerts.length * 0.1), color: 'text-gray-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-gray-600 ' },
+    { label: 'Deposits', icon: DollarSign, count: Math.floor(alerts.length * 0.3), color: 'text-emerald-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'Fleet', icon: Users, count: Math.floor(alerts.length * 0.2), color: 'text-blue-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'Performance', icon: TrendingDown, count: Math.floor(alerts.length * 0.15), color: 'text-violet-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'Security', icon: Shield, count: Math.floor(alerts.length * 0.1), color: 'text-amber-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'System', icon: Settings, count: Math.floor(alerts.length * 0.1), color: 'text-gray-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
   ];
 
   const tabs = ['All', 'Unread', 'Critical', 'Resolved'];

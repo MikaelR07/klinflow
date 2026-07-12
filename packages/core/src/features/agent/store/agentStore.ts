@@ -13,6 +13,46 @@ import { ROLES } from '@klinflow/constants';
 import { AgentStore, AgentJob, CoachInsight, Booking, ProfileRow, AgentConfiguration, AgentReview } from './agentStore.types';
 import { AgentService } from '../services/agentService';
 
+/**
+ * Fetch all participant user_ids for a swarm (group pickup).
+ * Returns an array of UUIDs. Falls back to empty array on error.
+ */
+const getSwarmParticipantIds = async (swarmId: string): Promise<string[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('swarm_participants')
+      .select('user_id')
+      .eq('swarm_id', swarmId)
+      .neq('status', 'withdrawn');
+    if (error || !data) return [];
+    return [...new Set(data.map((p: any) => p.user_id).filter(Boolean))];
+  } catch {
+    return [];
+  }
+};
+
+/**
+ * Send a notification to every participant in a group pickup swarm.
+ * For non-group pickups, sends to the single booking owner.
+ */
+const notifyGroupOrSingle = async (
+  job: AgentJob,
+  title: string,
+  body: string,
+  type: string = 'success'
+) => {
+  const { addNotification } = useNotificationStore.getState();
+  
+  if (job.is_group_pickup && job.swarm_id) {
+    const participantIds = await getSwarmParticipantIds(job.swarm_id);
+    // Also include the booking creator in case they're not a participant
+    const allTargets = [...new Set([...participantIds, job.user_id])];
+    await addNotification(title, body, type, 'user', allTargets);
+  } else {
+    await addNotification(title, body, type, 'user', job.user_id);
+  }
+};
+
 export const useAgentStore = create<AgentStore>()(
   persist(
     (set, get) => ({
@@ -103,6 +143,7 @@ export const useAgentStore = create<AgentStore>()(
   
   // ── Agent Configuration ────────────────────────────
   agentConfig: null,
+  companyProfile: null,
   isLoadingConfig: false,
   
   fetchAgentConfig: async () => {
@@ -111,12 +152,25 @@ export const useAgentStore = create<AgentStore>()(
     
     set({ isLoadingConfig: true });
     try {
-      const targetAgentId = (profile?.agentAccountType === 'fleet_driver' && profile?.companyId) 
-        ? profile.companyId 
-        : userId;
+      let targetAgentId = userId;
+
+      if (profile?.agentAccountType === 'fleet_driver' && profile?.companyId) {
+        // profile.companyId is the UUID of the company owner's profile
+        targetAgentId = profile.companyId;
+      }
+
+      // Fetch the target profile (to get service_profile for custom services)
+      const { data: targetProfileData } = await supabase
+        .from('profiles')
+        .select('service_profile')
+        .eq('id', targetAgentId)
+        .maybeSingle();
 
       const data = await AgentService.fetchAgentConfig(targetAgentId);
-      set({ agentConfig: data });
+      set({ 
+        agentConfig: data,
+        companyProfile: targetProfileData || null
+      });
     } catch (err) {
       console.error('[AgentStore] Error fetching config:', err);
     } finally {
@@ -125,11 +179,12 @@ export const useAgentStore = create<AgentStore>()(
   },
   
   getEffectivePrice: (categorySlug, subcategorySlug) => {
-    const { agentConfig } = get();
+    const { agentConfig, companyProfile } = get();
     const { profile } = useAuthStore.getState();
     
     // 1. Try Custom Service Catalog from Profile (New robust way)
-    const serviceProfile = (profile as any)?.service_profile;
+    const targetProfile = companyProfile || profile;
+    const serviceProfile = (targetProfile as any)?.service_profile;
     const customServices = serviceProfile?.custom_services || [];
     if (customServices.length > 0) {
       const cat = customServices.find((c: any) => c.category.toLowerCase() === categorySlug.toLowerCase());
@@ -192,40 +247,31 @@ export const useAgentStore = create<AgentStore>()(
           const isCompanyAdmin = profile?.role === 'company_admin' || profile?.agentAccountType === 'company_admin';
           if (isCompanyAdmin) return;
 
-          // 2. Only process if job is open (public) OR targeted specifically to this agent
-          if (!newJob.agent_id || newJob.agent_id === userId) {
-            // 3. MATERIAL FILTERING: Respect accepted materials configuration
-            // NOTE: accepted_materials uses WASTE_CATEGORIES IDs (e.g. 'recyclable'),
-            // but booking waste_type may use DB slugs (e.g. 'plastic'). Use alias map.
+          // 2. Only process if job is open (public) OR targeted specifically to this agent OR to this agent's company hub
+          const companyId = profile?.companyId || profile?.company_id;
+          if (!newJob.agent_id || newJob.agent_id === userId || (companyId && newJob.agent_id === companyId)) {
+            // 3. MATERIAL & CAPACITY FILTERING
             const accepted = (get().agentConfig?.accepted_materials || []) as any[];
             const wasteType = newJob.waste_type;
+            
             if (accepted.length > 0 && wasteType) {
-              const MATERIAL_ALIASES: Record<string, string[]> = {
-                'recyclable': ['plastic', 'plastics', 'pet', 'hdpe', 'ldpe', 'pp', 'mixed_plastic'],
-                'plastic': ['recyclable'],
-                'metal': ['aluminium', 'copper', 'steel', 'brass', 'scrap'],
-                'ewaste': ['e-waste', 'electronics', 'batteries', 'cables', 'screens', 'logic_boards'],
-                'paper': ['cardboard', 'newsprint', 'office_paper'],
-                'glass': ['clear_glass', 'colored_glass'],
-                'organic': ['food_scraps', 'green_waste', 'compost'],
-                'general': ['household_trash', 'mixed', 'general_waste'],
-              };
-              const wasteLower = String(wasteType).toLowerCase();
+              const normalize = (s: string) => String(s).toLowerCase().replace(/\s+/g, '-');
+              const wasteNorm = normalize(wasteType);
               const isAccepted = accepted.some((mat: any) => {
-                if (!mat) return false;
-                let matStr = '';
-                if (typeof mat === 'string') {
-                  matStr = mat;
-                } else if (typeof mat === 'object') {
-                  matStr = mat.id || mat.name || '';
-                }
-                const matLower = String(matStr).toLowerCase();
-                if (!matLower) return false;
-                if (matLower === wasteLower) return true;
-                const aliases = MATERIAL_ALIASES[matLower] || [];
-                return aliases.includes(wasteLower);
+                const matStr = typeof mat === 'string' ? mat : (mat?.id || mat?.name || '');
+                return normalize(matStr) === wasteNorm;
               });
-              if (!isAccepted) return; // Material type not accepted by this agent/driver
+              if (!isAccepted) return; // Material not accepted
+            }
+
+            // 4. Check Operational Capacity (min/max weight limits)
+            const serviceProfile = profile?.serviceProfile || profile?.service_profile || {};
+            const minWeight = serviceProfile.min_weight ?? 0;
+            const maxWeight = serviceProfile.max_weight ?? 99999;
+            const jobWeight = newJob.weight_kg || 0;
+            
+            if (jobWeight < minWeight || jobWeight > maxWeight) {
+              return; // Job weight falls outside agent's operational capacity limits
             }
 
             useNotificationStore.getState().playNotificationSound('New Mission Available 🚛', 'A new pickup request is on your radar.');
@@ -594,15 +640,19 @@ export const useAgentStore = create<AgentStore>()(
       await get().fetchAvailableJobs();
       await get().fetchActiveJobs();
 
-      // Notify the Resident
+      // Notify the Resident(s) — for group pickups, notify ALL swarm participants
       const job = get().activeJobs.find(j => j.id === jobId);
       if (job) {
-        useNotificationStore.getState().addNotification(
-          "Mission Accepted! 🚛",
-          `Agent ${profile?.fullName || 'an Agent'} has claimed your pickup and is preparing to head your way.`,
-          'success',
-          'user',
-          job.user_id
+        const agentName = profile?.fullName || profile?.name || 'an Agent';
+        const isGroup = job.is_group_pickup && job.swarm_id;
+        
+        await notifyGroupOrSingle(
+          job,
+          isGroup ? "Community Pickup Accepted! 🏘️" : "Mission Accepted! 🚛",
+          isGroup
+            ? `Agent ${agentName} has accepted your community group pickup and is preparing to head your way. Get your materials ready!`
+            : `Agent ${agentName} has claimed your pickup and is preparing to head your way.`,
+          'success'
         );
       }
 
