@@ -157,7 +157,7 @@ export default function CommunityCollective() {
                         <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0">
                           <Handshake className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Group RFQs</h3>
+                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Group Contracts</h3>
                       </div>
                       <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-1">
                         Pool resources.<br />Fulfill large volume orders.
@@ -211,7 +211,7 @@ export default function CommunityCollective() {
                         <div className="w-8 h-8 rounded-full bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center shrink-0">
                           <Target className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                         </div>
-                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Individual RFQs</h3>
+                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Individual Contracts</h3>
                       </div>
                       <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-1">
                         Go solo.<br />Fulfill direct buyer requests.

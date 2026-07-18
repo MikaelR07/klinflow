@@ -21,9 +21,9 @@ export default function AgentHomeHeader({
 }: AgentHomeHeaderProps) {
 
   return (
-    <div className="pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
+    <div className="pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
       {/* Fixed Top Nav */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900">
         <div className="flex items-center justify-between px-1">
           {/* Left: Avatar + Greeting */}
           <div className="flex items-center gap-2 min-w-0">

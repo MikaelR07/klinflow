@@ -16,7 +16,7 @@ interface FulfillmentStore {
   fetchFleetAssignments: (driverId: string) => Promise<void>;
   updateFulfillmentStatus: (fulfillmentId: string, status: FulfillmentOrder['status'], notes?: string) => Promise<void>;
   assignDriver: (fulfillmentId: string, companyId: string, driverId: string) => Promise<void>;
-  verifyMaterial: (fulfillmentId: string, weight: number, grade: string, contamination: number, photos: string[], code: string) => Promise<void>;
+  verifyMaterial: (fulfillmentId: string, materialName: string, weight: number, grade: string, contamination: number, photos: string[], code: string) => Promise<void>;
   subscribeToFulfillments: (userId: string) => () => void;
 }
 
@@ -148,7 +148,7 @@ export const useFulfillmentStore = create<FulfillmentStore>()(
     }
   },
 
-  verifyMaterial: async (fulfillmentId, weight, grade, contamination, photos, code) => {
+  verifyMaterial: async (fulfillmentId, materialName, weight, grade, contamination, photos, code) => {
     try {
       // 1. Verify code
       const { data: order, error: orderErr } = await supabase
@@ -186,6 +186,11 @@ export const useFulfillmentStore = create<FulfillmentStore>()(
       });
       
       if (updateErr) throw updateErr;
+      
+      // Ensure the exact plain-english material name is saved to the asset that was just created
+      await supabase.from('assets')
+        .update({ material_type: materialName })
+        .eq('booking_id', fulfillmentId);
       
       await supabase.from('fulfillment_status_history').insert({
         fulfillment_id: fulfillmentId,

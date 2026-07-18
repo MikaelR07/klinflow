@@ -3,6 +3,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
 import { getEnv, validateEnv } from '../_shared/env.ts';
+import { getSystemPrompt } from './prompts.ts';
+import { getToolsForRole, executeTool } from './tools.ts';
 
 const PayloadSchema = z.object({
   type: z.string().min(1),
@@ -15,11 +17,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// ── MAIN HANDLER ────────────────────────────────────────────────────
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
-
-  const startTime = Date.now();
 
   try {
     validateEnv(['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'GEMINI_API_KEY']);
@@ -41,177 +40,162 @@ Deno.serve(async (req) => {
 
     const apiKey = getEnv('GEMINI_API_KEY');
 
-    // ── CASE A: VISION SCAN (IMAGE ANALYSIS) ──────────────────────────
+    // ── CASE A: VISION SCAN ───────────────────────────────────────────
     if (type === 'vision_scan') {
       const { imageBase64, materialHint, validMaterials } = payload;
       
-      if (!imageBase64) {
-        throw new Error('Missing image data for vision scan');
-      }
+      if (!imageBase64) throw new Error('Missing image data');
+
+      const materialsConstraint = validMaterials && validMaterials.length > 0
+        ? `ACCEPTED CATEGORIES: ${validMaterials.join(', ')}. Match the material to one of these categories. If none match, set matched_category to null.`
+        : `Identify the broad category (e.g. recyclable, metal, ewaste, glass, paper, organic).`;
 
       const visionPrompt = `
-        You are the Klinflow AI Vision Lab. Analyze this image of recyclable waste.
-        ${validMaterials && validMaterials.length > 0 ? 
-          `STRICT OBJECTIVE: Identify the MATERIAL from this EXACT list: ${validMaterials.join(', ')}. If none match, return null.` : 
-          `STRICT OBJECTIVE: Identify the MATERIAL.`
-        }
-        Additionally, assign a GRADE (A, B, or C).
-        
-        GRADING RULES:
-        - Grade A: High purity, clean, uniform (e.g. clear PET bottles only).
-        - Grade B: Mixed subtypes or minor contamination/dirt.
-        - Grade C: High contamination, dirty, or low-value mix.
-        
-        CONTEXT: The user thinks this is ${materialHint || 'unknown'}.
-        
-        Return ONLY a JSON object:
-        {
-          "material": "${validMaterials && validMaterials.length > 0 ? `One of: ${validMaterials.join(', ')}` : 'recyclable|metal|ewaste|glass|paper|organic'}",
-          "grade": "A|B|C",
-          "purity": 0-100,
-          "confidence": 0-100,
-          "reason": "1 sentence explanation of why it got this grade"
-        }
-      `;
+You are the Klinflow Material Identification Lab. Analyze this image and identify the recyclable material.
+OBJECTIVE: Identify the specific material in this image and provide helpful educational information for the field agent.
+${materialsConstraint}
+CONTEXT: The agent thinks this is "${materialHint || 'unknown'}".
+Return ONLY a JSON object:
+{
+  "material_name": "Specific material",
+  "matched_category": "Category slug",
+  "grade": "A|B|C",
+  "grade_reason": "Reason",
+  "description": "Description",
+  "recyclability": "Recyclability details",
+  "handling_tips": "Tips"
+}`;
 
       const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
-      
       const geminiRes = await fetch(geminiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: [{
-            parts: [
-              { text: visionPrompt },
-              { inline_data: { mime_type: "image/jpeg", data: imageBase64 } }
-            ]
-          }],
-          generationConfig: { 
-            response_mime_type: "application/json"
-          }
+          contents: [{ parts: [{ text: visionPrompt }, { inline_data: { mime_type: "image/jpeg", data: imageBase64 } }] }],
+          generationConfig: { response_mime_type: "application/json" }
         })
       });
 
       if (!geminiRes.ok) throw new Error(`Gemini Vision Error: ${await geminiRes.text()}`);
-      
       const geminiData = await geminiRes.json();
       const rawOutput = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-      console.log('[AI Logic] Raw Vision Output:', rawOutput);
-      const analysis = JSON.parse(rawOutput);
-
-      return new Response(JSON.stringify(analysis), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      return new Response(rawOutput, { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    // ── CASE B: CHAT ADVISOR (EXISTING LOGIC) ─────────────────────────
-    // 1. Build Context — fetch the user's data to give the AI "Memory"
-    const [profileRes, bookingsRes, marketRes] = await Promise.all([
+    // ── CASE B: CHAT ADVISOR ──────────────────────────────────────────
+    // 1. Fetch User & Context
+    const [profileRes, bookingsRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', userId).single(),
-      supabase.from('bookings').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(3),
-      supabase.from('marketplace_listings').select('*').eq('status', 'active').limit(5)
+      supabase.from('bookings').select('waste_type, status').eq('user_id', userId).order('created_at', { ascending: false }).limit(3)
     ]);
 
-    const user = profileRes.data;
-    const recentBookings = bookingsRes.data || [];
-    const marketListings = marketRes.data || [];
+    const user = profileRes.data || { role: 'user' };
+    const context = {
+      recentBookings: bookingsRes.data || [],
+      pendingCount: 0, // Simplified for MVP
+      fleetCount: 0 // Simplified for MVP
+    };
 
-    // 2. Build the prompt with all context baked in
-    const systemContext = `You are HygeneX, the Autonomous Operations Manager for Klinflow.
-You are speaking to ${user?.name || 'a user'} (Role: ${user?.role || 'user'}).
+    // Fetch conversation history (last 10 messages)
+    const { data: historyData } = await supabase
+      .from('hygenex_messages')
+      .select('role, text')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(10);
+      
+    let chatHistory = [];
+    let lastRole = null;
+    const userMessage = payload?.message || 'Hello';
+    const allMessages = [...(historyData ? historyData.reverse() : []), { role: 'user', text: userMessage }];
 
-LOCALE: Kenya (Country-wide platform). Warm, professional, efficient.
-CORE DATA:
-- User Stats: Wallet KSh ${user?.wallet_balance || 0}, Points ${user?.reward_points || 0}
-- Recent Activity: ${recentBookings.length > 0 ? recentBookings.map(b => `${b.waste_type} (${b.status})`).join(', ') : 'No recent bookings.'}
-- Market Trends (Live): ${marketListings.length > 0 ? marketListings.map(l => `${l.material} @ KSh ${l.price_per_kg}/kg`).join(', ') : 'Market data unavailable.'}
+    for (const m of allMessages) {
+      const gRole = m.role === 'ai' ? 'model' : 'user';
+      const text = m.text || " ";
 
-INTELLIGENCE RULES:
-- If a user asks about rewards, explain how they can earn more by better segregation.
-- If an agent asks about work, prioritize "pending" bookings near their location.
-- If a business/weaver asks about selling, use the Live Market Trends above to suggest optimal pricing.
-- Keep answers helpful and concise. Be actionable. Use Swahili greetings sparingly.
-- BRANDING: ALWAYS refer to the company as "Klinflow". Never say "Cleanflow" or "CleanFlow".
-- Respond in plain conversational text, like a helpful assistant. Do NOT wrap your reply in JSON.
-
-ACTION PROTOCOL (EXCEPTION):
-ONLY if the user explicitly wants to book a pickup, respond with a JSON object instead of plain text.
-Format: { "text": "Sure, I've drafted a PET Plastic pickup for tomorrow...", "action": { "type": "BOOK_PICKUP", "payload": { "waste_type": "plastic", "scheduled_date": "2024-05-04" } } }
-Available waste types: plastic, metal, ewaste, paper, glass, organic, mixed.
-For all other requests, just reply in plain conversational text.`;
-
-    const userMessage = payload?.message || payload?.userMessage || 'Hello';
-    console.log('[AI Version] Running Engine V6 (Actions enabled)'); 
-    // 3. Call Gemini REST API
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
-    
-    const geminiRes = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts: [{ text: `${systemContext}\n\nUser: ${userMessage}` }] }],
-        generationConfig: { 
-          maxOutputTokens: 1500, 
-          temperature: 0.7
-        }
-      })
-    });
-
-    if (!geminiRes.ok) {
-      const err = await geminiRes.text();
-      console.error('[Gemini Error]', err);
-      throw new Error(`AI Engine Failure: ${err}`);
-    }
-
-    const geminiData = await geminiRes.json();
-    let rawOutput = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || "I'm here to help! Could you rephrase your question?";
-    
-    // Clean potential markdown code fences
-    rawOutput = rawOutput.replace(/```json/g, '').replace(/```/g, '').trim();
-
-    // Gemini might return JSON only when an action is triggered — handle both cases
-    let aiResponse = rawOutput;
-    let actionPayload = null;
-
-    if (rawOutput.startsWith('{')) {
-      try {
-        const parsed = JSON.parse(rawOutput);
-        aiResponse = parsed.text || rawOutput;
-        actionPayload = parsed.action || null;
-      } catch (e) {
-        // Not valid JSON — treat the whole thing as plain text
-        console.warn('[HygeneX] Raw output looked like JSON but failed to parse, using as plain text.');
-        aiResponse = rawOutput;
+      if (gRole === lastRole && chatHistory.length > 0) {
+        chatHistory[chatHistory.length - 1].parts[0].text += `\n\n${text}`;
+      } else {
+        chatHistory.push({ role: gRole, parts: [{ text }] });
+        lastRole = gRole;
       }
     }
 
-    // 4. Store AI response (Background)
-    const aiMsgId = crypto.randomUUID();
-    const createdAt = new Date().toISOString();
-    
-    // We don't await this to return to user faster
-    supabase
-      .from('hygenex_messages')
-      .insert({ 
-        id: aiMsgId,
-        user_id: userId, 
-        role: 'ai', 
-        text: aiResponse,
-        metadata: actionPayload ? { action: actionPayload } : null,
-        created_at: createdAt
-      })
-      .then(({ error }) => {
-        if (error) console.error('[AI Error] Background save failed:', error);
-      });
+    if (chatHistory.length > 0 && chatHistory[0].role !== 'user') {
+      chatHistory.shift();
+    }
 
-    return new Response(JSON.stringify({ 
-      id: aiMsgId, 
-      role: 'ai', 
-      text: aiResponse, 
-      created_at: createdAt,
-      metadata: actionPayload ? { action: actionPayload } : null 
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    const systemInstruction = getSystemPrompt(user.role, user, context);
+    const tools = getToolsForRole(user.role);
+
+    const callGemini = async (history: any[], isStreaming: boolean = false, forceText: boolean = false) => {
+      const geminiUrl = isStreaming
+        ? `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?alt=sse&key=${apiKey}`
+        : `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+      
+      const payload: any = {
+        system_instruction: { parts: [{ text: systemInstruction }] },
+        contents: history,
+        tools: [{ function_declarations: tools }],
+        generationConfig: { temperature: 0.7 }
+      };
+
+      if (forceText) {
+        payload.tool_config = { function_calling_config: { mode: "NONE" } };
+      }
+
+      return await fetch(geminiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    };
+
+    // Step 1: Call Gemini (non-streaming) to check for tool calls
+    let res = await callGemini(chatHistory, false, false);
+    if (!res.ok) throw new Error(await res.text());
+    let data = await res.json();
+    
+    let parts = data.candidates?.[0]?.content?.parts || [];
+    let functionCallPart = parts.find((p: any) => p.functionCall);
+    let toolsUsed = [];
+    let toolResultsMetadata = null;
+
+    if (functionCallPart) {
+      // Tool Calling Loop
+      const fnCall = functionCallPart.functionCall;
+      console.log(`[AI Tool Call] ${fnCall.name}`);
+      toolsUsed.push(fnCall.name);
+      
+      const toolResult = await executeTool(supabase, fnCall.name, fnCall.args, userId);
+      if (fnCall.name === 'query_marketplace') {
+        toolResultsMetadata = toolResult.result; // Save for UI rendering
+      }
+
+      // Inject the tool result directly into the user's last message to avoid strict role issues
+      chatHistory[chatHistory.length - 1].parts[0].text += `\n\n[System Tool Response for ${fnCall.name}]: ${JSON.stringify(toolResult)}\nPlease summarize this to the user.`;
+
+      // Step 2: Stream final response back to client (Force Text)
+      console.log(`[AI] Streaming final response after tool call`);
+      const streamRes = await callGemini(chatHistory, true, true);
+      
+      // Save metadata header to stream so UI knows tools were used
+      const metadataHeader = JSON.stringify({ tools_used: toolsUsed, marketplace_results: toolResultsMetadata });
+      
+      return new Response(streamRes.body, {
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'text/event-stream',
+          'X-AI-Metadata': encodeURIComponent(metadataHeader) 
+        }
+      });
+    }
+
+    // If no tool call, re-request as stream (Force Text)
+    console.log(`[AI] Streaming direct response`);
+    const streamRes = await callGemini(chatHistory, true, true);
+    return new Response(streamRes.body, {
+      headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' }
     });
 
   } catch (error) {

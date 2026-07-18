@@ -452,7 +452,8 @@ export default function ExpectedArrivalsPage() {
             total_price: payingOrder.total_price,
             amount: payingOrder.total_price,
             unit_price: payingOrder.unit_price,
-            sellerName: payingOrder.sellerName
+            sellerName: payingOrder.sellerName,
+            tracking_id: (payingOrder as any).tracking_id
           }}
           role="agent"
         />

@@ -132,40 +132,46 @@ export const useBookingStore = create<BookingStore>()(
     set({ bookingSubscription: null });
   },
 
-  fetchNearbyAgents: async (lat: number, lng: number) => {
+  fetchNearbyAgents: async (lat: number, lng: number, weight: number = 0) => {
     const { data, error } = await supabase.rpc('get_nearby_agents_dynamic', {
       p_lat: lat,
       p_lng: lng,
-      p_max_results: 15,
+      p_weight: weight,
+      p_max_results: 50,
       p_max_radius_km: 50
     });
 
     if (!error && data) {
       const rawAgents = (data as any[]).map(a => normalizeKeys(a));
       const validAgents = safeParseArray(ProfileSchema, rawAgents, 'Nearby Agents Fetch');
-      set({ liveAgents: validAgents.map(p => ({
-        id: p.id,
-        name: p.name || 'Agent',
-        location: p.location,
-        role: p.role,
-        isOnline: p.isOnline,
-        agentAccountType: p.agentAccountType,
-        companyName: p.companyName,
-        companyId: p.companyId,
-        isHubActive: p.isHubActive,
-        hubAddress: p.hubAddress,
-        hubLocation: p.hubLocation,
-        fleetInviteCode: p.fleetInviteCode,
-        rating: p.rating || 4.9,
-        phone: p.phone,
-        klinflowId: p.klinflow_id,
-        config: p.config,
-        distance_km: (p as any).distanceKm // Added distance_km mapping
-      } as NearbyAgent)) });
+      set({ liveAgents: validAgents.map((p, index) => {
+        const raw = rawAgents[index] || {};
+        return {
+          id: p.id,
+          name: p.name || 'Agent',
+          location: p.location,
+          role: p.role,
+          isOnline: p.isOnline,
+          agentAccountType: p.agentAccountType,
+          companyName: p.companyName,
+          companyId: p.companyId,
+          isHubActive: p.isHubActive,
+          hubAddress: p.hubAddress,
+          hubLocation: p.hubLocation,
+          fleetInviteCode: p.fleetInviteCode,
+          rating: p.rating || 4.9,
+          phone: p.phone,
+          klinflowId: p.klinflow_id,
+          config: p.config,
+          distance_km: raw.distanceKm || raw.pickupDistanceKm || raw.hubDistanceKm,
+          pickupDistanceKm: raw.pickupDistanceKm,
+          hubDistanceKm: raw.hubDistanceKm
+        } as NearbyAgent;
+      })});
     }
   },
 
-  subscribeToAgents: (lat: number, lng: number) => {
+  subscribeToAgents: (lat: number, lng: number, weight: number = 0) => {
     const existing = get().agentSubscription;
     if (existing) supabase.removeChannel(existing);
 
@@ -176,7 +182,7 @@ export const useBookingStore = create<BookingStore>()(
         table: 'profiles', 
         filter: 'role=eq.agent' 
       }, () => {
-        get().fetchNearbyAgents(lat, lng);
+        get().fetchNearbyAgents(lat, lng, weight);
       })
       .subscribe();
 
@@ -196,8 +202,10 @@ export const useBookingStore = create<BookingStore>()(
     try {
       const timeVal = bookingData.time || bookingData.timeSlot || 'ASAP';
       const dateVal = timeVal.includes('@') ? timeVal.split('@')[0].trim() : new Date().toISOString().split('T')[0];
+      const { generateTrackingId } = await import('../utils/tracking');
 
       const dbPayload: any = {
+        tracking_id: generateTrackingId('BKG'),
         user_id: userId,
         waste_type: bookingData.wasteType,
         weight_kg: Number(bookingData.weight || bookingData.weightKg || bookingData.bags || 0),

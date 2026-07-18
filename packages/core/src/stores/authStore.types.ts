@@ -12,6 +12,7 @@ export interface AuthState {
   profile: Profile | null;
   rewardPoints: number;
   walletBalance: number;
+  payoutBalance: number;
   userId: string | null;
   notificationPrefs: NotificationPrefs | any; // Keep any for now until all components are updated
   profileSubscription: any;
@@ -36,8 +37,10 @@ export interface AuthState {
   fetchProfile: () => Promise<void>;
   uploadAvatar: (file: File) => Promise<string>;
   toggleOnline: (coords?: { latitude: number; longitude: number } | null) => Promise<void>;
+  sendPulse: () => Promise<void>;
   withdrawRewards: (amount: number) => Promise<void>;
   depositToWallet: (amount: number) => Promise<void>;
+  transferToTradingBalance: (amount: number) => Promise<void>;
   
   // Auth Actions
   login: (phone: string, pin: string, forcedRole?: UserRole | string | string[]) => Promise<void>;

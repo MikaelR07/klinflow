@@ -192,19 +192,23 @@ export default function RFQDetailsPage() {
   const percentage = rfq.requestedWeight ? Math.min(100, Math.round((totalPledged / rfq.requestedWeight) * 100)) : 0;
 
   return (
-    <div className="flex flex-col w-full pb-16">
-      {/* ── HEADER ── */}
-      <div className="mb-6 flex items-center gap-4">
-        <button onClick={() => navigate(-1)} className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
-          <ArrowLeft className="w-6 h-6 text-slate-500 group-hover:text-amber-500 transition-colors" />
-        </button>
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">RFQ Details</h1>
-          <p className="text-xs font-bold text-amber-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> Sourcing Request Command
-          </p>
+    <div className="flex flex-col w-full ">
+      {/* ── FIXED HEADER ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200/60 dark:border-slate-800/60 pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] pb-3 px-3 max-w-lg mx-auto">
+        <div className="flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-amber-500 transition-colors" />
+          </button>
+          <div>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">RFQ Details</h1>
+            <p className="text-[10px] font-bold text-amber-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> Sourcing Request Command
+            </p>
+          </div>
         </div>
       </div>
+
+      <div className="pt-[calc(env(safe-area-inset-top,0px)+4.5rem)]"></div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-7 space-y-6">
@@ -250,11 +254,11 @@ export default function RFQDetailsPage() {
         )}
 
         {/* ── RFQ SPECIFICATIONS CARD ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-100 dark:border-slate-800/40 space-y-5">
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Requested</p>
-              <h2 className="text-xl font-bold text-indigo-700 dark:text-white capitalize leading-tight">
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Requested</p>
+              <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight mb-2">
                 {materialPrices?.find(m => m.id === rfq.materialId || `${rfq.categoryId}_${m.id}` === rfq.materialId)?.material_name || getSubcategoryLabel(rfq.categoryId, rfq.materialId) || rfq.materialId}
               </h2>
             </div>
@@ -267,45 +271,45 @@ export default function RFQDetailsPage() {
           <hr className="border-slate-100 dark:border-slate-800/60" />
 
           {/* Details Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-2 gap-5">
-            <div className="flex items-start gap-3">
-              <Coins className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-start gap-2">
+              <Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Target Budget</p>
-                <p className="text-sm font-black text-emerald-600 leading-none">KSh {rfq.targetPrice}/kg</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Target Budget</p>
+                <p className="text-xs font-black text-emerald-600 leading-none">KSh {rfq.targetPrice}/kg</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <Scale className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2">
+              <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Volume Wanted</p>
-                <p className="text-sm font-black text-slate-900 dark:text-white capitalize">{rfq.quantity}</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Volume Wanted</p>
+                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{rfq.quantity}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2">
+              <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{rfq.location}</span>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.location}</span>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2">
+              <Clock className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Created On</p>
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{rfq.createdAt}</span>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Created On</p>
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.createdAt}</span>
               </div>
             </div>
 
             {rfq.deadline && rfq.deadline !== 'N/A' && (
-              <div className="flex items-start gap-3">
-                <Timer className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2">
+                <Timer className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Deadline</p>
-                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{rfq.deadline}</span>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Deadline</p>
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.deadline}</span>
                 </div>
               </div>
             )}
@@ -315,8 +319,8 @@ export default function RFQDetailsPage() {
             <>
               <hr className="border-slate-100 dark:border-slate-800/60" />
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Specifications</p>
-                <p className="text-sm text-slate-600 dark:text-slate-350 italic">"{rfq.description}"</p>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Specifications</p>
+                <p className="text-xs text-slate-600 dark:text-slate-350 italic">"{rfq.description}"</p>
               </div>
             </>
           )}

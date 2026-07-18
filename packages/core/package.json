@@ -11,6 +11,7 @@
     "./utils/*": "./src/utils/*.ts",
     "./validation": "./src/validation/index.ts",
     "./validation/*": "./src/validation/*.ts",
+    "./services/*": "./src/services/*.ts",
     "./lib/*": "./src/lib/*.ts",
     "./data/*": "./src/data/*.ts",
     "./offline": "./src/offline/index.ts",

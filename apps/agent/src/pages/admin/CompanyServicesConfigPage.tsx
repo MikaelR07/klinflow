@@ -123,12 +123,13 @@ export default function CompanyServicesConfigPage() {
 
   useEffect(() => {
     if (!profile) return;
-    if (profile.service_profile) {
+    const sp = profile.serviceProfile || profile.service_profile;
+    if (sp) {
       setFormData(prev => ({
         ...prev,
-        min_weight: profile.service_profile.min_weight || 5,
-        max_weight: profile.service_profile.max_weight || 100,
-        custom_services: profile.service_profile.custom_services || []
+        min_weight: sp.minWeight ?? sp.min_weight ?? 5,
+        max_weight: sp.maxWeight ?? sp.max_weight ?? 100,
+        custom_services: sp.customServices ?? sp.custom_services ?? []
       }));
     }
     setHubData({
@@ -373,24 +374,27 @@ export default function CompanyServicesConfigPage() {
 
           {/* LOGISTICS FEE & CAPACITY GRID */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white dark:bg-slate-800 p-4 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-3">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="font-medium w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
-                  <Truck className="w-4 h-4" />
+            <div className="bg-white dark:bg-slate-800 p-4 rounded-[1rem] border border-[#e0e3eb] dark:border-slate-800 shadow-none space-y-3 relative overflow-hidden opacity-80 cursor-not-allowed">
+              <div className="absolute inset-0 z-10 pointer-events-auto" title="This feature will be unlocked upon full verification." />
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2">
+                  <div className="font-medium w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                    <Truck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold dark:text-white tracking-widest">Base Fee</h3>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xs font-bold dark:text-white tracking-widest">Base Fee</h3>
-                </div>
+                <span className="text-[8px] font-black text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded uppercase tracking-widest border border-amber-500/20">Soon</span>
               </div>
               <div className="space-y-1">
                 <label className="font-medium text-[9px] text-slate-400 uppercase tracking-widest">Amount (KSh)</label>
                 <input
                   type="text"
                   inputMode="decimal"
-                  disabled={isFleetDriver}
+                  disabled={true}
                   value={formData.base_logistics_fee}
-                  onChange={(e) => setFormData({ ...formData, base_logistics_fee: e.target.value.replace(/[^0-9.]/g, '') })}
-                  className="font-medium w-full p-3 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-xl text-xs outline-none focus:border-amber-500 transition-colors"
+                  className="font-medium w-full p-3 bg-white dark:bg-slate-800/50 border border-[#e0e3eb] dark:border-slate-700 rounded-xl text-xs text-slate-400 outline-none cursor-not-allowed"
                 />
               </div>
             </div>

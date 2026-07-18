@@ -17,7 +17,6 @@ import { toast } from 'sonner';
 import AgentHomeHeader from '../../features/agentHome/AgentHomeHeader';
 import AgentHomeStats from '../../features/agentHome/AgentHomeStats';
 import AgentHomeActivePickup from '../../features/agentHome/AgentHomeActivePickup';
-import AgentHomeHistory from '../../features/agentHome/AgentHomeHistory';
 
 export default function AgentHome() {
   const profile = useAuthStore(s => (s as any).profile);
@@ -30,10 +29,8 @@ export default function AgentHome() {
   const fetchEarnings = useAgentStore(s => s.fetchEarnings);
   const fetchDynamicInsights = useAgentStore(s => s.fetchDynamicInsights);
   const broadcastLocation = useAgentStore(s => s.broadcastLocation);
-  const jobHistory = useAgentStore(s => s.jobHistory);
   const subscribeToJobs = useAgentStore(s => s.subscribeToJobs);
   const cleanupJobs = useAgentStore(s => s.cleanupJobs);
-  const clearJobHistory = useAgentStore(s => s.clearJobHistory);
 
   const fetchAssets = useAssetStore(s => s.fetchAssets);
   const getUnreadCount = useNotificationStore(s => s.getUnreadCount);
@@ -256,10 +253,6 @@ export default function AgentHome() {
         navigate={navigate}
       />
 
-      <AgentHomeHistory
-        jobHistory={jobHistory}
-        clearJobHistory={clearJobHistory}
-      />
 
       {/* Floating AI Voice Assistant */}
       <motion.button

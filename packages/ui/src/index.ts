@@ -10,6 +10,7 @@ export { default as RatingModal } from './components/RatingModal';
 export { default as ThemeToggleRow } from './components/ThemeToggleRow';
 export { default as AssetBadge } from './components/AssetBadge';
 export { default as AIScannerModal } from './components/AIScannerModal';
+export { default as MaterialIdentifierModal } from './components/MaterialIdentifierModal';
 export { default as AssetJourney } from './components/AssetJourney';
 export { LoadingScreen, Spinner } from './components/Loading';
 

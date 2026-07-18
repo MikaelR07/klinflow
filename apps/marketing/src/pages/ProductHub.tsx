@@ -253,7 +253,7 @@ export default function ProductHub() {
       <section className="relative pt-20 pb-16 md:pt-28 md:pb-32 overflow-hidden min-h-[80vh] flex items-center">
         {/* Background Elements */}
         <div className="absolute inset-0 z-0">
-          <div className={`absolute inset-0 ${isDarkMode ? "bg-[#0A0A0A]" : "bg-[#F8F9FA]"}`} />
+          <div className={`absolute inset-0 ${isDarkMode ? "bg-surface-950" : "bg-slate-50"}`} />
           {/* Tech Grid Pattern */}
           <div className={`absolute inset-0 opacity-[0.03] ${isDarkMode ? "invert" : ""}`}
             style={{ backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)", backgroundSize: "40px 40px" }}
@@ -278,7 +278,7 @@ export default function ProductHub() {
 
               <h1 className={`text-5xl md:text-6xl xl:text-6xl font-bold tracking-tight mb-6 leading-[1.1] ${isDarkMode ? "text-white" : "text-slate-900"}`}>
                 The Operating System for <br className="hidden lg:block" />
-                <span className="text-slate-500">Modern Recycling.</span>
+                <span className="text-slate-500 dark:text-blue-600">Modern Recycling.</span>
               </h1>
               <p className={`text-lg md:text-xl font-medium max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
                 Digitize intake, automate supplier payments, manage inventory, optimize material flows, and fulfill enterprise contracts from a single platform. Built for high-volume operations, Klinflow Hub eliminates paperwork and brings total financial and operational transparency to your facility.
@@ -301,9 +301,7 @@ export default function ProductHub() {
               className="lg:col-span-7 relative perspective-[2000px] z-20"
             >
               <div className="relative transform rotate-y-[-10deg] rotate-x-[5deg] scale-105 md:scale-110 lg:scale-[1.2] hover:rotate-y-0 hover:rotate-x-0 hover:scale-[1.25] transition-all duration-700 ease-out mt-12 lg:mt-0 lg:ml-12 origin-center lg:origin-left">
-                {/* Image Glow */}
-                <div className="absolute inset-0 bg-emerald-500/20 blur-[100px] rounded-[2rem] pointer-events-none" />
-
+                
                 <div 
                   className={`relative rounded-2xl overflow-hidden border shadow-2xl ${isDarkMode ? "bg-surface-900 border-white/10 shadow-black/50" : "bg-white border-slate-200 shadow-slate-300/50"}`}
                 >
@@ -327,12 +325,7 @@ export default function ProductHub() {
       </section>
 
       {/* ── 2. SCALING OPERATIONS (Alternating Layout) ─────────────── */}
-      <section className={`relative py-20 lg:py-32 overflow-hidden ${isDarkMode ? "bg-[#050505]" : "bg-slate-50"}`}>
-        {/* Line Grid Background */}
-        <div 
-          className={`absolute inset-0 opacity-[0.02] ${isDarkMode ? "invert" : ""}`}
-          style={{ backgroundImage: "linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)", backgroundSize: "40px 40px" }}
-        />
+      <section className={`relative py-20 lg:py-32 overflow-hidden ${isDarkMode ? "bg-surface-900" : "bg-slate-50"}`}>
         <div className="max-w-[90rem] mx-auto px-6 space-y-20 lg:space-y-28 relative z-10">
           
           {/* Section Header */}
@@ -386,24 +379,13 @@ export default function ProductHub() {
 
                 {/* Image Content */}
                 <div className={`lg:col-span-7 ${index % 2 === 1 ? 'lg:order-1' : 'lg:order-2'}`}>
-                  <div className="relative group">
-                    <div className={`absolute -inset-4 md:-inset-8 rounded-[2rem] border transition-all duration-500 ${isDarkMode ? "bg-white/[0.02] border-white/5 group-hover:bg-white/[0.04]" : "bg-slate-200/50 border-slate-200 group-hover:bg-slate-200"}`} />
-                    
-                    <div className="relative rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-[#0F172A] ring-1 ring-black/5">
-                      <div className="flex items-center px-4 py-3 bg-[#1E293B] border-b border-white/5">
-                        <div className="flex gap-1.5">
-                          <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                        </div>
-                      </div>
-                      <img
-                        src={cap.image}
-                        alt={cap.title}
-                        loading="lazy"
-                        className="w-full h-auto object-cover"
-                      />
-                    </div>
+                  <div className={`rounded-xl overflow-hidden shadow-2xl border ${isDarkMode ? "bg-surface-900 border-white/10" : "bg-white border-slate-200"}`}>
+                    <img
+                      src={cap.image}
+                      alt={cap.title}
+                      loading="lazy"
+                      className="w-full h-auto block"
+                    />
                   </div>
                 </div>
 
@@ -415,7 +397,7 @@ export default function ProductHub() {
       </section>
 
       {/* ── 3. PLATFORM & IMPACT COMBINED ──────────────────────────────────────── */}
-      <section className={`relative py-24 px-6 overflow-hidden ${isDarkMode ? "bg-[#050505]" : "bg-emerald-50/50"}`}>
+      <section className={`relative py-24 px-6 overflow-hidden ${isDarkMode ? "bg-surface-900" : "bg-emerald-50/50"}`}>
         {/* Dotted Background */}
         <div 
           className={`absolute inset-0 ${isDarkMode ? "opacity-[0.2] text-emerald-900" : "opacity-[0.05] text-emerald-900"}`}
@@ -442,7 +424,7 @@ export default function ProductHub() {
                 return (
                   <div 
                     key={i} 
-                    className={`${isFullWidth ? "md:col-span-2" : ""} p-8 rounded-3xl border relative overflow-hidden group transition-all duration-300 ${isDarkMode ? "bg-surface-900 border-white/10 hover:border-white/20" : "bg-white border-slate-200 hover:border-slate-300 shadow-xl shadow-slate-200/20"}`}
+                    className={`${isFullWidth ? "md:col-span-2" : ""} p-8 rounded-3xl border relative overflow-hidden group transition-all duration-300 ${isDarkMode ? "bg-surface-950 border-surface-900 hover:border-white/20" : "bg-white border-slate-200 "}`}
                   >
                     <div className={`absolute -right-10 -top-10 w-40 h-40 rounded-full blur-3xl opacity-20 transition-opacity group-hover:opacity-40 ${mod.bg}`} />
                     
@@ -514,7 +496,7 @@ export default function ProductHub() {
       </section>
 
       {/* ── 5. BUILT FOR EVERY MATERIAL (Interactive Tree) ───────────────────────────────── */}
-      <section className={`relative py-18 md:py-24 px-6 overflow-hidden ${isDarkMode ? "bg-[#0A0A0A]" : "bg-[#F8F9FA]"}`}>
+      <section className={`relative py-18 md:py-24 px-6 overflow-hidden ${isDarkMode ? "bg-surface-950" : "bg-slate-50"}`}>
         {/* Line Grid Background */}
         <div 
           className={`absolute inset-0 opacity-[0.03] ${isDarkMode ? "invert" : ""}`}
@@ -666,7 +648,7 @@ export default function ProductHub() {
           </div>
 
           {/* Core Processing Hub */}
-          <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 w-56 h-56 bg-white dark:bg-slate-900 rounded-full flex flex-col items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.5)] border-8 border-emerald-200 z-30">
+          <div className="absolute left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 w-56 h-56 bg-white dark:bg-surface-900 rounded-full flex flex-col items-center justify-center shadow-[0_0_80px_rgba(16,185,129,0.5)] border-8 border-emerald-200 z-30">
             <div className="absolute inset-0 rounded-full border border-emerald-400 animate-ping opacity-30" />
             <Warehouse className="w-12 h-12 text-emerald-900 mb-2" />
             <h4 className="font-black text-emerald-900 dark:text-white text-xl tracking-tight">Klinflow MOS</h4>
@@ -725,7 +707,7 @@ export default function ProductHub() {
      
 
       {/* ── 8. FINAL CTA ─────────────────────────────────────────────── */}
-      <section className={`py-24 px-6 text-center ${isDarkMode ? "bg-[#0A0A0A]" : "bg-slate-900"}`}>
+      <section className={`py-24 px-6 text-center ${isDarkMode ? "bg-surface-950" : "bg-slate-900"}`}>
         <div className="max-w-3xl mx-auto">
           <h2 className={`text-4xl md:text-6xl font-black tracking-tighter mb-8 leading-[1.1] ${isDarkMode ? "text-white" : "text-slate-50"}`}>
             Build the Digital Backbone of Your Recycling Operation.

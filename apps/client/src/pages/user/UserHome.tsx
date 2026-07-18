@@ -13,7 +13,6 @@ import {
   Recycle,
   TrendingUp,
   ArrowRight,
-  Star,
   ChevronRight,
   Trophy,
   Building2,
@@ -58,9 +57,6 @@ export default function UserHome() {
 
   const bookings = useBookingStore((s) => s.bookings);
   const fetchBookings = useBookingStore((s) => s.fetchBookings);
-  const setActiveVerificationBooking = useBookingStore(
-    (s) => s.setActiveVerificationBooking,
-  );
 
   // NOTE: Realtime subscription is managed globally in App.tsx — do NOT subscribe/cleanup here
   const getUnreadCount = useNotificationStore((s) => s.getUnreadCount);
@@ -71,9 +67,6 @@ export default function UserHome() {
   const unreadCount = getUnreadCount();
   const [showPushPrompt, setShowPushPrompt] = useState(false);
   const [userRank, setUserRank] = useState<number | null>(null);
-  const [isActivityCleared, setIsActivityCleared] = useState(() => {
-    return localStorage.getItem(`activity_cleared_${profile?.id}`) === "true";
-  });
 
   useEffect(() => {
     fetchBookings();
@@ -118,24 +111,7 @@ export default function UserHome() {
     fetchRank();
   }, [profile?.id, profile?.rewardPoints]);
 
-  // Auto-reset clear flag if a new mission arrives
-  useEffect(() => {
-    if (bookings.length > 0 && bookings[0]) {
-      const latestId = bookings[0].id;
-      const lastSeenId = localStorage.getItem(
-        `last_seen_booking_${profile?.id}`,
-      );
-      if (latestId !== lastSeenId) {
-        setIsActivityCleared(false);
-        localStorage.setItem(`activity_cleared_${profile?.id}`, "false");
-        localStorage.setItem(`last_seen_booking_${profile?.id}`, latestId);
-      }
-    }
-  }, [bookings, profile?.id]);
 
-  const handleOpenVerification = (booking: any) => {
-    setActiveVerificationBooking(booking);
-  };
 
   const handleDismissPush = () => {
     setShowPushPrompt(false);
@@ -224,9 +200,9 @@ export default function UserHome() {
       />
 
       {/* ── TOP NAV & HERO ── */}
-      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3rem)]">
+      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
         {/* Header Section - Edge to Edge - DYNAMIC STICKY */}
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
               {/* Profile Avatar */}
@@ -476,106 +452,6 @@ export default function UserHome() {
         </div>
       </div>
 
-      {/* Recent Activity Section */}
-      <div className="bg-white dark:bg-slate-900/40 !mt-3 rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800">
-        <div className="flex items-center justify-between mb-6 px-1">
-          <h3 className="font-semibold text-[12px] capitalize tracking-widest text-slate-600">
-            Activity Hub
-          </h3>
-          <button
-            onClick={() => {
-              setIsActivityCleared(true);
-              localStorage.setItem(`activity_cleared_${profile?.id}`, "true");
-              toast.info("Activity Feed Cleared");
-            }}
-            className="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-[11px] font-semibold text-slate-500 dark:text-slate-400 capitalize tracking-widest rounded-lg hover:bg-red-50 hover:text-red-500 transition-all"
-          >
-            Clear
-          </button>
-        </div>
-
-        <div className="space-y-6">
-          {!isActivityCleared && bookings.length > 0 ? (
-            (() => {
-              const active = bookings.filter((b: any) =>
-                ["pending", "accepted", "in_progress"].includes(b.status),
-              );
-              const displayList = active.length > 0 ? active : bookings;
-              return displayList.slice(0, 3).map((booking: any, i: number) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between group px-1"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-lg shadow-sm">
-                      {booking.wasteType === "general" ? "🗑️" : "♻️"}
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize">
-                        {booking.wasteType} Pickup
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <p className="text-[8px] font-semibold text-primary font-mono capitalize">
-                          #{String(booking.id).slice(0, 8).toUpperCase()}
-                        </p>
-                        <p className="text-[10px] font-semibold text-slate-400">
-                          {new Date(booking.createdAt).toLocaleString([], {
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right flex flex-col items-end gap-1">
-                    <p
-                      className={`text-[11px] font-semibold capitalize tracking-widest ${
-                        booking.status === "completed"
-                          ? "text-primary"
-                          : booking.status === "cancelled"
-                            ? "text-rose-500"
-                            : "text-amber-500"
-                      }`}
-                    >
-                      {booking.status.replace("_", " ")}
-                    </p>
-
-                    {/* Action Button for Finalizing */}
-                    {booking.status === "picked_up" && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOpenVerification(booking);
-                        }}
-                        className="px-2 py-1 bg-primary text-[8px] font-semibold text-white capitalize tracking-widest rounded-lg shadow-lg shadow-primary/20 active:scale-90 transition-all flex items-center gap-1"
-                      >
-                        Verify Weight{" "}
-                        <Star className="w-2.5 h-2.5 fill-white" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ));
-            })()
-          ) : (
-            <div className="text-center py-6">
-              <p className="text-[11px] font-semibold text-slate-600 capitalize tracking-widest">
-                {isActivityCleared ? "Activity Cleared" : "No recent pickups"}
-              </p>
-              {!isActivityCleared && (
-                <button
-                  onClick={() => navigate("/discovery")}
-                  className="text-[10px] font-semibold text-primary capitalize tracking-widest mt-2 underline"
-                >
-                  Start Recycling →
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
 
       {/* Floating AI Voice Assistant */}
       <motion.button

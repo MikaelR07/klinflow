@@ -57,15 +57,24 @@ export default function ProfilePage() {
     <div className=" bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* Fixed Top Nav */}
       {!isCompanyAdmin && (
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.25rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-600 shadow-sm">
           <div className="flex items-center gap-4">
             <button onClick={() => navigate('/settings')} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all">
               <ArrowLeft className="w-4 h-4 dark:text-white" />
             </button>
-            <div>
+            <div className="flex-1">
               <h1 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none mb-1">My Profile</h1>
               <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Personal Information</p>
             </div>
+            <button
+              type="submit"
+              form="profile-form"
+              disabled={isLoading}
+              className="px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-[0.85rem] font-bold text-[11px] uppercase tracking-widest flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-70 shadow-sm shadow-primary/20"
+            >
+              {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+              Save
+            </button>
           </div>
         </div>
       )}
@@ -95,7 +104,7 @@ export default function ProfilePage() {
           <p className="text-xs text-slate-500 font-medium mt-3">Professional Photo</p>
         </div>
 
-        <form onSubmit={handleSave} className="space-y-6">
+        <form id="profile-form" onSubmit={handleSave} className="space-y-6 pb-8">
 
           {/* Basic Details */}
           <div className="card p-5 space-y-4">
@@ -150,13 +159,15 @@ export default function ProfilePage() {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70"
-          >
-            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Save Changes
-          </button>
+          {isCompanyAdmin && (
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-70 mt-6"
+            >
+              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Save Changes
+            </button>
+          )}
 
         </form>
       </div>

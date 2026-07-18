@@ -5,208 +5,61 @@ import {
 } from 'lucide-react';
 import Layout from '../layouts/Layout';
 
-// Mock API Data matching the alternating Layout style
-const apiModules = [
+// Upcoming API Features Overview
+const apiFeatures = [
   {
-    number: "01",
-    title: "Zero-Trust Authentication",
-    subtitle: "Secure every endpoint.",
-    description: "Klinflow enforces strict JWT-based authentication with Role-Based Access Control (RBAC). Generate API keys via the dashboard and authenticate using standard Bearer tokens.",
+    title: "Secure Access (Zero-Trust)",
+    subtitle: "Enterprise-grade security.",
+    description: "Strict JWT-based authentication with Role-Based Access Control (RBAC). Granular policies for users and machines to secure every endpoint.",
     icon: Lock,
     bg: "bg-slate-500/10",
     color: "text-slate-400",
     borderColor: "border-slate-500/20",
-    language: "Go",
-    capabilities: [
-      "Sub-millisecond token validation",
-      "Granular RBAC policies for users and machines",
-      "Automated key rotation and IP whitelisting"
-    ],
-    code: `package main
-
-import (
-	"fmt"
-	"github.com/klinflow/klinflow-go"
-)
-
-func main() {
-	// Initialize the client with your secret API key
-	client := klinflow.NewClient("sk_live_123456789")
-
-	// Validate API Key and fetch account status
-	account, err := client.Accounts.Retrieve()
-	if err != nil {
-		fmt.Printf("Authentication failed: %v", err)
-		return
-	}
-
-	fmt.Printf("Authenticated as: %s (Role: %s)", account.Name, account.Role)
-}`
   },
   {
-    number: "02",
-    title: "Initialize Material Lot",
+    title: "Material Lot Management",
     subtitle: "Programmable material intake.",
-    description: "Create a highly verifiable material lot with geo-fencing, mass validation from IoT scales, and digital signatures. Every lot is instantly synced across the decentralized network.",
+    description: "Access highly verifiable material lot data with geo-fencing, mass validation from IoT scales, and digital signatures. Synchronized instantly.",
     icon: Database,
     bg: "bg-blue-500/10",
-    color: "text-blue-500",
+    color: "text-blue-400",
     borderColor: "border-blue-500/20",
-    language: "Node.js",
-    capabilities: [
-      "Auto-syncs with Bluetooth IoT Scales",
-      "Validates collector Klin-ID signatures",
-      "Assigns immutable tracking hashes"
-    ],
-    code: `import { Klinflow } from '@klinflow/sdk';
-
-const klinflow = new Klinflow(process.env.KLINFLOW_API_KEY);
-
-// Create a verified material lot
-const lot = await klinflow.lots.create({
-  material_type: 'aluminum_cans',
-  weight_kg: 45.5,
-  origin_coordinates: {
-    lat: -1.2921, 
-    lng: 36.8219
-  },
-  metadata: {
-    collector_id: 'usr_9x8f2a',
-    purity_grade: 'A'
-  }
-});
-
-console.log(lot.id); // "lot_88b2c1"`
   },
   {
-    number: "03",
-    title: "Fleet & Logistics Engine",
-    subtitle: "Automate collection routes.",
-    description: "Programmatically dispatch fleets to pickup zones. The API automatically calculates optimal routes based on pending lot volumes, traffic data, and vehicle capacity.",
+    title: "Fleet Routing & Dispatch",
+    subtitle: "Automate collection logistics.",
+    description: "Interact with our routing engine to dispatch fleets, track GPS telemetry in real-time, and calculate optimal routes based on capacity and traffic.",
     icon: Truck,
     bg: "bg-amber-500/10",
-    color: "text-amber-500",
+    color: "text-amber-400",
     borderColor: "border-amber-500/20",
-    language: "C# (.NET)",
-    capabilities: [
-      "Dynamic multi-stop routing algorithms",
-      "Real-time GPS telemetry ingestion",
-      "Automated capacity utilization checks"
-    ],
-    code: `using Klinflow.Net;
-using System;
-using System.Threading.Tasks;
-
-class Program 
-{
-    static async Task Main() 
-    {
-        KlinflowClient client = new KlinflowClient("sk_live_...");
-
-        var options = new FleetDispatchOptions {
-            VehicleType = "Heavy Duty Truck",
-            ZoneId = "zone_nairobi_central",
-            Priority = "High"
-        };
-
-        // Dispatch the nearest available fleet
-        var dispatch = await client.Logistics.DispatchFleetAsync(options);
-        
-        Console.WriteLine($"Dispatched Fleet {dispatch.Id} to {dispatch.Destination}");
-    }
-}`
   },
   {
-    number: "04",
-    title: "Instant Escrow & Payouts",
-    subtitle: "Automate financial settlement.",
-    description: "Trigger instant M-PESA or bank payouts to collectors and fleets as soon as a lot is verified at the Hub gate. Built-in escrow protects both parties until physical handover.",
+    title: "Financial Escrow Integration",
+    subtitle: "Automated payout security.",
+    description: "Hold buyer funds in digital escrow until materials are verified at the processing hub, enabling seamless, trustless B2B transactions.",
     icon: Zap,
     bg: "bg-emerald-500/10",
-    color: "text-emerald-500",
+    color: "text-emerald-400",
     borderColor: "border-emerald-500/20",
-    language: "Python",
-    capabilities: [
-      "Direct integration with M-PESA B2C",
-      "Zero-fee internal wallet transfers",
-      "Automated tax and commission splitting"
-    ],
-    code: `import klinflow
-
-client = klinflow.Client(api_key="sk_live_...")
-
-# Trigger payout upon Hub verification
-payout = client.payouts.create(
-    destination="m-pesa",
-    phone_number="+254700000000",
-    amount=4500.00,
-    currency="KES",
-    description="Payout for lot_88b2c1",
-    idempotency_key="pay_idmp_99x"
-)
-
-print(f"Payout {payout.status}") # "processing"`
   },
   {
-    number: "05",
-    title: "Idempotent Error Handling",
-    subtitle: "Robust, predictable responses.",
-    description: "The Klinflow API uses standard HTTP status codes. We provide detailed JSON error objects and support idempotency keys to safely retry requests without double-charging or duplicating data.",
+    title: "Idempotent Operations",
+    subtitle: "Robust, predictable handling.",
+    description: "Safely retry requests without double-charging or duplicating data, supported by strict idempotency keys and clear HTTP error responses.",
     icon: ShieldAlert,
     bg: "bg-rose-500/10",
-    color: "text-rose-500",
+    color: "text-rose-400",
     borderColor: "border-rose-500/20",
-    language: "Ruby",
-    capabilities: [
-      "Guaranteed idempotency up to 24 hours",
-      "Detailed RFC-7807 problem details",
-      "Granular rate limiting headers (X-RateLimit)"
-    ],
-    code: `require 'klinflow'
-Klinflow.api_key = 'sk_live_...'
-
-begin
-  # Attempt to confirm a high-value transfer
-  transfer = Klinflow::Transfer.confirm('tr_88b2c1', {
-    idempotency_key: 'req_saf8x_001'
-  })
-rescue Klinflow::RateLimitError => e
-  # HTTP 429: Too Many Requests
-  puts "Rate limited. Retry after #{e.retry_after} seconds."
-rescue Klinflow::AuthenticationError => e
-  # HTTP 401: Unauthorized
-  puts "Check your API key."
-rescue Klinflow::APIError => e
-  # HTTP 500: Server Error
-  puts "Klinflow issue: #{e.message}"
-end`
   },
   {
-    number: "06",
-    title: "Real-time Webhooks",
-    subtitle: "Hydrate your own systems.",
-    description: "Subscribe to ecosystem events. Instantly hydrate your ERP, accounting software, or fleet management tools when a fleet is dispatched or a lot changes custody.",
+    title: "Real-Time Webhooks",
+    subtitle: "Hydrate your systems.",
+    description: "Subscribe to ecosystem events. Instantly hydrate your ERP or management tools when a fleet is dispatched or a lot changes custody.",
     icon: Webhook,
     bg: "bg-indigo-500/10",
-    color: "text-indigo-500",
+    color: "text-indigo-400",
     borderColor: "border-indigo-500/20",
-    language: "cURL",
-    capabilities: [
-      "Sub-100ms event delivery latency",
-      "Automatic payload signing for security",
-      "Built-in retry logic with exponential backoff"
-    ],
-    code: `curl -X POST https://api.klinflow.com/v1/webhooks \\
-  -H "Authorization: Bearer sk_live_..." \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "url": "https://your-app.com/webhooks/klinflow",
-    "enabled_events": [
-      "lot.created",
-      "lot.verified",
-      "fleet.dispatched"
-    ]
-  }'`
   }
 ];
 
@@ -215,16 +68,15 @@ export default function Ecosystem() {
   return (
     <Layout>
       {/* Global Background Layer for Ecosystem - Forces Dark Mode + Grid */}
-      <div className="fixed inset-0 z-[-1] bg-[#050505]" />
+      <div className="fixed inset-0 z-[-1] bg-surface-950" />
       <div 
-        className="fixed inset-0 z-[-1] opacity-[0.04]"
+        className="fixed inset-0 z-[-1] opacity-[0.02]"
         style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}
       />
       
       {/* ── PACKED HERO SECTION ──────────────────────────────── */}
       <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden border-b border-white/5">
-        {/* Glow */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/20 blur-[150px] rounded-full mix-blend-screen pointer-events-none" />
+       
 
         <div className="max-w-[1400px] mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -237,9 +89,9 @@ export default function Ecosystem() {
               </div>
               
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-8 leading-[1.1] text-white">
-                The Infrastructure for <br />
+                The complete Suite <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-                  Circular Economies.
+                  To build your system.
                 </span>
               </h1>
               
@@ -379,89 +231,36 @@ export default function Ecosystem() {
 
       {/* ── API MODULES (Alternating Layout) ──────────────────────────────── */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="max-w-[90rem] mx-auto px-6 space-y-20 lg:space-y-32 relative z-10">
-          
-          {apiModules.map((module, index) => {
-            const ModIcon = module.icon;
-            return (
-              <div key={module.number} className="grid lg:grid-cols-12 gap-12 lg:gap-24 items-center">
-                
-                {/* Text Content */}
-                <div className={`lg:col-span-5 min-w-0 w-full ${index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'}`}>
-                  <div className={`w-12 h-12 rounded-xl ${module.bg} flex items-center justify-center mb-8 border ${module.borderColor}`}>
-                    <ModIcon className={`w-5 h-5 ${module.color}`} />
+        <div className="max-w-[90rem] mx-auto px-6 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16 lg:mb-24">
+            <h2 className="text-[10px] font-mono font-bold uppercase tracking-[0.3em] mb-4 text-emerald-500">Upcoming API Features</h2>
+            <h3 className="text-3xl md:text-5xl font-black tracking-tighter text-white mb-6">Build the Future of Recycling.</h3>
+            <p className="text-lg text-slate-400">Our upcoming API will provide developers with direct access to Klinflow's core logistics, verification, and marketplace systems.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {apiFeatures.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <div key={index} className="bg-[#0F172A] border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all group">
+                  <div className={`w-12 h-12 rounded-xl ${feature.bg} flex items-center justify-center mb-6 border ${feature.borderColor} group-hover:scale-110 transition-transform`}>
+                    <Icon className={`w-5 h-5 ${feature.color}`} />
                   </div>
                   
-                  <h4 className={`text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-3 ${module.color}`}>
-                    API {module.number} // {module.title}
-                  </h4>
-                  
-                  <h3 className="text-3xl md:text-4xl font-bold tracking-tighter mb-6 leading-tight text-white">
-                    {module.subtitle}
-                  </h3>
-                  
-                  <p className="text-lg leading-relaxed mb-8 text-slate-400">
-                    {module.description}
+                  <h4 className="text-xl font-bold text-white mb-2">{feature.title}</h4>
+                  <h5 className={`text-sm font-semibold mb-4 ${feature.color}`}>{feature.subtitle}</h5>
+                  <p className="text-sm leading-relaxed text-slate-400">
+                    {feature.description}
                   </p>
-
-                  {/* Capability Bullets */}
-                  <div className="space-y-4">
-                    {module.capabilities.map((item, i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <div className={`w-6 h-6 rounded-md shrink-0 mt-0.5 flex items-center justify-center ${module.bg}`}>
-                          <CheckCircle2 className={`w-3.5 h-3.5 ${module.color}`} />
-                        </div>
-                        <p className="text-sm leading-relaxed text-slate-300">
-                          {item}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
                 </div>
-
-                {/* Code Card Content */}
-                <div className={`lg:col-span-7 min-w-0 w-full ${index % 2 === 1 ? 'lg:order-1' : 'lg:order-2'}`}>
-                  <div className="relative group w-full">
-                    <div className="absolute inset-0 sm:-inset-4 md:-inset-8 rounded-[1rem] border transition-all duration-500 bg-slate-900/[10] border-white/5" />
-                    
-                    <div className="relative rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-[#0F172A] ring-1 ring-black/5 w-full">
-                      {/* MacOS Style Header */}
-                      <div className="flex items-center justify-between px-4 py-3 bg-[#1E293B] border-b border-white/5">
-                        <div className="flex gap-1.5">
-                          <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                          <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                        </div>
-                        <div className="flex items-center">
-                          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">{module.language}</span>
-                        </div>
-                      </div>
-                      
-                      {/* Code Block */}
-                      <div className="p-4 sm:p-6 md:p-8 overflow-x-auto w-full max-w-full">
-                        <pre className="text-[10px] sm:text-xs md:text-sm font-mono text-slate-300 leading-relaxed whitespace-pre block w-max min-w-full">
-                           <code dangerouslySetInnerHTML={{ 
-                             __html: module.code
-                                .replace(/import|const|await|new|export|return/g, '<span class="text-blue-400">$&</span>')
-                                .replace(/function|console|client|klinflow/g, '<span class="text-emerald-400">$&</span>')
-                                .replace(/['"].*?['"]/g, '<span class="text-amber-300">$&</span>')
-                                .replace(/\b(create|log|print)\b/g, '<span class="text-indigo-400">$&</span>')
-                           }} />
-                        </pre>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            );
-          })}
-
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* ── MONOREPO ARCHITECTURE VISUALIZATION (CLEAN / PROFESSIONAL) ──────────────────────────────── */}
-      <section className="relative py-32 overflow-hidden border-t border-white/5 bg-[#050505]">
+      <section className="relative py-32 overflow-hidden border-t border-white/5 bg-surface-950">
         <div className="max-w-[1200px] mx-auto px-6 relative z-10 text-center mb-16 md:mb-24">
            <h2 className="text-[10px] font-mono font-bold uppercase tracking-[0.3em] mb-4 text-slate-500">System Architecture</h2>
            <h3 className="text-3xl md:text-5xl font-black tracking-tighter mb-4 text-white">Unified Monorepo.</h3>
@@ -531,7 +330,7 @@ export default function Ecosystem() {
       </section>
 
       {/* ── TECHNICAL CTA ────────────────────────────────────────────────── */}
-      <section className="py-24 px-6 border-t bg-[#050505] border-white/5 relative z-10">
+      <section className="py-24 px-6 border-t bg-emerald-800 border-white/5 relative z-10">
         <div className="max-w-4xl mx-auto rounded-3xl border p-12 text-center relative overflow-hidden bg-surface-950 border-white/10">
            <div className="absolute inset-0 bg-[size:24px_24px] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)]" />
            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-primary/10 blur-[100px] pointer-events-none" />

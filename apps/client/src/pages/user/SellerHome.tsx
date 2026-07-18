@@ -13,7 +13,6 @@ import {
   Trash2,
   Plus,
   Sparkles,
-  History,
   Leaf,
   TrendingUp,
   Truck,
@@ -57,24 +56,6 @@ import { SkeletonCard } from '@klinflow/ui/components/Skeletons';
 import PushNotificationModal from '@klinflow/ui/components/PushNotificationModal';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 import { toast } from 'sonner';
-
-// ── SMART NAMING GUARD (REGEX + DICTIONARY) ───────────────────────
-const formatMaterial = (text: string | null) => {
-  if (!text) return 'Recyclable Load';
-  const materialMap = {
-    'ewaste': 'Electronic Waste',
-    'iron': 'Scrap Metal',
-    'plastic': 'PET Plastic',
-    'paper': 'Paper/Cardboard',
-    'glass': 'Glass Cullet',
-    'organic': 'Organic Waste',
-    'metal': 'Scrap Metal'
-  };
-  const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(text);
-  if (isUUID) return 'Recyclable Load';
-  const slug = text.toLowerCase();
-  return (materialMap as any)[slug] || text.charAt(0).toUpperCase() + text.slice(1);
-};
 
 export default function SellerHome() {
   const profile = useAuthStore(s => (s as any).profile);
@@ -163,23 +144,6 @@ export default function SellerHome() {
     }
   };
 
-  const handleClearHistory = async () => {
-    if (!profile?.id) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .update({ completed_cleared_at: new Date().toISOString() })
-        .eq('id', profile.id)
-        .select()
-        .single();
-
-      if (error) throw error;
-      toast.success("History cleared!");
-    } catch (err) {
-      toast.error("Failed to clear history");
-    }
-  };
 
   // ── MERCHANT METRICS (Marketplace Centric) ──
   const marketplaceBookings = bookings.filter((b: any) => b.booking_type === 'marketplace' || b.booking_type === 'marketplace_pickup');
@@ -201,15 +165,6 @@ export default function SellerHome() {
 
   const inEscrowAmount = stats?.pending_settlement || 0;
 
-  const recentBookings = [...bookings]
-    .filter((b: any) => {
-      if (b.status === 'completed' && (profile as any)?.completed_cleared_at) {
-        return new Date(b.createdAt || Date.now()) > new Date((profile as any).completed_cleared_at);
-      }
-      return true;
-    })
-    .sort((a: any, b: any) => new Date(b.createdAt || Date.now()).getTime() - new Date(a.createdAt || Date.now()).getTime())
-    .slice(0, 3);
 
   if (isInitializing && !profile) {
     return <LoadingScreen message="Loading Merchant Profile..." />;
@@ -229,8 +184,8 @@ export default function SellerHome() {
       />
 
       {/* ── TOP NAV & HERO ── */}
-      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]">
-        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/70 ">
+      <div className="space-y-3 pt-[calc(env(safe-area-inset-top,1rem)+4rem)]">
+        <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/70 ">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
               {/* Profile Avatar */}
@@ -485,60 +440,6 @@ export default function SellerHome() {
 
 
 
-      </div>
-      {/* ── RECENT ACTIVITY (BASE RECORD) ── */}
-      <div className="bg-white dark:bg-slate-900/50 !mt-2 rounded-2xl p-5 border border-slate-200/50 dark:border-slate-800">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="font-semibold text-xs capitalize tracking-widest text-slate-400">Recent Activity</h3>
-          <div className="flex items-center gap-3">
-            {recentBookings.length > 0 && (
-              <button
-                onClick={handleClearHistory}
-                className="text-[11px] font-semibold text-slate-400 hover:text-red-500 capitalize tracking-widest transition-colors"
-              >
-                Clear
-              </button>
-            )}
-            <History className="w-4 h-4 text-slate-300" />
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          {recentBookings.map((item: any, i) => (
-            <div key={i} className="flex items-center justify-between group px-1">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-200/50 dark:bg-slate-800 flex items-center justify-center text-lg">
-                  {item.wasteType === 'general' ? '🗑️' : item.wasteType === 'recyclable' ? '♻️' : '🥬'}
-                </div>
-                <div>
-                  <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize">{formatMaterial(item.wasteType)} Trade</p>
-                  <p className="text-[11px] font-semibold text-slate-400">
-                    {item.createdAt ? new Date(item.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Just now'}
-                  </p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className={`text-[11px] font-semibold capitalize tracking-widest ${item.status === 'completed' ? 'text-emerald-600' :
-                  item.status === 'pending_clearance' ? 'text-rose-500' : 'text-amber-600'
-                  }`}>
-                  {item.status === 'pending_clearance' ? 'Held for Clearance' : item.status}
-                </p>
-                {item.status === 'completed' && (
-                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5">Verified</p>
-                )}
-                {item.status === 'pending_clearance' && (
-                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5">Awaiting Hub Weight Check</p>
-                )}
-              </div>
-            </div>
-          ))}
-
-          {recentBookings.length === 0 && (
-            <div className="text-center py-4">
-              <p className="text-xs text-slate-600 font-semibold capitalize tracking-widest">No Activity Yet</p>
-            </div>
-          )}
-        </div>
       </div>
 
       {/* Floating AI Voice Assistant */}

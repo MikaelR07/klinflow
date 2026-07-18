@@ -34,28 +34,54 @@ window.L = L;
 // ── HUB PIN ICON ──
 const hubPinIcon = L.divIcon({
   className: 'custom-hub-pin',
-  html: `<div class="w-10 h-10 rounded-2xl bg-emerald-600 border-3 border-white shadow-2xl flex items-center justify-center animate-bounce" style="animation-duration:1.5s"><span class="text-lg">📍</span></div>`,
+  html: `<div class="w-10 h-10 rounded-xl bg-emerald-600 border-[3px] border-white shadow-xl flex items-center justify-center text-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>`,
   iconSize: [40, 40],
   iconAnchor: [20, 40]
 });
 
-// ── MAP CLICK HANDLER COMPONENT ──
-function MapClickHandler({ onLocationSelect }: { onLocationSelect: (lat: number, lng: number) => void }) {
+// ── REVERSE GEOCODE HELPER ─────────────────────────────────────────
+const fetchAddress = async (lat: number, lon: number) => {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`,
+      { headers: { 'User-Agent': 'Klinflow-PWA/1.0' } }
+    );
+    const data = await response.json();
+    if (!data || !data.address) return null;
+    const addr = data.address;
+    return addr.neighbourhood || addr.suburb || addr.quarter || addr.suburb || addr.road || data.display_name.split(',')[0];
+  } catch (err) {
+    return null;
+  }
+};
+
+// ── MAP DRAG HANDLER ───────────────────────────────────────────────
+function MapDragHandler({ onMove }: { onMove: (lat: number, lng: number) => void }) {
+  const map = useMap();
   useMapEvents({
-    click: (e) => {
-      onLocationSelect(e.latlng.lat, e.latlng.lng);
+    dragend() {
+      const center = map.getCenter();
+      onMove(center.lat, center.lng);
+    },
+    zoomend() {
+      const center = map.getCenter();
+      onMove(center.lat, center.lng);
     }
   });
   return null;
 }
 
-function FlyToLocation({ lat, lng }: { lat: number; lng: number }) {
-  const map = useMap();
-  useEffect(() => { 
-    if (lat && lng) map.flyTo([lat, lng], 16, { duration: 1 }); 
-  }, [lat, lng, map]);
-  return null;
-}
+// ── FIXED CENTER PIN ───────────────────────────────────────────────
+const FixedCenterPin = () => (
+  <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center z-[1000]">
+    <div className="relative flex flex-col items-center -mt-10">
+      <div className="w-10 h-10 rounded-xl bg-emerald-600 border-[3px] border-white shadow-xl flex items-center justify-center text-white animate-pulse">
+        <MapPin className="w-6 h-6" />
+      </div>
+      <div className="w-2 h-2 bg-slate-900/50 rounded-full blur-[2px] mt-1"></div>
+    </div>
+  </div>
+);
 
 function MapInvalidator() {
   const map = useMap();
@@ -80,15 +106,8 @@ export default function AgentConfigurationPage() {
     accepted_materials: [],
     custom_rates: {},
     min_weight: 5,
-    max_weight: 100,
-    custom_services: [] // [{ category: 'Plastics', icon: '♻️', subcategories: [{ name: 'PET Bottles', rate_per_kg: 12 }] }]
+    max_weight: 100
   });
-
-  // Custom category builder state
-  const [showAddCategory, setShowAddCategory] = useState(false);
-  const [newCategory, setNewCategory] = useState({ category: '', icon: '📦' });
-  const [expandedCustomCat, setExpandedCustomCat] = useState(null);
-  const [newSubItem, setNewSubItem] = useState({});  // { [catIndex]: { name: '', rate_per_kg: '' } }
 
   const [isSaving, setIsSaving] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
@@ -100,6 +119,8 @@ export default function AgentConfigurationPage() {
     address: profile?.hubAddress || '',
     coords: profile?.hubLocation || profile?.location || null
   });
+  
+  const reverseGeocodeTimer = useRef<NodeJS.Timeout | null>(null);
 
   const isIndividualAgent = profile?.role === 'agent' && profile?.agentAccountType === 'independent';
   const isCompanyOwner = profile?.role === 'agent' && profile?.agentAccountType === 'company_admin';
@@ -128,16 +149,19 @@ export default function AgentConfigurationPage() {
     }));
   }, [agentConfig, categories]);
 
-  // Re-initialize service_profile fields when profile.service_profile updates
+  // Re-initialize service_profile fields when profile updates
   useEffect(() => {
     if (!profile) return;
 
-    if (profile.service_profile) {
+    const sp = profile.serviceProfile || profile.service_profile;
+    console.log('[DEBUG] PROFILE LOADED:', profile);
+    console.log('[DEBUG] SP OBJ:', sp);
+    if (sp) {
+      console.log('[DEBUG] SP WEIGHTS:', sp.minWeight, sp.min_weight, sp.maxWeight, sp.max_weight);
       setFormData(prev => ({
         ...prev,
-        min_weight: profile.service_profile.min_weight || 5,
-        max_weight: profile.service_profile.max_weight || 100,
-        custom_services: profile.service_profile.custom_services || []
+        min_weight: sp.minWeight ?? sp.min_weight ?? 5,
+        max_weight: sp.maxWeight ?? sp.max_weight ?? 100
       }));
     }
 
@@ -171,48 +195,6 @@ export default function AgentConfigurationPage() {
     }));
   };
 
-  // ── Custom Category Handlers ──
-  const handleAddCustomCategory = () => {
-    if (!newCategory.category.trim()) return toast.error('Category name is required');
-    setFormData(prev => ({
-      ...prev,
-      custom_services: [...prev.custom_services, { ...newCategory, subcategories: [] }]
-    }));
-    setNewCategory({ category: '', icon: '📦' });
-    setShowAddCategory(false);
-  };
-
-  const handleDeleteCustomCategory = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      custom_services: prev.custom_services.filter((_, i) => i !== index)
-    }));
-  };
-
-  const handleAddSubItem = (catIndex) => {
-    const item = newSubItem[catIndex];
-    if (!item?.name?.trim()) return toast.error('Sub-item name required');
-    setFormData(prev => {
-      const updated = [...prev.custom_services];
-      updated[catIndex] = {
-        ...updated[catIndex],
-        subcategories: [...(updated[catIndex].subcategories || []), { name: item.name, rate_per_kg: parseFloat(item.rate_per_kg) || 0 }]
-      };
-      return { ...prev, custom_services: updated };
-    });
-    setNewSubItem(prev => ({ ...prev, [catIndex]: { name: '', rate_per_kg: '' } }));
-  };
-
-  const handleDeleteSubItem = (catIndex, subIndex) => {
-    setFormData(prev => {
-      const updated = [...prev.custom_services];
-      updated[catIndex] = {
-        ...updated[catIndex],
-        subcategories: updated[catIndex].subcategories.filter((_, i) => i !== subIndex)
-      };
-      return { ...prev, custom_services: updated };
-    });
-  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -242,8 +224,7 @@ export default function AgentConfigurationPage() {
           service_profile: {
             min_weight: parseFloat(formData.min_weight),
             max_weight: parseFloat(formData.max_weight),
-            categories: formData.accepted_materials.map(m => ({ name: m, enabled: true })),
-            custom_services: formData.custom_services
+            categories: formData.accepted_materials.map(m => ({ name: m, enabled: true }))
           }
         })
         .eq('id', profile.id);
@@ -268,7 +249,7 @@ export default function AgentConfigurationPage() {
   const isCompanyAdmin = profile?.agentAccountType === 'company_admin';
 
   return (
-    <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors min-h-screen">
+    <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* Fixed Top Nav */}
       {!isCompanyAdmin && (
         <div className="fixed top-0 left-0 right-0 z-[1001] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
@@ -302,7 +283,7 @@ export default function AgentConfigurationPage() {
         </div>
       )}
 
-      <main className={`flex-1 ${isCompanyAdmin ? 'pt-4' : 'pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]'} px-1.5 pb-24 w-full max-w-lg mx-auto space-y-2`}>
+      <main className={`flex-1 ${isCompanyAdmin ? 'pt-4' : 'pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)]'} px-1.5 pb-5 w-full max-w-lg mx-auto space-y-2`}>
         {isFleetDriver && (
           <div className="p-4 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-800/30 rounded-xl flex items-start gap-3 shadow-sm mx-0.5">
             <ShieldCheck className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0 mt-0.5" />
@@ -445,27 +426,29 @@ export default function AgentConfigurationPage() {
                 zoom={15}
                 zoomControl={false}
                 className="h-full w-full z-0"
+                key={showHubMapModal ? 'open' : 'closed'}
               >
                 <MapInvalidator />
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <MapClickHandler
-                  onLocationSelect={(lat, lng) => {
+                <MapDragHandler
+                  onMove={(lat, lng) => {
                     setHubData(prev => ({
                       ...prev,
                       coords: { latitude: lat, longitude: lng }
                     }));
+                    
+                    if (reverseGeocodeTimer.current) clearTimeout(reverseGeocodeTimer.current);
+                    reverseGeocodeTimer.current = setTimeout(async () => {
+                      const addr = await fetchAddress(lat, lng);
+                      if (addr) {
+                        setHubData(prev => ({ ...prev, address: addr }));
+                      }
+                    }, 1500);
                   }}
                 />
-                {hubData.coords?.latitude && (
-                  <>
-                    <Marker
-                      position={[hubData.coords.latitude, hubData.coords.longitude]}
-                      {...({ icon: hubPinIcon } as any)}
-                    />
-                    <FlyToLocation lat={hubData.coords.latitude} lng={hubData.coords.longitude} />
-                  </>
-                )}
               </MapContainer>
+              
+              <FixedCenterPin />
 
               {/* Floating Coords Badge */}
               {hubData.coords?.latitude && (
@@ -484,12 +467,10 @@ export default function AgentConfigurationPage() {
               )}
 
               {/* Floating Instruction */}
-              {!hubData.coords?.latitude && (
-                <div className="absolute top-4 left-4 right-4 z-[400] bg-amber-50 dark:bg-amber-900/30 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-xl border border-amber-200 dark:border-amber-800 flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-amber-600 shrink-0 animate-bounce" />
-                  <p className="text-xs font-bold text-amber-800 dark:text-amber-300 leading-snug">Tap on the map to pin your hub's exact location</p>
-                </div>
-              )}
+              <div className="absolute top-4 left-4 right-4 z-[400] bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 flex items-center gap-3">
+                <MapPin className="w-5 h-5 text-emerald-600 shrink-0" />
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-snug">Drag the map to place the pin precisely on your hub</p>
+              </div>
             </div>
 
             {/* Bottom Panel */}
@@ -521,15 +502,19 @@ export default function AgentConfigurationPage() {
           document.body
         )}
         {/* 🚚 LOGISTICS FEE */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-3 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 text-amber-500 flex items-center justify-center shrink-0">
-              <Truck className="w-4 h-4" />
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-3 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-3 relative overflow-hidden opacity-80 cursor-not-allowed">
+          <div className="absolute inset-0 z-10 pointer-events-auto" title="This feature will be unlocked upon full verification." />
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 text-amber-500 flex items-center justify-center shrink-0">
+                <Truck className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-xs font-bold text-slate-900 dark:text-white capitalize tracking-widest">Base Logistics Fee</h3>
+                <p className="text-[9px] text-slate-400 font-semibold capitalize tracking-widest">Your standard pickup charge</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-xs font-bold text-slate-900 dark:text-white capitalize tracking-widest">Base Logistics Fee</h3>
-              <p className="text-[9px] text-slate-400 font-semibold capitalize tracking-widest">Your standard pickup charge</p>
-            </div>
+            <span className="text-[8px] font-black text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md uppercase tracking-widest border border-amber-500/20">Coming Soon</span>
           </div>
 
           <div className="space-y-1">
@@ -537,16 +522,12 @@ export default function AgentConfigurationPage() {
             <input
               type="text"
               inputMode="decimal"
-              disabled={isFleetDriver}
+              disabled={true}
               value={formData.base_logistics_fee}
-              onChange={(e) => {
-                const val = e.target.value.replace(/[^0-9.]/g, '');
-                setFormData({ ...formData, base_logistics_fee: val });
-              }}
-              className="w-full p-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-xs text-slate-900 dark:text-white outline-none focus:border-amber-500 transition-colors disabled:opacity-50"
+              className="w-full p-2.5 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-xs text-slate-400 dark:text-slate-500 outline-none cursor-not-allowed"
             />
-            <p className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest mt-1.5 flex items-center gap-1.5 ml-1">
-              <Info className="w-3 h-3" /> Hint: Setting a 0 base fee attracts significantly more clients!
+            <p className="text-[9px] font-bold text-amber-600 dark:text-amber-500 capitalize tracking-widest mt-1.5 flex items-center gap-1.5 ml-1">
+              <Info className="w-3 h-3 shrink-0" /> Feature unlocks upon full Klinflow verification.
             </p>
           </div>
         </div>
@@ -626,69 +607,6 @@ export default function AgentConfigurationPage() {
             })}
           </div>
 
-          {/* ── CUSTOM CATEGORIES ── */}
-          {!isFleetDriver && (
-            <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800/60 mt-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Your Custom Categories</p>
-                <button
-                  type="button"
-                  onClick={() => setShowAddCategory(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors rounded-lg text-[10px] font-bold capitalize tracking-widest"
-                >
-                  <Plus className="w-3 h-3" /> Add
-                </button>
-              </div>
-
-              {/* Add Category Form */}
-              {showAddCategory && (
-                <div className="p-3 bg-primary/5 border border-primary/20 rounded-xl space-y-3">
-                  <div className="flex items-center gap-2">
-                    <input
-                      placeholder="Icon"
-                      value={newCategory.icon}
-                      onChange={e => setNewCategory({ ...newCategory, icon: e.target.value })}
-                      className="w-12 p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-center text-lg outline-none focus:border-primary"
-                    />
-                    <input
-                      placeholder="Category name..."
-                      value={newCategory.category}
-                      onChange={e => setNewCategory({ ...newCategory, category: e.target.value })}
-                      className="flex-1 p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold outline-none focus:border-primary"
-                    />
-                  </div>
-                  <div className="flex gap-2">
-                    <button type="button" onClick={handleAddCustomCategory} className="flex-1 py-2 bg-primary text-white rounded-lg text-xs font-bold capitalize tracking-widest">Add Category</button>
-                    <button type="button" onClick={() => setShowAddCategory(false)} className="px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-500"><X className="w-4 h-4" /></button>
-                  </div>
-                </div>
-              )}
-
-              {/* Custom Category List */}
-              {formData.custom_services.length === 0 && !showAddCategory && (
-                <div className="p-4 text-center bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
-                  <Tag className="w-4 h-4 mx-auto mb-1.5 text-slate-300" />
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">No custom categories</p>
-                </div>
-              )}
-              <div className="space-y-2">
-                {formData.custom_services.map((svc, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl shadow-sm">
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-xl">{svc.icon}</span>
-                      <div>
-                        <p className="text-xs font-bold text-slate-900 dark:text-white">{svc.category}</p>
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{svc.subcategories?.length || 0} sub-items</p>
-                      </div>
-                    </div>
-                    <button type="button" onClick={() => handleDeleteCustomCategory(i)} className="p-2 text-rose-400 hover:text-rose-600 bg-rose-50 dark:bg-rose-900/10 rounded-lg transition-colors">
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Pricing Rates */}
@@ -785,51 +703,7 @@ export default function AgentConfigurationPage() {
           )}
         </div>
 
-        {/* ── CUSTOM CATEGORY RATES ── */}
-        {!isFleetDriver && formData.custom_services.length > 0 && (
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Tag className="w-4 h-4 text-primary" />
-              <h4 className="text-xs font-bold dark:text-white capitalize tracking-widest">Custom Category Rates</h4>
-            </div>
-            {formData.custom_services.map((svc, catIndex) => {
-              const isExpanded = expandedCustomCat === catIndex;
-              const subInput = newSubItem[catIndex] || { name: '', rate_per_kg: '' };
-              return (
-                <div key={catIndex} className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-slate-50 dark:bg-slate-800/50">
-                  <button type="button" onClick={() => setExpandedCustomCat(isExpanded ? null : catIndex)} className="w-full flex items-center justify-between p-3.5">
-                    <div className="flex items-center gap-2.5">
-                      <span className="text-xl">{svc.icon}</span>
-                      <span className="text-xs font-bold text-slate-900 dark:text-white capitalize tracking-widest">{svc.category}</span>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded">{svc.subcategories?.length || 0}</span>
-                    </div>
-                    {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
-                  </button>
-                  {isExpanded && (
-                    <div className="p-3.5 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 space-y-3">
-                      {(svc.subcategories || []).map((sub, subIndex) => (
-                        <div key={subIndex} className="flex items-center justify-between pl-3 border-l-2 border-primary/30 py-1">
-                          <div>
-                            <p className="text-[11px] font-bold text-slate-900 dark:text-white capitalize">{sub.name}</p>
-                            <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-widest mt-0.5">KSh {sub.rate_per_kg}/KG</p>
-                          </div>
-                          <button type="button" onClick={() => handleDeleteSubItem(catIndex, subIndex)} className="p-2 text-rose-400 hover:text-rose-600 bg-rose-50 dark:bg-rose-900/10 rounded-lg">
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ))}
-                      <div className="flex items-center gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
-                        <input placeholder="Item name" value={subInput.name} onChange={e => setNewSubItem(prev => ({ ...prev, [catIndex]: { ...subInput, name: e.target.value } }))} className="flex-1 p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold outline-none focus:border-primary" />
-                        <input type="number" placeholder="KSh/KG" value={subInput.rate_per_kg} onChange={e => setNewSubItem(prev => ({ ...prev, [catIndex]: { ...subInput, rate_per_kg: e.target.value } }))} className="w-20 p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-bold text-primary outline-none focus:border-primary" />
-                        <button type="button" onClick={() => handleAddSubItem(catIndex)} className="p-2.5 bg-primary text-white rounded-lg"><Plus className="w-4 h-4" /></button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
+
 
 
       </main>

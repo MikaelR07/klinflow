@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, MapPin, Scale, Wallet, 
   CheckCircle2, Navigation, Phone, Clock,
-  PackageCheck, Info, ShieldCheck, TrendingUp, ChevronDown, ChevronRight
+  PackageCheck, Info, ShieldCheck, TrendingUp, ChevronDown, ChevronRight, Search
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
@@ -36,6 +36,27 @@ export default function MyTrades() {
   const [activeTrades, setActiveTrades] = useState<TradeWithListing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState<'Active' | 'Weight' | 'Value'>('Active');
+
+  const displayedTrades = useMemo(() => {
+    let result = activeTrades;
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(t => 
+        t.estate?.toLowerCase().includes(term) || 
+        t.waste_type?.toLowerCase().includes(term) || 
+        t.listing?.material?.toLowerCase().includes(term)
+      );
+    }
+    
+    if (activeTab === 'Weight') {
+      result = [...result].sort((a, b) => (b.actual_weight_kg || b.listing?.quantity || 0) - (a.actual_weight_kg || a.listing?.quantity || 0));
+    } else if (activeTab === 'Value') {
+      result = [...result].sort((a, b) => (b.total_price || 0) - (a.total_price || 0));
+    }
+    return result;
+  }, [activeTrades, searchTerm, activeTab]);
 
   const fetchActiveTrades = async () => {
     if (!profile?.id) {
@@ -124,7 +145,7 @@ export default function MyTrades() {
   return (
     <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)]  px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)]  px-4 border-b border-slate-200 dark:border-slate-600 shadow-sm max-w-lg mx-auto">
         <div className="max-w-lg mx-auto">
           {/* Header row */}
           <div className="flex items-center gap-3 ">
@@ -143,32 +164,55 @@ export default function MyTrades() {
              </div>
           </div>
 
-          {/* Stats row - Inside the fixed header */}
-          <div className="flex bg-slate-50 dark:bg-slate-800/60 rounded-lg p-1 border border-slate-100 dark:border-slate-700/50">
-            <div className="flex-1 text-center py-1">
+          {/* Search Input */}
+          <div className="mt-3 mb-2 px-1">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search trades..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full h-10 pl-9 pr-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-medium focus:outline-none focus:border-primary transition-all dark:text-white"
+              />
+            </div>
+          </div>
+
+          {/* Stats row as tabs - Inside the fixed header */}
+          <div className="flex px-1 pb-2">
+            <button
+              onClick={() => setActiveTab('Active')}
+              className={`flex-1 text-center py-2 transition-all rounded-lg  bg-slate-200 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50`}
+            >
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Active</p>
               <p className="text-xs font-black text-slate-800 dark:text-white leading-none">{activeTrades.length}</p>
-            </div>
-            <div className="w-px bg-slate-200 dark:bg-slate-700/50 mx-1" />
-            <div className="flex-1 text-center py-1">
+            </button>
+
+            <button
+              onClick={() => setActiveTab('Weight')}
+              className={`flex-1 text-center py-2 transition-all rounded-lg  bg-slate-200 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50`}
+            >
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Weight</p>
-              <p className="text-xs font-black text-emerald-600 dark:text-emerald-400 leading-none">
+              <p className="text-xs font-black text-slate-800 dark:text-white leading-none">
                 {activeTrades.reduce((acc, t) => acc + (t.actual_weight_kg || t.listing?.quantity || 0), 0).toLocaleString()} <span className="text-[8px] opacity-70">KG</span>
               </p>
-            </div>
-            <div className="w-px bg-slate-200 dark:bg-slate-700/50 mx-1" />
-            <div className="flex-1 text-center py-1">
+            </button>
+
+            <button
+              onClick={() => setActiveTab('Value')}
+              className={`flex-1 text-center py-2 transition-all rounded-lg  bg-slate-200 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/50`}
+            >
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Value</p>
-              <p className="text-xs font-black text-indigo-600 dark:text-indigo-400 leading-none">
+              <p className="text-xs font-black text-slate-800 dark:text-white leading-none">
                 <span className="text-[8px] mr-0.5 opacity-70">KSh</span>
                 {activeTrades.reduce((acc, t) => acc + (t.total_price || 0), 0).toLocaleString()}
               </p>
-            </div>
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 space-y-0 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+5em)] relative max-w-lg mx-auto w-full">
+      <div className="flex-1 space-y-0 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+9.4em)] relative max-w-lg mx-auto w-full">
 
         {/* ── CONTENT AREA ── */}
         <div className="">
@@ -342,16 +386,16 @@ export default function MyTrades() {
                   [1, 2].map(i => (
                     <div key={i} className="h-20 bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse" />
                   ))
-                ) : activeTrades.length === 0 ? (
+                ) : displayedTrades.length === 0 ? (
                   <div className="py-20 text-center">
                     <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-[2rem] flex items-center justify-center mx-auto mb-4 text-slate-300">
                       <TrendingUp className="w-10 h-10" />
                     </div>
-                    <h3 className="text-sm font-semibold text-slate-400 capitalize tracking-widest">No accepted trades</h3>
-                    <p className="text-[11px] text-slate-400 mt-2">Check the Radar to find new materials.</p>
+                    <h3 className="text-sm font-semibold text-slate-400 capitalize tracking-widest">No trades found</h3>
+                    <p className="text-[11px] text-slate-400 mt-2">Try adjusting your search.</p>
                   </div>
                 ) : (
-                  activeTrades.map((trade, i) => (
+                  displayedTrades.map((trade, i) => (
                     <motion.div
                       key={trade.id}
                       initial={{ opacity: 0, y: 20 }}

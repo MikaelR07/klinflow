@@ -66,6 +66,7 @@ export const ProfileSchema = z.object({
   avatarUrl: z.string().nullable().optional(), // Removed .url() to allow emojis/paths
   avatar: z.string().nullable().optional(), // Added for compatibility
   walletBalance: z.number().default(0),
+  payoutBalance: z.number().default(0),
   rewardPoints: z.number().default(0),
   location: LocationSchema.nullable().optional(),
   isVerified: z.boolean().default(false),
@@ -104,6 +105,7 @@ export const ProfileSchema = z.object({
 
 export const BookingSchema = z.object({
   id: z.string(), // Removed .uuid() for mock support
+  trackingId: z.string().nullable().optional(),
   userId: z.string(), // Removed .uuid() for mock support
   agentId: z.string().nullable().optional(), // Removed .uuid() for mock support
   wasteType: z.string(),
@@ -133,6 +135,7 @@ export const BookingSchema = z.object({
 
 export const MarketplaceListingSchema = z.object({
   id: z.string().uuid(),
+  trackingId: z.string().nullable().optional(),
   sellerId: z.string().uuid(),
   material: z.string(),
   materialCategory: z.string().nullable().optional(),
@@ -161,6 +164,7 @@ export const MarketplaceListingSchema = z.object({
 
 export const MarketplaceOrderSchema = z.object({
   id: z.string().uuid(),
+  trackingId: z.string().nullable().optional(),
   listingId: z.string().uuid(),
   buyerId: z.string().uuid(),
   sellerId: z.string().uuid(),
@@ -176,6 +180,7 @@ export const MarketplaceOrderSchema = z.object({
 
 export const MarketplaceOfferSchema = z.object({
   id: z.string().uuid(),
+  trackingId: z.string().nullable().optional(),
   listingId: z.string().uuid(),
   buyerId: z.string().uuid(),
   sellerId: z.string().uuid(),
@@ -242,6 +247,8 @@ export const AppNotificationSchema = z.object({
 
 export const AssetSchema = z.object({
   id: z.string().uuid(),
+  trackingId: z.string().nullable().optional(),
+  originTrackingId: z.string().nullable().optional(),
   materialType: z.string(),
   grade: z.string().optional(),
   weightKg: z.number().nonnegative(),

@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapPin, ArrowLeft, ArrowRight, Phone, Navigation, CheckCircle, User, Zap, Clock, Warehouse, Truck } from 'lucide-react';
+import { MapPin, ArrowLeft, Phone, Navigation, CheckCircle, User, Zap, Clock, Warehouse, Truck, Scan, Edit3, Recycle } from 'lucide-react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
@@ -59,6 +59,7 @@ export default function NavigateJobPage() {
   const { fetchCategories } = useServiceStore();
   const { verifyAsset } = useAssetStore();
   const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [prefillCategory, setPrefillCategory] = useState<string | null>(null);
   const [hasArrived, setHasArrived] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [dragY, setDragY] = useState(0);
@@ -86,6 +87,7 @@ export default function NavigateJobPage() {
             pay: d.fee,
             bags: d.bags,
             actual_weight_kg: d.actual_weight_kg,
+            weight_kg: (d as any).weight_kg,
             is_market_trade: d.is_market_trade,
             notes: d.notes
           } as AgentJob);
@@ -213,7 +215,7 @@ export default function NavigateJobPage() {
           // If swiped up hard or past threshold
           if (info.offset.y < -50) setIsExpanded(true);
         }}
-        className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-800 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] rounded-t-[3.5rem] p-6 pb-32 cursor-grab active:cursor-grabbing"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-800 shadow-[0_-20px_50px_rgba(0,0,0,0.2)] rounded-t-[3.5rem] p-6  cursor-grab active:cursor-grabbing"
       >
         {/* Interaction Handle */}
         <button 
@@ -228,48 +230,114 @@ export default function NavigateJobPage() {
         
         {/* Main Content */}
         <div className="max-w-md mx-auto">
-          <div className="flex gap-2 mb-2">
-            <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[12px] font-bold text-slate-400 capitalize tracking-widest mb-1">Client</span>
-              <span className="text-[11px] font-black text-slate-600 dark:text-white capitalize truncate w-full">{activeJob.customerName?.split(' ')[0] || activeJob.customer?.split(' ')[0] || 'Client'}</span>
-            </div>
-            <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[12px] font-bold text-slate-400 capitalize tracking-widest mb-1">Location</span>
-              <span className="text-[11px] font-black text-slate-600 dark:text-white capitalize truncate w-full">{activeJob.location}</span>
-            </div>
-            <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-              <span className="text-[12px] font-bold text-slate-400 capitalize tracking-widest mb-1">Material</span>
-              <span className="text-[11px] font-black text-slate-600 dark:text-white capitalize truncate w-full">{activeJob.material}</span>
-            </div>
-            
-            <button 
-              onClick={() => window.location.href = `tel:${activeJob.phone || '+254700000000'}`}
-              className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center active:scale-95 transition-all shadow-lg shadow-emerald-500/30 shrink-0 self-center"
-            >
-              <Phone className="w-5 h-5" />
-            </button>
+          <div className="text-center mb-2">
+            <h2 className="text-base font-bold text-slate-700 dark:text-white">Pickup Request</h2>
+            <p className="text-[11px] text-slate-400">Review details before starting collection.</p>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 mb-6 font-semibold text-xs capitalize tracking-widest">
-             <div className="bg-slate-200 dark:bg-slate-800/50 p-4 rounded-2xl flex items-center gap-3">
-                <Clock className="w-4 h-4 text-accent" />
-                <div className="flex flex-col">
-                   <span className="text-xs text-slate-600">Scheduled Pickup Window</span>
-                   <span className="dark:text-white leading-none mt-0.5">{activeJob.time}</span>
-                </div>
-             </div>
+          <div className="bg-white dark:bg-slate-900 p-2 sm:p-4 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 mb-4">
+            
+            {/* Client Row */}
+            <div className="flex items-center gap-4 p-2">
+              <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm shrink-0">
+                {(activeJob.customerName || activeJob.customer || 'C')[0].toUpperCase()}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-bold text-slate-900 dark:text-white text-xs truncate">
+                  {activeJob.customerName || activeJob.customer || 'Client'}
+                </h4>
+                <p className="text-[10px] text-slate-400 font-semibold mt-0.5 flex items-center gap-1">
+                  Klinflow Client <CheckCircle className="w-3 h-3 text-primary" />
+                </p>
+              </div>
+              <button 
+                onClick={() => window.location.href = `tel:${activeJob.phone || '+254700000000'}`}
+                className="px-2 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-primary rounded-xl font-bold flex flex-col items-center justify-center shadow-sm active:scale-95 transition-all h-10 w-10 shrink-0"
+              >
+                <Phone className="w-5 h-5 mb-0.5" />
+              </button>
+            </div>
 
-             {activeJob.notes && (
-               <div className="bg-primary/5 dark:bg-primary/10 border border-primary/20 p-4 rounded-2xl flex items-start gap-3">
-                  <Truck className="w-4 h-4 text-primary mt-0.5" />
-                  <div className="flex flex-col">
-                     <span className="text-xs text-primary">Description</span>
-                     <span className="dark:text-slate-300 normal-case font-semibold mt-1 leading-relaxed italic">
-                       "{activeJob.notes.replace(/Est\. Total: KSh \d+( \| Item: )?/, '').replace(/^ \| /, '')}"
-                     </span>
+            {/* Location Row */}
+            <div className="flex items-center gap-4 p-2">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-bold text-slate-900 dark:text-white text-xs truncate">
+                  {activeJob.location}
+                </h4>
+                <p className="text-[10px] text-slate-400 mt-0.5 truncate">Pickup Location</p>
+              </div>
+              <div className="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center shrink-0">
+                <Navigation className="w-5 h-5" />
+              </div>
+            </div>
+
+            {/* Material & Weight Row */}
+            <div className="flex items-center p-2">
+              <div className="flex-1 flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Recycle className="w-5 h-5" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-bold text-slate-900 dark:text-white text-xs capitalize truncate">
+                    {activeJob.material}
+                  </h4>
+                  <p className="text-[10px] text-slate-400 mt-0.5">Material Type</p>
+                </div>
+              </div>
+
+              {(activeJob.actual_weight_kg || activeJob.weight_kg) ? (
+                <>
+                  <div className="w-px h-8 bg-slate-100 dark:bg-slate-800 mx-2 shrink-0" />
+                  <div className="flex-1 flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                      <Warehouse className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-bold text-slate-900 dark:text-white text-xs truncate">
+                        {activeJob.actual_weight_kg || activeJob.weight_kg} kg
+                      </h4>
+                      <p className="text-[10px] text-slate-400 mt-0.5 truncate">Est. Weight</p>
+                    </div>
                   </div>
-               </div>
-             )}
+                </>
+              ) : null}
+            </div>
+
+            {/* Notes / Description */}
+            {activeJob.notes && (
+              <div className="flex items-start gap-4 p-2">
+                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                  <Truck className="w-5 h-5" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-bold text-slate-900 dark:text-white text-xs">Description</h4>
+                  <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed italic">
+                   "{activeJob.notes.replace(/Est\. Total: KSh \d+( \| Item: )?/, '').replace(/^ \| /, '')}"
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Time Row (Separate Card) */}
+          <div className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+              <Clock className="w-5 h-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h4 className="font-bold text-slate-900 dark:text-white text-xs truncate">
+                Pickup Window
+              </h4>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="text-xs font-black text-slate-600 dark:text-slate-300">{activeJob.time}</span>
+                <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-[8px] font-black rounded-full uppercase tracking-wider flex items-center gap-1">
+                  <div className="w-1 h-1 bg-primary rounded-full animate-pulse" /> Active
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Scrollable details if expanded */}
@@ -341,27 +409,19 @@ export default function NavigateJobPage() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-3 pt-2 pb-4">
-                <button 
-                  onClick={() => setIsScannerOpen(true)}
-                  className="w-full py-5 bg-blue-600 text-white font-semibold text-sm rounded-2xl shadow-xl shadow-blue-600/30 flex items-center justify-center gap-3 active:scale-95 transition-all group"
-                >
-                  <Zap className="w-5 h-5 animate-pulse fill-white" />
-                  START AI SCAN (RECOMMENDED)
-                </button>
+              <div className="flex flex-col gap-2 pt-2 pb-4">
                 <button 
                   onClick={() => {
+                    setPrefillCategory(null);
                     setIsScannerOpen(true);
-                    // We need to tell the modal to start in manual mode
-                    // We'll pass a prop or use a timeout to trigger it
-                    setTimeout(() => {
-                      const manualBtn = document.getElementById('manual-override-btn');
-                      if (manualBtn) manualBtn.click();
-                    }, 100);
                   }}
-                  className="w-full py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold text-xs capitalize tracking-[0.2em] rounded-2xl active:scale-95 transition-all border border-slate-200 dark:border-slate-800"
+                  className="w-full py-4 bg-primary text-white rounded-2xl active:scale-95 transition-all flex items-center justify-center gap-3 shadow-lg shadow-primary/20"
                 >
-                  Skip Scan & Use Manual Entry
+                  <Edit3 className="w-6 h-6 shrink-0" />
+                  <div className="flex flex-col items-start text-left">
+                     <span className="font-bold text-sm">Record Collection</span>
+                     <span className="text-[11px] opacity-70">Asset Intake & Verification</span>
+                  </div>
                 </button>
               </div>
             )}
@@ -371,8 +431,12 @@ export default function NavigateJobPage() {
 
       <AIScannerModal 
         isOpen={isScannerOpen}
-        onClose={() => setIsScannerOpen(false)}
+        onClose={() => {
+          setIsScannerOpen(false);
+          setPrefillCategory(null);
+        }}
         booking={activeJob}
+        prefillCategory={prefillCategory}
         onVerify={async (data) => {
           try {
             const isMarketTrade = !!(activeJob.is_market_trade || activeJob.booking_type === 'marketplace_pickup');

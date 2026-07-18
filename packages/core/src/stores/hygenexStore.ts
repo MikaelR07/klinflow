@@ -9,6 +9,8 @@ export interface Message {
   role: 'user' | 'ai';
   text: string;
   timestamp: string;
+  metadata?: any;
+  isStreaming?: boolean;
 }
 
 interface HygenexStore {
@@ -119,8 +121,10 @@ export const useHygenexStore = create<HygenexStore>((set, get) => ({
     const userMsg: Message = { id: tempId, role: 'user', text, timestamp: new Date().toISOString() };
     set((s) => ({ messages: [...s.messages, userMsg], isTyping: true }));
 
-    const sendMessagePromise = (async () => {
-      const { userId } = useAuthStore.getState();
+    // Persist user message in background
+    supabase.from('hygenex_messages').insert({ user_id: userId, role: 'user', text }).then();
+
+    try {
       const session = await supabase.auth.getSession();
       const token = session?.data?.session?.access_token;
 
@@ -139,36 +143,72 @@ export const useHygenexStore = create<HygenexStore>((set, get) => ({
       });
 
       if (!res.ok) {
-        const errorData = await res.text();
-        console.error('[HygeneX] AI Edge Function Error:', errorData);
-        throw new Error('AI Response Failed');
+        const errText = await res.text();
+        console.error('[HygeneX] AI Edge Function HTTP Error:', errText);
+        throw new Error(`Server Error: ${errText}`);
       }
 
-      return res.json();
-    })();
+      // Check metadata header
+      let metadata = null;
+      const metadataHeader = res.headers.get('X-AI-Metadata');
+      if (metadataHeader) {
+        try { metadata = JSON.parse(decodeURIComponent(metadataHeader)); } catch (e) {}
+      }
 
-    const persistUserMsgPromise = supabase.from('hygenex_messages').insert({
-      user_id: userId,
-      role: 'user',
-      text
-    });
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error('No stream returned');
 
-    try {
-      const [aiMsg] = await Promise.all([sendMessagePromise, persistUserMsgPromise]);
-      
-      set((s) => {
-        const exists = s.messages.find(m => m.id === aiMsg.id);
-        if (exists) return { isTyping: false };
-        return {
-          messages: [...s.messages, { 
-            id: aiMsg.id, 
-            role: aiMsg.role, 
-            text: aiMsg.text, 
-            timestamp: aiMsg.created_at 
-          }],
-          isTyping: false
-        };
-      });
+      const decoder = new TextDecoder('utf-8');
+      const aiMsgId = crypto.randomUUID();
+      let accumulatedText = '';
+
+      // Initialize AI message placeholder
+      set((s) => ({
+        messages: [...s.messages, { id: aiMsgId, role: 'ai', text: '', timestamp: new Date().toISOString(), isStreaming: true, metadata }],
+        isTyping: false
+      }));
+
+      // Stream loop
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        const chunk = decoder.decode(value, { stream: true });
+        
+        buffer += chunk;
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ''; // Keep the incomplete last line in buffer
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const dataStr = line.slice(6).trim();
+            if (dataStr === '[DONE]' || !dataStr) continue;
+            try {
+              const data = JSON.parse(dataStr);
+              const textPart = data.candidates?.[0]?.content?.parts?.[0]?.text;
+              if (textPart) {
+                accumulatedText += textPart;
+                set((s) => ({
+                  messages: s.messages.map(m => m.id === aiMsgId ? { ...m, text: accumulatedText } : m)
+                }));
+              }
+            } catch (e) {
+              console.warn('[HygeneX] Failed to parse SSE chunk:', dataStr, e);
+            }
+          }
+        }
+      }
+
+      // Finish stream
+      set((s) => ({
+        messages: s.messages.map(m => m.id === aiMsgId ? { ...m, isStreaming: false } : m)
+      }));
+
+      // Persist AI message in background
+      if (accumulatedText) {
+        supabase.from('hygenex_messages').insert({ user_id: userId, role: 'ai', text: accumulatedText }).then();
+      }
 
     } catch (err) {
       console.error('[HygeneX] AI Error:', err);

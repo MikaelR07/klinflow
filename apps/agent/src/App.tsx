@@ -27,6 +27,7 @@ const MyRoutes = lazy(() => import('./pages/agent/MyRoutes'));
 const ReviewsPage = lazy(() => import('./pages/agent/ReviewsPage'));
 const NavigateJobPage = lazy(() => import('./pages/agent/NavigateJobPage'));
 const AgentWarehouse = lazy(() => import('./pages/agent/AgentWarehouse'));
+const AgentTradeHub = lazy(() => import('./pages/agent/AgentTradeHub'));
 const AgentSellStock = lazy(() => import('./pages/agent/AgentSellStock'));
 const Sourcing = lazy(() => import('./pages/agent/Sourcing'));
 const MyTrades = lazy(() => import('./pages/agent/MyTrades'));
@@ -73,7 +74,6 @@ const OwnerAgentDetail = lazy(() => import('./pages/admin/mobile/OwnerAgentDetai
 const OwnerAlerts = lazy(() => import('./pages/admin/mobile/OwnerAlerts'));
 const OwnerDisputes = lazy(() => import('./pages/admin/mobile/OwnerDisputes'));
 const OwnerDisputeDetail = lazy(() => import('./pages/admin/mobile/OwnerDisputeDetail'));
-const OwnerFinance = lazy(() => import('./pages/admin/mobile/OwnerFinance'));
 
 
 
@@ -186,6 +186,25 @@ export default function App() {
     };
   }, [isAuthenticated, userId, profile?.isOnline, subscribeToJobs, cleanupJobs]);
 
+  // 3. Live GPS Tracking & Heartbeat (Uber-like presence)
+  useEffect(() => {
+    let pulseInterval: NodeJS.Timeout;
+    
+    if (isAuthenticated && userId && profile?.isOnline) {
+      const { sendPulse } = useAuthStore.getState();
+      // Send immediately on mount/online-toggle
+      sendPulse(); 
+      // Then send every 60 seconds
+      pulseInterval = setInterval(() => {
+        sendPulse();
+      }, 60000);
+    }
+
+    return () => {
+      if (pulseInterval) clearInterval(pulseInterval);
+    };
+  }, [isAuthenticated, userId, profile?.isOnline]);
+
   return (
     <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
       {isInitializing && <LoadingScreen message="Syncing Dispatch..." />}
@@ -207,6 +226,7 @@ export default function App() {
             <Route path="/jobs" element={<AvailableJobs />} />
             <Route path="/routes" element={<MyRoutes />} />
             <Route path="/warehouse" element={<AgentWarehouse />} />
+            <Route path="/warehouse/trade" element={<AgentTradeHub />} />
             <Route path="/warehouse/sell" element={<AgentSellStock />} />
             <Route path="/sourcing" element={<Sourcing />} />
             <Route path="/market-pulse" element={<MarketPulse />} />
@@ -237,7 +257,6 @@ export default function App() {
             <Route path="/alerts" element={<OwnerAlerts />} />
             <Route path="/disputes" element={<OwnerDisputes />} />
             <Route path="/disputes/:id" element={<OwnerDisputeDetail />} />
-            <Route path="/finance" element={<OwnerFinance />} />
             <Route path="/market-prices" element={<MarketPulse />} />
 
             <Route path="/settings">

@@ -11,7 +11,8 @@ export interface Asset {
   photo_url?: string | null;
   is_manual: boolean;
   status: string;
-  digital_batch_id: string | null;
+  tracking_id: string | null;
+  origin_tracking_id: string | null;
   metadata: any;
   created_at: string;
   booking?: any;
@@ -25,7 +26,7 @@ export interface AssetStore {
   isLoading: boolean;
   CARBON_FACTORS: Record<string, number>;
   calculateCarbonOffset: (materialType: string, weightKg: number) => number;
-  generateDigitalBatchId: (materialType: string) => string;
+
   fetchAssets: () => Promise<void>;
   fetchLiveFeed: () => Promise<void>;
   verifyAsset: (bookingId: string, verificationData: any) => Promise<Asset>;

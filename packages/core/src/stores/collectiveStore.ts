@@ -137,9 +137,12 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
 
   createSwarm: async (data) => {
     try {
+      const { generateTrackingId } = await import('../utils/tracking');
+      const payload = { ...data, tracking_id: generateTrackingId('SWM') };
+      
       const { data: resData, error } = await supabase
         .from('swarms')
-        .insert(data)
+        .insert(payload)
         .select()
         .single();
       if (error) throw error;

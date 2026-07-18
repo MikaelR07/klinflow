@@ -327,6 +327,7 @@ export const useAgentStore = create<AgentStore>()(
           material: b.waste_type,
           bags: b.bags,
           actual_weight_kg: b.actual_weight_kg,
+          weight_kg: b.weight_kg,
           location: b.estate,
           time: b.time_slot,
           date: (b as any).preferred_date || (b as any).scheduled_date || (b as any).created_at,
@@ -441,6 +442,7 @@ export const useAgentStore = create<AgentStore>()(
       material: b.waste_type,
       bags: b.bags,
       actual_weight_kg: b.actual_weight_kg,
+      weight_kg: b.weight_kg,
       pay: (b.fee || 0) * useSettingsStore.getState().getAgentCommission(),
       location: b.estate,
       time: b.time_slot,
@@ -493,7 +495,7 @@ export const useAgentStore = create<AgentStore>()(
     
     try {
       // 1. Fetch Aggregated Stats via Backend RPC
-      const { data: stats, error: rpcError } = await supabase.rpc('get_company_stats_v2', { 
+      const { data: stats, error: rpcError } = await supabase.rpc('get_company_stats_v3', { 
         p_company_id: userId 
       });
 
@@ -540,6 +542,7 @@ export const useAgentStore = create<AgentStore>()(
             photos: b.photo_url ? [b.photo_url] : [],
             bags: b.bags || 0,
             actual_weight_kg: b.actual_weight_kg || 0,
+            weight_kg: b.weight_kg || 0,
             time: b.time_slot || '',
             agent_id: b.agent_id || '',
             user_id: b.user_id || '',

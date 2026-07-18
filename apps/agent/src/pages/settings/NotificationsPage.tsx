@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2, Save, BellRing, Smartphone, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Loader2, Save, BellRing, Smartphone, MessageSquare, Check } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { ROLES } from '@klinflow/constants';
 import { toast } from 'sonner';
 
 export default function NotificationsPage() {
-  const { notificationPrefs, updateNotificationPrefs, role } = useAuthStore();
+  const { notificationPrefs, updateProfile, role } = useAuthStore();
   const navigate = useNavigate();
   const isAgent = role === ROLES.AGENT;
 
@@ -19,13 +20,20 @@ export default function NotificationsPage() {
     channel: notificationPrefs?.channel ?? 'push'
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [pushStatus, setPushStatus] = useState<'pending' | 'granted' | 'denied'>('pending');
 
-  const handleToggle = (key) => setPrefs(prev => ({ ...prev, [key]: !prev[key] }));
+  useEffect(() => {
+    if ('Notification' in window) {
+      setPushStatus(Notification.permission as any);
+    }
+  }, []);
+
+  const handleToggle = (key: string) => setPrefs(prev => ({ ...prev, [key]: !(prev as any)[key] }));
   
   const handleSave = async () => {
     setIsLoading(true);
     try {
-      await updateNotificationPrefs(prefs);
+      await updateProfile({ notificationPrefs: prefs });
       toast.success('Preferences Saved', { description: 'Your notification channels are updated.' });
       navigate('/settings');
     } catch (err) {
@@ -51,9 +59,9 @@ export default function NotificationsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-950 transition-colors">
+    <div className="min-h-screen bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-800 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button onClick={() => navigate('/settings')} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-500 transition-colors" />
@@ -69,7 +77,7 @@ export default function NotificationsPage() {
       <div className="pt-[calc(env(safe-area-inset-top,1rem)+5rem)] px-1.5 space-y-6 max-w-lg mx-auto">
         
         {/* Native Push Authorization (Hero Style) */}
-        <div className="relative overflow-hidden bg-emerald-600 dark:bg-emerald-900/40 rounded-3xl p-6 shadow-lg shadow-emerald-500/10 border border-emerald-500/20">
+        <div className="relative overflow-hidden bg-emerald-600  rounded-xl p-6 border border-emerald-500/20">
           <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 blur-2xl rounded-full pointer-events-none" />
           <div className="relative z-10 flex flex-col items-center text-center">
             <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-4">
@@ -81,17 +89,25 @@ export default function NotificationsPage() {
             </p>
             <button 
               onClick={async () => {
+                if (pushStatus === 'granted') return;
                 const ok = await useNotificationStore.getState().subscribeToPush();
                 if (ok) {
+                  setPushStatus('granted');
                   toast.success('Agent Radar Ready! 🛰️', { description: 'Native mission alerts are now active.' });
                 } else {
+                  setPushStatus('denied');
                   toast.error('Auth Failed', { description: 'Please enable notifications in device settings.' });
                 }
               }}
-              className="w-full py-3.5 bg-white text-emerald-600 rounded-xl text-[13px] font-bold tracking-widest uppercase active:scale-95 transition-all shadow-md shadow-black/5 flex items-center justify-center gap-2"
+              disabled={pushStatus === 'granted'}
+              className={`w-full py-3.5 rounded-xl text-[13px] font-bold tracking-widest uppercase transition-all shadow-md flex items-center justify-center gap-2
+                ${pushStatus === 'granted' 
+                  ? 'bg-emerald-800 text-emerald-200 cursor-default opacity-90' 
+                  : 'bg-white text-emerald-600 active:scale-95 shadow-black/5 hover:bg-emerald-50'
+                }`}
             >
-              <Smartphone className="w-4 h-4" />
-              Enable Push
+              {pushStatus === 'granted' ? <Check className="w-4 h-4" /> : <Smartphone className="w-4 h-4" />}
+              {pushStatus === 'granted' ? 'Native Push Active' : 'Enable Native Push'}
             </button>
           </div>
         </div>

@@ -53,28 +53,43 @@ const fetchAddress = async (lat: number, lon: number) => {
 };
 
 // ── RECENTER MAP HELPER ───────────────────────────────────────────
-function RecenterMap({ lat, lng }: { lat: number | null | undefined; lng: number | null | undefined }) {
+function RecenterMap({ centerPos }: { centerPos: [number, number] | null }) {
   const map = useMap();
   useEffect(() => {
-    if (lat && lng) {
-      map.flyTo([lat, lng], 17, {
-        animate: true,
-        duration: 1.5
-      });
+    if (centerPos) {
+      map.flyTo(centerPos, 17, { animate: true, duration: 1.5 });
     }
-  }, [lat, lng, map]);
+  }, [centerPos, map]);
   return null;
 }
 
 // ── MAP EVENT HANDLER ──────────────────────────────────────────────
 function MapEvents({ onMove }: { onMove: (lat: number, lon: number) => void }) {
+  const map = useMap();
   useMapEvents({
-    click(e: any) {
-      onMove(e.latlng.lat, e.latlng.lng);
+    dragend() {
+      const center = map.getCenter();
+      onMove(center.lat, center.lng);
     },
+    zoomend() {
+      const center = map.getCenter();
+      onMove(center.lat, center.lng);
+    }
   });
   return null;
 }
+
+// ── FIXED CENTER PIN COMPONENT ─────────────────────────────────────
+const FixedCenterPin = () => (
+  <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center z-[1000]">
+    <div className="relative flex flex-col items-center -mt-8"> {/* Offset to put the tip at the center */}
+      <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center animate-pulse">
+        <MapPin className="w-8 h-8 text-primary drop-shadow-md" fill="currentColor" />
+      </div>
+      <div className="w-2 h-2 bg-slate-900/50 rounded-full blur-[2px] mt-1"></div>
+    </div>
+  </div>
+);
 
 export default function LocationSelector({ 
   value, 
@@ -85,11 +100,12 @@ export default function LocationSelector({
   const [isCapturing, setIsCapturing] = useState(false);
   const [showMap, setShowMap] = useState(!!value?.latitude);
   const [accuracy, setAccuracy] = useState<number | null>(null);
+  const [flyToPos, setFlyToPos] = useState<[number, number] | null>(null);
 
-  const initialPos: [number, number] = useMemo(() => {
+  const [initialPos] = useState<[number, number]>(() => {
     if (value?.latitude && value?.longitude) return [value.latitude, value.longitude];
     return [-1.286389, 36.817223]; // General Kenya center
-  }, [value?.latitude, value?.longitude]);
+  });
 
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -138,6 +154,7 @@ export default function LocationSelector({
         const { latitude, longitude, accuracy: acc } = pos.coords;
         setAccuracy(acc);
         setShowMap(true);
+        setFlyToPos([latitude, longitude]);
         updateLocation(latitude, longitude, acc);
         toast.success('Position Locked', { description: `Accuracy: ${Math.round(acc)}m` });
       },
@@ -189,22 +206,18 @@ export default function LocationSelector({
           <div className={hideHeaderText ? "h-56 w-full relative z-0" : "h-48 w-full rounded-[2.5rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl relative z-0"}>
             <MapContainer center={initialPos as any} zoom={15} style={{ height: '100%', width: '100%' }} zoomControl={false} {...({} as any)}>
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <RecenterMap lat={value?.latitude} lng={value?.longitude} />
-              <Marker position={[value?.latitude || initialPos[0], value?.longitude || initialPos[1]] as any} draggable={true} {...({ icon: DefaultIcon } as any)} eventHandlers={{
-                dragend: (e: any) => {
-                  const marker = e.target;
-                  const pos = marker.getLatLng();
-                  updateLocation(pos.lat, pos.lng);
-                }
-              }} />
+              <RecenterMap centerPos={flyToPos} />
               <MapEvents onMove={updateLocation} />
             </MapContainer>
+            
+            <FixedCenterPin />
             
             <div className="absolute top-4 left-4 right-4 z-[1000] flex justify-center pointer-events-none">
               <div className="glass px-4 py-2 rounded-full border border-white/20 shadow-lg flex items-center gap-3 pointer-events-auto">
                 <div className="flex flex-col">
-                  <span className="text-xs font-black text-primary uppercase tracking-widest leading-none">Sector</span>
-                  <span className="text-xs font-bold text-slate-800 dark:text-white truncate max-w-[120px] leading-tight mt-0.5">
+                  <span className="text-xs font-black text-primary capitalize tracking-wide leading-none">Location</span>
+                  <span className="text-xs font-bold text-slate-800 dark:text-white truncate max-w-[120px] leading-tight mt-0.5 flex items-center gap-1.5">
+                    {isCapturing && <Loader2 className="w-3 h-3 animate-spin text-primary shrink-0" />}
                     {value?.estate || 'Detecting...'}
                   </span>
                 </div>
@@ -218,16 +231,11 @@ export default function LocationSelector({
                 </button>
               </div>
             </div>
-            {isCapturing && (
-              <div className="absolute inset-0 z-[1100] bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              </div>
-            )}
           </div>
 
           {!hideFooterText && (
             <p className="text-xs text-slate-400 font-bold uppercase tracking-widest text-center">
-              <Move className="w-3 h-3 inline mr-1 mb-0.5" /> Drag the pin to your exact pickup gate
+              <Move className="w-3 h-3 inline mr-1 mb-0.5" /> Drag the map to place the pin on your exact location
             </p>
           )}
         </div>

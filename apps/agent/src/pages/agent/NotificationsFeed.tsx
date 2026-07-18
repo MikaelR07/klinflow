@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, BellRing, CheckCircle2, AlertTriangle, Gift, Info, Clock } from 'lucide-react';
+import { ArrowLeft, BellRing, CheckCircle2, AlertTriangle, Gift, Info, Clock, CircleCheckBig, MessageSquareCheck } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useNotificationStore, NOTIFICATION_TYPES } from '@klinflow/core/stores/notificationStore';
 
@@ -32,7 +32,7 @@ export default function NotificationsFeed() {
       if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
       if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
       
-      return parsed.toLocaleDateString([], { month: 'short', day: 'numeric' });
+      return parsed.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ', ' + parsed.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } catch (e) {
       return 'just now';
     }
@@ -46,18 +46,18 @@ export default function NotificationsFeed() {
   }, []);
 
   const getIcon = (type: string) => {
-    switch (type) {
-      case NOTIFICATION_TYPES.SUCCESS: return <CheckCircle2 className="w-4 h-4 text-emerald-500" />;
-      case NOTIFICATION_TYPES.WARNING: return <AlertTriangle className="w-4 h-4 text-rose-500" />;
-      case NOTIFICATION_TYPES.REWARD: return <Gift className="w-4 h-4 text-amber-500" />;
-      default: return <Info className="w-4 h-4 text-blue-500" />;
+     switch (type) {
+      case NOTIFICATION_TYPES.SUCCESS: return <CircleCheckBig className="w-5 h-5 text-emerald-500" />;
+      case NOTIFICATION_TYPES.WARNING: return <AlertTriangle className="w-5 h-5 text-rose-500" />;
+      case NOTIFICATION_TYPES.REWARD: return <Gift className="w-5 h-5 text-amber-500" />;
+      default: return <MessageSquareCheck className="w-5 h-5 text-blue-500" />;
     }
   };
 
   return (
-    <div className="pb-4 bg-white dark:bg-slate-900 min-h-screen">
+    <div className="pb-4 bg-white dark:bg-slate-800">
       {/* ── FIXED TOPNAV ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#F8F8FF]/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-6">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#F8F8FF]/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-900 max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-6">
         <div className="flex items-center justify-between px-4 h-10">
           <div className="flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">
@@ -74,35 +74,33 @@ export default function NotificationsFeed() {
                 Clear
               </button>
             )}
-            <button 
-              onClick={() => navigate('/settings/notifications')}
-              className="text-[11px] font-bold capitalize tracking-widest text-slate-600 dark:text-slate-300 bg-slate-300 dark:bg-slate-800 px-2.5 py-1.5 rounded-lg transition-colors"
-            >
-              Settings
-            </button>
           </div>
         </div>
       </header>
 
       {/* ── NOTIFICATIONS FEED ── */}
-      <div className="max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+4rem)] animate-slide-up divide-y divide-slate-100 dark:divide-slate-800">
+      <div className="max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+4rem)] animate-slide-up space-y-2.5 px-1.5">
         {notifications.map((n: any) => (
-          <div key={n.id} className={`p-4 flex gap-4 transition-colors ${!n.read ? 'bg-primary/5 dark:bg-primary/10' : ''}`}>
+          <div key={n.id} className={`p-4 flex gap-2 transition-colors rounded-xl border ${
+            !n.read 
+              ? 'bg-primary/5 dark:bg-primary/10 border-primary/20 dark:border-primary/20' 
+              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/50'
+          }`}>
              <div className="mt-1 shrink-0">{getIcon(n.type)}</div>
              <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-0.5 gap-2">
                   <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{n.title}</p>
-                  <div className="flex items-center gap-1 shrink-0">
-                    <span className="text-[10px] text-slate-400 font-medium tabular-nums capitalize tracking-wider">
+                  <div className="flex items-center gap-2 shrink-0">
+                    <p className="text-[10px] text-slate-400 font-medium tabular-nums">
                       {formatRelativeTime(n.createdAt || n.date)}
-                    </span>
+                    </p>
+                    {!n.read && (
+                      <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    )}
                   </div>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed pr-2">{n.content}</p>
              </div>
-             {!n.read && (
-               <div className="w-2 h-2 rounded-full bg-primary mt-2 shrink-0 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-             )}
           </div>
         ))}
         

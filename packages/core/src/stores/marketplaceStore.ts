@@ -198,9 +198,13 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
     if (!userId) return null;
 
     try {
+      const { generateTrackingId } = await import('../utils/tracking');
+      const prefix = (listingData as any).isBulkDrive || (listingData as any).groupMetadata ? 'GRQ' : ((listingData as any).targetAgentId || (listingData as any).target_agent_id ? 'RFQ' : 'LST');
+
       const { data, error } = await supabase
         .from('marketplace_listings')
         .insert({
+          tracking_id: generateTrackingId(prefix),
           seller_id: userId,
           status: 'active',
           material: (listingData as any).material,
@@ -314,9 +318,12 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
     if (!userId) return;
 
     try {
+      const { generateTrackingId } = await import('../utils/tracking');
+
       const { data, error } = await supabase
         .from('marketplace_orders')
         .insert({
+          tracking_id: generateTrackingId('ORD'),
           listing_id: listing.id,
           buyer_id: userId,
           seller_id: listing.sellerId,
@@ -556,9 +563,11 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
     if (!userId) return;
 
     try {
+      const { generateTrackingId } = await import('../utils/tracking');
       const { data, error } = await supabase
         .from('marketplace_offers')
         .insert({
+          tracking_id: generateTrackingId('OFR'),
           listing_id: listing.id,
           buyer_id: userId,
           seller_id: listing.sellerId,
@@ -615,9 +624,11 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
 
       // 2. Create actual order
       // 2. Create actual order
+      const { generateTrackingId } = await import('../utils/tracking');
       const { data: orderData, error: orderError } = await supabase
         .from('marketplace_orders')
         .insert({
+          tracking_id: generateTrackingId('ORD'),
           listing_id: offer.listingId,
           buyer_id: offer.buyerId,
           seller_id: offer.sellerId,

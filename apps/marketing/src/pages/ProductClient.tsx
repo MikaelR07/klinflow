@@ -402,7 +402,18 @@ export default function ProductClient() {
       <section className="relative pt-24 pb-16 md:pt-40 md:pb-32 min-h-[90vh] flex items-center overflow-hidden">
         {/* Background Layer */}
         <div className="absolute inset-0 z-0">
-          {/* Removed local LINE GRID to prevent double-grid effect with global Layout grid */}
+          <div
+            className={`absolute inset-0 ${isDarkMode ? "bg-surface-950" : "bg-transparent"}`}
+          />
+          <div
+            className={`absolute inset-0 ${isDarkMode ? "opacity-[0.3]" : "opacity-[0.8]"}`}
+            style={{
+              backgroundImage: `linear-gradient(${isDarkMode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)"} 1px, transparent 1px), linear-gradient(90deg, ${isDarkMode ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)"} 1px, transparent 1px)`,
+              backgroundSize: "60px 60px",
+            }}
+          />
+          <div className="absolute top-20 right-20 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-emerald-500/8 blur-[120px] rounded-full pointer-events-none" />
         </div>
 
         <div className="max-w-[90rem] mx-auto px-6 md:px-12 lg:px-16 relative z-10 w-full mt-4 lg:-mt-40">
@@ -410,7 +421,7 @@ export default function ProductClient() {
             {/* Left side: Text */}
             <div className="max-w-2xl">
               {/* Pill */}
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8 ${isDarkMode ? "bg-surface-800/80 text-slate-200 border border-white/10" : "bg-white/80 backdrop-blur-sm text-slate-600 shadow-sm border border-slate-100"}`}>
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8 ${isDarkMode ? "bg-surface-900 text-slate-200 border border-white/10" : "bg-white/80 backdrop-blur-sm text-slate-600 shadow-sm border border-slate-100"}`}>
                 <div className="w-2 h-2 rounded-full bg-primary" />
                 Multi Persona Application
               </div>
@@ -419,7 +430,7 @@ export default function ProductClient() {
               <h1
                 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-[1.1] ${isDarkMode ? "text-white" : "text-[#0f172a]"}`}
               >
-                Recycling Made Simple,<br />
+                Recycling Made,<br />
                  Rewarding<br />
                 <span className="text-primary">and Transparent.</span>
               </h1>
@@ -433,13 +444,13 @@ export default function ProductClient() {
               
               {/* Buttons */}
               <div className="flex flex-row flex-wrap gap-3 sm:gap-4">
-                <Link to="/contact" className="flex-1 sm:flex-none px-4 py-3 sm:px-8 sm:py-4 bg-primary text-white font-bold rounded-full shadow-lg shadow-primary/30 hover:bg-emerald-600 hover:-translate-y-0.5 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap">
+                <Link to="/contact" className="flex-1 sm:flex-none px-4 py-3 sm:px-8 sm:py-4 bg-primary text-white font-bold rounded-full  active:scale-95 transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap">
                   Get Started <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Link>
                 <button
                   className={`flex-1 sm:flex-none px-4 py-3 sm:px-8 sm:py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap ${
                     isDarkMode 
-                      ? "bg-surface-800 text-white hover:bg-surface-700 border border-white/10" 
+                      ? "bg-surface-900 text-white hover:bg-surface-700 border border-white/10" 
                       : "bg-white text-slate-900 shadow-sm hover:bg-slate-50 border border-slate-200"
                   }`}
                 >
@@ -559,7 +570,7 @@ export default function ProductClient() {
       <button
         key={item.id}
         onClick={() => setActiveIssue(i)}
-        className={`text-left p-4 sm:p-6 lg:p-8 rounded-2xl sm:rounded-3xl border transition-all duration-300 flex flex-col ${activeIssue === i ? (isDarkMode ? "bg-surface-800 border-primary" : "bg-white border-primary shadow-lg shadow-primary/10 scale-[1.02]") : (isDarkMode ? "bg-surface-900/50 border-surface-800 hover:border-surface-600 hover:bg-surface-800/50" : "bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100/50")}`}
+        className={`text-left p-4 sm:p-6 lg:p-8 rounded-2xl sm:rounded-3xl border transition-all duration-300 flex flex-col ${activeIssue === i ? (isDarkMode ? "bg-surface-950 border-primary" : "bg-white border-primary shadow-lg shadow-primary/10 scale-[1.02]") : (isDarkMode ? "bg-surface-900/50 border-slate-600 " : "bg-slate-50 border-slate-200")}`}
       >
         <div className={`w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mb-3 sm:mb-5 transition-colors duration-300 ${activeIssue === i ? "bg-primary text-white shadow-lg shadow-primary/30" : (isDarkMode ? "bg-rose-500/10 text-rose-400" : "bg-rose-100 text-rose-600")}`}>
           <item.problem.icon className="w-4 h-4 sm:w-6 sm:h-6" />
@@ -804,13 +815,13 @@ export default function ProductClient() {
             {/* LEFT — How It Works: Circular orbit */}
             <div className="lg:col-span-5 relative w-full aspect-square max-w-[450px] mx-auto lg:mr-auto">
               {/* Center label */}
-              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full flex flex-col items-center justify-center z-20 shadow-xl border-2 border-primary/30 ${isDarkMode ? "bg-surface-800" : "bg-white"}`}>
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full flex flex-col items-center justify-center z-20 shadow-xl border-2 border-primary/30 ${isDarkMode ? "bg-surface-950" : "bg-white"}`}>
                 <span className="text-primary text-2xl font-black">4</span>
                 <span className={`text-xs font-bold ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>Steps</span>
               </div>
 
               {/* Orbit ring */}
-              <div className={`absolute inset-[20%] rounded-full border-2 border-dashed ${isDarkMode ? "border-white/10" : "border-slate-200"}`} />
+              <div className={`absolute inset-[20%] rounded-full border-2 border-dashed ${isDarkMode ? "border-white/40" : "border-slate-200"}`} />
 
               {/* Static nodes with animated connector lines */}
               <div className="absolute inset-0">
@@ -862,7 +873,7 @@ export default function ProductClient() {
                       </div>
 
                       {/* NODE */}
-                      <div className={`relative z-10 w-28 md:w-32 p-3 rounded-2xl text-center shadow-lg border ${isDarkMode ? "bg-surface-800 border-white/10" : "bg-white border-slate-200"} hover:scale-105 transition-transform`}>
+                      <div className={`relative z-10 w-28 md:w-32 p-3 rounded-2xl text-center shadow-lg border ${isDarkMode ? "bg-surface-950 border-white/10" : "bg-white border-slate-200"} hover:scale-105 transition-transform`}>
                         <div className={`w-10 h-10 mx-auto rounded-xl bg-primary/10 ${s.color} flex items-center justify-center mb-2`}>
                           <s.icon className="w-5 h-5" />
                         </div>
@@ -925,7 +936,7 @@ export default function ProductClient() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 * i, duration: 0.5 }}
-                    className={`p-4 sm:p-5 rounded-xl sm:rounded-2xl border ${isDarkMode ? `bg-surface-800 ${node.border}` : `bg-white ${node.border}`} shadow-sm hover:shadow-xl transition-all group relative overflow-hidden`}
+                    className={`p-4 sm:p-5 rounded-xl sm:rounded-2xl border ${isDarkMode ? `bg-surface-950 ${node.border}` : `bg-white ${node.border}`} shadow-sm transition-all group relative overflow-hidden`}
                   >
                     <div className={`absolute -top-8 -right-8 w-24 h-24 rounded-full ${node.bg} blur-3xl opacity-0 group-hover:opacity-60 transition-opacity`} />
                     <div className="relative z-10">

@@ -50,7 +50,7 @@ export default function Contact() {
 
   return (
     <Layout>
-      <section className={`relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden ${isDarkMode ? 'bg-slate-900' : 'bg-white'}`}>
+      <section className={`relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden ${isDarkMode ? 'bg-surface-950' : 'bg-white'}`}>
         {/* Background Elements */}
         {/* <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-500/5 blur-[150px] rounded-full pointer-events-none" /> */}

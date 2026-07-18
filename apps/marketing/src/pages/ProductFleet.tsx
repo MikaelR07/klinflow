@@ -159,7 +159,7 @@ export default function ProductFleet() {
       <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden min-h-[80vh] flex items-center">
         {/* Background Elements */}
         <div className="absolute inset-0 z-0">
-          <div className={`absolute inset-0 ${isDarkMode ? "bg-[#0B0F19]" : "bg-slate-50"}`} />
+          <div className={`absolute inset-0 ${isDarkMode ? "bg-surface-950" : "bg-slate-50"}`} />
           {/* Tech Grid Pattern */}
           <div className="absolute inset-0 opacity-[0.1] dark:opacity-[0.05]"
             style={{ backgroundImage: "linear-gradient(to right, #808080 1px, transparent 1px), linear-gradient(to bottom, #808080 1px, transparent 1px)", backgroundSize: "40px 40px" }}
@@ -200,25 +200,13 @@ export default function ProductFleet() {
             {/* Right Column: Hero Image Showcase */}
             <div className="lg:col-span-7 relative perspective-[2000px] z-20">
               <div className="relative transform rotate-y-[-10deg] rotate-x-[5deg] scale-105 md:scale-110 lg:scale-[1.2] hover:rotate-y-0 hover:rotate-x-0 hover:scale-[1.25] transition-all duration-700 ease-out mt-12 lg:mt-0 lg:ml-12 origin-center lg:origin-left">
-                {/* Image Glow */}
-                <div className="absolute inset-0 bg-indigo-500/20 blur-[100px] rounded-[2rem] pointer-events-none" />
-                
+               
                 {/* The Dashboard Preview */}
-                <div className={`relative rounded-2xl overflow-hidden border shadow-2xl ${isDarkMode ? "bg-[#0F172A] border-white/10 shadow-indigo-500/10" : "bg-white border-slate-200 shadow-slate-200/50"}`}>
-                  <div className={`flex items-center gap-2 px-4 py-3 border-b ${isDarkMode ? "border-white/5 bg-white/5" : "border-slate-100 bg-slate-50"}`}>
-                    <div className="flex gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-                      <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                      <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                    </div>
-                    <div className={`ml-4 px-3 py-1 rounded-md text-[10px] font-mono ${isDarkMode ? "bg-black/20 text-slate-400" : "bg-white border border-slate-200 text-slate-500"}`}>
-                      klinflow.com/enterprise/dashboard
-                    </div>
-                  </div>
+                <div className={`relative rounded-2xl overflow-hidden border shadow-2xl ${isDarkMode ? "bg-surface-900 border-white/10 shadow-indigo-500/10" : "bg-white border-slate-200 shadow-slate-200/50"}`}>
                   <img
                     src="/products/fleet-manager/manager-dashboard.webp"
                     alt="Klinflow Enterprise Dashboard"
-                    className="w-full h-auto object-cover border-t border-transparent"
+                    className="w-full h-auto object-cover"
                   />
                 </div>
               </div>
@@ -229,7 +217,7 @@ export default function ProductFleet() {
       </section>
 
       {/* ── CORE MODULES (PROFESSIONAL ALTERNATING LAYOUT) ─────────────────────────────────────────── */}
-      <section className={`py-20 lg:py-32 ${isDarkMode ? "bg-[#0B0F19]" : "bg-slate-50"}`}>
+      <section className={`py-20 lg:py-32 ${isDarkMode ? "bg-surface-950" : "bg-slate-50"}`}>
         <div className="max-w-[90rem] mx-auto px-6 space-y-20 lg:space-y-20">
           
           <div className="text-center max-w-3xl mx-auto mb-12 lg:mb-20">
@@ -267,28 +255,15 @@ export default function ProductFleet() {
                 <AnimatedFeatureList details={feature.details} color={feature.color} />
               </div>
 
-              {/* Image Content (Refined Professional Presentation) */}
+              {/* Image Content */}
               <div className={`lg:col-span-7 ${index % 2 === 1 ? 'lg:order-1' : 'lg:order-2'}`}>
-                <div className="relative group">
-                  {/* Subtle technical background behind image */}
-                  <div className={`absolute -inset-4 md:-inset-8 rounded-[2rem] border transition-all duration-500 ${isDarkMode ? "bg-white/[0.02] border-white/5 group-hover:bg-white/[0.04]" : "bg-slate-200/50 border-slate-200 group-hover:bg-slate-200"}`} />
-                  
-                  <div className="relative rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-[#0F172A] ring-1 ring-black/5">
-                    {/* Mac-style Top Bar for the screenshot */}
-                    <div className="flex items-center px-4 py-3 bg-[#1E293B] border-b border-white/5">
-                      <div className="flex gap-1.5">
-                        <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                        <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                        <div className="w-2.5 h-2.5 rounded-full bg-slate-600" />
-                      </div>
-                    </div>
-                    <img
-                      src={feature.image}
-                      alt={feature.title}
-                      loading="lazy"
-                      className="w-full h-auto object-cover"
-                    />
-                  </div>
+                <div className={`rounded-xl overflow-hidden shadow-2xl border ${isDarkMode ? "bg-surface-900 border-white/10" : "bg-white border-slate-200"}`}>
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    loading="lazy"
+                    className="w-full h-auto block"
+                  />
                 </div>
               </div>
 
@@ -299,7 +274,7 @@ export default function ProductFleet() {
       </section>
 
       {/* ── ENTERPRISE CTA (MINIMAL & SHARP) ────────────────────────────────────────────────── */}
-      <section className={`py-16 md:py-14 border-t ${isDarkMode ? "bg-[#0F172A] border-white/5" : "bg-primary border-slate-100"}`}>
+      <section className={`py-16 md:py-14 border-t ${isDarkMode ? "bg-surface-900 border-white/5" : "bg-primary border-slate-100"}`}>
         <div className="max-w-[90rem] mx-auto px-6 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-indigo-500/10 text-indigo-500 mb-8 border border-indigo-500/20 shadow-[0_0_40px_rgba(99,102,241,0.2)]">
             <Building2 className="w-8 h-8 md:w-10 md:h-10" />

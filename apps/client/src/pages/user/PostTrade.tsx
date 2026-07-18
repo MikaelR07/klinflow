@@ -96,8 +96,9 @@ export default function PostTrade() {
     .filter((a: any) => a.isHubActive && (a.hubLocation?.latitude || a.location?.latitude))
     .map((hub: any) => ({
       ...hub,
-      distance: hub.distance_km || 999
+      distance: hub.hubDistanceKm || hub.distance_km || 999
     }))
+    .filter((hub: any) => hub.distance <= 50)
     .sort((a: any, b: any) => a.distance - b.distance);
 
   const hubIcon = L.divIcon({
@@ -119,8 +120,9 @@ export default function PostTrade() {
     fetchConfig();
     const lat = customLocation.latitude || -1.2635;
     const lng = customLocation.longitude || 36.8048;
-    fetchNearbyAgents(lat, lng);
-    subscribeToAgents(lat, lng);
+    const currentWeight = parseFloat(quantity) || 0;
+    fetchNearbyAgents(lat, lng, currentWeight);
+    subscribeToAgents(lat, lng, currentWeight);
 
     if (initialMode === 'service') {
       const generalCat = categories.find(c => c.id === 'general');
@@ -137,7 +139,7 @@ export default function PostTrade() {
     }
 
     return () => cleanupAgents();
-  }, [initialMode, categories.length, cleanupAgents, fetchCategories, fetchMaterialPrices, fetchConfig, fetchNearbyAgents, fetchPrices, subscribeToAgents]);
+  }, [initialMode, categories.length, quantity, cleanupAgents, fetchCategories, fetchMaterialPrices, fetchConfig, fetchNearbyAgents, fetchPrices, subscribeToAgents]);
 
   // ── PRICING (Powered by Market Hub) ──
   const selected = selectedSubItem || wasteType;

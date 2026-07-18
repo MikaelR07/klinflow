@@ -52,13 +52,7 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
     return weightKg * factor;
   },
 
-  generateDigitalBatchId: (materialType) => {
-    const prefix = 'CF';
-    const mat = (materialType || 'GEN').substring(0, 3).toUpperCase();
-    const year = new Date().getFullYear().toString().substring(2);
-    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-    return `${prefix}-${mat}-${year}-${random}`;
-  },
+  // generateDigitalBatchId removed — replaced by tracking_id system
 
   // ── FETCH ASSETS ───────────────────────────────────────────
   fetchAssets: async () => {
@@ -141,22 +135,27 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
       const isManual = verificationData.isManual || false;
       
       let finalOwnerId = verificationData.ownerId;
+      let originTrackingId = null;
       if (!finalOwnerId) {
          console.warn('[AssetStore] ownerId missing from verificationData. Recovering from bookings table...');
-         const { data: bData } = await supabase.from('bookings').select('user_id').eq('id', bookingId).single();
+         const { data: bData } = await supabase.from('bookings').select('user_id, tracking_id').eq('id', bookingId).single();
          finalOwnerId = bData?.user_id;
+         originTrackingId = bData?.tracking_id;
+      } else {
+         const { data: bData } = await supabase.from('bookings').select('tracking_id').eq('id', bookingId).single();
+         originTrackingId = bData?.tracking_id;
       }
       
       console.log('[AssetStore] Starting verification payload processing.', {
           bookingId,
-          ownerId: finalOwnerId
+          ownerId: finalOwnerId,
+          trackingId: originTrackingId
       });
 
       let asset = existing;
       if (!existing) {
         // 2. Create Asset Record
         console.log('[AssetStore] Inserting into assets table...');
-        const digitalBatchId = get().generateDigitalBatchId(verificationData.materialType);
         const carbonOffset = get().calculateCarbonOffset(verificationData.materialType, verificationData.weightKg);
         
         const { data: newAsset, error: assetError } = await supabase
@@ -164,6 +163,8 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
           .insert({
             booking_id: bookingId,
             verifier_id: userId,
+            tracking_id: originTrackingId,
+            origin_tracking_id: originTrackingId,
             material_type: verificationData.materialType,
             grade: verificationData.grade,
             weight_kg: verificationData.weightKg,
@@ -172,7 +173,6 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
             photo_url: verificationData.photoUrl || null,
             is_manual: isManual,
             status: 'verified',
-            digital_batch_id: digitalBatchId,
             metadata: {
               carbon_offset_kg: carbonOffset,
               chain_of_custody: [
@@ -261,7 +261,7 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
     try {
       const material = MATERIAL_TYPES[data.materialType as keyof typeof MATERIAL_TYPES] || { basePrice: 10 };
       const estimatedValue = data.weightKg * material.basePrice;
-      const digitalBatchId = get().generateDigitalBatchId(data.materialType);
+      const { generateTrackingId } = await import('../utils/tracking');
       const carbonOffset = get().calculateCarbonOffset(data.materialType, data.weightKg);
 
       const { data: asset, error } = await supabase
@@ -274,7 +274,7 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
           status: 'matched', // Weavers own their side collection immediately
           source: ASSET_SOURCES.SELF,
           grade: 'B', // Default for self-declared
-          digital_batch_id: digitalBatchId,
+          tracking_id: generateTrackingId('SCL'),
           metadata: {
             carbon_offset_kg: carbonOffset,
             chain_of_custody: [

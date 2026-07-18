@@ -308,23 +308,15 @@ export const walletService = {
   },
 
   /**
-   * Fetch paginated wallet transactions
+   * Fetch paginated wallet transactions with enriched counterparty data.
+   * For 'payment' type (agent paying sellers), returns seller name & phone.
    */
   async getWalletTransactions(userId: string, limit: number = 50): Promise<any[]> {
     try {
-      const { data, error } = await supabase
-        .from('wallet_transactions')
-        .select(`
-          id,
-          amount,
-          transaction_type,
-          metadata,
-          created_at,
-          reference_id
-        `)
-        .eq('profile_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(limit);
+      const { data, error } = await supabase.rpc('get_agent_wallet_transactions', {
+        p_user_id: userId,
+        p_limit: limit
+      });
 
       if (error) throw error;
       return data || [];

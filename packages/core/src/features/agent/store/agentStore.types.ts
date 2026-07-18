@@ -9,6 +9,7 @@ export interface AgentJob {
   material: string | null;
   bags: number;
   actual_weight_kg: number;
+  weight_kg?: number;
   location: string | null;
   time: string | null;
   status: string;

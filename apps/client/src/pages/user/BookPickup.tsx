@@ -187,6 +187,8 @@ export default function BookPickup() {
   const [selectedCompanyId, setSelectedCompanyId] = useState(preselectedAgentId);
 
   const filteredAgents = liveAgents.filter(agent => {
+    if (!agent.isOnline) return false;
+    
     // Distance filtering is now handled by the backend geospatial RPC.
     let lat = agent.location?.latitude;
     let lon = agent.location?.longitude;

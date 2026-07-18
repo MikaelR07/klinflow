@@ -61,7 +61,7 @@ export default function AgentHomeActivePickup({ activePickup, navigate }: AgentH
                Weight: {activePickup.actual_weight || activePickup.rfq?.requested_weight || 0} KG
               </p>
               <p className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-0.5">
-                ID: {activePickup.id.slice(0, 8)}
+                ORDER REF: {activePickup.id.slice(0, 8)}
               </p>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 text-[10px] font-bold text-slate-600 truncate max-w-[100px]">

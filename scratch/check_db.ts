@@ -1,13 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
-dotenv.config({ path: '/home/mikael/Desktop/Coding/Klinflow/apps/client/.env.local' });
+import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = 'https://heqxpcrguaopiimsuqmk.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlcXhwY3JndWFvcGlpbXN1cW1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNjM2NjgsImV4cCI6MjA5MTkzOTY2OH0.vGES_grqNJDhSJJPvodzAEn02uF7wScNIOk9AhIbczI'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-async function test() {
-  const { data, error } = await supabase.rpc('hello_world'); // just checking if connected
-  console.log("Connected");
+async function check() {
+  const { data, error } = await supabase.from('profiles').select('id, name, service_profile').order('updated_at', { ascending: false }).limit(2)
+  console.log(JSON.stringify(data, null, 2))
 }
-test();
+
+check()

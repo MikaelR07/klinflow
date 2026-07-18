@@ -243,7 +243,7 @@ export default function ProductAgent() {
               <h1
                 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-[1.1] ${isDarkMode ? "text-white" : "text-[#0f172a]"}`}
               >
-                Collect Smarter.
+                Collect and
                 <br />
                 Earn More.
                 <br />
@@ -268,7 +268,7 @@ export default function ProductAgent() {
                       : "bg-white text-slate-900 shadow-sm hover:bg-slate-50 border border-slate-200"
                   }`}
                 >
-                  Earning Calculator 
+                  Earning Calculator(coming soon) 
                 </Link>
               </div>
             </div>
@@ -369,7 +369,7 @@ export default function ProductAgent() {
                 <button
                   key={item.id}
                   onClick={() => setActiveFeature(i)}
-                  className={`text-left p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl border transition-all duration-300 flex flex-col ${activeFeature === i ? (isDarkMode ? "bg-surface-800 border-blue-500 shadow-lg shadow-blue-500/10" : "bg-white border-blue-500 shadow-lg shadow-blue-500/10 scale-[1.02]") : isDarkMode ? "bg-surface-900/50 border-surface-800 hover:border-surface-600 hover:bg-surface-800/50" : "bg-white/60 border-slate-200 hover:border-slate-300 hover:bg-white"}`}
+                  className={`text-left p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl border transition-all duration-300 flex flex-col ${activeFeature === i ? (isDarkMode ? "bg-surface-950 border-blue-500" : "bg-white border-blue-500 shadow-lg shadow-blue-500/10 scale-[1.02]") : isDarkMode ? "bg-surface-900/50 border-surface-900" : "bg-white/60 border-slate-200 hover:border-slate-300 hover:bg-white"}`}
                 >
                   <div
                     className={`w-8 h-8 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex items-center justify-center mb-3 sm:mb-4 transition-colors duration-300 ${activeFeature === i ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30" : isDarkMode ? "bg-rose-500/10 text-rose-400" : "bg-rose-100 text-rose-600"}`}
@@ -407,7 +407,7 @@ export default function ProductAgent() {
                         type: "spring",
                         bounce: 0.3,
                       }}
-                      className={`absolute inset-0 w-full p-6 lg:p-8 rounded-2xl sm:rounded-3xl border shadow-xl flex flex-col justify-center ${isDarkMode ? "bg-blue-900/20 border-blue-500/30 shadow-blue-900/20" : "bg-blue-50 border-blue-200 shadow-blue-500/10"}`}
+                      className={`absolute inset-0 w-full p-6 lg:p-8 rounded-2xl sm:rounded-3xl border shadow-xl flex flex-col justify-center ${isDarkMode ? "bg-blue-900/20 border-blue-500/30" : "bg-blue-50 border-blue-200"}`}
                     >
                       <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-4 lg:mb-6 shadow-lg shadow-blue-500/30">
                         <SolutionIcon className="w-5 h-5 lg:w-6 lg:h-6" />
@@ -473,11 +473,11 @@ export default function ProductAgent() {
                   className={`w-full text-left p-5 sm:p-6 rounded-2xl border transition-all duration-300 ${
                     activeShowcase === i
                       ? isDarkMode
-                        ? "bg-surface-800 border-blue-500/40 shadow-lg"
-                        : "bg-white border-blue-500/30 shadow-lg shadow-blue-500/5"
+                        ? "bg-surface-950 border-blue-500/40 shadow-lg"
+                        : "bg-white border-blue-500 shadow-lg shadow-blue-500/5"
                       : isDarkMode
-                        ? "bg-surface-900/30 border-surface-800 hover:bg-surface-800/50"
-                        : "bg-slate-50/50 border-slate-200 hover:bg-white"
+                        ? "bg-surface-900 border-surface-900"
+                        : "bg-slate-50/50 border-slate-200"
                   }`}
                 >
                   <div className="flex items-start gap-4">
@@ -635,10 +635,10 @@ export default function ProductAgent() {
                   className={`w-full text-left p-5 sm:p-6 rounded-2xl border transition-all duration-300 ${
                     activeShowcase2 === i
                       ? isDarkMode
-                        ? "bg-surface-800 border-blue-500/40 shadow-lg"
-                        : "bg-white border-blue-500/30 shadow-lg shadow-blue-500/5"
+                        ? "bg-surface-950 border-blue-500/40 shadow-lg"
+                        : "bg-white border-blue-500 shadow-lg shadow-blue-500/5"
                       : isDarkMode
-                        ? "bg-surface-900/30 border-surface-800 hover:bg-surface-800/50"
+                        ? "bg-surface-900 border-surface-900"
                         : "bg-slate-50/50 border-slate-200 hover:bg-white"
                   }`}
                 >
@@ -893,7 +893,7 @@ export default function ProductAgent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, duration: 0.5 }}
-                className={`group p-5 sm:p-8 rounded-2xl sm:rounded-3xl border transition-all duration-300 hover:shadow-xl ${isDarkMode ? "bg-surface-900/50 border-surface-800 hover:border-surface-600" : "bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-white"}`}
+                className={`group p-5 sm:p-8 rounded-2xl sm:rounded-3xl border transition-all duration-300 hover:shadow-xl ${isDarkMode ? "bg-surface-900 border-surface-900" : "bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-white"}`}
               >
                 <div
                   className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-${f.color}-500/10 text-${f.color}-500 flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform`}

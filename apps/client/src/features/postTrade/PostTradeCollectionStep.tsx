@@ -67,12 +67,16 @@ export default function PostTradeCollectionStep({
   };
 
   // ── FILTER LIVE AGENTS FOR PICKUP VIEW ──
-  // Show Independent, Company Admins, and if a hub is selected, its Fleet Drivers.
+  // Show Independent and Fleet Drivers directly (Uber-like behavior). Company Admins are not shown here.
   const filteredAgents = liveAgents.filter((agent: any) => {
-    if (agent.isHubActive) return false;
-    if (agent.agentAccountType === 'independent' || agent.agentAccountType === 'company_admin') return true;
-    if (drillDownCompany && agent.agentAccountType === 'fleet_driver' && agent.companyId === drillDownCompany.id) return true;
-    return false;
+    // Only show online agents on the live dispatch map
+    if (!agent.isOnline) return false;
+
+    // Must have a valid pickup location within 50km
+    const pDist = agent.pickupDistanceKm ?? agent.distance_km;
+    if (pDist == null || pDist > 50) return false;
+
+    return agent.agentAccountType === 'independent' || agent.agentAccountType === 'fleet_driver';
   });
 
   return (
@@ -243,26 +247,25 @@ export default function PostTradeCollectionStep({
       ) : (
         <div className="space-y-4">
           {/* Active Selection Cards */}
-          {(selectedAgent || drillDownCompany) && (
+          {selectedAgent && (
             <div className="bg-white dark:bg-slate-800 p-3.5 rounded-2xl border border-primary/20 shadow-xl mt-3 animate-slide-up">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-lg">
-                    {drillDownCompany && !selectedAgent ? '🏢' : '🚛'}
+                    🚛
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-primary capitalize tracking-widest leading-none">
-                      {drillDownCompany && !selectedAgent ? 'Fleet Hub Selected' : 'Targeting Agent'}
+                      Targeting Agent
                     </p>
                     <h4 className="text-xs font-semibold text-slate-900 dark:text-white mt-1">
-                      {selectedAgent ? selectedAgent.name : (drillDownCompany?.companyName || 'Selected Hub')}
+                      {selectedAgent.name}
                     </h4>
                   </div>
                 </div>
                 <button
                   onClick={() => {
                     setSelectedAgent(null);
-                    setDrillDownCompany(null);
                     toast.success("Selection Cleared");
                   }}
                   className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors"
@@ -270,41 +273,6 @@ export default function PostTradeCollectionStep({
                   <X className="w-4 h-4" />
                 </button>
               </div>
-            </div>
-          )}
-
-          {/* Fleet Drivers List for Selected Hub */}
-          {drillDownCompany && !selectedAgent && (
-            <div className="space-y-3 mt-4 animate-slide-up">
-              <h3 className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Available Fleet Agents</h3>
-              {liveAgents.filter((a: any) => a.agentAccountType === 'fleet_driver' && a.companyId === drillDownCompany.id).length > 0 ? (
-                <div className="space-y-2">
-                  {liveAgents.filter((a: any) => a.agentAccountType === 'fleet_driver' && a.companyId === drillDownCompany.id).map((agent: any) => (
-                    <button
-                      key={agent.id}
-                      onClick={() => setSelectedAgent(agent)}
-                      className="w-full flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-primary transition-all active:scale-95 shadow-sm"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                          <Truck className="w-5 h-5" />
-                        </div>
-                        <div className="text-left">
-                          <p className="text-sm font-semibold dark:text-white leading-none mb-1">{agent.name || 'Fleet Agent'}</p>
-                          <p className="text-[10px] font-semibold capitalize tracking-widest text-slate-400">
-                            {agent.isOnline ? '🟢 Online' : '⚪ Offline'}
-                          </p>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-5 h-5 text-slate-300" />
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="p-4 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
-                  <p className="text-xs font-semibold text-slate-400">No agents currently available for this hub.</p>
-                </div>
-              )}
             </div>
           )}
 

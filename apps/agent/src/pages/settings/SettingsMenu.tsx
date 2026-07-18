@@ -48,10 +48,10 @@ export default function SettingsMenu() {
   ];
 
   const quickActions = [
-    ...(isFleet ? [] : [{ label: 'Wallet', icon: DollarSign, path: '/wallet', color: 'bg-indigo-500' }]),
-    { label: 'Finance', icon: Wallet, path: '/finance', color: 'bg-emerald-500' },
+    { label: 'Wallet', icon: DollarSign, path: isFleet ? '/deposit' : '/wallet', color: 'bg-indigo-500' },
     { label: 'Pricing', icon: Settings, path: isCompanyOwner ? '/admin/services' : '/settings/configuration', color: 'bg-blue-500' },
     { label: 'Reviews', icon: Star, path: '/reviews', color: 'bg-amber-500' },
+    { label: 'Notifications', icon: Bell, path: '/settings/notifications', color: 'bg-rose-500' },
   ];
 
   const secondaryMenu = [
@@ -64,9 +64,9 @@ export default function SettingsMenu() {
   ];
 
   return (
-    <div className="flex flex-col bg-white dark:bg-slate-900 transition-colors pb-5">
+    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors pb-5">
       {/* FIXED TOP NAV */}
-      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-white dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-800">
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-white dark:bg-slate-800 shadow-sm border-b border-slate-100 dark:border-slate-800">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -88,7 +88,7 @@ export default function SettingsMenu() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] pb-6 max-w-lg mx-auto w-full px-1.5 space-y-6">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+5rem)]  max-w-lg mx-auto w-full px-1.5 space-y-6">
         {/* ── HERO BENTO CARD ── */}
         <div className="relative overflow-hidden rounded-[1rem] bg-gradient-to-br from-primary via-emerald-600 to-teal-700 p-4 text-white  group">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 dark:bg-primary/5 rounded-full blur-[80px] -mr-32 -mt-32 transition-transform group-hover:scale-110 duration-700" />
@@ -127,12 +127,6 @@ export default function SettingsMenu() {
                     <Copy className="w-3 h-3 text-white/70" />
                   </button>
                 )}
-                <button
-                  onClick={(e) => { e.stopPropagation(); navigate('/settings/profile'); }}
-                  className="flex items-center gap-1 mt-2 text-emerald-100 font-bold text-[9px] capitalize tracking-[0.2em] hover:text-white transition-colors"
-                >
-                  Edit Profile <ChevronRight className="w-2 h-2" />
-                </button>
               </div>
             </div>
 
@@ -161,7 +155,7 @@ export default function SettingsMenu() {
         </div>
 
         {/* ── AGENT STATUS ── */}
-        {!isCompanyOwner && (
+        {isFleetDriver && (
           <div className="space-y-3 mb-6">
             <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Agent Status</p>
             <div className="bg-white dark:bg-slate-900 rounded-[1rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
@@ -264,8 +258,8 @@ export default function SettingsMenu() {
         </div>
 
         <div className="text-center space-y-1 opacity-40 mt-8">
-          <p className="text-[10px] font-bold capitalize tracking-[0.3em]">Klinflow Operating System</p>
-          <p className="text-[9px] font-medium italic">Empowering the Circular Economy • V1.4.2</p>
+          <p className="text-[10px] font-bold capitalize tracking-[0.3em]">Klinflow Agent</p>
+          <p className="text-[9px] font-medium italic">Empowering the Circular Economy • V1.0.0</p>
         </div>
       </main>
 

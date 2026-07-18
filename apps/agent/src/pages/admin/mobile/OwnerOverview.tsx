@@ -47,7 +47,7 @@ export default function OwnerOverview() {
 
 
   const scrollableQuickActions = [
-    { title: 'Deposit Requests', icon: Receipt, path: '/finance', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
+    { title: 'Deposit Requests', icon: Receipt, path: '/wallet', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
     { title: 'View Disputes', icon: ShieldAlert, path: '/disputes', color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10' },
     { title: 'Critical Alerts', icon: AlertTriangle, path: '/alerts', color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10' },
     { title: 'Price Override', icon: DollarSign, path: '/approvals', color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-500/10' },
@@ -56,7 +56,6 @@ export default function OwnerOverview() {
   // 2. Module Quick Links data
   const quickLinks = [
     { title: 'Disputes', desc: 'Resolve issues', icon: ShieldAlert, path: '/disputes', color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10' },
-    { title: 'Finance', desc: 'View wallets', icon: Receipt, path: '/finance', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
   ];
 
   return (
@@ -103,7 +102,7 @@ export default function OwnerOverview() {
                 </h2>
               </div>
               <button
-                onClick={() => navigate('/finance')}
+                onClick={() => navigate('/wallet')}
                 className="bg-white text-blue-700 hover:bg-blue-50 px-6 py-2 rounded-xl font-black text-[10px] tracking-widest flex items-center justify-center active:scale-95 transition-all whitespace-nowrap shadow-sm uppercase w-full"
               >
                 Deposit

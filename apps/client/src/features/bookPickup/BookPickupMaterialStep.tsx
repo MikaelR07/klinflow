@@ -178,25 +178,25 @@ export default function BookPickupMaterialStep({
           <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4">
             <input
               type="range"
-              min="1"
+              min="5"
               max="100"
-              value={quantity || 1}
+              value={quantity || 5}
               onChange={(e) => setQuantity(parseInt(e.target.value))}
               className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary"
             />
             <div className="flex items-center gap-4">
-              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 rounded-[14px] bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-xl font-semibold dark:text-white active:scale-95 transition-transform shrink-0">-</button>
+              <button onClick={() => setQuantity(Math.max(5, quantity - 1))} className="w-10 h-10 rounded-[14px] bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-xl font-semibold dark:text-white active:scale-95 transition-transform shrink-0">-</button>
               <div className="flex-1 text-center relative group">
                 <input
                   type="number"
-                  min="1"
+                  min="5"
                   value={quantity || ''}
                   onChange={(e) => {
                     const val = parseInt(e.target.value);
-                    setQuantity(isNaN(val) ? '' : Math.max(1, val));
+                    setQuantity(isNaN(val) ? '' : Math.max(5, val));
                   }}
                   onBlur={() => {
-                    if (!quantity || quantity < 1) setQuantity(1);
+                    if (!quantity || quantity < 5) setQuantity(5);
                   }}
                   className="w-full bg-transparent text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter text-center outline-none appearance-none"
                   style={{ MozAppearance: 'textfield' }}

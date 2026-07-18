@@ -10,7 +10,7 @@ interface ThemeState {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set, get) => ({
-      isDarkMode: false,
+      isDarkMode: true,
       toggleTheme: () => {
         const newTheme = !get().isDarkMode;
         set({ isDarkMode: newTheme });
@@ -21,7 +21,7 @@ export const useThemeStore = create<ThemeState>()(
       }
     }),
     {
-      name: 'klinflow-theme-state-v4',
+      name: 'klinflow-theme-state-v5',
       onRehydrateStorage: () => (state) => {
         if (state) state.initTheme();
       }

@@ -35,25 +35,36 @@ export default function AboutUs() {
       <div className="pb-20">
         
         {/* Hero */}
-        <div className="max-w-7xl mx-auto px-6 pt-16 pb-20">
-          <div className="max-w-4xl">
-            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-8 border ${isDarkMode ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
-              <Globe2 className="w-3.5 h-3.5" /> About Klinflow
+        <div className="relative w-full pt-16 pb-20 overflow-hidden">
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div
+              className={`absolute inset-0 opacity-[0.05] ${isDarkMode ? "text-white" : "text-slate-900"}`}
+              style={{
+                backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(to right, currentColor 1px, transparent 1px)`,
+                backgroundSize: '40px 40px'
+              }}
+            />
+          </div>
+          <div className="relative z-10 max-w-7xl mx-auto px-6">
+            <div className="max-w-4xl">
+              <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-8 border ${isDarkMode ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
+                <Globe2 className="w-3.5 h-3.5" /> About Klinflow
+              </div>
+              <h1 className={`text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-8 leading-[1.05] ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                Industrializing the{' '}
+                <span className="text-emerald-500">circular economy</span>, one transaction at a time.
+              </h1>
+              <p className={`text-xl leading-relaxed max-w-3xl ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                Klinflow is the operating system for the global waste-to-value supply chain. We provide the infrastructure, intelligence, and financial rails that transform scattered informal recycling networks into efficient, traceable, and profitable operations.
+              </p>
             </div>
-            <h1 className={`text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-8 leading-[1.05] ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-              Industrializing the{' '}
-              <span className="text-emerald-500">circular economy</span>, one transaction at a time.
-            </h1>
-            <p className={`text-xl leading-relaxed max-w-3xl ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-              Klinflow is the operating system for the global waste-to-value supply chain. We provide the infrastructure, intelligence, and financial rails that transform scattered informal recycling networks into efficient, traceable, and profitable operations.
-            </p>
           </div>
         </div>
 
         {/* Stats Banner */}
-        <div className="w-full relative py-20 bg-slate-900 overflow-hidden">
+        <div className={`w-full relative py-20 overflow-hidden ${isDarkMode ? 'bg-surface-900' : 'bg-slate-900'}`}>
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-luminosity"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-900"></div>
+          <div className={`absolute inset-0 bg-gradient-to-r ${isDarkMode ? 'from-surface-900 via-surface-900/90 to-surface-900' : 'from-slate-900 via-slate-900/90 to-slate-900'}`}></div>
           <div className="relative z-10 max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
               {[

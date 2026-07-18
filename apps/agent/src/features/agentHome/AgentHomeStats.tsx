@@ -94,7 +94,7 @@ export default function AgentHomeStats({
             {/* LEFT */}
             <div className="flex-1 min-w-0 pl-1">
               <p className="text-[12px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
-                Stock Value
+                Collected Value
               </p>
 
               <div className="flex items-baseline gap-1 mb-2 min-w-0">

@@ -14,11 +14,14 @@ import {
   ChevronDown,
   Loader2,
   Brain,
-  ShieldCheck
+  ShieldCheck,
+  Banknote,
+  Scan
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase, usePriceStore, useServiceStore, useAgentStore, useAuthStore, WASTE_CATEGORIES, getCategoryBySlug } from '@klinflow/core';
 import AssetBadge from './AssetBadge';
+import MaterialIdentifierModal from './MaterialIdentifierModal';
 import mpesaLogo from '../assets/logos/mpesa.svg';
 import airtelLogo from '../assets/logos/airtel.svg';
 import equityLogo from '../assets/logos/equity.svg';
@@ -36,14 +39,13 @@ interface AIScannerModalProps {
   onVerify: (data: any) => void;
   booking: any;
   role?: 'agent' | 'user';
+  prefillCategory?: string | null;
 }
 
-export default function AIScannerModal({ isOpen, onClose, onVerify, booking, role = 'agent' }: AIScannerModalProps) {
+export default function AIScannerModal({ isOpen, onClose, onVerify, booking, role = 'agent', prefillCategory }: AIScannerModalProps) {
   const { categories, materialPrices, fetchMaterialPrices, fetchCategories } = useServiceStore();
   const { agentConfig, getEffectivePrice, companyProfile } = useAgentStore();
   const { profile } = useAuthStore();
-  const [step, setStep] = useState('result'); 
-  const [grade, setGrade] = useState(null);
 
   React.useEffect(() => {
     if (categories.length === 0) fetchCategories();
@@ -85,8 +87,10 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
     return [...filteredDB, ...newCustom];
   }, [categories, agentConfig, profile]);
 
-  const initialMaterial = (booking?.material || booking?.wasteType || uiCategories[0]?.id || 'recyclable').toLowerCase();
-  const [material, setMaterial] = useState(initialMaterial);
+  const [material, setMaterial] = useState(prefillCategory || booking?.material || booking?.wasteType || uiCategories[0]?.id || 'recyclable');
+  const [subcategory, setSubcategory] = useState<string | null>(null);
+  const [weight, setWeight] = useState(booking?.actual_weight_kg || booking?.weightKg || booking?.bags || 10);
+  const [isIdentifierOpen, setIsIdentifierOpen] = useState(false);
   
   const currentCategory = uiCategories.find((c: any) => c.id === material || (c as any).slug === material) || uiCategories[0];
 
@@ -128,21 +132,27 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
       });
   }, [currentCategory, companyProfile, profile, materialPrices, getEffectivePrice]);
 
-  const initialSub = activeSubcategories[0]?.id || 'pet';
-  const [subcategory, setSubcategory] = useState(initialSub);
+  React.useEffect(() => {
+    if (prefillCategory && uiCategories.some(c => c.id === prefillCategory || c.slug === prefillCategory)) {
+      setMaterial(prefillCategory);
+    } else if (!material && uiCategories.length > 0) {
+      setMaterial(uiCategories[0].id);
+    }
+  }, [uiCategories, prefillCategory]);
 
   React.useEffect(() => {
     if (activeSubcategories.length > 0) {
-      if (!activeSubcategories.some((s: any) => s.id === subcategory)) {
+      if (!subcategory || !activeSubcategories.some((s: any) => s.id === subcategory)) {
         setSubcategory(activeSubcategories[0].id);
       }
     }
-  }, [activeSubcategories]);
+  }, [activeSubcategories, subcategory]);
 
-  const [weight, setWeight] = useState(booking?.actual_weight_kg || booking?.weightKg || booking?.bags || 10); // weight in KG
+
   
   const [payoutTarget, setPayoutTarget] = useState(booking?.phone || '');
   const [selectedProvider, setSelectedProvider] = useState(PAYOUT_PROVIDERS[0]);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
 
   // Sync state when booking data loads
   React.useEffect(() => {
@@ -226,98 +236,13 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
   }, [weight, agentRate, isMarketTrade, customPayoutAmount, basePayoutAmount]);
 
   const [isProcessing, setIsProcessing] = useState(false);
-  const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = useState(null);
-  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
-  const [isManual, setIsManual] = useState(true); 
-  const [aiReason, setAiReason] = useState(null);
 
-  const [digitalBatchId] = useState(() => {
-    const mat = String(booking?.material || booking?.wasteType || 'PLA').substring(0,3).toUpperCase();
-    const suffix = Math.random().toString(36).substring(2,6).toUpperCase();
-    return `KF-${mat}-${suffix}`;
-  });
+  // Use the real tracking_id from the booking (created at source)
+  const trackingId = booking?.tracking_id || booking?.trackingId || null;
 
   if (!isOpen) return null;
 
-  const startScan = async () => {
-    if (!photoFile) {
-      alert("Please capture a photo first!");
-      return;
-    }
-    setStep('scanning');
-    try {
-      // 1. Convert to Base64 for Vision API
-      const reader = new FileReader();
-      const base64Promise = new Promise((resolve) => {
-        reader.onload = () => resolve((reader.result as string).split(',')[1]);
-        reader.readAsDataURL(photoFile);
-      });
-      const imageBase64 = await base64Promise;
 
-      // 2. Upload to Storage for record keeping
-      const fileExt = photoFile?.name?.split('.').pop() || 'jpg';
-      const fileName = `${booking.id}-${Math.random()}.${fileExt}`;
-      const filePath = `verifications/${fileName}`;
-      const { data: uploadData, error: uploadError } = await supabase.storage.from('assets-verified').upload(filePath, photoFile);
-      if (uploadError) throw uploadError;
-      
-      const { data: { publicUrl } } = supabase.storage.from('assets-verified').getPublicUrl(filePath);
-      setPhotoUrl(publicUrl || null);
-
-      // 3. Call HygeneX Vision Engine
-      const { data: { session } } = await supabase.auth.getSession();
-      const EDGE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/hygenex-agent`;
-      
-      console.log('[AI Debug] Hitting URL:', EDGE_URL);
-      console.log('[AI Debug] Session Present:', !!session);
-      
-      const response = await fetch(EDGE_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`,
-          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY
-        },
-        body: JSON.stringify({
-          type: 'vision_scan',
-          userId: profile?.id,
-          payload: { 
-            imageBase64,
-            materialHint: material
-          }
-        })
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('[AI Debug] Server Error Response:', errorText);
-        throw new Error(`AI Scan Failed: ${response.status} ${errorText}`);
-      }
-      
-      const analysis = await response.json();
-      console.log('[AI Debug] Analysis Success:', analysis);
-
-      // 4. Update UI with Real Results
-      if (analysis.material) setMaterial(analysis.material.toLowerCase());
-      if (analysis.grade) {
-        // Find matching subcategory if possible
-        const catData = getCategoryBySlug(analysis.material || material);
-        const bestSub = catData?.subcategories?.find(s => s.id.includes(analysis.grade.toLowerCase())) || catData?.subcategories?.[0];
-        if (bestSub) setSubcategory(bestSub.id);
-        setGrade(analysis.grade);
-      }
-      
-      // Store AI reason for display
-      setAiReason(analysis.reason);
-      setStep('result');
-
-    } catch (err) {
-      console.error('[Vision Scan] Error:', err);
-      toast.error("AI Scan Failed", { description: "Falling back to manual verification." });
-      setStep('result');
-    }
-  };
 
   const handleFinalConfirm = async () => {
     setIsProcessing(true);
@@ -333,7 +258,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
         payout_method: selectedProvider?.id,
         payout_target: payoutTarget,
         status: 'verified',
-        digitalBatchId: digitalBatchId
+        trackingId: trackingId
       });
       onClose();
     } catch (err) {
@@ -351,10 +276,10 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
         <div className="p-6 border-b border-slate-300 dark:border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-4">
              <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
-                <Sparkles className="w-6 h-6" />
+                <Banknote className="w-6 h-6" />
              </div>
              <div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white leading-none">Smart Verification</h3>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white leading-none">Manual Entry</h3>
                 <p className="text-xs font-bold text-slate-400 capitalize tracking-widest mt-1">Asset Intake & Payout</p>
              </div>
           </div>
@@ -363,9 +288,26 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
           </button>
         </div>
 
-        <div className="max-h-[70vh] overflow-y-auto py-2">
-          {step === 'result' && (
-            <div className="space-y-4">
+        <div className="p-4 space-y-6 max-h-[75vh] overflow-y-auto">
+          {/* AI Scan Button */}
+          <button 
+            onClick={() => setIsIdentifierOpen(true)}
+            className="w-full py-4 bg-primary text-white rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-primary/20"
+          >
+            <Scan className="w-6 h-6 shrink-0" />
+            <div className="flex flex-col items-start text-left">
+               <span className="font-bold text-sm">Scan Material (HygeneX)</span>
+               <span className="text-[10px] opacity-80">AI Material Identification</span>
+            </div>
+          </button>
+
+          <div className="flex items-center gap-3 my-1">
+            <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1" />
+            <span className="text-[10px] font-black text-slate-400">ENTER MANUALLY</span>
+            <div className="h-px bg-slate-200 dark:bg-slate-700 flex-1" />
+          </div>
+
+          <div className="space-y-4">
               <div className="p-6 bg-slate-50 dark:bg-slate-800/40 border-y border-slate-100 dark:border-slate-800">
                 <div className="grid grid-cols-1 gap-4">
                   <div className="flex gap-2 items-end w-full overflow-hidden">
@@ -386,7 +328,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                     <div className="flex-[1.5] min-w-0 space-y-1">
                       <label className="text-[11px] font-black text-slate-400 capitalize truncate block">Grade</label>
                       <select 
-                        value={subcategory}
+                        value={subcategory || ''}
                         onChange={(e) => setSubcategory(e.target.value)}
                         className="w-full p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold dark:text-white outline-none focus:ring-2 focus:ring-primary/20 truncate"
                       >
@@ -421,39 +363,29 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                 </div>
               </div>
 
-              {/* Digital ID & AI Insight Display */}
+              {/* Tracking ID Display */}
               <div className="mx-4 space-y-3">
-                <div className="p-4 bg-white dark:bg-black rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none flex items-center justify-between group overflow-hidden relative">
+                {trackingId && (
+                <div className="p-3 bg-white dark:bg-black rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none flex items-center justify-between overflow-hidden relative">
                    <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl -mr-5 -mt-5" />
                    <div className="flex items-center gap-3 relative z-10">
                       <div className="w-8 h-8 bg-emerald-50 dark:bg-white/10 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                          <ShieldCheck className="w-4 h-4" />
                       </div>
                       <div>
-                         <p className="text-[8px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-[0.2em] leading-none mb-1">Digital Batch ID</p>
-                         <p className="text-[10px] font-mono font-bold text-slate-900 dark:text-white tracking-widest uppercase">{digitalBatchId}</p>
+                         <p className="text-[8px] font-black text-slate-500 dark:text-slate-500 uppercase tracking-[0.2em] leading-none mb-1">Tracking ID</p>
+                         <p className="text-[11px] font-mono font-bold text-slate-900 dark:text-white tracking-widest uppercase">{trackingId}</p>
                       </div>
                    </div>
                    <div className="px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 text-[8px] font-black uppercase rounded border border-emerald-200 dark:border-emerald-500/20 relative z-10">
-                      TRACKABLE
+                      VERIFIED
                    </div>
                 </div>
-
-                {aiReason && (
-                  <div className="p-4 bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 rounded-3xl flex items-start gap-3 animate-slide-up">
-                    <div className="w-8 h-8 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0">
-                      <Brain className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-none mb-1">Neural Insight</p>
-                      <p className="text-xs font-bold text-slate-600 dark:text-slate-300 italic leading-snug">"{aiReason}"</p>
-                    </div>
-                  </div>
                 )}
               </div>
 
               {/* Invoice Display */}
-              <div className="bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-slate-900 dark:via-slate-800 dark:to-emerald-900 p-6 text-white shadow-xl relative overflow-hidden border-y border-white/5">
+              <div className="bg-gradient-to-br from-emerald-700 to-emerald-900 dark:from-slate-900 dark:via-slate-800 rounded-xl dark:to-emerald-900 p-4 text-white shadow-xl relative overflow-hidden border-y border-white/5">
                 <div className="flex justify-between items-center mb-6">
                   <h4 className="text-xs font-black uppercase tracking-[0.3em] text-white/50 flex items-center gap-2">
                     <CreditCard className="w-3 h-3" /> Mission Invoice
@@ -598,21 +530,17 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
                 </button>
               </div>
             </div>
-          )}
-
-          {step === 'scanning' && (
-            <div className="py-20 flex flex-col items-center text-center">
-              <div className="relative w-24 h-24 mb-6">
-                <div className="absolute inset-0 border-4 border-primary rounded-full animate-ping opacity-20" />
-                <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-                <Sparkles className="absolute inset-0 m-auto w-8 h-8 text-primary" />
-              </div>
-              <h4 className="text-xl font-black text-slate-900 dark:text-white">AI Vision Active...</h4>
-              <p className="text-xs font-black uppercase text-slate-400 tracking-widest mt-2">Checking Purity & Material Grade</p>
-            </div>
-          )}
         </div>
       </div>
+
+      <MaterialIdentifierModal 
+        isOpen={isIdentifierOpen}
+        onClose={() => setIsIdentifierOpen(false)}
+        onProceedToPayment={(slug) => {
+          if (slug) setMaterial(slug);
+          setIsIdentifierOpen(false);
+        }}
+      />
     </div>
   );
 }

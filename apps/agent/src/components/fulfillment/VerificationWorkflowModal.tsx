@@ -173,6 +173,7 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
     try {
       await verifyMaterial(
         order.id,
+        selectedSubcategory,
         parseFloat(weight),
         grade,
         parseInt(contamination),

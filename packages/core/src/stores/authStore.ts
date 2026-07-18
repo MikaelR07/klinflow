@@ -81,6 +81,7 @@ export const useAuthStore = create<AuthState>()(
       profile: null,
       rewardPoints: 0, 
       walletBalance: 0,
+      payoutBalance: 0,
       userId: null,
       notificationPrefs: defaultNotifPrefs(),
       profileSubscription: null,
@@ -198,7 +199,7 @@ export const useAuthStore = create<AuthState>()(
 
               const { data: profileData } = await supabase
                 .from('profiles')
-                .select('*, user_wallets(cash_balance, available_points)')
+                .select('*, user_wallets(cash_balance, payout_balance, available_points)')
                 .eq('id', session.user.id)
                 .maybeSingle();
               
@@ -332,7 +333,7 @@ export const useAuthStore = create<AuthState>()(
         if (!userId) return;
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('*, user_wallets(cash_balance, available_points)')
+          .select('*, user_wallets(cash_balance, payout_balance, available_points)')
           .eq('id', userId)
           .maybeSingle();
         if (profileData) {
@@ -341,7 +342,8 @@ export const useAuthStore = create<AuthState>()(
             set({ 
               profile: uiProfile,
               rewardPoints: uiProfile.rewardPoints || 0,
-              walletBalance: uiProfile.walletBalance || 0
+              walletBalance: uiProfile.walletBalance || 0,
+              payoutBalance: uiProfile.payoutBalance || 0
             });
           }
         }
@@ -357,6 +359,7 @@ export const useAuthStore = create<AuthState>()(
 
         // Ensure strictly typed fields for monetary values
         normalized.walletBalance = userWallet ? Number(userWallet.cash_balance || 0) : Number(profileData.wallet_balance || 0);
+        normalized.payoutBalance = userWallet ? Number(userWallet.payout_balance || 0) : 0;
         normalized.rewardPoints = userWallet ? Number(userWallet.available_points || 0) : Number(profileData.reward_points || 0);
         const rawRating = profileData.rating;
         normalized.rating = (rawRating === null || rawRating === undefined || isNaN(Number(rawRating))) 
@@ -504,6 +507,7 @@ export const useAuthStore = create<AuthState>()(
           if (key === 'nemaLicense') dbKey = 'nema_license';
           if (key === 'businessType') dbKey = 'business_type';
           if (key === 'avatarUrl') dbKey = 'avatar_url';
+          if (key === 'notificationPrefs') dbKey = 'notification_prefs';
           
           if (VALID_COLUMNS.includes(dbKey)) {
             if (dbKey === 'location' && value && typeof value === 'object') {
@@ -587,15 +591,86 @@ export const useAuthStore = create<AuthState>()(
         });
       },
 
-      withdrawRewards: async (amount: number) => {
-        const { userId, walletBalance, profile } = get();
-        if (!userId) throw new Error("Not authenticated");
-        if (amount > walletBalance) throw new Error("Insufficient funds");
+      sendPulse: async () => {
+        const { userId, profile } = get();
+        if (!userId || !profile?.isOnline) return;
 
-        const { error } = await supabase.rpc('process_wallet_withdrawal', {
+        // Helper to update Supabase heartbeat
+        const updateHeartbeat = async (coords?: { latitude: number, longitude: number }) => {
+          const locationPayload = {
+            ...((profile?.location as any) || {}),
+            status: 'active',
+            last_pulse: new Date().toISOString()
+          };
+          if (coords) {
+            locationPayload.latitude = coords.latitude;
+            locationPayload.longitude = coords.longitude;
+          }
+
+          const { error } = await supabase.from('profiles')
+            .update({ location: locationPayload } as any)
+            .eq('id', userId);
+          
+          if (!error) {
+            set({
+              profile: {
+                ...profile,
+                location: locationPayload
+              } as Profile
+            });
+          }
+        };
+
+        // 1. Get exact hardware GPS coordinates
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async (pos) => {
+              await updateHeartbeat({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+            },
+            async (err) => {
+              console.warn('[Agent Pulse] GPS skipped, falling back to basic heartbeat:', err);
+              // Fallback: Still send the heartbeat to keep agent online, just don't update GPS coords
+              await updateHeartbeat();
+            },
+            // Increased timeout and added maximumAge to prevent immediate timeout errors
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 }
+          );
+        } else {
+          // Fallback if geolocation isn't supported by the browser
+          await updateHeartbeat();
+        }
+      },
+
+      withdrawRewards: async (amount: number) => {
+        const { userId, walletBalance, payoutBalance, profile } = get();
+        if (!userId) throw new Error("Not authenticated");
+        
+        // Use payout_balance for agents, cash_balance for residents
+        const isAgent = profile?.role === ROLES.AGENT || profile?.role === ROLES.BUSINESS || profile?.agentAccountType;
+        const availableBalance = isAgent ? payoutBalance : walletBalance;
+        
+        if (amount > availableBalance) throw new Error("Insufficient funds");
+
+        const rpcName = isAgent ? 'withdraw_payout' : 'process_wallet_withdrawal';
+        const rpcPayload = isAgent ? { p_amount: amount } : {
           p_amount: amount,
           p_method: 'M-PESA',
           p_account: profile?.phone || ''
+        };
+
+        const { error } = await supabase.rpc(rpcName as any, rpcPayload);
+           
+        if (error) throw new Error(error.message);
+        await get().fetchProfile();
+      },
+
+      transferToTradingBalance: async (amount: number) => {
+        const { userId, payoutBalance } = get();
+        if (!userId) throw new Error("Not authenticated");
+        if (amount > payoutBalance) throw new Error("Insufficient payout funds");
+
+        const { error } = await supabase.rpc('transfer_payout_to_trading', {
+          p_amount: amount
         });
            
         if (error) throw new Error(error.message);
