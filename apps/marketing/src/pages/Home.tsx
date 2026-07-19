@@ -423,7 +423,7 @@ export default function Home() {
                   }}
                 >
                   <img
-                    src="/landing-page/hero/eco.webp"
+                    src="/landing-page/hero/hero1.webp"
                     alt="Klinflow Platform Dashboard"
                     className="absolute inset-0 w-full h-full object-cover object-center"
                   />
