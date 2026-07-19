@@ -262,19 +262,6 @@ const appCards = [
 export default function Home() {
   const { isDarkMode } = useThemeStore();
   const [activeNode, setActiveNode] = useState(0);
-  const [heroImageIndex, setHeroImageIndex] = useState(0);
-  const heroImages = [
-    "/landing-page/hero/hero1.webp",
-    "/landing-page/hero/hero2.webp",
-    "/landing-page/hero/hero3.webp"
-  ];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
   const [selectedImage, setSelectedImage] = useState<
     (typeof screenshots)[0] | null
   >(null);
@@ -331,21 +318,62 @@ export default function Home() {
     },
   ];
 
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0, xPct: 0, yPct: 0 });
+  const [isGridHovered, setIsGridHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const xPct = (x / rect.width) * 2 - 1;
+    const yPct = (y / rect.height) * 2 - 1;
+
+    setMousePos({ x, y, xPct, yPct });
+  };
+
   return (
     <Layout>
       {/* HERO SECTION ─────────────────────────────────────────── */}
       <section 
-        className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden min-h-[70vh] md:min-h-[85vh] flex items-center bg-transparent"
+        className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden min-h-[70vh] md:min-h-[85vh] flex items-center bg-transparent perspective-[1000px]"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsGridHovered(true)}
+        onMouseLeave={() => setIsGridHovered(false)}
       >
-        {/* Background Grid Pattern */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <div
-            className={`absolute inset-0 opacity-[0.03] ${isDarkMode ? "text-white" : "text-slate-900"}`}
-            style={{
-              backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(to right, currentColor 1px, transparent 1px)`,
-              backgroundSize: '40px 40px'
+        {/* Background Interactive Grid Pattern */}
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex items-center justify-center">
+          <motion.div
+            animate={{
+              rotateX: isGridHovered ? mousePos.yPct * -6 : 0,
+              rotateY: isGridHovered ? mousePos.xPct * 6 : 0,
+              scale: 1.15
             }}
-          />
+            transition={{ type: "spring", stiffness: 50, damping: 20 }}
+            className="absolute inset-[-20%] w-[140%] h-[140%]"
+          >
+            {/* Base Faint Grid */}
+            <div
+              className={`absolute inset-0 opacity-[0.04] ${isDarkMode ? "text-white" : "text-slate-900"}`}
+              style={{
+                backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(to right, currentColor 1px, transparent 1px)`,
+                backgroundSize: '40px 40px'
+              }}
+            />
+            {/* Highlight Spotlight Grid */}
+            <motion.div
+              animate={{ opacity: isGridHovered ? 1 : 0 }}
+              transition={{ duration: 0.5 }}
+              className={`absolute inset-0 opacity-[0.06] ${isDarkMode ? "text-emerald-600/40" : "text-emerald-700/50"}`}
+              style={{
+                backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(to right, currentColor 1px, transparent 1px)`,
+                backgroundSize: '40px 40px',
+                // Offset the mask because the parent is 140% sized and centered
+                WebkitMaskImage: `radial-gradient(350px circle at calc(10% + ${mousePos.x}px) calc(10% + ${mousePos.y}px), black 0%, transparent 100%)`,
+                maskImage: `radial-gradient(350px circle at calc(10% + ${mousePos.x}px) calc(10% + ${mousePos.y}px), black 0%, transparent 100%)`,
+              }}
+            />
+          </motion.div>
         </div>
         <div className="max-w-[1600px] mx-auto pl-6 md:pl-12 lg:pl-20 pr-6 relative z-20 w-full">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -376,7 +404,7 @@ export default function Home() {
                   to="/products/client"
                   className={`bg-transparent font-medium px-6 py-3 rounded-md transition-colors text-sm ${isDarkMode ? "hover:bg-white/5 text-slate-300 border border-slate-700" : "hover:bg-slate-100 text-slate-700 border border-slate-300"}`}
                 >
-                  View Documentation
+                  View Products
                 </Link>
               </div>
             </div>
@@ -394,18 +422,11 @@ export default function Home() {
                     transition: "transform 0.5s ease",
                   }}
                 >
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={heroImageIndex}
-                      src={heroImages[heroImageIndex]}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.8, ease: "easeInOut" }}
-                      alt="Klinflow Platform Dashboard"
-                      className="absolute inset-0 w-full h-full object-cover object-center"
-                    />
-                  </AnimatePresence>
+                  <img
+                    src="/landing-page/hero/eco.webp"
+                    alt="Klinflow Platform Dashboard"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
                 </div>
               </div>
               {/* Subtle shadow beneath the 3D card */}
@@ -788,66 +809,66 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-6 gap-4 max-w-6xl mx-auto">
             {/* Resident App */}
-            <div className="col-span-1 md:col-span-3 lg:col-span-2 p-8 rounded-2xl bg-surface-900 border border-white/5 relative overflow-hidden group hover:border-white/10 transition-all flex flex-col justify-start min-h-[240px]">
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-6 relative z-10">
-                <User className="w-6 h-6 text-white" />
+            <div className={`col-span-1 md:col-span-3 lg:col-span-2 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] ${isDarkMode ? "bg-surface-900 border border-white/10 hover:border-white/20" : "bg-white border border-slate-200 shadow-2xl"}`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 ${isDarkMode ? "bg-white/10" : "bg-slate-100"}`}>
+                <User className={`w-6 h-6 ${isDarkMode ? "text-white" : "text-slate-700"}`} />
               </div>
-              <h4 className="text-xl font-bold mb-3 text-white relative z-10">
+              <h4 className={`text-xl font-bold mb-3 relative z-10 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
                 Resident App
               </h4>
-              <p className="text-sm leading-relaxed text-slate-400 relative z-10">
+              <p className={`text-sm leading-relaxed relative z-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
                 Designed for households to quickly schedule on-demand pickups, receive AI valuations, and get paid instantly in Cash or GreenFuel Points.
               </p>
             </div>
 
             {/* Seller App */}
-            <div className="col-span-1 md:col-span-3 lg:col-span-2 p-8 rounded-2xl bg-surface-900 border border-white/5 relative overflow-hidden group hover:border-white/10 transition-all flex flex-col justify-start min-h-[240px]">
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-6 relative z-10">
-                <Building2 className="w-6 h-6 text-white" />
+            <div className={`col-span-1 md:col-span-3 lg:col-span-2 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] ${isDarkMode ? "bg-surface-900 border border-white/10 hover:border-white/20" : "bg-white border border-slate-200 shadow-2xl"}`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 ${isDarkMode ? "bg-white/10" : "bg-slate-100"}`}>
+                <Building2 className={`w-6 h-6 ${isDarkMode ? "text-white" : "text-slate-700"}`} />
               </div>
-              <h4 className="text-xl font-bold mb-3 text-white relative z-10">
+              <h4 className={`text-xl font-bold mb-3 relative z-10 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
                 Seller App
               </h4>
-              <p className="text-sm leading-relaxed text-slate-400 relative z-10">
+              <p className={`text-sm leading-relaxed relative z-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
                 Built for bulk waste producers and institutional clients to manage large collections, track detailed reporting, and ensure regulatory compliance.
               </p>
             </div>
 
             {/* Agent App */}
-            <div className="col-span-1 md:col-span-6 lg:col-span-2 p-8 rounded-2xl bg-surface-900 border border-white/5 relative overflow-hidden group hover:border-white/10 transition-all flex flex-col justify-start min-h-[240px]">
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-6 relative z-10">
-                <Truck className="w-6 h-6 text-white" />
+            <div className={`col-span-1 md:col-span-6 lg:col-span-2 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] ${isDarkMode ? "bg-surface-900 border border-white/10 hover:border-white/20" : "bg-white border border-slate-200 shadow-2xl"}`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 ${isDarkMode ? "bg-white/10" : "bg-slate-100"}`}>
+                <Truck className={`w-6 h-6 ${isDarkMode ? "text-white" : "text-slate-700"}`} />
               </div>
-              <h4 className="text-xl font-bold mb-3 text-white relative z-10">
+              <h4 className={`text-xl font-bold mb-3 relative z-10 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
                 Agent & Fleet App
               </h4>
-              <p className="text-sm leading-relaxed text-slate-400 relative z-10">
+              <p className={`text-sm leading-relaxed relative z-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
                 Built for field agents to leverage multi-stop AI route optimization, perform on-spot material grading, and manage daily collections efficiently.
               </p>
             </div>
 
             {/* Hub App */}
-            <div className="col-span-1 md:col-span-3 lg:col-span-3 p-8 rounded-2xl bg-surface-900 border border-white/5 relative overflow-hidden group hover:border-white/10 transition-all flex flex-col justify-start min-h-[240px]">
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-6 relative z-10">
-                <Warehouse className="w-6 h-6 text-white" />
+            <div className={`col-span-1 md:col-span-3 lg:col-span-3 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] ${isDarkMode ? "bg-surface-900 border border-white/10 hover:border-white/20" : "bg-white border border-slate-200 shadow-2xl"}`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 ${isDarkMode ? "bg-white/10" : "bg-slate-100"}`}>
+                <Warehouse className={`w-6 h-6 ${isDarkMode ? "text-white" : "text-slate-700"}`} />
               </div>
-              <h4 className="text-xl font-bold mb-3 text-white relative z-10">
+              <h4 className={`text-xl font-bold mb-3 relative z-10 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
                 Hub Command App
               </h4>
-              <p className="text-sm leading-relaxed text-slate-400 relative z-10">
+              <p className={`text-sm leading-relaxed relative z-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
                 The control center for Material Recovery Facilities (MOS) and fleet owners to manage logistics, inventory processing workflows, and comprehensive live analytics.
               </p>
             </div>
 
             {/* Business App */}
-            <div className="col-span-1 md:col-span-3 lg:col-span-3 p-8 rounded-2xl bg-surface-900 border border-white/5 relative overflow-hidden group hover:border-white/10 transition-all flex flex-col justify-start min-h-[240px]">
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-6 relative z-10">
-                <LineChart className="w-6 h-6 text-white" />
+            <div className={`col-span-1 md:col-span-3 lg:col-span-3 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] ${isDarkMode ? "bg-surface-900 border border-white/10 hover:border-white/20" : "bg-white border border-slate-200 shadow-2xl"}`}>
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 ${isDarkMode ? "bg-white/10" : "bg-slate-100"}`}>
+                <LineChart className={`w-6 h-6 ${isDarkMode ? "text-white" : "text-slate-700"}`} />
               </div>
-              <h4 className="text-xl font-bold mb-3 text-white relative z-10">
+              <h4 className={`text-xl font-bold mb-3 relative z-10 ${isDarkMode ? "text-white" : "text-slate-900"}`}>
                 B2B Business App
               </h4>
-              <p className="text-sm leading-relaxed text-slate-400 relative z-10">
+              <p className={`text-sm leading-relaxed relative z-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
                 Designed for large-scale industrial buyers to secure consistent high-volume material lots through transparent escrow trades and verified material provenance.
               </p>
             </div>
@@ -883,7 +904,7 @@ export default function Home() {
                 "ReCycle Africa",
                 "Circular Economy Fund"
               ].map((partner, i) => (
-                <div key={`partner1-${i}`} className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-900 dark:text-slate-200 whitespace-nowrap opacity-70 hover:opacity-100 transition-opacity">
+                <div key={`partner1-${i}`} className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600 dark:text-slate-300 whitespace-nowrap opacity-70 hover:opacity-100 transition-opacity">
                   {partner}
                 </div>
               ))}
@@ -897,7 +918,7 @@ export default function Home() {
                 "ReCycle Africa",
                 "Circular Economy Fund"
               ].map((partner, i) => (
-                <div key={`partner2-${i}`} className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-400 whitespace-nowrap opacity-70 hover:opacity-100 transition-opacity">
+                <div key={`partner2-${i}`} className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-slate-600 dark:text-slate-300 whitespace-nowrap opacity-70 hover:opacity-100 transition-opacity">
                   {partner}
                 </div>
               ))}
@@ -918,13 +939,13 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs mb-6">
               <Brain className="w-5 h-5" /> The Sustainomics Engine
             </div>
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 tracking-tighter text-white">
+            <h3 className={`text-3xl sm:text-4xl md:text-5xl font-bold mb-8 tracking-tighter ${isDarkMode ? "text-white" : "text-slate-900"}`}>
               The Source of <br />
               <span className="text-primary italic">
                 Material Value.
               </span>
             </h3>
-            <p className="text-sm sm:text-base md:text-lg font-normal leading-relaxed mb-12 text-slate-700 dark:text-slate-300">
+            <p className={`text-sm sm:text-base md:text-lg font-normal leading-relaxed mb-10 ${isDarkMode ? "text-slate-300" : "text-slate-700"}`}> 
               HygeneX is our proprietary AI engine that powers the entire
               ecosystem. It identifies 50+ material types, grades quality
               instantly, and provides a real-time "Oracle" price for every gram
@@ -951,12 +972,12 @@ export default function Home() {
               ].map((f, i) => (
                 <div
                   key={i}
-                  className="p-4 sm:p-6 rounded-md border flex flex-col lg:flex-row gap-3 lg:gap-6 items-start bg-surface-900 border-surface-900"
+                  className={`p-4 sm:p-6 rounded-[32px] border flex flex-col lg:flex-row gap-3 lg:gap-6 items-start ${isDarkMode ? "bg-surface-900 border-white/10" : "bg-white border-slate-200 shadow-2xl"}`}
                 >
                   <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-md bg-primary/10 text-primary flex items-center justify-center shrink-0">
                     <f.icon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <p className="text-[10px] sm:text-sm text-slate-400 font-medium leading-tight sm:leading-relaxed">
+                  <p className={`text-[12px] sm:text-sm font-normal leading-tight sm:leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
                     {f.title}
                   </p>
                 </div>
