@@ -55,9 +55,11 @@ export default function SwarmsList() {
 
   const filteredSwarms = swarms
     .filter((s: any) => {
-      if (activeTab === 'Active') return s.status === 'active';
+      const isExpired = s.closes_at && new Date(s.closes_at).getTime() < new Date().getTime();
+      
+      if (activeTab === 'Active') return s.status === 'active' && !isExpired;
       if (activeTab === 'My Swarms') return s.creator_id === userId;
-      if (activeTab === 'Completed') return s.status === 'completed';
+      if (activeTab === 'Completed') return s.status === 'completed' || (s.status === 'active' && isExpired);
       return true;
     })
     .filter((s: any) => {
@@ -111,9 +113,10 @@ export default function SwarmsList() {
           <div className="flex bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-xl">
             {TABS.map(tab => {
               const tabCount = swarms.filter((s: any) => {
-                if (tab === 'Active') return s.status === 'active';
+                const isExpired = s.closes_at && new Date(s.closes_at).getTime() < new Date().getTime();
+                if (tab === 'Active') return s.status === 'active' && !isExpired;
                 if (tab === 'My Swarms') return s.creator_id === userId;
-                if (tab === 'Completed') return s.status === 'completed';
+                if (tab === 'Completed') return s.status === 'completed' || (s.status === 'active' && isExpired);
                 return false;
               }).length;
 
@@ -186,21 +189,41 @@ export default function SwarmsList() {
                   active:scale-[0.98]
                 "
               >
-                {/* Header & Progress Ring */}
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <p className="text-[11px] font-medium text-slate-500 uppercase dark:text-slate-400">
-                        <span className="font-semibold uppercase text-slate-900 text-sm dark:text-white">{materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}</span>
+                {/* Header & Image */}
+                <div className="flex items-start gap-3">
+                  {/* Image on the left */}
+                  <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm relative">
+                    <img 
+                      src={(swarm.images && swarm.images[0]) || 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80&w=200'} 
+                      alt={swarm.material || 'Material'} 
+                      className="w-full h-full object-cover"
+                    />
+                    {swarm.images && swarm.images.length > 1 && (
+                      <div className="absolute bottom-1 right-1 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-widest">
+                        +{swarm.images.length - 1}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Details on the right */}
+                  <div className="flex-1 min-w-0 py-0.5">
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <p className="text-[11px] font-medium text-slate-500 uppercase dark:text-slate-400 leading-none">
+                        <span className="font-semibold uppercase text-slate-900 text-[13px] dark:text-white">{materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}</span>
                       </p>
                       {swarm.status === 'active' && postedSwarmIds.has(swarm.id) && (
-                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                        <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 leading-none">
                           Posted
                         </span>
                       )}
-                      {swarm.status === 'active' && !postedSwarmIds.has(swarm.id) && (
-                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                      {swarm.status === 'active' && !postedSwarmIds.has(swarm.id) && new Date(swarm.closes_at).getTime() > new Date().getTime() && (
+                        <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 leading-none">
                           Active
+                        </span>
+                      )}
+                      {swarm.status === 'active' && new Date(swarm.closes_at).getTime() < new Date().getTime() && (
+                        <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 leading-none">
+                          Expired
                         </span>
                       )}
                     </div>
@@ -211,52 +234,18 @@ export default function SwarmsList() {
 
                     <div className="flex items-center gap-1.5 mb-1.5 text-slate-500 dark:text-slate-400">
                       <MapPin className="w-3.5 h-3.5 shrink-0" />
-                      <p className="text-xs font-medium">{swarm.estate}</p>
+                      <p className="text-[11px] font-medium truncate">{swarm.estate}</p>
                     </div>
 
                     {swarm.closes_at && (
-                      <div className="flex items-center gap-1.5 text-[#e65100] dark:text-amber-500 font-bold mt-0.5">
+                      <div className={`flex items-center gap-1.5 font-bold mt-1 ${new Date(swarm.closes_at).getTime() < new Date().getTime() ? 'text-rose-500' : 'text-[#e65100] dark:text-amber-500'}`}>
                         <Clock className="w-3.5 h-3.5 shrink-0" />
-                        <p className="text-xs">Deadline: {new Date(swarm.closes_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                        <p className="text-[10px] uppercase tracking-wide">
+                          {new Date(swarm.closes_at).getTime() < new Date().getTime() ? 'Expired: ' : 'Deadline: '}
+                          {new Date(swarm.closes_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </p>
                       </div>
                     )}
-                  </div>
-
-                  {/* Progress Ring */}
-                  <div className="shrink-0 ml-1 mt-0.5">
-                    <div className="relative w-[88px] h-[88px]">
-                      <svg className="w-full h-full -rotate-90" viewBox="0 0 84 84">
-                        <circle
-                          cx="42"
-                          cy="42"
-                          r="38"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                          className="text-slate-200 dark:text-slate-700"
-                        />
-                        <circle
-                          cx="42"
-                          cy="42"
-                          r="38"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                          className="text-green-500"
-                          strokeDasharray={`${2 * Math.PI * 38}`}
-                          strokeDashoffset={`${2 * Math.PI * 38 * (1 - progress / 100)}`}
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-lg font-black text-slate-900 dark:text-white leading-none mb-0.5">
-                          {progress}%
-                        </span>
-                        <span className="text-[9px] text-[#868e96] dark:text-slate-400 font-medium leading-none">
-                          Complete
-                        </span>
-                      </div>
-                    </div>
                   </div>
                 </div>
 

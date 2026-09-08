@@ -347,18 +347,23 @@ export default function MyBookings() {
                           <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
                             <span className="text-slate-900 dark:text-white text-[14px]">{waste?.label || wasteTypeVal}</span>
                           </p>
-                           <p className="text-[10px] font-semibold text-slate-500 flex items-center gap-1.5">
+                          <p className="text-[10px] font-semibold text-slate-500 flex items-center gap-1.5">
                             <MapPin className="w-3 h-3 text-green-500" /> {b.estate}
                           </p>
                           <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
-                            Pickup ID: <span className="text-primary font-mono text-[11px]">{b.id.slice(0, 8).toUpperCase()}</span>
+                            Pickup ID: <span className="text-primary font-mono text-[11px]">{b.trackingId || b.tracking_id || b.id.slice(0, 8).toUpperCase()}</span>
                           </p>
                         </div>
                       </div>
-                      <div className="text-right flex flex-col items-end gap-1.5">
-                        <span className={`text-[10px] font-black tracking-widest px-2 py-0.5 rounded-lg ${status.color}`}>
-                          {status.label}
-                        </span>
+                      <div className="text-right flex flex-col items-end gap-2">
+                        <div className="flex flex-col items-end gap-1">
+                          <span className={`text-[9px] font-black tracking-widest px-2 py-0.5 rounded-lg ${status.color}`}>
+                            {status.label}
+                          </span>
+                          <p className="text-[9px] font-bold text-slate-500 flex items-center gap-1">
+                            <Clock className="w-2.5 h-2.5 text-blue-500" /> {b.timeSlot || b.time_slot || 'ASAP'}
+                          </p>
+                        </div>
                         <ChevronDown className="w-4 h-4 text-slate-300 -rotate-90" />
                       </div>
                     </div>

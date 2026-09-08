@@ -179,7 +179,7 @@ export default function MyTrades() {
     try {
       const { error } = await supabase.rpc("complete_booking_trade_payout", {
         p_booking_id: b.id,
-        p_actual_weight: b.actualWeightKg || b.bags || 0,
+        p_actual_weight: b.actualWeightKg || b.weightKg || 0,
         p_payout_amount: b.counterOfferAmount || 0,
       });
       if (error) throw error;
@@ -203,7 +203,7 @@ export default function MyTrades() {
     setIsSubmitting(true);
     try {
       const result = await rescheduleBooking(reschedulingTrade.id, newDate, newTime, {
-        wasteType: reschedulingTrade.wasteType, weight: reschedulingTrade.actualWeightKg || reschedulingTrade.bags,
+        wasteType: reschedulingTrade.wasteType, weight: reschedulingTrade.actualWeightKg || reschedulingTrade.weightKg,
         estate: reschedulingTrade.estate, latitude: reschedulingTrade.latitude, longitude: reschedulingTrade.longitude,
         notes: reschedulingTrade.notes, agentId: reschedulingTrade.agentId, photoUrl: reschedulingTrade.photoUrl,
       });
@@ -503,7 +503,7 @@ export default function MyTrades() {
                           </div>
                           <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
                             <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0"><Clock className="w-2.5 h-2.5 text-slate-400" /> {b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
-                            <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {b.actualWeightKg || b.bags || 0} KG</p>
+                            <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {b.actualWeightKg || b.weightKg || 0} KG</p>
                           </div>
                         </div>
                         <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
@@ -567,7 +567,7 @@ export default function MyTrades() {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="flex items-start gap-3"><Tag className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Trade ID</p><p className="text-xs font-black text-slate-900 dark:text-white font-mono uppercase">CF-{b.id?.slice(0, 8)}</p></div></div>
                           <div className="flex items-start gap-3"><Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Trade Value</p><p className="text-xs font-black text-emerald-600 leading-none">KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p></div></div>
-                          <div className="flex items-start gap-3"><Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quantity</p><p className="text-xs font-black text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.bags || 0} KG</p></div></div>
+                          <div className="flex items-start gap-3"><Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quantity</p><p className="text-xs font-black text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg || 0} KG</p></div></div>
                           <div className="flex items-start gap-3"><MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Location</p><span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block truncate max-w-[120px]">{b.estate || "Pickup point"}</span></div></div>
                         </div>
                       </div>

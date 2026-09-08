@@ -94,7 +94,7 @@ export default function BookPickup() {
             slug: cat.slug || cat.id
           });
         }
-        setQuantity(existing.bags || existing.actualWeightKg || 1);
+        setQuantity(existing.weightKg || existing.actualWeightKg || 1);
         setCustomDescription(existing.notes || '');
         setCustomLocation({
           estate: existing.estate,
@@ -199,11 +199,11 @@ export default function BookPickup() {
         if (company?.location?.latitude && company?.location?.longitude) {
           lat = company.location.latitude;
           lon = company.location.longitude;
-          // Mutate agent location for map plotting with a tiny visual offset so they don't completely overlap
+          // Provide the company's coordinates to the fleet driver so they show up on the map
           agent.location = {
             ...agent.location,
-            latitude: lat + (Math.random() - 0.5) * 0.003,
-            longitude: lon + (Math.random() - 0.5) * 0.003
+            latitude: lat,
+            longitude: lon
           };
         }
       }
@@ -239,28 +239,8 @@ export default function BookPickup() {
     return config.accepted_materials.includes(selected?.slug || '');
   });
 
-  // ── ANTI-OVERLAP MAP JITTER ──
-  const seenCoords = new Set<string>();
-  const finalAgents = filteredAgents.map(agent => {
-    if (!agent.location?.latitude || !agent.location?.longitude) return agent;
-    
-    let lat = agent.location.latitude;
-    let lng = agent.location.longitude;
-    const coordKey = `${lat.toFixed(4)},${lng.toFixed(4)}`;
-    
-    if (seenCoords.has(coordKey)) {
-      // If someone is already sitting here, add a small offset so both pins are visible
-      lat += (Math.random() - 0.5) * 0.003;
-      lng += (Math.random() - 0.5) * 0.003;
-    } else {
-      seenCoords.add(coordKey);
-    }
-    
-    return {
-      ...agent,
-      location: { ...agent.location, latitude: lat, longitude: lng }
-    };
-  });
+  // No random map jitter needed here - BookPickupAgentStep handles stable clustering offsets
+  const finalAgents = filteredAgents;
 
   // ── PRICING (Powered by Market Hub & Agent Overrides) ──
   // If the user targets a Fleet Driver, dynamically fetch the Company Admin's pricing rules
@@ -312,6 +292,8 @@ export default function BookPickup() {
       }
       const timeString = isManualTime ? `${customDate} @ ${customTime}` : ((selectedTime as any)?.time || 'ASAP');
 
+      const targetAgentId = selectedAgent?.id || (selectedCompanyId ? liveAgents.find(a => a.companyId === selectedCompanyId && a.agentAccountType === 'company_admin')?.id : null) || null;
+
       const bookingData = {
         wasteType: selected.slug || selected.id,
         weight: quantity,
@@ -322,7 +304,7 @@ export default function BookPickup() {
         amount: 0,
         totalPrice: finalPrice,
         photoUrl: photoUrl || (rescheduleId ? bookings.find(b => b.id === rescheduleId)?.photoUrl : null),
-        agentId: selectedAgent?.id || selectedCompanyId || null,
+        agentId: targetAgentId,
         notes: customDescription || '',
         bookingType: selectedTime?.type || 'any',
       };
@@ -338,14 +320,13 @@ export default function BookPickup() {
         if (!result) throw new Error("Failed to create pickup request. Please try again.");
       }
 
-
       // Instantly notify the specific agent (or all available agents if none selected)
       await useNotificationStore.getState().addNotification(
         "New Dispatch Mission! 🚛",
         `A pickup request for ${quantity}kg of ${selected.label || (selected.slug || selected.id)} is available in ${customLocation.estate || 'your area'}.`,
         'info', // type
         'agent', // target role
-        selectedAgent?.id || selectedCompanyId || null, // targeted agent if manually selected
+        targetAgentId, // targeted agent if manually selected
         { wasteType: selected.slug || selected.id } // metadata for client-side filtering
       );
 
@@ -363,7 +344,7 @@ export default function BookPickup() {
   const center = [customLocation.latitude || -1.2635, customLocation.longitude || 36.8048];
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 overflow-x-hidden min-h-screen">
 
       {/* ── HEADER (FIXED TOP NAV) ── */}
       <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-5 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-900/70">

@@ -52,28 +52,39 @@ export default function BookPickupAgentStep({
     setSearchedAgent(null);
     setSearchAttempted(true);
 
-    let normPhone = agentSearchQuery.replace(/\s+/g, '');
-    if (normPhone.startsWith('0')) {
-      normPhone = normPhone.slice(1);
-    } else if (normPhone.startsWith('+254')) {
-      normPhone = normPhone.slice(4);
-    } else if (normPhone.startsWith('254')) {
-      normPhone = normPhone.slice(3);
-    }
-
-    if (!/^(7|1)\d{8}$/.test(normPhone)) {
-      setSearchError('Enter a valid phone number.');
+    const normId = agentSearchQuery.trim().toUpperCase();
+    if (!normId) {
+      setSearchError('Enter a valid Klin-ID.');
       return;
     }
 
     setIsSearching(true);
     try {
-      const { data, error } = await supabase.rpc('search_pickup_agent_exact_v2', { p_core_digits: normPhone });
+      const { data, error } = await supabase.from('profiles')
+        .select('*')
+        .eq('klinflow_id', normId)
+        .limit(1);
+
       if (error) throw error;
       
       if (data && data.length > 0) {
-        setSearchedAgent(data[0]);
+        if (data[0].agent_account_type === 'fleet_driver') {
+          setSearchError('Fleet Agents cannot be booked directly. Please search for their Hub.');
+          setSearchedAgent(null);
+        } else {
+          setSearchedAgent({
+            ...data[0],
+            full_name: data[0].company_name || data[0].name,
+            agent_type: data[0].agent_account_type,
+            profile_photo: data[0].avatar_url,
+            rating: 4.9, // mock rating since it might not be explicitly queried
+            completed_pickups: 15,
+            online: data[0].is_online,
+            company_id: data[0].company_id
+          });
+        }
       } else {
+        setSearchError('No agent found with this Klin-ID.');
         setSearchedAgent(null);
       }
     } catch (err) {
@@ -149,7 +160,7 @@ export default function BookPickupAgentStep({
                   eventHandlers={{
                     click: () => {
                       if (isCompany) {
-                        setSelectedCompanyId(agent.id);
+                        setSelectedCompanyId(agent.companyId);
                         toast.success(`Hub Selected`);
                       } else {
                         setSelectedAgent(agent);
@@ -189,7 +200,7 @@ export default function BookPickupAgentStep({
                     {selectedCompanyId && !selectedAgent ? 'Fleet Hub Selected' : 'Targeting Agent'}
                   </p>
                   <h4 className="text-xs font-semibold text-slate-900 dark:text-white mt-1">
-                    {selectedAgent ? selectedAgent.name : (liveAgents.find(a => a.id === selectedCompanyId)?.companyName || 'Selected Hub')}
+                    {selectedAgent ? selectedAgent.name : (liveAgents.find(a => a.companyId === selectedCompanyId && a.agentAccountType === 'company_admin')?.companyName || 'Selected Hub')}
                   </h4>
                 </div>
               </div>
@@ -241,182 +252,212 @@ export default function BookPickupAgentStep({
             )}
           </div>
         )}
-
-        {/* Preferred Agent Search */}
-        <div className="bg-white dark:bg-slate-800 p-5 rounded-[1.5rem] border border-slate-100 dark:border-slate-700/50 shadow-sm mt-3.5 relative overflow-hidden">
-          <h2 className="text-xs font-bold text-slate-900 dark:text-white tracking-tight mb-4 flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-primary" /> Find an Agent by Phone
-          </h2>
-          
-          <div className="relative flex items-center gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input
-                type="tel"
-                value={agentSearchQuery}
-                placeholder="07XX..."
-                className={`w-full bg-slate-50 dark:bg-slate-900/50 py-3.5 pl-10 pr-4 rounded-xl border ${searchError ? 'border-red-300 dark:border-red-900/50 focus:border-red-500 focus:ring-red-200' : 'border-slate-200 dark:border-slate-700/50 focus:border-primary/50 focus:ring-primary/20'} text-sm font-semibold dark:text-white outline-none focus:ring-4 transition-all`}
-                onChange={(e) => {
-                  setAgentSearchQuery(e.target.value);
-                  setSearchError(null);
-                  setSearchAttempted(false);
-                  setSearchedAgent(null);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleAgentSearch();
-                }}
-              />
-            </div>
-            <button
-              onClick={handleAgentSearch}
-              disabled={isSearching || !agentSearchQuery}
-              className="px-5 py-3.5 bg-slate-900 dark:bg-primary text-white rounded-xl text-sm font-bold tracking-wide disabled:opacity-50 hover:bg-slate-800 dark:hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2"
-            >
-              {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
-            </button>
-          </div>
-
-          {searchError && (
-            <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-xs font-bold text-red-500 mt-3 flex items-center gap-1.5">
-              <AlertCircle className="w-3.5 h-3.5" /> {searchError}
-            </motion.p>
-          )}
-
-          {searchAttempted && !isSearching && !searchError && (
-            <div className="mt-5 border-t border-slate-100 dark:border-slate-700/50 pt-5">
-              {searchedAgent ? (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0 border-2 border-white dark:border-slate-700 shadow-sm">
-                      {searchedAgent.profile_photo ? (
-                        <img src={searchedAgent.profile_photo} alt={searchedAgent.full_name} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-sm font-black text-slate-500 dark:text-slate-400">{searchedAgent.full_name?.charAt(0) || 'A'}</span>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{searchedAgent.full_name}</h4>
-                        <span className="px-2 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[9px] font-black uppercase tracking-widest rounded-md">
-                          {searchedAgent.agent_type === 'fleet_driver' ? 'Fleet Agent' : 'Independent'}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                        <span className="flex items-center gap-1"><Star className="w-3 h-3 text-emerald-500 fill-emerald-500" /> {searchedAgent.rating}</span>
-                        <span>•</span>
-                        <span>{searchedAgent.completed_pickups} Pickups</span>
-                        <span>•</span>
-                        <span className="flex items-center gap-1.5">
-                          <span className={`w-2 h-2 rounded-full ${searchedAgent.online ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`} />
-                          {searchedAgent.online ? 'Online' : 'Offline'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      const agentAdapter = {
-                        id: searchedAgent.id,
-                        name: searchedAgent.full_name,
-                        rating: searchedAgent.rating,
-                        isOnline: searchedAgent.online,
-                        agentAccountType: searchedAgent.agent_type,
-                        avatarUrl: searchedAgent.profile_photo
-                      };
-                      setSelectedAgent(agentAdapter);
-                      setSelectedCompanyId(null);
-                      setSearchAttempted(false);
-                      setSearchedAgent(null);
-                      setAgentSearchQuery('');
-                      toast.success(`${searchedAgent.full_name} selected`);
-                    }}
-                    className="w-full mt-4 py-2.5 bg-primary/10 text-primary font-bold text-xs rounded-xl hover:bg-primary/20 transition-colors"
-                  >
-                    Select Agent
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4 px-2">
-                  <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 mx-auto flex items-center justify-center mb-3">
-                    <User className="w-5 h-5 text-slate-400" />
-                  </div>
-                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed">
-                    No Klinflow pickup agent was found with that phone number.
-                  </p>
-                </motion.div>
-              )}
-            </div>
-          )}
-        </div>
       </div>
 
-      {aiSuggestions.length > 0 ? (
-        <div className="space-y-3">
-          {/* SMART ASAP BUTTON */}
-          <button
-            onClick={() => { selectTime({ time: 'ASAP', type: 'asap' }); setIsManualTime(false); }}
-            className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-primary border-primary ' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-white/5'}`}
-          >
-            <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-white/20' : 'bg-primary/10'}`}>
-              <Zap className={`w-5 h-5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-primary'}`} />
+      {/* Unified Search & Booking Actions Card */}
+      <div className="bg-slate-200 dark:bg-slate-800/60 p-5 rounded-[1.5rem] border border-slate-300/50 dark:border-slate-700/50 shadow-sm mt-3.5 space-y-6">
+          
+          {/* Find by Klin-ID Section */}
+          <div className="relative overflow-hidden">
+            <h2 className="text-xs font-bold text-slate-900 dark:text-white tracking-tight mb-1 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-primary" /> Find by Klin-ID
+            </h2>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold mb-4 leading-relaxed">
+              You can search for a Hub or an Individual Agent using their unique ID.
+            </p>
+            
+            <div className="relative flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  value={agentSearchQuery}
+                  placeholder="KFL-..."
+                  className={`w-full bg-white dark:bg-slate-900/50 py-3.5 pl-10 pr-4 rounded-xl border ${searchError ? 'border-red-300 dark:border-red-900/50 focus:border-red-500 focus:ring-red-200' : 'border-slate-200 dark:border-slate-700/50 focus:border-primary/50 focus:ring-primary/20'} text-sm font-semibold dark:text-white outline-none focus:ring-4 transition-all`}
+                  onChange={(e) => {
+                    setAgentSearchQuery(e.target.value.toUpperCase());
+                    setSearchError(null);
+                    setSearchAttempted(false);
+                    setSearchedAgent(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleAgentSearch();
+                  }}
+                />
+              </div>
+              <button
+                onClick={handleAgentSearch}
+                disabled={isSearching || !agentSearchQuery}
+                className="px-5 py-3.5 bg-slate-900 dark:bg-primary text-white rounded-xl text-sm font-bold tracking-wide disabled:opacity-50 hover:bg-slate-800 dark:hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2"
+              >
+                {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
+              </button>
             </div>
-            <div className="flex-1">
-              <p className={`text-sm font-semibold leading-tight ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>ASAP</p>
-              <p className={`text-[10px] font-bold mt-0.5 leading-tight ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white/70' : 'text-slate-400'}`}>
-                {(() => {
-                  const hubs = filteredAgents.filter(a => a.agentAccountType === 'company_admin').length;
-                  const agents = filteredAgents.filter(a => a.agentAccountType === 'independent' || a.agentAccountType === 'fleet_driver').length;
 
-                  if (hubs > 0 && agents > 0) return `${hubs} Hubs & ${agents} Agents ready`;
-                  if (hubs > 0) return `${hubs} Fleet Hubs available`;
-                  if (agents > 0) return `${agents} Agents ready nearby`;
-                  return 'No partners nearby';
-                })()}
+            {searchError && (
+              <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-xs font-bold text-red-500 mt-3 flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5" /> {searchError}
+              </motion.p>
+            )}
+
+            {searchAttempted && !isSearching && !searchError && (
+              <div className="mt-5 border-t border-slate-300 dark:border-slate-700/50 pt-5">
+                {searchedAgent ? (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm relative">
+                    <button 
+                      onClick={() => {
+                        setSearchAttempted(false);
+                        setSearchedAgent(null);
+                        setAgentSearchQuery('');
+                      }}
+                      className="absolute top-3 right-3 w-6 h-6 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0 border-2 border-white dark:border-slate-700 shadow-sm">
+                        {searchedAgent.profile_photo ? (
+                          <img src={searchedAgent.profile_photo} alt={searchedAgent.full_name} className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-sm font-black text-slate-500 dark:text-slate-400">{searchedAgent.full_name?.charAt(0) || 'A'}</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0 pr-6">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{searchedAgent.full_name}</h4>
+                          <span className="px-2 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[9px] font-black uppercase tracking-widest rounded-md">
+                            {searchedAgent.agent_type === 'company_admin' ? 'Enterprise' : 'Independent'}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3 text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                          <span className="flex items-center gap-1"><Star className="w-3 h-3 text-emerald-500 fill-emerald-500" /> {searchedAgent.rating}</span>
+                          <span>•</span>
+                          <span>{searchedAgent.completed_pickups} Pickups</span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1.5">
+                            <span className={`w-2 h-2 rounded-full ${searchedAgent.online ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`} />
+                            {searchedAgent.online ? 'Online' : 'Offline'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {!searchedAgent.online && (
+                      <div className="mt-4 p-2.5 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/30 rounded-xl flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                        <p className="text-[10px] font-semibold text-red-700 dark:text-red-400 leading-tight">
+                          This agent is currently offline. You can select them, but you will only be able to schedule a pickup for later.
+                        </p>
+                      </div>
+                    )}
+                    <button
+                      onClick={() => {
+                        const isHub = searchedAgent.agent_type === 'company_admin';
+                        if (isHub) {
+                          setSelectedCompanyId(searchedAgent.company_id || searchedAgent.id);
+                          setSelectedAgent(null);
+                        } else {
+                          const agentAdapter = {
+                            id: searchedAgent.id,
+                            name: searchedAgent.full_name,
+                            rating: searchedAgent.rating,
+                            isOnline: searchedAgent.online,
+                            agentAccountType: searchedAgent.agent_type,
+                            avatarUrl: searchedAgent.profile_photo,
+                            companyId: searchedAgent.company_id
+                          };
+                          setSelectedAgent(agentAdapter);
+                          setSelectedCompanyId(null);
+                        }
+                        setSearchAttempted(false);
+                        setSearchedAgent(null);
+                        setAgentSearchQuery('');
+                        toast.success(`${searchedAgent.full_name} selected`);
+                      }}
+                      className="w-full mt-4 py-2.5 bg-primary/10 text-primary font-bold text-xs rounded-xl hover:bg-primary/20 transition-colors"
+                    >
+                      Select Agent
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-4 px-2">
+                    <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 mx-auto flex items-center justify-center mb-3">
+                      <User className="w-5 h-5 text-slate-400" />
+                    </div>
+                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 leading-relaxed">
+                      No Klinflow pickup agent was found with that ID.
+                    </p>
+                  </motion.div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="w-full h-px bg-slate-300/70 dark:bg-slate-700/50" />
+
+          {/* Time Selection Section (ASAP / Schedule) */}
+          {aiSuggestions.length > 0 ? (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                {/* SMART ASAP BUTTON */}
+                <button
+                  disabled={selectedAgent && !selectedAgent.isOnline}
+                  onClick={() => { selectTime({ time: 'ASAP', type: 'asap' }); setIsManualTime(false); }}
+                  className={`w-full p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center gap-1.5 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-primary border-primary ' : 'bg-white dark:bg-slate-800 border-transparent hover:border-slate-300 dark:hover:border-slate-600 shadow-sm'} ${(selectedAgent && !selectedAgent.isOnline) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'bg-white/20' : 'bg-primary/10'}`}>
+                    <Zap className={`w-4 h-4 ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-primary'}`} />
+                  </div>
+                  <div>
+                    <p className={`text-xs font-bold ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white' : 'text-slate-900 dark:text-white'}`}>ASAP</p>
+                    <p className={`text-[9px] font-semibold uppercase tracking-widest ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'text-white/70' : 'text-slate-500'}`}>
+                      Available Now
+                    </p>
+                  </div>
+                </button>
+
+                {/* SCHEDULE LATER */}
+                <button
+                  onClick={() => setIsManualTime(true)}
+                  className={`w-full p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center text-center gap-1.5 ${isManualTime ? 'bg-slate-800 dark:bg-slate-700 border-slate-600 shadow-xl' : 'bg-white dark:bg-slate-800 border-transparent hover:border-slate-300 dark:hover:border-slate-600 shadow-sm'}`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isManualTime ? 'bg-white/10' : 'bg-slate-100 dark:bg-slate-700'}`}>
+                    <Clock className={`w-4 h-4 ${isManualTime ? 'text-primary' : 'text-slate-400'}`} />
+                  </div>
+                  <div>
+                    <p className={`text-xs font-bold ${isManualTime ? 'text-white' : 'text-slate-900 dark:text-white'}`}>Schedule Later</p>
+                    <p className={`text-[9px] font-semibold uppercase tracking-widest ${isManualTime ? 'text-white/50' : 'text-slate-500'}`}>Pick a Time</p>
+                  </div>
+                </button>
+              </div>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold text-center mt-3">
+                Select exactly when you want your pickup to happen.
               </p>
+            </>
+          ) : (
+            <div className="bg-orange-50 dark:bg-orange-900/20 p-8 rounded-3xl border border-orange-100 dark:border-orange-900/30 text-center space-y-3">
+              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center mx-auto text-orange-500"><AlertCircle className="w-6 h-6" /></div>
+              <h3 className="text-sm font-semibold text-orange-900 dark:text-orange-200 capitalize tracking-widest">No Agents Online</h3>
+              <p className="text-[11px] font-semibold text-orange-700/70 dark:text-orange-400/70 leading-relaxed">All agents are currently offline. You can schedule a pickup for later!</p>
+              <button onClick={() => setIsManualTime(true)} className="px-6 py-3 bg-orange-500 text-white rounded-xl text-xs font-semibold capitalize tracking-widest shadow-lg shadow-orange-500/20">Schedule a Pickup</button>
             </div>
-            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${!isManualTime && (selectedTime as any)?.time === 'ASAP' ? 'border-white bg-white' : 'border-slate-200'}`}>
-              {!isManualTime && (selectedTime as any)?.time === 'ASAP' && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
-            </div>
-          </button>
+          )}
 
-          {/* SCHEDULE LATER */}
-          <button
-            onClick={() => setIsManualTime(true)}
-            className={`w-full p-4 rounded-2xl border-2 transition-all text-left flex items-center gap-3.5 ${isManualTime ? 'bg-slate-800 dark:bg-slate-800 border-slate-600 shadow-xl' : 'bg-white dark:bg-slate-800 border-dashed border-slate-200 dark:border-white/10'}`}
-          >
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${isManualTime ? 'bg-white/10' : 'bg-slate-50 dark:bg-slate-800'}`}>
-              <Clock className={`w-5 h-5 ${isManualTime ? 'text-primary' : 'text-slate-400'}`} />
-            </div>
-            <div className="flex-1">
-              <p className={`text-[13px] font-semibold leading-tight ${isManualTime ? 'text-white' : 'text-slate-900 dark:text-white'}`}>Schedule Later</p>
-              <p className={`text-[10px] font-bold mt-0.5 leading-tight ${isManualTime ? 'text-white/50' : 'text-slate-400'}`}>Pick a date & time</p>
-            </div>
-            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isManualTime ? 'border-white bg-white' : 'border-slate-200'}`}>
-              {isManualTime && <div className="w-2.5 h-2.5 rounded-full bg-slate-900" />}
-            </div>
-          </button>
-        </div>
-      ) : (
-        <div className="bg-orange-50 dark:bg-orange-900/20 p-8 rounded-3xl border border-orange-100 dark:border-orange-900/30 text-center space-y-3">
-          <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/40 rounded-2xl flex items-center justify-center mx-auto text-orange-500"><AlertCircle className="w-6 h-6" /></div>
-          <h3 className="text-sm font-semibold text-orange-900 dark:text-orange-200 capitalize tracking-widest">No Agents Online</h3>
-          <p className="text-[11px] font-semibold text-orange-700/70 dark:text-orange-400/70 leading-relaxed">All agents are currently offline. You can schedule a pickup for later!</p>
-          <button onClick={() => setIsManualTime(true)} className="px-6 py-3 bg-orange-500 text-white rounded-xl text-xs font-semibold capitalize tracking-widest shadow-lg shadow-orange-500/20">Schedule a Pickup</button>
-        </div>
-      )}
+          {/* Custom Time Picker */}
+          {isManualTime && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-white/5 grid grid-cols-2 gap-4 shadow-sm">
+              <div className="space-y-1">
+                <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Date</span>
+                <input type="date" value={customDate} onChange={(e) => setCustomDate(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Time</span>
+                <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
+              </div>
+            </motion.div>
+          )}
 
-      {isManualTime && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-white/5 grid grid-cols-2 gap-4">
-          <div className="space-y-1">
-            <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Date</span>
-            <input type="date" value={customDate} onChange={(e) => setCustomDate(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
-          </div>
-          <div className="space-y-1">
-            <span className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Time</span>
-            <input type="time" value={customTime} onChange={(e) => setCustomTime(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-xs font-semibold dark:text-white outline-none" />
-          </div>
-        </motion.div>
-      )}
+        </div>
     </motion.div>
   );
 }

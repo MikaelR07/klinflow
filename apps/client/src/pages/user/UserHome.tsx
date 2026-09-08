@@ -153,7 +153,7 @@ export default function UserHome() {
             </div>
             <div>
               <h1 className="text-lg font-black text-slate-900 dark:text-white tracking-wide leading-none">
-                Hi, {(profile?.fullName || profile?.name || "Resident").split(" ")[0]}!👋
+                Hello, {(profile?.fullName || profile?.name || "Resident").split(" ")[0]}!👋
               </h1>
               <div className="flex items-center gap-1.5 mt-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold capitalize tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 w-fit">
                 <MapPin className="w-3 h-3" />
@@ -178,30 +178,26 @@ export default function UserHome() {
       <div className="max-w-xl mx-auto px-1.5 space-y-6 pt-16">
         
         {/* ── ECO-REWARDS HERO CARD ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-[#064e3b] to-emerald-600 p-6 shadow-lg shadow-emerald-900/20">
-          <div className="absolute top-0 right-0 p-4 opacity-20 pointer-events-none">
-            <Leaf className="w-28 h-28 text-white transform rotate-12" />
-          </div>
-          
-          <div className="relative z-10 flex flex-col gap-5">
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-[#064e3b] to-emerald-600 p-6 ">
+          <div className="relative z-10 flex flex-col gap-2">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[10px] font-black text-emerald-300 uppercase tracking-widest mb-1.5 flex items-center gap-1">
                   <Wallet className="w-4 h-4" /> Available Balance
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-emerald-100">KSh</span>
-                  <h2 className="text-4xl font-black text-white tracking-tighter leading-none">
+                  <span className="text-xl font-bold text-emerald-100">Ksh</span>
+                  <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
                     {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </h2>
                 </div>
               </div>
-              <button onClick={handleWithdraw} className="bg-primary  mt-2 backdrop-blur-md border border-white/20 text-white px-6 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-sm">
+              <button onClick={handleWithdraw} className="bg-primary mt-1 backdrop-blur-md border border-white/20 text-white px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-sm">
                 Withdraw
               </button>
             </div>
 
-            <div className="flex items-center gap-1.5 pt-4 border-t border-white/10">
+            <div className="flex items-center gap-1.5 pt-2 border-t border-white/10">
               <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
                 <span className="text-lg font-black text-white">{metrics.totalPickups}</span>
                 <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
@@ -219,11 +215,11 @@ export default function UserHome() {
         </motion.div>
 
         {/* ── ACTION HUB (QUICK LINKS + CTA) ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-slate-100 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-2 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-2 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           {/* ── APP SERVICES GRID ── */}
           <div className="space-y-2">
-            <h3 className="text-[13px] font-black text-slate-700 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
-            <div className="grid grid-cols-4 gap-2 !mt-1">
+            <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
+            <div className="grid grid-cols-4 gap-1 !mt-1">
               {[
                 { label: 'Wallet', icon: <Wallet className="w-6 h-6" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-amber-500/10 text-amber-600' },
                 { label: 'Bookings', icon: <RecycleIcon className="w-6 h-6" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600' },
@@ -247,7 +243,7 @@ export default function UserHome() {
           {/* ── PRIMARY CTA: ON-DEMAND BOOKING ── */}
           <button 
             onClick={() => navigate("/book-pickup")}
-            className="w-full bg-gradient-to-r from-emerald-600 to-primary text-white dark:bg-white dark:text-slate-900 rounded-[20px] p-1 shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group"
+            className="w-full bg-gradient-to-br from-indigo-400 !mt-2 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-[20px]  shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group"
           >
             <div className="border border-white/10 dark:border-slate-900/10 rounded-[16px] p-4 flex items-center justify-between bg-repeat opacity-95">
               <div className="flex items-center gap-3">
@@ -255,8 +251,8 @@ export default function UserHome() {
                   <Truck className="w-5 h-5 text-white dark:text-slate-900 group-hover:translate-x-1 transition-transform" />
                 </div>
                 <div className="text-left">
-                  <h3 className="text-lg font-black tracking-tight leading-none mb-1">Book a Pickup</h3>
-                  <p className="text-[11px] font-bold text-slate-200 dark:text-slate-600">Turn your recyclables into cash today</p>
+                  <h3 className="text-base font-black  tracking-tight leading-none mb-1">Book a Pickup</h3>
+                  <p className="text-[11px] font-bold text-white">Turn your recyclables into cash today</p>
                 </div>
               </div>
               <div className="w-8 h-8 bg-white/20 dark:bg-slate-900/20 rounded-full flex items-center justify-center">
@@ -270,13 +266,13 @@ export default function UserHome() {
         {/* ── CATALOG: E-COMMERCE SCROLL ── */}
         <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.2 }} className="space-y-2">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-[13px] font-black text-slate-800 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
-            <button onClick={() => navigate("/discovery")} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest hover:underline flex items-center">
+            <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-wide">What Collectors Buy!</h3>
+            <button onClick={() => navigate("/discovery")} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest hover:underline flex items-center">
               view details <ChevronDownCircle className="w-3 h-3 ml-0.5" />
             </button>
           </div>
           
-          <div className="flex gap-3 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
+          <div className="flex gap-1 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
             {(categories.length > 0 ? categories : catalogItems as any[]).map((item: any, idx: number) => {
               const palette = COLOR_PALETTES[idx % COLOR_PALETTES.length];
               const isDB = categories.length > 0;
@@ -349,19 +345,19 @@ export default function UserHome() {
 
           <div 
             onClick={() => navigate("/community-collective")}
-            className="bg-gradient-to-br from-indigo-400 to-purple-400 border border-white dark:border-indigo-400 rounded-[20px] p-4 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group"
+            className="bg-gradient-to-br from-emerald-500 to-primary border border-white dark:border-primary rounded-[20px] p-4 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group"
           >
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+              <div className="w-12 h-12 bg-emerald-500 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Users className="w-6 h-6 text-white dark:text-indigo-400" />
               </div>
               <div>
                 <h4 className="text-[15px] font-black text-slate-900 dark:text-white leading-none mb-1">Community Pickups</h4>
-                <p className="text-[11px] font-semibold text-indigo-600">Join group pickups</p>
+                <p className="text-[11px] font-semibold text-white">Join group pickups</p>
               </div>
             </div>
-            <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center group-hover:bg-indigo-100 dark:group-hover:bg-indigo-800/50 transition-colors">
-              <ChevronRight className="w-4 h-4 text-indigo-600 dark:text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
+            <div className="w-8 h-8 rounded-full bg-primary dark:bg-indigo-900/30 flex items-center justify-center group-hover:bg-indigo-100 dark:group-hover:bg-indigo-800/50 transition-colors">
+              <ChevronRight className="w-4 h-4 text-white dark:text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </div>
         </motion.div>

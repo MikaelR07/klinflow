@@ -178,15 +178,24 @@ export default function PostTradeCollectionStep({
                   // Anti-overlap map jitter logic
                   const baseLat = agent.location?.latitude || center[0];
                   const baseLng = agent.location?.longitude || center[1];
-                  const hasDuplicate = filteredAgents.some((other: any, otherIdx: number) =>
-                    otherIdx !== index &&
+                  
+                  // Find all agents at this exact location to form a cluster
+                  const cluster = filteredAgents.filter((other: any) => 
                     Math.abs((other.location?.latitude || center[0]) - baseLat) < 0.001 &&
                     Math.abs((other.location?.longitude || center[1]) - baseLng) < 0.001
                   );
+
                   let markerLat = baseLat;
                   let markerLng = baseLng;
-                  if (hasDuplicate) {
-                    const angle = (2 * Math.PI * index) / filteredAgents.length;
+                  
+                  if (cluster.length > 1) {
+                    // Sort cluster by ID to ensure stable ordering regardless of how filteredAgents is sorted
+                    const sortedCluster = [...cluster].sort((a: any, b: any) => a.id.localeCompare(b.id));
+                    // Find this agent's stable index within the cluster
+                    const stableIndex = sortedCluster.findIndex((a: any) => a.id === agent.id);
+                    
+                    // Spread them out evenly based on the cluster size
+                    const angle = (2 * Math.PI * stableIndex) / cluster.length;
                     const offsetRadius = 0.003; // ~300m spread
                     markerLat = baseLat + offsetRadius * Math.cos(angle);
                     markerLng = baseLng + offsetRadius * Math.sin(angle);

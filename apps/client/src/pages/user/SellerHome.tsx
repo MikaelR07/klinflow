@@ -262,33 +262,30 @@ export default function SellerHome() {
 
       <div className="max-w-xl mx-auto px-1.5 space-y-6 pt-16">
         {/* ── REVENUE HERO CARD ── */}
-        <motion.div variants={itemVariants} className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-[#064e3b] to-emerald-600 p-6 shadow-lg shadow-emerald-900/20">
-          <div className="absolute top-0 right-0 p-4 opacity-20 pointer-events-none">
-            <Wallet2Icon className="w-28 h-28 text-white transform rotate-12" />
-          </div>
-          
-          <div className="relative z-10 flex flex-col gap-5">
+        <motion.div variants={itemVariants} className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-[#064e3b] to-emerald-600 p-6">
+        
+          <div className="relative z-10 flex flex-col gap-2">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[10px] font-black text-emerald-300 uppercase tracking-widest mb-1.5 flex items-center gap-1">
                   <Wallet className="w-4 h-4" /> Available Balance
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-emerald-100">KSh</span>
-                  <h2 className="text-4xl font-black text-white tracking-tighter leading-none">
+                  <span className="text-xl font-bold text-emerald-100">Ksh</span>
+                  <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
                     {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </h2>
                 </div>
               </div>
               <button
                 onClick={() => navigate('/withdraw')}
-                className="bg-primary mt-2 backdrop-blur-md border border-white/20 text-white px-6 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-sm"
+                className="bg-primary mt-1 backdrop-blur-md border border-white/20 text-white px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-sm"
               >
                 Withdraw
               </button>
             </div>
 
-            <div className="flex items-center gap-1.5 pt-4 border-t border-white/10">
+            <div className="flex items-center gap-1.5 pt-2 border-t border-white/10">
               <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
                 <span className="text-lg font-black text-white">{totalDeals}</span>
                 <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3" /> Deals</span>
@@ -306,11 +303,11 @@ export default function SellerHome() {
         </motion.div>
 
 
-        <motion.div variants={itemVariants} className="bg-slate-100 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-2 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
+        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-2 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           <div className="space-y-2">
             <h3 className="text-[13px] font-black text-slate-700 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
-            <div className="grid grid-cols-4 gap-2 !mt-1">
+            <div className="grid grid-cols-4 gap-1.5 !mt-1">
               <button
                 onClick={() => navigate('/post-trade')}
                 className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-md active:scale-95 transition-all group"
@@ -472,7 +469,7 @@ export default function SellerHome() {
           {/* ── MY RFQ QUOTES ── */}
           <button 
             onClick={() => navigate('/my-rfq-offers')}
-            className="w-full mt-2 bg-gradient-to-r from-emerald-600 to-primary text-white dark:bg-white dark:text-slate-900 rounded-[20px] p-1 shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group"
+            className="w-full mt-2 bg-gradient-to-r from-emerald-600 to-primary text-white dark:bg-white dark:text-slate-900 rounded-[20px] shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group"
           >
             <div className="border border-white/10 dark:border-slate-900/10 rounded-[16px] p-4 flex items-center justify-between bg-repeat opacity-95">
               <div className="flex items-center gap-3">

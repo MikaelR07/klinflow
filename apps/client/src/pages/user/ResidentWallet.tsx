@@ -226,14 +226,14 @@ export default function ResidentWallet() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
-        className="mx-1"
+        className="mx-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden p-4 shadow-sm"
       >
-        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-600  px-1">Quick Actions</h3>
+        <h3 className="text-sm font-bold text-slate-600 dark:text-white mb-3">Quick Actions</h3>
         <div className="grid grid-cols-4 gap-2">
           {/* Withdraw */}
           <button
             onClick={() => navigate('/withdraw')}
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
+            className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl p-2 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Landmark className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -244,7 +244,7 @@ export default function ResidentWallet() {
           {/* Redeem Rewards */}
           <button
             onClick={() => navigate('/redeem-gfp')}
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
+            className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Gift className="w-5 h-5 text-amber-600 dark:text-amber-400" />
@@ -255,7 +255,7 @@ export default function ResidentWallet() {
           {/* Transfer Points */}
           <button
             onClick={() => navigate('/transfer-gfp')}
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
+            className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <ArrowRightLeft className="w-5 h-5 text-blue-600 dark:text-green-300" />
@@ -266,7 +266,7 @@ export default function ResidentWallet() {
           {/* Earn More */}
           <button
             onClick={() => navigate('/book-pickup')}
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
+            className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <div className="w-10 h-10 bg-purple-50 dark:bg-purple-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
               <Banknote className="w-5 h-5 text-purple-600 dark:text-purple-400" />
@@ -274,197 +274,22 @@ export default function ResidentWallet() {
             <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">Earn More</p>
           </button>
         </div>
-      </motion.div>
 
-      {/* ── RECYCLING REWARDS ── */}
-      <div className="mx-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4">
+        <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-4 " />
 
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-            Recycling Rewards
+          <h3 className="text-sm font-bold text-slate-600 dark:text-white">
+            Recent Transactions
           </h3>
-
           <button
-            onClick={() => navigate('/impact-hub')}
+            onClick={() => navigate('/transactions-history')}
             className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
           >
-            View all
+            View History
           </button>
         </div>
 
-        <div className="flex items-center gap-4">
-
-          {/* Left side — Message */}
-          <div className="flex items-start gap-3 flex-1 min-w-0">
-
-            <div className="w-12 h-12 bg-emerald-200 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20">
-              <span className="text-xl">{impact.icon}</span>
-            </div>
-
-            <div className="min-w-0">
-              <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5 truncate">
-                {thisMonthPickups.length > 0
-                  ? "You're doing amazing!"
-                  : "Start your journey!"}
-              </p>
-
-              <p className="text-[10px] font-medium text-slate-400 leading-snug">
-                {thisMonthPickups.length > 0
-                  ? `You recycled ${kgRecoveredThisMonth}kg this month. Keep going!`
-                  : 'Complete your first pickup to start earning rewards.'}
-              </p>
-            </div>
-
-          </div>
-
-          {/* Right side — Level */}
-          <div className="text-right shrink-0">
-
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
-              Level {impact.level}
-            </p>
-CAPIcapitalize
-            <p className="text-sm font-black text-slate-900 dark:text-white leading-tight">
-              {impact.label}
-            </p>
-
-            {/* Static Progress Bar */}
-            <div className="w-24 h-2 bg-slate-400 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
-
-              <div
-                style={{ width: `${progressPercent}%` }}
-                className="h-full bg-gradient-to-r from-emerald-500 to-green-400 rounded-full"
-              />
-
-            </div>
-
-            <p className="text-[8px] font-bold text-slate-400 mt-1">
-              {gfpBalance}/{impact.nextThreshold} pts
-            </p>
-
-          </div>
-
-        </div>
-      </div>
-
-      {/* ── SAVINGS + PICKUP SUMMARY ── */}
-      <div className="mx-1">
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 flex flex-col">
-          
-          {/* Top Section: Savings */}
-          <div className="flex flex-col mb-4">
-            <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-0.5">
-              Savings This Month
-            </h4>
-            <p className="text-[9px] font-semibold text-slate-400 mb-3">
-              Money earned by recycling
-            </p>
-            <p className="text-xl font-black text-slate-900 dark:text-white mb-1.5">
-              KES {Number(totalEarnedThisMonth).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-            <div className="flex items-center gap-1.5">
-              <TrendingUp className="w-3 h-3 text-emerald-500 shrink-0" />
-              <p className="text-[9px] font-bold text-emerald-500">
-                {thisMonthPickups.length > 0
-                  ? `${thisMonthPickups.length} pickups completed this month`
-                  : 'Start recycling to earn'}
-              </p>
-            </div>
-            
-            {/* Dynamic Sparkline */}
-            <div className="mt-3 h-8 flex items-end gap-0.5">
-              {sparklineData.map((h, i) => (
-                <div
-                  key={i}
-                  style={{ height: `${h}%` }}
-                  className="flex-1 bg-primary rounded-sm min-h-[2px] transition-all duration-500"
-                />
-              ))}
-            </div>
-          </div>
-
-          <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-4" />
-
-          {/* Bottom Section: Pickup Summary */}
-          <div className="flex flex-col">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                Pickup Summary
-              </h4>
-              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">
-                Overall
-              </span>
-            </div>
-
-            <div className="space-y-3.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <Package className="w-4 h-4 text-blue-500 shrink-0" />
-                  <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                    Total Pickups
-                  </p>
-                </div>
-                <p className="text-sm font-black text-slate-900 dark:text-white">
-                  {totalPickups}
-                </p>
-              </div>
-
-              <div className="h-px bg-slate-100 dark:bg-slate-800" />
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <Clock className="w-4 h-4 text-amber-500 shrink-0" />
-                  <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                    Upcoming
-                  </p>
-                </div>
-                <p className="text-sm font-black text-slate-900 dark:text-white">
-                  {upcomingPickups}
-                </p>
-              </div>
-
-              <div className="h-px bg-slate-100 dark:bg-slate-800" />
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
-                  <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                    Completed
-                  </p>
-                </div>
-                <p className="text-sm font-black text-slate-900 dark:text-white">
-                  {completedBookings.length}
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      {/* ── RECENT TRANSACTIONS ── */}
-      <div className="mx-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
-
-        <div className="p-4 pb-2">
-
-          <div className="flex items-center justify-between">
-
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-              Recent Transactions
-            </h3>
-
-            <button
-              onClick={() => navigate('/transactions-history')}
-              className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
-            >
-              View History
-            </button>
-
-          </div>
-
-        </div>
-
-        <div className="space-y-2 p-3 pt-0 mt-1">
+        <div className="space-y-2">
           <AnimatePresence mode="popLayout">
             {transactions.length > 0 ? (
               transactions.slice(0, 4).map((txn, i) => (
@@ -514,17 +339,17 @@ CAPIcapitalize
                 </motion.div>
               ))
             ) : (
-              <div className="py-10 text-center">
-                <div className="w-14 h-14 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                  <Wallet className="w-6 h-6 text-slate-300 dark:text-slate-600" />
+              <div className="py-8 text-center bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800">
+                <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Wallet className="w-5 h-5 text-slate-400 dark:text-slate-500" />
                 </div>
-                <p className="text-sm font-semibold text-slate-400 dark:text-slate-500 mb-1">No transactions yet</p>
-                <p className="text-[10px] font-semibold text-slate-400/70 mb-4">
+                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">No transactions yet</p>
+                <p className="text-[10px] font-semibold text-slate-400/70 dark:text-slate-500 mb-4">
                   Complete your first pickup to start earning
                 </p>
                 <button
                   onClick={() => navigate('/book-pickup')}
-                  className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all "
+                  className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
                 >
                   Book a Pickup
                 </button>
@@ -532,7 +357,173 @@ CAPIcapitalize
             )}
           </AnimatePresence>
         </div>
+      </motion.div>
+
+      {/* ── RECYCLING REWARDS & SUMMARY ── */}
+      <div className="mx-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-2">
+
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+            Recycling Rewards
+          </h3>
+
+          <button
+            onClick={() => navigate('/impact-hub')}
+            className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
+          >
+            View all
+          </button>
+        </div>
+
+        <div className="flex items-center gap-4">
+
+          {/* Left side — Message */}
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+
+            <div className="w-12 h-12 bg-emerald-200 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20">
+              <span className="text-xl">{impact.icon}</span>
+            </div>
+
+            <div className="min-w-0">
+              <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5 truncate">
+                {thisMonthPickups.length > 0
+                  ? "You're doing amazing!"
+                  : "Start your journey!"}
+              </p>
+
+              <p className="text-[10px] font-medium text-slate-400 leading-snug">
+                {thisMonthPickups.length > 0
+                  ? `You recycled ${kgRecoveredThisMonth}kg this month. Keep going!`
+                  : 'Complete your first pickup to start earning rewards.'}
+              </p>
+            </div>
+
+          </div>
+
+          {/* Right side — Level */}
+          <div className="text-right shrink-0">
+
+            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
+              Level {impact.level}
+            </p>
+            <p className="text-sm font-black text-slate-900 dark:text-white leading-tight capitalize">
+              {impact.label}
+            </p>
+
+            {/* Static Progress Bar */}
+            <div className="w-24 h-2 bg-slate-400 dark:bg-slate-800 rounded-full mt-2 overflow-hidden">
+
+              <div
+                style={{ width: `${progressPercent}%` }}
+                className="h-full bg-gradient-to-r from-emerald-500 to-green-400 rounded-full"
+              />
+
+            </div>
+
+            <p className="text-[8px] font-bold text-slate-400 mt-1">
+              {gfpBalance}/{impact.nextThreshold} pts
+            </p>
+
+          </div>
+
+        </div>
+        <div className="h-px bg-slate-100 dark:bg-slate-800/50 w-full my-2" />
+
+      {/* ── SAVINGS + PICKUP SUMMARY ── */}
+        <div className="grid grid-cols-2 gap-3">
+          
+          {/* Left Section: Savings */}
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-700/50 p-4 flex flex-col justify-between">
+            <div>
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-1">
+                Savings This Month
+              </h4>
+              <p className="text-[9px] font-semibold text-slate-400 mb-3">
+                Money earned by recycling
+              </p>
+              <p className="text-lg font-black text-slate-900 dark:text-white mb-1.5 leading-none">
+                KES {Number(totalEarnedThisMonth).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+              </p>
+              <div className="flex items-center gap-1.5">
+                <TrendingUp className="w-3 h-3 text-emerald-500 shrink-0" />
+                <p className="text-[9px] font-bold text-emerald-500 leading-tight">
+                  {thisMonthPickups.length > 0
+                    ? `${thisMonthPickups.length} pickups done`
+                    : 'No pickups yet'}
+                </p>
+              </div>
+            </div>
+            
+            {/* Dynamic Sparkline */}
+            <div className="mt-4 h-10 flex items-end gap-0.5">
+              {sparklineData.map((h, i) => (
+                <div
+                  key={i}
+                  style={{ height: `${h}%` }}
+                  className="flex-1 bg-primary/80 dark:bg-primary/60 rounded-[1px] min-h-[2px] transition-all duration-500"
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Right Section: Pickup Summary */}
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-700/50 p-4 flex flex-col">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                Summary
+              </h4>
+              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">
+                Overall
+              </span>
+            </div>
+
+            <div className="space-y-3 mt-auto">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Package className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                  <p className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">
+                    Total
+                  </p>
+                </div>
+                <p className="text-xs font-black text-slate-900 dark:text-white">
+                  {totalPickups}
+                </p>
+              </div>
+
+              <div className="h-px bg-slate-100 dark:bg-slate-800" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  <p className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">
+                    Upcoming
+                  </p>
+                </div>
+                <p className="text-xs font-black text-slate-900 dark:text-white">
+                  {upcomingPickups}
+                </p>
+              </div>
+
+              <div className="h-px bg-slate-100 dark:bg-slate-800" />
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                  <p className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">
+                    Completed
+                  </p>
+                </div>
+                <p className="text-xs font-black text-slate-900 dark:text-white">
+                  {completedBookings.length}
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
+
+
 
       {/* ── SECURITY FOOTER ── */}
       <motion.div

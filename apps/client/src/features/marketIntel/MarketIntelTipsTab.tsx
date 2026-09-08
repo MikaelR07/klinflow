@@ -35,7 +35,7 @@ export default function MarketIntelTipsTab({ marketData }: MarketIntelTipsTabPro
                 </div>
               </div>
               <h3 className="text-[11px] font-bold text-white leading-tight mb-1">
-                {marketData?.insights?.length || 0} active insights available
+                {Array.isArray(marketData?.insights) ? marketData.insights.length : 0} active insights available
               </h3>
               <p className="text-[11px] text-slate-50 leading-snug pr-2">
                 Review market opportunities and recommendations designed to improve your collection earnings.
@@ -47,7 +47,7 @@ export default function MarketIntelTipsTab({ marketData }: MarketIntelTipsTabPro
             <div className="flex flex-col bg-emerald-900/40 p-2 rounded-lg border border-emerald-600">
               <div className="flex items-center gap-1.5 mb-1">
                 <TrendingUp className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span className="text-sm font-bold text-white leading-none">{marketData?.insights?.length || 0}</span>
+                <span className="text-sm font-bold text-white leading-none">{Array.isArray(marketData?.insights) ? marketData.insights.length : 0}</span>
               </div>
               <p className="text-[8px] font-bold text-emerald-200/80 capitalize tracking-widest">Active Insights</p>
             </div>
@@ -92,7 +92,7 @@ export default function MarketIntelTipsTab({ marketData }: MarketIntelTipsTabPro
 
       {/* Insights List */}
       <div className="space-y-1 !mt-2">
-        {!marketData?.insights || marketData.insights.length === 0 ? (
+        {!Array.isArray(marketData?.insights) || marketData.insights.length === 0 ? (
           Array.from({ length: 3 }).map((_, i) => (
             <div
               key={i}

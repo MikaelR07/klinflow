@@ -80,6 +80,7 @@ export default function SwarmDetails() {
 
   const percentage = swarm ? Math.min(100, Math.round((swarm.current_weight / swarm.target_weight) * 100)) : 0;
   const alreadyJoined = participants.some(p => p.user_id === profile?.id);
+  const isExpired = swarm?.closes_at && new Date(swarm.closes_at).getTime() < new Date().getTime();
 
   if (loading) {
     return (
@@ -173,9 +174,9 @@ export default function SwarmDetails() {
               </h2>
             </div>
             <div className="flex items-center gap-2">
-              <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${swarm.status === 'active' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border border-emerald-200 dark:border-emerald-500/20' : 'bg-slate-50 dark:bg-slate-500/10 text-slate-500 border border-slate-200 dark:border-slate-500/20'}`}>
-                {swarm.status === 'active' ? <Clock className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
-                <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{swarm.status}</span>
+              <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${swarm.status === 'active' && !isExpired ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border border-emerald-200 dark:border-emerald-500/20' : swarm.status === 'active' && isExpired ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-500 border border-rose-200 dark:border-rose-500/20' : 'bg-slate-50 dark:bg-slate-500/10 text-slate-500 border border-slate-200 dark:border-slate-500/20'}`}>
+                {swarm.status === 'active' && !isExpired ? <Clock className="w-3.5 h-3.5" /> : swarm.status === 'active' && isExpired ? <AlertTriangle className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+                <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{swarm.status === 'active' && isExpired ? 'expired' : swarm.status}</span>
               </div>
               {swarm.creator_id === profile?.id && (
                 <button
@@ -218,10 +219,10 @@ export default function SwarmDetails() {
 
             {swarm.closes_at && (
               <div className="flex items-start gap-3">
-                <Clock className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                <Clock className={`w-4 h-4 shrink-0 mt-0.5 ${isExpired ? 'text-rose-500' : 'text-rose-500'}`} />
                 <div>
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Deadline</p>
-                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{new Date(swarm.closes_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">{isExpired ? 'Expired On' : 'Deadline'}</p>
+                  <span className={`text-[11px] font-bold ${isExpired ? 'text-rose-600 dark:text-rose-400' : 'text-slate-700 dark:text-slate-300'}`}>{new Date(swarm.closes_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
               </div>
             )}
@@ -388,6 +389,10 @@ export default function SwarmDetails() {
             {alreadyJoined ? (
               <div className="flex-1 py-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 rounded-2xl font-semibold text-xs capitalize tracking-widest flex items-center justify-center gap-2 border border-emerald-100 dark:border-emerald-500/20">
                 <CheckCircle2 className="w-4 h-4" /> You've Joined This Swarm
+              </div>
+            ) : isExpired ? (
+              <div className="flex-1 py-4 bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 rounded-2xl font-semibold text-xs capitalize tracking-widest flex items-center justify-center gap-2 border border-rose-100 dark:border-rose-500/20">
+                <AlertTriangle className="w-4 h-4" /> Swarm Expired
               </div>
             ) : (
               <button

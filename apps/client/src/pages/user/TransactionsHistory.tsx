@@ -130,55 +130,60 @@ export default function TransactionsHistory() {
         </div>
       </div>
 
-      <main className="max-w-lg mx-auto px-3 pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)] space-y-4">
-        {/* ── STATS HEADER CARD ── */}
-        <div className="bg-gradient-to-br from-[#224823] to-[#142d15] dark:from-slate-900 dark:to-slate-900 border border-emerald-800/30 dark:border-slate-800 text-white rounded-2xl p-4 shadow-sm flex items-center justify-between">
-          <div>
-            <p className="text-[10px] font-semibold text-[#c2ed7d] uppercase tracking-wider mb-0.5">
-              Filtered Volume
-            </p>
-            <p className="text-2xl font-black font-mono text-white">
-              KES {totalVolume.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          </div>
-          <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center border border-white/15">
-            <Wallet className="w-5 h-5 text-[#c2ed7d]" />
-          </div>
-        </div>
-
-        {/* ── SEARCH & FILTER CONTROLS ── */}
-        <div className="space-y-2.5">
-          <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search by Hub name or material..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-            />
+      <main className="max-w-lg mx-auto px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)] space-y-3">
+        {/* ── STATS HEADER & FILTERS CARD ── */}
+        <div className="bg-gradient-to-br from-purple-400 to-indigo-500 dark:from-slate-900 dark:to-slate-900 border border-indigo-800/30 dark:border-slate-800 text-white rounded-2xl p-4 shadow-sm space-y-2">
+          {/* Top Stats */}
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-semibold text-white/80 uppercase tracking-wider mb-0.5">
+                Filtered Volume
+              </p>
+              <p className="text-2xl font-black font-mono text-white">
+                KES {totalVolume.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </p>
+            </div>
+            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center border border-white/15">
+              <Wallet className="w-5 h-5 text-white" />
+            </div>
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-            {(['all', 'payouts', 'rewards'] as const).map(type => (
-              <button
-                key={type}
-                onClick={() => setFilterType(type)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold capitalize transition-all shrink-0 ${
-                  filterType === type
-                    ? 'bg-slate-900 text-white dark:bg-emerald-500 dark:text-slate-950 shadow-2xs'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50'
-                }`}
-              >
-                {type}
-              </button>
-            ))}
+          <div className="h-px bg-white/10 w-full" />
+
+          {/* Search & Filter Controls */}
+          <div className="space-y-3">
+            <div className="relative">
+              <Search className="w-4 h-4 text-white/50 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search by Hub name or material..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="w-full bg-black/20 dark:bg-slate-950/50 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm transition-all"
+              />
+            </div>
+
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              {(['all', 'payouts', 'rewards'] as const).map(type => (
+                <button
+                  key={type}
+                  onClick={() => setFilterType(type)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold capitalize transition-all shrink-0 border ${
+                    filterType === type
+                      ? 'bg-white text-indigo-600 dark:bg-emerald-500 dark:text-slate-950 border-white dark:border-emerald-500 shadow-sm'
+                      : 'bg-black/10 dark:bg-slate-900 border-white/10 text-white/80 hover:bg-black/20'
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* ── TRANSACTION FEED CARD ── */}
-        <div className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-2xs">
-          <div className="divide-y divide-slate-100 dark:divide-slate-800/80">
+        <div className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-2 shadow-2xs">
+          <div className="space-y-1">
             {isLoading ? (
               <div className="py-12 text-center text-xs text-slate-500 font-medium">
                 Loading transaction ledger...
@@ -197,7 +202,7 @@ export default function TransactionsHistory() {
               filteredTransactions.map(item => (
                 <div
                   key={item.id}
-                  className="p-3.5 flex items-center justify-between gap-3 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  className="px-4 py-3 flex items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
                     <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0 font-bold">
