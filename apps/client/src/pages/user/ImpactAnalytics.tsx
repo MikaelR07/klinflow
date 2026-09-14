@@ -426,10 +426,12 @@ export default function ImpactAnalytics() {
           </div>
         </div>
 
-        {/* ── FOUR STATS GRID ── */}
-        <div className="grid grid-cols-4 gap-1">
+        {/* ── METRICS & GOALS WRAPPER ── */}
+        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-2xl space-y-4 !mt-2">
+          {/* ── FOUR STATS GRID ── */}
+          <div className="grid grid-cols-4 gap-2">
           {/* Lifetime Earnings */}
-          <div className="bg-white dark:bg-slate-900/60 rounded-xl p-2.5 border border-slate-200 dark:border-slate-800  flex flex-col justify-between min-h-[90px]">
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-2.5 border-none shadow-sm flex flex-col justify-between min-h-[90px]">
             <div className="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center mb-1">
               <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
             </div>
@@ -438,7 +440,7 @@ export default function ImpactAnalytics() {
 
           </div>
           {/* Global Rank */}
-          <div className="bg-white dark:bg-slate-900/60 rounded-xl p-2.5 border border-slate-200 dark:border-slate-800  flex flex-col justify-between min-h-[90px]">
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-2.5 border-none shadow-sm flex flex-col justify-between min-h-[90px]">
             <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mb-1">
               <Trophy className="w-3.5 h-3.5 text-blue-600 dark:text-blue-500" />
             </div>
@@ -447,7 +449,7 @@ export default function ImpactAnalytics() {
 
           </div>
           {/* Total Pickups */}
-          <div className="bg-white dark:bg-slate-900/60 rounded-xl p-2.5 border border-slate-200 dark:border-slate-800  flex flex-col justify-between min-h-[90px]">
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-2.5 border-none shadow-sm flex flex-col justify-between min-h-[90px]">
             <div className="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center mb-1">
               <Truck className="w-3.5 h-3.5 text-purple-600 dark:text-purple-500" />
             </div>
@@ -456,7 +458,7 @@ export default function ImpactAnalytics() {
 
           </div>
           {/* GFP Points */}
-          <div className="bg-white dark:bg-slate-900/60 rounded-xl p-2.5 border border-slate-200 dark:border-slate-800  flex flex-col justify-between min-h-[90px]">
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-2.5 border-none shadow-sm flex flex-col justify-between min-h-[90px]">
             <div className="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center mb-1">
               <Star className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
             </div>
@@ -469,13 +471,13 @@ export default function ImpactAnalytics() {
         {/* ── GOAL TRACKING (CIRCULAR) ── */}
         <div className="space-y-1">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Your Goals</h3>
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-white">Set Recycling Goals</h3>
 
           </div>
 
-          <div className="grid grid-cols-2 gap-1">
+          <div className="grid grid-cols-2 gap-2">
             {/* Weekly Goal */}
-            <div className="bg-white dark:bg-slate-900/60 rounded-[1rem] p-4 border border-slate-200 dark:border-slate-800 transition-colors">
+            <div className="bg-white dark:bg-slate-900 rounded-[1rem] p-4 border-none shadow-sm transition-colors">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
                   <Calendar className="w-3.5 h-3.5" /> <span className="text-[10px] font-semibold">Weekly Goal</span>
@@ -502,7 +504,7 @@ export default function ImpactAnalytics() {
             </div>
 
             {/* Monthly Goal */}
-            <div className="bg-white dark:bg-slate-900/60 rounded-[1rem] p-4 border border-slate-200 dark:border-slate-800 transition-colors">
+            <div className="bg-white dark:bg-slate-900 rounded-[1rem] p-4 border-none shadow-sm transition-colors">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
                   <Calendar className="w-3.5 h-3.5" /> <span className="text-[10px] font-semibold">Monthly Goal</span>
@@ -528,6 +530,7 @@ export default function ImpactAnalytics() {
               </div>
             </div>
           </div>
+        </div>
         </div>
 
         {/* ── RECYCLING TRENDS (KEPT EXISTING GRAPH AS REQUESTED) ── */}
@@ -589,101 +592,6 @@ export default function ImpactAnalytics() {
             </div>
           </div>
         </div>
-
-        {/* ── ACHIEVEMENTS ── */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Achievements</h3>
-            <button
-              onClick={() => navigate('/impact-hub')}
-              className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1 hover:text-slate-900 dark:hover:text-white transition-colors"
-            >
-              View all <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-          <div className="grid grid-cols-4 gap-2">
-            {/* First Step */}
-            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 rounded-2xl p-2.5 border flex flex-col items-center justify-center gap-2 ${stats.totalPickups >= 1 ? 'bg-emerald-500 dark:bg-emerald-800 border-emerald-300 dark:border-emerald-700/50' : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 opacity-80 grayscale'}`}>
-              <div className={`w-10 h-10 rounded-xl rotate-45 flex items-center justify-center border shadow-sm ${stats.totalPickups >= 1 ? 'bg-emerald-50 dark:bg-emerald-500/20 border-emerald-300 dark:border-emerald-500/30' : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600'}`}>
-                {stats.totalPickups >= 1 ? (
-                  <Leaf className="w-5 h-5 text-emerald-600 dark:text-emerald-400 -rotate-45" />
-                ) : (
-                  <Lock className="w-6 h-6 text-slate-400 dark:text-slate-500 -rotate-45" />
-                )}
-              </div>
-              <div className="text-center mt-1">
-                <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">First Step</p>
-                <div className="flex items-center justify-center gap-0.5">
-                  <p className="text-[7px] font-semibold text-slate-100 dark:text-slate-400">1 Pickup</p>
-                  {stats.totalPickups >= 1 && (
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Green Neighbor */}
-            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 rounded-2xl p-2.5 border flex flex-col items-center justify-center gap-2 ${stats.totalPickups >= 10 ? 'bg-blue-500 dark:bg-blue-800 border-blue-300 dark:border-blue-700/50' : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 opacity-80 grayscale'}`}>
-              <div className={`w-10 h-10 rounded-xl rotate-45 flex items-center justify-center border shadow-sm ${stats.totalPickups >= 10 ? 'bg-blue-50 dark:bg-blue-500/20 border-blue-300 dark:border-blue-500/30' : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600'}`}>
-                {stats.totalPickups >= 10 ? (
-                  <Recycle className="w-5 h-5 text-blue-600 dark:text-blue-400 -rotate-45" />
-                ) : (
-                  <Lock className="w-6 h-6 text-slate-400 dark:text-slate-500 -rotate-45" />
-                )}
-              </div>
-              <div className="text-center mt-1">
-                <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Green Neighbor</p>
-                <div className="flex items-center justify-center gap-0.5">
-                  <p className="text-[7px] font-semibold text-slate-500 dark:text-slate-400">10 Pickups</p>
-                  {stats.totalPickups >= 10 && (
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Plastic Warrior */}
-            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 rounded-2xl p-2.5 border flex flex-col items-center justify-center gap-2 ${stats.plasticKg >= 100 ? 'bg-purple-500 dark:bg-purple-800 border-purple-300 dark:border-purple-700/50' : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 opacity-80 grayscale'}`}>
-              <div className={`w-10 h-10 rounded-xl rotate-45 flex items-center justify-center border shadow-sm ${stats.plasticKg >= 100 ? 'bg-purple-50 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/30' : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600'}`}>
-                {stats.plasticKg >= 100 ? (
-                  <Trophy className="w-5 h-5 text-purple-600 dark:text-purple-400 -rotate-45" />
-                ) : (
-                  <Lock className="w-6 h-6 text-slate-400 dark:text-slate-500 -rotate-45" />
-                )}
-              </div>
-              <div className="text-center mt-1">
-                <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Plastic Warrior</p>
-                <div className="flex items-center justify-center gap-0.5">
-                  <p className="text-[7px] font-semibold text-slate-100 dark:text-slate-400">100 KG</p>
-                  {stats.plasticKg >= 100 && (
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Eco-Titan */}
-            <div onClick={() => navigate('/impact-hub')} className={`cursor-pointer transition-all hover:scale-105 rounded-2xl p-2.5 border flex flex-col items-center justify-center gap-2 ${stats.totalWeight >= 500 ? 'bg-amber-400 dark:bg-amber-800 border-amber-300 dark:border-amber-700/50' : 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 opacity-80 grayscale'}`}>
-              <div className={`w-10 h-10 rounded-xl rotate-45 flex items-center justify-center border shadow-sm ${stats.totalWeight >= 500 ? 'bg-amber-50 dark:bg-amber-500/20 border-amber-300 dark:border-amber-500/30' : 'bg-slate-200 dark:bg-slate-700 border-slate-300 dark:border-slate-600'}`}>
-                {stats.totalWeight >= 500 ? (
-                  <Star className="w-5 h-5 text-amber-600 dark:text-amber-400 -rotate-45" />
-                ) : (
-                  <Lock className="w-6 h-6 text-slate-400 dark:text-slate-500 -rotate-45" />
-                )}
-              </div>
-              <div className="text-center mt-1">
-                <p className="text-[9px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">Eco-Titan</p>
-                <div className="flex items-center justify-center gap-0.5">
-                  <p className="text-[7px] font-semibold text-slate-500 dark:text-slate-400">500 KG</p>
-                  {stats.totalWeight >= 500 && (
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[6px]">✓</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
 
 
       </div>

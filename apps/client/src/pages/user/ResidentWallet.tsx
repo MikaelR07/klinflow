@@ -87,11 +87,7 @@ export default function ResidentWallet() {
     [completedBookings, currentMonthStart]
   );
 
-  const totalPickups = bookings.length;
-  const upcomingPickups = useMemo(() =>
-    bookings.filter((b: any) => ['pending', 'accepted', 'in_progress'].includes(b.status)).length,
-    [bookings]
-  );
+
 
   // True Transactions from ledger (Moved up to be used by metrics)
   const transactions = useMemo(() => {
@@ -112,28 +108,37 @@ export default function ResidentWallet() {
     return thisMonthPickups.reduce((sum, b) => sum + (Number(b.actualWeightKg) || Number(b.weightKg) || 0), 0);
   }, [thisMonthPickups]);
 
-  const totalEarnedThisMonth = useMemo(() => {
-    return thisMonthPickups.reduce((sum, b) => sum + (Number(b.totalPrice) || 0), 0);
-  }, [thisMonthPickups]);
-
-  const sparklineData = useMemo(() => {
-    const days = 10;
-    const data = new Array(days).fill(0);
-    const today = new Date();
-    today.setHours(23, 59, 59, 999);
-
-    completedBookings.forEach((b: any) => {
-      const date = new Date(b.completedAt || b.updatedAt || b.createdAt);
-      const diffTime = today.getTime() - date.getTime();
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays >= 0 && diffDays < days) {
-        data[days - 1 - diffDays] += (Number(b.totalPrice) || 0);
-      }
-    });
-
-    const max = Math.max(...data, 1);
-    return data.map(val => Math.max((val / max) * 100, 5));
-  }, [completedBookings]);
+  const getRewardMessages = () => {
+    if (impact.level === 4) {
+      return {
+        title: "True Climate Guardian!",
+        subtitle: `Your impact is monumental. You've recycled ${kgRecoveredThisMonth}kg this month alone!`
+      };
+    }
+    if (impact.level === 3) {
+      return {
+        title: "You're an Eco Hero!",
+        subtitle: `Incredible work. You've recycled ${kgRecoveredThisMonth}kg this month.`
+      };
+    }
+    if (impact.level === 2) {
+      return {
+        title: "You're making a difference!",
+        subtitle: `Keep it up, Green Scout! You're getting closer to Eco Hero.`
+      };
+    }
+    // Level 1
+    if (completedBookings.length > 0) {
+      return {
+        title: "Great start!",
+        subtitle: `You've taken the first steps. Keep recycling to level up to Green Scout!`
+      };
+    }
+    return {
+      title: "Start your journey!",
+      subtitle: "Complete your first pickup to start earning rewards."
+    };
+  };
 
   // True Transactions from ledger moved up
 
@@ -149,133 +154,106 @@ export default function ResidentWallet() {
   const progressPercent = Math.min(((gfpBalance || 0) / impact.nextThreshold) * 100, 100);
 
   return (
-    <div className="space-y-4 pb-2">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden min-h-screen">
 
-      {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-600">
-        <div className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate(-1)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors active:scale-95">
-              <ArrowLeft className="w-5 h-5 text-slate-500" />
-            </button>
-            <div className="flex items-center gap-2">
+      {/* ── TOP SECTION: GRADIENT WITH ROUNDED BOTTOM ── */}
+      <div className="bg-gradient-to-br from-indigo-500 to-purple-500 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2rem] shadow-sm relative z-20">
 
-              <h1 className="font-bold text-lg tracking-tight text-slate-600 dark:text-white">Resident Wallet</h1>
-            </div>
+        {/* Fixed Header */}
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-indigo-500/90 to-purple-500/90 dark:from-indigo-500/90 dark:to-purple-500/90 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-3 px-4 max-w-lg mx-auto flex items-center justify-between shadow-sm">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center active:scale-95 transition-all border border-white/20">
+            <ArrowLeft className="w-5 h-5 text-white" />
+          </button>
+          <div className="text-center">
+            <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Resident Wallet</h1>
           </div>
-
+          <div className="w-10 h-10"></div>
         </div>
-      </div>
 
-      {/* Spacer for fixed nav */}
-      <div className="pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)]" />
-
-      {/* ── BALANCE HERO CARD (Agent Performance Card Style) ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: 'easeOut' }}
-        className="mx-1"
-      >
-        <div className="relative bg-primary  rounded-xl p-5 overflow-hidden">
-          {/* Balance Section */}
-          <div className="relative z-10 mb-4 pl-1">
-            <p className="text-[10px] font-bold text-emerald-50 mb-1 tracking-wider uppercase">
-              Available Balance
-            </p>
-            <div className="flex items-center gap-2 mb-1.5">
-              <h2 className="text-3xl sm:text-4xl font-semibold text-white tracking-tight leading-none">
-                {balanceVisible ? `KSH ${Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '••••••••'}
-              </h2>
-              <button
-                onClick={() => setBalanceVisible(!balanceVisible)}
-                className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors"
-              >
-                {balanceVisible
-                  ? <Eye className="w-5 h-5 text-slate-200" />
-                  : <EyeOff className="w-5 h-5 text-slate-200" />
-                }
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: 'easeOut' }}
+        >
+          {/* Balance */}
+          <div className="text-center px-4 mb-4">
+            <p className="text-[11px] font-bold text-white/70 uppercase tracking-widest mb-1.5">Available Balance</p>
+            <div className="flex items-center justify-center gap-2 text-white">
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-bold">KSh</span>
+                <span className={`text-3xl font-black leading-none transition-all duration-300 ${!balanceVisible ? 'blur-md select-none' : ''}`}>
+                  {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+              <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-1.5 hover:bg-white/10 rounded-xl transition-colors active:scale-95">
+                {balanceVisible ? <Eye className="w-5 h-5 text-white/80" /> : <EyeOff className="w-5 h-5 text-white/80" />}
               </button>
             </div>
-            <p className="text-[10px] font-semibold text-emerald-100">Klinflow Wallet</p>
-          </div>
-
-          {/* Stats Row */}
-          <div className="relative z-10 flex items-center gap-6 mt-4 pt-4 border-t border-white/10">
-            <div>
-              <p className="text-[10px] font-medium text-emerald-100/80 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
-                <Leaf className="w-3 h-3 text-emerald-300" /> GFP Points
-              </p>
-              <p className="text-base font-bold text-white leading-none">{gfpBalance.toLocaleString()}</p>
-            </div>
-            
-            <div className="w-px h-8 bg-white/10" />
-            
-            <div>
-              <p className="text-[10px] font-medium text-emerald-100/80 mb-1 flex items-center gap-1.5 uppercase tracking-wider">
-                <Recycle className="w-3 h-3 text-emerald-300" /> Recycled This Month
-              </p>
-              <p className="text-base font-bold text-white leading-none">{kgRecoveredThisMonth} kg</p>
+            <div className="flex justify-center mt-3">
+              <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold text-white capitalize tracking-widest bg-white/20 px-3 py-1.5 rounded-full border border-white/10">
+                <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
+              </div>
             </div>
           </div>
-        </div>
-      </motion.div>
 
-      {/* ── QUICK ACTIONS ── */}
+          {/* Quick Actions inside hero */}
+          <div className="relative z-10 grid grid-cols-4 gap-2 mt-3 pt-3 px-4 border-t border-white/15">
+            {/* Withdraw */}
+            <button
+              onClick={() => navigate('/withdraw')}
+              className="bg-white/15 backdrop-blur-sm border border-white/10 rounded-xl p-2 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-white/25"
+            >
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Landmark className="w-5 h-5 text-white" />
+              </div>
+              <p className="text-[10px] font-bold text-white/90 text-center leading-tight">Withdraw</p>
+            </button>
+
+            {/* Redeem Rewards */}
+            <button
+              onClick={() => navigate('/redeem-gfp')}
+              className="bg-white/15 backdrop-blur-sm border border-white/10 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-white/25"
+            >
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Gift className="w-5 h-5 text-white" />
+              </div>
+              <p className="text-[10px] font-bold text-white/90 text-center leading-tight">Redeem GFP</p>
+            </button>
+
+            {/* Transfer Points */}
+            <button
+              onClick={() => navigate('/transfer-gfp')}
+              className="bg-white/15 backdrop-blur-sm border border-white/10 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-white/25"
+            >
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <ArrowRightLeft className="w-5 h-5 text-white" />
+              </div>
+              <p className="text-[10px] font-bold text-white/90 text-center leading-tight">Transfer GFP</p>
+            </button>
+
+            {/* Earn More */}
+            <button
+              onClick={() => navigate('/book-pickup')}
+              className="bg-white/15 backdrop-blur-sm border border-white/10 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-white/25"
+            >
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Banknote className="w-5 h-5 text-white" />
+              </div>
+              <p className="text-[10px] font-bold text-white/90 text-center leading-tight">Earn More</p>
+            </button>
+          </div>
+        </motion.div>
+      </div>
+
+      <div className="px-1.5 mt-2 space-y-4 relative z-10 max-w-lg mx-auto pb-4">
+
+      {/* ── RECENT TRANSACTIONS ── */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
-        className="mx-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden p-4 shadow-sm"
+        className="mx-1 bg-white dark:bg-slate-900 rounded-2xl !mt-1 border border-slate-200 dark:border-slate-700 overflow-hidden p-4 shadow-sm"
       >
-        <h3 className="text-sm font-bold text-slate-600 dark:text-white mb-3">Quick Actions</h3>
-        <div className="grid grid-cols-4 gap-2">
-          {/* Withdraw */}
-          <button
-            onClick={() => navigate('/withdraw')}
-            className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl p-2 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Landmark className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">Withdraw</p>
-          </button>
-
-          {/* Redeem Rewards */}
-          <button
-            onClick={() => navigate('/redeem-gfp')}
-            className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Gift className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-            </div>
-            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">Redeem Points</p>
-          </button>
-
-          {/* Transfer Points */}
-          <button
-            onClick={() => navigate('/transfer-gfp')}
-            className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <div className="w-10 h-10 bg-blue-50 dark:bg-blue-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <ArrowRightLeft className="w-5 h-5 text-blue-600 dark:text-green-300" />
-            </div>
-            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">Transfer Points</p>
-          </button>
-
-          {/* Earn More */}
-          <button
-            onClick={() => navigate('/book-pickup')}
-            className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group hover:bg-slate-100 dark:hover:bg-slate-800"
-          >
-            <div className="w-10 h-10 bg-purple-50 dark:bg-purple-500/15 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Banknote className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-            </div>
-            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">Earn More</p>
-          </button>
-        </div>
-
-        <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-4 " />
 
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-bold text-slate-600 dark:text-white">
@@ -289,7 +267,7 @@ export default function ResidentWallet() {
           </button>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-0.5">
           <AnimatePresence mode="popLayout">
             {transactions.length > 0 ? (
               transactions.slice(0, 4).map((txn, i) => (
@@ -360,7 +338,7 @@ export default function ResidentWallet() {
       </motion.div>
 
       {/* ── RECYCLING REWARDS & SUMMARY ── */}
-      <div className="mx-1 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-2">
+      <div className="mx-1 bg-white dark:bg-slate-900 !mt-1 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 space-y-2">
 
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -386,15 +364,11 @@ export default function ResidentWallet() {
 
             <div className="min-w-0">
               <p className="text-xs font-bold text-slate-900 dark:text-white mb-0.5 truncate">
-                {thisMonthPickups.length > 0
-                  ? "You're doing amazing!"
-                  : "Start your journey!"}
+                {getRewardMessages().title}
               </p>
 
               <p className="text-[10px] font-medium text-slate-400 leading-snug">
-                {thisMonthPickups.length > 0
-                  ? `You recycled ${kgRecoveredThisMonth}kg this month. Keep going!`
-                  : 'Complete your first pickup to start earning rewards.'}
+                {getRewardMessages().subtitle}
               </p>
             </div>
 
@@ -427,100 +401,6 @@ export default function ResidentWallet() {
           </div>
 
         </div>
-        <div className="h-px bg-slate-100 dark:bg-slate-800/50 w-full my-2" />
-
-      {/* ── SAVINGS + PICKUP SUMMARY ── */}
-        <div className="grid grid-cols-2 gap-3">
-          
-          {/* Left Section: Savings */}
-          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-700/50 p-4 flex flex-col justify-between">
-            <div>
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-1">
-                Savings This Month
-              </h4>
-              <p className="text-[9px] font-semibold text-slate-400 mb-3">
-                Money earned by recycling
-              </p>
-              <p className="text-lg font-black text-slate-900 dark:text-white mb-1.5 leading-none">
-                KES {Number(totalEarnedThisMonth).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-              </p>
-              <div className="flex items-center gap-1.5">
-                <TrendingUp className="w-3 h-3 text-emerald-500 shrink-0" />
-                <p className="text-[9px] font-bold text-emerald-500 leading-tight">
-                  {thisMonthPickups.length > 0
-                    ? `${thisMonthPickups.length} pickups done`
-                    : 'No pickups yet'}
-                </p>
-              </div>
-            </div>
-            
-            {/* Dynamic Sparkline */}
-            <div className="mt-4 h-10 flex items-end gap-0.5">
-              {sparklineData.map((h, i) => (
-                <div
-                  key={i}
-                  style={{ height: `${h}%` }}
-                  className="flex-1 bg-primary/80 dark:bg-primary/60 rounded-[1px] min-h-[2px] transition-all duration-500"
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Right Section: Pickup Summary */}
-          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-700/50 p-4 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                Summary
-              </h4>
-              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">
-                Overall
-              </span>
-            </div>
-
-            <div className="space-y-3 mt-auto">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Package className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                  <p className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">
-                    Total
-                  </p>
-                </div>
-                <p className="text-xs font-black text-slate-900 dark:text-white">
-                  {totalPickups}
-                </p>
-              </div>
-
-              <div className="h-px bg-slate-100 dark:bg-slate-800" />
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                  <p className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">
-                    Upcoming
-                  </p>
-                </div>
-                <p className="text-xs font-black text-slate-900 dark:text-white">
-                  {upcomingPickups}
-                </p>
-              </div>
-
-              <div className="h-px bg-slate-100 dark:bg-slate-800" />
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                  <p className="text-[10px] font-semibold text-slate-600 dark:text-slate-300">
-                    Completed
-                  </p>
-                </div>
-                <p className="text-xs font-black text-slate-900 dark:text-white">
-                  {completedBookings.length}
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
       </div>
 
 
@@ -537,6 +417,7 @@ export default function ResidentWallet() {
           Secured by Klinflow Escrow
         </p>
       </motion.div>
+      </div>
     </div >
   );
 }

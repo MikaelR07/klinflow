@@ -260,7 +260,7 @@ export default function SellerHome() {
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto px-1.5 space-y-6 pt-16">
+      <div className="max-w-xl mx-auto px-1.5 space-y-4 pt-16">
         {/* ── REVENUE HERO CARD ── */}
         <motion.div variants={itemVariants} className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-[#064e3b] to-emerald-600 p-6">
         
@@ -285,17 +285,17 @@ export default function SellerHome() {
               </button>
             </div>
 
-            <div className="flex items-center gap-1.5 pt-2 border-t border-white/10">
+            <div className="flex items-center gap-1 pt-2 border-t border-white/10">
               <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                <span className="text-lg font-black text-white">{totalDeals}</span>
+                <span className="text-base font-black text-white">{totalDeals}</span>
                 <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3" /> Deals</span>
               </div>
               <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                <span className="text-lg font-black text-white">{totalSoldKg}</span>
+                <span className="text-base font-black text-white">{totalSoldKg}</span>
                 <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Scale className="w-3 h-3" /> KG Sold</span>
               </div>
               <div onClick={() => navigate("/impact-hub")} className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-amber-500/30 transition-colors">
-                <span className="text-lg font-black text-amber-300">{gfpBalance.toLocaleString()}</span>
+                <span className="text-base font-black text-amber-300">{gfpBalance.toLocaleString()}</span>
                 <span className="text-[10px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
               </div>
             </div>
@@ -305,12 +305,12 @@ export default function SellerHome() {
 
         <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-2 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           <div className="space-y-2">
-            <h3 className="text-[13px] font-black text-slate-700 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
+            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
-            <div className="grid grid-cols-4 gap-1.5 !mt-1">
+            <div className="grid grid-cols-4 gap-1 !mt-1">
               <button
                 onClick={() => navigate('/post-trade')}
-                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
               >
                 <div className="w-9 h-9 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <CircleFadingPlus className="w-6 h-6" />
@@ -320,7 +320,7 @@ export default function SellerHome() {
 
               <button
                 onClick={() => navigate('/inventory')}
-                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
               >
                 <div className="w-9 h-9 bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Package className="w-6 h-6" />
@@ -330,7 +330,7 @@ export default function SellerHome() {
 
               <button
                 onClick={() => navigate('/my-trades')}
-                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
               >
                 <div className="relative">
                   {receivedOffers.filter((o: any) => o.status === 'pending').length > 0 && (
@@ -347,7 +347,7 @@ export default function SellerHome() {
 
               <button
                 onClick={() => navigate('/seller-wallet')}
-                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
               >
                 <div className="w-9 h-9 bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Wallet className="w-6 h-6" />
@@ -355,19 +355,37 @@ export default function SellerHome() {
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Wallet</span>
               </button>
             </div>
+            
+            {/* ── PRIMARY CTAS ── */}
+            <div className="grid grid-cols-1 gap-1 mt-2">
+              <button 
+                onClick={() => navigate('/my-rfq-offers')}
+                className="w-full bg-gradient-to-br from-indigo-400 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-2.5 flex items-center gap-2.5 border border-white/10 dark:border-slate-900/10"
+              >
+                <div className="w-9 h-9 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0">
+                  <Receipt className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-0.5 transition-transform" />
+                </div>
+                <div className="text-left min-w-0 flex-1">
+                  <h3 className="text-[13px] font-black tracking-tight leading-none mb-0.5">Submitted RFQ Proposals</h3>
+                  <p className="text-[9px] font-bold text-white/80 dark:text-slate-500 leading-tight">Track Requests To Buyers</p>
+                </div>
+                <div className="w-8 h-8 flex items-center justify-center shrink-0">
+                  <ArrowRight className="w-4 h-4 text-white/80 dark:text-slate-500 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </button>
+            </div>
+
           </div>
         </motion.div>
 
         {/* ── CATALOG: E-COMMERCE SCROLL ── */}
-        <motion.div variants={itemVariants} className="space-y-2 mt-4">
+        <motion.div variants={itemVariants} className="space-y-2 !mt-3">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-[13px] font-black text-slate-800 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
-            <button  className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest hover:underline flex items-center">
-              View Details <ChevronDownCircle className="w-3 h-3 ml-0.5" />
-            </button>
+            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
+            
           </div>
           
-          <div className="flex gap-3 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
+          <div className="flex gap-1 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
             {(categories.length > 0 ? categories : catalogItems as any[]).map((item: any, idx: number) => {
               const palette = COLOR_PALETTES[idx % COLOR_PALETTES.length];
               const isDB = categories.length > 0;
@@ -418,74 +436,40 @@ export default function SellerHome() {
         </motion.div>
 
         {/* ── BUSINESS TOOLS ── */}
-        <motion.div variants={itemVariants} className="bg-slate-100 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
+        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
           <div className="space-y-2">
-            <h3 className="text-[13px] font-black text-slate-700 dark:text-white capitalize tracking-widest px-1">Business Tools</h3>
+            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Business Tools</h3>
           </div>
           {/* ── GRID OF COLLECTIVE & MARKET PRICES ── */}
-          <div className="grid grid-cols-2 gap-2 !mt-1">
+          <div className="grid grid-cols-2 gap-1">
             {/* ── COMMUNITY COLLECTIVE ── */}
-            <div
+            <button
               onClick={() => navigate('/community-collective')}
-              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-4 flex flex-col justify-between group active:scale-[0.98] transition-all relative overflow-hidden min-h-[120px] shadow-sm hover:shadow-md"
+              className="w-full bg-gradient-to-br from-emerald-500 to-primary text-white rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-3 flex items-center gap-2.5 border border-white/10"
             >
-              <div className="flex items-start justify-between w-full relative z-10">
-                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Users className="w-5 h-5" />
-                </div>
-                <div className="w-6 h-6 bg-slate-200/50 dark:bg-slate-600/50 rounded-full flex items-center justify-center transition-all group-hover:bg-primary group-hover:text-white text-slate-400">
-                  <ArrowRight className="w-3 h-3" />
-                </div>
+              <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+                <Users className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
               </div>
-              <div className="relative z-10 mt-auto">
-                <h3 className="text-sm font-black text-slate-700 dark:text-white capitalize tracking-tight leading-none mb-1">Collective Hub</h3>
-                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-tight">
-                  View Market Contracts
-                </p>
+              <div className="text-left min-w-0">
+                <h3 className="text-[13px] font-black tracking-tight leading-none mb-0.5">Collective Hub</h3>
+                <p className="text-[9px] font-bold text-white/80 leading-tight">Market Contracts</p>
               </div>
-            </div>
+            </button>
 
             {/* ── MARKET INTELLIGENCE ── */}
-            <div
+            <button
               onClick={() => navigate('/market-pulse')}
-              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-4 flex flex-col justify-between group active:scale-[0.98] transition-all relative overflow-hidden min-h-[120px] shadow-sm hover:shadow-md"
+              className="w-full bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-3 flex items-center gap-2.5"
             >
-              <div className="flex items-start justify-between w-full relative z-10">
-                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <BarChart3 className="w-5 h-5" />
-                </div>
-                <div className="w-6 h-6 bg-slate-200/50 dark:bg-slate-600/50 rounded-full flex items-center justify-center transition-all group-hover:bg-primary group-hover:text-white text-slate-400">
-                  <ArrowRight className="w-3 h-3" />
-                </div>
+              <div className="w-9 h-9 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center shrink-0">
+                <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
               </div>
-              <div className="relative z-10 mt-auto">
-                <h3 className="text-sm font-black text-slate-700 dark:text-white capitalize tracking-tight leading-none mb-1">Market Prices</h3>
-                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-tight">
-                  View Market Rates
-                </p>
+              <div className="text-left min-w-0">
+                <h3 className="text-[13px] font-black text-slate-700 dark:text-white tracking-tight leading-none mb-0.5">Market Prices</h3>
+                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-tight">View Market Rates</p>
               </div>
-            </div>
+            </button>
           </div>
-          {/* ── MY RFQ QUOTES ── */}
-          <button 
-            onClick={() => navigate('/my-rfq-offers')}
-            className="w-full mt-2 bg-gradient-to-r from-emerald-600 to-primary text-white dark:bg-white dark:text-slate-900 rounded-[20px] shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group"
-          >
-            <div className="border border-white/10 dark:border-slate-900/10 rounded-[16px] p-4 flex items-center justify-between bg-repeat opacity-95">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/10 dark:bg-slate-900/10 rounded-full flex items-center justify-center">
-                  <Receipt className="w-5 h-5 text-white dark:text-slate-900 group-hover:translate-x-1 transition-transform" />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-base font-black tracking-tight leading-none mb-1">Submitted RFQ Proposals</h3>
-                  <p className="text-[11px] font-bold text-slate-200 dark:text-slate-600">Track Requests To Buyers</p>
-                </div>
-              </div>
-              <div className="w-8 h-8 bg-white/20 dark:bg-slate-900/20 rounded-full flex items-center justify-center">
-                <ArrowRight className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-          </button>
         </motion.div>
 
 

@@ -197,17 +197,17 @@ export default function UserHome() {
               </button>
             </div>
 
-            <div className="flex items-center gap-1.5 pt-2 border-t border-white/10">
+            <div className="flex items-center gap-1 pt-2 border-t border-white/10">
               <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                <span className="text-lg font-black text-white">{metrics.totalPickups}</span>
+                <span className="text-base font-black text-white">{metrics.totalPickups}</span>
                 <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
               </div>
               <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                <span className="text-lg font-black text-white">{metrics.kgRecovered}</span>
+                <span className="text-base font-black text-white">{metrics.kgRecovered}</span>
                 <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
               </div>
               <div onClick={() => navigate("/impact-hub")} className="flex-1 bg-black/20  rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-amber-500/30 transition-colors">
-                <span className="text-lg font-black text-amber-300">{rewardPoints}</span>
+                <span className="text-base font-black text-amber-300">{rewardPoints}</span>
                 <span className="text-[10px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
               </div>
             </div>
@@ -229,7 +229,7 @@ export default function UserHome() {
                 <button 
                   key={service.label} 
                   onClick={() => navigate(service.route)}
-                  className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                  className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
                 >
                   <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
                     {service.icon}
@@ -240,26 +240,34 @@ export default function UserHome() {
             </div>
           </div>
 
-          {/* ── PRIMARY CTA: ON-DEMAND BOOKING ── */}
-          <button 
-            onClick={() => navigate("/book-pickup")}
-            className="w-full bg-gradient-to-br from-indigo-400 !mt-2 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-[20px]  shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group"
-          >
-            <div className="border border-white/10 dark:border-slate-900/10 rounded-[16px] p-4 flex items-center justify-between bg-repeat opacity-95">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/10 dark:bg-slate-900/10 rounded-full flex items-center justify-center">
-                  <Truck className="w-5 h-5 text-white dark:text-slate-900 group-hover:translate-x-1 transition-transform" />
-                </div>
-                <div className="text-left">
-                  <h3 className="text-base font-black  tracking-tight leading-none mb-1">Book a Pickup</h3>
-                  <p className="text-[11px] font-bold text-white">Turn your recyclables into cash today</p>
-                </div>
+          {/* ── PRIMARY CTAS ── */}
+          <div className="grid grid-cols-2 gap-1">
+            <button 
+              onClick={() => navigate("/book-pickup")}
+              className="w-full bg-gradient-to-br from-indigo-400 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-2.5 flex items-center gap-2.5 border border-white/10 dark:border-slate-900/10"
+            >
+              <div className="w-9 h-9 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0">
+                <Truck className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-0.5 transition-transform" />
               </div>
-              <div className="w-8 h-8 bg-white/20 dark:bg-slate-900/20 rounded-full flex items-center justify-center">
-                <ArrowRight className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-1 transition-transform" />
+              <div className="text-left min-w-0">
+                <h3 className="text-[13px] font-black tracking-tight leading-none mb-0.5">Book Pickup</h3>
+                <p className="text-[9px] font-bold text-white/80 dark:text-slate-500 leading-tight">Turn trash to cash</p>
               </div>
-            </div>
-          </button>
+            </button>
+
+            <button 
+              onClick={() => navigate("/community-collective")}
+              className="w-full bg-gradient-to-br from-emerald-500 to-primary text-white rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-2.5 flex items-center gap-2.5 border border-white/10"
+            >
+              <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
+                <Users className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+              </div>
+              <div className="text-left min-w-0">
+                <h3 className="text-[13px] font-black tracking-tight leading-none mb-0.5">Community</h3>
+                <p className="text-[9px] font-bold text-white/80 leading-tight">Join group pickups</p>
+              </div>
+            </button>
+          </div>
         </motion.div>
         
 
@@ -267,9 +275,9 @@ export default function UserHome() {
         <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.2 }} className="space-y-2">
           <div className="flex items-center justify-between px-1">
             <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-wide">What Collectors Buy!</h3>
-            <button onClick={() => navigate("/discovery")} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest hover:underline flex items-center">
+            {/* <button onClick={() => navigate("/discovery")} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest hover:underline flex items-center">
               view details <ChevronDownCircle className="w-3 h-3 ml-0.5" />
-            </button>
+            </button> */}
           </div>
           
           <div className="flex gap-1 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
@@ -323,11 +331,11 @@ export default function UserHome() {
         </motion.div>
 
         
-        {/* ── DISCOVER MORE (MARKET & COMMUNITY) ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.4 }} className="grid grid-cols-1 sm:grid-cols-2 gap-2 !mt-1">
+        {/* ── DISCOVER MORE (MARKET) ── */}
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.4 }} className="space-y-2 !mt-1">
           <div 
             onClick={() => navigate("/market-pulse")}
-            className="bg-slate-200 dark:bg-gradient-to-br dark:from-emerald-600 dark:to-emerald-600 border border-white dark:border-emerald-800/30 rounded-[20px] p-4 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group"
+            className="bg-slate-200 dark:bg-gradient-to-br dark:from-emerald-600 dark:to-emerald-600 border border-white dark:border-emerald-800/30 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group"
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -340,24 +348,6 @@ export default function UserHome() {
             </div>
             <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center group-hover:bg-emerald-100 dark:group-hover:bg-emerald-800/50 transition-colors">
               <ChevronRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
-            </div>
-          </div>
-
-          <div 
-            onClick={() => navigate("/community-collective")}
-            className="bg-gradient-to-br from-emerald-500 to-primary border border-white dark:border-primary rounded-[20px] p-4 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-emerald-500 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Users className="w-6 h-6 text-white dark:text-indigo-400" />
-              </div>
-              <div>
-                <h4 className="text-[15px] font-black text-slate-900 dark:text-white leading-none mb-1">Community Pickups</h4>
-                <p className="text-[11px] font-semibold text-white">Join group pickups</p>
-              </div>
-            </div>
-            <div className="w-8 h-8 rounded-full bg-primary dark:bg-indigo-900/30 flex items-center justify-center group-hover:bg-indigo-100 dark:group-hover:bg-indigo-800/50 transition-colors">
-              <ChevronRight className="w-4 h-4 text-white dark:text-indigo-400 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </div>
         </motion.div>

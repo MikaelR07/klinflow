@@ -6,10 +6,9 @@ import { useState, useMemo, useEffect } from 'react';
 import {
   ArrowLeft, Eye, EyeOff, ArrowUpRight,
   Gift, Send, Banknote, Package,
-  TrendingUp, BarChart2, ShieldCheck, CheckCircle2,
+  TrendingUp, ShieldCheck,
   Receipt, Landmark, ChevronRight,
   ArrowLeftRight,
-  BadgeDollarSign,
   Store
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -88,78 +87,74 @@ export default function SellerWallet() {
   };
 
   return (
-    <div className="space-y-4 pb-8">
-      {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-600">
-        <div className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate(-1)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-colors active:scale-95">
-              <ArrowLeft className="w-5 h-5 text-slate-500" />
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden min-h-screen">
+
+      {/* ── TOP SECTION: PREMIUM FINTECH GRADIENT ── */}
+      <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 pt-[calc(env(safe-area-inset-top,1.5rem)+5rem)] pb-8 rounded-b-[2.5rem] shadow-lg shadow-indigo-900/30 relative z-20 overflow-hidden">
+
+        {/* Decorative background orbs for depth */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.07] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-400/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+
+        {/* Fixed Header — transparent, minimal */}
+        <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
+          <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-all border border-white/15">
+            <ArrowLeft className="w-4.5 h-4.5 text-white/90" />
+          </button>
+          <p className="text-[13px] font-semibold tracking-wide text-white/80">Seller Wallet</p>
+          <div className="w-9 h-9" />
+        </div>
+
+        {/* Balance */}
+        <div className="text-center px-4 mb-5 relative z-10">
+          <p className="text-[10px] font-semibold text-white/50 uppercase tracking-[0.2em] mb-2">Available Balance</p>
+          <div className="flex items-center justify-center gap-2">
+            <div className="flex items-baseline gap-1.5 text-white">
+              <span className="text-lg font-medium opacity-70">KSh</span>
+              <span className={`text-[2.5rem] font-black leading-none tracking-tight transition-all duration-300 ${!balanceVisible ? 'blur-lg select-none' : ''}`}>
+                {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
+            </div>
+            <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-2 hover:bg-white/10 rounded-full transition-colors active:scale-90">
+              {balanceVisible ? <Eye className="w-4.5 h-4.5 text-white/50" /> : <EyeOff className="w-4.5 h-4.5 text-white/50" />}
             </button>
-            <div className="flex items-center gap-2">
-              <h1 className="font-bold text-lg tracking-tight text-slate-600 dark:text-white">Seller Wallet</h1>
+          </div>
+          <div className="flex justify-center mt-3">
+            <div className="flex items-center justify-center gap-1.5 text-[8px] font-semibold text-white/70 uppercase tracking-[0.15em] bg-white/10 backdrop-blur-sm px-3.5 py-1.5 rounded-full border border-white/10">
+              <ShieldCheck className="w-3 h-3" /> Secured by Klinflow
             </div>
+          </div>
+        </div>
+
+        {/* Pending Settlement & Total Earnings */}
+        <div className="grid grid-cols-2 gap-2.5 px-5 mt-1 relative z-10">
+          <div className="bg-white/[0.08] backdrop-blur-md border border-white/[0.08] rounded-2xl px-3.5 py-2.5 text-center">
+            <p className="text-[8px] font-semibold text-white/45 uppercase tracking-[0.15em] mb-1">Pending</p>
+            <p className="text-[15px] font-bold text-white tracking-tight">KES {pendingSettlement.toLocaleString()}</p>
+          </div>
+          <div className="bg-white/[0.08] backdrop-blur-md border border-white/[0.08] rounded-2xl px-3.5 py-2.5 text-center">
+            <p className="text-[8px] font-semibold text-white/45 uppercase tracking-[0.15em] mb-1">Total Earned</p>
+            <p className="text-[15px] font-bold text-white tracking-tight">KES {isLoadingStats ? '...' : totalEarningsLifetime.toLocaleString()}</p>
           </div>
         </div>
       </div>
 
-      {/* Spacer for fixed nav */}
-      <div className="pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)]" />
-
-      {/* ── BALANCE HERO CARD ── */}
-      <div className="mx-1">
-        <div className="bg-primary rounded-2xl p-5 overflow-hidden ">
-          <div className="flex justify-between items-start mb-6">
-            <div>
-              <p className="text-[10px] font-bold text-emerald-100 mb-1 tracking-wider uppercase">
-                Total Available
-              </p>
-              <div className="flex items-center gap-2">
-                <h2 className="text-2xl sm:text-4xl font-semibold text-white tracking-tight leading-none">
-                  {balanceVisible ? `KSH ${Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '••••••••'}
-                </h2>
-                <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-1 hover:bg-white/10 rounded-lg transition-colors">
-                  {balanceVisible ? <Eye className="w-5 h-5 text-emerald-100/80" /> : <EyeOff className="w-5 h-5 text-emerald-100/80" />}
-                </button>
-              </div>
-              <p className="text-[10px] font-medium text-emerald-200 mt-1">Ready for withdrawal</p>
-            </div>
-
-          </div>
-
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 gap-4 border-t border-emerald-700/50 pt-4">
-            <div>
-              <p className="text-[9px] font-bold text-emerald-100 uppercase tracking-widest mb-1">Pending Settlement</p>
-              <p className="text-sm font-bold text-white">KES {pendingSettlement.toLocaleString() || '8,200.00'}</p>
-            </div>
-            <div className="flex justify-between items-end">
-              <div>
-                <p className="text-[9px] font-bold text-emerald-100 uppercase tracking-widest mb-1">Total Earnings</p>
-                <p className="text-sm font-bold text-white">KES {isLoadingStats ? '...' : totalEarningsLifetime.toLocaleString()}</p>
-              </div>
-              <BarChart2 className="w-5 h-5 text-[#c2ed7d]" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="px-1.5 mt-2 space-y-4 relative z-10 max-w-lg mx-auto pb-8">
 
       {/* ── QUICK ACTIONS ── */}
       <div className="mx-1">
-        <div className="bg-slate-100 dark:bg-slate-800/40 rounded-[12px] p-1.5 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
-          <div className="space-y-2">
-            <h3 className="text-[13px] font-black text-slate-700 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
-          </div>
-          <div className="grid grid-cols-4 gap-2 !mt-1">
+        <div className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
+          <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
+          <div className="grid grid-cols-4 gap-1">
             {/* Withdraw */}
             <button
               onClick={() => navigate('/withdraw')}
-              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
             >
-              <div className="w-8 h-8 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-[10px] flex items-center justify-center group-hover:scale-110 transition-transform">
-                <BadgeDollarSign className="w-6 h-6" />
+              <div className="w-9 h-9 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Landmark className="w-6 h-6" />
               </div>
-              <p className="text-[10px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider text-center leading-tight">Withdraw</p>
+              <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Withdraw</span>
             </button>
 
             {/* Redeem Points */}
@@ -171,165 +166,122 @@ export default function SellerWallet() {
                   navigate('/redeem-gfp');
                 }
               }}
-              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
             >
-              <div className="w-8 h-8 bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-[10px] flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-9 h-9 bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Gift className="w-6 h-6" />
               </div>
-              <p className="text-[10px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider text-center leading-tight">Redeem</p>
+              <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Redeem</span>
             </button>
 
             {/* Transfer Points */}
             <button
               onClick={() => navigate('/transfer-gfp')}
-              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
             >
-              <div className="w-8 h-8 bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-[10px] flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-9 h-9 bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                 <ArrowLeftRight className="w-6 h-6" />
               </div>
-              <p className="text-[10px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider text-center leading-tight">Transfer</p>
+              <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Transfer</span>
             </button>
 
             {/* Earn More */}
             <button
               onClick={() => navigate('/post-trade')}
-              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
             >
-              <div className="w-8 h-8 bg-purple-100 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 rounded-[10px] flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-9 h-9 bg-purple-100 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Banknote className="w-6 h-6" />
               </div>
-              <p className="text-[10px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider text-center leading-tight">Earn More</p>
+              <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Earn More</span>
             </button>
           </div>
 
           {/* ── RECENT TRANSACTIONS ── */}
-          <div className="bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200/60 dark:border-slate-800 p-3 shadow-2xs mt-2">
-        <div className="flex items-center justify-between mb-3">
-              <div>
-                <h3 className="text-[13px] font-black text-slate-700 dark:text-white capitalize tracking-widest">Recent Transactions</h3>
-                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-tight">Hub payouts</p>
-              </div>
-              <button onClick={() => navigate('/transactions-history')} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest hover:underline flex items-center">
-                View All <ChevronRight className="w-3 h-3 ml-0.5" />
+          <div className="bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200/60 dark:border-slate-800 p-3 shadow-sm mt-2">
+
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">Recent Transactions</h3>
+              <button
+                onClick={() => navigate('/transactions-history')}
+                className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
+              >
+                View History
               </button>
             </div>
 
-        <div className="space-y-2 mt-1">
+        <div className="space-y-0.5">
           {isLoadingStats ? (
             <div className="py-6 text-center text-xs text-slate-500 font-medium">Loading transactions...</div>
           ) : recentTrades.length === 0 ? (
-            <div className="py-8 text-center text-xs text-slate-500 space-y-1">
-              <Package className="w-6 h-6 mx-auto opacity-40 mb-1" />
-              <p className="font-semibold">No recent transactions found.</p>
-              <p className="text-[10px] text-slate-400">Hub payouts will appear here instantly when you sell materials.</p>
+            <div className="py-8 text-center bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800">
+              <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <Package className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+              </div>
+              <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">No transactions yet</p>
+              <p className="text-[10px] font-semibold text-slate-400/70 dark:text-slate-500 mb-4">
+                Hub payouts will appear here when you sell materials
+              </p>
+              <button
+                onClick={() => navigate('/post-trade')}
+                className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
+              >
+                Post a Trade
+              </button>
             </div>
           ) : (
-            recentTrades.slice(0, 4).map(item => (
-              <div key={item.id} className="py-2.5 flex items-center justify-between gap-3 bg-white dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/50 px-3 rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 min-w-0 flex-1">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0 font-bold">
-                    <Store className="w-4 h-4" />
+            recentTrades.slice(0, 4).map((item, i) => (
+              <div
+                key={item.id}
+                className="px-4 py-3 flex items-center justify-between bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-emerald-50 dark:bg-emerald-900/30">
+                    <ArrowUpRight className="w-5 h-5 text-emerald-500" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight mb-0.5">
                       {item.buyer && !['Agent', 'Klinflow Hub Payout', 'Unknown Buyer'].includes(item.buyer)
                         ? item.buyer
                         : (item.metadata?.hub_name || 'Klinflow Hub')}
                     </p>
-                    <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                      {item.material && item.material !== 'Material' ? item.material : 'Recyclables Drop-off'}
-                    </p>
-                    {item.created_at && (
-                      <p className="text-[9px] font-semibold text-slate-400 dark:text-slate-500 mt-0.5">
-                        {formatTxDate(item.created_at)}
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate">
+                        {item.material && item.material !== 'Material' ? item.material : 'Recyclables Drop-off'}
                       </p>
-                    )}
+                      <span className="text-slate-300 dark:text-slate-600">·</span>
+                      {item.created_at && (
+                        <p className="text-[10px] font-medium text-slate-400">
+                          {formatTxDate(item.created_at)}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="text-right shrink-0">
-                  <p className="text-sm font-semibold font-mono text-emerald-600 dark:text-emerald-400">
+                <div className="text-right shrink-0 ml-3">
+                  <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
                     +KES {Number(item.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
-                  <span className="inline-block bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md mt-0.5">
+                  <p className="text-[9px] font-semibold text-slate-400 mt-0.5 capitalize">
                     {item.status || 'Completed'}
-                  </span>
+                  </p>
                 </div>
               </div>
             ))
           )}
         </div>
-      </div>
-        </div>
-      </div>
-
-      {/* ── CHARTS SECTION ── */}
-      <div className="mx-1 !mt-1">
-        <div className="bg-slate-100 dark:bg-slate-800/40 rounded-[12px] p-1.5 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3 mt-2">
-          <div className="space-y-2">
-            <h3 className="text-[13px] font-black text-slate-700 dark:text-white capitalize tracking-widest px-1">Insights</h3>
-          </div>
-          
-          {/* Combined Insights Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 flex flex-col overflow-hidden transform-gpu">
-            
-            {/* Top section: Earnings Overview */}
-            <div className="flex flex-col mb-4">
-              <h4 className="text-xs font-bold text-slate-600 dark:text-white mb-2">
-                Earnings Overview
-              </h4>
-              <p className="text-xl font-semibold text-slate-800 dark:text-white mb-1 leading-none truncate">
-                KES {isLoadingStats ? '...' : totalEarningsThisMonth.toLocaleString()}
-              </p>
-              <div className="flex items-center gap-1.5">
-                {totalEarningsThisMonth > 0 ? (
-                  <>
-                    <TrendingUp className="w-3 h-3 text-[#c2ed7d] shrink-0" />
-                    <p className="text-[10px] font-bold text-[#84cc16] dark:text-[#c2ed7d] truncate">
-                      This Month
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-[10px] font-bold text-slate-400 truncate">
-                    No earnings yet
-                  </p>
-                )}
-              </div>
-            </div>
-
-            <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-4" />
-
-            {/* Bottom section: Top Material Sold */}
-            <div className="flex flex-col">
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-3">
-                Top Material Sold
-              </h4>
-              <div className="space-y-2">
-                {isLoadingStats ? (
-                  <div className="text-xs text-slate-500">Loading...</div>
-                ) : topMaterials.length === 0 ? (
-                  <div className="text-xs text-slate-500">No data available</div>
-                ) : (
-                  topMaterials.map((mat, idx) => {
-                    const colors = ['bg-[#c2ed7d]', 'bg-[#65a30d]', 'bg-slate-600', 'bg-slate-500'];
-                    const total = topMaterials.reduce((acc, m) => acc + m.amount_sold, 0);
-                    const percentage = total > 0 ? Math.round((mat.amount_sold / total) * 100) : 0;
-                    return (
-                      <div key={idx} className="flex items-center justify-between text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <div className={`w-2 h-2 rounded-sm ${colors[idx % colors.length]} shrink-0`} />
-                          <span className="truncate">{mat.material}</span>
-                        </div>
-                        <span className="shrink-0">{percentage}%</span>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
+      {/* ── SECURITY FOOTER ── */}
+      <div className="flex items-center justify-center gap-2 py-3">
+        <ShieldCheck className="w-3.5 h-3.5 text-emerald-500/40" />
+        <p className="text-[9px] font-bold text-slate-400/50 dark:text-slate-500/50 uppercase tracking-[0.2em]">
+          Secured by Klinflow Escrow
+        </p>
+      </div>
+      </div>
     </div>
   );
 }

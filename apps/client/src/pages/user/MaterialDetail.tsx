@@ -416,39 +416,48 @@ export default function MaterialDetail() {
 
           {/* Unified Material Info Card */}
           <div className="flex flex-col justify-center">
-            <div className="bg-white dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 p-5 md:p-6 shadow-sm h-full flex flex-col justify-between max-h-[320px]">
+            <div className="bg-white dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm h-full flex flex-col max-h-[320px] overflow-hidden">
               
-              <div>
-                <h1 className="text-[18px] md:text-3xl font-black text-slate-900 dark:text-white leading-tight tracking-tight mb-1.5">
-                  {title}
-                </h1>
-                <p className="text-[13px] md:text-sm font-bold text-slate-500 dark:text-slate-400 mb-6">
-                  {mat.subtitle}
-                </p>
-              </div>
-
-              <div className="pt-1 border-t border-slate-100 dark:border-slate-800/60 flex items-end justify-between gap-4 mt-auto">
-                <div>
-                  <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Market Rate</span>
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter">
-                      {livePrice > 0 ? `KSh ${livePrice}` : 'Varies'}
-                    </span>
-                    {livePrice > 0 && <span className="text-sm font-bold text-slate-500">/ kg</span>}
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-end gap-2.5">
-                  <div className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest border ${
+              {/* Header Section */}
+              <div className="p-5 md:p-6 pb-0 md:pb-0">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <h1 className="text-[18px] md:text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">
+                    {title}
+                  </h1>
+                  <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border shrink-0 ${
                     mat.demand === 'Very High' || mat.demand === 'High' 
                     ? 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
                     : 'text-amber-700 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20'
                   }`}>
-                    ● {mat.demand} Demand
+                    {mat.demand} Demand
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
-                    <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-500">{mockTrend} this week</span>
+                </div>
+                <p className="text-[12px] md:text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
+                  {mat.subtitle}
+                </p>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="mt-auto p-4 md:p-6 pt-2 md:pt-2">
+                <div className="grid grid-cols-2 gap-3">
+                  {/* Market Rate */}
+                  <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-3.5">
+                    <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1.5">Market Rate</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
+                        {livePrice > 0 ? `KSh ${livePrice}` : 'Varies'}
+                      </span>
+                      {livePrice > 0 && <span className="text-[11px] font-bold text-slate-400">/ kg</span>}
+                    </div>
+                  </div>
+
+                  {/* Trend */}
+                  <div className="bg-emerald-50/50 dark:bg-emerald-500/5 rounded-xl p-3.5">
+                    <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1.5">Weekly Trend</span>
+                    <div className="flex items-center gap-1.5">
+                      <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-none">{mockTrend}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -466,7 +475,7 @@ export default function MaterialDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           
           {/* LEFT COLUMN (7 cols) */}
-          <div className="lg:col-span-7 space-y-12">
+          <div className="lg:col-span-7 space-y-4">
             
             {/* ── MARKET SNAPSHOT ── */}
             <motion.div variants={fadeUp}>
@@ -501,23 +510,25 @@ export default function MaterialDetail() {
 
             {/* ── WHY IT'S WORTH COLLECTING ── */}
             <motion.div variants={fadeUp}>
-              <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-3">
-                Why it's worth collecting
-              </h2>
-              <p className="text-[13.5px] md:text-[14px] text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-                {mat.whyCollectorsBuy}
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {mat.valueProps.map((vp, i) => (
-                  <div key={i} className="flex items-start gap-3 bg-white dark:bg-[#0a0c10] border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm">
-                    <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700">
-                      <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
+              <div className="bg-slate-200 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5">
+                <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-2">
+                  Why it's worth collecting
+                </h2>
+                <p className="text-[13px] md:text-[13.5px] text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                  {mat.whyCollectorsBuy}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {mat.valueProps.map((vp, i) => (
+                    <div key={i} className="flex items-start gap-3 bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-xl p-3.5 shadow-sm">
+                      <div className="w-7 h-7 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div className="pt-0.5">
+                        <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-snug">{vp}</p>
+                      </div>
                     </div>
-                    <div className="pt-0.5">
-                      <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-snug">{vp}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </motion.div>
 
@@ -565,39 +576,41 @@ export default function MaterialDetail() {
             
             {/* ── PREPARE YOUR MATERIAL ── */}
             <motion.div variants={fadeUp}>
-              <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-5">
-                Prepare your material
-              </h2>
-              
-              <div className="flex flex-col gap-4">
-                {/* DO Box */}
-                <div className="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 rounded-2xl p-5 md:p-6">
-                  <h3 className="text-[11px] font-black text-emerald-800 dark:text-emerald-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    Do
-                  </h3>
-                  <ul className="space-y-3">
-                    {mat.doList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-500 shrink-0 mt-0.5" />
-                        <span className="text-[13px] font-medium text-slate-800 dark:text-slate-300 leading-snug">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="bg-slate-200 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5">
+                <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-4">
+                  Prepare your material
+                </h2>
+                
+                <div className="flex flex-col gap-3">
+                  {/* DO Box */}
+                  <div className="bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-xl p-4 md:p-5 shadow-sm">
+                    <h3 className="text-[11px] font-black text-emerald-800 dark:text-emerald-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      Do
+                    </h3>
+                    <ul className="space-y-2.5">
+                      {mat.doList.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-500 shrink-0 mt-0.5" />
+                          <span className="text-[13px] font-medium text-slate-800 dark:text-slate-300 leading-snug">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                {/* AVOID Box */}
-                <div className="bg-amber-50/30 dark:bg-amber-950/10 border border-amber-100 dark:border-amber-900/20 rounded-2xl p-5 md:p-6">
-                  <h3 className="text-[11px] font-black text-amber-800 dark:text-amber-600 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    Avoid
-                  </h3>
-                  <ul className="space-y-3">
-                    {mat.dontList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <X className="w-4 h-4 text-amber-600 dark:text-amber-600 shrink-0 mt-0.5" />
-                        <span className="text-[13px] font-medium text-slate-800 dark:text-slate-400 leading-snug">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* AVOID Box */}
+                  <div className="bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-xl p-4 md:p-5 shadow-sm">
+                    <h3 className="text-[11px] font-black text-amber-800 dark:text-amber-600 uppercase tracking-widest mb-3 flex items-center gap-2">
+                      Avoid
+                    </h3>
+                    <ul className="space-y-2.5">
+                      {mat.dontList.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <X className="w-4 h-4 text-amber-600 dark:text-amber-600 shrink-0 mt-0.5" />
+                          <span className="text-[13px] font-medium text-slate-800 dark:text-slate-400 leading-snug">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               </div>
             </motion.div>

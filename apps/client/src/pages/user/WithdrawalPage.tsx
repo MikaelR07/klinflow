@@ -73,10 +73,10 @@ export default function WithdrawalPage() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden min-h-screen">
       
       {/* ── TOP SECTION: PRIMARY WITH ROUNDED BOTTOM ── */}
-      <div className="bg-primary pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2rem] shadow-sm relative z-20">
+      <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2.5rem] shadow-lg shadow-indigo-900/30 relative z-20 overflow-hidden">
         
         {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-primary/90 dark:bg-primary/90 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-3 px-4 max-w-lg mx-auto flex items-center justify-between shadow-sm">
+        <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
           <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center active:scale-95 transition-all border border-white/20">
             <ArrowLeft className="w-5 h-5 text-white" />
           </button>
@@ -137,13 +137,13 @@ export default function WithdrawalPage() {
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
 
             {/* AMOUNT AND DETAILS CARD */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-[1rem] p-5 shadow-sm border border-slate-100 dark:border-slate-800">
+            <div className="bg-slate-200 dark:bg-slate-900 rounded-[1rem] p-5 shadow-sm border border-slate-100 dark:border-slate-800">
               <h3 className="text-[14px] font-bold text-slate-700 dark:text-white capitalize tracking-wider mb-4 text-center">Withdrawal Details</h3>
               
               <div className="space-y-4">
                 {/* AMOUNT INPUT */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest ml-1">Amount to Withdraw</label>
+                  <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">Amount to Withdraw</label>
                   <div className="relative flex items-center">
                     <span className="absolute left-4 font-black text-emerald-600 dark:text-emerald-400 text-lg">KSh</span>
                     <input
@@ -168,7 +168,7 @@ export default function WithdrawalPage() {
 
                 {/* DETAILS INPUT */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest ml-1">
+                  <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">
                     {method.id === 'bank' ? 'Account Number' : 'Phone Number'}
                   </label>
                   <div className="relative flex items-center">
@@ -189,7 +189,7 @@ export default function WithdrawalPage() {
               <button
                 onClick={handleConfirm}
                 disabled={loading || amount === '' || Number(amount) < 100 || Number(amount) > cashBalance}
-                className="w-full mt-6 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm shadow-md shadow-emerald-600/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:bg-slate-300 dark:disabled:bg-slate-700 flex items-center justify-center gap-2 capitalize tracking-widest"
+                className="w-full mt-6 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm shadow-md shadow-emerald-600/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:bg-slate-400 dark:disabled:bg-slate-700 flex items-center justify-center gap-2 capitalize tracking-widest"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Confirm & Withdraw</>}
               </button>
@@ -202,7 +202,7 @@ export default function WithdrawalPage() {
             </div>
 
             {/* HOW IT WORKS */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-[1rem] p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
+            <div className="bg-slate-200 dark:bg-slate-900 rounded-[1rem] p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
               <h4 className="text-[12px] font-bold text-slate-700 dark:text-white uppercase tracking-wider mb-3">How Withdrawals Work</h4>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">

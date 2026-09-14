@@ -145,195 +145,269 @@ export default function ImpactHub() {
   const unlockedCount = badges.filter(b => b.unlocked).length;
 
 
+  // SVG ring dimensions
+  const ringSize = 180;
+  const strokeWidth = 12;
+  const radius = (ringSize - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const progressOffset = circumference - (metrics.progress / 100) * circumference;
+
+  // Tier progression data
+  const tiers = [
+    { name: 'Seedling', icon: '🌱', minGfp: 0 },
+    { name: 'Sprout', icon: '🌿', minGfp: 500 },
+    { name: 'Sapling', icon: '🌳', minGfp: 1000 },
+    { name: 'Guardian', icon: '🛡️', minGfp: 3000 },
+    { name: 'Champion', icon: '🏆', minGfp: 7000 },
+    { name: 'Legend', icon: '👑', minGfp: 15000 },
+  ];
+  const currentTierIdx = tiers.findIndex(t => t.name === metrics.tier);
+
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors">
-      {/* ── FIXED TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-4 px-4 border-b border-slate-200 dark:border-slate-800  z-50 transition-colors max-w-lg mx-auto">
-        <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-95 transition-all group">
-            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+    <div className="flex flex-col bg-white dark:bg-slate-950  transition-colors">
+      {/* ── GRADIENT TOP BACKGROUND ── */}
+      <div className="absolute top-0 left-0 right-0 h-[380px] z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-purple-500 to-indigo-500 dark:from-purple-600 dark:via-purple-700 dark:to-indigo-700" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/5" />
+        {/* Decorative circles */}
+        <div className="absolute top-10 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-10 left-0 w-40 h-40 bg-indigo-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none" />
+        {/* Bottom curve */}
+        <div className="absolute -bottom-1 left-0 right-0 h-12 bg-white dark:bg-slate-950 rounded-t-[2.5rem]" />
+      </div>
+
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-purple-400 to-indigo-500 dark:from-purple-600 dark:to-indigo-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 max-w-lg mx-auto">
+        <div className="flex items-center justify-between">
+          <button onClick={() => navigate(-1)} className="w-9 h-9 shrink-0 rounded-full bg-white/15 border border-white/10 flex items-center justify-center active:scale-95 transition-all">
+            <ArrowLeft className="w-4 h-4 text-white" />
           </button>
-          <div>
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">GreenFlow Hub</h1>
-            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em] mt-1">Sustainability Dashboard</p>
-          </div>
+          <h1 className="text-[14px] font-black text-white tracking-tight">GreenFlow Hub</h1>
+          <button onClick={() => setShowBadgeModal(true)} className="w-9 h-9 shrink-0 rounded-full bg-white/15 border border-white/10 flex items-center justify-center active:scale-95 transition-all">
+            <Award className="w-4 h-4 text-white" />
+          </button>
         </div>
       </div>
 
-      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)] relative max-w-lg mx-auto w-full px-1.5 pb-10 space-y-6">
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] relative max-w-lg mx-auto w-full pb-12 z-10">
 
-        {/* Main Stats Card */}
-        <div className="card bg-gradient-to-br from-primary to-emerald-600 p-6 text-white border-0 overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+        {/* ── MAIN STATS CARD ── */}
+        <div className="px-1.5 pt-4 pb-8">
+          <div className="bg-slate-200 dark:bg-slate-800 backdrop-blur-md border border-white/20 dark:border-white/5 p-6 rounded-[2rem] shadow-xl shadow-indigo-900/10">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center text-4xl shadow-sm">
+                {metrics.icon}
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] mb-1">Current Rank</p>
+                <h2 className="text-2xl font-black tracking-tight leading-none text-slate-900 dark:text-white drop-shadow-sm">{metrics.tier}</h2>
+              </div>
+              <div className="text-right">
+                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] mb-1">Impact Score</p>
+                <p className="text-xl font-black text-slate-900 dark:text-white drop-shadow-sm">{profile?.rewardPoints || 0} <span className="text-xs text-emerald-500">GFP</span></p>
+              </div>
+            </div>
 
-          <div className="flex items-center gap-4 mb-6 relative">
-            <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center text-4xl">
-              {metrics.icon}
-            </div>
-            <div>
-              <p className="text-xs font-semibold capitalize tracking-widest opacity-80">Current Rank</p>
-              <h2 className="text-2xl font-semibold">{metrics.tier}</h2>
-            </div>
-            <div className="ml-auto text-right">
-              <p className="text-xs font-semibold capitalize tracking-widest opacity-80">Impact Score</p>
-              <p className="text-lg font-mono font-semibold">{profile?.rewardPoints || 0} GFP</p>
-            </div>
-          </div>
-
-          <div className="space-y-1.5 relative">
-            <div className="flex justify-between items-end text-xs font-semibold capitalize tracking-widest">
-              <span>Progress to {metrics.nextTier}</span>
-              <span>{Math.round(metrics.progress)}%</span>
-            </div>
-            <div className="h-3 w-full bg-black/20 rounded-full overflow-hidden border border-white/10 p-0.5">
-              <div
-                className="h-full bg-white rounded-full transition-all duration-1000"
-                style={{ width: `${metrics.progress}%` }}
-              ></div>
-            </div>
-            <p className="text-xs font-semibold text-center opacity-70 italic mt-1">
-              Your recycling efforts have recovered {kgRecovered}kg of waste from landfills
-            </p>
-          </div>
-        </div>
-
-        {/* Streaks & Quick Stats */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="card p-4 rounded-2xl border-0 flex items-center gap-3 bg-orange-500 text-white">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20">
-              <Flame className="w-5 h-5 text-white fill-white" />
-            </div>
-            <div>
-              <p className="text-[10px] font-bold capitalize leading-none mb-1.5 text-white/70">Streak</p>
-              <p className="text-lg font-semibold leading-none">
-                {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'None'}
+            <div className="space-y-2 mb-4">
+              <div className="flex justify-between items-end">
+                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Next: {metrics.nextTier}</span>
+                <span className="text-[11px] font-black text-slate-900 dark:text-white">{Math.round(metrics.progress)}%</span>
+              </div>
+              <div className="h-2.5 w-full bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden p-[2px]">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.3)] transition-all duration-1000 ease-out"
+                  style={{ width: `${metrics.progress}%` }}
+                />
+              </div>
+              <p className="text-[10px] font-medium text-slate-600 dark:text-slate-400 text-center mt-2 leading-relaxed">
+                Your recycling efforts have recovered <strong className="text-emerald-600 dark:text-emerald-400">{kgRecovered}kg</strong> of waste from landfills.
               </p>
             </div>
-          </div>
-          <div className="card p-4 rounded-2xl border-0 bg-blue-600 text-white flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-white fill-white" />
-            </div>
-            <div>
-              <p className="text-[10px] font-bold capitalize text-white/70 leading-none mb-1.5">Recovered</p>
-              <p className="text-lg font-semibold leading-none">{kgRecovered}kg</p>
+
+            {/* Streak Info */}
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-3 flex items-center justify-between border border-slate-100 dark:border-slate-700 shadow-sm mt-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center">
+                  <Flame className="w-5 h-5 text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Current Streak</p>
+                  <p className="text-[15px] font-black text-slate-900 dark:text-white leading-none">
+                    {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'No active streak'}
+                  </p>
+                </div>
+              </div>
+              {streak > 0 && (
+                <div className="px-3 py-1 bg-orange-100 dark:bg-orange-500/20 rounded-lg">
+                  <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 uppercase tracking-widest">On Fire!</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Badges Showcase */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-extrabold flex items-center gap-2">
-              <Medal className="w-4 h-4 text-amber-500" /> Badges
-            </h3>
-            <button
-              onClick={() => setShowBadgeModal(true)}
-              className="text-xs font-semibold text-primary capitalize tracking-widest flex items-center gap-1 hover:underline"
-            >
-              How to earn <ChevronRight className="w-3 h-3" />
-            </button>
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            {badges.map(badge => (
-              <div
-                key={badge.id}
+        {/* ── BADGES ── */}
+        <div className="px-1.5 mb-8">
+          <div className="bg-slate-200 dark:bg-slate-800/80 rounded-[2rem] p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-5 px-1">
+              <h3 className="text-[15px] font-black text-slate-900 dark:text-white tracking-tight">
+                Achievements
+              </h3>
+              <button
                 onClick={() => setShowBadgeModal(true)}
-                className={`card p-3 text-center transition-all cursor-pointer ${!badge.unlocked ? 'grayscale opacity-60' : 'border-primary/60 bg-primary/10'}`}
+                className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 active:scale-95 transition-transform"
               >
-                <div className={`text-3xl mb-1.5 ${badge.unlocked ? 'transform hover:scale-110 transition-transform' : ''}`}>
-                  {badge.icon}
-                </div>
-                <p className="text-xs font-semibold leading-tight capitalize tracking-tighter text-slate-700 dark:text-slate-300">
-                  {badge.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+                View All <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
 
-
-
-        {/* Badge Guide Modal */}
-        {showBadgeModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center pb-20 p-2">
-            <div className="absolute inset-0 bg-slate-900/60" onClick={() => setShowBadgeModal(false)} />
-            <div className="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-[1rem] border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in duration-300">
-              <div className="p-6 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center">
-                    <Award className="w-6 h-6 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-sm capitalize tracking-widest">Badge Guide</h3>
-                    <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest">How to earn badges</p>
-                  </div>
-                </div>
-                <button onClick={() => setShowBadgeModal(false)} className="p-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl">
-                  <X className="w-5 h-5 text-slate-400" />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-                {badges.map(badge => (
+            {/* Beginner Badges */}
+            <div className="mb-4">
+              <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2 px-1">Starter Collection</p>
+              <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+                {badges.slice(0, 8).map(badge => (
                   <div
                     key={badge.id}
-                    className={`p-4 rounded-3xl border flex items-center gap-4 transition-all ${badge.unlocked
-                      ? 'bg-emerald-50/50 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-800/30'
-                      : 'bg-slate-50 dark:bg-slate-800/30 border-slate-100 dark:border-slate-800'
-                      }`}
+                    onClick={() => setShowBadgeModal(true)}
+                    className={`shrink-0 w-[88px] flex flex-col items-center p-3 rounded-2xl cursor-pointer transition-all active:scale-95 ${
+                      badge.unlocked
+                        ? 'bg-white dark:bg-slate-900 shadow-sm border border-transparent'
+                        : 'bg-white/50 dark:bg-slate-900/50 opacity-60 border border-transparent'
+                    }`}
                   >
-                    <div className={`text-3xl ${!badge.unlocked && 'grayscale opacity-50'}`}>
+                    <div className={`text-[28px] mb-1.5 ${!badge.unlocked ? 'grayscale' : ''}`}>
                       {badge.icon}
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-xs font-semibold capitalize tracking-tight">{badge.name}</h4>
-                        {badge.unlocked ? (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 fill-emerald-500/10" />
-                        ) : (
-                          <Lock className="w-3 h-3 text-slate-300" />
-                        )}
+                    <p className={`text-[8px] font-bold text-center leading-tight ${badge.unlocked ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
+                      {badge.name}
+                    </p>
+                    {badge.unlocked && (
+                      <div className="mt-1.5">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-500" />
                       </div>
-                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
-                        {badge.description}
-                      </p>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
+            </div>
 
-              <div className="p-6 bg-slate-50 dark:bg-slate-800/50">
-                <button
-                  onClick={() => setShowBadgeModal(false)}
-                  className="w-full py-4 bg-green-600 dark:bg-slate-700 text-white rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.98] transition-all"
-                >
-                  Got it, Captain!
-                </button>
+            {/* Master Badges */}
+            <div className="mb-2">
+              <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2 px-1">Mastery Collection</p>
+              <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+                {badges.slice(8).map(badge => (
+                  <div
+                    key={badge.id}
+                    onClick={() => setShowBadgeModal(true)}
+                    className={`shrink-0 w-[88px] flex flex-col items-center p-3 rounded-2xl cursor-pointer transition-all active:scale-95 ${
+                      badge.unlocked
+                        ? 'bg-white dark:bg-slate-900 shadow-sm border border-transparent'
+                        : 'bg-white/50 dark:bg-slate-900/50 opacity-60 border border-transparent'
+                    }`}
+                  >
+                    <div className={`text-[28px] mb-1.5 ${!badge.unlocked ? 'grayscale' : ''}`}>
+                      {badge.icon}
+                    </div>
+                    <p className={`text-[8px] font-bold text-center leading-tight ${badge.unlocked ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
+                      {badge.name}
+                    </p>
+                    {badge.unlocked && (
+                      <div className="mt-1.5">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        )}
-        {/* The Path to Mastery */}
-        <div className="card bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-100 dark:border-slate-800 p-6 rounded-[2.5rem] relative overflow-hidden mt-8">
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <Sparkles className="w-20 h-20 text-primary" />
-          </div>
-          <div className="relative z-10">
-            <h3 className="text-lg font-semibold tracking-tight mb-2">The Path to Mastery 🏆</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
-              You've unlocked <span className="text-primary font-semibold">{unlockedCount} of {badges.length}</span> badges.
-              Keep recycling to become a <span className="text-emerald-600 dark:text-emerald-400 font-semibold ">Certified Sustainability Hero</span> and unlock exclusive M-Pesa reward multipliers!
+
+            {/* Progress bar */}
+            <div className="mt-5 bg-slate-300/50 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full transition-all duration-700"
+                style={{ width: `${(unlockedCount / badges.length) * 100}%` }}
+              />
+            </div>
+            <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 text-center mt-2">
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold">{unlockedCount}</span> of {badges.length} unlocked
             </p>
-            <button
-              onClick={() => navigate('/book-pickup')}
-              className="w-full py-4 bg-primary text-white rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-95 transition-all"
-            >
-              Level Up Now
-            </button>
           </div>
         </div>
+
+        
+
+        {/* ── CTA ── */}
+        <div className="px-4">
+          <button
+            onClick={() => navigate('/book-pickup')}
+            className="w-full py-4 bg-primary dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-[13px] active:scale-[0.98] transition-all shadow-lg shadow-slate-900/10"
+          >
+            Book a Pickup to Level Up
+          </button>
+          <p className="text-[10px] font-medium text-slate-400 text-center mt-3 leading-relaxed">
+            Every KG recycled earns you <strong className="text-emerald-500">GFP points</strong> and pushes you closer to the next tier.
+          </p>
+        </div>
+
       </div>
+
+      {/* ── BADGE GUIDE MODAL ── */}
+      {showBadgeModal && (
+        <div className="fixed inset-0 z-[100] flex items-end justify-center p-4 pb-[90px]">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowBadgeModal(false)} />
+          <div className="relative w-full max-w-lg bg-slate-200 dark:bg-slate-950 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col max-h-[75vh] animate-in slide-in-from-bottom duration-300">
+
+            {/* Handle */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1 rounded-full bg-slate-200 dark:bg-slate-700" />
+            </div>
+
+            <div className="px-5 pt-2 pb-4 flex items-center justify-between">
+              <div>
+                <h3 className="font-black text-[17px] text-slate-900 dark:text-white leading-none">Achievements</h3>
+                <p className="text-[11px] font-semibold text-slate-400 mt-1">
+                  {unlockedCount} of {badges.length} unlocked
+                </p>
+              </div>
+              <button onClick={() => setShowBadgeModal(false)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full active:scale-95 transition-all">
+                <X className="w-5 h-5 text-slate-400" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-4 pb-6 space-y-2 custom-scrollbar">
+              {badges.map(badge => (
+                <div
+                  key={badge.id}
+                  className={`p-3.5 rounded-2xl flex items-center gap-3.5 transition-all ${badge.unlocked
+                    ? 'bg-emerald-50/60 dark:bg-emerald-500/5'
+                    : 'bg-slate-50 dark:bg-slate-900/50'
+                    }`}
+                >
+                  <div className={`w-11 h-11 rounded-2xl flex items-center justify-center text-xl shrink-0 ${
+                    badge.unlocked ? 'bg-white dark:bg-slate-800 shadow-sm' : 'bg-slate-100 dark:bg-slate-800 grayscale opacity-50'
+                  }`}>
+                    {badge.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className={`text-[13px] font-bold truncate ${badge.unlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400'}`}>
+                      {badge.name}
+                    </h4>
+                    <p className={`text-[10px] font-medium leading-snug mt-0.5 ${badge.unlocked ? 'text-slate-500' : 'text-slate-400 dark:text-slate-500'}`}>
+                      {badge.description}
+                    </p>
+                  </div>
+                  {badge.unlocked ? (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                  ) : (
+                    <Lock className="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

@@ -45,7 +45,27 @@ export default function DiscoveryHub() {
           .eq('is_online', true);
 
         if (error) throw error;
-        const normalized = (data as any[]).map(p => normalizeKeys(p));
+
+        // Fetch review counts from bookings
+        const { data: bookingsData, error: bookingsError } = await supabase
+          .from('bookings')
+          .select('agent_id')
+          .not('agent_rating', 'is', null);
+
+        const reviewCounts: Record<string, number> = {};
+        if (!bookingsError && bookingsData) {
+          bookingsData.forEach((b: any) => {
+            if (b.agent_id) {
+              reviewCounts[b.agent_id] = (reviewCounts[b.agent_id] || 0) + 1;
+            }
+          });
+        }
+
+        const normalized = (data as any[]).map(p => {
+          const norm = normalizeKeys(p);
+          norm.reviewCount = reviewCounts[p.id] || 0;
+          return norm;
+        });
         setPartners(normalized);
       } catch (err) {
         console.error('[Discovery] Error:', err);
@@ -83,35 +103,53 @@ export default function DiscoveryHub() {
             </button>
             <div>
               <h1 className="text-lg font-bold dark:text-white tracking-tight leading-none mb-1">Find a Partner</h1>
-              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Verified Logistics</p>
+              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Verified Collectors Near you</p>
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <div className="relative flex-1 group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-primary transition-colors" />
-              <input
-                type="text"
-                placeholder="Search partners..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-300/50 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-primary/20 rounded-2xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
-              />
+          <div className="flex flex-col gap-3 mt-2">
+            <div className="flex gap-2">
+              <div className="relative flex-1 group">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-primary transition-colors" />
+                <input
+                  type="text"
+                  placeholder="Search partners..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-slate-200 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-primary/20 rounded-2xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
+                />
+              </div>
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all shrink-0 ${showFilters || activeScale !== 'all'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500'
+                  }`}
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+              </button>
             </div>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all ${showFilters || activeMaterial !== 'all' || activeScale !== 'all'
-                ? 'bg-primary text-white '
-                : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 text-slate-500'
-                }`}
-            >
-              <SlidersHorizontal className="w-4 h-4" />
-            </button>
+            
+            {/* Material Filter Tabs */}
+            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+              {materials.map(m => (
+                <button
+                  key={m}
+                  onClick={() => setActiveMaterial(m)}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize tracking-widest whitespace-nowrap transition-all border ${activeMaterial === m
+                    ? 'bg-primary border-primary text-white'
+                    : 'bg-slate-400 dark:bg-slate-400 text-slate-100 border-slate-100 dark:border-slate-800'
+                    }`}
+                >
+                  {m === 'all' ? 'All' : ((MATERIAL_LABELS as any)[m] || m)}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+6rem)] pb-6 px-0 space-y-6">
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+9rem)] pb-6 px-0 space-y-6">
 
         {/* ── EXPANDABLE FILTERS ── */}
         <AnimatePresence>
@@ -120,45 +158,49 @@ export default function DiscoveryHub() {
               initial={{ height: 0, opacity: 0, marginBottom: 0 }}
               animate={{ height: 'auto', opacity: 1, marginBottom: 24 }}
               exit={{ height: 0, opacity: 0, marginBottom: 0 }}
-              className="overflow-hidden space-y-5 px-4"
+              className="overflow-hidden px-4"
             >
-              {/* Material Filter */}
-              <div className="space-y-2">
-
-                <div className="flex gap-2 overflow-x-auto no-scrollbar pt-4">
-                  {materials.map(m => (
-                    <button
-                      key={m}
-                      onClick={() => setActiveMaterial(m)}
-                      className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize tracking-widest whitespace-nowrap transition-all border ${activeMaterial === m
-                        ? 'bg-primary border-primary text-white'
-                        : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-100 dark:border-slate-800'
-                        }`}
-                    >
-                      {m === 'all' ? 'All' : ((MATERIAL_LABELS as any)[m] || m)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* Service Scale (Weight) Filter */}
-              <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-slate-400 capitalize tracking-widest px-1">Scale</h3>
-                <div className="grid grid-cols-2 gap-2">
+              <div className="bg-white dark:bg-slate-900 p-4 rounded-[1.25rem] shadow-sm border border-slate-100 dark:border-slate-800">
+                <div className="flex items-center justify-between mb-4 px-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <Filter className="w-3.5 h-3.5 text-primary" />
+                    </div>
+                    <h3 className="text-[13px] font-bold text-slate-900 dark:text-white tracking-tight">Operation Scale</h3>
+                  </div>
+                  {activeScale !== 'all' && (
+                    <button 
+                      onClick={() => setActiveScale('all')}
+                      className="text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-2.5">
                   {SCALE_DEFS.map(s => (
                     <button
                       key={s.id}
                       onClick={() => setActiveScale(s.id)}
-                      className={`p-3 rounded-2xl border text-left transition-all ${s.id === 'all' ? 'col-span-2' : ''
+                      className={`relative flex flex-col p-3 rounded-xl border text-left transition-all overflow-hidden group ${s.id === 'all' ? 'col-span-2' : ''
                         } ${activeScale === s.id
-                          ? 'border-primary bg-primary/5'
-                          : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800'
+                          ? 'border-primary bg-primary/5 shadow-sm'
+                          : 'bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 border-transparent hover:border-slate-200 dark:hover:border-slate-600'
                         }`}
                     >
-                      <p className={`text-xs font-semibold capitalize tracking-tight mb-0.5 ${activeScale === s.id ? 'text-primary' : 'dark:text-white'}`}>
-                        {s.label}
-                      </p>
-                      <p className="text-xs font-medium text-slate-400 leading-tight">
+                      {activeScale === s.id && (
+                        <div className="absolute top-0 right-0 w-8 h-8 bg-primary rounded-bl-xl flex items-start justify-end p-1.5 shadow-sm">
+                          <CircleCheck className="w-3.5 h-3.5 text-white" />
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <s.icon className={`w-3.5 h-3.5 ${activeScale === s.id ? 'text-primary' : 'text-slate-400 group-hover:text-slate-500'}`} />
+                        <p className={`text-xs font-bold capitalize tracking-tight ${activeScale === s.id ? 'text-primary' : 'text-slate-700 dark:text-white'}`}>
+                          {s.label}
+                        </p>
+                      </div>
+                      <p className={`text-[10px] font-medium leading-relaxed ${activeScale === s.id ? 'text-primary/70' : 'text-slate-500 dark:text-slate-400'}`}>
                         {s.description}
                       </p>
                     </button>
@@ -188,7 +230,7 @@ export default function DiscoveryHub() {
               return (
                 <div
                   key={partner.id}
-                  className="w-full bg-white dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800  overflow-hidden transition-all text-left  block cursor-pointer"
+                  className="w-full bg-slate-200 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800  overflow-hidden transition-all text-left  block cursor-pointer"
                   onClick={() => navigate(`/company/${partner.id}`)}
                 >
                   <div className="p-2 flex gap-3 relative">
@@ -292,13 +334,13 @@ export default function DiscoveryHub() {
 
         {/* ── INFO BOX ── */}
         <div className="px-1.5">
-          <div className="bg-gradient-to-br from-emerald-800 to-green-500  p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
-            <div className="w-10 h-10 bg-emerald-800 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center shrink-0">
+          <div className="bg-gradient-to-br from-purple-400 to-indigo-500  p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
+            <div className="w-10 h-10 bg-purple-800 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center shrink-0">
               <Info className="w-5 h-5 text-white" />
             </div>
             <div>
               <h4 className="text-xs font-semibold text-white dark:text-white capitalize tracking-widest mb-1">Choosing the right scale</h4>
-              <p className="text-xs font-medium text-slate-200/70 dark:text-slate-200/70 leading-relaxed">
+              <p className="text-xs font-medium text-slate-200 leading-relaxed">
                 Standard agents use small vehicles for fast, small pickups. Bulk partners use trucks for estate-wide or industrial recycling.
               </p>
             </div>

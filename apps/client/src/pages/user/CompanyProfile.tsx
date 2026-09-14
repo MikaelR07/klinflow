@@ -132,164 +132,153 @@ export default function CompanyProfile() {
 
       <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-5 px-1.5 space-y-4 max-w-lg mx-auto">
         {/* Hero */}
-        <div className="relative overflow-hidden rounded-xl bg-gradient-to-r from-primary to-emerald-800 p-3 text-white ">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-[80px] -mr-16 -mt-16" />
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 p-4 text-white shadow-lg shadow-indigo-900/30">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-300/20 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
           
           <div className="relative z-10">
-            <div className="flex items-start gap-4 mb-5">
-              <div className="relative w-[85px] h-[85px] shrink-0">
-                <div className="w-full h-full rounded-[1.25rem] bg-emerald-800 dark:bg-slate-800 flex items-center justify-center text-3xl overflow-hidden shadow-md">
+            <div className="flex items-start gap-4 mb-6">
+              <div className="relative w-[90px] h-[90px] shrink-0">
+                <div className="w-full h-full rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-4xl overflow-hidden shadow-inner border-[2px] border-white/20">
                   {company?.avatarUrl || company?.avatar_url ? (
                     <OptimizedImage src={getThumbnailUrl(company.avatarUrl || company.avatar_url, { width: 250 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                   ) : (
                     isFleetAdmin ? '🏢' : '🚛'
                   )}
                 </div>
-                <div className="absolute -bottom-2 -left-2 bg-black/70 px-2 py-0.5 rounded-full border-2 border-green-500 flex items-center gap-1.5 z-10 shadow-sm">
-                  <div className={`w-1.5 h-1.5 rounded-full ${company?.is_online ? 'bg-emerald-400 animate-pulse' : 'bg-slate-300'}`} />
-                  <span className="text-[9px] font-bold text-white capitalize tracking-wide pr-0.5">
+                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 backdrop-blur-md px-3 py-1 rounded-full border flex items-center gap-1.5 z-10 shadow-sm ${company?.is_online ? 'bg-emerald-500/90 border-emerald-300/50' : 'bg-amber-500/90 border-amber-300/50'}`}>
+                  <div className={`w-1.5 h-1.5 rounded-full bg-white ${company?.is_online ? 'animate-pulse shadow-[0_0_5px_white]' : ''}`} />
+                  <span className="text-[9px] font-bold text-white capitalize tracking-widest pr-0.5">
                     {company?.is_online ? 'Online' : 'Offline'}
                   </span>
                 </div>
               </div>
 
               <div className="flex-1 pt-1">
-                <div className="flex items-center gap-1 mb-0.5">
-                  <h2 className="text-lg text-white font-bold tracking-tight leading-none">{company?.company_name || company?.name || 'Klinflow Partner'}</h2>
-                  <CircleCheck className="w-4 h-4 text-green-400 fill-green-600/20" />
+                <div className="flex flex-col gap-1.5 mb-2">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <h2 className="text-[1.15rem] text-white font-black tracking-tight leading-none drop-shadow-sm">{company?.company_name || company?.name || 'Klinflow Partner'}</h2>
+                    <ShieldCheck className="w-4 h-4 text-white/90 drop-shadow-sm" />
+                  </div>
+                  <div className="flex items-center gap-1 flex-wrap mt-0.5">
+                    <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full border border-white/10 w-fit">
+                      <MapPin className="w-3 h-3 text-white" />
+                      <span className="text-[9px] font-bold text-white">{company?.location?.estate || 'Starehe, Nairobi'}</span>
+                    </div>
+                    <span className="text-white/40 text-[10px]">•</span>
+                    <p className="text-[10px] font-medium text-white/90">
+                      {isFleetAdmin ? 'Verified Fleet' : 'Independent Agent'}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-[12px] font-medium text-emerald-100 mb-2">
-                  {isFleetAdmin ? 'Verified Fleet Company' : 'Independent Agent'}
-                </p>
 
-                <div className="flex items-center gap-1 mb-1.5">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  <span className="text-[12px] font-bold text-white">
-                    {computedRating}
-                  </span>
-                  <span className="text-[11px] text-emerald-200/80">({reviewCount} reviews)</span>
-                </div>
-                
-                <div className="flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="text-[11px] font-medium text-emerald-200/90">Verified by Klinflow</span>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10">
+                    <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300 drop-shadow-sm" />
+                    <span className="text-[11px] font-bold text-white">
+                      {computedRating}
+                    </span>
+                    <span className="text-[9px] text-white/70">({reviewCount} reviews)</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className=" border-t border-white/50 dark:border-slate-200 rounded-3xl p-3 flex items-center justify-between shadow-sm">
-              <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-100 dark:border-slate-800 last:border-0">
-                <Package className="w-4 h-4 text-emerald-200 mb-1" />
-                <p className="text-sm font-bold text-white dark:text-white leading-none mb-0.5">{Number(company?.total_pickups || 1)}</p>
-                <p className="text-[9px] text-slate-200 font-medium">Total Pickups</p>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 flex items-center justify-between shadow-lg">
+              <div className="flex flex-col items-center justify-center flex-1 border-r border-white/50 last:border-0">
+                <Package className="w-4 h-4 text-white/80 mb-1.5" />
+                <p className="text-[13px] font-black text-white leading-none mb-1">{Number(company?.total_pickups || 1)}</p>
+                <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Pickups</p>
               </div>
-              <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-100 dark:border-slate-800 last:border-0">
-                <Star className="w-4 h-4 text-amber-400 mb-1" />
-                <p className="text-sm font-bold text-white dark:text-white leading-none mb-0.5">{computedRating}</p>
-                <p className="text-[9px] text-slate-200 font-medium">Rating</p>
-              </div>
-              <div className="flex flex-col items-center justify-center flex-1 border-r border-slate-100 dark:border-slate-800 last:border-0">
-                <Clock className="w-4 h-4 text-blue-400 mb-1" />
-                <p className="text-sm font-bold text-white dark:text-white leading-none mb-0.5">1-2 hrs</p>
-                <p className="text-[9px] text-slate-200 font-medium">Avg. Arrival</p>
+              <div className="flex flex-col items-center justify-center flex-1 border-r border-white/50 last:border-0">
+                <Clock className="w-4 h-4 text-white/80 mb-1.5" />
+                <p className="text-[13px] font-black text-white leading-none mb-1">1-2h</p>
+                <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Arrival</p>
               </div>
               <div className="flex flex-col items-center justify-center flex-1 last:border-0">
-                <Zap className="w-4 h-4 text-purple-400 mb-1" />
-                <p className="text-sm font-bold text-white dark:text-white leading-none mb-0.5">KSh {logisticsFee}</p>
-                <p className="text-[9px] text-slate-200 font-medium">Base Fee</p>
+                <Zap className="w-4 h-4 text-white/80 mb-1.5" />
+                <p className="text-[13px] font-black text-white leading-none mb-1">KSh {logisticsFee}</p>
+                <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Base Fee</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Service Area */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-3 border border-slate-100 dark:border-slate-800 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
-              <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">Service Area</p>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">{company?.location?.estate || 'Starehe, Nairobi'}</p>
-            </div>
-          </div>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-lg">
-            <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">View on map</span>
-            <MapPin className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-          </button>
-        </div>
 
-        {/* Accepted Materials */}
-        {materials.length > 0 && (
-          <div className="space-y-3 pt-2 !mt-1">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white px-1">Accepted Materials</h3>
-            <div className="flex overflow-x-auto gap-3 pb-2 no-scrollbar px-1">
-              {(showAllMaterials ? materials : materials.slice(0, 3)).map((m: string) => {
-                  let bgImage = '';
-                  const identifier = m.toLowerCase();
-                  const catLabel = m.toLowerCase();
-                  if (identifier.includes('textile') || identifier.includes('clothes') || catLabel.includes('textile') || catLabel.includes('clothes')) bgImage = '/material-categories/textile.webp';
-                  else if (identifier.includes('paper') || identifier.includes('cardboard') || identifier.includes('carton')) bgImage = '/material-categories/boxes.webp';
-                  else if (identifier.includes('plastic')) bgImage = '/material-categories/plastic.webp';
-                  else if (identifier.includes('ewaste') || identifier.includes('e-waste') || identifier.includes('electronic')) bgImage = '/material-categories/E-waste.webp';
-                  else if (identifier.includes('metal')) bgImage = '/material-categories/metal.webp';
-                  else if (identifier.includes('organic') || identifier.includes('food')) bgImage = '/material-categories/organic-waste.webp';
-                  else if (identifier.includes('general') || identifier.includes('trash')) bgImage = '/material-categories/general-waste.webp';
-                  else if (identifier.includes('glass')) bgImage = '/material-categories/glasses.webp';
-                  else if (identifier.includes('appliance')) bgImage = '/material-categories/bulky-item.webp';
-                  else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
-                  else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
+        {/* ── SERVICES & PRICING WRAPPER ── */}
+        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-2xl space-y-1 mt-4">
+          {/* Accepted Materials */}
+          {materials.length > 0 && (
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-slate-600 dark:text-white px-1">Accepted Materials</h3>
+              <div className="flex overflow-x-auto gap-3 pb-1 no-scrollbar px-1">
+                {(showAllMaterials ? materials : materials.slice(0, 3)).map((m: string) => {
+                    let bgImage = '';
+                    const identifier = m.toLowerCase();
+                    const catLabel = m.toLowerCase();
+                    if (identifier.includes('textile') || identifier.includes('clothes') || catLabel.includes('textile') || catLabel.includes('clothes')) bgImage = '/material-categories/textile.webp';
+                    else if (identifier.includes('paper') || identifier.includes('cardboard') || identifier.includes('carton')) bgImage = '/material-categories/boxes.webp';
+                    else if (identifier.includes('plastic')) bgImage = '/material-categories/plastic.webp';
+                    else if (identifier.includes('ewaste') || identifier.includes('e-waste') || identifier.includes('electronic')) bgImage = '/material-categories/E-waste.webp';
+                    else if (identifier.includes('metal')) bgImage = '/material-categories/metal.webp';
+                    else if (identifier.includes('organic') || identifier.includes('food')) bgImage = '/material-categories/organic-waste.webp';
+                    else if (identifier.includes('general') || identifier.includes('trash')) bgImage = '/material-categories/general-waste.webp';
+                    else if (identifier.includes('glass')) bgImage = '/material-categories/glasses.webp';
+                    else if (identifier.includes('appliance')) bgImage = '/material-categories/bulky-item.webp';
+                    else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
+                    else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
 
-                  return (
-                  <div 
-                    key={m} 
-                    className="shrink-0 w-[85px] h-[85px] bg-slate-100 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center p-2 shadow-md relative overflow-hidden"
-                    style={bgImage ? {
-                      backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8)), url(${bgImage})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
-                    } : {}}
+                    return (
+                    <div 
+                      key={m} 
+                      className="shrink-0 w-[85px] h-[85px] bg-slate-100 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center p-2 shadow-md relative overflow-hidden"
+                      style={bgImage ? {
+                        backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8)), url(${bgImage})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                      } : {}}
+                    >
+                      <span className="text-[10px] font-black text-white capitalize tracking-widest text-center leading-tight italic z-10 relative">
+                        {m.replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                  )})}
+                {!showAllMaterials && materials.length > 3 && (
+                  <button 
+                    onClick={() => setShowAllMaterials(true)}
+                    className="shrink-0 w-[85px] h-[85px] bg-slate-300 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center p-2 shadow-sm active:scale-95 transition-transform"
                   >
-                    <span className="text-[10px] font-black text-white capitalize tracking-widest text-center leading-tight italic z-10 relative">
-                      {m.replace(/_/g, ' ')}
+                    <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-full flex items-center justify-center mb-2">
+                      <span className="text-base font-bold text-emerald-600 dark:text-emerald-400">+{materials.length - 3}</span>
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">
+                      More
                     </span>
-                  </div>
-                )})}
-              {!showAllMaterials && materials.length > 3 && (
-                <button 
-                  onClick={() => setShowAllMaterials(true)}
-                  className="shrink-0 w-[85px] h-[85px] bg-slate-300 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center p-2 shadow-sm active:scale-95 transition-transform"
-                >
-                  <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-full flex items-center justify-center mb-2">
-                    <span className="text-base font-bold text-emerald-600 dark:text-emerald-400">+{materials.length - 3}</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">
-                    More
-                  </span>
-                </button>
-              )}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Pricing Card */}
-        <div className="space-y-3 pt-2 !mt-2">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white px-1">Pricing</h3>
-          <div className="bg-emerald-50/50 dark:bg-slate-900/50 rounded-2xl p-4 border border-emerald-100 dark:border-slate-800 flex gap-4">
-            <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
-              <Truck className="w-5 h-5 text-emerald-700 dark:text-emerald-400" />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">Base Logistics Fee</h4>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-snug pr-4">
-                    Final price depends on material type and weight, confirmed after pickup.
-                  </p>
-                </div>
-                <div className="text-right shrink-0 flex flex-col items-end">
-                  <p className="text-lg font-black text-emerald-700 dark:text-emerald-400 leading-none mb-2">KSh {logisticsFee}</p>
-                  <span className="px-2 py-1 bg-emerald-100/80 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[9px] font-bold rounded-md">No booking fee</span>
+          {/* Pricing Card */}
+          <div className="space-y-1">
+            <h3 className="text-sm font-semibold text-slate-600 dark:text-white px-1">Pricing</h3>
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border-none shadow-sm flex gap-4">
+              <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
+                <Truck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">Base Logistics Fee</h4>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug pr-4">
+                      Final price depends on material type and weight, confirmed after pickup.
+                    </p>
+                  </div>
+                  <div className="text-right shrink-0 flex flex-col items-end">
+                    <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-none mb-2">KSh {logisticsFee}</p>
+                    <span className="px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold rounded-md">No booking fee</span>
+                  </div>
                 </div>
               </div>
             </div>

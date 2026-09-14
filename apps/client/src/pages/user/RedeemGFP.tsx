@@ -137,24 +137,35 @@ export default function RedeemGFP() {
   };
 
   return (
-    <div className="-mx-1 px-1 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-5 relative  overflow-x-hidden">
-      {/* AMBER TOP BACKGROUND (Perfectly fills edges by scaling and clipping overflow) */}
-      <div className="absolute top-0 left-0 right-0 h-[220px] bg-gradient-to-b from-amber-500 to-amber-600 rounded-b-[40%] scale-x-[1.5] z-0 shadow-sm" />
+    <div className="-mx-1 px-1 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-5 relative overflow-x-hidden">
+      {/* PREMIUM AMBER HERO BACKGROUND */}
+      <div className="absolute top-0 left-0 right-0 h-[340px] z-0 overflow-hidden">
+        {/* Primary gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 dark:from-amber-600 dark:via-amber-700 dark:to-orange-700" />
+        {/* Mesh overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-white/5" />
+        {/* Decorative circles */}
+        <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-white/8" />
+        <div className="absolute top-24 -left-20 w-40 h-40 rounded-full bg-orange-400/15" />
+        <div className="absolute -bottom-10 right-8 w-32 h-32 rounded-full bg-amber-300/10" />
+        {/* Bottom curve */}
+        <div className="absolute -bottom-1 left-0 right-0 h-12 bg-slate-50 dark:bg-slate-900 rounded-t-[2.5rem]" />
+      </div>
 
-      {/* HEADER */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-amber-500 dark:bg-amber-600 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-start justify-between">
+      {/* FIXED HEADER */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-start justify-between">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 active:scale-95 transition-all relative z-10">
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
 
         <div className="absolute left-0 right-0 bottom-2 flex flex-col items-center pointer-events-none text-center px-12">
           <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Redeem GFP</h1>
-          <p className="text-[9px] text-slate-50 font-medium tracking-wider capitalize mt-0.5">Turn  Green fuel points to rewards</p>
+          <p className="text-[9px] text-white/70 font-medium tracking-wider capitalize mt-0.5">Turn green fuel points into rewards</p>
         </div>
 
         <button 
           onClick={() => navigate('/redemption-history')}
-          className="relative z-10 flex items-center gap-1.5 px-2 py-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors backdrop-blur-sm mt-0.5"
+          className="relative z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 transition-colors backdrop-blur-sm mt-0.5 border border-white/10"
         >
           <Clock className="w-3.5 h-3.5 text-white" />
           <span className="text-xs font-bold text-white">History</span>
@@ -163,33 +174,46 @@ export default function RedeemGFP() {
 
       <div className="relative z-10 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] px-1.5 max-w-lg mx-auto space-y-4">
 
-        {/* HERO IMAGE CARD */}
-        <div className="relative overflow-hidden rounded-2xl  shadow-lg bg-emerald-900 border border-amber-400/30 flex items-center justify-center">
-          <img 
-            src="/vectors/redeem-gfp.webp" 
-            alt="Redeem GFP" 
-            className="w-full h-auto opacity-90"
-          />
+        {/* HERO CARD — Clean Image */}
+        <div className="relative overflow-hidden rounded-2xl shadow-xl">
+          <div className="bg-emerald-900">
+            <img 
+              src="/vectors/redeem-gfp.webp" 
+              alt="Redeem GFP" 
+              className="w-full h-auto"
+            />
+          </div>
         </div>
 
         {/* STATS CARD */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-2 shadow-sm border border-slate-200 dark:border-slate-700">
-          <div className="flex items-center justify-between">
-            <div className="text-center flex-1">
-              <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest mb-1.5">Available GFP</p>
-              <div className="flex items-baseline justify-center gap-1 text-emerald-600 dark:text-emerald-400">
-                <span className="text-base font-black leading-none">
-                  {isLoadingWallet ? '...' : gfpBalance.toLocaleString()}
+        <div className="bg-white dark:bg-slate-800/90 rounded-xl px-4 py-2.5 shadow-md border border-slate-100 dark:border-slate-700/80">
+          <div className="flex items-center">
+            {/* Available GFP */}
+            <div className="flex-1 flex items-center justify-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-500/15 flex items-center justify-center shrink-0">
+                <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Available GFP</p>
+                <span className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-tight">
+                  {isLoadingWallet ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
+                  ) : gfpBalance.toLocaleString()}
                 </span>
               </div>
             </div>
-            
-            <div className="w-[1px] h-10 bg-slate-200 dark:bg-slate-200" />
 
-            <div className="text-center flex-1">
-              <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest mb-1.5">Worth (KES)</p>
-              <div className="flex items-baseline justify-center gap-1 text-amber-600 dark:text-amber-500">
-                <span className="text-base font-black leading-none">
+            {/* Divider */}
+            <div className="w-px h-8 bg-gradient-to-b from-transparent via-slate-200 dark:via-slate-600 to-transparent mx-2" />
+
+            {/* Worth (KES) */}
+            <div className="flex-1 flex items-center justify-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-500/15 flex items-center justify-center shrink-0">
+                <Landmark className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div>
+                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Worth (KES)</p>
+                <span className="text-lg font-black text-amber-600 dark:text-amber-400 leading-tight">
                   {maxKsh.toLocaleString()}
                 </span>
               </div>
@@ -197,88 +221,116 @@ export default function RedeemGFP() {
           </div>
         </div>
 
-        {/* OPTIONS GRID */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 p-5">
-          <div className="text-center mb-5">
-            <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize tracking-wider mb-1">Redeem your points</h3>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Choose a reward to claim instantly</p>
+        {/* OPTIONS — Horizontal Scroll */}
+        <div className="mt-2">
+          {/* Section Header */}
+          <div className="flex items-center justify-between mb-2.5 px-0.5">
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-400 to-amber-600" />
+              <h3 className="text-[13px] font-extrabold text-slate-900 dark:text-white tracking-tight">Redeem your points</h3>
+            </div>
+            <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">Scroll for more →</p>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="-mx-1.5 px-1.5 flex gap-2 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
             {REDEEM_OPTIONS.map((opt) => (
               <button
                 key={opt.id}
                 onClick={() => handleCardClick(opt.id)}
                 disabled={isLoadingWallet}
-                className={`flex flex-col items-center justify-center p-3 rounded-2xl text-center transition-all disabled:opacity-50 ${selectedOption === opt.id
-                  ? 'bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-500 shadow-md scale-[1.02]'
-                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-200 dark:hover:border-emerald-800/50 shadow-sm'
+                className={`group snap-start shrink-0 w-[100px] flex flex-col items-center justify-center p-3 rounded-xl text-center transition-all duration-200 disabled:opacity-50 active:scale-[0.96] ${selectedOption === opt.id
+                  ? 'bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-500 shadow-lg shadow-emerald-500/10 scale-[1.02]'
+                  : 'bg-white dark:bg-slate-800/90 border border-slate-150 dark:border-slate-700/60 shadow-sm hover:shadow-md'
                   }`}
               >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 shadow-sm ${opt.bg}`}>
-                  <opt.icon className={`w-5 h-5 ${opt.color}`} />
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 shadow-sm transition-transform duration-200 group-hover:scale-105 ${opt.bg}`}>
+                  <opt.icon className={`w-4.5 h-4.5 ${opt.color}`} />
                 </div>
-                <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-0.5 leading-tight">{opt.title}</h4>
-                <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-tight line-clamp-2">{opt.desc}</p>
+                <h4 className="text-[10px] font-bold text-slate-800 dark:text-white mb-0.5 leading-tight">{opt.title}</h4>
+                <p className="text-[8px] text-slate-400 dark:text-slate-500 leading-tight line-clamp-2">{opt.desc}</p>
               </button>
             ))}
 
-            {/* Secure & Instant Card (6th slot) */}
-            <div className="flex flex-col items-center justify-center p-3 rounded-2xl text-center bg-blue-700 dark:bg-blue-700 border border-white dark:border-blue-500/50 relative overflow-hidden">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center mb-2 bg-white dark:bg-blue-500">
-                <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-white" />
+            {/* Secure & Instant Card */}
+            {/* <div className="snap-start shrink-0 w-[100px] relative flex flex-col items-center justify-center p-3 rounded-xl text-center bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-800 border border-blue-400/20 overflow-hidden shadow-sm">
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0" />
+              <div className="relative w-10 h-10 rounded-xl flex items-center justify-center mb-2 bg-white/15 backdrop-blur-sm border border-white/10">
+                <ShieldCheck className="w-4.5 h-4.5 text-white" />
               </div>
-              <h4 className="text-[11px] font-bold text-white dark:text-white mb-0.5 leading-tight">Secure</h4>
-              <p className="text-[9px] text-white/70 dark:text-white/70 leading-tight">Instant delivery</p>
-            </div>
+              <h4 className="relative text-[10px] font-bold text-white mb-0.5 leading-tight">Secure</h4>
+              <p className="relative text-[8px] text-white/60 leading-tight">Instant delivery</p>
+            </div> */}
           </div>
         </div>
 
         {/* RECENT REDEMPTIONS */}
-        <div className="px-1">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-wider">Recent Redemptions</h3>
-            <button onClick={() => navigate('/redemption-history')} className="text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:underline">
+        <div className="bg-white dark:bg-slate-800/90 rounded-2xl shadow-md !mt-1  border border-slate-100 dark:border-slate-700/80 overflow-hidden">
+          {/* Section Header */}
+          <div className="px-5 pt-4 pb-3 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-1 h-5 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
+              <h3 className="text-[13px] font-extrabold text-slate-900 dark:text-white tracking-tight">Recent Redemptions</h3>
+            </div>
+            <button 
+              onClick={() => navigate('/redemption-history')} 
+              className="flex items-center gap-1 text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
+            >
               View All
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
           
-          <div className="space-y-2">
+          <div className="px-4 pb-4 space-y-2">
             {isLoadingHistory ? (
-              <div className="py-6 text-center text-slate-500">
-                <Loader2 className="w-5 h-5 animate-spin mx-auto" />
+              <div className="py-8 text-center">
+                <Loader2 className="w-5 h-5 animate-spin mx-auto text-slate-400" />
+                <p className="text-[10px] text-slate-400 mt-2 font-medium">Loading history…</p>
               </div>
             ) : recentRedemptions.length > 0 ? (
-              recentRedemptions.map((txn) => {
+              recentRedemptions.map((txn, index) => {
                 const opt = REDEEM_OPTIONS.find(o => o.type === txn.type);
                 const Icon = opt?.icon || Receipt;
                 return (
-                  <div key={txn.id} className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${opt ? opt.bg : 'bg-slate-200 dark:bg-slate-800'}`}>
-                      <Icon className={`w-5 h-5 ${opt ? opt.color : 'text-slate-500'}`} />
+                  <div 
+                    key={txn.id} 
+                    className="group relative bg-slate-50/80 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-100 dark:border-slate-700/50 flex items-center gap-3 hover:bg-white dark:hover:bg-slate-800/60 hover:shadow-sm transition-all duration-200 hover:border-slate-200 dark:hover:border-slate-600"
+                  >
+                    {/* Left accent bar */}
+                    <div className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full ${
+                      txn.status === 'completed' ? 'bg-emerald-400' : txn.status === 'pending' ? 'bg-amber-400' : 'bg-rose-400'
+                    }`} />
+
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${opt ? opt.bg : 'bg-slate-200 dark:bg-slate-700'}`}>
+                      <Icon className={`w-4.5 h-4.5 ${opt ? opt.color : 'text-slate-500'}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                      <p className="text-[12px] font-bold text-slate-800 dark:text-white truncate leading-tight">
                         {opt?.title || 'Redemption'}
                       </p>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="text-[10px] text-slate-500">{new Date(txn.created_at).toLocaleDateString()}</span>
-                        <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
-                        <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${getStatusColor(txn.status)}`}>
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
+                          {new Date(txn.created_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
+                        </span>
+                        <span className="w-0.5 h-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
+                        <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${getStatusColor(txn.status)}`}>
                           {txn.status}
                         </span>
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-sm font-black text-slate-900 dark:text-white">-{txn.amount}</p>
-                      <p className="text-[10px] font-bold text-green-600">KES {txn.kes_equivalent}</p>
+                      <p className="text-[13px] font-black text-slate-800 dark:text-white leading-tight">-{txn.amount}</p>
+                      <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">KES {txn.kes_equivalent}</p>
                     </div>
                   </div>
                 );
               })
             ) : (
-              <div className="text-center py-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-                <p className="text-xs text-slate-500 dark:text-slate-400">No recent redemptions</p>
+              <div className="text-center py-8 bg-slate-50/80 dark:bg-slate-900/30 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Receipt className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+                </div>
+                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-0.5">No recent redemptions</p>
+                <p className="text-[10px] text-slate-400 dark:text-slate-500">Your redemption history will appear here</p>
               </div>
             )}
           </div>

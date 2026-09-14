@@ -17,7 +17,14 @@ export default function TransferGFP() {
   // Wizard state
   const [step, setStep] = useState(1);
 
-  const [phone, setPhone] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const maskPhone = (p?: string) => {
+    if (!p) return '';
+    if (p.length >= 10) return `${p.slice(0, 2)}****${p.slice(-4)}`;
+    if (p.length > 4) return `${p.slice(0, 2)}***`;
+    return p;
+  };
   const [amount, setAmount] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -39,12 +46,12 @@ export default function TransferGFP() {
   }, [userId]);
 
   const searchUser = async () => {
-    if (!phone || phone.length < 4) return toast.error('Enter a valid phone or ID to search');
+    if (!searchQuery || searchQuery.length < 5) return toast.error('Enter a valid Klinflow ID to search');
     setIsSearching(true);
     setSearchAttempted(true);
     setSearchedRecipient(null);
     try {
-      const result = await walletService.searchRecipient(phone);
+      const result = await walletService.searchRecipient(searchQuery);
       setSearchedRecipient(result);
     } catch (err) {
       setSearchedRecipient(null);
@@ -88,25 +95,32 @@ export default function TransferGFP() {
   };
 
   return (
-    <div className="-mx-1 px-1 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-5 relative  overflow-x-hidden">
+    <div className="-mx-1 px-1 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-5 relative overflow-x-hidden">
       
-      {/* EMERALD TOP BACKGROUND */}
-      <div className="absolute top-0 left-0 right-0 h-[300px] bg-gradient-to-b from-primary to-primary rounded-b-[40%] scale-x-[1.5] z-0 shadow-sm" />
+      {/* PREMIUM TOP BACKGROUND */}
+      <div className="absolute top-0 left-0 right-0 h-[340px] z-0 overflow-hidden">
+        {/* Primary gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary dark:from-emerald-700 dark:via-emerald-800 dark:to-teal-900" />
+        {/* Mesh overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-white/5" />
+        {/* Bottom curve */}
+        <div className="absolute -bottom-1 left-0 right-0 h-12 bg-slate-50 dark:bg-slate-900 rounded-t-[2.5rem]" />
+      </div>
 
-      {/* HEADER */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-primary  backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-start justify-between">
+      {/* FIXED HEADER */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-primary to-primary dark:from-emerald-700 dark:to-emerald-800 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-start justify-between">
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 active:scale-95 transition-all relative z-10">
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
 
         <div className="absolute left-0 right-0 bottom-2 flex flex-col items-center pointer-events-none text-center px-12">
           <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Transfer GFP</h1>
-          <p className="text-[9px] text-emerald-100/90 font-medium tracking-wider uppercase mt-0.5">Share your tokens with loved ones</p>
+          <p className="text-[9px] text-white/70 font-medium tracking-wider capitalize mt-0.5">Share your tokens with loved ones</p>
         </div>
 
         <button 
           onClick={() => navigate('/wallet-history')}
-          className="relative z-10 flex items-center gap-1.5 px-2 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm mt-0.5 border border-white/10"
+          className="relative z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 transition-colors backdrop-blur-sm mt-0.5 border border-white/10"
         >
           <Clock className="w-3.5 h-3.5 text-white" />
           <span className="text-xs font-bold text-white">History</span>
@@ -116,34 +130,44 @@ export default function TransferGFP() {
       {/* MAIN CONTENT */}
       <div className="relative z-10 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] px-1.5 max-w-lg mx-auto space-y-4">
 
-        {/* HERO IMAGE CARD */}
-        <div className="relative overflow-hidden rounded-2xl shadow-lg bg-emerald-900 border border-emerald-400/20 flex items-center justify-center">
-          <img 
-            src="/vectors/money.webp" 
-            alt="Transfer GFP" 
-            className="w-full h-auto opacity-90"
-          />
+        {/* HERO CARD — Clean Image */}
+        <div className="relative overflow-hidden rounded-2xl shadow-xl">
+          <div className="bg-emerald-900">
+            <img 
+              src="/vectors/money.webp" 
+              alt="Transfer GFP" 
+              className="w-full h-auto"
+            />
+          </div>
         </div>
 
         {/* STATS CARD */}
-        <div className="bg-white dark:bg-slate-800 rounded-xl p-2 shadow-sm border border-slate-200 dark:border-slate-700">
-          <div className="flex items-center justify-between">
-            <div className="text-center flex-1">
-              <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5">Available Balance</p>
-              <div className="flex items-baseline justify-center gap-1 text-emerald-600 dark:text-emerald-400">
-                <span className="text-base font-black leading-none">
+        <div className="bg-white dark:bg-slate-800/90 rounded-xl px-4 py-2.5 shadow-md border border-slate-100 dark:border-slate-700/80">
+          <div className="flex items-center">
+            {/* Available Balance */}
+            <div className="flex-1 flex items-center justify-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-500/15 flex items-center justify-center shrink-0">
+                <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div>
+                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Available GFP</p>
+                <span className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-tight">
                   {walletBalance.toLocaleString()}
                 </span>
-                <span className="text-xs font-bold">GFP</span>
               </div>
             </div>
-            
-            <div className="w-[1px] h-10 bg-slate-200 dark:bg-slate-700" />
 
-            <div className="text-center flex-1">
-              <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1.5">Worth (KES)</p>
-              <div className="flex items-baseline justify-center gap-1 text-amber-600 dark:text-amber-500">
-                <span className="text-base font-black leading-none">
+            {/* Divider */}
+            <div className="w-px h-8 bg-gradient-to-b from-transparent via-slate-200 dark:via-slate-600 to-transparent mx-2" />
+
+            {/* Worth (KES) */}
+            <div className="flex-1 flex items-center justify-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-500/15 flex items-center justify-center shrink-0">
+                <Tag className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div>
+                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Worth (KES)</p>
+                <span className="text-lg font-black text-amber-600 dark:text-amber-400 leading-tight">
                   {(walletBalance * WALLET_CONFIG.GFP_TO_KES_RATE).toLocaleString()}
                 </span>
               </div>
@@ -152,252 +176,310 @@ export default function TransferGFP() {
         </div>
 
         {/* 3-STEP WIZARD FORM */}
-        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 mt-4 min-h-[300px]">
+        <div className="bg-slate-200 dark:bg-slate-800/95 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/60 p-5 mt-4 min-h-[340px] flex flex-col relative overflow-hidden">
           
-          {/* STEP INDICATOR */}
-          <div className="flex items-center gap-2 mb-6 justify-center">
-            <div className={`h-1.5 w-12 rounded-full transition-colors duration-300 ${step >= 1 ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'}`} />
-            <div className={`h-1.5 w-12 rounded-full transition-colors duration-300 ${step >= 2 ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'}`} />
-            <div className={`h-1.5 w-12 rounded-full transition-colors duration-300 ${step >= 3 ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'}`} />
+          {/* POLISHED STEP INDICATOR */}
+          <div className="flex items-center justify-between mb-8 relative px-2">
+            {/* Background track */}
+            <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-0.5 bg-slate-100 dark:bg-slate-700 z-0" />
+            {/* Active track */}
+            <div 
+              className="absolute left-6 top-1/2 -translate-y-1/2 h-0.5 bg-emerald-500 z-0 transition-all duration-500 ease-out"
+              style={{ right: step === 1 ? '66%' : step === 2 ? '33%' : '6px' }}
+            />
+            
+            {[
+              { num: 1, label: 'Recipient' },
+              { num: 2, label: 'Amount' },
+              { num: 3, label: 'Confirm' }
+            ].map((s) => (
+              <div key={s.num} className="relative z-10 flex flex-col items-center gap-1.5">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-all duration-300 ${
+                  step >= s.num 
+                    ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20' 
+                    : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'
+                }`}>
+                  {step > s.num ? <CheckCircle2 className="w-3.5 h-3.5" /> : s.num}
+                </div>
+                <span className={`text-[9px] font-bold uppercase tracking-wider absolute -bottom-5 whitespace-nowrap transition-colors duration-300 ${
+                  step >= s.num ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'
+                }`}>
+                  {s.label}
+                </span>
+              </div>
+            ))}
           </div>
 
-          {/* STEP 1: RECIPIENT */}
-          {step === 1 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="text-center mb-5">
-                <h3 className="text-[15px] font-bold text-slate-700 dark:text-white uppercase tracking-wider mb-1">Step 1: Recipient</h3>
-                <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Search by Klinflow ID or phone</p>
-              </div>
-
-              {!recipient && (
-                <div className="bg-primary  rounded-2xl p-3 mb-5 border border-emerald-100 dark:border-emerald-800/30 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-800/50 flex items-center justify-center shrink-0 mt-0.5">
-                    <HelpCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  <p className="text-[11px] text-emerald-50 dark:text-emerald-300 font-medium leading-relaxed">
-                    Enter the registered phone number or Klinflow ID of the person you want to send points to. Make sure they have a verified Klinflow account.
-                  </p>
+          <div className="flex-1 mt-4">
+            {/* STEP 1: RECIPIENT */}
+            {step === 1 && (
+              <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                <div className="mb-2">
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight leading-tight">Who are you sending to?</h3>
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Search by Klinflow ID</p>
                 </div>
-              )}
 
-              {!recipient ? (
-                <>
-                  <div className="relative flex items-center gap-2 mb-4">
-                    <div className="relative flex-1">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                        <Phone className="w-4 h-4" />
-                      </span>
-                      <input
-                        type="text"
-                        value={phone}
-                        onChange={(e) => {
-                          setPhone(e.target.value);
-                          setSearchAttempted(false);
+                {!recipient ? (
+                  <>
+                    <div className="relative flex items-center gap-2.5 mb-6">
+                      <div className="relative flex-1 group">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <Contact className="w-4.5 h-4.5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+                        </div>
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => {
+                            setSearchQuery(e.target.value.toUpperCase());
+                            setSearchAttempted(false);
+                            setSearchedRecipient(null);
+                          }}
+                          onKeyDown={(e) => { if (e.key === 'Enter') searchUser(); }}
+                          placeholder="e.g. KPT123456"
+                          className="w-full bg-white dark:bg-slate-900/50 border-2 border-slate-100 dark:border-slate-700/50 rounded-xl py-2.5 pl-11 pr-4 text-[14px] font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600"
+                        />
+                      </div>
+                      <button
+                        onClick={searchUser}
+                        disabled={isSearching || searchQuery.length < 5}
+                        className="h-11 px-5 bg-slate-800 dark:bg-emerald-600 text-white rounded-xl text-sm font-bold tracking-wide disabled:opacity-50 disabled:bg-slate-700 dark:disabled:bg-slate-800 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center shrink-0"
+                      >
+                        {isSearching ? <Loader2 className="w-4.5 h-4.5 animate-spin" /> : 'Search'}
+                      </button>
+                    </div>
+
+                    {!searchQuery && !searchAttempted && (
+                      <div className="bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/30 rounded-xl p-3 flex items-start gap-2.5 animate-in fade-in duration-300">
+                        <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-800/50 flex items-center justify-center shrink-0 mt-0.5">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                        </div>
+                        <p className="text-[11px] font-medium text-emerald-800 dark:text-emerald-300/90 leading-tight">
+                          Ensure the recipient has a <strong>verified Klinflow account</strong> before transferring GFP.
+                        </p>
+                      </div>
+                    )}
+
+                    {searchAttempted && !isSearching && (
+                      <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        {searchedRecipient ? (
+                          <div className="group bg-white dark:bg-slate-800 rounded-xl p-2.5 border-2 border-emerald-500/20 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all cursor-pointer" onClick={() => selectRecipient(searchedRecipient)}>
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center shrink-0 overflow-hidden ring-2 ring-emerald-50 dark:ring-emerald-900 text-emerald-600 dark:text-emerald-400 font-bold text-base">
+                                {searchedRecipient.avatar ? (
+                                  <img src={searchedRecipient.avatar} alt="avatar" className="w-full h-full object-cover" />
+                                ) : (
+                                  searchedRecipient.full_name.charAt(0)
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h4 className="text-[14px] font-bold text-slate-900 dark:text-white truncate leading-none">{searchedRecipient.full_name}</h4>
+                                  <span className="px-1.5 py-[1px] bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[8px] font-black uppercase tracking-wider rounded shrink-0">
+                                    {searchedRecipient.account_type.replace('_', ' ')}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 tracking-wide leading-none">{maskPhone(searchedRecipient.phone)}</p>
+                              </div>
+                              <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/30 transition-colors">
+                                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-500" />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="bg-rose-50/50 dark:bg-rose-900/10 rounded-2xl p-4 border border-rose-100 dark:border-rose-900/30 text-center">
+                            <div className="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900/30 mx-auto flex items-center justify-center mb-2">
+                              <AlertCircle className="w-5 h-5 text-rose-500" />
+                            </div>
+                            <p className="text-[13px] font-bold text-rose-600 dark:text-rose-400">User Not Found</p>
+                            <p className="text-[11px] font-medium text-rose-500/80 mt-1">Please check the ID and try again.</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="animate-in fade-in zoom-in-95 duration-300">
+                    <div className="bg-slate-50/80 dark:bg-slate-900/50 rounded-xl p-3.5 border border-slate-100 dark:border-slate-700/50 relative">
+                      <button 
+                        onClick={() => {
+                          setRecipient(null);
                           setSearchedRecipient(null);
+                          setSearchAttempted(false);
                         }}
-                        onKeyDown={(e) => { if (e.key === 'Enter') searchUser(); }}
-                        placeholder="e.g. 0712... or KPT..."
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-11 pr-4 text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-400"
+                        className="absolute top-3 right-3 p-1.5 rounded-full bg-white dark:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 shadow-sm transition-colors border border-slate-100 dark:border-slate-700"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2.5">Sending to</p>
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg font-black overflow-hidden ring-2 ring-white dark:ring-slate-800 shadow-sm">
+                          {recipient.avatar ? <img src={recipient.avatar} alt="avatar" className="w-full h-full object-cover" /> : recipient.full_name.charAt(0)}
+                        </div>
+                        <div className="flex-1 min-w-0 pr-6">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight truncate">{recipient.full_name}</h4>
+                            <span className="px-1.5 py-[1px] bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[8px] font-black uppercase tracking-wider rounded shrink-0">
+                              {recipient.account_type.replace('_', ' ')}
+                            </span>
+                          </div>
+                          <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 tracking-wide leading-none">{maskPhone(recipient.phone)}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button 
+                      onClick={handleNextStep1} 
+                      className="w-full mt-6 py-4 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25"
+                    >
+                      Continue <ChevronRight className="w-4.5 h-4.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* STEP 2: AMOUNT */}
+            {step === 2 && (
+              <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-6">
+                  <button onClick={() => setStep(1)} className="p-2 bg-slate-50 dark:bg-slate-900 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 transition-all">
+                    <ArrowLeft className="w-4.5 h-4.5" />
+                  </button>
+                  <div>
+                    <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight leading-tight">Enter Amount</h3>
+                  </div>
+                </div>
+
+                <div className="flex-1 flex flex-col py-2">
+                  <div className="w-full mb-6">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1">Amount to Send</label>
+                    <div className="relative w-full group">
+                      <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                        <span className="text-[13px] font-bold text-slate-400 dark:text-slate-500">GFP</span>
+                      </div>
+                      <input
+                        type="number"
+                        inputMode="numeric"
+                        min="0"
+                        value={amount}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val === '' || Number(val) >= 0) setAmount(val);
+                        }}
+                        placeholder="0.00"
+                        className="w-full bg-white dark:bg-slate-900/50 border-2 border-slate-100 dark:border-slate-700/50 rounded-xl py-3 pl-4 pr-12 text-lg font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-sm"
+                        autoFocus
                       />
                     </div>
-                    <button
-                      onClick={searchUser}
-                      disabled={isSearching || !phone}
-                      className="px-5 py-3.5 bg-emerald-600 text-white rounded-xl text-sm font-bold tracking-wide disabled:opacity-50 hover:bg-emerald-700 active:scale-95 transition-all flex items-center justify-center gap-2"
-                    >
-                      {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Search'}
-                    </button>
+                    
+                    {amount && (
+                      <div className="mt-3 flex items-center justify-between px-2 animate-in fade-in duration-200">
+                        <span className="text-[11px] font-medium text-slate-500">KES Equivalent</span>
+                        <p className="text-[13px] font-bold text-emerald-600 dark:text-emerald-400">
+                          KES {equivalentKes.toLocaleString()}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
-                  {searchAttempted && !isSearching && (
-                    <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/50">
-                      {searchedRecipient ? (
-                        <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 animate-in fade-in zoom-in-95">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex items-center justify-center shrink-0 border-2 border-white dark:border-slate-600 shadow-sm">
-                              {searchedRecipient.avatar ? (
-                                <img src={searchedRecipient.avatar} alt="avatar" className="w-full h-full object-cover" />
-                              ) : (
-                                <span className="text-sm font-black text-slate-500 dark:text-slate-400">{searchedRecipient.full_name.charAt(0)}</span>
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate mb-0.5">{searchedRecipient.full_name}</h4>
-                              <span className="px-2 py-0.5 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-md">
-                                {searchedRecipient.account_type.replace('_', ' ')}
-                              </span>
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => selectRecipient(searchedRecipient)}
-                            className="w-full mt-4 py-2.5 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold text-xs rounded-xl hover:bg-emerald-200 dark:hover:bg-emerald-500/30 transition-colors"
-                          >
-                            Select Recipient
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="bg-red-50 dark:bg-red-500/10 rounded-2xl p-4 border border-red-100 dark:border-red-500/20 text-center animate-in fade-in zoom-in-95">
-                          <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-500/20 mx-auto flex items-center justify-center mb-2">
-                            <AlertCircle className="w-5 h-5 text-red-500" />
-                          </div>
-                          <p className="text-xs font-bold text-red-600 dark:text-red-400">User Not Found</p>
-                          <p className="text-[10px] font-medium text-red-500/80 dark:text-red-400/80 mt-0.5">Please check the number or ID and try again.</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl p-4 border border-emerald-100 dark:border-emerald-500/20 relative animate-in fade-in zoom-in-95">
-                  <button 
-                    onClick={() => {
-                      setRecipient(null);
-                      setSearchedRecipient(null);
-                      setSearchAttempted(false);
-                    }}
-                    className="absolute top-3 right-3 p-1.5 rounded-full bg-white dark:bg-slate-800 text-slate-400 hover:text-red-500 shadow-sm transition-colors"
-                  >
-                    <X className="w-4 h-4" />
+                  <div className="flex flex-wrap gap-2 mb-6 w-full">
+                    {[50, 100, 200, walletBalance].filter(v => v > 0 && v <= walletBalance).map((val, idx) => {
+                      const isMax = idx === 3 || val === walletBalance;
+                      const label = isMax ? 'Max' : `+${val}`;
+                      const isSelected = transferAmount === val;
+                      return (
+                        <button
+                          key={label}
+                          onClick={() => setAmount(val.toString())}
+                          className={`px-4 py-2 rounded-full text-xs font-bold transition-all active:scale-95 border-2 ${isSelected
+                            ? 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                            : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-slate-200'
+                            }`}
+                        >
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <button 
+                  onClick={handleNextStep2} 
+                  disabled={transferAmount < WALLET_CONFIG.MIN_TRANSFER_POINTS || transferAmount > walletBalance} 
+                  className="w-full mt-auto py-4 rounded-xl font-bold text-white bg-slate-900 dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 active:scale-[0.98] disabled:opacity-40 transition-all flex items-center justify-center gap-2 shadow-lg"
+                >
+                  Review Transfer <ChevronRight className="w-4.5 h-4.5" />
+                </button>
+              </div>
+            )}
+
+            {/* STEP 3: SUMMARY */}
+            {step === 3 && (
+              <div className="animate-in fade-in slide-in-from-right-4 duration-300 h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-5">
+                  <button onClick={() => setStep(2)} className="p-2 bg-slate-50 dark:bg-slate-900 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 transition-all">
+                    <ArrowLeft className="w-4.5 h-4.5" />
                   </button>
-                  <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-3">Selected Recipient</p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-emerald-200 dark:bg-emerald-500/30 text-emerald-700 dark:text-emerald-300 flex items-center justify-center text-lg font-bold overflow-hidden shadow-sm">
-                      {recipient.avatar ? <img src={recipient.avatar} alt="avatar" className="w-full h-full object-cover" /> : recipient.full_name.charAt(0)}
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Confirm Details</h3>
+                </div>
+
+                {/* Receipt Card */}
+                <div className="bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl p-5 mb-6 border border-slate-100 dark:border-slate-700/50 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
+                  
+                  <div className="flex items-center gap-3 mb-5 pb-5 border-b border-dashed border-slate-200 dark:border-slate-700">
+                    <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex items-center justify-center shrink-0 shadow-sm">
+                      {recipient?.avatar ? <img src={recipient.avatar} alt="avatar" className="w-full h-full object-cover" /> : <span className="font-bold text-slate-500">{recipient?.full_name.charAt(0)}</span>}
                     </div>
                     <div>
-                      <h4 className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight mb-1">{recipient.full_name}</h4>
-                      <span className="px-2 py-0.5 bg-emerald-200/50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-md">
-                        {recipient.account_type.replace('_', ' ')}
-                      </span>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Sending To</p>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{recipient?.full_name}</h4>
                     </div>
                   </div>
+
+                  <div className="space-y-3.5">
+                     <div className="flex justify-between items-center text-[13px]">
+                        <span className="text-slate-500 font-medium">Transfer Amount</span>
+                        <span className="font-bold text-slate-900 dark:text-white">{transferAmount.toLocaleString()} GFP</span>
+                     </div>
+                     <div className="flex justify-between items-center text-[13px]">
+                        <span className="text-slate-500 font-medium">KES Equivalent</span>
+                        <span className="font-bold text-slate-900 dark:text-white">KES {equivalentKes.toLocaleString()}</span>
+                     </div>
+                     <div className="flex justify-between items-center text-[13px]">
+                        <span className="text-slate-500 font-medium">Network Fee</span>
+                        <span className="font-bold text-emerald-500 uppercase tracking-wider text-[10px] px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 rounded">Free</span>
+                     </div>
+                  </div>
+
+                  <div className="pt-4 mt-4 border-t border-dashed border-slate-200 dark:border-slate-700 flex justify-between items-end">
+                     <div>
+                       <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total Deducted</span>
+                       <span className="text-2xl font-black text-slate-900 dark:text-white leading-none">{transferAmount.toLocaleString()}</span>
+                       <span className="text-xs font-bold text-slate-400 ml-1">GFP</span>
+                     </div>
+                  </div>
                 </div>
-              )}
 
-              {recipient && (
-                <button 
-                  onClick={handleNextStep1} 
-                  className="w-full mt-6 py-3.5 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20"
-                >
-                  Continue <ChevronRight className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          )}
-
-          {/* STEP 2: AMOUNT */}
-          {step === 2 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <button onClick={() => setStep(1)} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-full text-slate-600 dark:text-slate-300 active:scale-95 transition-all">
-                  <ArrowLeft className="w-4 h-4" />
-                </button>
-                <div className="flex-1 text-center pr-8">
-                  <h3 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">Step 2: Amount</h3>
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Enter points to transfer</p>
-                </div>
-              </div>
-
-              <div className="relative flex items-center mb-3">
-                <span className="absolute left-4 text-emerald-600 dark:text-emerald-400">
-                  <Leaf className="w-5 h-5" />
-                </span>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min="0"
-                  value={amount}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (val === '' || Number(val) >= 0) setAmount(val);
-                  }}
-                  placeholder="0"
-                  className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-3 pl-12 pr-12 text-lg font-black text-emerald-700 dark:text-emerald-400 outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-300"
-                />
-                <span className="absolute right-4 text-[12px] font-bold text-emerald-700 dark:text-emerald-400">
-                  GFP
-                </span>
-              </div>
-
-              <div className="grid grid-cols-4 gap-2 mb-6">
-                {['50', '100', '200', 'Max'].map(label => {
-                  const val = label === 'Max' ? walletBalance : parseInt(label);
-                  const isSelected = transferAmount === val;
-                  return (
-                    <button
-                      key={label}
-                      onClick={() => setAmount(val.toString())}
-                      className={`py-2 rounded-xl text-[11px] font-bold transition-all active:scale-95 ${isSelected
-                        ? 'bg-emerald-100 dark:bg-emerald-500/20 border-2 border-emerald-500 text-emerald-700 dark:text-emerald-400 shadow-sm'
-                        : 'bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-emerald-300'
-                        }`}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button 
-                onClick={handleNextStep2} 
-                disabled={transferAmount < WALLET_CONFIG.MIN_TRANSFER_POINTS || transferAmount > walletBalance} 
-                className="w-full py-3.5 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] disabled:opacity-50 disabled:bg-slate-300 dark:disabled:bg-slate-700 transition-all flex items-center justify-center gap-2"
-              >
-                Review Transfer <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-
-          {/* STEP 3: SUMMARY */}
-          {step === 3 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="flex items-center gap-3 mb-4">
-                <button onClick={() => setStep(2)} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-full text-slate-600 dark:text-slate-300 active:scale-95 transition-all">
-                  <ArrowLeft className="w-4 h-4" />
-                </button>
-                <div className="flex-1 text-center pr-8">
-                  <h3 className="text-[15px] font-black text-slate-900 dark:text-white uppercase tracking-wider mb-1">Step 3: Confirm</h3>
-                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Review final details</p>
+                <div className="mt-auto space-y-3">
+                  <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <Lock className="w-3 h-3 text-emerald-500" />
+                    <span>Secured by Klinflow</span>
+                  </div>
+                  <button
+                    onClick={executeTransfer}
+                    disabled={isProcessing}
+                    className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-500/25 active:scale-[0.98] flex justify-center items-center gap-2"
+                  >
+                    {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (
+                      <>Send Now <Send className="w-4 h-4 ml-1" /></>
+                    )}
+                  </button>
                 </div>
               </div>
-
-              <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 space-y-3 mb-6 border border-slate-100 dark:border-slate-800">
-                 <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">To</span>
-                    <span className="font-bold text-slate-900 dark:text-white">{recipient?.full_name}</span>
-                 </div>
-                 <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Amount</span>
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400">{transferAmount.toLocaleString()} GFP</span>
-                 </div>
-                 <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Worth</span>
-                    <span className="font-bold text-amber-600">KES {equivalentKes.toLocaleString()}</span>
-                 </div>
-                 <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Transfer Fee</span>
-                    <span className="font-bold text-emerald-500 uppercase">Free</span>
-                 </div>
-                 <div className="pt-3 mt-3 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
-                    <span className="text-slate-500 font-bold uppercase tracking-wider text-[11px]">Remaining Balance</span>
-                    <span className="font-bold text-slate-900 dark:text-white">{(walletBalance - transferAmount).toLocaleString()} GFP</span>
-                 </div>
-              </div>
-
-              <button
-                 onClick={executeTransfer}
-                 disabled={isProcessing}
-                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98] flex justify-center items-center gap-2"
-              >
-                 {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-                   <>Confirm & Send <Send className="w-4 h-4 ml-1" /></>
-                 )}
-              </button>
-            </div>
-          )}
-
+            )}
+          </div>
         </div>
-        
         {/* SECURE INDICATOR */}
         <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-2 pb-6">
           <Lock className="w-3 h-3" />
