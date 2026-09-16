@@ -183,7 +183,7 @@ export default function Register() {
 
         {/* Scrollable Foreground */}
         <div className="flex-1 w-full relative z-10 overflow-y-auto overflow-x-hidden flex flex-col">
-          <div className="flex-1 flex flex-col px-6 pt-10 pb-8 bg-white rounded-t-[40px] mt-[45vh] shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
+          <div className="flex-1 flex flex-col px-6 pt-10 pb-8 bg-white rounded-t-[40px] mt-[30vh] shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
             
             {/* Header */}
             <div className="mb-6">
