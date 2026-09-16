@@ -90,16 +90,16 @@ export default function SellerWallet() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden min-h-screen">
 
       {/* ── TOP SECTION: PREMIUM FINTECH GRADIENT ── */}
-      <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 pt-[calc(env(safe-area-inset-top,1.5rem)+5rem)] pb-8 rounded-b-[2.5rem] shadow-lg shadow-indigo-900/30 relative z-20 overflow-hidden">
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5rem)] pb-8 rounded-b-[2.5rem] shadow-sm relative z-20 overflow-hidden">
 
         {/* Decorative background orbs for depth */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.07] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-400/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-300/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
         {/* Fixed Header — transparent, minimal */}
-        <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-emerald-600/90 to-emerald-800/90 dark:from-emerald-600/90 dark:to-emerald-800/90 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
           <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-all border border-white/15">
-            <ArrowLeft className="w-4.5 h-4.5 text-white/90" />
+            <ArrowLeft className="w-4.5 h-4.5 text-white" />
           </button>
           <p className="text-[13px] font-semibold tracking-wide text-white/80">Seller Wallet</p>
           <div className="w-9 h-9" />

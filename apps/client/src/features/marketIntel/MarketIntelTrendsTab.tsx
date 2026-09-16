@@ -1,12 +1,18 @@
-import { GitGraph, TrendingUp, Zap, MapPin, BrainCircuit } from 'lucide-react';
+import { TrendingUp, Zap, MapPin, BrainCircuit, Activity, BarChart3, AlertTriangle, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { MarketIntelData } from './marketIntel.types';
 
 interface MarketIntelTrendsTabProps {
   marketData: MarketIntelData;
+  profile?: any;
 }
 
-export default function MarketIntelTrendsTab({ marketData }: MarketIntelTrendsTabProps) {
+export default function MarketIntelTrendsTab({ marketData, profile }: MarketIntelTrendsTabProps) {
+  // Helper to ensure any stray raw IDs look professional
+  const formatText = (text: string) => {
+    if (!text) return text;
+    return text.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
   return (
     <motion.div
       key="trends-view"
@@ -16,145 +22,215 @@ export default function MarketIntelTrendsTab({ marketData }: MarketIntelTrendsTa
       className="space-y-4 pb-5 overflow-x-hidden"
     >
       {/* AI MARKET SIGNAL HERO */}
-      <div 
-        className="rounded-xl p-4 relative overflow-hidden shadow-sm dark:shadow-none bg-cover bg-center"
-        style={{ backgroundImage: `url('/vectors/hygenex-analytics.webp')` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/60 to-emerald-800/40 z-0 pointer-events-none" />
-        <div className="relative z-10 flex flex-col gap-3 justify-center">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-8 h-8 bg-emerald-900 dark:bg-emerald-900/40 rounded-full flex items-center justify-center border border-emerald-900 dark:border-emerald-500/30 shrink-0">
-              <BrainCircuit className="w-5 h-5 text-emerald-500 dark:text-emerald-400 animate-pulse" />
+      <div className="rounded-xl p-5 relative overflow-hidden bg-gradient-to-br from-[#110C24] via-[#1E143E] to-[#0B081A] shadow-lg shadow-purple-900/20 border border-purple-900/30">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        
+        <div className="relative z-10 flex flex-col gap-4">
+          <div className="flex items-center justify-between border-b border-purple-500/20 pb-2.5">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-purple-500/20 rounded flex items-center justify-center border border-purple-500/30">
+                <BrainCircuit className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+              </div>
+              <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-purple-300">Algo Insights</h3>
             </div>
-            <div>
-              <p className="text-[9px] font-bold text-slate-200 capitalize tracking-widest leading-none mb-1">Market Intel</p>
-              <h2 className="text-lg font-bold text-slate-900 text-white tracking-tight leading-none">HygeneX Analytics</h2>
+            <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Live
             </div>
           </div>
-          <p className="text-[11px] text-slate-50 leading-snug">
-            Our AI is tracking market movements, buyer behavior, and pricing patterns to help you sell for more.
-          </p>
-          <p className="text-[10px] text-slate-100">Stick around and get the inside details ahead of others</p>
-        </div>
-      </div>
-
-      {/* INFINITE SCROLL SIGNALS */}
-      <div className="overflow-hidden relative flex w-full mt-1 ">
-        <motion.div 
-          animate={{ x: ["0%", "-50%"] }} 
-          transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
-          className="flex gap-2 whitespace-nowrap w-max"
-        >
-          {/* Duplicate the array to create a seamless infinite loop */}
-          {[...(marketData.market_signals || []), ...(marketData.market_signals || []), ...(marketData.market_signals || []), ...(marketData.market_signals || [])].map((sig: any, idx: number) => (
-            <div key={idx} className="flex items-center gap-2 bg-emerald-800 dark:bg-slate-900/60 px-3 p-2 rounded-xl border border-emerald-900 dark:border-slate-800 shrink-0">
-              <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${sig.trend === 'up' ? 'bg-emerald-400 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400'}`}>
-                <TrendingUp className={`w-3 h-3 ${sig.trend === 'down' ? 'rotate-180' : ''}`} />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[10px] font-bold text-white dark:text-white leading-tight mb-0.5">{sig.text}</p>
-                <p className={`text-[9px] font-semibold ${sig.trend === 'up' ? 'text-emerald-100 dark:text-emerald-500' : 'text-rose-600 dark:text-rose-500'}`}>{sig.subtext}</p>
-              </div>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* TODAY'S TOP OPPORTUNITIES */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between px-1">
-          <h3 className="text-sm font-bold text-slate-400 tracking-tight">Today's Top Opportunities</h3>
-        </div>
-
-        <div className="flex overflow-x-auto gap-3 pb-4 no-scrollbar -mx-4 px-4">
-          {marketData.opportunities?.map((opp: any, idx: number) => {
-            const bgStyles = opp.tagColor === 'amber' ? 'bg-gradient-to-br from-amber-50 dark:from-slate-900 to-amber-100 dark:to-[#1e1b10] border-amber-200 dark:border-amber-900/30' :
-              opp.tagColor === 'blue' ? 'bg-gradient-to-br from-blue-50 dark:from-slate-900 to-blue-100 dark:to-[#0c182a] border-blue-200 dark:border-blue-900/30' :
-                'bg-gradient-to-br from-purple-50 dark:from-slate-900 to-purple-100 dark:to-[#1c1020] border-purple-200 dark:border-purple-900/30';
-            const textColor = opp.tagColor === 'amber' ? 'text-amber-600 dark:text-amber-500' : opp.tagColor === 'blue' ? 'text-blue-600 dark:text-blue-500' : 'text-purple-600 dark:text-purple-500';
-            const iconBg = opp.tagColor === 'amber' ? 'bg-amber-500/20' : opp.tagColor === 'blue' ? 'bg-blue-500/20' : 'bg-purple-500/20';
-
-            return (
-              <div key={idx} className={`shrink-0 w-44 rounded-2xl p-3 border relative overflow-hidden ${bgStyles}`}>
-                <div className="flex items-center gap-1.5 ">
-                  <div className={`w-4 h-4 rounded flex items-center justify-center ${iconBg}`}>
-                    <Zap className={`w-2.5 h-2.5 ${textColor}`} />
-                  </div>
-                  <span className={`text-[8px] font-bold uppercase tracking-widest ${textColor}`}>{opp.tag}</span>
-                </div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">{opp.material}</h4>
-
-                <div className="space-y-1 ">
-                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">{opp.metricLabel}</p>
-                  <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-none">{opp.metricValue}</p>
-                  <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold mt-1 ${opp.changeType === 'positive' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400' : 'bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400'}`}>
-                    {opp.changeType === 'positive' ? '▲' : '▼'} {opp.change}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* REGIONAL HOTSPOTS */}
-      <div className="space-y-3 !mt-1">
-        <div className="flex items-center justify-between px-1">
+          
           <div>
-            <h3 className="text-sm font-bold text-slate-400 tracking-tight">Regional Hotspots</h3>
-            <p className="text-[10px] text-slate-400 font-medium mt-0.5">Places with highest buyer demand right now</p>
+            <h2 className="text-xl font-black text-white tracking-tight leading-tight mb-2">Automated Market Analytics</h2>
+            <p className="text-[11px] font-medium text-purple-200/70 leading-relaxed max-w-[90%]">
+              Our scrap indexing AI is scanning the market. We analyze price trends, supply/demand imbalances, and regional heatmaps in real-time,to offer you the best intel ahead of others.
+            </p>
           </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-1.5">
-          {marketData.hotspots?.map((spot: any, idx: number) => (
-            <div key={idx} className="bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/50 rounded-xl p-3 shadow-sm dark:shadow-none">
-              <div className="flex items-center gap-1.5 mb-2">
-                <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
-                <span className="text-xs font-medium text-slate-900 dark:text-white truncate">{spot.area}</span>
-              </div>
-              <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 capitalize tracking-widest mb-1">Demand Score</p>
-              <div className="flex items-end gap-2">
-                <span className="text-[14px] font-semibold text-slate-800 dark:text-white leading-none">{spot.score}%</span>
-                <div className="flex gap-0.5 mb-1">
-                  {[1, 2, 3, 4, 5, 6].map(i => (
-                    <div key={i} className={`w-1 h-2 rounded-sm ${i * 15 <= spot.score ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-800'}`} />
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
 
-         {/* AI RECOMMENDATIONS */}
+      {/* LIVE MARKET TICKER (generated from real commodity data) */}
+      {(() => {
+        const trends = marketData.commodity_trends || [];
+        const signals = trends.map((item: any) => {
+          // Determine the most interesting signal for each material
+          if (item.demand === 'Critical') return { text: `${item.label} — Critical Demand`, subtext: 'Buyers competing for supply', trend: 'up' };
+          if (item.demand === 'High') return { text: `${item.label} — High Demand`, subtext: 'Strong buyer activity', trend: 'up' };
+          if (item.supply === 'Low') return { text: `${item.label} — Supply Shortage`, subtext: 'Limited availability', trend: 'up' };
+          if (item.trend === 'up') return { text: `${item.label} ▲ ${item.change_30d}`, subtext: '30D price increase', trend: 'up' };
+          if (item.trend === 'down') return { text: `${item.label} ▼ ${item.change_30d}`, subtext: '30D price decline', trend: 'down' };
+          return { text: `${item.label} — Stable`, subtext: `KSh ${item.price}/kg`, trend: 'stable' };
+        }).filter((s: any) => s.trend !== 'stable'); // Only show actionable signals
+
+        const tickerItems = signals.length > 0 ? [...signals, ...signals, ...signals, ...signals] : [];
+
+        return tickerItems.length > 0 ? (
+          <div className="overflow-hidden relative flex w-full">
+            <motion.div 
+              animate={{ x: ["0%", "-50%"] }} 
+              transition={{ repeat: Infinity, duration: Math.max(tickerItems.length * 8, 40), ease: "linear" }}
+              className="flex gap-1 whitespace-nowrap w-max"
+            >
+              {tickerItems.map((sig: any, idx: number) => (
+                <div key={idx} className="flex items-center gap-2 bg-slate-200 dark:bg-slate-900 px-3 py-2 rounded-xl border border-slate-100 dark:border-slate-800 shrink-0 shadow-sm">
+                  <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${sig.trend === 'up' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-500'}`}>
+                    <TrendingUp className={`w-3 h-3 ${sig.trend === 'down' ? 'rotate-180' : ''}`} />
+                  </div>
+                  <div className="min-w-0 pr-2">
+                    <p className="text-[10px] font-bold text-slate-900 dark:text-white leading-tight mb-0.5">{sig.text}</p>
+                    <p className="text-[9px] font-semibold text-slate-500">{sig.subtext}</p>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        ) : null;
+      })()}
+
+      {/* MARKET OPPORTUNITIES (Vertical Feed) */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between px-1">
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">AI Recommendations</h3>
-            <p className="text-[10px] text-slate-400 font-medium mt-0.5">Personalised insights to help you earn more</p>
-          </div>
+        <div className="flex flex-col gap-1 px-1 mb-2">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">Market Opportunities</h3>
+          <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed max-w-[90%]">
+            Discover materials that are currently paying out more than usual. We compare today's prices against historical averages so you know exactly what is most profitable to sell right now.
+          </p>
         </div>
 
-        <div className="flex overflow-x-auto gap-2 pb-2 no-scrollbar -mx-4 px-4">
-          {marketData.recommendations?.map((rec: any, idx: number) => {
-            const bgClass = rec.color === 'emerald' ? 'bg-emerald-600  border-emerald-100 dark:border-emerald-600' :
-              rec.color === 'amber' ? 'bg-amber-600 border-amber-100 dark:border-amber-800' :
-                'bg-purple-600 border-purple-100 dark:border-purple-800';
-            return (
-              <div key={idx} className={`shrink-0 w-64 rounded-xl p-4 border ${bgClass} flex gap-3`}>
-                <div className="flex-1">
-                  <h4 className="text-xs font-bold text-white dark:text-white mb-1.5">{rec.title}</h4>
-                  <p className="text-[10px] text-slate-100  leading-relaxed mb-3 line-clamp-3">{rec.text}</p>
-                  <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md ${rec.color === 'emerald' ? 'bg-emerald-200/50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400' : rec.color === 'amber' ? 'bg-amber-200/50 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400' : 'bg-purple-200/50 dark:bg-purple-900/50 text-purple-700 dark:text-purple-400'}`}>
+        <div className="flex flex-col gap-2">
+          {(!marketData.opportunities || marketData.opportunities.length === 0) ? (
+            <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800 text-center">
+              <Activity className="w-6 h-6 text-slate-300 mx-auto mb-2" />
+              <p className="text-xs font-bold text-slate-500">Scanning for opportunities...</p>
+            </div>
+          ) : (
+            marketData.opportunities.map((opp: any, idx: number) => (
+              <div key={idx} className="bg-white dark:bg-slate-900 rounded-xl p-3.5 border border-slate-100 dark:border-slate-800 shadow-sm flex items-center justify-between group active:scale-[0.99] transition-all">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                    opp.tagColor === 'amber' ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-600' :
+                    opp.tagColor === 'blue' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600' :
+                    'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600'
+                  }`}>
+                    <Zap className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white capitalize">{formatText(opp.material)}</h4>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className={`text-[9px] font-bold uppercase tracking-widest ${
+                        opp.tagColor === 'amber' ? 'text-amber-500' :
+                        opp.tagColor === 'blue' ? 'text-blue-500' :
+                        'text-emerald-500'
+                      }`}>{opp.tag}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <p className="text-[13px] font-black text-slate-900 dark:text-white">{opp.metricValue}</p>
+                  <div className="flex items-center justify-end gap-1 mt-1">
+                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-black flex items-center gap-0.5 ${
+                      opp.changeType === 'positive' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'
+                    }`}>
+                      {opp.changeType === 'positive' ? '▲' : '▼'} {opp.change}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* ALGORITHMIC RECOMMENDATIONS */}
+      <div className="space-y-3 pt-2">
+        <div className="flex flex-col gap-1 px-1 mb-2">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">Actionable Insights</h3>
+          <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed max-w-[90%]">
+            Smart tips from our AI. We watch the market for you and suggest what materials are hot, when to hold onto your stock, and the best time to sell for maximum cash.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2.5">
+          {(!marketData.recommendations || marketData.recommendations.length === 0) ? (
+             <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800 text-center">
+             <BarChart3 className="w-6 h-6 text-slate-300 mx-auto mb-2" />
+             <p className="text-xs font-bold text-slate-500">Generating insights...</p>
+           </div>
+          ) : (
+            marketData.recommendations.map((rec: any, idx: number) => (
+              <div key={idx} className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 border border-slate-200 dark:border-slate-800 relative overflow-hidden">
+                <div className={`absolute left-0 top-0 bottom-0 w-1 ${
+                  rec.color === 'emerald' ? 'bg-emerald-500' :
+                  rec.color === 'amber' ? 'bg-amber-500' :
+                  'bg-purple-500'
+                }`} />
+                <div className="flex items-start justify-between gap-3 ml-2">
+                  <div className="flex-1 space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      {rec.priority === 'Urgent' && <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />}
+                      <h4 className="text-[13px] font-bold text-slate-900 dark:text-white">{formatText(rec.title)}</h4>
+                    </div>
+                    <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">{formatText(rec.text)}</p>
+                  </div>
+                  <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-md shrink-0 ${
+                    rec.color === 'emerald' ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400' : 
+                    rec.color === 'amber' ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400' : 
+                    'bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400'
+                  }`}>
                     {rec.priority}
                   </span>
                 </div>
               </div>
-            )
-          })}
+            ))
+          )}
         </div>
       </div>
+
+      {/* REGIONAL VOLUME PROFILE (HOTSPOTS) */}
+      <div className="space-y-3 pt-2">
+        <div className="flex flex-col gap-1 px-1 mb-2">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">Regional Demand Profile</h3>
+          <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed max-w-[90%]">
+            Shows volume concentration by area. We prioritize regions closest to your registered location ({profile?.county || 'Nairobi'}) so you can focus on actionable, local buyers.
+          </p>
+        </div>
+
+        <div className="bg-slate-200 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-xl p-4 shadow-sm">
+          {(!marketData.hotspots || marketData.hotspots.length === 0) ? (
+            <div className="text-center py-4">
+               <MapPin className="w-6 h-6 text-slate-300 mx-auto mb-2" />
+               <p className="text-xs font-bold text-slate-500">Mapping regions...</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {[...marketData.hotspots]
+                .sort((a: any, b: any) => {
+                  const userCounty = (profile?.county || 'Nairobi').toLowerCase();
+                  const aIsLocal = a.area.toLowerCase().includes(userCounty);
+                  const bIsLocal = b.area.toLowerCase().includes(userCounty);
+                  if (aIsLocal && !bIsLocal) return -1;
+                  if (!aIsLocal && bIsLocal) return 1;
+                  return b.score - a.score;
+                })
+                .slice(0, 5)
+                .map((spot: any, idx: number) => (
+                <div key={idx} className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between px-0.5">
+                    <span className="text-[12px] font-bold text-slate-800 dark:text-slate-200 truncate">{spot.area}</span>
+                    <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-500">{spot.score}%</span>
+                  </div>
+                  <div className="w-full h-3 bg-white dark:bg-slate-800/50 rounded-full overflow-hidden border border-slate-300/30 dark:border-transparent shadow-inner">
+                    <div 
+                      className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-1000"
+                      style={{ width: `${Math.max(spot.score, 2)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
     </motion.div>
   );
 }

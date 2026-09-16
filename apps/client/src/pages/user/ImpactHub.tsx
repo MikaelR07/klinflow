@@ -278,7 +278,7 @@ export default function ImpactHub() {
                     <div className={`text-[28px] mb-1.5 ${!badge.unlocked ? 'grayscale' : ''}`}>
                       {badge.icon}
                     </div>
-                    <p className={`text-[8px] font-bold text-center leading-tight ${badge.unlocked ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
+                    <p className={`text-[10px] font-bold text-center leading-tight ${badge.unlocked ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
                       {badge.name}
                     </p>
                     {badge.unlocked && (
@@ -308,7 +308,7 @@ export default function ImpactHub() {
                     <div className={`text-[28px] mb-1.5 ${!badge.unlocked ? 'grayscale' : ''}`}>
                       {badge.icon}
                     </div>
-                    <p className={`text-[8px] font-bold text-center leading-tight ${badge.unlocked ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
+                    <p className={`text-[10px] font-bold text-center leading-tight ${badge.unlocked ? 'text-slate-700 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
                       {badge.name}
                     </p>
                     {badge.unlocked && (

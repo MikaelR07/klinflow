@@ -73,7 +73,7 @@ export default function WithdrawalPage() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden min-h-screen">
       
       {/* ── TOP SECTION: PRIMARY WITH ROUNDED BOTTOM ── */}
-      <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2.5rem] shadow-lg shadow-indigo-900/30 relative z-20 overflow-hidden">
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2.5rem] shadow-lg shadow-emerald-900/30 relative z-20 overflow-hidden">
         
         {/* Fixed Header */}
         <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">

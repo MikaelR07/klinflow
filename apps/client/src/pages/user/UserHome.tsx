@@ -11,7 +11,8 @@ import {
   BarChart3,
   BarChart,
   RecycleIcon,
-  ChevronDownCircle
+  ChevronDownCircle,
+  Headset
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookingStore } from "@klinflow/core/stores/bookingStore";
@@ -70,6 +71,13 @@ export default function UserHome() {
   const unreadCount = getUnreadCount();
   const [showPushPrompt, setShowPushPrompt] = useState(false);
   const [userRank, setUserRank] = useState<number | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     fetchBookings();
@@ -135,96 +143,121 @@ export default function UserHome() {
   }
 
   return (
-    <div className="pb-4 bg-[#f8fafc] dark:bg-[#0f172a]  font-sans">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-[#0f172a] relative overflow-x-hidden  font-sans">
       <PushNotificationModal isOpen={showPushPrompt} onClose={() => setShowPushPrompt(false)} />
 
-      {/* ── TOP NAV (FIXED) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4">
-        <div className="max-w-xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 p-[2px] shadow-sm">
-              <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 flex items-center justify-center overflow-hidden">
-                {profile?.avatarUrl ? (
-                  <img src={getThumbnailUrl(profile.avatarUrl, { width: 100 })} className="w-full h-full object-cover" alt="Profile" />
-                ) : (
-                  <span className="text-xl">👤</span>
-                )}
+      {/* ── TOP SECTION: PREMIUM GRADIENT ── */}
+      <div className="bg-gradient-to-br from-primary via-primary/80 to-emerald-500 pt-[calc(env(safe-area-inset-top,1.5rem)+4rem)] pb-4 rounded-b-[2.5rem] shadow-lg shadow-emerald-900/20 relative z-20 overflow-hidden">
+        
+        {/* Decorative background orbs */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-300/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+
+        {/* ── TOP NAV (FIXED) ── */}
+        <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 ${isScrolled ? 'bg-gradient-to-br from-primary to-emerald-600 backdrop-blur-md shadow-md border-b border-white/10' : 'bg-transparent '}`}>
+          <div className="max-w-xl mx-auto px-5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-md p-[2px] shadow-sm border border-white/20">
+                <div className="w-full h-full rounded-full bg-emerald-700 flex items-center justify-center overflow-hidden">
+                  {profile?.avatarUrl ? (
+                    <img src={getThumbnailUrl(profile.avatarUrl, { width: 100 })} className="w-full h-full object-cover" alt="Profile" />
+                  ) : (
+                    <span className="text-xl">👤</span>
+                  )}
+                </div>
+              </div>
+              <div>
+                <h1 className="text-[17px] font-black text-white tracking-wide leading-none drop-shadow-sm">
+                  Hello, {(profile?.fullName || profile?.name || "Resident").split(" ")[0]}!👋
+                </h1>
+                <div className="flex items-center gap-1.5 mt-1 text-[10px] text-white/90 font-semibold capitalize tracking-wider bg-black/10 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/20 w-fit">
+                  <MapPin className="w-3 h-3" />
+                  {profile?.location?.estate || profile?.estate || "Location not set"}
+                </div>
               </div>
             </div>
-            <div>
-              <h1 className="text-lg font-black text-slate-900 dark:text-white tracking-wide leading-none">
-                Hello, {(profile?.fullName || profile?.name || "Resident").split(" ")[0]}!👋
-              </h1>
-              <div className="flex items-center gap-1.5 mt-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold capitalize tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 w-fit">
-                <MapPin className="w-3 h-3" />
-                {profile?.location?.estate || profile?.estate || "Location not set"}
-              </div>
+            
+            <div className="flex items-center gap-2">
+             
+
+              {/* Notifications */}
+              <button
+                onClick={() => navigate("/notifications")}
+                className="relative w-11 h-11 shrink-0 rounded-2xl bg-black/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm hover:bg-black/20 transition-all active:scale-95 group"
+              >
+                <Bell className="w-5 h-5 text-white group-hover:animate-swing" />
+                {Number(unreadCount) > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-emerald-600 shadow-md animate-in zoom-in">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+               {/* Support Icon */}
+              <button
+                onClick={() => navigate("/settings/support")}
+                className="relative w-11 h-11 shrink-0 rounded-2xl bg-black/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm hover:bg-black/20 transition-all active:scale-95 group"
+              >
+                <Headset className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+              </button>
             </div>
           </div>
-          <button
-            onClick={() => navigate("/notifications")}
-            className="relative w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
-          >
-            <Bell className="w-5 h-5 text-slate-400 group-hover:text-emerald-500 transition-colors" />
-            {Number(unreadCount) > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-800 shadow-md animate-in zoom-in">
-                {unreadCount}
-              </span>
-            )}
-          </button>
+        </div>
+
+        {/* ── ECO-REWARDS HERO CARD ── */}
+        <div className="relative z-10 px-4 max-w-xl mx-auto mt-6">
+          <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative group overflow-hidden rounded-[24px] bg-white/10  border border-emerald-600  p-5">
+            <div className="absolute inset-0 bg-gradient-to-b from-emerald-600 to-emerald-600 pointer-events-none" />
+            <div className="relative z-10 flex flex-col gap-2">
+              <div className="flex justify-between items-start mb-1">
+                <div>
+                  <p className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1">
+                    <Wallet className="w-4 h-4" /> Available Balance
+                  </p>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xl font-bold text-white/90">Ksh</span>
+                    <h2 className="text-3xl font-black text-white tracking-tighter leading-none drop-shadow-md">
+                      {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </h2>
+                  </div>
+                </div>
+                <button onClick={handleWithdraw} className="bg-white text-emerald-700 mt-1 px-5 py-3 rounded-2xl text-sm font-black capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-emerald-50">
+                  Withdraw
+                </button>
+              </div>
+
+              <div className="flex items-center gap-1 pt-3 border-t border-white/20">
+                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
+                  <span className="text-base font-black text-white">{metrics.totalPickups}</span>
+                  <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
+                </div>
+                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
+                  <span className="text-base font-black text-white">{metrics.kgRecovered}</span>
+                  <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
+                </div>
+                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition-colors">
+                  <span className="text-base font-black text-amber-300 drop-shadow-sm">{rewardPoints}</span>
+                  <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto px-1.5 space-y-6 pt-16">
-        
-        {/* ── ECO-REWARDS HERO CARD ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-[#064e3b] to-emerald-600 p-6 ">
-          <div className="relative z-10 flex flex-col gap-2">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-[10px] font-black text-emerald-300 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                  <Wallet className="w-4 h-4" /> Available Balance
-                </p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-emerald-100">Ksh</span>
-                  <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
-                    {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </h2>
-                </div>
-              </div>
-              <button onClick={handleWithdraw} className="bg-primary mt-1 backdrop-blur-md border border-white/20 text-white px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-sm">
-                Withdraw
-              </button>
-            </div>
-
-            <div className="flex items-center gap-1 pt-2 border-t border-white/10">
-              <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                <span className="text-base font-black text-white">{metrics.totalPickups}</span>
-                <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
-              </div>
-              <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                <span className="text-base font-black text-white">{metrics.kgRecovered}</span>
-                <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
-              </div>
-              <div onClick={() => navigate("/impact-hub")} className="flex-1 bg-black/20  rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-amber-500/30 transition-colors">
-                <span className="text-base font-black text-amber-300">{rewardPoints}</span>
-                <span className="text-[10px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+      <div className="max-w-xl mx-auto px-2.5 space-y-5 pt-3 pb-24">
 
         {/* ── ACTION HUB (QUICK LINKS + CTA) ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-2 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
           {/* ── APP SERVICES GRID ── */}
           <div className="space-y-2">
             <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1 !mt-1">
               {[
-                { label: 'Wallet', icon: <Wallet className="w-6 h-6" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-amber-500/10 text-amber-600' },
-                { label: 'Bookings', icon: <RecycleIcon className="w-6 h-6" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600' },
-                { label: 'Dashboard', icon: <BarChart className="w-6 h-6" />, route: '/Analytics', color: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' },
-                { label: 'Discover', icon: <Search className="w-6 h-6" />, route: '/discovery', color: 'bg-blue-50 dark:bg-blue-500/10 text-blue-600' },
+                { label: 'Wallet', icon: <Wallet className="w-6 h-6" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Bookings', icon: <RecycleIcon className="w-6 h-6" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Dashboard', icon: <BarChart className="w-6 h-6" />, route: '/Analytics', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Discover', icon: <Search className="w-6 h-6" />, route: '/discovery', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
                 <button 
                   key={service.label} 
@@ -241,30 +274,22 @@ export default function UserHome() {
           </div>
 
           {/* ── PRIMARY CTAS ── */}
-          <div className="grid grid-cols-2 gap-1">
+          <div className="grid grid-cols-1 gap-1">
             <button 
               onClick={() => navigate("/book-pickup")}
-              className="w-full bg-gradient-to-br from-indigo-400 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-2.5 flex items-center gap-2.5 border border-white/10 dark:border-slate-900/10"
+              className="w-full bg-gradient-to-br from-indigo-400 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-[20px] shadow-sm shadow-slate-900/5 active:scale-[0.98] transition-all group p-3 flex items-center justify-between border border-white/10 dark:border-slate-900/10"
             >
-              <div className="w-9 h-9 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0">
-                <Truck className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-0.5 transition-transform" />
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Truck className="w-6 h-6 text-white dark:text-slate-900" />
+                </div>
+                <div className="text-left min-w-0">
+                  <h3 className="text-[16px] font-black tracking-tight leading-none mb-1">Book Pickup</h3>
+                  <p className="text-[11px] font-semibold text-white/80 dark:text-slate-500 leading-tight">Turn Recyclables to cash</p>
+                </div>
               </div>
-              <div className="text-left min-w-0">
-                <h3 className="text-[13px] font-black tracking-tight leading-none mb-0.5">Book Pickup</h3>
-                <p className="text-[9px] font-bold text-white/80 dark:text-slate-500 leading-tight">Turn trash to cash</p>
-              </div>
-            </button>
-
-            <button 
-              onClick={() => navigate("/community-collective")}
-              className="w-full bg-gradient-to-br from-emerald-500 to-primary text-white rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-2.5 flex items-center gap-2.5 border border-white/10"
-            >
-              <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-                <Users className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
-              </div>
-              <div className="text-left min-w-0">
-                <h3 className="text-[13px] font-black tracking-tight leading-none mb-0.5">Community</h3>
-                <p className="text-[9px] font-bold text-white/80 leading-tight">Join group pickups</p>
+              <div className="w-8 h-8 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center group-hover:bg-white/30 dark:group-hover:bg-slate-900/20 transition-colors">
+                <ChevronRight className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </button>
           </div>
@@ -331,25 +356,50 @@ export default function UserHome() {
         </motion.div>
 
         
-        {/* ── DISCOVER MORE (MARKET) ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.4 }} className="space-y-2 !mt-1">
+        {/* ── DISCOVER MORE (MARKET & COMMUNITY) ── */}
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.4 }} className="grid grid-cols-2 gap-1 !mt-1">
+          {/* ── COMMUNITY COLLECTIVE ── */}
           <div 
-            onClick={() => navigate("/market-pulse")}
-            className="bg-slate-200 dark:bg-gradient-to-br dark:from-emerald-600 dark:to-emerald-600 border border-white dark:border-emerald-800/30 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group"
+            onClick={() => navigate("/community-collective")}
+            className="bg-gradient-to-br from-primary to-emerald-600 border border-emerald-400/50 dark:border-emerald-500/50 rounded-[20px] p-3 flex flex-col justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group min-h-[105px] relative overflow-hidden"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <BarChart3Icon className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+            <div className="absolute -left-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
+            <div className="flex items-start justify-between mb-2 relative z-10">
+              <div className="w-9 h-9 bg-white/20 dark:bg-white/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                <Users className="w-4.5 h-4.5 text-white" />
               </div>
-              <div>
-                <h4 className="text-[15px] font-black text-slate-900 dark:text-white leading-none mb-1">Market Pulse</h4>
-                <p className="text-[11px] font-semibold text-slate-500">Live recyclable prices</p>
+              <div className="w-6 h-6 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                <ChevronRight className="w-3 h-3 text-white group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>
-            <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center group-hover:bg-emerald-100 dark:group-hover:bg-emerald-800/50 transition-colors">
-              <ChevronRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
+            <div className="relative z-10 mt-auto">
+              <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Community Hub</h4>
+              <p className="text-[9px] font-semibold text-emerald-50 leading-tight">Join group pickups</p>
             </div>
           </div>
+
+          {/* ── MARKET PULSE ── */}
+          <div 
+            onClick={() => navigate("/market-pulse")}
+            className="bg-slate-300 dark:bg-gradient-to-br dark:from-emerald-600 dark:to-emerald-600 border border-white dark:border-emerald-800/30 rounded-[20px] p-3 flex flex-col justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group min-h-[105px] relative overflow-hidden"
+          >
+            <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 dark:bg-emerald-900/20 rounded-full blur-xl pointer-events-none" />
+            <div className="flex items-start justify-between mb-2 relative z-10">
+              <div className="w-9 h-9 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                <BarChart3Icon className="w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="w-6 h-6 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center group-hover:bg-emerald-100 dark:group-hover:bg-emerald-800/50 transition-colors">
+                <ChevronRight className="w-3 h-3 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </div>
+            <div className="relative z-10 mt-auto">
+              <h4 className="text-[13px] font-black text-slate-900 dark:text-white leading-tight mb-0.5">Market Prices</h4>
+              <p className="text-[9px] font-semibold text-slate-500 leading-tight">Live recyclable prices</p>
+            </div>
+          </div>
+          
+          
+
         </motion.div>
 
       </div>

@@ -170,35 +170,54 @@ export default function LocationSelector({
   return (
     <div className={hideHeaderText ? "w-full" : "space-y-4"}>
       {!hideHeaderText && (
-        <div className="flex items-center justify-between">
-          <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Location Area</label>
+        <div className="flex items-center gap-2 mb-4">
+          <MapPin className="w-5 h-5 text-[#064e3b] shrink-0" />
+          <h3 className="text-[14px] font-bold text-[#0c392c]">How would you like us to get your location?</h3>
           {accuracy && (
-            <span className="flex items-center gap-1.5 text-xs font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full uppercase tracking-widest">
-              <Target className="w-3 h-3" /> Precision {Math.round(accuracy)}m
+            <span className="ml-auto flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full uppercase tracking-widest">
+              <Target className="w-3 h-3" /> {Math.round(accuracy)}m
             </span>
           )}
         </div>
       )}
 
       {!showMap ? (
-        <div className={hideHeaderText ? "grid grid-cols-2 gap-3 p-4" : "grid grid-cols-2 gap-3"}>
+        <div className={hideHeaderText ? "grid grid-cols-1 gap-3 p-4" : "grid grid-cols-1 sm:grid-cols-2 gap-3"}>
           <button 
             type="button"
             onClick={handleDetect}
             disabled={isCapturing}
-            className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900 hover:border-primary transition-all group"
+            className="flex items-start gap-3 p-4 border border-emerald-600 rounded-xl bg-emerald-50/50 transition-all text-left group"
           >
-            {isCapturing ? <Loader2 className="w-6 h-6 animate-spin text-primary" /> : <Navigation className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />}
-            <span className="text-xs font-black mt-3 uppercase tracking-tighter">Live Detect</span>
+            <div className="mt-0.5">
+              {isCapturing ? <Loader2 className="w-[18px] h-[18px] animate-spin text-emerald-700" /> : <Target className="w-[18px] h-[18px] text-emerald-700" />}
+            </div>
+            <div className="flex-1">
+              <span className="block text-[13px] font-bold text-emerald-800 mb-0.5">Live location</span>
+              <span className="block text-[11px] font-medium text-emerald-700/70 leading-snug">Use your current location in real time</span>
+            </div>
+            <div className="mt-0.5">
+               <div className="w-4 h-4 rounded-full border-2 border-emerald-600 flex items-center justify-center shrink-0">
+                 <div className="w-2 h-2 rounded-full bg-emerald-600"></div>
+               </div>
+            </div>
           </button>
 
           <button 
             type="button"
             onClick={() => setShowMap(true)}
-            className="flex flex-col items-center justify-center p-6 border-2 border-slate-200 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900 hover:border-slate-400 transition-all group"
+            className="flex items-start gap-3 p-4 border border-slate-200 rounded-xl bg-white hover:border-slate-300 transition-all text-left"
           >
-            <MapPin className="w-6 h-6 text-slate-400 group-hover:text-primary transition-colors" />
-            <span className="text-xs font-black mt-3 uppercase tracking-tighter">Manual Pin</span>
+            <div className="mt-0.5">
+              <MapPin className="w-[18px] h-[18px] text-slate-400" />
+            </div>
+            <div className="flex-1">
+              <span className="block text-[13px] font-bold text-slate-700 mb-0.5">Manual pin</span>
+              <span className="block text-[11px] font-medium text-slate-500 leading-snug">Select your location on the map</span>
+            </div>
+            <div className="mt-0.5">
+               <div className="w-4 h-4 rounded-full border-2 border-slate-200 shrink-0"></div>
+            </div>
           </button>
         </div>
       ) : (

@@ -4,7 +4,6 @@ import { Route } from 'react-router-dom';
 const SellerWallet = lazy(() => import('../../../pages/user/SellerWallet'));
 const PostTrade = lazy(() => import('../../../pages/user/PostTrade'));
 const MyTrades = lazy(() => import('../../../pages/user/MyTrades'));
-const TrustScoreDetails = lazy(() => import('../../../pages/user/TrustScoreDetails'));
 
 const MyRFQOffers = lazy(() => import('../../../pages/user/MyRFQOffers'));
 const MarketplaceInventory = lazy(() => import('../../../pages/user/MarketplaceInventory'));
@@ -23,7 +22,6 @@ export function getSellerRoutes() {
 
       <Route path="/my-rfq-offers" element={<MyRFQOffers />} />
       <Route path="/inventory" element={<MarketplaceInventory />} />
-      <Route path="/trust-score" element={<TrustScoreDetails />} />
       <Route path="/market-pulse" element={<MarketIntelligenceHub />} />
       <Route path="/circular-resume" element={<CircularResume />} />
       <Route path="/materials/:slug" element={<MaterialDetail />} />

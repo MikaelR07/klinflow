@@ -89,7 +89,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
 
   const [material, setMaterial] = useState(prefillCategory || booking?.material || booking?.wasteType || uiCategories[0]?.id || 'recyclable');
   const [subcategory, setSubcategory] = useState<string | null>(null);
-  const [weight, setWeight] = useState(booking?.actual_weight_kg || booking?.weightKg || booking?.bags || 10);
+  const [weight, setWeight] = useState(booking?.actual_weight_kg || booking?.weightKg || booking?.weight_kg || 10);
   const [isIdentifierOpen, setIsIdentifierOpen] = useState(false);
   
   const currentCategory = uiCategories.find((c: any) => c.id === material || (c as any).slug === material) || uiCategories[0];
@@ -165,7 +165,7 @@ export default function AIScannerModal({ isOpen, onClose, onVerify, booking, rol
       else if (slug === 'e-waste') setMaterial('ewaste');
       else setMaterial(slug);
     }
-    const derivedWeight = booking?.actual_weight_kg || booking?.weightKg || booking?.bags;
+    const derivedWeight = booking?.actual_weight_kg || booking?.weightKg || booking?.weight_kg;
     if (derivedWeight) {
       setWeight(derivedWeight);
     }

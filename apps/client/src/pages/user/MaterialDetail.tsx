@@ -30,6 +30,7 @@ import {
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { supabase } from '@klinflow/supabase';
 
 /* ────────────────────────────────────────────────────────────────────────
  * MATERIAL INTELLIGENCE DATABASE
@@ -333,14 +334,32 @@ export default function MaterialDetail() {
   const role = useAuthStore((s) => s.role);
 
   const [isScrolled, setIsScrolled] = useState(false);
+  const [liveStats, setLiveStats] = useState<any>(null);
 
   useEffect(() => {
     fetchCategories();
     fetchPrices();
+    
+    // Fetch live market stats for this material
+    const fetchLiveStats = async () => {
+      if (!slug) return;
+      try {
+        const { data, error } = await supabase.rpc('get_material_stats', { material_name_param: slug });
+        if (!error && data) {
+          setLiveStats(data);
+        } else if (error) {
+          console.error('Failed to fetch material stats:', error.message, error.details, error.hint, error);
+        }
+      } catch (err) {
+        console.error('Failed to fetch material stats exception:', err);
+      }
+    };
+    fetchLiveStats();
+
     const onScroll = () => setIsScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [slug]);
 
   // Resolve material data
   const dbCat = categories.find(c => (c.slug || '').toLowerCase() === slug?.toLowerCase() || c.id === slug);
@@ -358,9 +377,20 @@ export default function MaterialDetail() {
   const title = dbCat?.label || mat.title;
   const livePrice = getPriceForMaterial(slug || '');
 
-  // We simulate a price trend for UI purposes as requested, tying it to the material length to keep it consistent
-  const mockTrend = mat.demand === 'Very High' || mat.demand === 'High' ? '↑ 8.2%' : '↑ 2.1%';
-  const mockOfferRange = livePrice > 0 ? `KSh ${Math.max(1, livePrice - 5)}–${livePrice + 5}/kg` : 'Varies by buyer';
+  // Use Live Stats if available, fallback to mock/admin defaults
+  const displayPrice = liveStats ? liveStats.vwap : livePrice;
+  const displayDemand = liveStats ? liveStats.demand : 'Calculating...';
+  const displayTrend = liveStats ? liveStats.change_30d : '--%';
+  const isTrendUp = displayTrend.includes('+');
+  const isTrendDown = displayTrend.includes('-');
+  
+  // Dynamic Actionable Advice based on Real Data
+  const getSellingAdvice = () => {
+    if (displayDemand === 'Critical') return "Buyers are actively sourcing this. Schedule a pickup now to secure premium rates.";
+    if (displayDemand === 'High') return "Strong market demand today. Great time to sell your stored volume.";
+    if (isTrendDown) return "Market prices are slightly down. Consider holding if you have storage, or liquidate now before further drops.";
+    return "Stable market conditions. Standard rates apply for clean, sorted material.";
+  };
 
   const isSeller = role === 'seller';
 
@@ -425,11 +455,13 @@ export default function MaterialDetail() {
                     {title}
                   </h1>
                   <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border shrink-0 ${
-                    mat.demand === 'Very High' || mat.demand === 'High' 
+                    displayDemand === 'Critical' || displayDemand === 'High'
                     ? 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+                    : displayDemand === 'Calculating...'
+                    ? 'text-slate-500 bg-slate-100 border-slate-200 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700'
                     : 'text-amber-700 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20'
                   }`}>
-                    {mat.demand} Demand
+                    {displayDemand} {displayDemand !== 'Calculating...' ? 'Demand' : ''}
                   </div>
                 </div>
                 <p className="text-[12px] md:text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -437,28 +469,41 @@ export default function MaterialDetail() {
                 </p>
               </div>
 
-              {/* Stats Grid */}
+              {/* Market Snapshot in Top Card */}
               <div className="mt-auto p-4 md:p-6 pt-2 md:pt-2">
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Market Rate */}
-                  <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-3.5">
-                    <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1.5">Market Rate</span>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
-                        {livePrice > 0 ? `KSh ${livePrice}` : 'Varies'}
-                      </span>
-                      {livePrice > 0 && <span className="text-[11px] font-bold text-slate-400">/ kg</span>}
+                <div className="bg-slate-200 dark:bg-slate-800/60 rounded-xl p-1.5 md:p-2 mb-3 shadow-inner">
+                  <div className="grid grid-cols-3 gap-1.5 md:gap-2">
+                    {/* Metric 1 */}
+                    <div className="bg-white dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Current Price</p>
+                      <p className="text-[13px] md:text-[15px] font-black text-slate-900 dark:text-white leading-none mb-1">
+                        {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'}
+                      </p>
+                      <p className="text-[9px] font-semibold text-slate-500 leading-tight truncate">VWAP Rate</p>
+                    </div>
+                    {/* Metric 2 */}
+                    <div className="bg-white dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Demand Level</p>
+                      <p className="text-[13px] md:text-[15px] font-black text-slate-900 dark:text-white leading-none mb-1 truncate">{displayDemand}</p>
+                      <p className="text-[9px] font-semibold text-slate-500 leading-tight truncate">Buyer activity</p>
+                    </div>
+                    {/* Metric 3 */}
+                    <div className="bg-white dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">30-Day Trend</p>
+                      <p className={`text-[13px] md:text-[15px] font-black ${isTrendUp ? 'text-emerald-600 dark:text-emerald-500' : isTrendDown ? 'text-rose-600 dark:text-rose-500' : 'text-slate-600 dark:text-slate-400'} leading-none mb-1`}>
+                        {isTrendUp ? '▲' : isTrendDown ? '▼' : ''} {displayTrend}
+                      </p>
+                      <p className="text-[9px] font-semibold text-slate-500 leading-tight truncate">Past 30 days</p>
                     </div>
                   </div>
+                </div>
 
-                  {/* Trend */}
-                  <div className="bg-emerald-50/50 dark:bg-emerald-500/5 rounded-xl p-3.5">
-                    <span className="block text-[9px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1.5">Weekly Trend</span>
-                    <div className="flex items-center gap-1.5">
-                      <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                      <span className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-none">{mockTrend}</span>
-                    </div>
-                  </div>
+                {/* Dynamic Actionable Advice */}
+                <div className="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-xl p-3 flex gap-2.5">
+                  <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-emerald-800 dark:text-emerald-300 font-medium leading-snug">
+                    {getSellingAdvice()}
+                  </p>
                 </div>
               </div>
 
@@ -477,37 +522,6 @@ export default function MaterialDetail() {
           {/* LEFT COLUMN (7 cols) */}
           <div className="lg:col-span-7 space-y-4">
             
-            {/* ── MARKET SNAPSHOT ── */}
-            <motion.div variants={fadeUp}>
-              <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-5 flex items-center gap-2">
-                Market Snapshot <Info className="w-4 h-4 text-slate-400" />
-              </h2>
-              <div className="bg-white dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 p-4 shadow-sm">
-                <div className="grid grid-cols-3 divide-x divide-slate-100 dark:divide-slate-800/60">
-                  {/* Metric 1 */}
-                  <div className="px-2">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Current Price</p>
-                    <p className="text-[13px] md:text-lg font-black text-slate-900 dark:text-white mb-1">
-                      {livePrice > 0 ? `KSh ${livePrice}` : 'Varies'}
-                    </p>
-                    <p className="text-[9px] font-semibold text-slate-500 leading-tight">Typ: {mockOfferRange}</p>
-                  </div>
-                  {/* Metric 2 */}
-                  <div className="px-2">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Demand Level</p>
-                    <p className="text-[13px] md:text-lg font-black text-slate-900 dark:text-white mb-1">{mat.demand}</p>
-                    <p className="text-[9px] font-semibold text-slate-500 leading-tight">Strong collector activity</p>
-                  </div>
-                  {/* Metric 3 */}
-                  <div className="px-2">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Price Trend</p>
-                    <p className="text-[13px] md:text-lg font-black text-emerald-600 dark:text-emerald-500 mb-1">{mockTrend}</p>
-                    <p className="text-[9px] font-semibold text-slate-500 leading-tight">Increasing this week</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
             {/* ── WHY IT'S WORTH COLLECTING ── */}
             <motion.div variants={fadeUp}>
               <div className="bg-slate-200 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5">
@@ -681,10 +695,10 @@ export default function MaterialDetail() {
               </p>
               <div className="flex items-center gap-2">
                 <span className="text-[12px] font-black text-slate-700 dark:text-slate-300">
-                  {livePrice > 0 ? `KSh ${livePrice}/kg` : 'Price varies'}
+                  {displayPrice > 0 ? `KSh ${displayPrice}/kg` : 'Price varies'}
                 </span>
-                <span className="text-[10px] font-bold text-emerald-600 hidden sm:inline-block">
-                  {mockTrend}
+                <span className={`text-[10px] font-bold hidden sm:inline-block ${isTrendUp ? 'text-emerald-600' : isTrendDown ? 'text-rose-600' : 'text-slate-500'}`}>
+                  {isTrendUp ? '▲' : isTrendDown ? '▼' : ''} {displayTrend}
                 </span>
               </div>
             </div>

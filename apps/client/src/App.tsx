@@ -34,6 +34,7 @@ const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
 const RFQDetailsPage = lazy(() => import('./pages/user/RFQDetailsPage'));
 const FulfillmentTrackingPage = lazy(() => import('./pages/user/FulfillmentTrackingPage'));
 const SubmittedQuoteDetailsPage = lazy(() => import('./pages/user/SubmittedQuoteDetailsPage'));
+const PublicCircularResume = lazy(() => import('./pages/public/PublicCircularResume'));
 
 // Auth Pages (Instant Load)
 import Welcome from './pages/auth/Welcome';
@@ -167,6 +168,9 @@ export default function App() {
         <Route path="/role-selection" element={isAuthenticated ? <Navigate to="/" replace /> : <RoleSelection />} />
         <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} />
+        
+        {/* Public Verification Route */}
+        <Route path="/verify/:id" element={<PublicCircularResume />} />
 
         <Route element={<ProtectedLayout />}>
           <Route path="/hygenex" element={<HygeneXPage />} />

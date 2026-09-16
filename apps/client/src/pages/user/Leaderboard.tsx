@@ -416,14 +416,14 @@ export default function Leaderboard() {
       </div>
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-purple-400 to-indigo-500 dark:from-purple-600 dark:to-indigo-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-purple-400 to-indigo-500 dark:from-purple-600 dark:to-indigo-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4 max-w-lg mx-auto">
         <div className="flex items-center gap-3">
           <button onClick={() => navigate(-1)} className="w-9 h-9 shrink-0 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all border border-white/10">
             <ArrowLeft className="w-4.5 h-4.5 text-white" />
           </button>
           <div>
-            <h1 className="text-[15px] font-black text-white tracking-tight leading-none">Champions</h1>
-            <p className="text-[9px] font-bold text-white/70 uppercase tracking-widest mt-0.5">Eco Leaderboard</p>
+            <h1 className="text-[15px] font-black text-white tracking-tight leading-none">Wall of Fame</h1>
+            <p className="text-[9px] font-bold text-white/70 uppercase tracking-widest mt-0.5">Top Contributors</p>
           </div>
         </div>
       </div>
@@ -434,7 +434,7 @@ export default function Leaderboard() {
         {isEmpty ? (
           <div className="px-6 mt-16 flex flex-col items-center text-center gap-5">
             <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <Recycle className="w-8 h-8 text-primary/40" />
+               <Recycle className="w-8 h-8 text-primary/40" />
             </div>
             <div>
               <h3 className="text-lg font-black text-slate-900 dark:text-white">No Champions Yet</h3>
@@ -453,8 +453,14 @@ export default function Leaderboard() {
           <>
            
 
+            {/* Podium Title */}
+            <div className="text-center mt-2 mb-8 relative z-10">
+              <h2 className="text-[20px] font-black text-white tracking-tight drop-shadow-lg">Champions Eco Leaderboard</h2>
+              <p className="text-[11px] font-semibold text-white/60 mt-0.5">Top recyclers making a real impact</p>
+            </div>
+
             {/* Podium */}
-            <div className="flex items-end justify-center gap-2.5 px-2 mb-6 relative z-10 mt-24">
+            <div className="flex items-end justify-center gap-2.5 px-2 mb-6 relative z-10">
               <PodiumCard user={topUsers[1] || null} rank={2} metric={`${(topUsers[1]?.kg || 0)} KG`} metricLabel="Collected" />
               <PodiumCard user={topUsers[0] || null} rank={1} metric={`${(topUsers[0]?.kg || 0)} KG`} metricLabel="Collected" />
               <PodiumCard user={topUsers[2] || null} rank={3} metric={`${(topUsers[2]?.kg || 0)} KG`} metricLabel="Collected" />

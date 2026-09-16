@@ -115,11 +115,11 @@ export default function SettingsMenu() {
           </div>
 
           {/* Quick Stats Grid */}
-          <div className="grid grid-cols-3 gap-3 mt-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+          <div className={`grid ${isSeller ? 'grid-cols-2' : 'grid-cols-3'} gap-3 mt-4 pt-6 border-t border-slate-100 dark:border-slate-800`}>
             {isSeller ? (
               <button
                 onClick={() => navigate('/circular-resume')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white hover:bg-indigo-700 transition-all border border-transparent active:scale-95 group"
+                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white  transition-all border border-transparent active:scale-95 group"
               >
                 <IdCard className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
                 <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
@@ -128,7 +128,7 @@ export default function SettingsMenu() {
             ) : (
               <button
                 onClick={() => navigate('/Analytics')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white hover:bg-emerald-700 transition-all border border-transparent active:scale-95 group"
+                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white  transition-all border border-transparent active:scale-95 group"
               >
                 <BarChart2 className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
                 <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Dashboard</p>
@@ -136,14 +136,16 @@ export default function SettingsMenu() {
               </button>
             )}
 
-            <button
-              onClick={() => navigate(isSeller ? '/trust-score' : '/leaderboard')}
-              className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white hover:bg-blue-700 transition-all border border-transparent active:scale-95 group"
-            >
-              {isSeller ? <BarChart2 className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" /> : <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />}
-              <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">{isSeller ? 'Dashboard' : 'Ranking'}</p>
-              <p className="text-xs font-bold text-white capitalize leading-none">{isSeller ? 'Trust Score' : 'Leaderboard'}</p>
-            </button>
+            {!isSeller && (
+              <button
+                onClick={() => navigate('/leaderboard')}
+                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white  transition-all border border-transparent active:scale-95 group"
+              >
+                <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
+                <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
+                <p className="text-xs font-bold text-white capitalize leading-none">Leaderboard</p>
+              </button>
+            )}
 
             {isSeller ? (
               <button
@@ -199,9 +201,30 @@ export default function SettingsMenu() {
           </div>
         </div>
 
-        {/* ── SETTINGS LINK ── */}
+        {/* ── VERIFICATION + SETTINGS LINKS ── */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
           <div className="divide-y divide-slate-50 dark:divide-slate-800">
+            {/* Seller-Only: Verification Row */}
+            {isSeller && (
+              <button
+                onClick={() => navigate('/settings/request-verification')}
+                className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
+              >
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${profile?.isVerified ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600'}`}>
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">{profile?.isVerified ? 'Verified' : 'Get Verified'}</p>
+                  <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">{profile?.isVerified ? 'Identity Confirmed' : 'Request Klinflow Verification'}</p>
+                </div>
+                {profile?.isVerified ? (
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 text-slate-300" />
+                )}
+              </button>
+            )}
+
             <button
               onClick={() => navigate('/settings/general')}
               className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"

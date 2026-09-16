@@ -20,7 +20,6 @@ import { toast } from 'sonner';
 
 import MarketIntelPricesTab from '../../features/marketIntel/MarketIntelPricesTab';
 import MarketIntelTrendsTab from '../../features/marketIntel/MarketIntelTrendsTab';
-import MarketIntelTipsTab from '../../features/marketIntel/MarketIntelTipsTab';
 import type { MarketIntelRFQ, MarketIntelData, MarketIntelCommodityTrend } from '../../features/marketIntel/marketIntel.types';
 
 export default function MarketIntelligenceHub() {
@@ -51,7 +50,9 @@ export default function MarketIntelligenceHub() {
         const materials = useServiceStore.getState().materialPrices || [];
         materials.forEach(m => {
           if (m.id && dataStr.includes(m.id)) {
-            dataStr = dataStr.replace(new RegExp(m.id, 'g'), m.material_name);
+            // Format material name nicely (e.g. metal_aluminum -> Metal Aluminum)
+            const formattedName = m.material_name.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            dataStr = dataStr.replace(new RegExp(m.id, 'g'), formattedName);
           }
         });
         setMarketData(JSON.parse(dataStr));
@@ -66,8 +67,9 @@ export default function MarketIntelligenceHub() {
     Promise.all([
       useServiceStore.getState().fetchMaterialPrices(),
       useServiceStore.getState().fetchCategories()
-    ]);
-    fetchIntelligence();
+    ]).then(() => {
+      fetchIntelligence();
+    });
 
     const channel = supabase.channel('public:rfqs-feed')
       .on(
@@ -106,7 +108,7 @@ export default function MarketIntelligenceHub() {
     <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90  border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
@@ -124,8 +126,7 @@ export default function MarketIntelligenceHub() {
         <div className="flex px-4 pb-3 gap-1.5 overflow-x-auto no-scrollbar">
           {([
             { id: 'prices', label: 'Prices', icon: TrendingUp },
-            { id: 'trends', label: 'AI Trends', icon: Sparkles },
-            { id: 'tips', label: 'Insights', icon: Zap },
+            { id: 'trends', label: 'AI Trends', icon: Sparkles }
           ].filter(Boolean) as Array<{ id: string, label: string, icon: any }>).map(tab => (
             <button
               key={tab.id}
@@ -151,7 +152,7 @@ export default function MarketIntelligenceHub() {
         </div>
 
         {/* Search & Filter Bar */}
-        {activeTab !== 'trends' && activeTab !== 'tips' && (
+        {activeTab !== 'trends' && (
           <div className="flex items-center gap-2 px-4 pb-1">
             {/* Search Box */}
             <div className="relative flex-1">
@@ -283,7 +284,7 @@ export default function MarketIntelligenceHub() {
       </div>
 
       {/* ── CONTENT AREA ── */}
-      <main className={`flex-1 pb-5 max-w-lg mx-auto w-full px-1.5 space-y-0.5 transition-all duration-300 ${activeTab === 'trends' || activeTab === 'tips'
+      <main className={`flex-1 pb-5 max-w-lg mx-auto w-full px-1.5 space-y-0.5 transition-all duration-300 ${activeTab === 'trends'
         ? 'pt-[calc(env(safe-area-inset-top,1rem)+6.5rem)]'
         : 'pt-[calc(env(safe-area-inset-top,1rem)+9.25rem)]'
         }`}>
@@ -293,11 +294,7 @@ export default function MarketIntelligenceHub() {
           )}
 
           {activeTab === 'trends' && (
-            <MarketIntelTrendsTab marketData={marketData} />
-          )}
-
-          {activeTab === 'tips' && (
-            <MarketIntelTipsTab marketData={marketData} />
+            <MarketIntelTrendsTab marketData={marketData} profile={profile} />
           )}
         </AnimatePresence>
       </main>

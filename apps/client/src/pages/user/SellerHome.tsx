@@ -44,6 +44,8 @@ import {
   PackageMinus,
   Wallet2Icon,
   ChevronDown,
+  BarChart3Icon,
+  Headset,
   ChevronDownCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -118,6 +120,13 @@ export default function SellerHome() {
   const [cashBalance, setCashBalance] = useState(0);
   const [gfpBalance, setGfpBalance] = useState(0);
   const [stats, setStats] = useState<SellerWalletStats | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     fetchBookings();
@@ -215,162 +224,155 @@ export default function SellerHome() {
   };
 
   return (
-    <motion.div variants={containerVariants} initial="hidden" animate="show" className="pb-4 bg-[#f8fafc] dark:bg-[#0f172a] font-sans">
-
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-[#0f172a] relative overflow-x-hidden font-sans pb-4">
       {/* ── PUSH ENROLLMENT MODAL ── */}
-      <PushNotificationModal
-        isOpen={showPushPrompt}
-        onClose={handleDismissPush}
-      />
+      <PushNotificationModal isOpen={showPushPrompt} onClose={handleDismissPush} />
 
-      {/* ── TOP NAV (FIXED) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4">
-        <div className="max-w-xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 p-[2px] shadow-sm">
-              <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 flex items-center justify-center overflow-hidden">
-                {profile?.avatarUrl ? (
-                  <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 300 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
-                ) : (
-                  <span className="text-xl">{(profile as any)?.avatar || '👤'}</span>
-                )}
+      {/* ── TOP SECTION: PREMIUM GRADIENT ── */}
+      <div className="bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 pt-[calc(env(safe-area-inset-top,1.5rem)+4rem)] pb-4 rounded-b-[2.5rem] shadow-lg shadow-emerald-900/20 relative z-20 overflow-hidden">
+        
+        {/* Decorative background orbs */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-300/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+
+        {/* ── TOP NAV (FIXED) ── */}
+        <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 ${isScrolled ? 'bg-gradient-to-br from-[#064e3b] to-emerald-700 backdrop-blur-md shadow-md border-b border-white/10' : 'bg-transparent '}`}>
+          <div className="max-w-xl mx-auto px-5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-md p-[2px] shadow-sm border border-white/20">
+                <div className="w-full h-full rounded-full bg-emerald-700 flex items-center justify-center overflow-hidden">
+                  {profile?.avatarUrl ? (
+                    <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 100 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
+                  ) : (
+                    <span className="text-xl">{(profile as any)?.avatar || '👤'}</span>
+                  )}
+                </div>
+              </div>
+              <div>
+                <h1 className="text-[17px] font-black text-white tracking-wide leading-none drop-shadow-sm">
+                  Hello, {(profile?.fullName || profile?.name || 'Merchant').split(' ')[0]}!👋
+                </h1>
+                <div className="flex items-center gap-1.5 mt-1 text-[10px] text-white/90 font-semibold capitalize tracking-wider bg-black/10 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/20 w-fit">
+                  <MapPin className="w-3 h-3" />
+                  {profile?.location?.estate || profile?.estate || 'searching...'}
+                </div>
               </div>
             </div>
-            <div>
-              <h1 className="text-lg font-black text-slate-900 dark:text-white tracking-wide leading-none">
-                Hello, {(profile?.fullName || profile?.name || 'Merchant').split(' ')[0]}!👋
-              </h1>
-              <div className="flex items-center gap-1.5 mt-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold capitalize tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 w-fit">
-                <MapPin className="w-3 h-3" />
-                {profile?.location?.estate || profile?.estate || 'searching...'}
-              </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => navigate('/notifications')}
+                className="relative w-11 h-11 shrink-0 rounded-2xl bg-black/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm hover:bg-black/20 transition-all active:scale-95 group"
+              >
+                <Bell className="w-5 h-5 text-white group-hover:animate-swing" />
+                {Number(unreadCount) > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-emerald-600 shadow-md animate-in zoom-in">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+              
+              <button
+                onClick={() => navigate('/settings/support')}
+                className="relative w-11 h-11 shrink-0 rounded-2xl bg-black/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm hover:bg-black/20 transition-all active:scale-95 group"
+              >
+                <Headset className="w-5 h-5 text-white" />
+              </button>
             </div>
           </div>
-          <button
-            onClick={() => navigate('/notifications')}
-            className="relative w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm hover:shadow-md transition-all active:scale-95 group"
-          >
-            <Bell className="w-5 h-5 text-slate-400 group-hover:text-emerald-500 transition-colors" />
-            {Number(unreadCount) > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-800 shadow-md animate-in zoom-in">
-                {unreadCount}
-              </span>
-            )}
-          </button>
+        </div>
+
+        {/* ── ECO-REWARDS HERO CARD (MERCHANT REVENUE) ── */}
+        <div className="relative z-10 px-4 max-w-xl mx-auto mt-6">
+          <motion.div variants={itemVariants} initial="hidden" animate="show" className="relative group overflow-hidden rounded-[24px] bg-white/10  border border-emerald-500/50  p-5">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary to-emerald-700/50 pointer-events-none" />
+            <div className="relative z-10 flex flex-col gap-2">
+              <div className="flex justify-between items-start mb-1">
+                <div>
+                  <p className="text-[10px] font-black text-emerald-100 uppercase tracking-widest mb-1 flex items-center gap-1">
+                    <Wallet className="w-4 h-4" /> Available Balance
+                  </p>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xl font-bold text-white/90">Ksh</span>
+                    <h2 className="text-3xl font-black text-white tracking-tighter leading-none drop-shadow-md">
+                      {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </h2>
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate('/withdraw')}
+                  className="bg-white text-emerald-700 mt-1 px-5 py-3 rounded-2xl text-sm font-black capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-emerald-50"
+                >
+                  Withdraw
+                </button>
+              </div>
+
+              <div className="flex items-center gap-1 pt-3 border-t border-white/20">
+                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
+                  <span className="text-base font-black text-white">{totalDeals}</span>
+                  <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3" /> Deals</span>
+                </div>
+                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
+                  <span className="text-base font-black text-white">{totalSoldKg}</span>
+                  <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Scale className="w-3 h-3" /> KG Sold</span>
+                </div>
+                <div onClick={() => navigate("/impact-hub")} className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition-colors">
+                  <span className="text-base font-black text-amber-300 drop-shadow-sm">{gfpBalance.toLocaleString()}</span>
+                  <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto px-1.5 space-y-4 pt-16">
-        {/* ── REVENUE HERO CARD ── */}
-        <motion.div variants={itemVariants} className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-[#064e3b] to-emerald-600 p-6">
-        
-          <div className="relative z-10 flex flex-col gap-2">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-[10px] font-black text-emerald-300 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                  <Wallet className="w-4 h-4" /> Available Balance
-                </p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-emerald-100">Ksh</span>
-                  <h2 className="text-2xl font-black text-white tracking-tighter leading-none">
-                    {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </h2>
-                </div>
-              </div>
-              <button
-                onClick={() => navigate('/withdraw')}
-                className="bg-primary mt-1 backdrop-blur-md border border-white/20 text-white px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-sm"
-              >
-                Withdraw
-              </button>
-            </div>
 
-            <div className="flex items-center gap-1 pt-2 border-t border-white/10">
-              <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                <span className="text-base font-black text-white">{totalDeals}</span>
-                <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3" /> Deals</span>
-              </div>
-              <div className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                <span className="text-base font-black text-white">{totalSoldKg}</span>
-                <span className="text-[10px] font-bold text-emerald-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Scale className="w-3 h-3" /> KG Sold</span>
-              </div>
-              <div onClick={() => navigate("/impact-hub")} className="flex-1 bg-black/20 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer hover:bg-amber-500/30 transition-colors">
-                <span className="text-base font-black text-amber-300">{gfpBalance.toLocaleString()}</span>
-                <span className="text-[10px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-
+      <div className="max-w-xl mx-auto px-2.5 space-y-5 pt-3 pb-24">
         <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-2 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           <div className="space-y-2">
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
             <div className="grid grid-cols-4 gap-1 !mt-1">
-              <button
-                onClick={() => navigate('/post-trade')}
-                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
-              >
-                <div className="w-9 h-9 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <CircleFadingPlus className="w-6 h-6" />
-                </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Sell</span>
-              </button>
-
-              <button
-                onClick={() => navigate('/inventory')}
-                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
-              >
-                <div className="w-9 h-9 bg-blue-100 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Package className="w-6 h-6" />
-                </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Listings</span>
-              </button>
-
-              <button
-                onClick={() => navigate('/my-trades')}
-                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
-              >
-                <div className="relative">
-                  {receivedOffers.filter((o: any) => o.status === 'pending').length > 0 && (
-                    <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center shadow-sm">
-                      <span className="text-[10px] font-semibold text-white">{receivedOffers.filter((o: any) => o.status === 'pending').length}</span>
-                    </div>
-                  )}
-                  <div className="w-9 h-9 bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Handshake className="w-6 h-6" />
+              {[
+                { label: 'Sell', icon: <CircleFadingPlus className="w-6 h-6" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Listings', icon: <Package className="w-6 h-6" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Trades', icon: <Handshake className="w-6 h-6" />, route: '/my-trades', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
+                { label: 'Wallet', icon: <Wallet className="w-6 h-6" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+              ].map((service) => (
+                <button
+                  key={service.label}
+                  onClick={() => navigate(service.route)}
+                  className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                >
+                  <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
+                    {service.badge && service.badge > 0 ? (
+                      <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center shadow-sm z-10">
+                        <span className="text-[10px] font-semibold text-white">{service.badge}</span>
+                      </div>
+                    ) : null}
+                    {service.icon}
                   </div>
-                </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Trades</span>
-              </button>
-
-              <button
-                onClick={() => navigate('/seller-wallet')}
-                className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
-              >
-                <div className="w-9 h-9 bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Wallet className="w-6 h-6" />
-                </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Wallet</span>
-              </button>
+                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{service.label}</span>
+                </button>
+              ))}
             </div>
             
             {/* ── PRIMARY CTAS ── */}
-            <div className="grid grid-cols-1 gap-1 mt-2">
+            <div className="grid grid-cols-1 gap-1">
               <button 
                 onClick={() => navigate('/my-rfq-offers')}
-                className="w-full bg-gradient-to-br from-indigo-400 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-2.5 flex items-center gap-2.5 border border-white/10 dark:border-slate-900/10"
+                className="w-full bg-gradient-to-br from-indigo-400 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-[20px] shadow-sm shadow-slate-900/5 active:scale-[0.98] transition-all group p-3 flex items-center justify-between border border-white/10 dark:border-slate-900/10"
               >
-                <div className="w-9 h-9 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0">
-                  <Receipt className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-0.5 transition-transform" />
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <Receipt className="w-6 h-6 text-white dark:text-slate-900" />
+                  </div>
+                  <div className="text-left min-w-0">
+                    <h3 className="text-[16px] font-black tracking-tight leading-none mb-1">Submitted RFQ Proposals</h3>
+                    <p className="text-[11px] font-semibold text-white/80 dark:text-slate-500 leading-tight">Track Requests To Buyers</p>
+                  </div>
                 </div>
-                <div className="text-left min-w-0 flex-1">
-                  <h3 className="text-[13px] font-black tracking-tight leading-none mb-0.5">Submitted RFQ Proposals</h3>
-                  <p className="text-[9px] font-bold text-white/80 dark:text-slate-500 leading-tight">Track Requests To Buyers</p>
-                </div>
-                <div className="w-8 h-8 flex items-center justify-center shrink-0">
-                  <ArrowRight className="w-4 h-4 text-white/80 dark:text-slate-500 group-hover:translate-x-1 transition-transform" />
+                <div className="w-8 h-8 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center group-hover:bg-white/30 dark:group-hover:bg-slate-900/20 transition-colors">
+                  <ChevronRight className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </button>
             </div>
@@ -443,32 +445,44 @@ export default function SellerHome() {
           {/* ── GRID OF COLLECTIVE & MARKET PRICES ── */}
           <div className="grid grid-cols-2 gap-1">
             {/* ── COMMUNITY COLLECTIVE ── */}
-            <button
-              onClick={() => navigate('/community-collective')}
-              className="w-full bg-gradient-to-br from-emerald-500 to-primary text-white rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-3 flex items-center gap-2.5 border border-white/10"
+            <div 
+              onClick={() => navigate("/community-collective")}
+              className="bg-gradient-to-br from-primary to-emerald-600 border border-emerald-400/50 dark:border-emerald-500/50 rounded-[20px] p-3 flex flex-col justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group min-h-[105px] relative overflow-hidden"
             >
-              <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center shrink-0">
-                <Users className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+              <div className="absolute -left-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
+              <div className="flex items-start justify-between mb-2 relative z-10">
+                <div className="w-9 h-9 bg-white/20 dark:bg-white/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                  <Users className="w-4.5 h-4.5 text-white" />
+                </div>
+                <div className="w-6 h-6 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                  <ChevronRight className="w-3 h-3 text-white group-hover:translate-x-0.5 transition-transform" />
+                </div>
               </div>
-              <div className="text-left min-w-0">
-                <h3 className="text-[13px] font-black tracking-tight leading-none mb-0.5">Collective Hub</h3>
-                <p className="text-[9px] font-bold text-white/80 leading-tight">Market Contracts</p>
+              <div className="relative z-10 mt-auto">
+                <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Community Hub</h4>
+                <p className="text-[9px] font-semibold text-emerald-50 leading-tight">Join group pickups</p>
               </div>
-            </button>
+            </div>
 
-            {/* ── MARKET INTELLIGENCE ── */}
-            <button
-              onClick={() => navigate('/market-pulse')}
-              className="w-full bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl shadow-md shadow-slate-900/5 active:scale-[0.98] transition-transform overflow-hidden group p-3 flex items-center gap-2.5"
+            {/* ── MARKET PULSE ── */}
+            <div 
+              onClick={() => navigate("/market-pulse")}
+              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-[20px] p-3 flex flex-col justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group min-h-[105px] relative overflow-hidden"
             >
-              <div className="w-9 h-9 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center shrink-0">
-                <BarChart3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
+              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 dark:bg-emerald-900/20 rounded-full blur-xl pointer-events-none" />
+              <div className="flex items-start justify-between mb-2 relative z-10">
+                <div className="w-9 h-9 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                  <BarChart3Icon className="w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div className="w-6 h-6 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-slate-100 dark:group-hover:bg-slate-700 transition-colors">
+                  <ChevronRight className="w-3 h-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                </div>
               </div>
-              <div className="text-left min-w-0">
-                <h3 className="text-[13px] font-black text-slate-700 dark:text-white tracking-tight leading-none mb-0.5">Market Prices</h3>
-                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 leading-tight">View Market Rates</p>
+              <div className="relative z-10 mt-auto">
+                <h4 className="text-[13px] font-black text-slate-900 dark:text-white leading-tight mb-0.5">Market Prices</h4>
+                <p className="text-[9px] font-semibold text-slate-500 leading-tight">Live recyclable prices</p>
               </div>
-            </button>
+            </div>
           </div>
         </motion.div>
 
@@ -486,6 +500,6 @@ export default function SellerHome() {
         <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
         <BrainCircuit className="w-6 h-6 text-white" />
       </motion.button>
-    </motion.div>
+    </div>
   );
 }

@@ -385,7 +385,7 @@ export default function ImpactAnalytics() {
             <p className="text-[11px] font-medium text-emerald-100/80 mb-1">Total Waste Recycled</p>
             <div className="flex items-end gap-3 mb-1">
               <div className="flex items-baseline gap-1.5">
-                <h2 className="text-5xl font-black text-white tracking-tighter leading-none">{stats.totalWeight}</h2>
+                <h2 className="text-4xl font-black text-white tracking-tighter leading-none">{stats.totalWeight}</h2>
                 <span className="text-sm font-bold text-emerald-400">KG</span>
               </div>
             </div>
@@ -426,173 +426,169 @@ export default function ImpactAnalytics() {
           </div>
         </div>
 
-        {/* ── METRICS & GOALS WRAPPER ── */}
-        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-2xl space-y-4 !mt-2">
-          {/* ── FOUR STATS GRID ── */}
-          <div className="grid grid-cols-4 gap-2">
-          {/* Lifetime Earnings */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-2.5 border-none shadow-sm flex flex-col justify-between min-h-[90px]">
-            <div className="w-6 h-6 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center mb-1">
-              <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
-            </div>
-            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">Revenue</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">KSh {stats.totalEarnings.toLocaleString()}</p>
-
-          </div>
-          {/* Global Rank */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-2.5 border-none shadow-sm flex flex-col justify-between min-h-[90px]">
-            <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center mb-1">
-              <Trophy className="w-3.5 h-3.5 text-blue-600 dark:text-blue-500" />
-            </div>
-            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">Global Rank</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">#{stats.globalRank || '—'}</p>
-
-          </div>
-          {/* Total Pickups */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-2.5 border-none shadow-sm flex flex-col justify-between min-h-[90px]">
-            <div className="w-6 h-6 rounded-lg bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center mb-1">
-              <Truck className="w-3.5 h-3.5 text-purple-600 dark:text-purple-500" />
-            </div>
-            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">Total Pickups</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{stats.totalPickups}</p>
-
-          </div>
-          {/* GFP Points */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-2.5 border-none shadow-sm flex flex-col justify-between min-h-[90px]">
-            <div className="w-6 h-6 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center mb-1">
-              <Star className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
-            </div>
-            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400">GFP Points</p>
-            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{gfpPoints.toLocaleString()}</p>
-
+        {/* ── STATS STRIP (Horizontal Scroll) ── */}
+        <div className="!mt-3">
+          <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1 mb-2">Your Stats at a Glance</p>
+          <div className="flex gap-2 overflow-x-auto no-scrollbar -mx-1.5 px-1.5 pb-1">
+            {[
+              { label: 'Total Earned', value: `KSh ${stats.totalEarnings.toLocaleString()}`, icon: Wallet, bg: 'bg-emerald-100 dark:bg-emerald-900/30' },
+              { label: 'Rank', value: `#${stats.globalRank || '—'}`, icon: Trophy, bg: 'bg-blue-100 dark:bg-blue-900/30' },
+              { label: 'Total Pickups', value: `${stats.totalPickups}`, icon: Truck, bg: 'bg-purple-100 dark:bg-purple-900/30' },
+              { label: 'Total GFP', value: `${gfpPoints.toLocaleString()}`, icon: Star, bg: 'bg-amber-100 dark:bg-amber-900/30' },
+            ].map((stat, i) => (
+              <div key={i} className={`shrink-0 w-[110px] ${stat.bg} rounded-xl p-2.5 border-none`}>
+                <stat.icon className="w-5 h-5 text-slate-900 dark:text-white mb-2" />
+                <p className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-0.5">{stat.label}</p>
+                <p className="text-[13px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{stat.value}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* ── GOAL TRACKING (CIRCULAR) ── */}
-        <div className="space-y-1">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-sm font-semibold text-slate-600 dark:text-white">Set Recycling Goals</h3>
-
+        {/* ── RECYCLING GOALS (UNIFIED CARD) ── */}
+        <div className="bg-slate-200 dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-800/60 !mt-1">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+                <Target className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
+              </div>
+              <h3 className="text-[13px] font-bold text-slate-900 dark:text-white">Recycling Goals</h3>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            {/* Weekly Goal */}
-            <div className="bg-white dark:bg-slate-900 rounded-[1rem] p-4 border-none shadow-sm transition-colors">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-                  <Calendar className="w-3.5 h-3.5" /> <span className="text-[10px] font-semibold">Weekly Goal</span>
-                </div>
+          {/* Weekly */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-3 h-3 text-slate-400" />
+                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Weekly</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-black text-slate-900 dark:text-white">
+                  {stats.currentWeekWeight}<span className="text-slate-400 font-semibold"> / {goals.weekly} KG</span>
+                </span>
                 <button
                   onClick={() => { setGoalType("weekly"); setShowGoalModal(true); }}
-                  className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full text-slate-400 hover:text-emerald-500 transition-colors"
+                  className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md text-slate-400 hover:text-emerald-500 transition-colors"
                 >
-                  <Edit3 className="w-3.5 h-3.5" />
+                  <Edit3 className="w-3 h-3" />
                 </button>
               </div>
-              <div className="flex justify-between items-center">
-                <div className="w-full">
-                  <p className="text-xl font-black text-slate-900 dark:text-white leading-none mb-1">
-                    <span className="text-emerald-600 dark:text-emerald-500">{stats.currentWeekWeight}</span> <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">/ {goals.weekly}</span>
-                    <span className="text-[9px] font-bold text-slate-400 ml-1">KG</span>
-                  </p>
-                  <div className="h-1.5 w-full bg-slate-300 dark:bg-slate-800 rounded-full mt-3 overflow-hidden">
-                    <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${weeklyProgress}%` }}></div>
-                  </div>
-                  <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400 mt-1.5">{Math.round(weeklyProgress)}% Completed</p>
-                </div>
-              </div>
             </div>
+            <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${weeklyProgress}%` }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
+              />
+            </div>
+            <p className="text-[9px] font-semibold text-slate-400 mt-1 text-right">{Math.round(weeklyProgress)}% complete</p>
+          </div>
 
-            {/* Monthly Goal */}
-            <div className="bg-white dark:bg-slate-900 rounded-[1rem] p-4 border-none shadow-sm transition-colors">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-                  <Calendar className="w-3.5 h-3.5" /> <span className="text-[10px] font-semibold">Monthly Goal</span>
-                </div>
+          {/* Monthly */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-3 h-3 text-slate-400" />
+                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Monthly</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-black text-slate-900 dark:text-white">
+                  {stats.currentMonthWeight}<span className="text-slate-400 font-semibold"> / {goals.monthly} KG</span>
+                </span>
                 <button
                   onClick={() => { setGoalType("monthly"); setShowGoalModal(true); }}
-                  className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full text-slate-400 hover:text-emerald-500 transition-colors"
+                  className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md text-slate-400 hover:text-emerald-500 transition-colors"
                 >
-                  <Edit3 className="w-3.5 h-3.5" />
+                  <Edit3 className="w-3 h-3" />
                 </button>
               </div>
-              <div className="flex justify-between items-center">
-                <div className="w-full">
-                  <p className="text-xl font-black text-slate-900 dark:text-white leading-none mb-1">
-                    <span className="text-emerald-600 dark:text-emerald-500">{stats.currentMonthWeight}</span> <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">/ {goals.monthly}</span>
-                    <span className="text-[9px] font-bold text-slate-400 ml-1">KG</span>
-                  </p>
-                  <div className="h-1.5 w-full bg-slate-300 dark:bg-slate-800 rounded-full mt-3 overflow-hidden">
-                    <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${monthlyProgress}%` }}></div>
-                  </div>
-                  <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400 mt-1.5">{Math.round(monthlyProgress)}% Completed</p>
+            </div>
+            <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${monthlyProgress}%` }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
+                className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+              />
+            </div>
+            <p className="text-[9px] font-semibold text-slate-400 mt-1 text-right">{Math.round(monthlyProgress)}% complete</p>
+          </div>
+        </div>
+
+        {/* ── WEEKLY TRENDS ── */}
+        <div className="!mt-3">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 dark:from-[#12141c] dark:to-[#0a0c10] rounded-2xl overflow-hidden border border-slate-700/30 dark:border-slate-800/60 shadow-sm">
+            {/* Summary header */}
+            <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-white/5">
+              <div>
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">This Week</p>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-xl font-black text-white tracking-tight">{stats.currentWeekWeight} KG</span>
+                  {stats.monthlyGrowth !== 0 && (
+                    <span className={`text-[10px] font-bold ${stats.monthlyGrowth > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {stats.monthlyGrowth > 0 ? '▲' : '▼'} {Math.abs(stats.monthlyGrowth)}%
+                    </span>
+                  )}
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        </div>
-
-        {/* ── RECYCLING TRENDS (KEPT EXISTING GRAPH AS REQUESTED) ── */}
-        <div className="space-y-1">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Weekly Trends</h3>
-            <button className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1 bg-white dark:bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800">
-              This Week <ChevronRight className="w-3 h-3 rotate-90" />
-            </button>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-600 to-blue-900 rounded-[1rem] p-5 border border-slate-200 dark:border-slate-800 ">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="font-semibold text-xs capitalize tracking-widest text-white dark:text-slate-400 flex items-center gap-2">
-                <BarChart className="w-4 h-4 text-emerald-500" /> Recovered Weight
-              </h3>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <p className="text-[10px] font-black text-slate-400 capitalize tracking-widest">
-                  KG
-                </p>
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-lg border border-white/5">
+                <BarChart className="w-3.5 h-3.5 text-emerald-500" />
+                <span className="text-[10px] font-bold text-slate-400">Weekly</span>
               </div>
             </div>
 
-            <div className="flex items-end justify-between h-40 gap-3 px-1">
-              {stats.weeklyData.map((day: any, i: number) => {
-                const maxWeight = Math.max(
-                  ...stats.weeklyData.map((d: any) => d.weight),
-                  5,
-                );
-                const height = (day.weight / maxWeight) * 100;
-                const dayName = new Date(day.date)
-                  .toLocaleDateString("en-US", { weekday: "short" })
-                  .charAt(0);
+            {/* Chart */}
+            <div className="px-4 pt-6 pb-4">
+              <div className="flex items-end justify-between h-36 gap-2">
+                {stats.weeklyData.map((day: any, i: number) => {
+                  const maxWeight = Math.max(
+                    ...stats.weeklyData.map((d: any) => d.weight),
+                    5,
+                  );
+                  const height = (day.weight / maxWeight) * 100;
+                  const dayName = new Date(day.date)
+                    .toLocaleDateString("en-US", { weekday: "short" })
+                    .charAt(0);
+                  const isToday = day.date === new Date().toLocaleDateString("en-CA");
 
-                return (
-                  <div
-                    key={i}
-                    className="flex-1 flex flex-col items-center justify-end h-full gap-2"
-                  >
-                    <div className="w-full relative h-full flex items-end">
-                      <motion.div
-                        initial={{ height: 0 }}
-                        animate={{ height: `${height}%` }}
-                        className={`w-full rounded-t-xl ${day.weight > 0 ? "bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.2)]" : "bg-slate-50 dark:bg-slate-800/50"}`}
-                      />
-                      {day.weight > 0 && (
-                        <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-black px-1.5 py-0.5 rounded  opacity-100 z-10">
-                          {day.weight}
-                        </div>
-                      )}
+                  return (
+                    <div
+                      key={i}
+                      className="flex-1 flex flex-col items-center justify-end h-full gap-1.5"
+                    >
+                      <div className="w-full relative h-full flex items-end">
+                        <motion.div
+                          initial={{ height: 0 }}
+                          animate={{ height: `${Math.max(height, 4)}%` }}
+                          transition={{ duration: 0.5, delay: i * 0.05 }}
+                          className={`w-full rounded-lg ${
+                            day.weight > 0
+                              ? isToday
+                                ? "bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+                                : "bg-emerald-500/60"
+                              : "bg-white/5"
+                          }`}
+                        />
+                        {day.weight > 0 && (
+                          <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-black text-emerald-400">
+                            {day.weight}
+                          </div>
+                        )}
+                      </div>
+                      <p className={`text-[10px] font-bold ${isToday ? 'text-emerald-400' : 'text-slate-500'}`}>
+                        {dayName}
+                      </p>
                     </div>
-                    <p className="text-[10px] font-black text-slate-100 dark:text-slate-400 capitalize tracking-tighter">
-                      {dayName}
-                    </p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
 
+        
 
       </div>
 

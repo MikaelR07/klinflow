@@ -230,7 +230,7 @@ export default function DiscoveryHub() {
               return (
                 <div
                   key={partner.id}
-                  className="w-full bg-slate-200 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800  overflow-hidden transition-all text-left  block cursor-pointer"
+                  className="w-full bg-slate-100 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800  overflow-hidden transition-all text-left  block cursor-pointer"
                   onClick={() => navigate(`/company/${partner.id}`)}
                 >
                   <div className="p-2 flex gap-3 relative">

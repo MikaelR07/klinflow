@@ -10,6 +10,7 @@ const FeedbackPage = lazy(() => import('../../../pages/settings/FeedbackPage'));
 const SubscriptionPage = lazy(() => import('../../../pages/settings/SubscriptionPage'));
 const SubscriptionDetail = lazy(() => import('../../../pages/settings/SubscriptionDetail'));
 const GeneralSettingsPage = lazy(() => import('../../../pages/settings/GeneralSettingsPage'));
+const RequestVerificationPage = lazy(() => import('../../../pages/settings/RequestVerificationPage'));
 
 export function getSettingsRoutes() {
   return (
@@ -23,6 +24,7 @@ export function getSettingsRoutes() {
       <Route path="privacy" element={<PrivacySecurityPage />} />
       <Route path="support" element={<SupportPage />} />
       <Route path="feedback" element={<FeedbackPage />} />
+      <Route path="request-verification" element={<RequestVerificationPage />} />
     </Route>
   );
 }
