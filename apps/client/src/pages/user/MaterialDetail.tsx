@@ -479,7 +479,7 @@ export default function MaterialDetail() {
                       <p className="text-[13px] md:text-[15px] font-black text-slate-900 dark:text-white leading-none mb-1">
                         {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'}
                       </p>
-                      <p className="text-[9px] font-semibold text-slate-500 leading-tight truncate">VWAP Rate</p>
+                      <p className="text-[9px] font-semibold text-slate-500 leading-tight truncate">Market Rate</p>
                     </div>
                     {/* Metric 2 */}
                     <div className="bg-white dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center">

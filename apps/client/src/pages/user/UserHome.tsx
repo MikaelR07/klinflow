@@ -235,7 +235,7 @@ export default function UserHome() {
                   <span className="text-base font-black text-white">{metrics.kgRecovered}</span>
                   <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
                 </div>
-                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition-colors">
+                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 transition-colors">
                   <span className="text-base font-black text-amber-300 drop-shadow-sm">{rewardPoints}</span>
                   <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
                 </div>
@@ -411,7 +411,7 @@ export default function UserHome() {
         onClick={() => navigate("/hygenex")}
         className="fixed bottom-24 right-6 w-14 h-14 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center z-50 shadow-lg shadow-emerald-500/30 border-2 border-white dark:border-slate-800 group"
       >
-        <div className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-20" />
+        <div className="absolute inset-0 rounded-full bg-emerald-500  opacity-20" />
         <BrainCircuit className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />
       </motion.button>
       
