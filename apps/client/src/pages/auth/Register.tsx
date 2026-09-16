@@ -167,10 +167,11 @@ export default function Register() {
 
   return (
     <div className="flex flex-col bg-[#f8fafc] sm:bg-slate-100 min-h-[100dvh] relative overflow-hidden font-sans">
-      <div className="flex-1 flex flex-col bg-white w-full max-w-lg mx-auto relative shadow-2xl overflow-y-auto overflow-x-hidden">
+      <div className="flex-1 w-full max-w-lg mx-auto relative shadow-2xl bg-[#06241c] overflow-hidden">
         
-        {/* Top Image Section (Curved) */}
-        <div className={`w-full h-[35vh] min-h-[250px] relative shrink-0 pointer-events-none ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
+        {/* Fixed Background Image */}
+        <div className="absolute top-0 left-0 right-0 h-[50vh] pointer-events-none z-0">
+          <div className={`absolute inset-0 transition-opacity duration-700 ${!imageLoaded ? 'bg-emerald-900/40 animate-pulse' : 'bg-transparent'}`} />
           <img 
             src="/welcome/registrationPage.webp" 
             alt="Create your account" 
@@ -178,18 +179,25 @@ export default function Register() {
             draggable={false}
             onLoad={() => setImageLoaded(true)}
           />
+          {/* Subtle gradient overlay to blend bottom edge */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#06241c] to-transparent opacity-80" />
         </div>
 
-        {/* Bottom Form Section */}
-        <div className="flex-1 px-6 pt-24 pb-8 flex flex-col relative z-20 bg-white rounded-t-[40px] -mt-12">
-          
-          {/* Header */}
-          <div className="mb-6 relative z-50">
-            <h1 className="text-[28px] font-bold text-[#0c392c] mb-1.5 tracking-tight">Create your account</h1>
-            <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[300px]">
-              {currentStep === 1 ? 'Join the Klinflow community and turn recyclables into value.' : 'Secure your account and set your location.'}
-            </p>
-          </div>
+        {/* Scrollable Content Layer */}
+        <div className="absolute inset-0 z-10 overflow-y-auto overflow-x-hidden flex flex-col">
+          {/* Transparent spacer to push card down */}
+          <div className="min-h-[40vh] shrink-0" />
+
+          {/* Bottom Docked Form Card */}
+          <div className="flex-1 bg-white rounded-t-[40px] px-6 pt-10 pb-8 flex flex-col relative shadow-[0_-15px_40px_rgba(0,0,0,0.15)] min-h-[60vh]">
+            
+            {/* Header */}
+            <div className="mb-8">
+              <h1 className="text-[28px] font-bold text-emerald-700 mb-1.5 tracking-tight">Create your account</h1>
+              <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[300px]">
+                {currentStep === 1 ? 'Join the Klinflow community and turn recyclables into value.' : 'Secure your account and set your location.'}
+              </p>
+            </div>
 
           <form onSubmit={initiateRegistration} className="space-y-3.5 flex-1">
             {currentStep === 1 ? (
@@ -410,7 +418,7 @@ export default function Register() {
               <button
                 onClick={handleFinalSubmit}
                 disabled={isLoading || formData.otp.length < 6}
-                className="w-full py-4 bg-[#064e3b] text-white rounded-2xl font-bold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-[#064e3b]/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2"
+                className="w-full py-4 bg-primary text-white rounded-2xl font-bold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-[#064e3b]/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2"
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm & Register'}
               </button>

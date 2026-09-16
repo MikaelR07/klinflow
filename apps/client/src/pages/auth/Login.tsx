@@ -115,10 +115,11 @@ export default function Login() {
 
   return (
     <div className="flex flex-col bg-[#f8fafc] sm:bg-slate-100 min-h-[100dvh] relative overflow-hidden font-sans">
-      <div className="flex-1 flex flex-col bg-white w-full max-w-lg mx-auto relative shadow-2xl overflow-y-auto overflow-x-hidden">
+      <div className="flex-1 w-full max-w-lg mx-auto relative shadow-2xl bg-[#06241c] overflow-hidden">
         
-        {/* Top Image Section (Curved) */}
-        <div className={`w-full h-[40vh] min-h-[250px] relative shrink-0 pointer-events-none ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
+        {/* Fixed Background Image */}
+        <div className="absolute top-0 left-0 right-0 h-[50vh] pointer-events-none z-0">
+          <div className={`absolute inset-0 transition-opacity duration-700 ${!imageLoaded ? 'bg-emerald-900/40 animate-pulse' : 'bg-transparent'}`} />
           <img 
             src="/welcome/loginTwo.webp" 
             alt="Welcome back" 
@@ -126,18 +127,25 @@ export default function Login() {
             draggable={false}
             onLoad={() => setImageLoaded(true)}
           />
+          {/* Subtle gradient overlay to blend bottom edge */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#06241c] to-transparent opacity-80" />
         </div>
 
-        {/* Bottom Form Section */}
-        <div className="flex-1 px-8 pt-24 pb-8 flex flex-col relative z-20 bg-white rounded-t-[40px] -mt-12">
-          
-          {/* Header */}
-          <div className="mb-4 relative z-50">
-            <h1 className="text-3xl font-bold text-[#0c392c] mb-2 tracking-tight">Welcome back</h1>
-            <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[280px]">
-              Ready to make an impact today?
-            </p>
-          </div>
+        {/* Scrollable Content Layer */}
+        <div className="absolute inset-0 z-10 overflow-y-auto overflow-x-hidden flex flex-col">
+          {/* Transparent spacer to push card down */}
+          <div className="min-h-[40vh] shrink-0" />
+
+          {/* Bottom Docked Form Card */}
+          <div className="flex-1 bg-white rounded-t-[40px] px-8 pt-10 pb-8 flex flex-col relative shadow-[0_-15px_40px_rgba(0,0,0,0.15)] min-h-[60vh]">
+            
+            {/* Header */}
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-primary mb-2 tracking-tight">Welcome back</h1>
+              <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[280px]">
+                Ready to make an impact today?
+              </p>
+            </div>
 
           <form onSubmit={handleLogin} className="space-y-3 flex-1">
             {/* Phone Input */}
@@ -192,7 +200,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-[18px] mt-2 bg-[#064e3b] hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full py-[18px] mt-2 bg-primary hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading && recoveryStep === 'none' ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
