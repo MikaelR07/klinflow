@@ -7,7 +7,12 @@ interface MarketPulseRFQsTabProps {
   navigate: (path: string) => void;
 }
 
+import { useAuthStore } from '@klinflow/core/stores/authStore';
+
 export default function MarketPulseRFQsTab({ filteredRFQs, navigate }: MarketPulseRFQsTabProps) {
+  const profile = useAuthStore(s => s.profile);
+  const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
+  
   return (
     <motion.div
       key="rfqs-view"
@@ -73,14 +78,16 @@ export default function MarketPulseRFQsTab({ filteredRFQs, navigate }: MarketPul
               </div>
 
               {/* Button */}
-              <div className="flex justify-end pt-1">
-                <button
-                  onClick={() => navigate(`/rfq/${rfq.id}`)}
-                  className="px-4 py-2 bg-primary hover:bg-primary/95 text-white rounded-xl font-bold text-[10px] uppercase tracking-wider shadow-md shadow-primary/10 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
-                >
-                  Fulfill Request <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
+              {!isFleetDriver && (
+                <div className="flex justify-end pt-1">
+                  <button
+                    onClick={() => navigate(`/rfq/${rfq.id}`)}
+                    className="px-4 py-2 bg-primary hover:bg-primary/95 text-white rounded-xl font-bold text-[10px] uppercase tracking-wider shadow-md shadow-primary/10 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
+                  >
+                    Fulfill Request <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
             </div>
           ))
         )}

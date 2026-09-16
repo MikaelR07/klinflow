@@ -1,10 +1,7 @@
-// @ts-nocheck
-
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
 import { getEnv, validateEnv } from '../_shared/env.ts';
 import { getSystemPrompt } from './prompts.ts';
-import { getToolsForRole, executeTool } from './tools.ts';
 
 const PayloadSchema = z.object({
   type: z.string().min(1),
@@ -59,14 +56,14 @@ Return ONLY a JSON object:
 {
   "material_name": "Specific material",
   "matched_category": "Category slug",
-  "grade": "A|B|C",
+  "grade": "Premium|Good|Mixed|Low",
   "grade_reason": "Reason",
   "description": "Description",
   "recyclability": "Recyclability details",
   "handling_tips": "Tips"
 }`;
 
-      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
       const geminiRes = await fetch(geminiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -83,31 +80,37 @@ Return ONLY a JSON object:
     }
 
     // ── CASE B: CHAT ADVISOR ──────────────────────────────────────────
-    // 1. Fetch User & Context
-    const [profileRes, bookingsRes] = await Promise.all([
-      supabase.from('profiles').select('*').eq('id', userId).single(),
-      supabase.from('bookings').select('waste_type, status').eq('user_id', userId).order('created_at', { ascending: false }).limit(3)
+    
+    // 1. Fetch User Profile
+    const { data: profile } = await supabase.from('profiles').select('*').eq('id', userId).single();
+    const user = profile || { role: 'user' };
+
+    // 2. Pre-Fetch Live Context (Parallel)
+    const [bookingsRes, marketRes, swarmsRes, pendingRes, historyRes] = await Promise.all([
+      supabase.from('bookings').select('waste_type, status').eq('user_id', userId).order('created_at', { ascending: false }).limit(3),
+      supabase.from('marketplace_listings').select('material, price_per_kg, location').eq('status', 'active').limit(5),
+      supabase.from('swarms').select('name, location, target_material').eq('status', 'active').limit(5),
+      (user.role === 'agent' || user.role === 'company_owner') 
+        ? supabase.from('bookings').select('waste_type, estate, weight_kg').eq('status', 'pending').limit(5)
+        : Promise.resolve({ data: [] }),
+      supabase.from('hygenex_messages').select('role, text').eq('user_id', userId).order('created_at', { ascending: false }).limit(10)
     ]);
 
-    const user = profileRes.data || { role: 'user' };
     const context = {
       recentBookings: bookingsRes.data || [],
-      pendingCount: 0, // Simplified for MVP
-      fleetCount: 0 // Simplified for MVP
+      marketPrices: marketRes.data || [],
+      swarms: swarmsRes.data || [],
+      pendingPickups: pendingRes.data || [],
+      fleetCount: 0 // Simplified
     };
 
-    // Fetch conversation history (last 10 messages)
-    const { data: historyData } = await supabase
-      .from('hygenex_messages')
-      .select('role, text')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(10);
-      
+    // 3. Build Chat History
+    const historyData = historyRes.data || [];
     let chatHistory = [];
     let lastRole = null;
     const userMessage = payload?.message || 'Hello';
-    const allMessages = [...(historyData ? historyData.reverse() : []), { role: 'user', text: userMessage }];
+    
+    const allMessages = [...historyData.reverse(), { role: 'user', text: userMessage }];
 
     for (const m of allMessages) {
       const gRole = m.role === 'ai' ? 'model' : 'user';
@@ -121,79 +124,50 @@ Return ONLY a JSON object:
       }
     }
 
+    // Ensure history starts with user
     if (chatHistory.length > 0 && chatHistory[0].role !== 'user') {
       chatHistory.shift();
     }
 
+    // 4. Generate Single Stream with Pre-fetched Context
     const systemInstruction = getSystemPrompt(user.role, user, context);
-    const tools = getToolsForRole(user.role);
-
-    const callGemini = async (history: any[], isStreaming: boolean = false, forceText: boolean = false) => {
-      const geminiUrl = isStreaming
-        ? `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?alt=sse&key=${apiKey}`
-        : `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
-      
-      const payload: any = {
-        system_instruction: { parts: [{ text: systemInstruction }] },
-        contents: history,
-        tools: [{ function_declarations: tools }],
-        generationConfig: { temperature: 0.7 }
-      };
-
-      if (forceText) {
-        payload.tool_config = { function_calling_config: { mode: "NONE" } };
-      }
-
-      return await fetch(geminiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+    
+    const MODELS = ['gemini-3.6-flash', 'gemini-3.6-flash-lite', 'gemini-flash-latest'];
+    const geminiPayload = {
+      system_instruction: { parts: [{ text: systemInstruction }] },
+      contents: chatHistory,
+      generationConfig: { temperature: 0.7 }
     };
 
-    // Step 1: Call Gemini (non-streaming) to check for tool calls
-    let res = await callGemini(chatHistory, false, false);
-    if (!res.ok) throw new Error(await res.text());
-    let data = await res.json();
-    
-    let parts = data.candidates?.[0]?.content?.parts || [];
-    let functionCallPart = parts.find((p: any) => p.functionCall);
-    let toolsUsed = [];
-    let toolResultsMetadata = null;
-
-    if (functionCallPart) {
-      // Tool Calling Loop
-      const fnCall = functionCallPart.functionCall;
-      console.log(`[AI Tool Call] ${fnCall.name}`);
-      toolsUsed.push(fnCall.name);
+    let streamRes: Response | null = null;
+    for (const model of MODELS) {
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+      console.log(`[AI] Trying model: ${model}`);
       
-      const toolResult = await executeTool(supabase, fnCall.name, fnCall.args, userId);
-      if (fnCall.name === 'query_marketplace') {
-        toolResultsMetadata = toolResult.result; // Save for UI rendering
+      const res = await fetch(geminiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(geminiPayload)
+      });
+
+      if (res.ok) {
+        streamRes = res;
+        console.log(`[AI] Success with model: ${model}`);
+        break;
       }
 
-      // Inject the tool result directly into the user's last message to avoid strict role issues
-      chatHistory[chatHistory.length - 1].parts[0].text += `\n\n[System Tool Response for ${fnCall.name}]: ${JSON.stringify(toolResult)}\nPlease summarize this to the user.`;
-
-      // Step 2: Stream final response back to client (Force Text)
-      console.log(`[AI] Streaming final response after tool call`);
-      const streamRes = await callGemini(chatHistory, true, true);
+      const errText = await res.text();
+      console.warn(`[AI] Model ${model} failed (${res.status}): ${errText.slice(0, 200)}`);
       
-      // Save metadata header to stream so UI knows tools were used
-      const metadataHeader = JSON.stringify({ tools_used: toolsUsed, marketplace_results: toolResultsMetadata });
-      
-      return new Response(streamRes.body, {
-        headers: { 
-          ...corsHeaders, 
-          'Content-Type': 'text/event-stream',
-          'X-AI-Metadata': encodeURIComponent(metadataHeader) 
-        }
-      });
+      // Only retry on 503 (overloaded) or 429 (rate limit)
+      if (res.status !== 503 && res.status !== 429) {
+        throw new Error(errText);
+      }
     }
 
-    // If no tool call, re-request as stream (Force Text)
-    console.log(`[AI] Streaming direct response`);
-    const streamRes = await callGemini(chatHistory, true, true);
+    if (!streamRes) throw new Error('All Gemini models are currently unavailable. Please try again in a moment.');
+
+    // Pipe the stream directly back to the client
     return new Response(streamRes.body, {
       headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' }
     });

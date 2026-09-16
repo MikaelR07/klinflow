@@ -24,6 +24,14 @@ export default function MyRFQs() {
   const { materialPrices, fetchMaterialPrices } = useServiceStore();
   const [filter, setFilter] = useState<'pending' | 'accepted' | 'completed' | 'closed'>('pending');
   const [rfqs, setRfqs] = useState<any[]>([]);
+  const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
+
+  useEffect(() => {
+    if (isFleetDriver) {
+      toast.error('Unauthorized access');
+      navigate('/');
+    }
+  }, [isFleetDriver, navigate]);
 
   useEffect(() => {
     fetchMaterialPrices();

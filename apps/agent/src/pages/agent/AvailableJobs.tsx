@@ -15,6 +15,7 @@ import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { usePriceStore } from '@klinflow/core/stores/priceStore';
+import { useFulfillmentStore } from '@klinflow/core/stores/fulfillmentStore';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { OptimizedImage } from '@klinflow/ui';
 import type { AgentJob } from '@klinflow/core/stores/agentStore.types';
@@ -57,13 +58,21 @@ export default function AvailableJobs() {
   const fetchPrices = usePriceStore(s => s.fetchPrices);
   const getPriceForMaterial = usePriceStore(s => s.getPriceForMaterial);
 
+  const activeFulfillments = useFulfillmentStore(s => s.activeFulfillments);
+  const fetchActiveFulfillments = useFulfillmentStore(s => s.fetchActiveFulfillments);
+
+  const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
+
   useEffect(() => {
     fetchAvailableJobs();
     fetchActiveJobs();
     fetchCategories();
     fetchEarnings();
     fetchPrices();
-  }, []);
+    if (profile?.id) {
+      fetchActiveFulfillments(profile.id, 'agent');
+    }
+  }, [profile?.id]);
 
   const handleAccept = async (job: AgentJob) => {
     try {
@@ -80,12 +89,62 @@ export default function AvailableJobs() {
     }
   };
 
+  const combinedActiveJobs = useMemo(() => {
+    const rfqs = activeFulfillments
+      .filter(f => !['completed', 'cancelled'].includes(f.status))
+      .map(f => ({
+        id: f.id,
+        material: f.rfq?.material_type || 'Mixed Material',
+        weight_kg: (f as any).proposal?.offered_weight || (f as any).rfq?.target_quantity || 0,
+        actual_weight_kg: 0,
+        location: f.pickup_address,
+        time: f.scheduled_time || 'ASAP',
+        status: f.status === 'agent_assigned' ? 'accepted' : f.status,
+        agent_id: f.assigned_agent_id || null,
+        user_id: f.seller_id,
+        customerName: 'Marketplace Seller',
+        pay: 0,
+        photo_url: null,
+        photoUrl: null,
+        photos: [],
+        phone: '',
+        is_market_trade: true,
+        booking_type: 'rfq'
+      } as AgentJob));
+    return [...activeJobs, ...rfqs];
+  }, [activeJobs, activeFulfillments]);
+
+  const combinedCompletedJobs = useMemo(() => {
+    const rfqs = activeFulfillments
+      .filter(f => f.status === 'completed')
+      .map(f => ({
+        id: f.id,
+        material: f.rfq?.material_type || 'Mixed Material',
+
+        actual_weight_kg: f.verified_weight || f.actual_weight || 0,
+        location: f.pickup_address,
+        time: f.scheduled_time,
+        status: 'completed',
+        agent_id: f.assigned_agent_id || null,
+        user_id: f.seller_id,
+        customerName: 'Marketplace Seller',
+        pay: 0,
+        photo_url: null,
+        photoUrl: null,
+        photos: [],
+        phone: '',
+        is_market_trade: true,
+        booking_type: 'rfq'
+      } as AgentJob));
+    return [...completedJobs, ...rfqs];
+  }, [completedJobs, activeFulfillments]);
+
   const currentJobs = activeTab === 'available'
     ? availableJobs
     : activeTab === 'active'
-      ? activeJobs
+      ? combinedActiveJobs
       : activeTab === 'completed'
-        ? completedJobs
+        ? combinedCompletedJobs
         : rejectedJobs.slice(0, 10);
 
   const filteredJobs = useMemo(() => {
@@ -162,15 +221,24 @@ export default function AvailableJobs() {
     return 'Scheduled';
   };
 
-  const TABS = [
+  const TABS = isFleetDriver ? [
+    { id: 'active', label: 'Dispatched', count: combinedActiveJobs.length },
+    { id: 'completed', label: 'Completed', count: combinedCompletedJobs.length },
+  ] : [
     { id: 'available', label: 'Requested', count: availableJobs.length },
-    { id: 'active', label: 'Accepted', count: activeJobs.length },
-    { id: 'completed', label: 'Completed', count: completedJobs.length },
+    { id: 'active', label: 'Accepted', count: combinedActiveJobs.length },
+    { id: 'completed', label: 'Completed', count: combinedCompletedJobs.length },
     { id: 'rejected', label: 'Rejected', count: rejectedJobs.length },
   ];
 
+  useEffect(() => {
+    if (isFleetDriver && (activeTab === 'available' || activeTab === 'rejected')) {
+      setActiveTab('active');
+    }
+  }, [isFleetDriver, activeTab]);
+
   return (
-    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
         <div className="flex items-center gap-3 max-w-lg mx-auto pb-2">
@@ -311,7 +379,7 @@ export default function AvailableJobs() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] bg-[#F8F8FF] dark:bg-slate-800 overflow-y-auto no-scrollbar pb-6"
+                className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-800 overflow-y-auto no-scrollbar pb-6"
               >
                 {(() => {
                   const job = currentJobs.find(j => j.id === expandedId);
@@ -374,7 +442,7 @@ export default function AvailableJobs() {
                         </div>
 
                         {/* ── MATERIAL SPECIFICATIONS CARD ── */}
-                        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
+                        <div className="bg-slate-200 dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
                           <div className="flex items-start justify-between">
                             <div>
                               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material-Type</p>
@@ -448,14 +516,18 @@ export default function AvailableJobs() {
                                   <Zap className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                                   <div>
                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Value</p>
-                                    <p className="text-xs font-black text-slate-900 dark:text-white">KSh {Math.floor((job.actual_weight_kg || job.bags || 0) * getPriceForMaterial(job.material || ''))}</p>
+                                    <p className="text-xs font-black text-slate-900 dark:text-white">
+                                      {job.is_market_trade 
+                                        ? `KSh ${Math.floor((job.weight_kg || job.actual_weight_kg || 0) * getPriceForMaterial(job.material || ''))}` 
+                                        : 'Pending Verification'}
+                                    </p>
                                   </div>
                                 </div>
                                 <div className="flex items-start gap-3">
                                   <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                                   <div>
                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Load</p>
-                                    <span className="text-xs font-black text-slate-900 dark:text-white">{job.actual_weight_kg || job.bags || 0} KG</span>
+                                    <span className="text-xs font-black text-slate-900 dark:text-white">{job.weight_kg || job.actual_weight_kg || 0} KG</span>
                                   </div>
                                 </div>
                               </>
@@ -600,7 +672,11 @@ export default function AvailableJobs() {
                               </p>
                               <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
                                 <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Value:</span>
-                                KSh {activeTab === 'completed' ? (job.total_price || job.fee || job.pay || 0).toLocaleString() : Math.floor((job.actual_weight_kg || job.bags || 0) * getPriceForMaterial(job.material || ''))}
+                                {activeTab === 'completed' 
+                                  ? `KSh ${(job.total_price || job.fee || job.pay || 0).toLocaleString()}`
+                                  : job.is_market_trade
+                                    ? `KSh ${Math.floor((job.weight_kg || job.actual_weight_kg || 0) * getPriceForMaterial(job.material || ''))}`
+                                    : 'Pending Verification'}
                               </p>
                             </div>
                           </div>

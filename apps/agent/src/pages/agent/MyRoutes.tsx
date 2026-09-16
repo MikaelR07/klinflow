@@ -209,7 +209,7 @@ export default function MyRoutes() {
   }, [tripDistance]);
 
   return (
-    <div className="fixed inset-0 bg-[#F8F8FF] dark:bg-slate-800 z-[100] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-slate-50 dark:bg-slate-800 z-[100] overflow-hidden flex flex-col">
       {/* ── TOP HUD (Earnings & Load) ── */}
       <div className="absolute top-4 left-4 right-4 z-[1000] pointer-events-none flex gap-3">
         <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl p-3 rounded-2xl shadow-xl border border-white/20 flex-1 pointer-events-auto flex items-center justify-between">
@@ -389,7 +389,7 @@ export default function MyRoutes() {
                         {item.pay > 0 ? `KSh ${item.pay.toLocaleString()}` : 'Pending'}
                       </p>
                       <p className="text-[9px] font-bold text-slate-400 tracking-widest uppercase mt-1">
-                        {item.actual_weight_kg ? `${item.actual_weight_kg} KG` : (item.bags ? `${item.bags} BAGS` : 'EST. WEIGHT')}
+                        {item.actual_weight_kg ? `${item.actual_weight_kg} KG` : (item.weight_kg ? `${item.weight_kg} KG` : 'EST. WEIGHT')}
                       </p>
                     </div>
                   </div>

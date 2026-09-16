@@ -53,7 +53,7 @@ export default function AgentTradeHub() {
   };
 
   return (
-    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors min-h-screen">
+    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors min-h-screen">
       {/* ── HEADER ── */}
       <div className="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] px-4 border-b border-slate-200 dark:border-slate-800 z-50 transition-colors">
         <div className="max-w-lg mx-auto space-y-1.5">

@@ -17,7 +17,7 @@ interface QueueItem {
   id: string;
   driver: string;
   registration: string;
-  type: 'Fleet' | 'Individual' | 'Walk-in';
+  type: 'Fleet' | 'Registered Seller' | 'Walk-in';
   expectedTonnage: number;
   arrivalTime: string;
   status: VehicleStatus;
@@ -28,7 +28,7 @@ interface QueueItem {
 export default function IntakeManagement() {
   const { isDarkMode } = useThemeStore();
   const navigate = useNavigate();
-  const { profile } = useAuthStore();
+  const { profile, currentCompanyId } = useAuthStore() as any;
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -36,6 +36,12 @@ export default function IntakeManagement() {
   const [incomingAlerts, setIncomingAlerts] = useState<any[]>([]);
   const [dismissedAlerts, setDismissedAlerts] = useState<string[]>([]);
   const [todayIntakeWeight, setTodayIntakeWeight] = useState(0);
+  const [stats, setStats] = useState({
+    incomingDeliveries: 0,
+    activeBays: 0,
+    expectedInbound: 0,
+    delayed: 0
+  });
 
   const fetchData = async () => {
     if (!profile?.id) return;
@@ -88,8 +94,74 @@ export default function IntakeManagement() {
         });
       }
 
+      // Add Marketplace Drop-offs
+      const { data: dropoffOrders } = await ((supabase
+         .from('marketplace_orders') as any)
+         .select('*, seller:seller_id(name, avatar_url)')
+         .eq('buyer_id', profile.id)
+         .eq('pickup_mode', 'dropoff')
+         .in('status', ['waiting', 'processing', 'confirmed']));
+         
+      const normalizedDropoffs = normalizeKeys(dropoffOrders || []) as any[];
+      for (const order of normalizedDropoffs) {
+         activeQueue.push({
+           id: order.id,
+           driver: order.seller?.name || 'Registered Seller',
+           registration: 'Self Drop-off',
+           type: 'Registered Seller',
+           expectedTonnage: (Number(order.quantity) || 0) / 1000,
+           arrivalTime: new Date(order.updatedAt || order.createdAt).toLocaleTimeString(),
+           status: 'Waiting',
+           material: order.material || 'Mixed',
+         });
+      }
+
+      // Add RFQ/Marketplace Drop-offs from fulfillment_orders
+      const { data: fulfillmentOrders } = await supabase
+        .from('fulfillment_orders')
+        .select(`
+          id,
+          status,
+          updated_at,
+          created_at,
+          delivery_method,
+          seller:profiles!seller_id(name, avatar_url),
+          proposal:rfq_offers!proposal_id(offered_weight),
+          rfq:marketplace_rfqs!rfq_id(material)
+        `)
+        .or(`buyer_id.eq.${profile.id},organization_id.eq.${currentCompanyId || profile.id}`)
+        .eq('delivery_method', 'self_drop')
+        .eq('status', 'pending_coordination');
+
+      const normalizedFulfillment = normalizeKeys(fulfillmentOrders || []) as any[];
+      for (const order of normalizedFulfillment) {
+         activeQueue.push({
+           id: order.id,
+           driver: order.seller?.name || 'RFQ Seller',
+           registration: 'Self Drop-off (RFQ)',
+           type: 'Registered Seller',
+           expectedTonnage: (Number(order.proposal?.offeredWeight) || 0) / 1000,
+           arrivalTime: new Date(order.updatedAt || order.createdAt).toLocaleTimeString(),
+           status: 'Waiting',
+           material: order.rfq?.material || 'Mixed',
+         });
+      }
+
       setQueue(activeQueue);
       setIncomingAlerts(alerts);
+      
+      // Calculate dynamic KPIs
+      const totalExpectedInbound = activeQueue.reduce((acc, curr) => acc + curr.expectedTonnage, 0);
+      const hubConfig = (profile?.hubConfig || {}) as any;
+      const receivingBays = hubConfig.receiving_bays || [];
+      const activeBaysCount = receivingBays.filter((b: any) => b.status === 'Occupied').length;
+      
+      setStats({
+        incomingDeliveries: activeQueue.length,
+        activeBays: activeBaysCount,
+        expectedInbound: totalExpectedInbound,
+        delayed: 0 // Will implement full delay logic later
+      });
       
       // Fetch Today's Intake (approximate for demo)
       const { data: hubAssets } = await ((supabase
@@ -118,6 +190,12 @@ export default function IntakeManagement() {
         schema: 'public', 
         table: 'profiles',
         filter: profile?.agentAccountType === 'company_admin' ? `company_id=eq.${profile?.id}` : undefined
+      }, () => fetchData())
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'marketplace_orders',
+        filter: `buyer_id=eq.${profile?.id}`
       }, () => fetchData())
       .subscribe();
 
@@ -151,8 +229,8 @@ export default function IntakeManagement() {
     },
     {
       id: 'individual',
-      title: 'Registered Sellers',
-      description: 'Independent collectors who use the Klinflow app. Lookup via Klin-ID to access their warehouse logs.',
+      title: 'Registered Agent',
+      description: 'Independent collectors who use the Klinflow app. Lookup via Klin-ID for fast manual entry.',
       icon: <Smartphone className="w-8 h-8" />,
       color: 'bg-blue-500',
       lightColor: 'bg-blue-50 dark:bg-blue-500/10',
@@ -186,10 +264,11 @@ export default function IntakeManagement() {
             <p className={`text-[11px] mt-1 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Monitor inbound traffic and initiate the intake process for agents.</p>
           </div>
           <div className="flex gap-3">
-            <button className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 border transition-colors ${
-              isDarkMode ? 'bg-slate-800 border-slate-700 text-white hover:bg-slate-700' : 'bg-white border-[#e0e3eb] text-slate-900 hover:bg-slate-50'
-            }`}>
-              <ListFilter className="w-4 h-4" /> Export Log
+            <button 
+              onClick={() => navigate('/operations/intake/history')}
+              className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+            >
+              <ListFilter className="w-4 h-4" /> Intake History
             </button>
           </div>
         </div>
@@ -284,14 +363,13 @@ export default function IntakeManagement() {
           {/* Right Column: KPIs + Queue List */}
           <div className="flex-1 flex flex-col gap-2">
             
-            {/* Top Metrics (Now 5) */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            {/* Top Metrics (Now 4) */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
               {[
-                { label: 'Incoming Deliveries', value: '5', trend: '+2 since last hour', icon: Truck, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
-                { label: 'Active Bays', value: '4', trend: '-4m vs yesterday', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10' },
-                { label: 'Expected Inbound', value: '554KG', trend: 'From waiting vehicles', icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-500/10' },
-                { label: 'Need Inspection', value: '12', trend: 'Vehicles on duty', icon: Truck, color: 'text-indigo-500', bg: 'bg-indigo-50 dark:bg-indigo-500/10' },
-                { label: 'Delayed', value: '14', trend: 'Across all channels', icon: AlertCircle, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
+                { label: 'Incoming Deliveries', value: stats.incomingDeliveries.toString(), trend: 'Active in queue', icon: Truck, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' },
+                { label: 'Active Bays', value: stats.activeBays.toString(), trend: 'Currently occupied', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10' },
+                { label: 'Expected Inbound', value: `${(stats.expectedInbound * 1000).toFixed(0)}KG`, trend: 'From waiting vehicles', icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-500/10' },
+                { label: 'Delayed', value: stats.delayed.toString(), trend: 'Across all channels', icon: AlertCircle, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' },
 
               ].map((stat, i) => (
                 <div key={i} className={`p-4 rounded-xl border flex flex-col ${isDarkMode ? 'bg-slate-800 border-slate-700/50' : 'bg-white border-[#e0e3eb]'}`}>
@@ -300,11 +378,11 @@ export default function IntakeManagement() {
                       <stat.icon className={`w-5 h-5 ${stat.color}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-[9px] xl:text-[10px] font-bold uppercase tracking-widest truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{stat.label}</p>
+                      <p className={`text-[9px] xl:text-[12px] font-bold uppercase tracking-widest truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{stat.label}</p>
                       <h2 className={`text-lg xl:text-xl font-bold tracking-tighter truncate ${isDarkMode ? 'text-white' : 'text-[#131722]'}`}>{stat.value}</h2>
                     </div>
                   </div>
-                  <p className={`text-[10px] font-medium truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{stat.trend}</p>
+                  <p className={`text-[11px] font-semibold truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{stat.trend}</p>
                 </div>
               ))}
             </div>

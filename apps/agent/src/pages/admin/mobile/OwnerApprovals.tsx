@@ -134,9 +134,9 @@ export default function OwnerApprovals() {
 
   const summaryCards = [
     { label: 'All Pending', count: totalPending, color: 'text-white', bg: 'bg-emerald-500 dark:bg-emerald-500', borderColor: 'border-emerald-200 dark:border-emerald-500/20', icon: Receipt },
-    { label: 'Onboarding', count: pendingOnboarding.length, color: 'text-blue-500', bg: 'bg-[#F8F8FF] dark:bg-blue-500', borderColor: 'border-[#F8F8FF  ] dark:border-blue-500/20', icon: Users },
-    { label: 'Deposit', count: pendingDeposits.length, color: 'text-amber-500', bg: 'bg-[#F8F8FF] dark:bg-amber-500', borderColor: 'border-[#F8F8FF] dark:border-amber-500/20', icon: Wallet },
-    { label: 'Override', count: pendingOverrides.length, color: 'text-rose-500', bg: 'bg-[#F8F8FF] dark:bg-rose-500', borderColor: 'border-[#F8F8FF] dark:border-rose-500/20', icon: DollarSign },
+    { label: 'Onboarding', count: pendingOnboarding.length, color: 'text-blue-500', bg: 'bg-slate-50 dark:bg-blue-500', borderColor: 'border-[#F8F8FF  ] dark:border-blue-500/20', icon: Users },
+    { label: 'Deposit', count: pendingDeposits.length, color: 'text-amber-500', bg: 'bg-slate-50 dark:bg-amber-500', borderColor: 'border-[#F8F8FF] dark:border-amber-500/20', icon: Wallet },
+    { label: 'Override', count: pendingOverrides.length, color: 'text-rose-500', bg: 'bg-slate-50 dark:bg-rose-500', borderColor: 'border-[#F8F8FF] dark:border-rose-500/20', icon: DollarSign },
   ];
 
   // Render a section
@@ -154,7 +154,7 @@ export default function OwnerApprovals() {
     const isCollapsed = collapsedSections[key];
     const Icon = icon;
     return (
-      <div className="bg-[#F8F8FF] dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
         {/* Section Header */}
         <button 
           onClick={() => toggleSection(key)}
@@ -201,7 +201,7 @@ export default function OwnerApprovals() {
     <div className="min-h-screen animate-in fade-in duration-300">
       
       {/* ── OWN TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-950 border-b border-slate-100 dark:border-slate-900 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-900 shadow-sm">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -254,7 +254,7 @@ export default function OwnerApprovals() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search pending requests..."
-              className="w-full pl-10 pr-4 py-3 bg-[#F8F8FF] dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-white placeholder:text-slate-400 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+              className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-white placeholder:text-slate-400 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
             />
           </div>
         </div>

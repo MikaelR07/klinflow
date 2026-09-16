@@ -92,7 +92,7 @@ export default function ReviewsPage() {
   }, [recentReviews]);
 
   return (
-    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800  pb-2">
+    <div className="flex flex-col bg-slate-50 dark:bg-slate-800  pb-2">
       {/* FIXED TOP NAV */}
       <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-white dark:bg-slate-800 shadow-sm border-b border-slate-100 dark:border-slate-800">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
@@ -100,7 +100,7 @@ export default function ReviewsPage() {
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => navigate(-1)} 
-                className="p-2 -ml-2 bg-[#F8F8FF] dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all shadow-sm"
+                className="p-2 -ml-2 bg-slate-50 dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all shadow-sm"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>

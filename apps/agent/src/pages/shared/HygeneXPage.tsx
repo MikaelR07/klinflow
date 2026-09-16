@@ -116,7 +116,7 @@ const Waveform = ({ isListening, isTyping }) => {
 
 export default function HygeneXPage() {
   const { role } = useAuthStore();
-  const { messages, isTyping, metrics, initChat, stopChat, sendMessage } = useHygenexStore();
+  const { messages, isTyping, initChat, stopChat, sendMessage } = useHygenexStore();
   const [inputText, setInputText] = useState("");
   const chatBottomRef = useRef(null);
   
@@ -213,7 +213,7 @@ export default function HygeneXPage() {
       </div>
 
       {/* 1. CHAT ENGINE (FULL WIDTH) */}
-      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] pb-[120px] flex flex-col relative z-10 overflow-hidden">
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] pb-[20px] flex flex-col relative z-10 overflow-hidden">
          {/* Messages */}
         <div className="flex-1 overflow-y-auto px-6 py-10 space-y-10">
           <div className="max-w-3xl mx-auto space-y-10">
@@ -224,7 +224,7 @@ export default function HygeneXPage() {
                 </div>
                 <h2 className="text-xl font-bold text-slate-100 dark:text-white tracking-tight mb-2 text-center">{getGreeting()}, how can I help you?</h2>
                 <p className="text-sm text-slate-100 mb-10 text-center max-w-sm">
-                  I'm HygeneX, your smart waste intelligence assistant. Select a topic or ask me anything.
+                  I'm HygeneX, your smart recycling coach. Select a topic or ask me anything.
                 </p>
                 <div className="grid grid-cols-2 gap-3 w-full max-w-lg px-2">
                   {(() => {

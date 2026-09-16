@@ -52,13 +52,7 @@ const MOCK_TOTAL_SPEND = 375000;
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ef4444', '#14b8a6'];
 
-const playNotificationSound = () => {
-  try {
-    const audio = new Audio('/notification.mp3');
-    audio.volume = 0.7;
-    audio.play().catch(() => { });
-  } catch (e) { /* silent */ }
-};
+
 
 export default function AgentDisbursements() {
   const navigate = useNavigate();
@@ -86,7 +80,6 @@ useEffect(() => {
          table: 'fund_requests',
          filter: `company_id=eq.${currentCompanyId}` // Use currentCompanyId for multi-tenancy
        }, async (payload) => {
-         playNotificationSound();
          const newReq = payload.new as any;
          const { data: driverData } = await supabase
            .from('profiles')

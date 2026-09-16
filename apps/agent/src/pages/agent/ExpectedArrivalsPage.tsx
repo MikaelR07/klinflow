@@ -191,6 +191,16 @@ export default function ExpectedArrivalsPage() {
 
       if (rpcError) throw rpcError;
 
+      if (payingOrder.booking_id) {
+        // Ensure category and sourcing tags are natively logged to the asset for clean Hub intake and Agent warehouse displaying
+        await supabase.from('assets')
+          .update({
+             material_category: verifiedData.category || verifiedData.materialCategory,
+             sourcing_tag: 'Seller'
+          })
+          .eq('booking_id', payingOrder.booking_id);
+      }
+
       setOrders(prev => prev.map(o =>
         o.id === payingOrder.id ? { ...o, status: 'completed', total_price: finalPrice, quantity: weight } : o
       ));
@@ -211,7 +221,7 @@ export default function ExpectedArrivalsPage() {
   ];
 
   return (
-    <div className="flex flex-col  bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col  bg-slate-50 dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV ── */}
       <div className="h-[calc(env(safe-area-inset-top,1rem)+0.6rem)]" />
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-1 px-4 border-b border-slate-200 dark:border-slate-900 max-w-lg mx-auto">

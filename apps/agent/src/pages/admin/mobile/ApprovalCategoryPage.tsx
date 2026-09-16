@@ -210,13 +210,13 @@ export default function ApprovalCategoryPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-800">
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-slate-50 dark:bg-slate-900 shadow-sm border-b border-slate-100 dark:border-slate-800">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => navigate('/approvals')}
-                className="p-2 -ml-2 bg-[#F8F8FF] dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 shadow-sm"
+                className="p-2 -ml-2 bg-slate-50 dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 shadow-sm"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
@@ -255,7 +255,7 @@ export default function ApprovalCategoryPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={`Search ${config.title.toLowerCase()}...`}
-              className="w-full pl-10 pr-4 py-3 bg-[#F8F8FF] dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-white placeholder:text-slate-400 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
+              className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-white placeholder:text-slate-400 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20"
             />
           </div>
         </div>
@@ -304,7 +304,7 @@ export default function ApprovalCategoryPage() {
               </span>
             </div>
 
-            <div className="bg-[#F8F8FF] dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden divide-y divide-slate-50 dark:divide-slate-800/50">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden divide-y divide-slate-50 dark:divide-slate-800/50">
               {filteredItems.map((item, i) => (
                 <button
                   key={item.id || i}

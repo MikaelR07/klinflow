@@ -30,31 +30,11 @@ async function invoke(body: any) {
   return res.json();
 }
 
-interface UserMessagePayload {
-  userMessage: string;
-  userId: string;
-  chatHistory?: any[];
-  userRole?: string;
-}
-
 export const callHygeneXAgent = {
-  userMessage: ({ userMessage, userId, chatHistory = [], userRole = 'user' }: UserMessagePayload) =>
-    invoke({
-      type: 'user_message',
-      userId,
-      payload: { userMessage, chatHistory, userRole },
-    }),
-
   visionScan: (userId: string, imageBase64: string, materialHint?: string, validMaterials?: string[]) =>
     invoke({
       type: 'vision_scan',
       userId,
       payload: { imageBase64, materialHint, validMaterials },
-    }),
-
-  scheduled: (checkType: 'daily_report' | 'reward_audit' | 'agent_dispatch' = 'daily_report') =>
-    invoke({
-      type: 'scheduled',
-      payload: { checkType },
     }),
 };

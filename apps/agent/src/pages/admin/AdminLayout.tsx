@@ -28,7 +28,7 @@ export default function AdminLayout() {
       
       {/* Fixed Top Bar — Only on homepage */}
       {isHomePage && (
-        <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-950 backdrop-blur-xl border-b border-slate-100 dark:border-slate-900 shadow-sm">
+        <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-slate-50 dark:bg-slate-950 backdrop-blur-xl border-b border-slate-100 dark:border-slate-900 shadow-sm">
           <div className="pt-[calc(env(safe-area-inset-top,1rem)+1.1rem)] pb-0.5 px-4 flex items-center justify-between">
             
             <div className="flex items-center gap-2">

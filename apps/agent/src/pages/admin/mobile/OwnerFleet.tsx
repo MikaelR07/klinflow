@@ -65,7 +65,7 @@ export default function OwnerFleet() {
     <div className="animate-in fade-in duration-300">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-800 border-b border-slate-100 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-800 shadow-sm">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -153,7 +153,7 @@ export default function OwnerFleet() {
               placeholder="Search agents by name or ID..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#F8F8FF] dark:bg-slate-800 border border-slate-200 dark:border-slate-800 focus:border-emerald-500 rounded-xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
+              className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 focus:border-emerald-500 rounded-xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
             />
           </div>
 
@@ -166,7 +166,7 @@ export default function OwnerFleet() {
                 className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 rounded-xl text-[11px] font-bold transition-all shrink-0 border ${
                   activeStatus === f.key
                     ? 'bg-primary dark:bg-white border-primary dark:border-white text-white dark:text-slate-600 shadow-sm'
-                    : 'bg-[#F8F8FF] dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-800'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-800'
                 }`}
               >
                 {f.dot && <span className={`w-2 h-2 rounded-full ${f.dot}`} />}
@@ -180,13 +180,13 @@ export default function OwnerFleet() {
         <div className="space-y-0.5">
           {isLoading ? (
             <div className="space-y-3">
-              {[1, 2, 3].map(i => <div key={i} className="h-28 bg-[#F8F8FF] dark:bg-slate-900 rounded-xl animate-pulse border border-slate-100 dark:border-slate-800" />)}
+              {[1, 2, 3].map(i => <div key={i} className="h-28 bg-slate-50 dark:bg-slate-900 rounded-xl animate-pulse border border-slate-100 dark:border-slate-800" />)}
             </div>
           ) : filteredDrivers.length > 0 ? (
             filteredDrivers.map((agent: any) => (
               <div
                 key={agent.id}
-                className="w-full bg-[#F8F8FF] dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-all cursor-pointer shadow-sm active:scale-[0.98]"
+                className="w-full bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-800 overflow-hidden transition-all cursor-pointer shadow-sm active:scale-[0.98]"
                 onClick={() => navigate(`/fleet/${agent.id}`, { state: { agent } })}
               >
                 <div className="p-3 flex gap-3">
@@ -248,7 +248,7 @@ export default function OwnerFleet() {
               </div>
             ))
           ) : (
-            <div className="text-center py-16 bg-[#F8F8FF] dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+            <div className="text-center py-16 bg-slate-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
               <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
               <h3 className="text-base font-black text-slate-900 dark:text-white mb-1">No agents found</h3>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Adjust your search or filters.</p>

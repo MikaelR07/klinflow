@@ -40,14 +40,48 @@ export default function AgentWarehouse() {
   const { profile, subscribeToProfileChanges } = useAuthStore() as any;
   const { assets } = useAssetStore();
   const { addNotification } = useNotificationStore();
-  const { materialPrices, fetchMaterialPrices, categories, fetchCategories } = useServiceStore();
+  const { materialPrices, fetchMaterialPrices, categories, fetchCategories, allCategories, fetchAllCategories } = useServiceStore();
   const { agentConfig, fetchAgentConfig } = useAgentStore();
   const [realAssets, setRealAssets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [materialSales, setMaterialSales] = useState([]);
   const [salesLoading, setSalesLoading] = useState(true);
 
-  // Removed materialNameMap and resolveMaterialName in favor of plain-english material_type strings
+  const resolveMaterialName = (asset: any) => {
+    const rawType = asset.material_type;
+    if (!rawType) return 'Unknown Material';
+    
+    // If it's a UUID, try to resolve it from our stores
+    if (rawType.length > 20 && rawType.includes('-')) {
+      const subcat = materialPrices?.find((m: any) => m.id === rawType);
+      if (subcat?.material_name) return subcat.material_name;
+      
+      const cat = categories?.find((c: any) => c.id === rawType);
+      if (cat?.label) {
+        // If material_type is exactly the category UUID, but we have a grade, the grade is probably the specific material!
+        if (asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') {
+          return asset.grade;
+        }
+        return cat.label; // Fallback to category if no specific material
+      }
+      
+      const allCat = allCategories?.find((c: any) => c.id === rawType);
+      if (allCat?.label) return allCat.label;
+      
+      // If it's an unresolved UUID (e.g., legacy data), show a clean fallback instead of the full UUID
+      return asset.grade && asset.grade.length > 2 ? asset.grade : `Legacy Material`;
+    }
+    
+    // If it's just a regular string slug (e.g., 'plastic', 'HDPE')
+    // If it's a category slug like 'plastic' but we have a specific grade, show the grade!
+    if (['plastic', 'metal', 'paper', 'glass', 'e_waste'].includes(rawType.toLowerCase())) {
+        if (asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') {
+            return asset.grade;
+        }
+    }
+
+    return rawType.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+  };
 
   // Stock Adjustment State
   const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
@@ -77,6 +111,7 @@ export default function AgentWarehouse() {
     fetchCargo();
     fetchMaterialPrices();
     fetchCategories();
+    fetchAllCategories();
     if (!agentConfig) {
       fetchAgentConfig();
     }
@@ -477,22 +512,23 @@ export default function AgentWarehouse() {
             ) : (
               <div className="space-y-2 pr-1">
                 {verifiedAssets.slice(0, 4).map((asset: any) => {
-                  const rawType = asset.material_type || 'Unknown';
-                  // Resolve UUID-style material_type to a human name from materialPrices
-                  const isUUID = rawType.length > 20 && rawType.includes('-');
-                  const resolved = isUUID 
-                    ? materialPrices.find((m: any) => m.id === rawType)?.material_name 
-                    : null;
-                  const displayName = (resolved || rawType).replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+                  const displayName = resolveMaterialName(asset);
                   
                   return (
                     <div key={asset.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400/50 transition-all group">
                       
                       {/* Left: Name + Date + ID */}
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-[13px] text-slate-900 dark:text-white capitalize truncate leading-tight">
-                          {displayName}
-                        </h4>
+                        <div className="flex flex-col">
+                          <h4 className="font-bold text-[13px] text-slate-900 dark:text-white capitalize truncate leading-tight">
+                            {displayName}
+                          </h4>
+                          {asset.material_category && (
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                              {asset.material_category.replace(/_/g, ' ')}
+                            </span>
+                          )}
+                        </div>
                         <div className="flex flex-col gap-1.5 mt-1.5">
                           <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
                             {new Date(asset.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
@@ -579,11 +615,18 @@ export default function AgentWarehouse() {
                   <div className="space-y-3">
                     {verifiedAssets.map((asset: any) => {
                       const rawType = asset.material_type || 'Unknown';
-                      // Resolve UUID-style material_type to a human name from materialPrices
                       const isUUID = rawType.length > 20 && rawType.includes('-');
-                      const resolved = isUUID 
-                        ? materialPrices.find((m: any) => m.id === rawType)?.material_name 
-                        : null;
+                      let resolved = null;
+                      if (isUUID) {
+                        const subcat = materialPrices.find((m: any) => m.id === rawType);
+                        if (subcat) resolved = subcat.material_name;
+                        else if (asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') resolved = asset.grade;
+                      } else {
+                        if (['plastic', 'metal', 'paper', 'glass', 'e_waste'].includes(rawType.toLowerCase()) && asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') {
+                            resolved = asset.grade;
+                        }
+                      }
+                      
                       const displayName = (resolved || rawType).replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
                       const currentVal = adjustingWeights[asset.id] !== undefined ? adjustingWeights[asset.id] : asset.weight_kg;
                       

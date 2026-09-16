@@ -15,120 +15,76 @@ import {
   Filter
 } from 'lucide-react';
 
-type NotificationType = 'system' | 'operations' | 'finance' | 'fleet' | 'alert';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 
-interface NotificationItem {
-  id: string;
-  title: string;
-  message: string;
-  time: string;
-  type: NotificationType;
-  isRead: boolean;
-}
+type NotificationType = 'system' | 'operations' | 'finance' | 'fleet' | 'alert' | 'success' | 'info' | 'warning' | 'reward';
 
-const MOCK_NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: '1',
-    title: 'Payment Received',
-    message: 'Hub wallet has been credited with $4,500.00 from main treasury.',
-    time: '10 mins ago',
-    type: 'finance',
-    isRead: false
-  },
-  {
-    id: '2',
-    title: 'New Dispatch Assigned',
-    message: 'Agent John Doe has been assigned to pickup request #REQ-9921.',
-    time: '1 hour ago',
-    type: 'fleet',
-    isRead: false
-  },
-  {
-    id: '3',
-    title: 'System Maintenance',
-    message: 'Scheduled downtime for server upgrade will begin at 2:00 AM UTC.',
-    time: '3 hours ago',
-    type: 'system',
-    isRead: true
-  },
-  {
-    id: '4',
-    title: 'Material Processing Alert',
-    message: 'PET sorting machine #2 reporting lower efficiency. Maintenance recommended.',
-    time: '5 hours ago',
-    type: 'operations',
-    isRead: false
-  },
-  {
-    id: '5',
-    title: 'Security Alert',
-    message: 'Multiple failed login attempts detected from unknown IP.',
-    time: 'Yesterday',
-    type: 'alert',
-    isRead: true
-  },
-  {
-    id: '6',
-    title: 'Inventory Threshold Reached',
-    message: 'HDPE stock has reached maximum capacity at Zone A.',
-    time: 'Yesterday',
-    type: 'operations',
-    isRead: true
-  },
-  {
-    id: '7',
-    title: 'Agent Payout Processed',
-    message: 'Daily disbursements of $1,250.00 completed successfully.',
-    time: '2 days ago',
-    type: 'finance',
-    isRead: true
-  }
-];
-
-const getTypeConfig = (type: NotificationType) => {
+const getTypeConfig = (type: string) => {
   switch (type) {
     case 'finance':
+    case 'reward':
       return { icon: Wallet, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/10' };
     case 'fleet':
+    case 'success':
       return { icon: Truck, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/10' };
     case 'operations':
       return { icon: Factory, color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-500/10' };
     case 'alert':
+    case 'warning':
       return { icon: AlertTriangle, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10' };
     case 'system':
+    case 'info':
     default:
       return { icon: Info, color: 'text-slate-500 dark:text-slate-400', bg: 'bg-slate-100 dark:bg-slate-800' };
   }
 };
 
 export default function Notifications() {
-  const [notifications, setNotifications] = useState<NotificationItem[]>(MOCK_NOTIFICATIONS);
+  const { notifications, markAsRead, markAllAsRead } = useNotificationStore();
+  const { profile } = useAuthStore();
   const [activeTab, setActiveTab] = useState<'all' | 'unread' | 'system' | 'operations' | 'finance'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleMarkAllRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    if (profile?.id) {
+      markAllAsRead(profile.id, 'hub');
+    }
   };
 
   const handleToggleRead = (id: string) => {
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: !n.isRead } : n));
+    const notif = notifications.find(n => n.id === id);
+    if (notif && !notif.read) {
+      markAsRead(id);
+    }
   };
 
   const filteredNotifications = notifications.filter(n => {
     if (searchQuery) {
       if (!n.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
-          !n.message.toLowerCase().includes(searchQuery.toLowerCase())) {
+          !(n.content || '').toLowerCase().includes(searchQuery.toLowerCase())) {
         return false;
       }
     }
-    if (activeTab === 'unread') return !n.isRead;
+    if (activeTab === 'unread') return !n.read;
     if (activeTab === 'system') return n.type === 'system' || n.type === 'alert';
     if (activeTab === 'operations') return n.type === 'operations' || n.type === 'fleet';
     if (activeTab === 'finance') return n.type === 'finance';
     return true;
   });
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const formatTime = (isoString: string) => {
+    if (!isoString) return 'Just now';
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} mins ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  };
 
   return (
     <div className="flex h-full w-full relative bg-transparent overflow-hidden">
@@ -221,12 +177,12 @@ export default function Notifications() {
                         key={notification.id}
                         className={`
                           p-4 md:p-5 flex gap-4 hover:bg-slate-50/50 dark:hover:bg-slate-900/30 transition-colors group relative cursor-pointer
-                          ${!notification.isRead ? 'bg-blue-50/30 dark:bg-blue-900/10' : ''}
+                          ${!notification.read ? 'bg-blue-50/30 dark:bg-blue-900/10' : ''}
                         `}
                         onClick={() => handleToggleRead(notification.id)}
                       >
                         {/* Unread Indicator Line */}
-                        {!notification.isRead && (
+                        {!notification.read && (
                           <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
                         )}
                         
@@ -236,16 +192,16 @@ export default function Notifications() {
                         
                         <div className="flex-1 min-w-0 pr-4">
                           <div className="flex items-start justify-between gap-2 mb-1">
-                            <h4 className={`text-sm truncate pr-4 ${!notification.isRead ? 'font-bold text-[#131722] dark:text-white' : 'font-medium text-slate-700 dark:text-slate-300'}`}>
+                            <h4 className={`text-sm truncate pr-4 ${!notification.read ? 'font-bold text-[#131722] dark:text-white' : 'font-medium text-slate-700 dark:text-slate-300'}`}>
                               {notification.title}
                             </h4>
                             <div className="flex items-center gap-1.5 text-slate-400 shrink-0">
                               <Clock className="w-3 h-3" />
-                              <span className="text-[10px] font-medium whitespace-nowrap">{notification.time}</span>
+                              <span className="text-[10px] font-medium whitespace-nowrap">{formatTime(notification.createdAt)}</span>
                             </div>
                           </div>
-                          <p className={`text-xs leading-relaxed ${!notification.isRead ? 'text-slate-600 dark:text-slate-300' : 'text-slate-500 dark:text-slate-400'}`}>
-                            {notification.message}
+                          <p className={`text-xs leading-relaxed ${!notification.read ? 'text-slate-600 dark:text-slate-300' : 'text-slate-500 dark:text-slate-400'}`}>
+                            {notification.content}
                           </p>
                         </div>
                         
@@ -253,9 +209,9 @@ export default function Notifications() {
                            <button 
                             onClick={(e) => { e.stopPropagation(); handleToggleRead(notification.id); }}
                             className="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-[#131722] dark:hover:text-white transition-colors"
-                            title={notification.isRead ? "Mark as unread" : "Mark as read"}
+                            title={notification.read ? "Mark as unread" : "Mark as read"}
                            >
-                             {notification.isRead ? <Info className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4 text-blue-500" />}
+                             {notification.read ? <Info className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4 text-blue-500" />}
                            </button>
                         </div>
                       </div>

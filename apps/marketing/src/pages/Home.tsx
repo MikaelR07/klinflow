@@ -888,7 +888,7 @@ export default function Home() {
               Native Product Suite
             </h3>
             <p className=" text-slate-700 dark:text-slate-300 font-medium">
-              Four specialized applications, one unified circular economy. Built for every stakeholder in the recycling value chain.
+              Multi Persona Specialized applications, one unified circular economy. Built for every stakeholder in the recycling value chain.
             </p>
           </motion.div>
 
@@ -937,27 +937,46 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Agent App */}
-            <div className="col-span-1 md:col-span-6 lg:col-span-2 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] bg-green-700 border border-green-700/50 hover:border-green-600 shadow-2xl">
+            {/* Solo Agent App */}
+            <div className="col-span-1 md:col-span-3 lg:col-span-2 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] bg-green-700 border border-green-700/50 hover:border-green-600 shadow-2xl">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 bg-white/10">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+              <h4 className="text-xl font-bold mb-3 relative z-10 text-white">
+                Solo Agent App
+              </h4>
+              <p className="text-sm leading-relaxed relative z-10 mb-4 text-green-100">
+                Built for on-ground aggregators and scouts to evaluate materials, dispatch tasks, and manage seller relationships.
+              </p>
+              <ul className="mt-auto space-y-2 text-xs font-medium relative z-10 text-green-50">
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> On-the-spot AI Material Grading</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Instant Digital Payouts to Sellers</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Local CRM & Relationship Management</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Live Local Market Pricing Feeds</li>
+              </ul>
+            </div>
+
+            {/* Fleet Driver App */}
+            <div className="col-span-1 md:col-span-3 lg:col-span-2 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] bg-blue-700 border border-blue-700/50 hover:border-blue-600 shadow-2xl">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 bg-white/10">
                 <Truck className="w-6 h-6 text-white" />
               </div>
               <h4 className="text-xl font-bold mb-3 relative z-10 text-white">
-                Agent & Fleet App
+                Fleet Driver App
               </h4>
-              <p className="text-sm leading-relaxed relative z-10 mb-4 text-green-100">
-                Built for field agents and drivers to levarage multi-stop AI route optimization, perfom on site valuations and manage daily collections efficiently.
+              <p className="text-sm leading-relaxed relative z-10 mb-4 text-blue-100">
+                Built for logistics teams to optimize pickups, track vehicle capacity, and ensure efficient and safe transit.
               </p>
-              <ul className="mt-auto space-y-2 text-xs font-medium relative z-10 text-green-50">
-                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> AI-powered Multi-stop Route Optimization</li>
-                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> On-the-spot Real-Time Material Grading</li>
-                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Pending Job Radar & Dispatch</li>
-                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Fleet Revenue Tracking</li>
+              <ul className="mt-auto space-y-2 text-xs font-medium relative z-10 text-blue-50">
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> AI Multi-stop Route Optimization</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Live Vehicle Capacity Tracking</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Digital Proof of Collection (e-Sign)</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Fleet Maintenance & Revenue Tracking</li>
               </ul>
             </div>
 
             {/* Hub App */}
-            <div className="col-span-1 md:col-span-3 lg:col-span-3 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] bg-teal-700 border border-teal-700/50 hover:border-teal-600 shadow-2xl">
+            <div className="col-span-1 md:col-span-3 lg:col-span-2 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] bg-teal-700 border border-teal-700/50 hover:border-teal-600 shadow-2xl">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 bg-white/10">
                 <Warehouse className="w-6 h-6 text-white" />
               </div>
@@ -967,20 +986,16 @@ export default function Home() {
               <p className="text-sm leading-relaxed relative z-10 mb-4 text-teal-100">
                 The enterprise control center for Aggregators and Material Recovery Facilities to scale operations.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-auto">
-                <ul className="space-y-2 text-xs font-medium relative z-10 text-teal-50">
-                  <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Hyper-Local RFQ Broadcasting</li>
-                  <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Multi-Agent Enterprise Architecture</li>
-                </ul>
-                <ul className="space-y-2 text-xs font-medium relative z-10 text-teal-50">
-                  <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Automated Fulfillment Tracking</li>
-                  <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Segregated "Market" vs "My RFQ" Views</li>
-                </ul>
-              </div>
+              <ul className="mt-auto space-y-2 text-xs font-medium relative z-10 text-teal-50">
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Hyper-Local RFQ Broadcasting</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Multi-Agent Enterprise Architecture</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Automated Fulfillment Tracking</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Segregated "Market" vs "My RFQ" Views</li>
+              </ul>
             </div>
             
             {/* Business App */}
-            <div className="col-span-1 md:col-span-3 lg:col-span-3 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] bg-emerald-600 border border-emerald-800/50 hover:border-emerald-700 shadow-2xl">
+            <div className="col-span-1 md:col-span-3 lg:col-span-2 p-8 rounded-[32px] relative overflow-hidden group transition-all flex flex-col justify-start min-h-[240px] bg-emerald-600 border border-emerald-800/50 hover:border-emerald-700 shadow-2xl">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 relative z-10 bg-white/10">
                 <LineChart className="w-6 h-6 text-white" />
               </div>
@@ -989,16 +1004,12 @@ export default function Home() {
               </h4>
               <p className="text-sm leading-relaxed relative z-10 mb-4 text-emerald-100">
                 Designed for large-scale industrial buyers to secure consistent high-volume material lots through transparent escrow trades and verifies material provenance.              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-auto">
-                <ul className="space-y-2 text-xs font-medium relative z-10 text-emerald-50">
-                  <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Full Supply Chain Traceability</li>
-                  <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Escrow-secured B2B Trading</li>
-                </ul>
-                <ul className="space-y-2 text-xs font-medium relative z-10 text-emerald-50">
-                  <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Verified Material Provenance</li>
-                  <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Live Commodity Dashboard</li>
-                </ul>
-              </div>
+              <ul className="mt-auto space-y-2 text-xs font-medium relative z-10 text-emerald-50">
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Full Supply Chain Traceability</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Escrow-secured B2B Trading</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Verified Material Provenance</li>
+                <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400 mt-1.5 shrink-0" /> Live Commodity Dashboard</li>
+              </ul>
             </div>
           </motion.div>
 
@@ -1078,7 +1089,7 @@ export default function Home() {
               Empowering Communities. <br className="hidden md:block" /> Changing Lives.
             </h3>
             <p className={`text-sm md:text-base leading-relaxed font-medium ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}>
-              Klinflow isn't just an enterprise platform; it's a catalyst for global change. By transforming everyday waste into a verifiable digital asset, we're creating sustainable, dignified income streams for millions of households and independent collection agents. Our technology bridges the gap between grassroots collectors and massive industrial processors—ensuring transparent pricing, cleaner neighborhoods, and a thriving circular economy where every stakeholder benefits from doing the right thing.
+              Klinflow isn't just an enterprise platform; it's a catalyst for global change. By transforming everyday waste into a verifiable digital asset, we're creating sustainable, dignified income streams for millions of sellers and independent collection agents. Our technology bridges the gap between grassroots collectors and massive industrial processors—ensuring transparent pricing, cleaner neighborhoods, and a thriving circular economy where every stakeholder benefits from doing the right thing.
             </p>
           </div>
 

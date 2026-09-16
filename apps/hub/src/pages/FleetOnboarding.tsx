@@ -146,8 +146,17 @@ export default function FleetOnboarding() {
   const rejectionRate = totalApps > 0 ? Math.round((rejectedApps / totalApps) * 100) : 0;
 
   const handleDocumentAction = (docKey: string, action: 'verify' | 'reject') => {
+    setRequests(prev => prev.map(req => {
+      if (req.id === selectedAppId) {
+        const newDocs = { ...req.documents };
+        if (newDocs[docKey]) {
+          newDocs[docKey] = { ...newDocs[docKey], status: action === 'verify' ? 'verified' : 'rejected' };
+        }
+        return { ...req, documents: newDocs };
+      }
+      return req;
+    }));
     toast.success(`Document marked as ${action === 'verify' ? 'Verified' : 'Rejected'}`);
-    // State mutation would happen here in a real app
   };
 
   const handleFinalAction = async (action: 'approve' | 'reject') => {

@@ -110,7 +110,7 @@ export default function OnboardingRequestDetail() {
               <FileText className="w-4 h-4 text-blue-600" />
               <h3 className="text-sm font-bold text-slate-600 dark:text-white">Request Overview</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
                   <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest mb-1">Request ID</p>
@@ -141,7 +141,7 @@ export default function OnboardingRequestDetail() {
               <User className="w-4 h-4 text-blue-600" />
               <h3 className="text-sm font-bold text-slate-600 dark:text-white">Agent Information</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
               {agentInfo.map((info, i) => (
                 <div key={i} className="flex items-center justify-between px-4 py-3.5">
                   <div className="flex items-center gap-3">
@@ -165,7 +165,7 @@ export default function OnboardingRequestDetail() {
             </div>
             <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
               {documents.map((doc, i) => (
-                <div key={i} className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-3 flex flex-col items-center gap-2 shrink-0 w-[90px] active:scale-95 transition-all cursor-pointer">
+                <div key={i} className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-3 flex flex-col items-center gap-2 shrink-0 w-[90px] active:scale-95 transition-all cursor-pointer">
                   <div className="w-10 h-12 rounded-lg bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center relative">
                     <File className="w-6 h-6 text-rose-400" />
                     <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full">PDF</span>
@@ -185,7 +185,7 @@ export default function OnboardingRequestDetail() {
               <Clock className="w-4 h-4 text-blue-600" />
               <h3 className="text-sm font-bold text-slate-800 dark:text-white">Status Timeline</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 space-y-1">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 space-y-1">
               {/* Requested */}
               <div className="flex items-start gap-3">
                 <div className="flex flex-col items-center">

@@ -2,7 +2,7 @@ import {
   User, Bell, Shield, LogOut, ChevronRight, Phone, MessageCircle,
   Truck, BadgeCheck, Clock, DollarSign, Brain, Settings,
   Wallet, ArrowUpRight, ArrowDownLeft, ArrowLeft, History, Package,
-  Search, Briefcase, Star, ShieldCheck, HelpCircle, X, Loader2, Zap, BarChart3, Copy
+  Search, Briefcase, Star, ShieldCheck, HelpCircle, X, Loader2, Zap, BarChart3, Copy, ShieldAlert
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -56,7 +56,7 @@ export default function SettingsMenu() {
 
   const secondaryMenu = [
     { icon: User, label: 'Profile Settings', subtitle: 'Personal info & location', path: '/settings/profile', color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10' },
-    { icon: Bell, label: 'Notifications', subtitle: 'Manage alerts & SMS', path: '/settings/notifications', color: 'text-amber-600 bg-amber-50 dark:bg-amber-500/10' },
+    { icon: ShieldAlert, label: 'Hub Complaints', subtitle: 'Report issues to Hub', path: '/settings/complaints', color: 'text-rose-600 bg-rose-50 dark:bg-rose-500/10' },
     { icon: ShieldCheck, label: 'Privacy & Security', subtitle: 'Passcode & Encryption', path: '/settings/privacy', color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' },
 
     { icon: HelpCircle, label: 'Support Center', subtitle: 'Help & WhatsApp', path: '/settings/support', color: 'text-slate-600 bg-slate-50 dark:bg-slate-500/10' },
@@ -72,7 +72,7 @@ export default function SettingsMenu() {
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => navigate('/')} 
-                className="p-2 -ml-2 bg-[#F8F8FF] dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all shadow-sm"
+                className="p-2 -ml-2 bg-slate-50 dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all shadow-sm"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>

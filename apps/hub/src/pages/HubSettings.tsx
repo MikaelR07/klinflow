@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Building2,
   MapPin,
@@ -22,7 +22,8 @@ import {
   Users,
   Shield,
   ToggleLeft,
-  ToggleRight
+  Map,
+  Check
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
@@ -30,6 +31,7 @@ import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { supabase } from '@klinflow/supabase';
 import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import { toast } from 'sonner';
+import HubTerritoryMap, { HubTerritoryMapRef } from '../components/HubTerritoryMap';
 
 interface SettingsFormData {
   hubName: string;
@@ -43,6 +45,8 @@ interface SettingsFormData {
   baseLogisticsFee: number;
   supportedCategories: string[];
   customRates: Record<string, string>;
+  autoDispatchEnabled: boolean;
+  autoDispatchVehicleTypes: string[];
 }
 
 export default function HubSettings() {
@@ -52,6 +56,8 @@ export default function HubSettings() {
   const { isDarkMode } = useThemeStore();
   const [isSaving, setIsSaving] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [isMarketRatesExpanded, setIsMarketRatesExpanded] = useState(false);
+  const mapRef = useRef<HubTerritoryMapRef>(null);
 
   // Permission check: only owner or users with DB-level 'setting:update' can edit
   const isOwner = membershipRole === 'owner';
@@ -69,6 +75,8 @@ export default function HubSettings() {
     baseLogisticsFee: 200,
     supportedCategories: [],
     customRates: {},
+    autoDispatchEnabled: false,
+    autoDispatchVehicleTypes: [],
   });
 
   // Fetch categories, material prices, and agent config
@@ -93,6 +101,8 @@ export default function HubSettings() {
         operatingHours: uiProfile.hubConfig?.operatingHours || 'Mon - Sat: 08:00 - 18:00',
         minWeight: uiProfile.serviceProfile?.minWeight || 5,
         maxWeight: uiProfile.serviceProfile?.maxWeight || 500,
+        autoDispatchEnabled: uiProfile.auto_dispatch_enabled || false,
+        autoDispatchVehicleTypes: uiProfile.auto_dispatch_vehicle_types || [],
       }));
     }
   }, [profile]);
@@ -145,7 +155,13 @@ export default function HubSettings() {
         Object.entries(formData.customRates).map(([k, v]) => [k, parseFloat(v) || 0])
       );
 
-      // 1. Update Agent Config (Shared with Mobile App logic)
+      // 1. Save Map Territory FIRST — before any profile update that could
+      //    trigger real-time subscriptions and remount the map component.
+      if (mapRef.current) {
+        await mapRef.current.saveTerritory();
+      }
+
+      // 2. Update Agent Config (Shared with Mobile App logic)
       const { success, error: configError } = await updateAgentConfig({
         base_logistics_fee: Math.max(0, formData.baseLogisticsFee || 0),
         accepted_materials: formData.supportedCategories,
@@ -154,7 +170,7 @@ export default function HubSettings() {
 
       if (!success) throw new Error(configError || 'Failed to update configuration');
 
-      // 2. Update Profile Information
+      // 3. Update Profile Information (this triggers real-time subscription → fetchProfile → re-render)
       const { error: profileError } = await supabase
         .from('profiles')
         .update({
@@ -171,11 +187,14 @@ export default function HubSettings() {
             maxWeight: parseFloat(String(formData.maxWeight)),
             // Re-sync categories for legacy profile usage
             categories: formData.supportedCategories.map(m => ({ name: m, enabled: true })),
-          }
+          },
+          auto_dispatch_enabled: formData.autoDispatchEnabled,
+          auto_dispatch_vehicle_types: formData.autoDispatchVehicleTypes.length > 0 ? formData.autoDispatchVehicleTypes : null,
         } as any)
         .eq('id', profile!.id);
 
       if (profileError) throw profileError;
+
       toast.success('Settings saved successfully!', { description: 'Your hub configuration has been updated.' });
     } catch (err: any) {
       console.error('[HubSettings] Save error:', err);
@@ -225,9 +244,37 @@ export default function HubSettings() {
               className="flex items-center gap-2.5 px-7 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-semibold text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 active:scale-[0.98] transition-all disabled:opacity-50"
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {isSaving ? 'Saving...' : 'Deploy Changes'}
+              {isSaving ? 'Saving...' : 'Save All Settings'}
             </button>
           )}
+        </div>
+
+        {/* ─── HUB ID DISPLAY ─── */}
+        <div className="flex flex-col md:flex-row md:items-center gap-6 p-5 rounded-2xl border bg-emerald-500/5 border-emerald-500/20 dark:border-emerald-500/10 shadow-sm animate-slide-up">
+           <div className="w-16 h-16 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center font-medium text-2xl text-emerald-600 dark:text-emerald-400 shrink-0">
+              {profile?.companyName ? profile.companyName.charAt(0) : (profile?.name ? profile.name.charAt(0) : 'H')}
+           </div>
+           <div className="space-y-1.5 flex-1">
+              <div>
+                <p className={`text-[10px] font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Your Hub ID</p>
+                <div className="flex items-center gap-3 mt-1">
+                  <code className={`text-2xl font-black tracking-wider ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                    {profile?.klinflowId || 'HUB...'}
+                  </code>
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(profile?.klinflowId || '');
+                      toast.success('Hub ID Copied!');
+                    }}
+                    className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 active:scale-95 transition-all"
+                    title="Copy Hub ID"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                  </button>
+                </div>
+              </div>
+              <p className={`text-[11px] font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Share this ID with residents and sellers so they can target your hub directly during bookings.</p>
+           </div>
         </div>
 
         {/* ─── PERMISSION BANNER ─── */}
@@ -490,9 +537,101 @@ export default function HubSettings() {
                   />
                 </div>
               </div>
+              
+              {/* Auto Dispatch Configuration */}
+              <div className={`pt-6 border-t ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
+                <div className="flex flex-col mb-4">
+                  <div className="flex items-center justify-between">
+                    <label className={`text-[10px] font-bold uppercase tracking-widest ml-1 flex items-center gap-1.5 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      <Zap className="w-3 h-3 text-emerald-500" /> Auto Dispatch
+                    </label>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input 
+                        type="checkbox" 
+                        name="autoDispatchEnabled"
+                        className="sr-only peer" 
+                        checked={formData.autoDispatchEnabled}
+                        disabled={!canEdit}
+                        onChange={handleChange}
+                      />
+                      <div className="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-slate-600 peer-checked:bg-emerald-500 shadow-inner"></div>
+                    </label>
+                  </div>
+                  <p className={`text-[10px] mt-1.5 ml-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Automatically assign resident pickups to your nearest available fleet drivers.</p>
+                </div>
+                
+                {formData.autoDispatchEnabled && (
+                  <div className={`p-4 mt-3 rounded-xl border ${isDarkMode ? 'bg-slate-800/50 border-white/5' : 'bg-slate-50 border-slate-100'}`}>
+                    <label className={`text-[10px] font-bold uppercase tracking-widest ml-1 flex items-center gap-1.5 mb-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                      <Truck className="w-3 h-3 text-emerald-500" /> Allowed Vehicles
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {[
+                        { id: 'pickup', label: 'Pickup Truck' },
+                        { id: 'lorry', label: 'Lorry / Canter' },
+                        { id: 'motorcycle', label: 'Motorcycle' },
+                        { id: 'tricycle', label: 'Tricycle (TukTuk)' }
+                      ].map(vt => (
+                        <label key={vt.id} className="flex items-center gap-2 cursor-pointer group">
+                          <div className="relative flex items-center justify-center">
+                            <input 
+                              type="checkbox"
+                              disabled={!canEdit}
+                              className="peer sr-only"
+                              checked={formData.autoDispatchVehicleTypes.includes(vt.id)}
+                              onChange={(e) => {
+                                if (!canEdit) return;
+                                setFormData(prev => {
+                                  const list = prev.autoDispatchVehicleTypes;
+                                  if (e.target.checked) {
+                                    return { ...prev, autoDispatchVehicleTypes: [...list, vt.id] };
+                                  } else {
+                                    return { ...prev, autoDispatchVehicleTypes: list.filter(t => t !== vt.id) };
+                                  }
+                                });
+                              }}
+                            />
+                            <div className="w-4 h-4 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 peer-checked:bg-emerald-500 peer-checked:border-emerald-500 transition-all flex items-center justify-center">
+                              <Check className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" strokeWidth={3} />
+                            </div>
+                          </div>
+                          <span className={`text-[10px] font-bold group-hover:text-emerald-500 transition-colors ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{vt.label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </Card>
         </div>
+
+        {/* ─── TERRITORY & LOCATION ─── */}
+        <Card>
+          <div className="flex items-center gap-3.5 mb-6">
+            <SectionIcon icon={Map} color="text-blue-500" bg={isDarkMode ? 'bg-blue-500/10' : 'bg-blue-50'} />
+            <div>
+              <h3 className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-[#131722]'}`}>
+                Territory & Location
+              </h3>
+              <p className={`text-[10px] font-semibold uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                Define your physical location and operational coverage zone
+              </p>
+            </div>
+          </div>
+          
+          {currentCompanyId ? (
+            <HubTerritoryMap 
+              ref={mapRef}
+              companyId={currentCompanyId} 
+              canEdit={canEdit} 
+            />
+          ) : (
+            <div className="p-8 text-center text-sm text-slate-500">
+              Loading Territory Data...
+            </div>
+          )}
+        </Card>
 
         {/* ─── COLLECTION SERVICES ─── */}
         <Card>
@@ -549,33 +688,46 @@ export default function HubSettings() {
 
         {/* ─── MARKET RATES / PRICING ─── */}
         <Card>
-          <div className="flex items-center gap-3.5 mb-6">
-            <SectionIcon icon={Zap} color="text-emerald-500" bg={isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'} />
-            <div>
-              <h3 className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-[#131722]'}`}>
-                Market Rates
-              </h3>
-              <p className={`text-[10px] font-semibold uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                Set per-KG purchase prices for each material category
-              </p>
+          <div 
+            className="flex items-center justify-between mb-2 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => setIsMarketRatesExpanded(!isMarketRatesExpanded)}
+          >
+            <div className="flex items-center gap-3.5">
+              <SectionIcon icon={Zap} color="text-emerald-500" bg={isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'} />
+              <div>
+                <h3 className={`text-sm font-bold uppercase tracking-widest ${isDarkMode ? 'text-white' : 'text-[#131722]'}`}>
+                  Market Rates
+                </h3>
+                <p className={`text-[10px] font-semibold uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Set per-KG purchase prices for each material category
+                </p>
+              </div>
+            </div>
+            <div className={`p-2 rounded-full ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
+              {isMarketRatesExpanded 
+                ? <ChevronUp className={`w-4 h-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`} /> 
+                : <ChevronDown className={`w-4 h-4 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`} />
+              }
             </div>
           </div>
 
-          {selectedSlugs.length === 0 ? (
-            <div className={`p-10 text-center rounded-2xl border border-dashed ${
-              isDarkMode
-                ? 'border-white/10 bg-slate-800/30'
-                : 'border-slate-200 bg-slate-50'
-            }`}>
-              <Package className={`w-8 h-8 mx-auto mb-3 ${isDarkMode ? 'text-slate-600' : 'text-slate-300'}`} />
-              <p className={`text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                No materials selected
-              </p>
-              <p className={`text-[10px] mt-1 ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
-                Enable materials in the Collection Services section above to configure pricing.
-              </p>
-            </div>
-          ) : (
+          {isMarketRatesExpanded && (
+            <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5">
+              {selectedSlugs.length === 0 ? (
+                <div className={`p-10 text-center rounded-2xl border border-dashed ${
+                  isDarkMode
+                    ? 'border-white/10 bg-slate-800/30'
+                    : 'border-slate-200 bg-slate-50'
+                }`}>
+                  <Package className={`w-8 h-8 mx-auto mb-3 ${isDarkMode ? 'text-slate-600' : 'text-slate-300'}`} />
+                  <p className={`text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                    No materials selected
+                  </p>
+                  <p className={`text-[10px] mt-1 ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
+                    Enable materials in the Collection Services section above to configure pricing.
+                  </p>
+                </div>
+              ) : (
             <div className="space-y-3">
               {selectedSlugs.map((slug) => {
                 const category = categories.find(c => (c.slug || c.id) === slug);
@@ -691,31 +843,9 @@ export default function HubSettings() {
               })}
             </div>
           )}
-        </Card>
-
-        {/* ─── BOTTOM SAVE BAR ─── */}
-        {canEdit && (
-          <div className={`flex items-center justify-between p-5 rounded-2xl border ${
-            isDarkMode
-              ? 'bg-slate-900 border-white/5'
-              : 'bg-white border-[#e0e3eb] shadow-sm'
-          }`}>
-            <div className="flex items-center gap-3">
-              <ShieldAlert className={`w-5 h-5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
-              <p className={`text-xs font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                Changes are pushed instantly to your fleet agents and marketplace profile.
-              </p>
-            </div>
-            <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-semibold text-xs uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all disabled:opacity-50"
-            >
-              {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              {isSaving ? 'Saving...' : 'Save All'}
-            </button>
           </div>
         )}
+        </Card>
 
       </div>
     </div>

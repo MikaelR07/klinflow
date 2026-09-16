@@ -60,15 +60,27 @@ export default function Settings() {
              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <h2 className={`font-semibold text-lg mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>My Profile</h2>
                 
-                <div className="flex items-center gap-6">
-                   <div className="w-24 h-24 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center font-medium text-3xl text-emerald-600 dark:text-emerald-400">
-                      {profile?.name ? profile.name.charAt(0) : 'E'}
+                <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8 p-5 rounded-2xl border bg-emerald-500/5 border-emerald-500/20 dark:border-emerald-500/10">
+                   <div className="w-20 h-20 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center font-medium text-3xl text-emerald-600 dark:text-emerald-400 shrink-0 shadow-sm">
+                      {profile?.name ? profile.name.charAt(0) : 'H'}
                    </div>
-                   <div className="space-y-2">
-                      <button className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm font-medium rounded-xl transition-colors">
-                         Upload New Avatar
-                      </button>
-                      <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Recommended size: 256x256px (JPG, PNG)</p>
+                   <div className="space-y-2 flex-1">
+                      <div>
+                        <p className={`text-[10px] font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Your Hub ID</p>
+                        <div className="flex items-center gap-3 mt-1">
+                          <code className={`text-2xl font-black tracking-wider ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>
+                            {profile?.klinflowId || profile?.klinflow_id || 'HUB...'}
+                          </code>
+                          <button 
+                            onClick={() => navigator.clipboard.writeText(profile?.klinflowId || profile?.klinflow_id || '')}
+                            className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 active:scale-95 transition-all"
+                            title="Copy Hub ID"
+                          >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                          </button>
+                        </div>
+                      </div>
+                      <p className={`text-xs font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Share this ID with residents and sellers so they can target your hub directly during bookings.</p>
                    </div>
                 </div>
 

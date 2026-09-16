@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@klinflow/supabase';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
+import { useAuthStore } from '@klinflow/core/stores/authStore';
 
 export default function RFQDetailsPage() {
   const { rfqId } = useParams();
@@ -16,6 +17,16 @@ export default function RFQDetailsPage() {
   const { materialPrices, fetchMaterialPrices, categories, fetchCategories } = useServiceStore();
   const [loading, setLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  
+  const profile = useAuthStore(s => s.profile);
+  const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
+
+  useEffect(() => {
+    if (isFleetDriver) {
+      toast.error('Unauthorized access');
+      navigate('/');
+    }
+  }, [isFleetDriver, navigate]);
 
   useEffect(() => {
     fetchMaterialPrices();

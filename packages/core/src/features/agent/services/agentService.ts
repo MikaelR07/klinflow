@@ -2,15 +2,62 @@ import { supabase } from '../../../lib/supabaseClient';
 import type { ProfileRow, AgentConfiguration, Booking } from '../store/agentStore.types';
 
 export const AgentService = {
-  fetchFleetDrivers: async (companyId: string): Promise<Partial<ProfileRow>[]> => {
+  fetchFleetDrivers: async (companyId: string): Promise<any[]> => {
     const { data, error } = await supabase
-      .from('profiles')
-      .select('id, name, phone, is_online, location, reward_points, avatar_url, rating, klinflow_id, user_wallets(cash_balance)')
-      .eq('company_id', companyId)
-      .order('name');
+      .rpc('get_fleet_agents_with_stats', { target_company_id: companyId });
       
     if (error) throw error;
-    return data as Partial<ProfileRow>[];
+    return data || [];
+  },
+
+  fetchFleetAnalytics: async (companyId: string): Promise<any> => {
+    const { data, error } = await supabase
+      .rpc('get_fleet_dashboard_analytics', { target_company_id: companyId });
+      
+    if (error) throw error;
+    return data;
+  },
+
+  fetchFleetVehicles: async (companyId: string): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('fleet_vehicles')
+      .select('*, profiles!assigned_agent_id(name)')
+      .eq('company_id', companyId);
+      
+    if (error) throw error;
+    return data?.map(v => ({...v, assigned_agent: { name: v.profiles?.name } })) || [];
+  },
+
+  addFleetVehicle: async (vehicleData: any): Promise<any> => {
+    const { data, error } = await supabase
+      .from('fleet_vehicles')
+      .insert([vehicleData])
+      .select()
+      .single();
+      
+    if (error) throw error;
+    return data;
+  },
+
+  updateFleetVehicle: async (id: string, updates: any): Promise<any> => {
+    const { data, error } = await supabase
+      .from('fleet_vehicles')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+      
+    if (error) throw error;
+    return data;
+  },
+
+  deleteFleetVehicle: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('fleet_vehicles')
+      .delete()
+      .eq('id', id);
+      
+    if (error) throw error;
   },
 
   fetchAgentConfig: async (agentId: string): Promise<AgentConfiguration | null> => {

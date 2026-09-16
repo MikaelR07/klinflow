@@ -71,7 +71,7 @@ export default function OwnerMoreMenu() {
       
       {/* ── PROFILE CARD ── */}
       <div className="px-0 pt-2">
-        <div className="bg-[#F8F8FF] dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex items-center gap-4">
+        <div className="bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex items-center gap-4">
           <div className="w-14 h-14 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border-2 border-emerald-500/20 shrink-0">
             {profile?.avatarUrl ? (
               <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 150 })} className="w-full h-full object-cover" />
@@ -94,7 +94,7 @@ export default function OwnerMoreMenu() {
         {menuGroups.map((group, i) => (
           <div key={i} className="space-y-2">
             <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">{group.title}</h3>
-            <div className="bg-[#F8F8FF] dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1.5rem] overflow-hidden shadow-sm">
+            <div className="bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1.5rem] overflow-hidden shadow-sm">
               {group.items.map((item, j) => (
                 <button
                   key={j}

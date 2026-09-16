@@ -45,12 +45,18 @@ export const useNotificationStore = create<NotificationStore>()(
   fetchNotifications: async (userId, role) => {
     set({ isLoading: true });
     const lastCleared = localStorage.getItem(`cf_nots_cleared_${userId}`) || '1970-01-01T00:00:00Z';
+    const currentCompanyId = useAuthStore.getState().currentCompanyId;
     
     try {
+      let orQuery = `target_user.eq.${userId},target_role.eq.${(role || '').toLowerCase()},target_role.eq.all`;
+      if (currentCompanyId) {
+        orQuery += `,target_user.eq.${currentCompanyId}`;
+      }
+
       const { data, error } = await supabase
         .from('notifications')
         .select('*')
-        .or(`target_user.eq.${userId},target_role.eq.${(role || '').toLowerCase()},target_role.eq.all`)
+        .or(orQuery)
         .gt('created_at', lastCleared)
         .order('created_at', { ascending: false })
         .limit(50);
@@ -88,26 +94,48 @@ export const useNotificationStore = create<NotificationStore>()(
       const isForeground = typeof document !== 'undefined' && document.visibilityState === 'visible';
 
       if (isForeground) {
-        // Foreground: Play custom in-app mp3 sound
+        // Foreground: Play custom in-app mp3 sound with Web Audio synth fallback
         const audio = new Audio(soundFile || '/notification.mp3');
-        audio.volume = 0.5;
-        audio.play().catch(() => {});
+        audio.volume = 1.0;
+        
+        audio.play().catch(() => {
+          // Web Audio API synth fallback for browser autoplay policy
+          try {
+            const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+            if (AudioCtx) {
+              const ctx = new AudioCtx();
+              const playTone = (freq: number, start: number, dur: number) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+                gain.gain.setValueAtTime(0.4, ctx.currentTime + start);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime + start);
+                osc.stop(ctx.currentTime + start + dur);
+              };
+              playTone(587.33, 0, 0.15); // D5
+              playTone(880.00, 0.12, 0.35); // A5
+            }
+          } catch (e) {}
+        });
 
         // Also vibrate the device if supported
         if ('vibrate' in navigator) {
           navigator.vibrate([200, 100, 200]);
         }
       } else {
-        // Background / Phone locked: Show browser native notification banner which plays the user's OS native notification ringtone/chime
+        // Background / Phone locked: Show browser native notification banner
         if ('Notification' in window && Notification.permission === 'granted') {
           const nativeNotif = new Notification(title || 'KlinFlow', {
             body: body || 'You have a new alert',
             icon: '/logo192.png',
             badge: '/logo192.png',
-            tag: `kf-${Date.now()}`, // Unique tag prevents stacking
-            silent: false, // Explicitly request OS sound
+            tag: `kf-${Date.now()}`,
+            silent: false,
           });
-          // Auto-close native notification after 5 seconds
           setTimeout(() => nativeNotif.close(), 5000);
         }
       }
@@ -146,8 +174,12 @@ export const useNotificationStore = create<NotificationStore>()(
         const isMission = n.title?.toLowerCase().includes('mission') || n.title?.toLowerCase().includes('dispatch');
         const isTradePost = n.title?.toLowerCase().includes('material') || n.title?.toLowerCase().includes('trade');
         
-        // 1. COMPLETELY IGNORE missions for company admins
-        if (isMission && isCompanyAdmin) return;
+        const { hubRoles, membershipRole, profile } = await import('./authStore').then(m => m.useAuthStore.getState());
+        const isSalesManager = hubRoles?.includes('sales_manager') || membershipRole === 'owner';
+        const isCompanyAdmin = agentAccountType === 'company_admin' || profile?.agentAccountType === 'company_admin';
+        
+        // 1. Filter missions for company admins: ONLY Sales Managers (and Owners) should see them in real-time
+        if (isMission && isCompanyAdmin && !isSalesManager) return;
  
         // 2. TARGETING LOGIC & NORMALIZATION
         // Normalize 'client' role to 'user' to ensure cross-app compatibility
@@ -155,11 +187,13 @@ export const useNotificationStore = create<NotificationStore>()(
         const normalizedMyRole = myRole === 'client' ? 'user' : myRole;
  
         const currentUserId = get().userId;
-        const isDirectPing = targetUser && targetUser === currentUserId;
+        const currentCompanyId = useAuthStore.getState().currentCompanyId;
+        const isDirectPing = targetUser && (targetUser === currentUserId || targetUser === currentCompanyId);
         const isRolePing = 
           normalizedTargetRole === normalizedMyRole || 
           normalizedTargetRole === 'all' ||
-          (normalizedTargetRole === 'agent' && normalizedMyRole === 'driver'); // Drivers are also targeted by Agent alerts
+          (normalizedTargetRole === 'agent' && normalizedMyRole === 'driver') ||
+          (normalizedTargetRole === 'agent' && normalizedMyRole === 'hub'); // Hubs are targeted by Agent alerts (like dispatch missions)
         
          let shouldProcess = isDirectPing || isRolePing;
  
@@ -234,8 +268,18 @@ export const useNotificationStore = create<NotificationStore>()(
                                  finalNotif.title?.toLowerCase().includes('order') ||
                                  finalNotif.title?.toLowerCase().includes('material') || 
                                  finalNotif.title?.toLowerCase().includes('trade');
-            const soundFile = isTradeEvent ? '/notification-sound/seller-notification.mp3' : '/notification.mp3';
-            get().playNotificationSound(finalNotif.title, finalNotif.content, soundFile);
+            
+            // 100% SOUND SUPPRESSION FOR HUB APP
+            const isHubApp = myRole === 'hub';
+            const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+            const isMarketplacePage = pathname.startsWith('/marketplace');
+            
+            const isSilentEnterpriseAlert = isMission && isCompanyAdmin && isSalesManager;
+            
+            if (!isHubApp) {
+                const soundFile = isTradeEvent ? '/notification-sound/seller-notification.mp3' : '/notification.mp3';
+                get().playNotificationSound(finalNotif.title, finalNotif.content, soundFile);
+            }
             
             // Only trigger high-visibility green/red Sonner toasts when the app is actively open in the foreground
             const isForeground = typeof document !== 'undefined' && document.visibilityState === 'visible';
@@ -246,8 +290,24 @@ export const useNotificationStore = create<NotificationStore>()(
                 icon: isMission ? '🚛' : undefined
               };
 
-              // High-visibility toasts for successes/rewards/missions
-              if (isMission || finalNotif.type === 'success' || finalNotif.type === 'reward') {
+              if (isMission && isCompanyAdmin) {
+                if (isSalesManager && isMarketplacePage) {
+                  // Enterprise-grade silent indigo toast for Sales Managers ONLY on marketplace pages
+                  toast(`⚡ ${finalNotif.title}`, {
+                    description: finalNotif.content,
+                    duration: 10000,
+                    style: {
+                      background: '#0f172a',
+                      border: '1px solid rgba(99,102,241,0.5)',
+                      boxShadow: '0 0 20px rgba(99,102,241,0.3)',
+                      color: '#ffffff',
+                      fontWeight: '700',
+                      animation: 'pulse 2s cubic-bezier(0.4,0,0.6,1) infinite',
+                    },
+                    descriptionClassName: 'text-indigo-200',
+                  });
+                }
+              } else if (finalNotif.type === 'success' || finalNotif.type === 'reward') {
                 toast.success(finalNotif.title, toastOptions);
               } else if (finalNotif.type === 'warning') {
                 toast.warning(finalNotif.title, toastOptions);

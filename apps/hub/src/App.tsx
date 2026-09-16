@@ -6,6 +6,7 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 
 import HubLanding from './pages/HubLanding';
+import Register from './pages/Register';
 import HubLayout from './layouts/HubLayout';
 import { DashboardRedirect } from './components/DashboardRedirect';
 
@@ -20,15 +21,10 @@ import IntakeVerification from './pages/IntakeVerification';
 import IndividualAgentIntake from './pages/IndividualAgentIntake';
 import WalkInIntake from './pages/WalkInIntake';
 import IntakeManagement from './pages/IntakeManagement';
-import DisputeControl from './pages/DisputeControl';
+import IntakeHistory from './pages/IntakeHistory';
 import InventoryCommand from './pages/InventoryCommand';
-import BatchTracking from './pages/BatchTracking';
-import TransferOrders from './pages/TransferOrders';
+import ProcessingTracker from './pages/ProcessingTracker';
 import MaterialsReceived from './pages/MaterialsReceived';
-import AutomatedPayouts from './pages/AutomatedPayouts';
-import ESGImpact from './pages/ESGImpact';
-import NationalIntelligence from './pages/NationalIntelligence';
-import AIOperations from './pages/AIOperations';
 import ProfileSettings from './pages/ProfileSettings';
 import AccountSecurity from './pages/settings/AccountSecurity';
 import Feedback from './pages/settings/Feedback';
@@ -40,27 +36,26 @@ import HubSettings from './pages/HubSettings';
 import Settings from './pages/Settings';
 import HubAnalyticsDashboard from './pages/dashboards/HubAnalyticsDashboard';
 import CustomReports from './pages/analytics/CustomReports';
-import FleetOverview from './pages/FleetOverview';
-import FleetMaintenance from './pages/FleetMaintenance';
-import RouteOptimizer from './pages/RouteOptimizer';
+
 import FleetOnboarding from './pages/FleetOnboarding';
 import FleetAgents from './pages/FleetAgents';
-import FleetVehicles from './pages/FleetVehicles';
 import DispatchManagement from './pages/DispatchManagement';
-import DispatchQueue from './pages/DispatchQueue';
-import AgentPickups from './pages/AgentPickups';
 import SalesDelivery from './pages/SalesDelivery';
 import KlinMarket from './pages/KlinMarket';
 import AgentComplaints from './pages/AgentComplaints';
+import ResidentRequests from './pages/ResidentRequests';
 import RFQs from './pages/RFQs';
+import RFQResponsesFeed from './pages/RFQResponsesFeed';
+import MarketOpenRFQs from './pages/MarketOpenRFQs';
 import RFQDetails from './pages/RFQDetails';
-import Auctions from './pages/Auctions';
+import SalesInventory from './pages/SalesInventory';
+import LiveAuctions from './pages/LiveAuctions';
+import ManageAuctionBids from './pages/ManageAuctionBids';
+import SalesOrders from './pages/SalesOrders';
 import SalesPipeline from './pages/SalesPipeline';
 import BuyerNetwork from './pages/BuyerNetwork';
-import SellerNetwork from './pages/SellerNetwork';
-import SalesOrders from './pages/SalesOrders';
-import InventoryListings from './pages/InventoryListings';
 import SalesContracts from './pages/SalesContracts';
+import FleetRecommendations from './pages/FleetRecommendations';
 import PriceDashboard from './pages/PriceDashboard';
 import AgentDisbursements from './pages/AgentDisbursements';
 import TeamManagement from './pages/admin/Users';
@@ -115,20 +110,70 @@ export default function App() {
 
   if (isInitializing) {
     return (
-      <div className="fixed inset-0 z-[9999] bg-slate-900 flex flex-col items-center justify-center">
-        <img src="/app-logo.webp" alt="Klinflow" className="w-20 h-20 mb-6 opacity-80 animate-pulse" />
-        <div className="flex items-center gap-3">
-          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce [animation-delay:0ms]" />
-          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce [animation-delay:150ms]" />
-          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce [animation-delay:300ms]" />
+      <div className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-slate-950 text-white' 
+          : 'bg-slate-50 text-slate-900'
+      }`}>
+        {/* Ambient Radial Gradient Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Central Glassmorphic Card */}
+        <div className={`relative px-10 py-9 rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col items-center max-w-sm w-full mx-4 transition-all ${
+          isDarkMode 
+            ? 'bg-slate-900/80 border-white/10 shadow-black/50' 
+            : 'bg-white/90 border-slate-200/80 shadow-slate-200/60'
+        }`}>
+          {/* Logo with Animated Aura Glow */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 rounded-2xl bg-emerald-500/20 blur-xl animate-pulse" />
+            <div className={`relative w-20 h-20 rounded-2xl border p-3.5 flex items-center justify-center transition-all ${
+              isDarkMode 
+                ? 'bg-slate-900 border-white/10 shadow-inner' 
+                : 'bg-slate-50 border-slate-200 shadow-sm'
+            }`}>
+              <img 
+                src="/app-logo.webp" 
+                alt="Klinflow Logo" 
+                className="w-full h-full object-contain animate-pulse" 
+              />
+            </div>
+          </div>
+
+          {/* Title & Brand Badge */}
+          <div className="text-center space-y-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 mb-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+              Klinflow MOS Engine
+            </div>
+            <h3 className={`text-base font-extrabold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+              Securing Hub Session
+            </h3>
+            <p className="text-xs text-slate-400 font-medium">
+              Verifying workspace credentials...
+            </p>
+          </div>
+
+          {/* Animated Loading Dots Indicator */}
+          <div className="flex items-center gap-2 mt-6">
+            <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:0ms]" />
+            <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:150ms]" />
+            <div className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-bounce [animation-delay:300ms]" />
+          </div>
         </div>
-        <p className="mt-4 text-xs font-semibold text-slate-400 uppercase tracking-widest">Securing Session</p>
       </div>
     );
   }
 
   if (!isAuthorized) {
-    return <HubLanding />;
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<HubLanding />} />
+        </Routes>
+      </BrowserRouter>
+    );
   }
 
 return (
@@ -155,43 +200,39 @@ return (
            
            {/* Operations */}
            <Route path="/operations/intake" element={<IntakeManagement />} />
+           <Route path="/operations/intake/history" element={<IntakeHistory />} />
            <Route path="/operations/received" element={<MaterialsReceived />} />
            <Route path="/operations/intake/fleet" element={<IntakeReceiving />} />
            <Route path="/operations/intake/verify" element={<IntakeVerification />} />
            <Route path="/operations/intake/individual" element={<IndividualAgentIntake />} />
            <Route path="/operations/intake/walkin" element={<WalkInIntake />} />
-           <Route path="/operations/dispatch" element={<DispatchQueue />} />
-           <Route path="/operations/disputes" element={<DisputeControl />} />
            <Route path="/operations/inventory" element={<InventoryCommand />} />
-           <Route path="/operations/batch" element={<BatchTracking />} />
-           <Route path="/operations/transfers" element={<TransferOrders />} />
-           <Route path="/operations/reports" element={<PlaceholderPage title="Operations Reports" />} />
+           <Route path="/operations/batch" element={<ProcessingTracker />} />
            
            {/* Fleet Management */}
-           <Route path="/fleet/overview" element={<FleetOverview />} />
+
            <Route path="/fleet/onboarding" element={<FleetOnboarding />} />
-           <Route path="/fleet/vehicles" element={<FleetVehicles />} />
            <Route path="/fleet/dispatch" element={<DispatchManagement />} />
-           <Route path="/fleet/pickups" element={<AgentPickups />} />
            <Route path="/fleet/deliveries" element={<SalesDelivery />} />
            <Route path="/fleet/agents" element={<FleetAgents />} />
-           <Route path="/fleet/routing" element={<RouteOptimizer />} />
-           <Route path="/fleet/maintenance" element={<FleetMaintenance />} />
            <Route path="/fleet/complaints" element={<AgentComplaints />} />
            <Route path="/fleet/reports" element={<PlaceholderPage title="Fleet Reports" />} />
            
            {/* Marketplace */}
+           <Route path="/marketplace/resident-requests" element={<ResidentRequests />} />
            <Route path="/marketplace/market" element={<KlinMarket />} />
-           <Route path="/marketplace/listings" element={<InventoryListings />} />
+           <Route path="/marketplace/inventory" element={<SalesInventory />} />
+           <Route path="/marketplace/auctions" element={<LiveAuctions />} />
+           <Route path="/marketplace/auctions/:id/bids" element={<ManageAuctionBids />} />
            <Route path="/marketplace/orders" element={<SalesOrders />} />
            <Route path="/marketplace/contracts" element={<SalesContracts />} />
            <Route path="/marketplace/rfqs" element={<RFQs />} />
+           <Route path="/marketplace/rfqs/responses" element={<RFQResponsesFeed />} />
+           <Route path="/marketplace/market-open-rfqs" element={<MarketOpenRFQs />} />
            <Route path="/marketplace/rfqs/:id" element={<RFQDetails />} />
-           <Route path="/marketplace/auctions" element={<Auctions />} />
            <Route path="/marketplace/buyers" element={<BuyerNetwork />} />
-           <Route path="/marketplace/sellers" element={<SellerNetwork />} />
            <Route path="/marketplace/pipeline" element={<SalesPipeline />} />
-           <Route path="/marketplace/reports" element={<PlaceholderPage title="Marketplace Reports" />} />
+           <Route path="/marketplace/recommendations" element={<FleetRecommendations />} />
            
            {/* Market Intelligence */}
            <Route path="/intelligence/pricing" element={<PriceDashboard />} />
@@ -203,7 +244,6 @@ return (
            <Route path="/finance/revenue" element={<PlaceholderPage title="Revenue Analytics" />} />
            <Route path="/finance/disbursements" element={<AgentDisbursements />} />
            <Route path="/finance/seller-payouts" element={<PlaceholderPage title="Seller Payouts" />} />
-           <Route path="/finance/payouts" element={<AutomatedPayouts />} />
            <Route path="/finance/agent-wallets" element={<PlaceholderPage title="Agent Wallets" />} />
            <Route path="/finance/payment-approvals" element={<PlaceholderPage title="Payment Approvals" />} />
            <Route path="/finance/receivables" element={<PlaceholderPage title="Receivables" />} />
@@ -217,7 +257,6 @@ return (
            
            {/* ESG & Compliance */}
            <Route path="/esg/dashboard" element={<PlaceholderPage title="Sustainability Dashboard" />} />
-           <Route path="/esg/carbon" element={<ESGImpact />} />
            <Route path="/esg/impact" element={<PlaceholderPage title="Environmental Impact" />} />
            <Route path="/esg/reporting" element={<PlaceholderPage title="ESG Reporting" />} />
            <Route path="/esg/certifications" element={<PlaceholderPage title="Certifications" />} />
@@ -228,11 +267,11 @@ return (
 
            {/* Settings */}
            <Route path="/settings/profile" element={<ProfileSettings />} />
-           <Route path="/settings/security" element={<AccountSecurity />} />
+           {/* <Route path="/settings/security" element={<AccountSecurity />} /> */}
            <Route path="/settings/feedback" element={<Feedback />} />
-           <Route path="/settings/support" element={<Support />} />
-           <Route path="/settings/notification-preferences" element={<NotificationPreferences />} />
-           <Route path="/settings/regions" element={<TimezoneRegions />} />
+           {/* <Route path="/settings/support" element={<Support />} /> */}
+           {/* <Route path="/settings/notification-preferences" element={<NotificationPreferences />} /> */}
+           {/* <Route path="/settings/regions" element={<TimezoneRegions />} /> */}
            <Route path="/settings/notifications" element={<Notifications />} />
            <Route path="/settings/hub" element={<HubSettings />} />
            <Route path="/settings" element={<Settings />} />

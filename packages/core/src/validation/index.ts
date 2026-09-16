@@ -109,7 +109,7 @@ export const BookingSchema = z.object({
   userId: z.string(), // Removed .uuid() for mock support
   agentId: z.string().nullable().optional(), // Removed .uuid() for mock support
   wasteType: z.string(),
-  bags: z.number().int().nonnegative().optional(),
+
   weightKg: z.number().nonnegative().optional(),
   actualWeightKg: z.number().nonnegative().nullable().optional(),
   totalPrice: z.number().nonnegative().default(0),
@@ -184,6 +184,7 @@ export const MarketplaceOfferSchema = z.object({
   listingId: z.string().uuid(),
   buyerId: z.string().uuid(),
   sellerId: z.string().uuid(),
+  companyId: z.string().uuid().nullable().optional(),
   offeredPrice: z.coerce.number().nonnegative(),
   quantity: z.coerce.number().nonnegative(),
   status: z.enum(['pending', 'accepted', 'declined', 'cancelled', 'completed', 'paid', 'rejected']),

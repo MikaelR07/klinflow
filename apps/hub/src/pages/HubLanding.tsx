@@ -238,6 +238,12 @@ export default function HubLanding() {
           
           {/* Bottom help */}
           <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+            <p className="text-center text-sm text-slate-400 dark:text-slate-500 font-medium mb-4">
+              Want to set up a new enterprise?{' '}
+              <a href="/register" className="text-emerald-600 dark:text-emerald-400 cursor-pointer hover:underline font-semibold">
+                Register Hub
+              </a>
+            </p>
             <p className="text-center text-sm text-slate-400 dark:text-slate-500 font-medium">
               Can't access your account?{' '}
               <span className="text-emerald-600 dark:text-emerald-400 cursor-pointer hover:underline font-semibold">

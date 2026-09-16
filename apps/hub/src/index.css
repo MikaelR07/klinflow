@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@100;300;400;500;700;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,18 +8,18 @@
   --primary: #10b981;
   --primary-dark: #059669;
   --accent: #3b82f6;
-  --background: #f8fafc;
+  --background: #fafafa;
   --surface: #ffffff;
 }
 
 .dark {
-  --background: #0f172a;
-  --surface: #1e293b;
+  --background: #0b1a25;
+  --surface: #103349;
 }
 
 body {
-  font-family: 'Outfit', sans-serif;
-  @apply bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300;
+  font-family: 'Space Grotesk', sans-serif;
+  @apply bg-slate-50 dark:bg-surface-950 text-slate-900 dark:text-slate-100 transition-colors duration-300;
 }
 
 .glass {

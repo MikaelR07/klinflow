@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation, useSearchParams } from 'react-router-dom';
-import { Recycle, User, Phone, Lock, Hash, Loader2, ArrowLeft, ShieldCheck, Briefcase, Mail, Venus, Mars } from 'lucide-react';
+import { Recycle, User, Phone, Lock, Hash, Loader2, ArrowLeft, ShieldCheck, Briefcase, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { ROLES } from '@klinflow/constants';
@@ -143,9 +143,8 @@ export default function Register() {
     if (formData.pin !== formData.confirmPin) return toast.error('Match Error', { description: 'Passcodes do not match.' });
     if (!formData.location?.estate) return toast.error('Field Missing', { description: 'Please select your operating location.' });
     if (formData.idNumber.length !== 8) return toast.error('Field Error', { description: 'National ID must be exactly 8 characters.' });
-    if ((formData.agent_account_type === 'independent' || formData.agent_account_type === 'fleet_driver') && !formData.gender) return toast.error('Field Missing', { description: 'Please select your gender.' });
+    if (!formData.gender) return toast.error('Field Missing', { description: 'Please select your gender.' });
     if (formData.agent_account_type === 'fleet_driver' && formData.fleet_invite_code.trim().length < 5) return toast.error('Missing Code', { description: 'Please enter a valid Company Invite Code.' });
-    if (formData.agent_account_type === 'company_admin' && formData.company_name.trim().length < 3) return toast.error('Incomplete Business Info', { description: 'Please provide a valid Company/Business name.' });
 
     if (formData.agent_account_type === 'fleet_driver' && companyDocs.length > 0) {
       const missingDocs = companyDocs.filter(doc => !formData.documents[doc]);
@@ -319,16 +318,7 @@ export default function Register() {
               </div>
             </div>
 
-            {formData.agent_account_type === 'company_admin' && (
-              <div className="pt-2 animate-slide-up">
-                <label className="block text-xs font-semibold text-primary dark:text-blue-400 mb-1.5 capitalize tracking-wider">Company / Business Name</label>
-                <div className="relative">
-                  <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
-                  <input type="text" name="company_name" value={formData.company_name} onChange={handleInputChange} placeholder="e.g. Nairobi Green Fleets" className="w-full pl-11 pr-4 py-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
-                </div>
-                <p className="text-xs text-slate-500 mt-1.5 ml-1">This will be your brand name in the Klinflow marketplace.</p>
-              </div>
-            )}
+
 
             {formData.agent_account_type === 'fleet_driver' && (
               <div className="pt-2 animate-slide-up space-y-4">
@@ -368,14 +358,14 @@ export default function Register() {
               </div>
             )}
 
-            {(formData.agent_account_type === 'independent' || formData.agent_account_type === 'fleet_driver') && (
+            {true && (
               <div className="pt-2 animate-slide-up">
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Gender</label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { id: 'male', label: 'Male', icon: Mars, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-                    { id: 'female', label: 'Female', icon: Venus, color: 'text-rose-500', bg: 'bg-rose-500/10' }
-                  ].map((g) => (
+                  { id: 'male', label: 'Male', color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                  { id: 'female', label: 'Female', color: 'text-rose-500', bg: 'bg-rose-500/10' }
+                ].map((g) => (
                     <button
                       key={g.id}
                       type="button"

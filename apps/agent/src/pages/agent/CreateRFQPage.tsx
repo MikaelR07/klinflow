@@ -34,6 +34,14 @@ export default function CreateRFQPage() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stepError, setStepError] = useState('');
+  const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
+
+  useEffect(() => {
+    if (isFleetDriver) {
+      toast.error('Unauthorized access');
+      navigate('/');
+    }
+  }, [isFleetDriver, navigate]);
 
   const [images, setImages] = useState<{ file: File; url: string }[]>([]);
   const [formData, setFormData] = useState({

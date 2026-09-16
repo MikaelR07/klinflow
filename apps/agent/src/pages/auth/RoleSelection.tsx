@@ -32,19 +32,6 @@ export default function RoleSelection() {
       iconColor: 'text-white',
       textColor: 'text-blue-600 dark:text-blue-400',
       benefits: ['Assigned Tasks', 'Fleet Support', 'Smart Routing']
-    },
-    {
-      id: 'company_admin',
-      title: 'Company Owner',
-      subtitle: 'The Agent Hub',
-      description: 'Best for waste management companies. Access the Agent Hub to monitor your entire fleet in real-time, track aggregate earnings, and manage staff performance.',
-      icon: Briefcase,
-      accent: 'amber',
-      bgColor: 'bg-amber-500',
-      borderColor: 'border-amber-600',
-      iconColor: 'text-white',
-      textColor: 'text-amber-600 dark:text-amber-400',
-      benefits: ['Fleet Monitoring', 'Admin Dashboard', 'Team Management']
     }
   ];
 

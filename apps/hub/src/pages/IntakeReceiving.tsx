@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@klinflow/supabase';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { normalizeKeys, Profile } from '@klinflow/core/validation';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { toast } from 'sonner';
 
 interface Bay {
@@ -54,10 +55,62 @@ export default function IntakeReceiving() {
   const { isDarkMode } = useThemeStore();
   const navigate = useNavigate();
   const { profile } = useAuthStore();
+  const { materialPrices, categories, allCategories, fetchAllCategories } = useServiceStore() as any;
   
   const [pinInput, setPinInput] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchAllCategories();
+  }, [fetchAllCategories]);
+
+  const resolveMaterialName = (asset: any, returnCategory = false) => {
+    const rawType = asset.materialType || asset.material_type;
+    if (!rawType) return 'Unknown Material';
+    
+    if (rawType.length > 20 && rawType.includes('-')) {
+      const subcat = materialPrices?.find((m: any) => m.id === rawType);
+      if (subcat?.material_name) return returnCategory ? (subcat.category?.replace(/_/g, ' ') || 'Other') : subcat.material_name;
+      
+      const cat = categories?.find((c: any) => c.id === rawType);
+      if (cat?.label) {
+        if (!returnCategory && asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') {
+          return asset.grade;
+        }
+        return cat.label;
+      }
+      
+      const allCat = allCategories?.find((c: any) => c.id === rawType);
+      if (allCat?.label) return allCat.label;
+      
+      return !returnCategory && asset.grade && asset.grade.length > 2 ? asset.grade : `Legacy Material`;
+    }
+
+    if (!returnCategory && ['plastic', 'metal', 'paper', 'glass', 'e_waste'].includes(rawType.toLowerCase())) {
+        if (asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') {
+            return asset.grade;
+        }
+    }
+    
+    if (returnCategory) {
+       const matchedSubcat = materialPrices?.find((m: any) => (m.material_name || '').toLowerCase() === rawType.toLowerCase());
+       if (matchedSubcat?.category) {
+           const catLabel = matchedSubcat.category.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+           // If the category returned is a UUID (unlikely for parent_category, but just in case)
+           if (catLabel.length > 20 && catLabel.includes('-')) {
+              const catObj = categories?.find((c: any) => c.id === matchedSubcat.category);
+              if (catObj?.label) return catObj.label;
+           }
+           return catLabel;
+       }
+       if (['plastic', 'metal', 'paper', 'glass', 'e_waste'].includes(rawType.toLowerCase())) {
+           return rawType.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+       }
+    }
+    
+    return rawType.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+  };
 
   // Bay management state — loaded from hub_config
   const [bays, setBays] = useState<Bay[]>([]);
@@ -120,14 +173,16 @@ export default function IntakeReceiving() {
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
 
-      // Get assets transferred to this hub today, grouped by verifier
+      // Get assets transferred to this hub today (excluding walk-in seller dropoffs)
       const { data, error: fetchError } = await ((supabase
         .from('assets') as any)
-        .select('id, material_type, weight_kg, updated_at, verifier_id, profiles:verifier_id(name, avatar_url)')
+        .select('id, material_type, weight_kg, created_at, verifier_id, profiles:verifier_id(name, avatar_url)')
         .eq('hub_manager_id', profile.id)
         .eq('status', 'transferred_to_hub')
-        .gte('updated_at', todayStart.toISOString())
-        .order('updated_at', { ascending: false }));
+        .neq('source', 'walk_in')
+        .neq('sourcing_tag', 'walk-in')
+        .gte('created_at', todayStart.toISOString())
+        .order('created_at', { ascending: false }));
 
       if (fetchError) throw fetchError;
 
@@ -143,10 +198,10 @@ export default function IntakeReceiving() {
             id: agentId,
             agentName: item.profiles?.name || 'Unknown Agent',
             agentAvatar: item.profiles?.avatar_url,
-            materialSummary: item.materialType || 'Mixed',
+            materialSummary: resolveMaterialName(item),
             totalWeight: 0,
             totalItems: 0,
-            arrivedAt: item.updatedAt,
+            arrivedAt: item.createdAt || new Date().toISOString(),
             bayAssigned: undefined
           });
         }
@@ -157,7 +212,7 @@ export default function IntakeReceiving() {
 
         // Collect distinct material types
         const types = new Set(entry.materialSummary.split(', '));
-        types.add(item.materialType || 'Mixed');
+        types.add(resolveMaterialName(item));
         entry.materialSummary = Array.from(types).slice(0, 3).join(', ');
       }
 
@@ -182,7 +237,9 @@ export default function IntakeReceiving() {
         .select('material_type, weight_kg, estimated_value')
         .eq('hub_manager_id', profile.id)
         .eq('status', 'transferred_to_hub')
-        .gte('updated_at', todayStart.toISOString()));
+        .neq('source', 'walk_in')
+        .neq('sourcing_tag', 'walk-in')
+        .gte('created_at', todayStart.toISOString()));
 
       if (fetchError) throw fetchError;
 
@@ -330,7 +387,11 @@ export default function IntakeReceiving() {
             is_manual,
             status,
             estimated_value,
+            material_category,
+            sourcing_tag,
             digital_batch_id,
+            tracking_id,
+            origin_tracking_id,
             created_at,
             booking:bookings(
               waste_type,
@@ -363,6 +424,7 @@ export default function IntakeReceiving() {
         const agentPayload = {
           agentName: agent.name || 'Anonymous Agent',
           agentId: agent.id,
+          agentKlinflowId: agent.klinflowId || agent.klinflow_id || 'Searching...',
           totalClaimedWeight: totalWeight,
           totalAmountPaidToday: totalAmount,
           materials: enRouteAssets.map((asset: any, idx: number) => {
@@ -374,19 +436,23 @@ export default function IntakeReceiving() {
             const bookingType = booking.bookingType;
             
             const tags: string[] = [];
-            if (clientRole === 'seller' || clientRole === 'business') tags.push('Seller Pickup');
-            else if (clientRole === 'resident') tags.push('Resident Pickup');
-            
-            if (isGroupPickup) tags.push('Community Pickup');
-            if (isMarketTrade || bookingType === 'rfq') tags.push(isGroupPickup ? 'Group RFQ' : 'Individual RFQ');
-            
-            if (tags.length === 0) tags.push('Hub Dropoff');
+            if (asset.sourcingTag || asset.sourcing_tag) {
+               tags.push(asset.sourcingTag || asset.sourcing_tag);
+            } else {
+               if (clientRole === 'seller' || clientRole === 'business') tags.push('Seller Pickup');
+               else if (clientRole === 'resident') tags.push('Resident Pickup');
+               
+               if (isGroupPickup) tags.push('Community Pickup');
+               if (isMarketTrade || bookingType === 'rfq') tags.push(isGroupPickup ? 'Group RFQ' : 'Individual RFQ');
+               
+               if (tags.length === 0) tags.push('Hub Dropoff');
+            }
 
             return {
               id: asset.id || `m${idx}`,
-              materialId: asset.digitalBatchId || asset.id?.slice(0,8) || `ID-${idx}`,
-              category: asset.grade || 'N/A',
-              subcategory: asset.materialType || 'Other',
+              materialId: asset.trackingId || asset.tracking_id || asset.originTrackingId || asset.origin_tracking_id || asset.digitalBatchId || 'Searching...',
+              category: asset.materialCategory || asset.material_category || resolveMaterialName(asset, true),
+              subcategory: resolveMaterialName(asset, false),
               weight: Number(asset.weightKg) || 0,
               amountPaid: Number(asset.estimatedValue) || 0,
               sellerName: client.name || 'Unknown Seller',
@@ -687,7 +753,7 @@ export default function IntakeReceiving() {
             ) : (
               <div className="flex gap-6 overflow-x-auto items-start">
                 <div className="shrink-0">
-                  <p className={`text-xs font-medium uppercase tracking-wider mb-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Today's Intake</p>
+                  <p className={`text-xs font-medium uppercase tracking-wider mb-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Today's Gate Arrivals</p>
                   <p className={`text-3xl font-medium tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{formatWeight(intakeStats.total)}</p>
                   <p className={`text-xs font-medium mt-1 ${isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>KES {intakeStats.totalPaid.toLocaleString()} paid</p>
                 </div>

@@ -102,7 +102,7 @@ export default function OverrideRequestDetail() {
               <FileText className="w-4 h-4 text-rose-600" />
               <h3 className="text-sm font-bold text-slate-600 dark:text-white">Request Overview</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
                   <p className="text-[9px] font-bold text-rose-600 uppercase tracking-widest mb-1">Request ID</p>
@@ -136,7 +136,7 @@ export default function OverrideRequestDetail() {
             
             {/* Price comparison cards */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 space-y-2">
+              <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 space-y-2">
                 <div className="flex items-center gap-2">
                   <TrendingDown className="w-4 h-4 text-slate-400" />
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Current Price</p>
@@ -155,7 +155,7 @@ export default function OverrideRequestDetail() {
             </div>
 
             {/* Additional info */}
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
               <div className="flex items-center justify-between px-4 py-3.5">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center">
@@ -183,7 +183,7 @@ export default function OverrideRequestDetail() {
               <User className="w-4 h-4 text-rose-600" />
               <h3 className="text-sm font-bold text-slate-800 dark:text-white">Agent Information</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
               <div className="flex items-center justify-between px-4 py-3.5">
                 <div className="flex items-center gap-3">
                   <User className="w-4 h-4 text-slate-400" />
@@ -207,7 +207,7 @@ export default function OverrideRequestDetail() {
               <Clock className="w-4 h-4 text-rose-600" />
               <h3 className="text-sm font-bold text-slate-800 dark:text-white">Status Timeline</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 space-y-1">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 space-y-1">
               {/* Requested */}
               <div className="flex items-start gap-3">
                 <div className="flex flex-col items-center">

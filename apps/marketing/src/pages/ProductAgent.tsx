@@ -56,7 +56,7 @@ export default function ProductAgent() {
     {
       subtitle: "Mission Control",
       subtitleColor: "text-blue-500",
-      title: "Your command center for collection ops.",
+      title: "Your command center for collection operations.",
       description:
         "The Agent Dashboard gives you a real-time tactical overview of your active missions, pending pickups, earnings summary, and performance metrics. See everything at a glance — available jobs in your zone, your daily route, current wallet balance, and live notifications from the network. It's mission control, built for speed.",
       features: [
@@ -230,7 +230,7 @@ export default function ProductAgent() {
               </h1>
 
               <p className="text-base md:text-lg font-medium leading-relaxed mb-10 max-w-xl text-blue-50">
-                Whether you're an independent agent, a fleet driver, or managing an entire collection company, Klinflow equips you with the tools and insights to streamline your operations, boost your income, and unlock the full potential of the circular economy. Klinflow streamlines dispatch, pickup verification, route optimization, and payouts through one intelligent platform built for circular logistics.
+                Whether you're an independent agent, a fleet driver, or managing an entire fleet force, our app equips you with the tools and insights to streamline your operations, boost your income, and unlock the full potential of the circular economy. Klinflow streamlines dispatch, pickup verification, route optimization, and payouts through one intelligent platform built for circular logistics.
               </p>
 
               <div className="flex flex-row flex-wrap gap-3 sm:gap-4">

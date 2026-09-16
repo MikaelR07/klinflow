@@ -30,13 +30,14 @@ interface MaterialEntry {
   amountPaid: number;
   sellerName: string;
   collectedAt: string;
-  sourcingTag: string;
+  sourcingTags: string[];
   isManual: boolean;
 }
 
 interface AgentPayload {
   agentName: string;
   agentId: string;
+  agentKlinflowId?: string;
   totalClaimedWeight: number;
   totalAmountPaidToday: number;
   materials: MaterialEntry[];
@@ -53,7 +54,7 @@ export default function IntakeVerification() {
   const [totalManualWeight, setTotalManualWeight] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [waybillId] = useState(`#WB-${(Math.random() * 99999).toFixed(0).padStart(5, '0')}`);
+  const [waybillId, setWaybillId] = useState<string | null>(null);
 
   // Redirect if no data
   if (!agentData) {
@@ -87,15 +88,15 @@ export default function IntakeVerification() {
       const assetIds = agentData.materials.map(m => m.id).filter(id => !id.startsWith('m'));
 
       if (assetIds.length > 0) {
-        const { error: assetError } = await (supabase
-          .from('assets')
-          .update({ 
-            status: 'transferred_to_hub',
-            hub_manager_id: profile.id
-          } as any)
-          .in('id', assetIds) as any);
+        const { data: generatedWaybillId, error: assetError } = await supabase.rpc('hub_receive_agent_cargo', {
+          p_asset_ids: assetIds,
+          p_hub_manager_id: profile.id
+        });
           
         if (assetError) throw assetError;
+        if (generatedWaybillId) setWaybillId(generatedWaybillId as string);
+      } else {
+        setWaybillId(`WB-${(Math.random() * 999999).toFixed(0).padStart(6, '0')}`);
       }
       
       if (agentData.agentId) {
@@ -105,6 +106,15 @@ export default function IntakeVerification() {
           .eq('id', agentData.agentId) as any);
 
         if (profileError) throw profileError;
+
+        // Complete any associated fulfillment orders for this driver
+        const { error: fulfillmentError } = await supabase
+          .from('fulfillment_orders')
+          .update({ status: 'completed', completed_at: new Date().toISOString() })
+          .eq('dispatch_driver_id', agentData.agentId)
+          .in('status', ['pending_coordination', 'in_progress', 'pickup_completed']);
+          
+        if (fulfillmentError) console.error('Error completing fulfillment orders:', fulfillmentError);
       }
 
       toast.success("Cargo Received!", { description: `Successfully transferred to Hub Inventory.` });
@@ -154,7 +164,7 @@ export default function IntakeVerification() {
           </div>
           <div className="flex items-center gap-3">
             <div className={`px-3 py-1.5 rounded-lg border text-xs font-medium ${isDarkMode ? 'bg-slate-800 border-white/5 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-600'}`}>
-              Agent ID: {agentData.agentId}
+              Agent ID: {agentData.agentKlinflowId || 'Searching...'}
             </div>
           </div>
         </div>
@@ -294,10 +304,12 @@ export default function IntakeVerification() {
                     </td>
                     {/* Tags */}
                     <td className="px-4 py-4">
-                      <div className="flex items-center justify-center gap-1.5 flex-wrap">
-                        <span className={`px-2 py-0.5 rounded border text-[9px] font-medium uppercase ${getTagColor(m.sourcingTag)}`}>
-                          {m.sourcingTag}
-                        </span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {m.sourcingTags?.map((tag, i) => (
+                          <span key={i} className={`px-2 py-0.5 rounded border text-[9px] font-medium uppercase ${getTagColor(tag)}`}>
+                            {tag}
+                          </span>
+                        ))}
                         {m.isManual && (
                           <span className="px-2 py-0.5 rounded border bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400 text-[9px] font-medium uppercase flex items-center gap-0.5">
                             <ShieldAlert className="w-2.5 h-2.5" /> Manual

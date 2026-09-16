@@ -31,6 +31,7 @@ const AgentTradeHub = lazy(() => import('./pages/agent/AgentTradeHub'));
 const AgentSellStock = lazy(() => import('./pages/agent/AgentSellStock'));
 const Sourcing = lazy(() => import('./pages/agent/Sourcing'));
 const MyTrades = lazy(() => import('./pages/agent/MyTrades'));
+const MyRecommendations = lazy(() => import('./pages/agent/MyRecommendations'));
 const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
 const CreateRFQPage = lazy(() => import('./pages/agent/CreateRFQPage'));
 const MyRFQs = lazy(() => import('./pages/agent/MyRFQs'));
@@ -48,6 +49,7 @@ const DepositPage = lazy(() => import('./pages/agent/DepositPage'));
 const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
 const AgentConfigurationPage = lazy(() => import('./pages/settings/AgentConfigurationPage'));
 const ProfilePage = lazy(() => import('./pages/settings/ProfilePage'));
+const AgentComplaintsPage = lazy(() => import('./pages/settings/AgentComplaintsPage'));
 const NotificationsPage = lazy(() => import('./pages/settings/NotificationsPage'));
 const NotificationsFeed = lazy(() => import('./pages/agent/NotificationsFeed'));
 const PrivacySecurityPage = lazy(() => import('./pages/settings/PrivacySecurityPage'));
@@ -88,14 +90,14 @@ function MobileLayout() {
 
   const AGENT_NAV = [
     { path: '/', icon: Home, label: 'Home' },
-    { path: '/jobs', icon: Briefcase, label: 'Jobs' },
-    { path: '/warehouse', icon: Package, label: 'Warehouse' },
+    { path: '/jobs', icon: Briefcase, label: isFleetDriver ? 'Missions' : 'Jobs' },
+    ...(isFleetDriver ? [] : [{ path: '/warehouse', icon: Package, label: 'Warehouse' }]),
     { path: '/sourcing', icon: Store, label: 'MarketPlace' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 
   return (
-    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-800">
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto bg-slate-50 dark:bg-slate-800">
       <div className="flex-1 pt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] pb-[calc(env(safe-area-inset-bottom,0px)+6rem)] px-1">
         <Suspense fallback={<LoadingScreen message="Loading..." />}>
           <Outlet />
@@ -132,6 +134,22 @@ function RoleBasedIndex() {
     return <OwnerOverview />;
   }
   return <AgentHome />;
+}
+
+function TradesOrRecommendations() {
+  const { profile } = useAuthStore();
+  if (profile?.agentAccountType === 'fleet_driver') {
+    return <MyRecommendations />;
+  }
+  return <MyTrades />;
+}
+
+function ActivePickupsOrJobs() {
+  const { profile } = useAuthStore();
+  if (profile?.agentAccountType === 'fleet_driver') {
+    return <Navigate to="/jobs" replace />;
+  }
+  return <ActivePickupsPage />;
 }
 
 function ProtectedLayout() {
@@ -206,7 +224,7 @@ export default function App() {
   }, [isAuthenticated, userId, profile?.isOnline]);
 
   return (
-    <div className="min-h-dvh bg-[#F8F8FF] dark:bg-slate-800 transition-colors duration-200">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-800 transition-colors duration-200">
       {isInitializing && <LoadingScreen message="Syncing Dispatch..." />}
       <OfflineBanner />
       <Routes>
@@ -234,10 +252,10 @@ export default function App() {
             <Route path="/rfqs" element={<MyRFQs />} />
             <Route path="/rfqs/:rfqId" element={<RFQDetailsPage />} />
             <Route path="/rfqs/:rfqId/offers/:offerId" element={<RFQOfferDetailsPage />} />
-            <Route path="/pickups" element={<ActivePickupsPage />} />
+            <Route path="/pickups" element={<ActivePickupsOrJobs />} />
             <Route path="/pickups/:id" element={<ActivePickupDetailsPage />} />
             <Route path="/expected-arrivals" element={<ExpectedArrivalsPage />} />
-            <Route path="/trades" element={<MyTrades />} />
+            <Route path="/trades" element={<TradesOrRecommendations />} />
             <Route path="/wallet" element={<AgentWallet />} />
             <Route path="/payout-history" element={<PayoutHistory />} />
             <Route path="/deposit" element={<DepositPage />} />
@@ -263,6 +281,7 @@ export default function App() {
               <Route index element={<SettingsMenu />} />
               <Route path="configuration" element={<AgentConfigurationPage />} />
               <Route path="profile" element={<ProfilePage />} />
+              <Route path="complaints" element={<AgentComplaintsPage />} />
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="privacy" element={<PrivacySecurityPage />} />
               <Route path="support" element={<SupportPage />} />

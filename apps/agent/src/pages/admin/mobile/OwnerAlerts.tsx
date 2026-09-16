@@ -24,11 +24,11 @@ export default function OwnerAlerts() {
   // Alerts by type
   const alertTypes = [
     { label: 'Disputes', icon: ShieldAlert, count: alerts.filter(a => a.type === 'dispute').length, color: 'text-rose-600', bg: 'bg-rose-50 dark:bg-rose-500/10', borderColor: 'border-rose-600 ' },
-    { label: 'Deposits', icon: DollarSign, count: Math.floor(alerts.length * 0.3), color: 'text-emerald-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
-    { label: 'Fleet', icon: Users, count: Math.floor(alerts.length * 0.2), color: 'text-blue-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
-    { label: 'Performance', icon: TrendingDown, count: Math.floor(alerts.length * 0.15), color: 'text-violet-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
-    { label: 'Security', icon: Shield, count: Math.floor(alerts.length * 0.1), color: 'text-amber-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
-    { label: 'System', icon: Settings, count: Math.floor(alerts.length * 0.1), color: 'text-gray-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'Deposits', icon: DollarSign, count: Math.floor(alerts.length * 0.3), color: 'text-emerald-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'Fleet', icon: Users, count: Math.floor(alerts.length * 0.2), color: 'text-blue-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'Performance', icon: TrendingDown, count: Math.floor(alerts.length * 0.15), color: 'text-violet-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'Security', icon: Shield, count: Math.floor(alerts.length * 0.1), color: 'text-amber-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
+    { label: 'System', icon: Settings, count: Math.floor(alerts.length * 0.1), color: 'text-gray-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-[#F8F8FF]' },
   ];
 
   const tabs = ['All', 'Unread', 'Critical', 'Resolved'];
@@ -89,7 +89,7 @@ export default function OwnerAlerts() {
     <div className="animate-in fade-in duration-300">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-800 border-b border-slate-100 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 border-b border-slate-100 dark:border-slate-800 shadow-sm">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -124,7 +124,7 @@ export default function OwnerAlerts() {
                   className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 rounded-xl text-[11px] font-bold transition-all shrink-0 border ${
                     activeTab === tab
                       ? 'bg-primary dark:bg-white border-primary dark:border-white text-white dark:text-slate-600 shadow-sm'
-                      : 'bg-[#F8F8FF] dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-800'
+                      : 'bg-slate-50 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-800'
                   }`}
                 >
                   {tab}
@@ -171,7 +171,7 @@ export default function OwnerAlerts() {
             placeholder="Search alerts..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#F8F8FF] dark:bg-slate-800 border border-slate-200 dark:border-slate-800 focus:border-emerald-500 rounded-xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
+            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 focus:border-emerald-500 rounded-xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
           />
         </div>
 
@@ -190,7 +190,7 @@ export default function OwnerAlerts() {
           {/* ── ALERTS LIST ── */}
           <div className="space-y-1">
             {filteredAlerts.length === 0 ? (
-              <div className="text-center py-16 flex flex-col items-center justify-center bg-[#F8F8FF] dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+              <div className="text-center py-16 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
                 <CheckCircle2 className="w-12 h-12 text-emerald-500 mb-4 opacity-50" />
                 <p className="text-sm font-black text-slate-900 dark:text-white mb-1">No Alerts</p>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Operations are running smoothly.</p>
@@ -206,7 +206,7 @@ export default function OwnerAlerts() {
                     onClick={() => {
                       if (!alert.read) markAsRead(alert.id);
                     }}
-                    className={`bg-[#F8F8FF] dark:bg-slate-800 rounded-xl p-4 border transition-all cursor-pointer active:scale-[0.98] ${
+                    className={`bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border transition-all cursor-pointer active:scale-[0.98] ${
                       !alert.read 
                         ? 'border-slate-200 dark:border-slate-700' 
                         : 'border-slate-100 dark:border-slate-800'

@@ -57,7 +57,7 @@ export default function NotificationsFeed() {
   return (
     <div className="pb-4 bg-white dark:bg-slate-800">
       {/* ── FIXED TOPNAV ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#F8F8FF]/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-900 max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-6">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-50/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-900 max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-6">
         <div className="flex items-center justify-between px-4 h-10">
           <div className="flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">

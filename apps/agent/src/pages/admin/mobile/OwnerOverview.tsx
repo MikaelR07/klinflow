@@ -33,12 +33,12 @@ export default function OwnerOverview() {
 
   // 1. KPI Cards data
   const kpis = [
-    { label: 'Completed Pickups', value: totalCompletedJobs.toString(), subtext: '98% success rate', icon: PackageCheck, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
-    { label: 'Collection Value', value: `KES ${collectionValue.toLocaleString()}`, subtext: '+5% vs last week', icon: Coins, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
-    { label: 'Collection Today', value: `${totalCollections.toLocaleString()} kg`, subtext: '+12% vs yesterday', icon: Scale, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
-    { label: 'Active Dispatches', value: activeFulfillments.length.toString(), subtext: 'On time delivery', icon: Clock, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
-    { label: 'Active Agents', value: onlineDrivers.length.toString(), subtext: '1 offline', icon: Users, color: 'text-teal-600 dark:text-teal-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
-    { label: 'Pending Issues', value: '3', subtext: 'Needs attention', icon: AlertTriangle, color: 'text-rose-600 dark:text-rose-400', bg: 'bg-[#F8F8FF] dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800', isDanger: true },
+    { label: 'Completed Pickups', value: totalCompletedJobs.toString(), subtext: '98% success rate', icon: PackageCheck, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-slate-50 dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
+    { label: 'Collection Value', value: `KES ${collectionValue.toLocaleString()}`, subtext: '+5% vs last week', icon: Coins, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-slate-50 dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
+    { label: 'Collection Today', value: `${totalCollections.toLocaleString()} kg`, subtext: '+12% vs yesterday', icon: Scale, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-slate-50 dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
+    { label: 'Active Dispatches', value: activeFulfillments.length.toString(), subtext: 'On time delivery', icon: Clock, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-slate-50 dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
+    { label: 'Active Agents', value: onlineDrivers.length.toString(), subtext: '1 offline', icon: Users, color: 'text-teal-600 dark:text-teal-400', bg: 'bg-slate-50 dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800' },
+    { label: 'Pending Issues', value: '3', subtext: 'Needs attention', icon: AlertTriangle, color: 'text-rose-600 dark:text-rose-400', bg: 'bg-slate-50 dark:bg-slate-800', border: 'border-slate-100 dark:border-slate-800', isDanger: true },
   ];
 
   // Group into rows of 3 for the scrollable container
@@ -118,7 +118,7 @@ export default function OwnerOverview() {
         <div className="overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-1 px-2 -mx-2">
           <div className="flex gap-1 w-max px-2">
           {scrollableQuickActions.map((action, i) => (
-            <button key={i} onClick={() => navigate(action.path)} className="snap-start shrink-0 flex items-center gap-2 bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl p-2 pr-3 shadow-sm active:scale-95 transition-all w-[120px]">
+            <button key={i} onClick={() => navigate(action.path)} className="snap-start shrink-0 flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800 rounded-xl p-2 pr-3 shadow-sm active:scale-95 transition-all w-[120px]">
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${action.bg} ${action.color}`}>
                 <action.icon className="w-4 h-4 " />
               </div>

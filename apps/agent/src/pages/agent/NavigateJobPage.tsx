@@ -85,7 +85,7 @@ export default function NavigateJobPage() {
             photos: d.photo_url ? [d.photo_url] : [],
             photoUrl: d.photo_url,
             pay: d.fee,
-            bags: d.bags,
+
             actual_weight_kg: d.actual_weight_kg,
             weight_kg: (d as any).weight_kg,
             is_market_trade: d.is_market_trade,
@@ -235,7 +235,7 @@ export default function NavigateJobPage() {
             <p className="text-[11px] text-slate-400">Review details before starting collection.</p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-2 sm:p-4 rounded-[1.5rem] border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-2 mb-4">
+          <div className="bg-slate-200 dark:bg-slate-800 p-2 sm:p-4 rounded-[1.5rem] border border-slate-100 dark:border-slate-800/40 shadow-sm flex flex-col gap-2 mb-4">
             
             {/* Client Row */}
             <div className="flex items-center gap-4 p-2">
@@ -460,6 +460,15 @@ export default function NavigateJobPage() {
                   p_payout_amount: activeJob.total_price || activeJob.pay || 0
                 });
                 if (error) throw error;
+                
+                // Ensure category and sourcing tags are natively logged to the asset
+                await supabase.from('assets')
+                  .update({
+                     material_category: data.category || data.materialCategory,
+                     sourcing_tag: 'Seller'
+                  })
+                  .eq('booking_id', activeJob.id);
+
                 await useAuthStore.getState().fetchProfile();
                 await useAgentStore.getState().fetchActiveJobs();
                 await useAgentStore.getState().fetchEarnings();

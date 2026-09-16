@@ -60,56 +60,40 @@ const NAV_CONFIG: NavSection[] = [
        { name: 'Dashboard', path: '/' }
      ]
    },
-     {
-       title: 'Operations',
-       icon: Factory,
-       items: [
-         { name: 'Intake Management', path: '/operations/intake' },
-         { name: 'Materials Received', path: '/operations/received' },
-         { name: 'Dispatch Queue', path: '/operations/dispatch' },
-         { name: 'Batch Tracking', path: '/operations/batch' },
-         { name: 'Inventory Ledger', path: '/operations/inventory' },
-         { name: 'Transfer Orders', path: '/operations/transfers' },
-         { name: 'Dispute Control', path: '/operations/disputes' },
-         { name: 'Reports', path: '/operations/reports' },
-       ],
-       roles: ['operations_manager']
-     },
+      {
+        title: 'Operations',
+        icon: Factory,
+        items: [
+          { name: 'Intake Management', path: '/operations/intake' },
+          { name: 'Dispatch Pickups', path: '/fleet/dispatch' },
+          { name: 'Processing Tracker', path: '/operations/batch' },
+          { name: 'Inventory Ledger', path: '/operations/inventory' },
+        ],
+        roles: ['operations_manager']
+      },
     {
       title: 'Fleet',
       icon: Truck,
       items: [
-        { name: 'Fleet Overview', path: '/fleet/overview' },
-        { name: 'Dispatch & Assignments', path: '/fleet/dispatch' },
-        { name: 'Agent Pickups', path: '/fleet/pickups' },
-        { name: 'Sales Delivery', path: '/fleet/deliveries' },
-        { name: 'Onboarding', path: '/fleet/onboarding' },
-        { name: 'Agents Network', path: '/fleet/agents' },
-        { name: 'Route Optimization', path: '/fleet/routing' },
-        { name: 'Vehicles', path: '/fleet/vehicles' },
-        { name: 'Maintenance', path: '/fleet/maintenance' },
+        { name: 'Fleet Agents', path: '/fleet/agents' },
+        { name: 'Onboarding & Recruiting', path: '/fleet/onboarding' },
         { name: 'Agent Complaints', path: '/fleet/complaints' },
-        { name: 'Reports', path: '/fleet/reports' },
       ],
-      roles: ['fleet_manager']
+      roles: ['fleet_manager', 'operations_manager']
     },
-   {
-     title: 'Marketplace',
-     icon: ShoppingCart,
-     items: [
-       { name: 'Inventory Listings', path: '/marketplace/listings' },
-       { name: 'Klin Market', path: '/marketplace/market' },
-       { name: 'Active RFQs', path: '/marketplace/rfqs' },
-       { name: 'Sales Pipeline', path: '/marketplace/pipeline' },
-       { name: 'Auctions', path: '/marketplace/auctions' },
-       { name: 'Orders ', path: '/marketplace/orders' },
-       { name: 'Contracts', path: '/marketplace/contracts' },
-       { name: 'Buyer Network', path: '/marketplace/buyers' },
-       { name: 'Supplier Network', path: '/marketplace/sellers' },
-       { name: 'Reports', path: '/marketplace/reports' },
-     ],
-     roles: ['sales_manager']
-   },
+    {
+      title: 'Marketplace',
+      icon: ShoppingCart,
+      items: [
+        { name: 'Klin Market', path: '/marketplace/market' },
+        { name: 'Resident Requests', path: '/marketplace/resident-requests' },
+        { name: 'Sales Inventory', path: '/marketplace/inventory' },
+        { name: 'Live Auctions', path: '/marketplace/auctions' },
+        { name: 'Sourcing RFQs', path: '/marketplace/rfqs' },
+        { name: 'Market Open RFQs', path: '/marketplace/market-open-rfqs' },
+      ],
+      roles: ['sales_manager', 'operations_manager']
+    },
 
    {
      title: 'Pricing',
@@ -141,20 +125,7 @@ const NAV_CONFIG: NavSection[] = [
       ],
       roles: ['finance_manager']
     },
-   {
-     title: 'ESG & Compliance',
-     icon: Leaf,
-     items: [
-       { name: 'Sustainability Dashboard', path: '/esg/dashboard' },
-       { name: 'Carbon Credits', path: '/esg/carbon' },
-       { name: 'Environmental Impact', path: '/esg/impact' },
-       { name: 'ESG Reporting', path: '/esg/reporting' },
-       { name: 'Certifications', path: '/esg/certifications' },
-       { name: 'Regulatory Compliance', path: '/esg/compliance' },
-     ],
-     roles: [],
-     ownerOnly: true
-   },
+
     {
      title: 'Admin',
      icon: Settings,
@@ -167,16 +138,16 @@ const NAV_CONFIG: NavSection[] = [
    {
      title: 'Settings',
      icon: Sliders,
-     items: [
-       { name: 'Profile', path: '/settings/profile' },
-       { name: 'Account Security', path: '/settings/security' },
-       { name: 'Feedback', path: '/settings/feedback' },
-       { name: 'Klinflow Support', path: '/settings/support' },
-       { name: 'Notification Prefs', path: '/settings/notification-preferences' },
-       { name: 'Timezone & Regions', path: '/settings/regions' },
-       { name: 'Notifications', path: '/settings/notifications' },
-       { name: 'Hub Settings', path: '/settings/hub' },
-     ]
+      items: [
+        { name: 'Profile', path: '/settings/profile' },
+        // { name: 'Account Security', path: '/settings/security' },
+        { name: 'Feedback', path: '/settings/feedback' },
+        // { name: 'Klinflow Support', path: '/settings/support' },
+        // { name: 'Notification Prefs', path: '/settings/notification-preferences' },
+        // { name: 'Timezone & Regions', path: '/settings/regions' },
+        // { name: 'Notifications', path: '/settings/notifications' },
+        { name: 'Hub Settings', path: '/settings/hub' },
+      ]
    },
 ];
 
@@ -267,7 +238,7 @@ const handleToggleMarketplace = async (e: React.MouseEvent) => {
   };
 
   return (
-    <div className={`flex h-screen overflow-hidden font-sans antialiased transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-300' : 'bg-slate-50 text-slate-600'}`}>
+    <div className={`flex h-screen overflow-hidden font-sans antialiased transition-colors duration-300 ${isDarkMode ? 'bg-surface-950 text-slate-300' : 'bg-slate-50 text-slate-600'}`}>
       
       {/* ── SIDEBAR ── */}
       <aside className={`
@@ -422,7 +393,7 @@ const handleToggleMarketplace = async (e: React.MouseEvent) => {
       <main className={`flex-1 flex flex-col min-h-screen overflow-hidden transition-all duration-300 ${isDesktopSidebarCollapsed ? 'lg:ml-[72px]' : 'lg:ml-60'}`}>
         
         {/* Header / Topnav */}
-        <header className={`h-16 shrink-0 flex items-center justify-between px-4 sm:px-6 border-b z-40 sticky top-0 backdrop-blur-md ${isDarkMode ? 'bg-slate-950/80 border-white/5 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.5)]' : 'bg-white/80 border-slate-200 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]'}`}>
+        <header className={`h-16 shrink-0 flex items-center justify-between px-4 sm:px-6 border-b z-40 sticky top-0 backdrop-blur-md ${isDarkMode ? 'bg-surface-950/80 border-white/5 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.5)]' : 'bg-white/80 border-slate-200 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.05)]'}`}>
            {/* Left side */}
            <div className="flex items-center gap-4">
              <button 
@@ -543,7 +514,7 @@ const handleToggleMarketplace = async (e: React.MouseEvent) => {
                 {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
               </button>
               
-              <NavLink 
+              {/* <NavLink 
                 to="/settings/notifications"
                 className={`relative p-2 rounded-full transition-colors ${isDarkMode ? 'hover:bg-slate-800 text-slate-400' : 'hover:bg-slate-100 text-slate-400'}`}
               >
@@ -551,7 +522,7 @@ const handleToggleMarketplace = async (e: React.MouseEvent) => {
                  {unreadCount > 0 && (
                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white dark:border-slate-950" />
                  )}
-              </NavLink>
+              </NavLink> */}
 
               {/* Profile Dropdown */}
               <div className="relative">
@@ -615,7 +586,7 @@ const handleToggleMarketplace = async (e: React.MouseEvent) => {
         </header>
 
         {/* Scrollable Page Content */}
-        <div className="flex-1 overflow-auto relative bg-slate-50/50 dark:bg-slate-950">
+        <div className="flex-1 overflow-auto relative bg-slate-50/50 dark:bg-surface-950">
            <Outlet />
         </div>
 

@@ -69,18 +69,18 @@ export default function OwnerDisputes() {
   ];
 
   const disputeTypes = [
-    { label: 'Price Disputes', icon: ShieldAlert, count: disputes.filter(a => a.dispute_type.toLowerCase().includes('price')).length, color: 'text-rose-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-rose-600' },
-    { label: 'Payment Issues', icon: Wallet, count: disputes.filter(a => a.dispute_type.toLowerCase().includes('payment')).length, color: 'text-amber-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-amber-600' },
-    { label: 'Service Issues', icon: Package, count: disputes.filter(a => a.dispute_type.toLowerCase().includes('service')).length, color: 'text-blue-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-blue-600' },
-    { label: 'Agent Issues', icon: UserX, count: disputes.filter(a => a.dispute_type.toLowerCase().includes('agent')).length, color: 'text-violet-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-violet-600' },
-    { label: 'Other', icon: Settings, count: disputes.filter(a => !['price','payment','service','agent'].some(t => a.dispute_type.toLowerCase().includes(t))).length, color: 'text-slate-600', bg: 'bg-[#F8F8FF] dark:bg-slate-800', borderColor: 'border-slate-600' },
+    { label: 'Price Disputes', icon: ShieldAlert, count: disputes.filter(a => a.dispute_type.toLowerCase().includes('price')).length, color: 'text-rose-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-rose-600' },
+    { label: 'Payment Issues', icon: Wallet, count: disputes.filter(a => a.dispute_type.toLowerCase().includes('payment')).length, color: 'text-amber-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-amber-600' },
+    { label: 'Service Issues', icon: Package, count: disputes.filter(a => a.dispute_type.toLowerCase().includes('service')).length, color: 'text-blue-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-blue-600' },
+    { label: 'Agent Issues', icon: UserX, count: disputes.filter(a => a.dispute_type.toLowerCase().includes('agent')).length, color: 'text-violet-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-violet-600' },
+    { label: 'Other', icon: Settings, count: disputes.filter(a => !['price','payment','service','agent'].some(t => a.dispute_type.toLowerCase().includes(t))).length, color: 'text-slate-600', bg: 'bg-slate-50 dark:bg-slate-800', borderColor: 'border-slate-600' },
   ];
 
   return (
     <div className="animate-in fade-in duration-300">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-[#F8F8FF] dark:bg-slate-950 border-b border-slate-100 dark:border-slate-900 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-900 shadow-sm">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -201,7 +201,7 @@ export default function OwnerDisputes() {
               {[1, 2, 3].map(i => <div key={i} className="h-28 bg-white dark:bg-slate-900 rounded-xl animate-pulse border border-slate-100 dark:border-slate-800" />)}
             </div>
           ) : filteredDisputes.length === 0 ? (
-            <div className="text-center py-16 flex flex-col items-center justify-center bg-[#F8F8FF] dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+            <div className="text-center py-16 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
               <CheckCircle2 className="w-12 h-12 text-emerald-500 mb-4 opacity-50" />
               <p className="text-sm font-black text-slate-900 dark:text-white mb-1">No Disputes Found</p>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">You're all clear here.</p>

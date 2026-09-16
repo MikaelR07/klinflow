@@ -10,6 +10,8 @@ export type Order = Database['public']['Tables']['marketplace_orders']['Row'];
 export type Offer = Database['public']['Tables']['marketplace_offers']['Row'];
 
 export interface MarketplaceStore {
+  territoryFilter: 'global' | 'local';
+  setTerritoryFilter: (filter: 'global' | 'local') => void;
   listings: MarketplaceListing[];
   targetedDropoffs: MarketplaceListing[];
   myListings: MarketplaceListing[];

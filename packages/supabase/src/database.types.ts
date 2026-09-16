@@ -9,6 +9,68 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      sales_deals: {
+        Row: {
+          id: string
+          company_id: string
+          buyer_company_name: string
+          contact_name: string
+          contact_email: string | null
+          contact_phone: string | null
+          material: string
+          source: string | null
+          value: number
+          probability: number
+          stage: string
+          priority: string
+          last_activity_at: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          company_id: string
+          buyer_company_name: string
+          contact_name: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          material: string
+          source?: string | null
+          value?: number
+          probability?: number
+          stage?: string
+          priority?: string
+          last_activity_at?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          company_id?: string
+          buyer_company_name?: string
+          contact_name?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          material?: string
+          source?: string | null
+          value?: number
+          probability?: number
+          stage?: string
+          priority?: string
+          last_activity_at?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_deals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           id: string
@@ -320,6 +382,7 @@ export type Database = {
           id: string
           listing_id: string
           buyer_id: string
+          company_id: string | null
           seller_id: string | null
           offered_price: number
           quantity: number
@@ -332,6 +395,7 @@ export type Database = {
           id?: string
           listing_id: string
           buyer_id: string
+          company_id?: string | null
           seller_id?: string | null
           offered_price: number
           quantity: number
@@ -344,6 +408,7 @@ export type Database = {
           id?: string
           listing_id?: string
           buyer_id?: string
+          company_id?: string | null
           seller_id?: string | null
           offered_price?: number
           quantity?: number

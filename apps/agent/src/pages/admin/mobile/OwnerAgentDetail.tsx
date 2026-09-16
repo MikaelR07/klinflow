@@ -95,7 +95,7 @@ export default function OwnerAgentDetail() {
       </div>
 
       {/* ── DETAIL SHEET ── */}
-      <div className="flex-1 overflow-y-auto px-3 py-5 space-y-5 pb-24 relative -mt-4 bg-[#F8F8FF] dark:bg-slate-900 rounded-t-[1.5rem]">
+      <div className="flex-1 overflow-y-auto px-3 py-5 space-y-5 pb-24 relative -mt-4 bg-slate-50 dark:bg-slate-900 rounded-t-[1.5rem]">
         
         {/* ── QUICK ACTIONS ── */}
         <div className="flex items-center gap-2 w-full">
@@ -159,7 +159,7 @@ export default function OwnerAgentDetail() {
               { icon: Activity, label: 'Status', value: agent.is_online ? '● Active' : '● Offline', valueColor: agent.is_online ? 'text-emerald-500' : 'text-slate-400' },
             ].map((info, i) => (
               <div key={i} className={`flex items-center gap-3 px-4 py-3 ${i < 4 ? 'border-b border-slate-100 dark:border-slate-700' : ''}`}>
-                <div className="w-9 h-9 bg-[#F8F8FF] dark:bg-slate-900 rounded-lg flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 bg-slate-50 dark:bg-slate-900 rounded-lg flex items-center justify-center shrink-0">
                   <info.icon className="w-4 h-4 text-slate-400" />
                 </div>
                 <div className="flex-1 min-w-0">

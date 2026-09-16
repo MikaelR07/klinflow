@@ -54,7 +54,7 @@ export default function AboutUs() {
                 Building the{' '}
                 <span className="text-emerald-500">Operating System </span>, for the Modern Circular Economy.
               </h1>
-              <p className={`text-xl leading-relaxed max-w-3xl ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+              <p className={`text-sm sm:text-base md:text-lg font-normal leading-relaxed mb-10 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                 Klinflow is the AI-powered operating system for Africa's waste-to-value supply chain. We provide the infrastructure, intelligence, and financial rails that transform scattered informal recycling networks into efficient, traceable, and profitable operations.
                 We aim to modernize the recycling industry by equipping every participant with the technology needed to operate more efficiently, collaborate seamlessly, and create greater value from recyclable materials.
               </p>
@@ -90,7 +90,7 @@ export default function AboutUs() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
               <div>
                 <h2 className={`text-3xl md:text-4xl font-bold tracking-tight mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Our Mission</h2>
-                <div className={`space-y-6 text-lg leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                <div className={`space-y-6 text-sm sm:text-base md:text-lg font-normal leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                   <p>
                     The global waste management industry generates over $2 trillion in economic value annually, yet much of the recycling supply chain — especially in emerging markets — remains informal, untracked, and financially excluded.
                   </p>
@@ -105,7 +105,7 @@ export default function AboutUs() {
               
               <div>
                 <h2 className={`text-3xl md:text-4xl font-bold tracking-tight mb-8 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Our Approach</h2>
-                <div className={`space-y-6 text-lg leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                <div className={`space-y-6 text-sm sm:text-base md:text-lg font-normal leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                   <p>
                     We take an infrastructure-first approach. Rather than building a marketplace on top of broken processes, we re-engineered the entire operational backbone: digital intake workflows, automated quality grading, real-time fleet telemetry, and instant micropayment settlement.
                   </p>

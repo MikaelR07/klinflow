@@ -807,7 +807,7 @@ export const useAuthStore = create<AuthState>()(
           role: role || ROLES.USER,
           wallet_balance: 0,
           reward_points: 0,
-          is_verified: true,
+          is_verified: false,
           company_name: company_name || null,
           gender: gender || null
         };

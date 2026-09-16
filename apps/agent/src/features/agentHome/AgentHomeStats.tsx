@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import {
   Handshake, Truck, Star, Zap, Briefcase, Receipt, PlusSquare,
-  MapPinPlus
+  MapPinPlus, Package
 } from 'lucide-react';
 import { supabase } from '@klinflow/supabase';
 import type { AgentEarningsData } from './agentHome.types';
@@ -149,7 +149,7 @@ export default function AgentHomeStats({
                   {acceptedTradesCount || 0}
                 </h4>
                 <p className="text-[9px] font-bold text-emerald-100/60 leading-tight">
-                  Accepted Bids
+                  {profile?.agentAccountType === 'fleet_driver' ? 'Accepted Leads' : 'Accepted Bids'}
                 </p>
               </div>
             </div>
@@ -182,7 +182,7 @@ export default function AgentHomeStats({
               <Zap className="w-4 h-4 text-blue-400 shrink-0 mx-auto" />
               <div>
                 <h4 className="text-sm font-black text-white leading-none mb-1 truncate">
-                  {profile?.rewardPoints || 0}
+                  {profile?.rewardPoints ?? profile?.gfp_balance ?? profile?.gfpBalance ?? 0}
                 </h4>
                 <p className="text-[9px] font-bold text-emerald-100/60 leading-tight">
                   Points
@@ -229,38 +229,56 @@ export default function AgentHomeStats({
               <Handshake className="w-5 h-5" />
             </div>
             <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
-              Market Bids
+              {profile?.agentAccountType === 'fleet_driver' ? 'Hub Leads' : 'Market Bids'}
             </p>
           </button>
 
-          <button
-            onClick={() => navigate('/rfq/create')}
-            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
-          >
-            <div className="w-10 h-10 shrink-0 bg-amber-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <PlusSquare className="w-5 h-5" />
-            </div>
-            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
-              Create RFQ
-            </p>
-          </button>
+          {profile?.agentAccountType !== 'fleet_driver' ? (
+            <>
+              <button
+                onClick={() => navigate('/rfq/create')}
+                className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+              >
+                <div className="w-10 h-10 shrink-0 bg-amber-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <PlusSquare className="w-5 h-5" />
+                </div>
+                <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
+                  Create RFQ
+                </p>
+              </button>
 
-          <button
-            onClick={handleRfqsClick}
-            className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group relative"
-          >
-            {newRfqsCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center shadow-sm z-10">
-                {newRfqsCount > 99 ? '99+' : newRfqsCount}
-              </span>
-            )}
-            <div className="w-10 h-10 shrink-0 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Receipt className="w-5 h-5" />
-            </div>
-            <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
-              View RFQs
-            </p>
-          </button>
+              <button
+                onClick={handleRfqsClick}
+                className="min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group relative"
+              >
+                {newRfqsCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold px-1.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center shadow-sm z-10">
+                    {newRfqsCount > 99 ? '99+' : newRfqsCount}
+                  </span>
+                )}
+                <div className="w-10 h-10 shrink-0 bg-indigo-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Receipt className="w-5 h-5" />
+                </div>
+                <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
+                  View RFQs
+                </p>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => navigate('/warehouse')}
+                className="col-span-2 min-w-0 bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 rounded-xl p-2 flex flex-col items-center gap-1 active:scale-[0.98] transition-all shadow-none group"
+              >
+                <div className="w-10 h-10 shrink-0 bg-purple-500 text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Package className="w-5 h-5" />
+                </div>
+                <p className="text-[10px] font-bold text-slate-700 dark:text-slate-300 leading-tight mt-1 text-center break-words">
+                  Warehouse
+                </p>
+              </button>
+            </>
+          )}
         </div>
       </div>
       </div>

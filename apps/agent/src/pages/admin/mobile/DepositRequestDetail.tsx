@@ -99,7 +99,7 @@ export default function DepositRequestDetail() {
               <FileText className="w-4 h-4 text-emerald-600" />
               <h3 className="text-sm font-bold text-slate-700 dark:text-white">Request Overview</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 min-w-0">
                   <p className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest mb-1">Request ID</p>
@@ -130,7 +130,7 @@ export default function DepositRequestDetail() {
               <Info className="w-4 h-4 text-emerald-600" />
               <h3 className="text-sm font-bold text-slate-800 dark:text-white">Request Information</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl divide-y divide-slate-100 dark:divide-slate-700">
               <div className="flex items-center justify-between px-4 py-3.5">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
@@ -155,7 +155,7 @@ export default function DepositRequestDetail() {
                   <FileText className="w-4 h-4 text-emerald-600" />
                   <h3 className="text-sm font-bold text-slate-800 dark:text-white">Agent Notes</h3>
                 </div>
-                <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4">
+                <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4">
                   <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     {req.notes || "No notes provided by the agent for this request."}
                   </p>
@@ -170,7 +170,7 @@ export default function DepositRequestDetail() {
               <Clock className="w-4 h-4 text-emerald-600" />
               <h3 className="text-sm font-bold text-slate-800 dark:text-white">Status Timeline</h3>
             </div>
-            <div className="bg-[#F8F8FF] dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 space-y-1">
+            <div className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-4 space-y-1">
               {/* Requested */}
               <div className="flex items-start gap-3">
                 <div className="flex flex-col items-center">

@@ -27,6 +27,11 @@ import {
 export const useMarketplaceStore = create<MarketplaceStore>()(
   persist(
     (set, get) => ({
+  territoryFilter: 'global',
+  setTerritoryFilter: (filter) => {
+    set({ territoryFilter: filter });
+    get().fetchListings();
+  },
   listings: [],
   targetedDropoffs: [],
   myListings: [],
@@ -40,12 +45,23 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
   fetchListings: async () => {
     set({ isLoading: true });
     try {
-      const { data, error } = await supabase
-        .from('marketplace_listings')
-        .select('*')
-        .eq('status', 'active')
-        .is('target_agent_id', null)
-        .order('created_at', { ascending: false });
+      const { territoryFilter } = get();
+      let query;
+      
+      if (territoryFilter === 'local') {
+        const { userId } = useAuthStore.getState();
+        query = supabase
+          .rpc('get_local_listings', { p_hub_id: userId });
+      } else {
+        query = supabase
+          .from('marketplace_listings')
+          .select('*')
+          .eq('status', 'active')
+          .is('target_agent_id', null)
+          .order('created_at', { ascending: false });
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
 
@@ -433,7 +449,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
         .insert({
           user_id: userId,
           waste_type: order.material,
-          bags: Math.ceil(order.quantity / 20), // Estimate bags
+          weight_kg: order.quantity,
           status: 'pending',
           is_market_trade: true,
           total_price: 500 // Base logistics fee for B2B
@@ -527,24 +543,26 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           *,
           marketplace_listings (*)
         `)
-        .eq('seller_id', userId)
-        .eq('status', 'pending');
+        .eq('seller_id', userId);
 
       if (error) throw error;
 
       if (data) {
-        const buyerIds = [...new Set(data.map((o) => o.buyer_id))];
-        const { data: buyers } = await supabase
-          .from('profiles')
-          .select('id, name')
-          .in('id', buyerIds);
+        const buyerIds = [...new Set(data.map((o) => o.buyer_id).filter(Boolean))];
+        const companyIds = [...new Set(data.map((o) => o.company_id).filter(Boolean))];
+        
+        const [ { data: buyers }, { data: companies } ] = await Promise.all([
+          buyerIds.length > 0 ? supabase.from('profiles').select('id, name').in('id', buyerIds) : Promise.resolve({ data: [] }),
+          companyIds.length > 0 ? supabase.from('companies').select('id, name').in('id', companyIds) : Promise.resolve({ data: [] })
+        ]);
         
         const buyerMap = Object.fromEntries(buyers?.map((b) => [b.id, b.name]) || []);
+        const companyMap = Object.fromEntries(companies?.map((c) => [c.id, c.name]) || []);
 
         const rawOffers = data.map(raw => {
           const o = raw as any;
           const normalized = normalizeKeys(o);
-          normalized.buyerName = buyerMap[o.buyer_id] || 'Interested Buyer';
+          normalized.buyerName = companyMap[o.company_id] || buyerMap[o.buyer_id] || 'Interested Buyer';
           normalized.listing = normalized.marketplaceListings;
           normalized.material = o.marketplace_listings?.material || 'Recyclables';
           normalized.photo = o.marketplace_listings?.photo_url;
@@ -559,7 +577,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
   },
 
   makeOffer: async (listing, price, quantity) => {
-    const { userId } = useAuthStore.getState();
+    const { userId, currentCompanyId } = useAuthStore.getState();
     if (!userId) return;
 
     try {
@@ -570,6 +588,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           tracking_id: generateTrackingId('OFR'),
           listing_id: listing.id,
           buyer_id: userId,
+          company_id: currentCompanyId || null,
           seller_id: listing.sellerId,
           offered_price: price,
           quantity: quantity,
@@ -631,6 +650,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           tracking_id: generateTrackingId('ORD'),
           listing_id: offer.listingId,
           buyer_id: offer.buyerId,
+          company_id: offer.companyId || null,
           seller_id: offer.sellerId,
           material: offer.material || 'Recyclables',
           quantity: offer.quantity,
@@ -653,13 +673,14 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
           .insert({
             user_id: offer.sellerId,
             agent_id: offer.buyerId, // The agent who won the bid handles the pickup
+            company_id: offer.companyId || null,
             waste_type: offer.material || 'Recyclables',
             status: 'pending',
             is_market_trade: true,
             total_price: offer.offeredPrice * offer.quantity,
             preferred_date: new Date().toISOString().split('T')[0],
             photo_url: offer.photo,
-            actual_weight_kg: offer.quantity,
+            weight_kg: offer.quantity,
             estate: offer.listing?.location || undefined,
             latitude: offer.listing?.latitude || undefined,
             longitude: offer.listing?.longitude || undefined,
@@ -676,9 +697,8 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
         }
       }
 
-      // 3. Update local state
       set(state => ({
-        receivedOffers: state.receivedOffers.filter(o => o.id !== offer.id)
+        receivedOffers: state.receivedOffers.map(o => o.id === offer.id ? { ...o, status: 'accepted' } : o)
       }));
 
       get().fetchReceivedOrders();
@@ -706,7 +726,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
       if (error) throw error;
 
       set(state => ({
-        receivedOffers: state.receivedOffers.filter(o => o.id !== offerId)
+        receivedOffers: state.receivedOffers.map(o => o.id === offerId ? { ...o, status: 'rejected' } : o)
       }));
     } catch (error) {
       console.error('Error declining offer:', error);

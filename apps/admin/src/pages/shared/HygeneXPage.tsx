@@ -89,7 +89,7 @@ const Waveform = ({ isListening, isTyping }) => {
 
 export default function HygeneXPage() {
   const { role } = useAuthStore();
-  const { messages, isTyping, metrics, initChat, stopChat, sendMessage } = useHygenexStore();
+  const { messages, isTyping, initChat, stopChat, sendMessage } = useHygenexStore();
   const [inputText, setInputText] = useState("");
   const chatBottomRef = useRef(null);
   

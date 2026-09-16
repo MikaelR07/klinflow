@@ -166,6 +166,8 @@ export const useAssetStore = create<AssetStore>((set, get) => ({
             tracking_id: originTrackingId,
             origin_tracking_id: originTrackingId,
             material_type: verificationData.materialType,
+            material_category: verificationData.category || verificationData.materialCategory,
+            sourcing_tag: 'Resident',
             grade: verificationData.grade,
             weight_kg: verificationData.weightKg,
             estimated_value: grossValue, // Gross value of material

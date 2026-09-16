@@ -96,6 +96,81 @@ export const useAgentStore = create<AgentStore>()(
   fleetDrivers: [],
   isLoadingFleet: false,
   lastFleetFetch: 0,
+  
+  fleetAnalytics: null,
+  isLoadingAnalytics: false,
+  fetchFleetAnalytics: async (companyId) => {
+    set({ isLoadingAnalytics: true });
+    try {
+      const data = await AgentService.fetchFleetAnalytics(companyId);
+      set({ fleetAnalytics: data });
+    } catch (err) {
+      console.error('Fetch fleet analytics error:', err);
+    } finally {
+      set({ isLoadingAnalytics: false });
+    }
+  },
+
+  fleetVehicles: [],
+  isLoadingVehicles: false,
+  fetchFleetVehicles: async (companyId) => {
+    set({ isLoadingVehicles: true });
+    try {
+      const data = await AgentService.fetchFleetVehicles(companyId);
+      set({ fleetVehicles: data });
+    } catch (err) {
+      console.error('Fetch fleet vehicles error:', err);
+    } finally {
+      set({ isLoadingVehicles: false });
+    }
+  },
+
+  addFleetVehicle: async (vehicleData) => {
+    const { userId, profile } = useAuthStore.getState();
+    const companyId = profile?.companyId || userId;
+    if (!companyId) return { success: false, error: 'No company ID found' };
+    
+    try {
+      const newVehicle = await AgentService.addFleetVehicle({ ...vehicleData, company_id: companyId });
+      // Attach the agent name if assigned
+      const agentDetails = get().fleetDrivers.find(d => d.id === vehicleData.assigned_agent_id);
+      const enrichedVehicle = { ...newVehicle, assigned_agent: { name: agentDetails?.name || 'Unassigned' } };
+      
+      set({ fleetVehicles: [...get().fleetVehicles, enrichedVehicle] });
+      return { success: true };
+    } catch (err: any) {
+      console.error('Add fleet vehicle error:', err);
+      return { success: false, error: err.message };
+    }
+  },
+
+  updateFleetVehicle: async (id, updates) => {
+    try {
+      const updatedVehicle = await AgentService.updateFleetVehicle(id, updates);
+      
+      set({ 
+        fleetVehicles: get().fleetVehicles.map(v => 
+          v.id === id ? { ...v, ...updatedVehicle, assigned_agent: v.assigned_agent } : v
+        ) 
+      });
+      return { success: true };
+    } catch (err: any) {
+      console.error('Update fleet vehicle error:', err);
+      return { success: false, error: err.message };
+    }
+  },
+
+  deleteFleetVehicle: async (id) => {
+    try {
+      await AgentService.deleteFleetVehicle(id);
+      set({ fleetVehicles: get().fleetVehicles.filter(v => v.id !== id) });
+      return { success: true };
+    } catch (err: any) {
+      console.error('Delete fleet vehicle error:', err);
+      return { success: false, error: err.message };
+    }
+  },
+
   fetchFleetDrivers: async () => {
     const { userId, profile } = useAuthStore.getState();
     if (!userId || profile?.agentAccountType !== 'company_admin') return;
@@ -106,34 +181,10 @@ export const useAgentStore = create<AgentStore>()(
     set({ isLoadingFleet: true });
     try {
       const data = await AgentService.fetchFleetDrivers(userId);
+      set({ fleetDrivers: data, lastFleetFetch: Date.now() });
       
-      // Also fetch their aggregate stats (disputes, completed jobs, collected kg, payouts)
-      const { data: disputesData } = await supabase.from('disputes').select('raised_by').eq('status', 'open');
-      const { data: bookingsData } = await supabase.from('bookings').select('agent_id, actual_weight_kg, payout_amount').eq('status', 'completed');
-      
-      const disputesCount: Record<string, number> = {};
-      (disputesData || []).forEach((d: any) => {
-        disputesCount[d.raised_by] = (disputesCount[d.raised_by] || 0) + 1;
-      });
-      
-      const fleetStats: Record<string, { jobs: number, kg: number, payout: number }> = {};
-      (bookingsData || []).forEach((b: any) => {
-        if (!b.agent_id) return;
-        if (!fleetStats[b.agent_id]) fleetStats[b.agent_id] = { jobs: 0, kg: 0, payout: 0 };
-        fleetStats[b.agent_id].jobs += 1;
-        fleetStats[b.agent_id].kg += Number(b.actual_weight_kg || 0);
-        fleetStats[b.agent_id].payout += Number(b.payout_amount || 0);
-      });
-
-      const enrichedDrivers = data.map(driver => ({
-        ...driver,
-        dispute_count: disputesCount[driver.id!] || 0,
-        completed_jobs: fleetStats[driver.id!]?.jobs || 0,
-        collected_kg: fleetStats[driver.id!]?.kg || 0,
-        payout_amount: fleetStats[driver.id!]?.payout || 0
-      }));
-
-      set({ fleetDrivers: enrichedDrivers, lastFleetFetch: Date.now() });
+      // Fetch analytics concurrently
+      get().fetchFleetAnalytics(userId);
     } catch (err) {
       console.error('Fetch fleet drivers error:', err);
     } finally {
@@ -141,10 +192,136 @@ export const useAgentStore = create<AgentStore>()(
     }
   },
   
+  // ── Hub Unified Pickups ─────────────────────────────
+  hubPickups: [],
+  isLoadingHubPickups: false,
+  fetchHubPickups: async (companyId: string) => {
+    set({ isLoadingHubPickups: true });
+    try {
+      if (get().fleetDrivers.length === 0) {
+         await get().fetchFleetDrivers();
+      }
+      const driverIds = get().fleetDrivers.map(d => d.id);
+      if (driverIds.length === 0) {
+        set({ hubPickups: [] });
+        return;
+      }
+      
+      const { data, error } = await supabase
+        .from('hub_unified_pickups_view')
+        .select('*')
+        .in('agent_id', driverIds)
+        .order('created_at', { ascending: false });
+        
+      if (error) throw error;
+      set({ hubPickups: data as any[] });
+    } catch (err) {
+      console.error('Fetch hub pickups error:', err);
+    } finally {
+      set({ isLoadingHubPickups: false });
+    }
+  },
+
   // ── Agent Configuration ────────────────────────────
   agentConfig: null,
   companyProfile: null,
   isLoadingConfig: false,
+
+  // ── Agent Complaints ───────────────────────────────
+  agentComplaints: [],
+  isLoadingComplaints: false,
+
+  fetchAgentComplaints: async (agentId) => {
+    set({ isLoadingComplaints: true });
+    try {
+      const { data, error } = await supabase
+        .from('agent_complaints')
+        .select('*')
+        .eq('agent_id', agentId)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      set({ agentComplaints: data || [] });
+    } catch (err) {
+      console.error('[AgentStore] Error fetching agent complaints:', err);
+    } finally {
+      set({ isLoadingComplaints: false });
+    }
+  },
+
+  fetchHubAgentComplaints: async (companyId: string, alternateId?: string) => {
+    set({ isLoadingComplaints: true });
+    try {
+      const idsToMatch = Array.from(new Set([companyId, alternateId].filter(Boolean)));
+      let query = supabase
+        .from('agent_complaints')
+        .select(`
+          *,
+          profiles!agent_id(name, avatar_url, phone)
+        `);
+
+      if (idsToMatch.length > 1) {
+        query = query.or(idsToMatch.map(id => `company_id.eq.${id}`).join(','));
+      } else if (idsToMatch.length === 1) {
+        query = query.eq('company_id', idsToMatch[0]);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
+
+      if (error) throw error;
+      set({ agentComplaints: (data as any) || [] });
+    } catch (err) {
+      console.error('[AgentStore] Error fetching hub complaints:', err);
+    } finally {
+      set({ isLoadingComplaints: false });
+    }
+  },
+
+  submitAgentComplaint: async (agentId, companyId, payload) => {
+    try {
+      const { error } = await supabase
+        .from('agent_complaints')
+        .insert({
+          agent_id: agentId,
+          company_id: companyId,
+          type: payload.type,
+          description: payload.description,
+          priority: payload.priority || 'medium',
+          is_anonymous: payload.is_anonymous || false,
+          status: 'open'
+        });
+      
+      if (error) throw error;
+      return { success: true };
+    } catch (err: any) {
+      console.error('[AgentStore] Error submitting complaint:', err);
+      return { success: false, error: err.message };
+    }
+  },
+
+  updateAgentComplaintStatus: async (complaintId, status, resolutionNote) => {
+    try {
+      const { error } = await supabase
+        .from('agent_complaints')
+        .update({ status, resolution_note: resolutionNote || null })
+        .eq('id', complaintId);
+      
+      if (error) throw error;
+
+      // Update local state
+      set(state => ({
+        agentComplaints: state.agentComplaints.map(c => 
+          c.id === complaintId ? { ...c, status, resolution_note: resolutionNote } : c
+        )
+      }));
+
+      return { success: true };
+    } catch (err: any) {
+      console.error('[AgentStore] Error updating complaint status:', err);
+      return { success: false, error: err.message };
+    }
+  },
+
   
   fetchAgentConfig: async () => {
     const { userId, profile } = useAuthStore.getState();
@@ -325,7 +502,6 @@ export const useAgentStore = create<AgentStore>()(
       const mapped: AgentJob[] = filteredJobs.map(b => ({
           id: b.id,
           material: b.waste_type,
-          bags: b.bags,
           actual_weight_kg: b.actual_weight_kg,
           weight_kg: b.weight_kg,
           location: b.estate,
@@ -440,7 +616,6 @@ export const useAgentStore = create<AgentStore>()(
     const mapped: AgentJob[] = typedBookings.map(b => ({
       id: b.id,
       material: b.waste_type,
-      bags: b.bags,
       actual_weight_kg: b.actual_weight_kg,
       weight_kg: b.weight_kg,
       pay: (b.fee || 0) * useSettingsStore.getState().getAgentCommission(),
@@ -540,7 +715,6 @@ export const useAgentStore = create<AgentStore>()(
             photo_url: b.photo_url,
             photoUrl: b.photo_url || null,
             photos: b.photo_url ? [b.photo_url] : [],
-            bags: b.bags || 0,
             actual_weight_kg: b.actual_weight_kg || 0,
             weight_kg: b.weight_kg || 0,
             time: b.time_slot || '',
@@ -638,7 +812,7 @@ export const useAgentStore = create<AgentStore>()(
     try {
       const { userId, profile } = useAuthStore.getState();
       if (!userId) return false;
-      const { error: updateError } = await supabase.rpc('accept_booking', { target_booking_id: jobId, assigned_agent_id: userId });
+      const { error: updateError } = await supabase.rpc('accept_booking', { target_booking_id: jobId });
       if (updateError) throw updateError;
       await get().fetchAvailableJobs();
       await get().fetchActiveJobs();

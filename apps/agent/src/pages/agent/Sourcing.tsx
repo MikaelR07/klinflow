@@ -46,6 +46,7 @@ export default function Sourcing() {
   const isLoading = useMarketplaceStore(s => s.isLoading);
 
   const profile = useAuthStore(s => s.profile);
+  const currentCompanyId = useAuthStore(s => s.currentCompanyId);
   const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -53,6 +54,7 @@ export default function Sourcing() {
   const [selectedTab, setSelectedTab] = useState<'All' | 'Individual' | 'Bulk Sells' | 'Drop-offs'>('All');
   const [offerPrice, setOfferPrice] = useState('');
   const [offerQty, setOfferQty] = useState(1);
+  const [recommendations, setRecommendations] = useState<any[]>([]);
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filterMaterial, setFilterMaterial] = useState('All');
@@ -87,6 +89,9 @@ export default function Sourcing() {
   useEffect(() => {
     fetchListings();
     fetchSentOffers();
+    if (profile?.id && isFleetDriver) {
+      fetchRecommendations();
+    }
     if (!isFleetDriver) fetchTargetedDropoffs();
 
     const mapListing = (l) => ({
@@ -180,6 +185,54 @@ export default function Sourcing() {
     }
   };
 
+  const handleRecommendToHub = async () => {
+    if (!offerPrice || parseFloat(offerPrice) <= 0) {
+      toast.error('Please enter a valid price');
+      return;
+    }
+    if (offerQty <= 0 || offerQty > selectedListing.quantity) {
+      toast.error('Invalid quantity');
+      return;
+    }
+
+    try {
+      const { error } = await supabase.from('agent_recommendations').insert({
+        agent_id: profile?.id,
+        hub_id: currentCompanyId,
+        listing_id: selectedListing.id,
+        recommended_price_per_kg: parseFloat(offerPrice),
+        recommended_quantity: parseFloat(offerQty.toString())
+      });
+      if (error) throw error;
+
+      setSelectedId(null);
+      setOfferPrice('');
+      toast.success('Recommendation Sent! 🚀', { description: 'The hub manager will review this material.' });
+      fetchRecommendations();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
+
+  const fetchRecommendations = async () => {
+    if (!profile?.id) return;
+    try {
+      const { data, error } = await supabase
+        .from('agent_recommendations')
+        .select('listing_id')
+        .eq('agent_id', profile.id);
+      if (!error && data) {
+        setRecommendations(data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getHasRecommended = (listingId: string) => {
+    return recommendations.some(r => r.listing_id === listingId);
+  };
+
   const getHasOffer = (listingId) => {
     return sentOffers.some(o => o.listingId === listingId);
   };
@@ -188,6 +241,11 @@ export default function Sourcing() {
     // If the Drop-offs tab is active, show targeted dropoffs instead
     if (selectedTab === 'Drop-offs') {
       let result = targetedDropoffs;
+      
+      if (!isFleetDriver) {
+        result = result.filter(l => !getHasOffer(l.id));
+      }
+
       if (!searchTerm) return result;
       const term = searchTerm.toLowerCase();
       return result.filter(l =>
@@ -197,6 +255,13 @@ export default function Sourcing() {
     }
 
     let result = listings;
+
+    // Filter out listings that the agent has already interacted with
+    if (isFleetDriver) {
+      result = result.filter(l => !getHasRecommended(l.id));
+    } else {
+      result = result.filter(l => !getHasOffer(l.id));
+    }
 
     if (isFleetDriver) {
       result = result.filter(l => (l as any).pickupMode !== 'dropoff');
@@ -241,16 +306,16 @@ export default function Sourcing() {
       (l.material && l.material.toLowerCase().includes(term)) ||
       (l.location && l.location.toLowerCase().includes(term))
     );
-  }, [listings, targetedDropoffs, searchTerm, selectedTab, filterMaterial, filterWeight, filterPriceRange]);
+  }, [listings, targetedDropoffs, searchTerm, selectedTab, filterMaterial, filterWeight, filterPriceRange, isFleetDriver, recommendations, sentOffers]);
 
   return (
-    <div className="flex flex-col bg-[#F8F8FF] dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
-        <div className="h-[calc(env(safe-area-inset-top,1rem)+8.2rem)]" />
+        <div className="h-[calc(env(safe-area-inset-top,1rem)+8.3rem)]" />
       )}
       {!selectedId && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 pt-[calc(env(safe-area-inset-top,1rem)+0.8rem)] pb-1 px-4 border-b border-slate-200 dark:border-slate-900 max-w-lg mx-auto">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-1 px-4 border-b border-slate-200 dark:border-slate-900 max-w-lg mx-auto">
           <div className="max-w-lg mx-auto">
             {/* Header row */}
             <div className="flex items-center justify-between mb-2">
@@ -580,24 +645,26 @@ export default function Sourcing() {
                 </div>
 
                 {/* Premium Bid Section */}
-                <div className={`${getHasOffer(selectedListing.id) ? 'bg-primary' : 'bg-emerald-700'} p-2 rounded-[1rem] border border-white/10 space-y-4 transition-colors duration-500`}>
+                <div className={`${(isFleetDriver ? getHasRecommended(selectedListing.id) : getHasOffer(selectedListing.id)) ? 'bg-primary' : 'bg-emerald-700'} p-2 rounded-[1rem] border border-white/10 space-y-4 transition-colors duration-500`}>
                   <div className="flex items-center justify-center gap-3">
                     <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                      {getHasOffer(selectedListing.id) ? (
+                      {(isFleetDriver ? getHasRecommended(selectedListing.id) : getHasOffer(selectedListing.id)) ? (
                         <CheckCircle2 className="w-4 h-4 text-white" />
                       ) : (
                         <MessageSquareQuote className="w-4 h-4 text-white" />
                       )}
                     </div>
                     <h3 className="text-[10px] font-bold text-white capitalize tracking-[0.2em]">
-                      {getHasOffer(selectedListing.id) ? 'Bid Active' : 'Ready to negotiate?'}
+                      {(isFleetDriver ? getHasRecommended(selectedListing.id) : getHasOffer(selectedListing.id)) ? (isFleetDriver ? 'Recommendation Sent' : 'Bid Active') : (isFleetDriver ? 'Recommend to Hub' : 'Ready to negotiate?')}
                     </h3>
                   </div>
 
-                  {getHasOffer(selectedListing.id) ? (
+                  {(isFleetDriver ? getHasRecommended(selectedListing.id) : getHasOffer(selectedListing.id)) ? (
                     <div className="text-center py-4 space-y-2">
                       <p className="text-xs font-medium text-white/90 leading-relaxed italic px-4">
-                        "Your offer for this material has been sent to the merchant. You'll be notified if they accept your bid."
+                        {isFleetDriver 
+                          ? "Your recommendation has been sent to the Hub. You will be dispatched to collect the material once the Hub Manager accepts it."
+                          : "Your offer for this material has been sent to the merchant. You'll be notified if they accept your bid."}
                       </p>
                       <div className="pt-4">
                         <button
@@ -638,7 +705,7 @@ export default function Sourcing() {
                       
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1.5">
-                          <label className="text-[9px] font-bold text-white capitalize tracking-widest ml-1">My Price Offer</label>
+                          <label className="text-[9px] font-bold text-white capitalize tracking-widest ml-1">{isFleetDriver ? 'Recommended Price' : 'My Price Offer'}</label>
                           <div className="relative">
                             <input
                               type="number"
@@ -651,7 +718,7 @@ export default function Sourcing() {
                           </div>
                         </div>
                         <div className="space-y-1.5">
-                          <label className="text-[9px] font-bold text-white capitalize tracking-widest ml-1">Total Weight</label>
+                          <label className="text-[9px] font-bold text-white capitalize tracking-widest ml-1">{isFleetDriver ? 'Recommended Weight' : 'Total Weight'}</label>
                           <div className="relative">
                             <input
                               type="number"
@@ -668,18 +735,18 @@ export default function Sourcing() {
 
                       <div className="pt-1 border-t border-white/10">
                         <div className="flex items-center justify-between mb-4 px-1">
-                          <p className="text-[10px] font-bold text-white/80 capitalize tracking-widest">Total Bid Value</p>
+                          <p className="text-[10px] font-bold text-white/80 capitalize tracking-widest">{isFleetDriver ? 'Total Recommendation Value' : 'Total Bid Value'}</p>
                           <p className="text-base font-black text-white tracking-tighter">KSh {(parseFloat(offerPrice || '0') * parseFloat(offerQty?.toString() || '0')).toLocaleString()}</p>
                         </div>
 
                         <button
-                          onClick={handleMakeOffer}
+                          onClick={isFleetDriver ? handleRecommendToHub : handleMakeOffer}
                           disabled={isLoading || !offerPrice || !offerQty}
                           className="w-full py-4 bg-white text-primary rounded-2xl font-black text-xs capitalize tracking-[0.2em] shadow-xl shadow-black/10 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                         >
                           {isLoading ? 'Processing...' : (
                             <>
-                              <CheckCircle2 className="w-5 h-5" /> Send Offer Now
+                              <CheckCircle2 className="w-5 h-5" /> {isFleetDriver ? 'Recommend to Hub' : 'Send Offer Now'}
                             </>
                           )}
                         </button>
@@ -761,9 +828,9 @@ export default function Sourcing() {
                                 <MapPin className="w-2.5 h-2.5 text-green-500" /> {listing.location}
                               </p>
                             )}
-                            {getHasOffer(listing.id) && (
+                            {(isFleetDriver ? getHasRecommended(listing.id) : getHasOffer(listing.id)) && (
                               <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[6px] font-black capitalize tracking-[0.2em] rounded shrink-0">
-                                ACTIVE BID
+                                {isFleetDriver ? 'RECOMMENDED' : 'ACTIVE BID'}
                               </span>
                             )}
                           </div>
