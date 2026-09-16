@@ -189,7 +189,7 @@ export default function Register() {
           <div className="min-h-[40vh] shrink-0" />
 
           {/* Bottom Docked Form Card */}
-          <div className="flex-1 bg-white rounded-t-[40px] px-6 pt-10 pb-8 flex flex-col relative shadow-[0_-15px_40px_rgba(0,0,0,0.15)] min-h-[60vh]">
+          <div className="flex-1 bg-white rounded-t-[40px] px-6 pt-10 pb-8 flex flex-col relative min-h-[60vh]">
             
             {/* Header */}
             <div className="mb-8">
