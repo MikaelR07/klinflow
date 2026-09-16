@@ -170,7 +170,7 @@ export default function Register() {
       <div className="flex-1 flex flex-col bg-white w-full max-w-lg mx-auto relative shadow-2xl overflow-y-auto overflow-x-hidden">
         
         {/* Top Image Section (Curved) */}
-        <div className={`w-full h-[40vh] min-h-[300px] relative shrink-0 z-10 pointer-events-none ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
+        <div className={`w-full h-[35vh] min-h-[250px] relative shrink-0 pointer-events-none ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
           <img 
             src="/welcome/registrationPage.webp" 
             alt="Create your account" 
@@ -181,7 +181,7 @@ export default function Register() {
         </div>
 
         {/* Bottom Form Section */}
-        <div className="flex-1 px-6 pt-8 pb-8 flex flex-col relative z-20 bg-white rounded-t-[32px] -mt-10">
+        <div className="flex-1 px-6 pt-8 pb-8 flex flex-col relative bg-white">
           
           {/* Header */}
           <div className="mb-6">

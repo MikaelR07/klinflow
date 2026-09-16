@@ -118,7 +118,7 @@ export default function Login() {
       <div className="flex-1 flex flex-col bg-white w-full max-w-lg mx-auto relative shadow-2xl overflow-y-auto overflow-x-hidden">
         
         {/* Top Image Section (Curved) */}
-        <div className={`w-full h-[45vh] min-h-[350px] relative shrink-0 z-10 pointer-events-none ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
+        <div className={`w-full h-[40vh] min-h-[250px] relative shrink-0 pointer-events-none ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
           <img 
             src="/welcome/loginTwo.webp" 
             alt="Welcome back" 
@@ -129,7 +129,7 @@ export default function Login() {
         </div>
 
         {/* Bottom Form Section */}
-        <div className="flex-1 px-8 pt-8 pb-8 flex flex-col relative z-20 bg-white rounded-t-[32px] -mt-10">
+        <div className="flex-1 px-8 pt-8 pb-8 flex flex-col relative bg-white">
           
           {/* Header */}
           <div className="mb-4">
