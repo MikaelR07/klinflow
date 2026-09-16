@@ -27,7 +27,9 @@ export default function Register() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [phoneAvailable, setPhoneAvailable] = useState<boolean | null>(null);
+  const [currentStep, setCurrentStep] = useState(1);
 
   const navigate = useNavigate();
   const { register, checkAvailability, sendOtp, verifyOtp } = useAuthStore();
@@ -78,20 +80,23 @@ export default function Register() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleNextStep = () => {
+    const nameParts = formData.name.trim().split(/\s+/);
+    if (nameParts.length < 2) return toast.error('Incomplete Name', { description: 'Please provide at least a First and Last name.' });
+    if (formData.phone.length !== 10) return toast.error('Format Error', { description: 'Phone must be exactly 10 digits.' });
+    if (phoneAvailable === false) return toast.error('Blocked', { description: 'This number is already registered.' });
+    if (!formData.email) return toast.error('Field Missing', { description: 'Please provide an email address.' });
+    if (!formData.gender) return toast.error('Field Missing', { description: 'Please select your gender.' });
+    setCurrentStep(2);
+  };
+
   const initiateRegistration = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // ── VALIDATION GATE ──
-    const nameParts = formData.name.trim().split(/\s+/);
-    if (nameParts.length < 2) {
-      return toast.error('Incomplete Name', { description: 'Please provide at least a First and Last name.' });
-    }
-    if (formData.phone.length !== 10) return toast.error('Format Error', { description: 'Phone must be exactly 10 digits.' });
-    if (phoneAvailable === false) return toast.error('Blocked', { description: 'This number is already registered.' });
     if (formData.pin.length < 8) return toast.error('Security Risk', { description: 'Passcode must be at least 8 characters.' });
     if (formData.pin !== formData.confirmPin) return toast.error('Match Error', { description: 'Passcodes do not match.' });
     if (!formData.location?.estate) return toast.error('Field Missing', { description: 'Please select your estate location.' });
-    if (!formData.gender) return toast.error('Field Missing', { description: 'Please select your gender.' });
 
     // Send real OTP via Africa's Talking
     setIsLoading(true);
@@ -165,27 +170,30 @@ export default function Register() {
       <div className="flex-1 flex flex-col bg-white w-full max-w-lg mx-auto relative shadow-2xl overflow-y-auto overflow-x-hidden">
         
         {/* Top Image Section (Curved) */}
-        <div className="w-full h-[35vh] min-h-[250px] relative shrink-0 z-10 pointer-events-none">
+        <div className={`w-full h-[40vh] min-h-[300px] relative shrink-0 z-10 pointer-events-none ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
           <img 
             src="/welcome/registrationPage.webp" 
             alt="Create your account" 
-            className="absolute inset-0 w-full h-full object-cover object-top" 
+            className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`} 
             draggable={false}
+            onLoad={() => setImageLoaded(true)}
           />
         </div>
 
         {/* Bottom Form Section */}
-        <div className="flex-1 px-6 pt-4 pb-8 flex flex-col relative z-0 bg-white -mt-16">
+        <div className="flex-1 px-6 pt-8 pb-8 flex flex-col relative z-0 bg-white rounded-t-[32px] -mt-10">
           
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-[28px] font-bold text-[#0c392c] mb-1.5 tracking-tight">Create your account</h1>
             <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[300px]">
-              Join the Klinflow community and turn recyclables into value.
+              {currentStep === 1 ? 'Join the Klinflow community and turn recyclables into value.' : 'Secure your account and set your location.'}
             </p>
           </div>
 
           <form onSubmit={initiateRegistration} className="space-y-3.5 flex-1">
+            {currentStep === 1 ? (
+              <>
             
             {/* Full Name Input */}
             <div className="relative group">
@@ -264,6 +272,16 @@ export default function Register() {
               </div>
             </div>
 
+            <button
+              type="button"
+              onClick={handleNextStep}
+              className="w-full py-[18px] mt-6 bg-[#064e3b] hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2"
+            >
+              Continue <ArrowRight className="w-[18px] h-[18px]" />
+            </button>
+            </>
+            ) : (
+            <>
             {/* Passwords */}
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -303,18 +321,25 @@ export default function Register() {
               />
             </div>
 
-            {/* Register Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-[18px] mt-2 bg-[#064e3b] hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>Register <ArrowRight className="w-[18px] h-[18px]" /></>
-              )}
-            </button>
+            {/* Register Buttons */}
+            <div className="flex gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => setCurrentStep(1)}
+                className="w-[60px] shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl flex items-center justify-center transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="flex-1 py-[18px] bg-[#064e3b] hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Complete Registration'}
+              </button>
+            </div>
+            </>
+            )}
           </form>
 
           {/* Footer Link */}

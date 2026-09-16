@@ -10,6 +10,7 @@ export default function Login() {
   const [pin, setPin] = useState('');
   const [showPin, setShowPin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // Recovery Flow State
   const [recoveryStep, setRecoveryStep] = useState<'none' | 'phone' | 'otp'>('none');
@@ -117,12 +118,13 @@ export default function Login() {
       <div className="flex-1 flex flex-col bg-white w-full max-w-lg mx-auto relative shadow-2xl overflow-y-auto overflow-x-hidden">
         
         {/* Top Image Section (Curved) */}
-        <div className="w-full h-[45vh] min-h-[350px] relative shrink-0 z-10 pointer-events-none">
+        <div className={`w-full h-[45vh] min-h-[350px] relative shrink-0 z-10 pointer-events-none ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
           <img 
             src="/welcome/loginTwo.webp" 
             alt="Welcome back" 
-            className="absolute inset-0 w-full h-full object-cover object-top" 
+            className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`} 
             draggable={false}
+            onLoad={() => setImageLoaded(true)}
           />
         </div>
 

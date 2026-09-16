@@ -12,17 +12,15 @@ export default function OfflineBanner() {
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="fixed top-16 left-0 right-0 z-[100] bg-opacity-100 bg-red-500 backdrop-blur-md text-white px-4 py-2 flex items-center justify-center gap-3 shadow-lg "
+          className="fixed top-14 left-25 right-0 mx-auto w-max z-[100] bg-red-500 text-white px-4 py-2 flex items-center justify-center gap-2 rounded-full shadow-lg shadow-red-900/20"
         >
           <WifiOff className="w-4 h-4 animate-pulse" />
           <p className="text-xs font-semibold tracking-wide">
-            You are offline.{' '}
-            {pendingCount > 0 ? (
-              <span className="font-bold bg-white/20 px-1.5 py-0.5 rounded ml-1">
+            You are in offline mode.
+            {pendingCount > 0 && (
+              <span className="font-bold bg-white/20 px-1.5 py-0.5 rounded ml-2">
                 {pendingCount} actions queued
               </span>
-            ) : (
-              <span className="opacity-90 font-medium ml-1">You are in offline mode</span>
             )}
           </p>
         </motion.div>
