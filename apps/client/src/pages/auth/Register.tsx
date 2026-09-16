@@ -181,7 +181,7 @@ export default function Register() {
         </div>
 
         {/* Bottom Form Section */}
-        <div className="flex-1 px-6 pt-8 pb-8 flex flex-col relative z-0 bg-white rounded-t-[32px] -mt-10">
+        <div className="flex-1 px-6 pt-8 pb-8 flex flex-col relative z-20 bg-white rounded-t-[32px] -mt-10">
           
           {/* Header */}
           <div className="mb-6">
