@@ -166,33 +166,27 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col bg-[#f8fafc] sm:bg-slate-100 min-h-[100dvh] relative overflow-hidden font-sans">
-      <div className="flex-1 w-full max-w-lg mx-auto relative shadow-2xl bg-[#06241c] overflow-hidden">
+    <div className="flex flex-col bg-white sm:bg-slate-100 min-h-[100dvh] relative overflow-hidden font-sans">
+      <div className="flex-1 flex flex-col w-full max-w-lg mx-auto relative shadow-2xl overflow-hidden bg-white">
         
         {/* Fixed Background Image */}
-        <div className="absolute top-0 left-0 right-0 h-[50vh] pointer-events-none z-0">
-          <div className={`absolute inset-0 transition-opacity duration-700 ${!imageLoaded ? 'bg-emerald-900/40 animate-pulse' : 'bg-transparent'}`} />
+        <div className={`absolute top-0 left-0 right-0 h-[55vh] pointer-events-none z-0 ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
           <img 
             src="/welcome/registrationPage.webp" 
             alt="Create your account" 
-            className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`} 
+            className={`w-full h-full object-cover object-top transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`} 
             draggable={false}
             onLoad={() => setImageLoaded(true)}
           />
-          {/* Subtle gradient overlay to blend bottom edge */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#06241c] to-transparent opacity-80" />
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent" />
         </div>
 
-        {/* Scrollable Content Layer */}
-        <div className="absolute inset-0 z-10 overflow-y-auto overflow-x-hidden flex flex-col">
-          {/* Transparent spacer to push card down */}
-          <div className="min-h-[40vh] shrink-0" />
-
-          {/* Bottom Docked Form Card */}
-          <div className="flex-1 bg-white rounded-t-[40px] px-6 pt-10 pb-8 flex flex-col relative min-h-[60vh]">
+        {/* Scrollable Foreground */}
+        <div className="flex-1 w-full relative z-10 overflow-y-auto overflow-x-hidden flex flex-col">
+          <div className="flex-1 flex flex-col px-6 pt-10 pb-8 bg-white rounded-t-[40px] mt-[45vh] shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
             
             {/* Header */}
-            <div className="mb-8">
+            <div className="mb-6">
               <h1 className="text-[28px] font-bold text-emerald-700 mb-1.5 tracking-tight">Create your account</h1>
               <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[300px]">
                 {currentStep === 1 ? 'Join the Klinflow community and turn recyclables into value.' : 'Secure your account and set your location.'}
@@ -355,7 +349,6 @@ export default function Register() {
             Already have an account? <Link to="/login" className="text-[#064e3b] font-bold hover:underline">Sign in</Link>
           </p>
 
-        </div>
         </div>
       </div>
 
