@@ -129,10 +129,10 @@ export default function Login() {
         </div>
 
         {/* Bottom Form Section */}
-        <div className="flex-1 px-8 pt-14 pb-8 flex flex-col relative z-20 bg-white rounded-t-[40px] -mt-12">
+        <div className="flex-1 px-8 pt-24 pb-8 flex flex-col relative z-20 bg-white rounded-t-[40px] -mt-12">
           
           {/* Header */}
-          <div className="mb-4">
+          <div className="mb-4 relative z-50">
             <h1 className="text-3xl font-bold text-[#0c392c] mb-2 tracking-tight">Welcome back</h1>
             <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[280px]">
               Ready to make an impact today?

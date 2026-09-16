@@ -181,10 +181,10 @@ export default function Register() {
         </div>
 
         {/* Bottom Form Section */}
-        <div className="flex-1 px-6 pt-14 pb-8 flex flex-col relative z-20 bg-white rounded-t-[40px] -mt-12">
+        <div className="flex-1 px-6 pt-24 pb-8 flex flex-col relative z-20 bg-white rounded-t-[40px] -mt-12">
           
           {/* Header */}
-          <div className="mb-6">
+          <div className="mb-6 relative z-50">
             <h1 className="text-[28px] font-bold text-[#0c392c] mb-1.5 tracking-tight">Create your account</h1>
             <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[300px]">
               {currentStep === 1 ? 'Join the Klinflow community and turn recyclables into value.' : 'Secure your account and set your location.'}
