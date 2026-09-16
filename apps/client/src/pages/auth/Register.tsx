@@ -351,6 +351,7 @@ export default function Register() {
 
         </div>
       </div>
+    </div>
 
       {/* ── VERIFICATION OVERLAY ────────────────────────────────────── */}
       {isVerifying && (
