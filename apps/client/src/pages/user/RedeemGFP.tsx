@@ -1,122 +1,127 @@
 /**
  * RedeemGFP — Production-grade points redemption page
- * Integrates with walletService for real wallet operations
+ * Rebuilt as a Rewards Store based on the Bonga Points model
+ * Supports dynamic KES amount input based on Providers
  */
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Gift, Phone, Landmark,
-  ChevronRight, ShieldCheck, HelpCircle,
-  Wallet, Info, Lock, Loader2,
-  Receipt, X, AlertCircle, CheckCircle2,
-  Copy, ArrowRight, Clock
+  ArrowLeft, Gift, Phone, AlertCircle,
+  Wallet, Loader2,
+  X, CheckCircle2, Copy, Clock
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
-import { walletService, WALLET_CONFIG, RedemptionResult, RedemptionRecord } from '@klinflow/core';
+import { walletService, REWARDS_CATALOG, RewardItem, RedemptionResult } from '@klinflow/core';
 import { toast } from 'sonner';
 
-type RedeemOption = 'money' | 'safaricom' | 'airtel' | 'khetias' | 'naivas';
-
-const REDEEM_OPTIONS = [
-  { id: 'money' as RedeemOption, title: 'Withdraw Cash', desc: 'Convert GFP directly to your Klinflow cash wallet', icon: Landmark, color: 'text-white', bg: 'bg-blue-600', type: 'money' as const, payout_method: 'wallet_cash' },
-  { id: 'safaricom' as RedeemOption, title: 'Safaricom Airtime', desc: 'Top up your Safaricom airtime instantly', icon: Phone, color: 'text-white', bg: 'bg-green-600', type: 'airtime' as const, payout_method: 'safaricom_airtime' },
-  { id: 'airtel' as RedeemOption, title: 'Airtel Airtime', desc: 'Top up your Airtel airtime instantly', icon: Phone, color: 'text-white', bg: 'bg-red-600', type: 'airtime' as const, payout_method: 'airtel_airtime' },
-  { id: 'khetias' as RedeemOption, title: 'Khetias Voucher', desc: 'Shop quality products at Khetias stores', icon: Gift, color: 'text-white', bg: 'bg-yellow-500', type: 'voucher' as const, payout_method: 'voucher_khetias' },
-  { id: 'naivas' as RedeemOption, title: 'Naivas Voucher', desc: 'Redeem at any Naivas branch nationwide', icon: Gift, color: 'text-white', bg: 'bg-amber-600', type: 'voucher' as const, payout_method: 'voucher_naivas' },
-];
-
-type ViewState = 'options' | 'confirm' | 'processing' | 'success';
+type ViewState = 'catalog' | 'confirm' | 'processing' | 'success';
 
 export default function RedeemGFP() {
   const navigate = useNavigate();
   const { userId, profile } = useAuthStore();
   const [gfpBalance, setGfpBalance] = useState(0);
+  const [pointsLastEarnedAt, setPointsLastEarnedAt] = useState<string | null>(null);
   const [isLoadingWallet, setIsLoadingWallet] = useState(true);
 
-  const [selectedOption, setSelectedOption] = useState<RedeemOption | null>(null);
+  const [selectedReward, setSelectedReward] = useState<RewardItem | null>(null);
+  
+  // Custom Input State
+  const [inputKesAmount, setInputKesAmount] = useState<string>('');
+  
   const [showModal, setShowModal] = useState(false);
-  const [gfpAmount, setGfpAmount] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState(profile?.phone || '');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [sendTo, setSendTo] = useState<'me' | 'other'>('me');
+  const [activeTab, setActiveTab] = useState<'all' | 'airtime' | 'voucher'>('all');
 
-  const [viewState, setViewState] = useState<ViewState>('options');
+  const [viewState, setViewState] = useState<ViewState>('catalog');
   const [redemptionResult, setRedemptionResult] = useState<RedemptionResult | null>(null);
-  const [recentRedemptions, setRecentRedemptions] = useState<RedemptionRecord[]>([]);
-  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
 
-  // Fetch real wallet balance & history
+  // Fetch real wallet balance
   useEffect(() => {
     if (userId) {
       setIsLoadingWallet(true);
-      walletService.getWalletDetails(userId).then(data => {
-        if (data) setGfpBalance(data.available_points);
+      walletService.getWalletDetails(userId).then((data: any) => {
+        if (data) {
+          setGfpBalance(data.available_points || 0);
+          setPointsLastEarnedAt(data.points_last_earned_at || null);
+        }
         setIsLoadingWallet(false);
-      });
-      walletService.getRedemptionHistory(userId, 'all', 'all', 3).then(data => {
-        setRecentRedemptions(data);
-        setIsLoadingHistory(false);
       });
     }
   }, [userId]);
 
-  const { GFP_TO_KES_RATE, MIN_REDEMPTION_POINTS, MAX_REDEMPTION_PER_TX } = WALLET_CONFIG;
-  const maxKsh = gfpBalance * GFP_TO_KES_RATE;
+  const filteredRewards = useMemo(() => {
+    return REWARDS_CATALOG.filter((r: RewardItem) => r.enabled && (activeTab === 'all' || r.category === activeTab));
+  }, [activeTab]);
 
-  const activeOption = useMemo(
-    () => REDEEM_OPTIONS.find((o) => o.id === selectedOption),
-    [selectedOption]
-  );
+  // Check for upcoming expiry (points older than 5 months warn the user)
+  const isExpiringSoon = useMemo(() => {
+    if (!pointsLastEarnedAt || gfpBalance === 0) return false;
+    const earnedDate = new Date(pointsLastEarnedAt);
+    const fiveMonthsAgo = new Date();
+    fiveMonthsAgo.setMonth(fiveMonthsAgo.getMonth() - 5);
+    return earnedDate < fiveMonthsAgo;
+  }, [pointsLastEarnedAt, gfpBalance]);
 
-  const numericGfp = Number(gfpAmount) || 0;
-  const kesEquivalent = numericGfp * GFP_TO_KES_RATE;
-  const isValidAmount = numericGfp >= MIN_REDEMPTION_POINTS && numericGfp <= gfpBalance && numericGfp <= MAX_REDEMPTION_PER_TX;
+  // Calculate dynamic costs
+  const kesValueNum = parseInt(inputKesAmount) || 0;
+  const totalGfpCost = selectedReward ? Math.ceil(kesValueNum / selectedReward.gfp_to_kes_rate) : 0;
+  
+  const isValidAmount = selectedReward && kesValueNum > 0 && totalGfpCost >= selectedReward.min_gfp && totalGfpCost <= gfpBalance;
+  const errorMsg = selectedReward 
+    ? (totalGfpCost > gfpBalance ? 'Insufficient GFP balance' : (totalGfpCost > 0 && totalGfpCost < selectedReward.min_gfp ? `Minimum is ${(selectedReward.min_gfp * selectedReward.gfp_to_kes_rate)} KES` : ''))
+    : '';
 
-  const requiresPhone = activeOption?.type === 'airtime';
-
-  const handleCardClick = (id: RedeemOption) => {
-    setSelectedOption(id);
-    setGfpAmount('');
-    setViewState('options');
+  const handleCardClick = (reward: RewardItem) => {
+    if (gfpBalance < reward.min_gfp) return;
+    setSelectedReward(reward);
+    setInputKesAmount(''); // Reset input
+    setViewState('confirm');
     setRedemptionResult(null);
     setShowModal(true);
   };
 
-  const handleConfirm = () => {
-    if (!isValidAmount || !activeOption) return;
-    if (requiresPhone && (!phoneNumber || phoneNumber.length < 10)) {
-      toast.error('Please enter a valid phone number');
-      return;
-    }
-    setViewState('confirm');
+  const setMaxAmount = () => {
+    if (!selectedReward) return;
+    const maxKes = Math.floor(gfpBalance * selectedReward.gfp_to_kes_rate);
+    setInputKesAmount(maxKes.toString());
   };
 
   const handleRedeem = async () => {
-    if (!isValidAmount || !activeOption) return;
+    if (!selectedReward || !isValidAmount) return;
+    
+    const finalPhone = sendTo === 'me' ? profile?.phone : phoneNumber;
+    
+    if (selectedReward.requires_phone && (!finalPhone || finalPhone.length < 10)) {
+      toast.error('Please enter a valid phone number');
+      return;
+    }
 
     setViewState('processing');
 
     const result = await walletService.redeemPoints({
-      type: activeOption.type,
-      amount: numericGfp,
-      payout_method: activeOption.payout_method,
-      phone: requiresPhone ? phoneNumber : undefined,
+      type: selectedReward.category,
+      amount: totalGfpCost,
+      payout_method: selectedReward.payout_method,
+      phone: selectedReward.requires_phone ? finalPhone : undefined,
     });
 
     setRedemptionResult(result);
 
     if (result.success) {
       setViewState('success');
-      // Update local balance
-      setGfpBalance(prev => prev - numericGfp);
+      setGfpBalance(prev => prev - totalGfpCost);
     } else {
-      setViewState('options');
+      setViewState('confirm');
       toast.error(result.error || 'Redemption failed. Please try again.');
     }
   };
 
   const handleDone = () => {
     setShowModal(false);
-    setGfpAmount('');
-    setViewState('options');
+    setSelectedReward(null);
+    setInputKesAmount('');
+    setViewState('catalog');
     setRedemptionResult(null);
   };
 
@@ -127,28 +132,15 @@ export default function RedeemGFP() {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch(status) {
-      case 'completed': return 'text-emerald-500 bg-emerald-50 dark:bg-emerald-500/10';
-      case 'pending': return 'text-amber-500 bg-amber-50 dark:bg-amber-500/10';
-      case 'failed': return 'text-rose-500 bg-rose-50 dark:bg-rose-500/10';
-      default: return 'text-slate-500 bg-slate-50 dark:bg-slate-500/10';
-    }
-  };
-
   return (
-    <div className="-mx-1 px-1 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-5 relative overflow-x-hidden">
+    <div className="-mx-1 px-1 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-10 relative overflow-x-hidden min-h-screen">
       {/* PREMIUM AMBER HERO BACKGROUND */}
       <div className="absolute top-0 left-0 right-0 h-[340px] z-0 overflow-hidden">
-        {/* Primary gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 dark:from-amber-600 dark:via-amber-700 dark:to-orange-700" />
-        {/* Mesh overlay for depth */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-white/5" />
-        {/* Decorative circles */}
         <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-white/8" />
         <div className="absolute top-24 -left-20 w-40 h-40 rounded-full bg-orange-400/15" />
         <div className="absolute -bottom-10 right-8 w-32 h-32 rounded-full bg-amber-300/10" />
-        {/* Bottom curve */}
         <div className="absolute -bottom-1 left-0 right-0 h-12 bg-slate-50 dark:bg-slate-900 rounded-t-[2.5rem]" />
       </div>
 
@@ -203,369 +195,302 @@ export default function RedeemGFP() {
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="w-px h-8 bg-gradient-to-b from-transparent via-slate-200 dark:via-slate-600 to-transparent mx-2" />
-
-            {/* Worth (KES) */}
-            <div className="flex-1 flex items-center justify-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-500/15 flex items-center justify-center shrink-0">
-                <Landmark className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div>
-                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Worth (KES)</p>
-                <span className="text-lg font-black text-amber-600 dark:text-amber-400 leading-tight">
-                  {maxKsh.toLocaleString()}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* OPTIONS — Horizontal Scroll */}
-        <div className="mt-2">
-          {/* Section Header */}
-          <div className="flex items-center justify-between mb-2.5 px-0.5">
-            <div className="flex items-center gap-2">
-              <div className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-400 to-amber-600" />
-              <h3 className="text-[13px] font-extrabold text-slate-900 dark:text-white tracking-tight">Redeem your points</h3>
-            </div>
-            <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">Scroll for more →</p>
-          </div>
-
-          <div className="-mx-1.5 px-1.5 flex gap-2 overflow-x-auto snap-x snap-mandatory pb-2 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
-            {REDEEM_OPTIONS.map((opt) => (
-              <button
-                key={opt.id}
-                onClick={() => handleCardClick(opt.id)}
-                disabled={isLoadingWallet}
-                className={`group snap-start shrink-0 w-[100px] flex flex-col items-center justify-center p-3 rounded-xl text-center transition-all duration-200 disabled:opacity-50 active:scale-[0.96] ${selectedOption === opt.id
-                  ? 'bg-emerald-50 dark:bg-emerald-900/20 border-2 border-emerald-500 shadow-lg shadow-emerald-500/10 scale-[1.02]'
-                  : 'bg-white dark:bg-slate-800/90 border border-slate-150 dark:border-slate-700/60 shadow-sm hover:shadow-md'
-                  }`}
-              >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 shadow-sm transition-transform duration-200 group-hover:scale-105 ${opt.bg}`}>
-                  <opt.icon className={`w-4.5 h-4.5 ${opt.color}`} />
-                </div>
-                <h4 className="text-[10px] font-bold text-slate-800 dark:text-white mb-0.5 leading-tight">{opt.title}</h4>
-                <p className="text-[8px] text-slate-400 dark:text-slate-500 leading-tight line-clamp-2">{opt.desc}</p>
-              </button>
-            ))}
-
-            {/* Secure & Instant Card */}
-            {/* <div className="snap-start shrink-0 w-[100px] relative flex flex-col items-center justify-center p-3 rounded-xl text-center bg-gradient-to-br from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-800 border border-blue-400/20 overflow-hidden shadow-sm">
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0" />
-              <div className="relative w-10 h-10 rounded-xl flex items-center justify-center mb-2 bg-white/15 backdrop-blur-sm border border-white/10">
-                <ShieldCheck className="w-4.5 h-4.5 text-white" />
-              </div>
-              <h4 className="relative text-[10px] font-bold text-white mb-0.5 leading-tight">Secure</h4>
-              <p className="relative text-[8px] text-white/60 leading-tight">Instant delivery</p>
-            </div> */}
-          </div>
-        </div>
-
-        {/* RECENT REDEMPTIONS */}
-        <div className="bg-white dark:bg-slate-800/90 rounded-2xl shadow-md !mt-1  border border-slate-100 dark:border-slate-700/80 overflow-hidden">
-          {/* Section Header */}
-          <div className="px-5 pt-4 pb-3 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-1 h-5 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
-              <h3 className="text-[13px] font-extrabold text-slate-900 dark:text-white tracking-tight">Recent Redemptions</h3>
-            </div>
-            <button 
-              onClick={() => navigate('/redemption-history')} 
-              className="flex items-center gap-1 text-[11px] font-bold text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
-            >
-              View All
-              <ChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-          
-          <div className="px-4 pb-4 space-y-2">
-            {isLoadingHistory ? (
-              <div className="py-8 text-center">
-                <Loader2 className="w-5 h-5 animate-spin mx-auto text-slate-400" />
-                <p className="text-[10px] text-slate-400 mt-2 font-medium">Loading history…</p>
-              </div>
-            ) : recentRedemptions.length > 0 ? (
-              recentRedemptions.map((txn, index) => {
-                const opt = REDEEM_OPTIONS.find(o => o.type === txn.type);
-                const Icon = opt?.icon || Receipt;
-                return (
-                  <div 
-                    key={txn.id} 
-                    className="group relative bg-slate-50/80 dark:bg-slate-900/50 p-3.5 rounded-xl border border-slate-100 dark:border-slate-700/50 flex items-center gap-3 hover:bg-white dark:hover:bg-slate-800/60 hover:shadow-sm transition-all duration-200 hover:border-slate-200 dark:hover:border-slate-600"
-                  >
-                    {/* Left accent bar */}
-                    <div className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full ${
-                      txn.status === 'completed' ? 'bg-emerald-400' : txn.status === 'pending' ? 'bg-amber-400' : 'bg-rose-400'
-                    }`} />
-
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${opt ? opt.bg : 'bg-slate-200 dark:bg-slate-700'}`}>
-                      <Icon className={`w-4.5 h-4.5 ${opt ? opt.color : 'text-slate-500'}`} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[12px] font-bold text-slate-800 dark:text-white truncate leading-tight">
-                        {opt?.title || 'Redemption'}
-                      </p>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                          {new Date(txn.created_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
-                        </span>
-                        <span className="w-0.5 h-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
-                        <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${getStatusColor(txn.status)}`}>
-                          {txn.status}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-[13px] font-black text-slate-800 dark:text-white leading-tight">-{txn.amount}</p>
-                      <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">KES {txn.kes_equivalent}</p>
-                    </div>
+            {/* Expiring Soon */}
+            {isExpiringSoon && (
+              <>
+                <div className="w-px h-8 bg-gradient-to-b from-transparent via-slate-200 dark:via-slate-600 to-transparent mx-2" />
+                <div className="flex-1 flex items-center justify-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-500/15 flex items-center justify-center shrink-0">
+                    <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                   </div>
-                );
-              })
-            ) : (
-              <div className="text-center py-8 bg-slate-50/80 dark:bg-slate-900/30 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
-                <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                  <Receipt className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+                  <div>
+                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Status</p>
+                    <span className="text-[11px] font-black text-amber-600 dark:text-amber-400 leading-tight">
+                      Expiring Soon
+                    </span>
+                  </div>
                 </div>
-                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-0.5">No recent redemptions</p>
-                <p className="text-[10px] text-slate-400 dark:text-slate-500">Your redemption history will appear here</p>
-              </div>
+              </>
             )}
           </div>
         </div>
+
+        {/* REWARDS CATALOG */}
+        <div className="bg-white dark:bg-slate-800/90 rounded-2xl shadow-md mt-4 border border-slate-100 dark:border-slate-700/80 p-4">
+          
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-1 h-5 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
+            <h3 className="text-[13px] font-extrabold text-slate-900 dark:text-white tracking-tight">Rewards Store</h3>
+          </div>
+
+          {/* Category Tabs */}
+          <div className="flex items-center gap-2 mb-4 p-1 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700/50">
+            {(['all', 'airtime', 'voucher'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex-1 py-1.5 text-[11px] font-bold capitalize rounded-lg transition-all ${
+                  activeTab === tab 
+                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm border border-slate-200/50 dark:border-slate-600' 
+                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'
+                }`}
+              >
+                {tab === 'all' ? 'All Rewards' : tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Grid - Switched to 2 columns for Providers */}
+          <div className="grid grid-cols-2 gap-3">
+            {filteredRewards.map((reward: RewardItem) => {
+              const isAffordable = gfpBalance >= reward.min_gfp;
+              const Icon = reward.icon === 'phone' ? Phone : Gift;
+              
+              return (
+                <button
+                  key={reward.id}
+                  onClick={() => handleCardClick(reward)}
+                  disabled={isLoadingWallet || !isAffordable}
+                  className={`relative flex flex-col text-left rounded-2xl p-4 border transition-all duration-200
+                    ${isAffordable 
+                      ? 'bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-700 shadow-sm active:scale-95 hover:border-emerald-500/30' 
+                      : 'bg-slate-50 dark:bg-slate-900/30 border-slate-100 dark:border-slate-800 opacity-60 grayscale-[30%]'
+                    }`}
+                >
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 shadow-sm ${reward.bg}`}>
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                  
+                  <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight leading-none mb-1">
+                    {reward.title}
+                  </h3>
+                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-tight mb-4">
+                    {reward.value_label}
+                  </p>
+                  
+                  <div className="mt-auto">
+                    {isAffordable ? (
+                      <div className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded-lg border border-emerald-100 dark:border-emerald-800/50">
+                        <span className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400">{reward.min_gfp}</span>
+                        <span className="text-[8px] font-bold text-emerald-600/70 dark:text-emerald-400/70">GFP MIN</span>
+                      </div>
+                    ) : (
+                      <div className="text-[9px] font-bold text-slate-400">
+                        Need {reward.min_gfp - gfpBalance} more
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
 
       {/* ═══════════════════════════════════════ */}
-      {/* REDEMPTION MODAL */}
+      {/* REDEMPTION BOTTOM SHEET MODAL */}
       {/* ═══════════════════════════════════════ */}
-      {showModal && activeOption && (
+      {showModal && selectedReward && (
         <div className="fixed inset-0 z-[100] flex items-end justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => viewState !== 'processing' && handleDone()} />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => viewState !== 'processing' && handleDone()} />
 
-          <div className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-t-3xl p-5 pb-[calc(env(safe-area-inset-bottom,0px)+6.5rem)] z-10">
-            <div className="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-700 mx-auto mb-4" />
+          <div className="relative w-full max-w-lg bg-slate-200 dark:bg-slate-900 rounded-t-[32px] p-4 pb-[calc(env(safe-area-inset-bottom,0px)+6.5rem)] z-10 shadow-2xl animate-in slide-in-from-bottom-8 duration-300">
+            <div className="w-12 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 mx-auto mb-6" />
 
             {viewState !== 'processing' && (
-              <button onClick={handleDone} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+              <button onClick={handleDone} className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center active:scale-95 transition-transform">
                 <X className="w-4 h-4 text-slate-500" />
               </button>
-            )}
-
-            {/* ─── OPTIONS VIEW (amount input) ─── */}
-            {viewState === 'options' && (
-              <>
-                <div className="flex items-center gap-3 mb-5">
-                  <div className={`w-11 h-11 rounded-full flex items-center justify-center ${activeOption.bg}`}>
-                    <activeOption.icon className={`w-5 h-5 ${activeOption.color}`} />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white">{activeOption.title}</h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">{activeOption.desc}</p>
-                  </div>
-                </div>
-
-                {/* GFP Input */}
-                <div className="mb-4">
-                  <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 block">
-                    Enter GFP Amount
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      min="0"
-                      value={gfpAmount}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        if (val === '' || Number(val) >= 0) setGfpAmount(val);
-                      }}
-                      placeholder={`Min ${MIN_REDEMPTION_POINTS}`}
-                      className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/70 text-lg font-bold text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 outline-none focus:border-emerald-500 transition-colors"
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">GFP</span>
-                  </div>
-
-                  {gfpAmount && !isValidAmount && (
-                    <div className="flex items-center gap-1.5 mt-2 text-amber-500">
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                      <p className="text-[10px] font-medium">
-                        {numericGfp < MIN_REDEMPTION_POINTS
-                          ? `Minimum is ${MIN_REDEMPTION_POINTS} GFP`
-                          : numericGfp > gfpBalance
-                            ? `You only have ${gfpBalance.toLocaleString()} GFP`
-                            : numericGfp > MAX_REDEMPTION_PER_TX
-                              ? `Maximum per transaction is ${MAX_REDEMPTION_PER_TX.toLocaleString()} GFP`
-                              : 'Invalid amount'}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Phone Input (for airtime) */}
-                {requiresPhone && (
-                  <div className="mb-4">
-                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 block">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      placeholder="e.g. 0712345678"
-                      className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/70 text-lg font-bold text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 outline-none focus:border-emerald-500 transition-colors"
-                    />
-                  </div>
-                )}
-
-                {/* Quick Select */}
-                <div className="flex gap-2 mb-5">
-                  {[100, 200, 500, 1000].filter(v => v <= gfpBalance).map((val) => (
-                    <button
-                      key={val}
-                      onClick={() => setGfpAmount(String(val))}
-                      className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-colors ${Number(gfpAmount) === val
-                        ? 'bg-emerald-500 text-white border-emerald-500'
-                        : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
-                        }`}
-                    >
-                      {val}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => setGfpAmount(String(Math.min(gfpBalance, MAX_REDEMPTION_PER_TX)))}
-                    className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-colors ${Number(gfpAmount) === Math.min(gfpBalance, MAX_REDEMPTION_PER_TX)
-                      ? 'bg-green-600 text-white border-emerald-500'
-                      : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700'
-                      }`}
-                  >
-                    Max
-                  </button>
-                </div>
-
-                {/* KES Preview */}
-                <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-900/70 rounded-xl p-3 mb-5 border border-slate-200 dark:border-slate-700">
-                  <p className="text-xs text-slate-500 dark:text-slate-400">You will receive</p>
-                  <p className="text-lg font-black text-green-600 dark:text-green-600">
-                    KES {kesEquivalent.toLocaleString()}
-                  </p>
-                </div>
-
-                {/* Continue Button */}
-                <button
-                  onClick={handleConfirm}
-                  disabled={!isValidAmount}
-                  className={`w-full py-3.5 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2 ${isValidAmount
-                    ? 'bg-green-600 text-white active:scale-[0.98]'
-                    : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
-                    }`}
-                >
-                  Continue <ArrowRight className="w-4 h-4" />
-                </button>
-              </>
             )}
 
             {/* ─── CONFIRM VIEW ─── */}
             {viewState === 'confirm' && (
               <>
                 <div className="text-center mb-6">
-                  <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${activeOption.bg}`}>
-                    <activeOption.icon className="w-8 h-8 text-white" />
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg ${selectedReward.bg}`}>
+                    {selectedReward.icon === 'phone' ? <Phone className="w-7 h-7 text-white" /> : <Gift className="w-7 h-7 text-white" />}
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Confirm Redemption</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Please review the details below.</p>
+                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">{selectedReward.title}</h2>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-500 mt-2 max-w-[260px] mx-auto leading-relaxed">
+                    You are redeeming your points for <strong className="text-slate-900 dark:text-slate-400">{selectedReward.description}</strong>. 
+                    {selectedReward.requires_phone 
+                      ? " The airtime will be sent directly to your phone."
+                      : " A digital voucher code will be issued to you."}
+                  </p>
                 </div>
 
-                <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 space-y-3 mb-6 border border-slate-100 dark:border-slate-800">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Type</span>
-                    <span className="font-bold text-slate-900 dark:text-white">{activeOption.title}</span>
+                {/* ── CUSTOM AMOUNT INPUT & COST BREAKDOWN ── */}
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 mb-5 relative overflow-hidden">
+                  <div className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {selectedReward.category === 'airtime' ? 'Airtime Amount to Receive (KES)' : 'Voucher Value (KES)'}
+                    </p>
+                    <button 
+                      onClick={setMaxAmount}
+                      className="text-[10px] font-extrabold text-amber-600 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-md hover:bg-amber-100 transition-colors"
+                    >
+                      MAX
+                    </button>
                   </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Points</span>
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400">{numericGfp.toLocaleString()} GFP</span>
+                  
+                  <div className="flex items-center gap-2 bg-white dark:bg-slate-900/80 border-2 border-emerald-500/20 focus-within:border-emerald-500 rounded-xl px-3 py-2 shadow-inner transition-colors">
+                    <span className="text-lg font-black text-slate-400 dark:text-slate-500">KSh</span>
+                    <input
+                      type="number"
+                      value={inputKesAmount}
+                      onChange={(e) => setInputKesAmount(e.target.value)}
+                      placeholder="0"
+                      className="flex-1 bg-transparent text-lg font-black text-slate-900 dark:text-white outline-none w-full placeholder:text-slate-300 dark:placeholder:text-slate-600"
+                    />
                   </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">You Receive</span>
-                    <span className="font-bold text-green-600">KES {kesEquivalent.toLocaleString()}</span>
+
+                  {/* Quick Select Bubbles */}
+                  <div className="flex gap-2 mt-4 overflow-x-auto scrollbar-hide pb-1">
+                    {[50, 100, 200, 500, 1000].map(amt => {
+                      // Only show quick buttons user can afford
+                      const isAffordable = gfpBalance >= (amt / selectedReward.gfp_to_kes_rate);
+                      if (!isAffordable) return null;
+
+                      return (
+                        <button
+                          key={amt}
+                          onClick={() => setInputKesAmount(amt.toString())}
+                          className={`shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all border ${
+                            kesValueNum === amt
+                              ? 'bg-emerald-500 text-white border-emerald-500'
+                              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-300'
+                          }`}
+                        >
+                          {amt}
+                        </button>
+                      );
+                    })}
                   </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Fee</span>
-                    <span className="font-bold text-slate-900 dark:text-white">0 GFP</span>
                   </div>
-                  {requiresPhone && (
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-slate-500 font-medium">Phone</span>
-                      <span className="font-bold text-slate-900 dark:text-white">{phoneNumber}</span>
+
+                  {/* Cost breakdown */}
+                  <div className="bg-slate-100/50 dark:bg-slate-800/80 p-4 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Total Cost</span>
+                    <div className="flex flex-col items-end">
+                      <span className={`font-bold ${totalGfpCost > gfpBalance ? 'text-rose-500' : 'text-amber-600 dark:text-amber-400'}`}>
+                        {totalGfpCost.toLocaleString()} GFP
+                      </span>
+                      {errorMsg && <span className="text-[9px] text-rose-500 font-bold">{errorMsg}</span>}
                     </div>
-                  )}
-                  <div className="pt-3 mt-3 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
-                    <span className="text-slate-500 font-bold uppercase tracking-wider text-xs">Remaining Balance</span>
-                    <span className="font-bold text-slate-900 dark:text-white">{(gfpBalance - numericGfp).toLocaleString()} GFP</span>
+                  </div>
+                  <div className="border-t border-dashed border-slate-200 dark:border-slate-700 pt-2.5 flex justify-between items-center text-sm">
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Balance After</span>
+                    <span className={`font-bold ${totalGfpCost > gfpBalance ? 'text-slate-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                      {totalGfpCost <= gfpBalance ? (gfpBalance - totalGfpCost).toLocaleString() : '---'} GFP
+                    </span>
                   </div>
                 </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setViewState('options')}
-                    className="flex-1 py-3.5 rounded-xl text-sm font-bold border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 active:scale-[0.98]"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={handleRedeem}
-                    className="flex-[2] py-3.5 rounded-xl text-sm font-bold bg-green-600 text-white active:scale-[0.98] transition-all shadow-md"
-                  >
-                    Confirm & Redeem
-                  </button>
                 </div>
+
+
+                {/* Phone Input (for airtime) */}
+                {selectedReward.requires_phone && (
+                  <div className="mb-5">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block ml-1">Send Airtime To</label>
+                    
+                    <div className="flex gap-2 mb-3 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                      <button
+                        onClick={() => setSendTo('me')}
+                        className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
+                          sendTo === 'me'
+                            ? 'bg-primary dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                            : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+                        }`}
+                      >
+                        My Number
+                      </button>
+                      <button
+                        onClick={() => setSendTo('other')}
+                        className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
+                          sendTo === 'other'
+                            ? 'bg-primary dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                            : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+                        }`}
+                      >
+                        Other Number
+                      </button>
+                    </div>
+
+                    {sendTo === 'me' ? (
+                      <div className="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/50 rounded-xl px-4 py-3">
+                        <Phone className="w-5 h-5 text-emerald-500" />
+                        <div>
+                          <p className="text-[10px] font-bold text-emerald-600/70 dark:text-emerald-400/70 uppercase">Linked Number</p>
+                          <p className="text-sm font-black text-emerald-700 dark:text-emerald-400">{profile?.phone || 'Not Set'}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="relative animate-in slide-in-from-top-2 duration-200">
+                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                        <input
+                          type="tel"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          placeholder="e.g. 0712345678"
+                          className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm font-bold text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <button
+                  onClick={handleRedeem}
+                  disabled={!isValidAmount}
+                  className="w-full py-4 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-bold text-sm tracking-wide transition-colors shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isValidAmount ? `Redeem ${totalGfpCost.toLocaleString()} GFP` : 'Enter Valid Amount'}
+                </button>
               </>
             )}
 
             {/* ─── PROCESSING VIEW ─── */}
             {viewState === 'processing' && (
-              <div className="py-12 text-center">
-                <Loader2 className="w-12 h-12 text-emerald-500 animate-spin mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Processing Redemption</h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Please wait while we process your request...</p>
+              <div className="py-12 flex flex-col items-center justify-center">
+                <div className="relative mb-6">
+                  <div className="w-16 h-16 rounded-full border-4 border-slate-100 dark:border-slate-800" />
+                  <div className="w-16 h-16 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin absolute inset-0" />
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Processing Request...</h3>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 text-center max-w-[250px]">
+                  Please wait while we secure your reward. Do not close this page.
+                </p>
               </div>
             )}
 
             {/* ─── SUCCESS VIEW ─── */}
             {viewState === 'success' && redemptionResult && (
-              <div className="py-6 text-center">
-                <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="py-4 flex flex-col items-center justify-center text-center animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mb-5 border-4 border-white dark:border-slate-900 shadow-xl">
                   <CheckCircle2 className="w-10 h-10 text-emerald-500" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">Redemption Successful!</h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Your points have been redeemed successfully.</p>
+                
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Success!</h3>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-8 max-w-[280px]">
+                  Your request for KSh {kesValueNum.toLocaleString()} {selectedReward.title} has been received and is being processed.
+                </p>
 
-                <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 space-y-3 mb-6 border border-slate-100 dark:border-slate-800 text-left">
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Reference</span>
-                    <button onClick={copyRef} className="flex items-center gap-1.5 font-mono font-bold text-emerald-600">
-                      {redemptionResult.reference_number}
-                      <Copy className="w-3.5 h-3.5" />
+                <div className="w-full bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 mb-8 text-left">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Reference Number</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-lg font-mono font-bold text-slate-900 dark:text-white">{redemptionResult.reference_number}</p>
+                    <button onClick={copyRef} className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                      <Copy className="w-4 h-4 text-slate-500" />
                     </button>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Amount</span>
-                    <span className="font-bold text-slate-900 dark:text-white">{redemptionResult.amount?.toLocaleString()} GFP</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">Value</span>
-                    <span className="font-bold text-green-600">KES {redemptionResult.kes_equivalent?.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-500 font-medium">New Balance</span>
-                    <span className="font-bold text-slate-900 dark:text-white">{redemptionResult.balance_after?.toLocaleString()} GFP</span>
                   </div>
                 </div>
 
                 <button
                   onClick={handleDone}
-                  className="w-full py-3.5 rounded-xl text-sm font-bold bg-emerald-600 text-white active:scale-[0.98] transition-all"
+                  className="w-full py-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm tracking-wide transition-colors"
                 >
                   Done
                 </button>

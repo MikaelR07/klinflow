@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, ArrowDownLeft, ArrowUpRight, Clock,
-  Filter, Calendar, ChevronDown, CheckCircle2, XCircle
+  Users
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { walletService, PointTransferRecord } from '@klinflow/core';
@@ -13,6 +13,7 @@ export default function TransferHistory() {
   const [filter, setFilter] = useState<'all' | 'sent' | 'received'>('all');
   const [history, setHistory] = useState<PointTransferRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(12);
 
   useEffect(() => {
     if (userId) {
@@ -27,96 +28,140 @@ export default function TransferHistory() {
     setIsLoading(false);
   };
 
+  const formatTxDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return '';
+    const dateFormatted = date.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+    const timeFormatted = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    return `${dateFormatted} • ${timeFormatted}`;
+  };
+
   return (
-    <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors pb-10">
+    <div className="bg-slate-50 dark:bg-slate-950 transition-colors pb-12">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600/60 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-1 px-4 flex flex-col gap-1">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3.5">
-              <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
-                <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
-              </button>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Transfer History</h1>
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-4 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 shadow-2xs">
+        <div className="max-w-lg mx-auto flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors active:scale-95"
+            >
+              <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+            </button>
+            <div>
+              <h1 className="font-bold text-base text-slate-900 dark:text-white leading-tight">
+                Transfer History
+              </h1>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                Peer-to-peer GFP transfers
+              </p>
             </div>
           </div>
-
-          {/* TABS */}
-          <div className="bg-slate-100/80 dark:bg-slate-900/50 p-1 rounded-xl flex items-center gap-1 border border-slate-200/50 dark:border-slate-800/50">
-            {['all', 'sent', 'received'].map(t => (
-              <button
-                key={t}
-                onClick={() => setFilter(t as any)}
-                className={`flex-1 py-2 text-[11px] font-bold uppercase tracking-widest rounded-lg transition-all ${filter === t ? 'bg-white dark:bg-slate-700 text-emerald-600 dark:text-emerald-400 shadow-sm border border-slate-200 dark:border-slate-600' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'}`}
-              >
-                {t}
-              </button>
-            ))}
+          <div className="text-right">
+            <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/20">
+              {history.length} Total
+            </span>
           </div>
         </div>
       </div>
 
-      {/* ── MAIN CONTENT ── */}
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+6.5rem)] max-w-lg mx-auto w-full px-4 space-y-4">
+      <main className="max-w-lg mx-auto px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] space-y-3">
+        {/* ── FILTERS HERO CARD ── */}
+        <div className="bg-gradient-to-br from-primary to-emerald-600 dark:from-slate-900 dark:to-slate-900 border border-emerald-800/30 dark:border-slate-800 text-white rounded-2xl p-4 shadow-sm space-y-3">
+          <div className="flex items-center justify-between mb-1">
+             <div className="flex items-center gap-2">
+               <Users className="w-4 h-4 text-emerald-200" />
+               <p className="text-xs font-semibold text-white/90">Filter Transfers</p>
+             </div>
+          </div>
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            {(['all', 'sent', 'received'] as const).map(type => (
+              <button
+                key={type}
+                onClick={() => setFilter(type as any)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold capitalize transition-all shrink-0 border ${
+                  filter === type
+                    ? 'bg-white text-emerald-700 dark:bg-emerald-500 dark:text-slate-950 border-white dark:border-emerald-500 shadow-sm'
+                    : 'bg-black/10 dark:bg-slate-900 border-white/10 text-white/80 hover:bg-black/20'
+                }`}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        {/* LIST */}
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-8 h-8 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-4" />
-            <p className="text-sm font-semibold text-slate-400">Loading history...</p>
-          </div>
-        ) : history.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
-              <Clock className="w-8 h-8 text-slate-300 dark:text-slate-600" />
-            </div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">No transfers found</h3>
-            <p className="text-xs text-slate-500 max-w-[200px]">You haven't made any point transfers yet.</p>
-          </div>
-        ) : (
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-            <div className="divide-y divide-slate-100 dark:divide-slate-800/60">
-              {history.map(record => {
+        {/* ── TRANSACTION FEED CARD ── */}
+        <div className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-2 shadow-2xs">
+          <div className="space-y-1">
+            {isLoading ? (
+              <div className="py-12 text-center text-xs text-slate-500 font-medium">
+                Loading transfer history...
+              </div>
+            ) : history.length === 0 ? (
+              <div className="py-12 text-center text-xs text-slate-500 space-y-2">
+                <Clock className="w-8 h-8 mx-auto opacity-30" />
+                <p className="font-semibold text-slate-700 dark:text-slate-300">
+                  No transfers found
+                </p>
+                <p className="text-[10px] text-slate-400 max-w-xs mx-auto">
+                  You haven't made any point transfers matching this filter.
+                </p>
+              </div>
+            ) : (
+              history.slice(0, visibleCount).map(record => {
                 const isSent = record.sender_id === userId;
                 return (
-                  <div key={record.id} className="p-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${isSent ? 'bg-rose-50 dark:bg-rose-900/20' : 'bg-emerald-50 dark:bg-emerald-900/20'}`}>
-                      {isSent ? <ArrowUpRight className="w-5 h-5 text-rose-500" /> : <ArrowDownLeft className="w-5 h-5 text-emerald-500" />}
+                  <div
+                    key={record.id}
+                    className="px-4 py-3 flex items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-bold border ${isSent ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'}`}>
+                        {isSent ? <ArrowUpRight className="w-5 h-5" /> : <ArrowDownLeft className="w-5 h-5" />}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-semibold text-slate-900 dark:text-white truncate">
+                          {isSent ? `To ${record.receiver_name}` : `From ${record.sender_name}`}
+                        </p>
+                        <p className="text-[11px] font-mono font-medium text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                          {record.reference_number}
+                        </p>
+                        <p className="text-[9px] font-semibold text-slate-400 dark:text-slate-500 mt-0.5">
+                          {formatTxDate(record.created_at)}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-start mb-0.5">
-                        <h4 className="text-[13px] font-bold text-slate-900 dark:text-white truncate pr-2">
-                          {isSent ? `To ${record.receiver_name}` : `From ${record.sender_name}`}
-                        </h4>
-                        <span className={`text-[13px] font-black shrink-0 ${isSent ? 'text-rose-500' : 'text-emerald-500'}`}>
-                          {isSent ? '-' : '+'}{record.amount.toLocaleString()} GFP
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-end mt-1">
-                        <div className="flex flex-col gap-0.5">
-                          <p className="text-[10px] text-slate-400 font-mono tracking-wide">{record.reference_number}</p>
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{new Date(record.created_at).toLocaleString()}</p>
-                        </div>
-                        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
-                          {record.status === 'completed' ? (
-                            <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                          ) : record.status === 'failed' ? (
-                            <XCircle className="w-3 h-3 text-rose-500" />
-                          ) : (
-                            <Clock className="w-3 h-3 text-amber-500" />
-                          )}
-                          <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">{record.status}</span>
-                        </div>
-                      </div>
+                    <div className="text-right shrink-0">
+                      <p className={`text-sm font-semibold font-mono ${isSent ? 'text-rose-500 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                        {isSent ? '-' : '+'}{record.amount.toLocaleString()} GFP
+                      </p>
+                      <span className={`inline-block border text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md mt-0.5 ${
+                        record.status === 'completed'
+                          ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                          : record.status === 'failed'
+                          ? 'bg-rose-500/10 text-rose-500 dark:text-rose-400 border-rose-500/20'
+                          : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                      }`}>
+                        {record.status}
+                      </span>
                     </div>
                   </div>
                 );
-              })}
-            </div>
+              })
+            )}
+
+            {history.length > visibleCount && (
+              <button
+                onClick={() => setVisibleCount(prev => prev + 12)}
+                className="w-full py-3 mt-2 rounded-xl text-xs font-bold text-slate-500 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 transition-colors"
+              >
+                Load More ({history.length - visibleCount} remaining)
+              </button>
+            )}
           </div>
-        )}
+        </div>
       </main>
     </div>
   );

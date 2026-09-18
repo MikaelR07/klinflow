@@ -35,7 +35,6 @@ export default function TransferGFP() {
   const [transferResult, setTransferResult] = useState<TransferResult | null>(null);
 
   const transferAmount = Number(amount) || 0;
-  const equivalentKes = transferAmount * WALLET_CONFIG.GFP_TO_KES_RATE;
 
   useEffect(() => {
     if (userId) {
@@ -157,21 +156,6 @@ export default function TransferGFP() {
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="w-px h-8 bg-gradient-to-b from-transparent via-slate-200 dark:via-slate-600 to-transparent mx-2" />
-
-            {/* Worth (KES) */}
-            <div className="flex-1 flex items-center justify-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-500/15 flex items-center justify-center shrink-0">
-                <Tag className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div>
-                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Worth (KES)</p>
-                <span className="text-lg font-black text-amber-600 dark:text-amber-400 leading-tight">
-                  {(walletBalance * WALLET_CONFIG.GFP_TO_KES_RATE).toLocaleString()}
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -371,15 +355,6 @@ export default function TransferGFP() {
                         autoFocus
                       />
                     </div>
-                    
-                    {amount && (
-                      <div className="mt-3 flex items-center justify-between px-2 animate-in fade-in duration-200">
-                        <span className="text-[11px] font-medium text-slate-500">KES Equivalent</span>
-                        <p className="text-[13px] font-bold text-emerald-600 dark:text-emerald-400">
-                          KES {equivalentKes.toLocaleString()}
-                        </p>
-                      </div>
-                    )}
                   </div>
 
                   <div className="flex flex-wrap gap-2 mb-6 w-full">
@@ -441,10 +416,6 @@ export default function TransferGFP() {
                      <div className="flex justify-between items-center text-[13px]">
                         <span className="text-slate-500 font-medium">Transfer Amount</span>
                         <span className="font-bold text-slate-900 dark:text-white">{transferAmount.toLocaleString()} GFP</span>
-                     </div>
-                     <div className="flex justify-between items-center text-[13px]">
-                        <span className="text-slate-500 font-medium">KES Equivalent</span>
-                        <span className="font-bold text-slate-900 dark:text-white">KES {equivalentKes.toLocaleString()}</span>
                      </div>
                      <div className="flex justify-between items-center text-[13px]">
                         <span className="text-slate-500 font-medium">Network Fee</span>

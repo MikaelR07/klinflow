@@ -2,13 +2,13 @@ import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Star, Building2, Truck,
-  ArrowLeft, SlidersHorizontal, ShieldCheck, X,
-  Sparkles, Filter, ChevronRight, Scale, Info, Package,
-  CircleCheck
+  ArrowLeft, SlidersHorizontal, X,
+  Filter, ChevronRight, Package, Info,
+  CircleCheck, Navigation2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@klinflow/supabase';
-import { MATERIAL_LABELS, WASTE_CATEGORIES } from '@klinflow/core/data/wasteDefinitions';
+import { MATERIAL_LABELS } from '@klinflow/core/data/wasteDefinitions';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { OptimizedImage } from '@klinflow/ui';
 import { normalizeKeys } from '@klinflow/core/validation';
@@ -19,6 +19,37 @@ const SCALE_DEFS = [
   { id: 'bulk', label: 'Bulk', icon: Building2, description: 'Estates & large loads (50kg+)' }
 ];
 
+/** Haversine formula — returns distance in KM between two lat/lng pairs */
+function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+/** Returns true if coordinates are a real, non-zero, in-range position */
+function validCoords(lat: any, lng: any): boolean {
+  const la = Number(lat);
+  const lo = Number(lng);
+  return (
+    lat !== null && lat !== undefined &&
+    lng !== null && lng !== undefined &&
+    !isNaN(la) && !isNaN(lo) &&
+    !(la === 0 && lo === 0) &&
+    Math.abs(la) <= 90 && Math.abs(lo) <= 180
+  );
+}
+
+function formatDistance(km: number): string {
+  if (km < 1) return `${Math.round(km * 1000)}m away`;
+  return `${km.toFixed(1)}km away`;
+}
+
 export default function DiscoveryHub() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,7 +58,38 @@ export default function DiscoveryHub() {
   const [partners, setPartners] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [locationStatus, setLocationStatus] = useState<'requesting' | 'granted' | 'denied' | 'idle'>('idle');
+
   const materials = ['all', 'recyclable', 'metal', 'ewaste', 'paper', 'glass', 'organic', 'general'];
+
+  // Request user's GPS location
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setLocationStatus('denied');
+      return;
+    }
+    setLocationStatus('requesting');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        // Reject (0,0) and obviously invalid coordinates
+        if (validCoords(lat, lng)) {
+          setUserCoords({ lat, lng });
+          setLocationStatus('granted');
+        } else {
+          console.warn('[Discovery] Browser returned invalid GPS coords:', lat, lng);
+          setLocationStatus('denied');
+        }
+      },
+      (err) => {
+        console.warn('[Discovery] Geolocation error:', err.message);
+        setLocationStatus('denied');
+      },
+      { timeout: 8000, maximumAge: 300000 }
+    );
+  }, []);
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -46,7 +108,7 @@ export default function DiscoveryHub() {
 
         if (error) throw error;
 
-        // Fetch review counts from bookings
+        // Fetch review counts
         const { data: bookingsData, error: bookingsError } = await supabase
           .from('bookings')
           .select('agent_id')
@@ -77,7 +139,7 @@ export default function DiscoveryHub() {
   }, []);
 
   const filteredPartners = useMemo(() => {
-    return partners.filter(p => {
+    const list = partners.filter(p => {
       const config = (Array.isArray(p.agentConfigurations) ? p.agentConfigurations[0] : p.agentConfigurations) || {};
       const acceptedMaterials = config.acceptedMaterials || p.serviceProfile?.categories?.filter((c: any) => c.enabled).map((c: any) => c.name) || [];
       const scale = config.serviceScale || p.serviceProfile?.scale || (p.agentAccountType === 'company_admin' ? 'bulk' : 'standard');
@@ -90,20 +152,56 @@ export default function DiscoveryHub() {
 
       return matchMaterial && matchScale && matchSearch;
     });
-  }, [partners, activeMaterial, activeScale, searchQuery]);
+
+    // Attach distance and sort — agents without valid coordinates go last
+    if (userCoords) {
+      return list
+        .map(p => {
+          // Location may be nested in location JSONB; normalizeKeys only camelCases top-level keys
+          const loc = p.location || {};
+          const lat = loc.latitude ?? loc.lat ?? null;
+          const lng = loc.longitude ?? loc.lng ?? null;
+          const distKm = validCoords(lat, lng)
+            ? haversineKm(userCoords.lat, userCoords.lng, Number(lat), Number(lng))
+            : null;
+          return { ...p, distKm };
+        })
+        .sort((a, b) => {
+          if (a.distKm === null && b.distKm === null) return 0;
+          if (a.distKm === null) return 1;
+          if (b.distKm === null) return -1;
+          return a.distKm - b.distKm;
+        });
+    }
+
+    return list.map(p => ({ ...p, distKm: null }));
+  }, [partners, activeMaterial, activeScale, searchQuery, userCoords]);
 
   return (
-    <div className=" bg-slate-50 dark:bg-slate-800 transition-colors">
+    <div className="bg-slate-50 dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50">
         <div className="w-full mx-auto">
           <div className="flex items-center gap-4 mb-2">
             <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-3xl active:scale-90 transition-all">
               <ArrowLeft className="w-4 h-4 dark:text-white" />
             </button>
-            <div>
-              <h1 className="text-lg font-bold dark:text-white tracking-tight leading-none mb-1">Find a Partner</h1>
-              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Verified Collectors Near you</p>
+            <div className="flex-1">
+              <h1 className="text-lg font-bold dark:text-white tracking-tight leading-none mb-0.5">Find a Partner</h1>
+              <div className="flex items-center gap-1.5">
+                {locationStatus === 'granted' && (
+                  <>
+                    <Navigation2 className="w-3 h-3 text-emerald-500" />
+                    <p className="text-[10px] font-bold text-emerald-500 tracking-[0.15em]">Sorted by distance</p>
+                  </>
+                )}
+                {locationStatus === 'requesting' && (
+                  <p className="text-[10px] font-bold text-amber-500 tracking-[0.15em]">Getting your location…</p>
+                )}
+                {(locationStatus === 'denied' || locationStatus === 'idle') && (
+                  <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Verified Collectors Near You</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -129,7 +227,7 @@ export default function DiscoveryHub() {
                 <SlidersHorizontal className="w-4 h-4" />
               </button>
             </div>
-            
+
             {/* Material Filter Tabs */}
             <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
               {materials.map(m => (
@@ -160,7 +258,6 @@ export default function DiscoveryHub() {
               exit={{ height: 0, opacity: 0, marginBottom: 0 }}
               className="overflow-hidden px-4"
             >
-              {/* Service Scale (Weight) Filter */}
               <div className="bg-white dark:bg-slate-900 p-4 rounded-[1.25rem] shadow-sm border border-slate-100 dark:border-slate-800">
                 <div className="flex items-center justify-between mb-4 px-1">
                   <div className="flex items-center gap-2">
@@ -170,7 +267,7 @@ export default function DiscoveryHub() {
                     <h3 className="text-[13px] font-bold text-slate-900 dark:text-white tracking-tight">Operation Scale</h3>
                   </div>
                   {activeScale !== 'all' && (
-                    <button 
+                    <button
                       onClick={() => setActiveScale('all')}
                       className="text-[10px] font-bold text-slate-400 hover:text-slate-600 transition-colors"
                     >
@@ -222,21 +319,21 @@ export default function DiscoveryHub() {
           ) : filteredPartners.length > 0 ? (
             filteredPartners.map((partner: any, i) => {
               const config = (Array.isArray(partner.agentConfigurations) ? partner.agentConfigurations[0] : partner.agentConfigurations) || {};
-              const logisticsFee = config.baseLogisticsFee ?? partner.serviceProfile?.baseLogisticsFee ?? 0;
               const acceptedMaterials = config.acceptedMaterials || partner.serviceProfile?.categories?.filter((c: any) => c.enabled).map((c: any) => c.name) || [];
               const scale = config.serviceScale || partner.serviceProfile?.scale || (partner.agentAccountType === 'company_admin' ? 'bulk' : 'standard');
               const isCompany = partner.agentAccountType === 'company_admin';
+              const hasDistance = partner.distKm !== null && partner.distKm !== undefined && !isNaN(partner.distKm) && partner.distKm >= 0;
 
               return (
                 <div
                   key={partner.id}
-                  className="w-full bg-slate-100 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800  overflow-hidden transition-all text-left  block cursor-pointer"
+                  className="w-full bg-slate-100 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 overflow-hidden transition-all text-left block cursor-pointer"
                   onClick={() => navigate(`/company/${partner.id}`)}
                 >
                   <div className="p-2 flex gap-3 relative">
-                    {/* Avatar/Icon */}
+                    {/* Avatar */}
                     <div className="shrink-0 mt-0.5">
-                      <div className={`w-[50px] h-[50px] rounded-2xl flex items-center justify-center text-2xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-600 dark:bg-indigo-900/30 text-white' : 'bg-[#138a53] text-white'}`}>
+                      <div className={`w-[50px] h-[50px] rounded-full flex items-center justify-center text-2xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-600 dark:bg-indigo-900/30 text-white' : 'bg-[#138a53] text-white'}`}>
                         {partner.avatarUrl ? (
                           <OptimizedImage src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
@@ -246,70 +343,73 @@ export default function DiscoveryHub() {
                     </div>
 
                     <div className="flex-1 min-w-0 flex justify-between">
-                       <div className="min-w-0 flex-1">
-                          {/* Name & Badge */}
-                          <div className="flex items-center gap-1 mb-1">
-                            <h4 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white truncate">
-                              {isCompany ? (partner.companyName || partner.name) : partner.name}
-                            </h4>
-                            <CircleCheck className="w-4 h-4 text-green-500 fill-green-500/20 shrink-0" />
-                          </div>
+                      <div className="min-w-0 flex-1">
+                        {/* Name & Badge */}
+                        <div className="flex items-center gap-1 mb-1">
+                          <h4 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white truncate">
+                            {isCompany ? (partner.companyName || partner.name) : partner.name}
+                          </h4>
+                        </div>
 
-                          {/* Rating & Tag */}
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="flex items-center gap-1">
-                              <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                              <span className="text-[11px] font-black text-[#0e1d2c] dark:text-white">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
-                              {(partner.rating || 0) > 0 && <span className="text-[11px] font-medium text-slate-400">({partner.reviewCount || 0})</span>}
-                            </div>
-                            {partner.rating > 4.5 && (
-                              <span className="text-[9px] font-bold text-[#138a53] bg-green-50 dark:bg-green-500/10 dark:text-green-400 px-1.5 py-0.5 rounded">Top Rated</span>
-                            )}
+                        {/* Rating & Distance */}
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                            <span className="text-[11px] font-black text-[#0e1d2c] dark:text-white">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
+                            {(partner.rating || 0) > 0 && <span className="text-[11px] font-medium text-slate-400">({partner.reviewCount || 0})</span>}
                           </div>
+                          {partner.rating > 4.5 && (
+                            <span className="text-[9px] font-bold text-[#138a53] bg-green-50 dark:bg-green-500/10 dark:text-green-400 px-1.5 py-0.5 rounded">Top Rated</span>
+                          )}
+                          {/* Distance badge */}
+                          {hasDistance && (
+                            <span className="flex items-center gap-0.5 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded">
+                              <MapPin className="w-2.5 h-2.5" />
+                              {formatDistance(partner.distKm)}
+                            </span>
+                          )}
+                        </div>
 
-                          {/* Meta info */}
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="flex items-center gap-1.5">
-                              <Package className="w-3.5 h-3.5 text-slate-400" />
-                              <span className="text-[10px] font-medium text-slate-500">{Number(partner.totalPickups || 0)} Pickups</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                              <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                              <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">{partner.location?.estate || 'Nairobi'}</span>
-                            </div>
+                        {/* Pickups + Location */}
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="flex items-center gap-1.5">
+                            <Package className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-[10px] font-medium text-slate-500">{Number(partner.totalPickups || 0)} Pickups</span>
                           </div>
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">{partner.location?.estate || 'Nairobi'}</span>
+                          </div>
+                        </div>
 
-                          {/* Materials Icons row */}
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {acceptedMaterials
-                              .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
-                              .slice(0, 3)
-                              .map((m: any) => (
-                                <span key={m} className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[10px] font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
-                                  {(MATERIAL_LABELS as any)[m]}
-                                </span>
-                              ))}
-                            {acceptedMaterials.filter((m: any) => !!(MATERIAL_LABELS as any)[m]).length > 3 && (
-                              <span className="px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[9px] font-semibold text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-700">
-                                +{acceptedMaterials.length - 3}
+                        {/* Materials */}
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {acceptedMaterials
+                            .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
+                            .slice(0, 3)
+                            .map((m: any) => (
+                              <span key={m} className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[10px] font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
+                                {(MATERIAL_LABELS as any)[m]}
                               </span>
-                            )}
-                          </div>
-                       </div>
-                       
-                       <div className="shrink-0 flex flex-col items-end justify-between pl-2 pb-1">
-                         <span className={`text-[9px] font-bold px-2 py-1 rounded capitalize ${scale === 'bulk' || scale === 'industrial' ? 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400' : 'bg-green-50 text-[#138a53] dark:bg-green-500/10 dark:text-green-400'}`}>
-                           {scale}
-                         </span>
-                         
-                         <div className="flex items-center gap-1 mt-auto h-full">
-                           <ChevronRight className="w-4 h-4 text-slate-700 dark:text-slate-300 ml-1 -mr-1" />
-                         </div>
-                       </div>
+                            ))}
+                          {acceptedMaterials.filter((m: any) => !!(MATERIAL_LABELS as any)[m]).length > 3 && (
+                            <span className="px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[9px] font-semibold text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-700">
+                              +{acceptedMaterials.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="shrink-0 flex flex-col items-end justify-between pl-2 pb-1">
+                        <span className={`text-[9px] font-bold px-2 py-1 rounded capitalize ${scale === 'bulk' || scale === 'industrial' ? 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400' : 'bg-green-50 text-[#138a53] dark:bg-green-500/10 dark:text-green-400'}`}>
+                          {scale}
+                        </span>
+                        <div className="flex items-center gap-1 mt-auto h-full">
+                          <ChevronRight className="w-4 h-4 text-slate-700 dark:text-slate-300 ml-1 -mr-1" />
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                 
                 </div>
               );
             })
@@ -334,7 +434,7 @@ export default function DiscoveryHub() {
 
         {/* ── INFO BOX ── */}
         <div className="px-1.5">
-          <div className="bg-gradient-to-br from-purple-400 to-indigo-500  p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
+          <div className="bg-gradient-to-br from-purple-400 to-indigo-500 p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
             <div className="w-10 h-10 bg-purple-800 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center shrink-0">
               <Info className="w-5 h-5 text-white" />
             </div>

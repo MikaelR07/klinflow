@@ -255,6 +255,76 @@ metal: {
   proTip:
     'If your collector accepts colour-sorted glass, keep clear, green and brown bottles in separate groups. Most importantly, handle broken glass carefully and use a strong container or sack that will not tear.',
 },
+organic: {
+  title: 'Organic & Food Waste',
+  subtitle: 'Food Scraps, Vegetable Peels & Green Waste',
+  icon: '🍎',
+  heroImage: '/material-categories/organic-waste.webp',
+  
+  demand: 'Medium',
+  
+  whyCollectorsBuy: 
+    'Organic waste is collected to be composted into nutrient-rich fertiliser or processed into clean biogas energy. Proper separation prevents it from contaminating other recyclables.',
+  
+  valueProps: [
+    'Can be turned into compost or biogas',
+    'Keeps other recyclables clean',
+    'Reduces harmful landfill gases',
+    'High demand from commercial composting facilities',
+  ],
+  
+  doList: [
+    'Keep organic waste in a dedicated bin',
+    'Include vegetable peels, fruit scraps, and coffee grounds',
+    'Drain excess liquid before disposal',
+    'Include garden waste like leaves and grass',
+  ],
+  
+  dontList: [
+    'Mix with plastic bags or wrappers',
+    'Include glass or metal items',
+    'Add hazardous chemicals or pet waste',
+    'Let it sit for too long to avoid pests and strong odours',
+  ],
+  
+  proTip: 
+    'Use a compostable bag or line your bin with newspaper to keep it clean. Emptying your organic waste bin regularly helps prevent bad smells and makes it easier for collectors to handle.',
+},
+mixed: {
+  title: 'Mixed Recyclables',
+  subtitle: 'Unsorted Paper, Plastic, Metal & Glass',
+  icon: '♻️',
+  heroImage: '/material-categories/recyclables.webp',
+  
+  demand: 'Variable',
+  
+  whyCollectorsBuy: 
+    'Mixed recyclables are bought by facilities that have automated or manual sorting lines. While sorting it yourself gets you the best price, mixed recycling is highly convenient and ensures materials are recovered rather than thrown away.',
+  
+  valueProps: [
+    'Very convenient and saves you time',
+    'Accepts multiple material types in one go',
+    'Keeps waste out of landfills',
+    'Processed by specialised sorting facilities',
+  ],
+  
+  doList: [
+    'Ensure all items are completely empty and dry',
+    'Rinse food containers before mixing them in',
+    'Flatten cardboard and crush cans to save space',
+    'Place everything loosely in the collection bag/bin',
+  ],
+  
+  dontList: [
+    'Include organic waste or food scraps',
+    'Put items inside tied plastic bags (keep them loose)',
+    'Include hazardous waste, batteries, or electronics',
+    'Mix heavily soiled items that can contaminate clean ones',
+  ],
+  
+  proTip: 
+    'The golden rule for mixed recyclables is keeping everything clean and dry. A single half-full soda bottle can leak and ruin paper and cardboard in the same bin, making them impossible to recycle.',
+},
 };
 
 const FALLBACK = {
@@ -384,13 +454,7 @@ export default function MaterialDetail() {
   const isTrendUp = displayTrend.includes('+');
   const isTrendDown = displayTrend.includes('-');
   
-  // Dynamic Actionable Advice based on Real Data
-  const getSellingAdvice = () => {
-    if (displayDemand === 'Critical') return "Buyers are actively sourcing this. Schedule a pickup now to secure premium rates.";
-    if (displayDemand === 'High') return "Strong market demand today. Great time to sell your stored volume.";
-    if (isTrendDown) return "Market prices are slightly down. Consider holding if you have storage, or liquidate now before further drops.";
-    return "Stable market conditions. Standard rates apply for clean, sorted material.";
-  };
+  
 
   const isSeller = role === 'seller';
 
@@ -429,7 +493,7 @@ export default function MaterialDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-5xl mx-auto">
           
           {/* Image Card (Restored Style) */}
-          <div className="relative h-[270px] md:h-[320px] w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm">
+          <div className="relative h-[300px] md:h-full w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm min-h-[300px]">
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${mat.heroImage})` }}
@@ -446,7 +510,7 @@ export default function MaterialDetail() {
 
           {/* Unified Material Info Card */}
           <div className="flex flex-col justify-center">
-            <div className="bg-white dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm h-full flex flex-col max-h-[320px] overflow-hidden">
+            <div className="bg-white dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm h-full flex flex-col overflow-hidden">
               
               {/* Header Section */}
               <div className="p-5 md:p-6 pb-0 md:pb-0">
@@ -498,12 +562,26 @@ export default function MaterialDetail() {
                   </div>
                 </div>
 
-                {/* Dynamic Actionable Advice */}
-                <div className="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-xl p-3 flex gap-2.5">
-                  <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <p className="text-[11px] text-emerald-800 dark:text-emerald-300 font-medium leading-snug">
-                    {getSellingAdvice()}
+                {/* ── WHY IT'S WORTH COLLECTING ── */}
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 mt-2">
+                  <h2 className="text-sm font-black text-slate-900 dark:text-white tracking-tight mb-2">
+                    Why it's worth collecting
+                  </h2>
+                  <p className="text-[12px] text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                    {mat.whyCollectorsBuy}
                   </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {mat.valueProps.map((vp, i) => (
+                      <div key={i} className="flex items-start gap-2 bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-lg p-2.5 shadow-sm">
+                        <div className="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                          <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        </div>
+                        <div className="pt-0.5">
+                          <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">{vp}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -522,29 +600,7 @@ export default function MaterialDetail() {
           {/* LEFT COLUMN (7 cols) */}
           <div className="lg:col-span-7 space-y-4">
             
-            {/* ── WHY IT'S WORTH COLLECTING ── */}
-            <motion.div variants={fadeUp}>
-              <div className="bg-slate-200 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5">
-                <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-2">
-                  Why it's worth collecting
-                </h2>
-                <p className="text-[13px] md:text-[13.5px] text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  {mat.whyCollectorsBuy}
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {mat.valueProps.map((vp, i) => (
-                    <div key={i} className="flex items-start gap-3 bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-xl p-3.5 shadow-sm">
-                      <div className="w-7 h-7 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
-                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                      </div>
-                      <div className="pt-0.5">
-                        <p className="text-[12px] font-bold text-slate-900 dark:text-white leading-snug">{vp}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+
 
             {/* ── MATERIAL QUALITY (Horizontal) ── */}
             <motion.div variants={fadeUp}>
@@ -639,40 +695,6 @@ export default function MaterialDetail() {
                   {mat.proTip}
                 </p>
               </div>
-            </motion.div>
-
-            {/* ── WHERE THE MATERIAL GOES ── */}
-            <motion.div variants={fadeUp}>
-              <h2 className="text-[11px] font-black text-slate-500 uppercase tracking-widest mb-4">
-                Where this material goes
-              </h2>
-              
-              {/* Minimal horizontal flow */}
-              <div className="flex items-center justify-between text-center px-2 mb-4">
-                <div className="flex flex-col items-center gap-1.5">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><Package className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" /></div>
-                  <span className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Collection</span>
-                </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" />
-                <div className="flex flex-col items-center gap-1.5">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><Layers className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" /></div>
-                  <span className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Sorting</span>
-                </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" />
-                <div className="flex flex-col items-center gap-1.5">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center"><Zap className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" /></div>
-                  <span className="text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Processing</span>
-                </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" />
-                <div className="flex flex-col items-center gap-1.5">
-                  <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center"><Recycle className="w-3.5 h-3.5 text-emerald-600" /></div>
-                  <span className="text-[9px] font-bold text-emerald-700 dark:text-emerald-500 uppercase tracking-wider">Reuse</span>
-                </div>
-              </div>
-              
-              <p className="text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800/50">
-                Your collected {title.toLowerCase()} can be sorted, processed and used to make new products.
-              </p>
             </motion.div>
 
           </div>

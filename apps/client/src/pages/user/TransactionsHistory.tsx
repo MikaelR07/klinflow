@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { walletService } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
 
 export default function TransactionsHistory() {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ export default function TransactionsHistory() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'payouts' | 'rewards'>('all');
+  const [visibleCount, setVisibleCount] = useState(12);
+  const [agentNames, setAgentNames] = useState<Record<string, string>>({});
 
   const isSeller = profile?.role === 'seller';
 
@@ -27,17 +30,47 @@ export default function TransactionsHistory() {
     const loadTxns = async () => {
       setIsLoading(true);
       try {
+        let txs: any[] = [];
         if (isSeller) {
           const stats = await walletService.getSellerDashboard(userId);
           if (stats?.recent_trades && stats.recent_trades.length > 0) {
-            setRawTxns(stats.recent_trades);
+            txs = stats.recent_trades;
           } else {
-            const txs = await walletService.getWalletTransactions(userId);
-            setRawTxns(txs || []);
+            txs = await walletService.getWalletTransactions(userId) || [];
           }
         } else {
-          const txs = await walletService.getWalletTransactions(userId);
-          setRawTxns(txs || []);
+          txs = await walletService.getWalletTransactions(userId) || [];
+        }
+        setRawTxns(txs);
+
+        // Fetch agent names for any payouts
+        const refIds = txs
+          .filter((t: any) => t.amount > 0 && t.transaction_type === 'payout' && t.reference_id)
+          .map((t: any) => t.reference_id);
+
+        if (refIds.length > 0) {
+          try {
+            const mapping: Record<string, string> = {};
+            const [{ data: foData }, { data: bData }] = await Promise.all([
+              supabase.from('fulfillment_orders').select('id, assigned_agent_id').in('id', refIds),
+              supabase.from('bookings').select('id, agent_id').in('id', refIds)
+            ]);
+
+            const agentIds = new Set<string>();
+            foData?.forEach((f: any) => { if (f.assigned_agent_id) agentIds.add(f.assigned_agent_id); });
+            bData?.forEach((b: any) => { if (b.agent_id) agentIds.add(b.agent_id); });
+            
+            if (agentIds.size > 0) {
+              const { data: profiles } = await supabase.from('profiles').select('id, name').in('id', Array.from(agentIds));
+              const profileMap = new Map(profiles?.map((p: any) => [p.id, p.name]));
+              
+              foData?.forEach((f: any) => { if (profileMap.has(f.assigned_agent_id)) mapping[f.id] = profileMap.get(f.assigned_agent_id); });
+              bData?.forEach((b: any) => { if (profileMap.has(b.agent_id)) mapping[b.id] = profileMap.get(b.agent_id); });
+            }
+            setAgentNames(mapping);
+          } catch (error) {
+            console.error('Error fetching agent names:', error);
+          }
         }
       } catch (err) {
         console.error('Failed to load transaction history:', err);
@@ -53,13 +86,19 @@ export default function TransactionsHistory() {
   const normalizedTransactions = useMemo(() => {
     return rawTxns.map((item: any) => {
       const isPayout = item.transaction_type === 'payout' || item.amount > 0;
-      const buyerName = item.buyer && !['Agent', 'Klinflow Hub Payout', 'Unknown Buyer'].includes(item.buyer)
-        ? item.buyer
-        : (item.metadata?.hub_name || item.metadata?.buyer_name || 'Klinflow Hub');
+      const isWithdrawal = item.transaction_type === 'withdrawal' || item.amount < 0;
       
-      const materialSummary = item.material && item.material !== 'Material'
-        ? item.material
-        : (item.metadata?.materials_summary || item.metadata?.description || 'Recyclables Drop-off');
+      const buyerName = isWithdrawal
+        ? 'Wallet Withdrawal'
+        : (item.buyer && !['Agent', 'Klinflow Hub Payout', 'Unknown Buyer', 'Recycling Agent'].includes(item.buyer)
+          ? item.buyer
+          : (agentNames[item.reference_id] || item.metadata?.hub_name || item.metadata?.buyer_name || (item.metadata?.type === 'material_buyback' ? 'Recycling Agent' : 'Klinflow Hub')));
+      
+      const materialSummary = isWithdrawal
+        ? (item.metadata?.method ? `${item.metadata.method} Transfer` : 'M-PESA Transfer')
+        : (item.material && item.material !== 'Material'
+          ? item.material
+          : (item.metadata?.materials_summary || item.metadata?.description || 'Recyclables Drop-off'));
 
       const dateObj = new Date(item.created_at || item.date || Date.now());
 
@@ -71,10 +110,11 @@ export default function TransactionsHistory() {
         status: item.status || 'Completed',
         date: dateObj,
         isPayout,
+        isWithdrawal,
         raw: item
       };
     }).sort((a, b) => b.date.getTime() - a.date.getTime());
-  }, [rawTxns]);
+  }, [rawTxns, agentNames]);
 
   // Filtered List
   const filteredTransactions = useMemo(() => {
@@ -89,10 +129,7 @@ export default function TransactionsHistory() {
     });
   }, [normalizedTransactions, searchQuery, filterType]);
 
-  // Totals
-  const totalVolume = useMemo(() => {
-    return filteredTransactions.reduce((acc, item) => acc + item.amount, 0);
-  }, [filteredTransactions]);
+
 
   const formatTxDate = (date: Date) => {
     if (isNaN(date.getTime())) return '';
@@ -130,25 +167,10 @@ export default function TransactionsHistory() {
         </div>
       </div>
 
-      <main className="max-w-lg mx-auto px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)] space-y-3">
+      <main className="max-w-lg mx-auto px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] space-y-3">
         {/* ── STATS HEADER & FILTERS CARD ── */}
-        <div className="bg-gradient-to-br from-purple-400 to-indigo-500 dark:from-slate-900 dark:to-slate-900 border border-indigo-800/30 dark:border-slate-800 text-white rounded-2xl p-4 shadow-sm space-y-2">
-          {/* Top Stats */}
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-semibold text-white/80 uppercase tracking-wider mb-0.5">
-                Filtered Volume
-              </p>
-              <p className="text-2xl font-black font-mono text-white">
-                KES {totalVolume.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </p>
-            </div>
-            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center border border-white/15">
-              <Wallet className="w-5 h-5 text-white" />
-            </div>
-          </div>
+        <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 dark:from-slate-900 dark:to-slate-900 border border-indigo-800/30 dark:border-slate-800 text-white rounded-2xl p-4 shadow-sm space-y-2">
 
-          <div className="h-px bg-white/10 w-full" />
 
           {/* Search & Filter Controls */}
           <div className="space-y-3">
@@ -159,7 +181,7 @@ export default function TransactionsHistory() {
                 placeholder="Search by Hub name or material..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full bg-black/20 dark:bg-slate-950/50 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30 backdrop-blur-sm transition-all"
+                className="w-full bg-white/30 dark:bg-slate-950/50 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder:text-white/40 transition-all"
               />
             </div>
 
@@ -199,7 +221,7 @@ export default function TransactionsHistory() {
                 </p>
               </div>
             ) : (
-              filteredTransactions.map(item => (
+              filteredTransactions.slice(0, visibleCount).map(item => (
                 <div
                   key={item.id}
                   className="px-4 py-3 flex items-center justify-between gap-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl shadow-sm hover:shadow-md transition-shadow"
@@ -222,15 +244,28 @@ export default function TransactionsHistory() {
                   </div>
 
                   <div className="text-right shrink-0">
-                    <p className="text-sm font-semibold font-mono text-emerald-600 dark:text-emerald-400">
-                      +KES {item.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    <p className={`text-sm font-semibold font-mono ${item.isWithdrawal ? 'text-red-500 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                      {item.isWithdrawal ? '-' : '+'}KES {Math.abs(item.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </p>
-                    <span className="inline-block bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md mt-0.5">
+                    <span className={`inline-block border text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md mt-0.5 ${
+                      item.isWithdrawal 
+                        ? 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
+                        : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                    }`}>
                       {item.status}
                     </span>
                   </div>
                 </div>
               ))
+            )}
+            
+            {filteredTransactions.length > visibleCount && (
+              <button
+                onClick={() => setVisibleCount(prev => prev + 12)}
+                className="w-full py-3 mt-2 rounded-xl text-xs font-bold text-slate-500 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 transition-colors"
+              >
+                Load More ({filteredTransactions.length - visibleCount} remaining)
+              </button>
             )}
           </div>
         </div>

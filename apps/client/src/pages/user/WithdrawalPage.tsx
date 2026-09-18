@@ -59,11 +59,11 @@ export default function WithdrawalPage() {
 
     setLoading(true);
     try {
-      await withdrawRewards(Number(amount));
+      await withdrawRewards(Number(amount), method.name, details);
       setStep(2);
       toast.success('Withdrawal Request Sent!');
-    } catch (err) {
-      toast.error('Withdrawal failed. Please try again.');
+    } catch (err: any) {
+      toast.error(err.message || 'Withdrawal failed. Please try again.');
     } finally {
       setLoading(false);
     }

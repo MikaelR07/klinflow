@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import {
   ArrowLeft, Star, MapPin, Truck, ShieldCheck, Package,
   Zap, ChevronRight, Clock, Share, MoreVertical, CheckCircle2,
-  CircleCheck
+  CircleCheck, MessageSquare
 } from 'lucide-react';
 import { supabase } from '@klinflow/supabase';
 import { MATERIAL_LABELS } from '@klinflow/core/data/wasteDefinitions';
@@ -178,7 +178,6 @@ export default function CompanyProfile() {
                     <span className="text-[11px] font-bold text-white">
                       {computedRating}
                     </span>
-                    <span className="text-[9px] text-white/70">({reviewCount} reviews)</span>
                   </div>
                 </div>
               </div>
@@ -191,9 +190,9 @@ export default function CompanyProfile() {
                 <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Pickups</p>
               </div>
               <div className="flex flex-col items-center justify-center flex-1 border-r border-white/50 last:border-0">
-                <Clock className="w-4 h-4 text-white/80 mb-1.5" />
-                <p className="text-[13px] font-black text-white leading-none mb-1">1-2h</p>
-                <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Arrival</p>
+                <MessageSquare className="w-4 h-4 text-white/80 mb-1.5" />
+                <p className="text-[13px] font-black text-white leading-none mb-1">{reviewCount}</p>
+                <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Reviews</p>
               </div>
               <div className="flex flex-col items-center justify-center flex-1 last:border-0">
                 <Zap className="w-4 h-4 text-white/80 mb-1.5" />

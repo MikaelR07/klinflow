@@ -1,11 +1,12 @@
 /**
  * RedemptionHistory — View all past point redemptions
+ * Uses scrollable pill tabs instead of dropdowns for filtering
  */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Clock, CheckCircle2, XCircle,
-  Landmark, Phone, Gift, Filter, Loader2,
+  Landmark, Phone, Gift, Loader2,
   AlertTriangle
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -24,6 +25,20 @@ const STATUS_CONFIG: Record<string, { icon: typeof CheckCircle2; label: string; 
   failed: { icon: XCircle, label: 'Failed', color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-500/10' },
   rejected: { icon: AlertTriangle, label: 'Rejected', color: 'text-rose-600', bg: 'bg-rose-50 dark:bg-rose-500/10' },
 };
+
+const TYPE_TABS: { value: 'all' | RedemptionType; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'airtime', label: 'Airtime' },
+  { value: 'voucher', label: 'Voucher' },
+];
+
+const STATUS_TABS: { value: 'all' | RedemptionStatus; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'processing', label: 'Processing' },
+  { value: 'failed', label: 'Failed' },
+];
 
 export default function RedemptionHistory() {
   const navigate = useNavigate();
@@ -45,10 +60,10 @@ export default function RedemptionHistory() {
   };
 
   return (
-    <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors pb-10">
+    <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors pb-10 min-h-screen">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600/60 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-1 px-4 flex flex-col gap-2">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 flex flex-col gap-3">
           {/* Header row */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
@@ -62,35 +77,26 @@ export default function RedemptionHistory() {
             </div>
           </div>
 
-          {/* Filters row */}
-          <div className="flex gap-2">
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value as any)}
-              className="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 outline-none focus:border-emerald-500"
-            >
-              <option value="all">All Types</option>
-              <option value="money">Cash</option>
-              <option value="airtime">Airtime</option>
-              <option value="voucher">Voucher</option>
-            </select>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="flex-1 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 outline-none focus:border-emerald-500"
-            >
-              <option value="all">All Statuses</option>
-              <option value="completed">Completed</option>
-              <option value="processing">Processing</option>
-              <option value="pending">Pending</option>
-              <option value="failed">Failed</option>
-            </select>
+
+          {/* Status filter tabs — scrollable */}
+          <div className="-mx-4 px-4 flex gap-2 overflow-x-auto scrollbar-hide pb-0.5" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            {STATUS_TABS.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setStatusFilter(tab.value)}
+                className={`shrink-0 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wide transition-all duration-200 border ${
+                  statusFilter === tab.value
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-sm'
+                    : 'bg-white dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-300'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
-
-      <div className="pt-[calc(env(safe-area-inset-top,1rem)+6.5rem)] px-4 space-y-4">
-
+      <div className="pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)] px-4 space-y-4">
 
         {/* ── HISTORY LIST ── */}
         {isLoading ? (
@@ -107,8 +113,8 @@ export default function RedemptionHistory() {
         ) : (
           <div className="space-y-2.5">
             {history.map((item) => {
-              const typeConf = TYPE_CONFIG[item.type] || TYPE_CONFIG.money;
-              const statusConf = STATUS_CONFIG[item.status] || STATUS_CONFIG.pending;
+              const typeConf = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.money!;
+              const statusConf = STATUS_CONFIG[item.status] ?? STATUS_CONFIG.pending!;
               const TypeIcon = typeConf.icon;
               const StatusIcon = statusConf.icon;
 

@@ -33,6 +33,7 @@ export default function ResidentWallet() {
   const [cashBalance, setCashBalance] = useState(0);
   const [walletStats, setWalletStats] = useState<any>(null);
   const [walletTxns, setWalletTxns] = useState<any[]>([]);
+  const [agentNames, setAgentNames] = useState<Record<string, string>>({});
 
   // Fetch real wallet balance and bookings
   useEffect(() => {
@@ -46,8 +47,39 @@ export default function ResidentWallet() {
           setWalletStats(data);
         }
       });
-      walletService.getWalletTransactions(userId).then(data => {
-        setWalletTxns(data || []);
+      walletService.getWalletTransactions(userId).then(async data => {
+        const txns = data || [];
+        setWalletTxns(txns);
+
+        const refIds = txns
+          .filter(t => t.amount > 0 && t.transaction_type === 'payout' && t.reference_id)
+          .map(t => t.reference_id);
+
+        if (refIds.length > 0) {
+          try {
+            const mapping: Record<string, string> = {};
+            
+            const [{ data: foData }, { data: bData }] = await Promise.all([
+              supabase.from('fulfillment_orders').select('id, assigned_agent_id').in('id', refIds),
+              supabase.from('bookings').select('id, agent_id').in('id', refIds)
+            ]);
+
+            const agentIds = new Set<string>();
+            foData?.forEach((f: any) => { if (f.assigned_agent_id) agentIds.add(f.assigned_agent_id); });
+            bData?.forEach((b: any) => { if (b.agent_id) agentIds.add(b.agent_id); });
+            
+            if (agentIds.size > 0) {
+              const { data: profiles } = await supabase.from('profiles').select('id, name').in('id', Array.from(agentIds));
+              const profileMap = new Map(profiles?.map((p: any) => [p.id, p.name]));
+              
+              foData?.forEach((f: any) => { if (profileMap.has(f.assigned_agent_id)) mapping[f.id] = profileMap.get(f.assigned_agent_id); });
+              bData?.forEach((b: any) => { if (profileMap.has(b.agent_id)) mapping[b.id] = profileMap.get(b.agent_id); });
+            }
+            setAgentNames(prev => ({ ...prev, ...mapping }));
+          } catch (error) {
+            console.error('Error fetching agent names:', error);
+          }
+        }
       });
       fetchBookings();
     };
@@ -91,18 +123,25 @@ export default function ResidentWallet() {
 
   // True Transactions from ledger (Moved up to be used by metrics)
   const transactions = useMemo(() => {
-    return walletTxns.map((t: any) => ({
-      id: t.id,
-      type: t.amount > 0 ? 'earned' : 'reward',
-      buyerName: t.metadata?.hub_name || t.metadata?.buyer_name || (t.metadata?.type === 'material_buyback' ? 'Recycling Agent' : 'Klinflow Payout'),
-      materialSummary: t.metadata?.materials_summary || t.metadata?.material || t.metadata?.description || (t.amount > 0 ? 'Recyclables Sale Payout' : 'Wallet Transfer / Reward'),
-      amount: t.amount,
+    return walletTxns.map((t: any) => {
+      const isWithdrawal = t.transaction_type === 'withdrawal' || t.amount < 0;
+      return {
+        id: t.id,
+        type: isWithdrawal ? 'withdrawal' : (t.amount > 0 ? 'earned' : 'reward'),
+        buyerName: isWithdrawal
+          ? 'Wallet Withdrawal'
+          : (agentNames[t.reference_id] || t.metadata?.hub_name || t.metadata?.buyer_name || (t.metadata?.type === 'material_buyback' ? 'Recycling Agent' : 'Klinflow Payout')),
+        materialSummary: isWithdrawal
+          ? (t.metadata?.method ? `${t.metadata.method} Transfer` : 'M-PESA Transfer')
+          : (t.metadata?.materials_summary || t.metadata?.material || t.metadata?.description || (t.amount > 0 ? 'Recyclables Sale Payout' : 'Wallet Transfer / Reward')),
+        amount: t.amount,
       date: new Date(t.created_at),
       status: 'completed' as const,
       reference: t.metadata?.waybill_id || `TRX-${String(t.id).substring(0, 6).toUpperCase()}`,
       metadata: t.metadata
-    })).sort((a, b) => b.date.getTime() - a.date.getTime());
-  }, [walletTxns]);
+      };
+    }).sort((a, b) => b.date.getTime() - a.date.getTime());
+  }, [walletTxns, agentNames]);
 
   const kgRecoveredThisMonth = useMemo(() => {
     return thisMonthPickups.reduce((sum, b) => sum + (Number(b.actualWeightKg) || Number(b.weightKg) || 0), 0);
@@ -306,12 +345,14 @@ export default function ResidentWallet() {
                   <div className="text-right shrink-0 ml-3">
                     <p className={`text-sm font-bold ${txn.type === 'earned'
                       ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-red-500 dark:text-red-400'
+                      : txn.type === 'withdrawal'
+                        ? 'text-red-500 dark:text-red-400'
+                        : 'text-slate-900 dark:text-white'
                       }`}>
-                      KES {Number(txn.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {txn.type === 'earned' ? '+' : '-'} KES {Math.abs(Number(txn.amount)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </p>
                     <p className="text-[9px] font-semibold text-slate-400 mt-0.5 capitalize">
-                      {txn.type === 'earned' ? 'Received' : 'Credited'}
+                      {txn.type === 'earned' ? 'Received' : txn.type === 'withdrawal' ? 'Completed' : 'Credited'}
                     </p>
                   </div>
                 </motion.div>

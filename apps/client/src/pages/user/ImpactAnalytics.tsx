@@ -436,10 +436,10 @@ export default function ImpactAnalytics() {
               { label: 'Total Pickups', value: `${stats.totalPickups}`, icon: Truck, bg: 'bg-purple-100 dark:bg-purple-900/30' },
               { label: 'Total GFP', value: `${gfpPoints.toLocaleString()}`, icon: Star, bg: 'bg-amber-100 dark:bg-amber-900/30' },
             ].map((stat, i) => (
-              <div key={i} className={`shrink-0 w-[110px] ${stat.bg} rounded-xl p-2.5 border-none`}>
+              <div key={i} className={`shrink-0 w-[110px] flex flex-col items-center text-center justify-center ${stat.bg} rounded-xl p-3 border border-slate-900 dark:border-slate-500`}>
                 <stat.icon className="w-5 h-5 text-slate-900 dark:text-white mb-2" />
-                <p className="text-[8px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-0.5">{stat.label}</p>
-                <p className="text-[13px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{stat.value}</p>
+                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-0.5">{stat.label}</p>
+                <p className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{stat.value}</p>
               </div>
             ))}
           </div>

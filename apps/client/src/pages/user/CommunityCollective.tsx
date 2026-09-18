@@ -50,31 +50,12 @@ export default function CommunityCollective() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] max-w-lg mx-auto w-full px-1.5 space-y-4">
 
         {/* ── HERO SECTION ── */}
-        <div
-          className="relative flex flex-col space-y-2 p-3 rounded-xl overflow-hidden  border border-slate-200 dark:border-slate-800"
-        >
-          {/* Background Image */}
-          <div
-            className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat  z-0"
-            style={{ backgroundImage: "url('/vectors/community-banner.webp')" }}
+        <div className="relative w-full rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800 shadow-sm bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+          <img 
+            src="/vectors/community-banner-real.webp" 
+            alt="Community Collective"
+            className="w-full h-auto object-contain"
           />
-
-          <div className="relative z-10 flex flex-col space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-200  rounded-full w-fit  shadow-sm backdrop-blur-sm">
-              <Leaf className="w-3.5 h-3.5 text-green-600 " />
-              <span className="text-[10px] font-bold text-green-700 ">Stronger Together</span>
-            </div>
-
-            <div className="w-[85%] md:w-[70%] space-y-3">
-              <h1 className="text-3xl font-black leading-[1.1] tracking-tight drop-shadow-sm">
-                <span className="text-[#0e1d2c] dark:text-white block">More Impact.</span>
-                <span className="text-white block">More Rewards.</span>
-              </h1>
-              <p className="text-xs font-medium text-slate-700 dark:text-slate-100 leading-relaxed pr-2">
-                Collaborate with others, Combine waste pickups, and earn rewards with community.
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* ── CHOOSE HOW TO GROW ── */}
@@ -84,199 +65,203 @@ export default function CommunityCollective() {
           <Leaf className="w-4 h-4 text-[#329845] scale-x-[-1]" />
         </div>
 
-        <div className="space-y-3">
-          <div className="grid grid-cols-1 gap-1">
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 gap-4">
             {/* SWARMS CARD */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
-              <div className="flex">
-                {/* Left side: Illustration */}
-                <div className="w-[40%] shrink-0 relative bg-emerald-50/50 dark:bg-slate-800/50">
-                  <img
-                    src="/vectors/goals.webp"
-                    alt="Swarms"
-                    className="absolute inset-0 w-full h-full object-cover object-center"
-                  />
-                </div>
-                {/* Right side: Info + Steps */}
-                <div className="w-[60%] flex flex-col justify-center items-center gap-2 p-3 pl-3">
-                  <div>
-                    <div className="flex items-center gap-1 mb-1.5">
-                      <div className="w-8 h-8 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center shrink-0">
-                        <Users className="w-4 h-4 text-[#329845] dark:text-green-400" />
-                      </div>
-                      <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Join a Swarm</h3>
-                    </div>
-                    <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-1">
-                      Team up nearby.<br />Fill the truck. Earn more.
-                    </p>
+            <motion.div whileHover={{ y: -2 }} className="bg-slate-200 dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
+              <div className="w-full aspect-[2/1] relative bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                <img
+                  src="/vectors/klin-swarms-real.webp"
+                  alt="Swarms"
+                  className="absolute inset-0 w-full h-full object-cover object-center"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 backdrop-blur-md flex items-center justify-center border border-emerald-500/30">
+                    <Users className="w-4 h-4 text-emerald-400" />
                   </div>
-                  
-                  {/* 3 Steps */}
-                  <div className="flex flex-col gap-1 pl-0.5">
-                    <div className="flex items-center gap-2">
-                      <Users className="w-3 h-3 text-[#329845] dark:text-green-400 shrink-0" />
-                      <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">1. Join others</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3 h-3 text-[#329845] dark:text-green-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                      <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">2. Add your waste</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-3 h-3 text-[#329845] dark:text-green-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                      <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">3. Truck comes & earn</span>
-                    </div>
-                  </div>
-                  
-                  <Link
-                    to="/swarms"
-                    className="w-full py-1.5 mt-1 bg-[#329845] hover:bg-[#287d37] text-white rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors relative shadow-sm"
-                  >
-                    <span>Explore Swarms</span>
-                    <ChevronRight className="w-3.5 h-3.5 absolute right-2" />
-                  </Link>
+                  <h3 className="text-[18px] font-black text-white leading-tight drop-shadow-sm">Join a Swarm</h3>
                 </div>
               </div>
-            </div>
+              
+              <div className="flex flex-col p-4 md:p-5">
+                <p className="text-[13px] text-slate-600 dark:text-slate-400 font-medium mb-5">
+                  Team up nearby. Fill the truck together. Unlock premium rates and earn more.
+                </p>
+                
+                {/* 3 Steps */}
+                <div className="flex items-center justify-between gap-2 mb-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
+                  <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                    <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">1. Join</span>
+                  </div>
+                  <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
+                  <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                    <Leaf className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">2. Add Waste</span>
+                  </div>
+                  <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
+                  <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                    <DollarSign className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">3. Earn</span>
+                  </div>
+                </div>
+                
+                <Link
+                  to="/swarms"
+                  className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-emerald-600/20"
+                >
+                  <span>Explore Swarms</span>
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </motion.div>
 
             {/* GROUP RFQS CARD (ONLY FOR SELLERS) */}
             {profile?.role === 'seller' && (
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
-                <div className="flex">
-                  {/* Left side: Illustration */}
-                  <div className="w-[40%] shrink-0 relative bg-emerald-50/50 dark:bg-slate-800/50">
-                    <img
-                      src="/vectors/klin-challenges.webp"
-                      alt="Group Contracts"
-                      className="absolute inset-0 w-full h-full object-cover object-center"
-                    />
-                  </div>
-                  {/* Right side: Info + Steps */}
-                  <div className="w-[60%] flex flex-col justify-center items-center gap-2 p-3 pl-3">
-                    <div>
-                      <div className="flex items-center gap-1 mb-1.5">
-                        <div className="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0">
-                          <Handshake className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        </div>
-                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Group Contracts</h3>
-                      </div>
-                      <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-1">
-                        Pool resources.<br />Fulfill large volume orders.
-                      </p>
+              <motion.div whileHover={{ y: -2 }} className="bg-slate-200 dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
+                <div className="w-full aspect-[2/1] relative bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                  <img
+                    src="/vectors/klin-contract-real.webp"
+                    alt="Group Contracts"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-blue-500/20 backdrop-blur-md flex items-center justify-center border border-blue-500/30">
+                      <Handshake className="w-4 h-4 text-blue-400" />
                     </div>
-                    
-                    {/* 3 Steps */}
-                    <div className="flex flex-col gap-1 pl-0.5">
-                      <div className="flex items-center gap-2">
-                        <Users className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">1. Take a contract</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Target className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">2. Others join in</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <DollarSign className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">3. Fulfill and earn</span>
-                      </div>
-                    </div>
-
-                    <Link
-                      to="/group-rfqs"
-                      className="w-full py-1.5 mt-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors relative shadow-sm"
-                    >
-                      <span>View Contracts</span>
-                      <ChevronRight className="w-3.5 h-3.5 absolute right-2" />
-                    </Link>
+                    <h3 className="text-[18px] font-black text-white leading-tight drop-shadow-sm">Group Contracts</h3>
                   </div>
                 </div>
-              </div>
+                
+                <div className="flex flex-col p-4 md:p-5">
+                  <p className="text-[13px] text-slate-600 dark:text-slate-400 font-medium mb-5">
+                    Pool resources with other sellers to fulfill large volume orders from major buyers.
+                  </p>
+                  
+                  {/* 3 Steps */}
+                  <div className="flex items-center justify-between gap-2 mb-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
+                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                      <Target className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">1. Find</span>
+                    </div>
+                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
+                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                      <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">2. Pool</span>
+                    </div>
+                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
+                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                      <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">3. Fulfill</span>
+                    </div>
+                  </div>
+
+                  <Link
+                    to="/group-rfqs"
+                    className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-blue-600/20"
+                  >
+                    <span>View Contracts</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </motion.div>
             )}
 
             {/* INDIVIDUAL RFQS CARD (ONLY FOR SELLERS) */}
             {profile?.role === 'seller' && (
-              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
-                <div className="flex">
-                  {/* Left side: Illustration */}
-                  <div className="w-[40%] shrink-0 relative bg-emerald-50/50 dark:bg-slate-800/50">
-                    <img
-                      src="/vectors/individual-rfq.webp"
-                      alt="Individual RFQs"
-                      className="absolute inset-0 w-full h-full object-cover object-center"
-                    />
-                  </div>
-                  {/* Right side: Info + Steps */}
-                  <div className="w-[60%] flex flex-col justify-center items-center gap-2 p-3 pl-3">
-                    <div>
-                      <div className="flex items-center gap-1 mb-1.5">
-                        <div className="w-8 h-8 rounded-full bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center shrink-0">
-                          <Target className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-                        </div>
-                        <h3 className="text-[14px] font-bold text-[#0e1d2c] dark:text-white leading-tight">Individual Contracts</h3>
-                      </div>
-                      <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-[1.4] font-medium pr-1">
-                        Go solo.<br />Fulfill direct buyer requests.
-                      </p>
+              <motion.div whileHover={{ y: -2 }} className="bg-slate-200 dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
+                <div className="w-full aspect-[2/1] relative bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                  <img
+                    src="/vectors/individual-rfq-real.webp"
+                    alt="Individual RFQs"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-rose-500/20 backdrop-blur-md flex items-center justify-center border border-rose-500/30">
+                      <Target className="w-4 h-4 text-rose-400" />
                     </div>
-                    
-                    {/* 3 Steps */}
-                    <div className="flex flex-col gap-1 pl-0.5 w-full">
-                      <div className="flex items-center gap-2">
-                        <Search className="w-3 h-3 text-rose-600 dark:text-rose-400 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">1. Find a request</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Handshake className="w-3 h-3 text-rose-600 dark:text-rose-400 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">2. Submit your bid</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-3 h-3 text-rose-600 dark:text-rose-400 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">3. Win the contract</span>
-                      </div>
-                    </div>
-
-                    <Link
-                      to="/individual-rfqs"
-                      className="w-full py-1.5 mt-1 bg-purple-600 text-white rounded-xl font-bold text-[11px] flex items-center justify-center gap-2 transition-colors relative shadow-sm"
-                    >
-                      <span>View Open RFQs</span>
-                      <ChevronRight className="w-3.5 h-3.5 absolute right-2" />
-                    </Link>
+                    <h3 className="text-[18px] font-black text-white leading-tight drop-shadow-sm">Individual Contracts</h3>
                   </div>
                 </div>
-              </div>
+                
+                <div className="flex flex-col p-4 md:p-5">
+                  <p className="text-[13px] text-slate-600 dark:text-slate-400 font-medium mb-5">
+                    Go solo. Bid on and fulfill direct requests from verified buyers on the network.
+                  </p>
+                  
+                  {/* 3 Steps */}
+                  <div className="flex items-center justify-between gap-2 mb-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
+                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                      <Search className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">1. Find</span>
+                    </div>
+                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
+                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                      <Handshake className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">2. Bid</span>
+                    </div>
+                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
+                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
+                      <CheckCircle2 className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">3. Win</span>
+                    </div>
+                  </div>
+
+                  <Link
+                    to="/individual-rfqs"
+                    className="w-full py-3.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-rose-600/20"
+                  >
+                    <span>View Open RFQs</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </motion.div>
             )}
 
           </div>
         </div>
 
-       
         {/* ── STATS BANNER ── */}
-        <div className="bg-gradient-to-br from-primary to-emerald-700 rounded-xl p-5 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="md:w-1/3">
-            <p className="text-[10px] font-semibold text-emerald-100/80 tracking-wide mb-1">Together, We Achieve More</p>
-            <h3 className="text-sm sm:text-base text-white font-bold leading-tight">Communities are driving real change</h3>
+        <div className="bg-primary rounded-xl p-4 md:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-5 mt-2 text-white">
+          <div className="md:w-1/3 border-b md:border-b-0 border-white/10 pb-3 md:pb-0">
+            <p className="text-[10px] font-semibold text-white/80 tracking-wide mb-1">Together, We Achieve More</p>
+            <h3 className="text-sm sm:text-base font-bold leading-tight">Communities are driving real change</h3>
           </div>
 
-          <div className="flex gap-4 md:w-2/3 justify-between">
-            <div className="flex items-start gap-2">
-              <Users className="w-4 h-4 text-emerald-300 mt-0.5 shrink-0" />
+          <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-6 md:w-2/3 justify-between items-center">
+            {/* 1. Group RFQs */}
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shrink-0 shadow-sm">
+                <Handshake className="w-3.5 h-3.5 text-black" />
+              </div>
               <div>
-                <p className="text-sm font-bold">876+</p>
-                <p className="text-[9px] text-emerald-100 leading-tight mt-0.5">Active<br />Collectives</p>
+                <p className="text-sm font-black leading-tight">154</p>
+                <p className="text-[9px] text-white/80 font-medium uppercase tracking-wider">Group RFQs</p>
               </div>
             </div>
-            <div className="flex items-start gap-2">
-              <Leaf className="w-4 h-4 text-emerald-300 mt-0.5 shrink-0" />
+
+            {/* 2. KSh Earned (Middle) */}
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shrink-0 shadow-sm">
+                <Trophy className="w-4 h-4 text-black" />
+              </div>
               <div>
-                <p className="text-sm font-bold">58K+</p>
-                <p className="text-[9px] text-emerald-100 leading-tight mt-0.5">Kg Waste<br />Consolidated</p>
+                <p className="text-sm font-black leading-tight">KSh 4.2M+</p>
+                <p className="text-[9px] text-white/80 font-medium uppercase tracking-wider">Earned</p>
               </div>
             </div>
-            <div className="flex items-start gap-2">
-              <TrendingUp className="w-4 h-4 text-emerald-300 mt-0.5 shrink-0" />
+
+            {/* 3. Indiv RFQs */}
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shrink-0 shadow-sm">
+                <Target className="w-3.5 h-3.5 text-black" />
+              </div>
               <div>
-                <p className="text-sm font-bold">KSh 127k+</p>
-                <p className="text-[9px] text-emerald-100 leading-tight mt-0.5">Earned by<br />Communities</p>
+                <p className="text-sm font-black leading-tight">892</p>
+                <p className="text-[9px] text-white/80 font-medium uppercase tracking-wider">Indiv. RFQs</p>
               </div>
             </div>
           </div>
@@ -311,7 +296,7 @@ export default function CommunityCollective() {
                 {/* Swarm Groups */}
                 <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800/60 shadow-sm overflow-hidden">
                   <div className="w-full aspect-[16/9] bg-emerald-50 dark:bg-emerald-900/20 relative flex items-center justify-center border-b border-emerald-100 dark:border-emerald-800/40 overflow-hidden">
-                    <img src="/vectors/klin-swarms.webp" alt="Swarms Illustration" className="w-full h-full object-fit" />
+                    <img src="/vectors/klin-swarms-real.webp" alt="Swarms Illustration" className="w-full h-full object-cover" />
                   </div>
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-3">
@@ -330,7 +315,7 @@ export default function CommunityCollective() {
                 {profile?.role === 'seller' && (
                   <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800/60 shadow-sm overflow-hidden">
                     <div className="w-full aspect-[16/9] bg-blue-50 dark:bg-blue-900/20 relative flex items-center justify-center border-b border-blue-100 dark:border-blue-800/40 overflow-hidden">
-                      <img src="/vectors/klin-contract.webp" alt="Group Contracts Illustration" className="w-full h-full object-fit" />
+                      <img src="/vectors/klin-contract-real.webp" alt="Group Contracts Illustration" className="w-full h-full object-cover" />
                     </div>
                     <div className="p-4">
                       <div className="flex items-center gap-2 mb-3">
