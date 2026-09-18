@@ -12,7 +12,6 @@ import {
 import { supabase } from '@klinflow/supabase';
 import { MATERIAL_LABELS } from '@klinflow/core/data/wasteDefinitions';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
-import { OptimizedImage } from '@klinflow/ui';
 import { toast } from 'sonner';
 
 export default function CompanyProfile() {

@@ -10,7 +10,6 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@klinflow/supabase';
 import { MATERIAL_LABELS } from '@klinflow/core/data/wasteDefinitions';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
-import { OptimizedImage } from '@klinflow/ui';
 import { normalizeKeys } from '@klinflow/core/validation';
 
 const SCALE_DEFS = [

@@ -414,7 +414,7 @@ export default function MaterialDetail() {
     const fetchLiveStats = async () => {
       if (!slug) return;
       try {
-        const { data, error } = await supabase.rpc('get_material_stats', { material_name_param: slug });
+        const { data, error } = await (supabase.rpc as any)('get_material_stats', { material_name_param: slug });
         if (!error && data) {
           setLiveStats(data);
         } else if (error) {

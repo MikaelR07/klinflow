@@ -4,7 +4,6 @@ import {
   CheckCircle2, ChevronRight, Trophy, Gift, Award, Handshake, Target, DollarSign, X, Search
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import { OptimizedImage } from '@klinflow/ui';
 import { useAuthStore, useCollectiveStore } from '@klinflow/core';
 import { motion, AnimatePresence } from 'framer-motion';
 
