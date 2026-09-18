@@ -38,7 +38,7 @@ export interface AuthState {
   uploadAvatar: (file: File) => Promise<string>;
   toggleOnline: (coords?: { latitude: number; longitude: number } | null) => Promise<void>;
   sendPulse: () => Promise<void>;
-  withdrawRewards: (amount: number) => Promise<void>;
+  withdrawRewards: (amount: number, method?: string, account?: string) => Promise<void>;
   depositToWallet: (amount: number) => Promise<void>;
   transferToTradingBalance: (amount: number) => Promise<void>;
   

@@ -1,6 +1,5 @@
 import { supabase } from '@klinflow/supabase';
 
-// System Wallet Limits Config
 export const WALLET_CONFIG = {
   // Transfer limits
   MIN_TRANSFER_POINTS: 200,
@@ -8,12 +7,32 @@ export const WALLET_CONFIG = {
   MAX_DAILY_TRANSFER_POINTS: 100000,
   MAX_DAILY_TRANSFER_COUNT: 20,
   // Redemption limits
-  MIN_REDEMPTION_POINTS: 200,
-  MAX_REDEMPTION_PER_TX: 10000,
   MAX_DAILY_REDEMPTION: 50000,
-  // Conversion rate
-  GFP_TO_KES_RATE: 0.01, // 100 GFP = 1 KES
 };
+
+export const GFP_RATE = 0.10; // 1 GFP = KES 0.10
+
+export interface RewardItem {
+  id: string;
+  title: string;
+  description: string;
+  min_gfp: number;
+  gfp_to_kes_rate: number;
+  category: 'airtime' | 'voucher';
+  icon: string;
+  bg: string;
+  payout_method: string;
+  requires_phone?: boolean;
+  value_label: string;
+  enabled: boolean;
+}
+
+export const REWARDS_CATALOG: RewardItem[] = [
+  { id: 'saf',  title: 'Safaricom Airtime', description: 'Instant Safaricom top-up',  min_gfp: 100, gfp_to_kes_rate: 0.1, category: 'airtime', icon: 'phone',  bg: 'bg-green-600',  payout_method: 'safaricom_airtime', requires_phone: true,  value_label: 'From KSh 10',  enabled: true },
+  { id: 'air',  title: 'Airtel Airtime',    description: 'Instant Airtel top-up',    min_gfp: 100, gfp_to_kes_rate: 0.1, category: 'airtime', icon: 'phone',  bg: 'bg-red-600',    payout_method: 'airtel_airtime',    requires_phone: true,  value_label: 'From KSh 10',  enabled: true },
+  { id: 'khe',  title: 'Khetias Voucher',   description: 'Shop at any Khetias branch', min_gfp: 500, gfp_to_kes_rate: 0.1, category: 'voucher', icon: 'gift',   bg: 'bg-yellow-500', payout_method: 'voucher_khetias',   requires_phone: false, value_label: 'From KSh 50',  enabled: true },
+  { id: 'nai',  title: 'Naivas Voucher',    description: 'Redeem at any Naivas branch', min_gfp: 500, gfp_to_kes_rate: 0.1, category: 'voucher', icon: 'gift',   bg: 'bg-orange-600',  payout_method: 'voucher_naivas',    requires_phone: false, value_label: 'From KSh 50', enabled: true },
+];
 
 export interface WalletRecipientSearchResult {
   user_id: string;

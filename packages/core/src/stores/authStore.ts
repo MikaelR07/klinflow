@@ -641,21 +641,19 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      withdrawRewards: async (amount: number) => {
+      withdrawRewards: async (amount: number, method?: string, account?: string) => {
         const { userId, walletBalance, payoutBalance, profile } = get();
         if (!userId) throw new Error("Not authenticated");
         
         // Use payout_balance for agents, cash_balance for residents
-        const isAgent = profile?.role === ROLES.AGENT || profile?.role === ROLES.BUSINESS || profile?.agentAccountType;
-        const availableBalance = isAgent ? payoutBalance : walletBalance;
-        
-        if (amount > availableBalance) throw new Error("Insufficient funds");
+        const isAgent = profile?.role === ROLES.AGENT || profile?.role === ROLES.BUSINESS;
+
 
         const rpcName = isAgent ? 'withdraw_payout' : 'process_wallet_withdrawal';
         const rpcPayload = isAgent ? { p_amount: amount } : {
           p_amount: amount,
-          p_method: 'M-PESA',
-          p_account: profile?.phone || ''
+          p_method: method || 'M-PESA',
+          p_account: account || profile?.phone || ''
         };
 
         const { error } = await supabase.rpc(rpcName as any, rpcPayload);
@@ -665,9 +663,8 @@ export const useAuthStore = create<AuthState>()(
       },
 
       transferToTradingBalance: async (amount: number) => {
-        const { userId, payoutBalance } = get();
+        const { userId } = get();
         if (!userId) throw new Error("Not authenticated");
-        if (amount > payoutBalance) throw new Error("Insufficient payout funds");
 
         const { error } = await supabase.rpc('transfer_payout_to_trading', {
           p_amount: amount
