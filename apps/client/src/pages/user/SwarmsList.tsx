@@ -14,7 +14,8 @@ import {
   Handshake,
   DollarSign,
   Coins,
-  Scale
+  Scale,
+  Weight
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore, useServiceStore } from '@klinflow/core';
@@ -93,7 +94,7 @@ export default function SwarmsList() {
                 <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
               </button>
               <div>
-                <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Logistics Swarms</h1>
+                <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Community Swarms</h1>
                 <p className="text-[10px] font-bold text-indigo-600 capitalize tracking-widest flex items-center gap-1">
                   <Truck className="w-3.5 h-3.5 text-indigo-500" /> {estateName}
                 </p>
@@ -116,7 +117,7 @@ export default function SwarmsList() {
               placeholder="Search swarms by material..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-300 dark:focus:border-indigo-600 transition-colors"
+              className="w-full pl-9 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-300 dark:focus:border-indigo-600 transition-colors"
             />
           </div>
 
@@ -135,7 +136,7 @@ export default function SwarmsList() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 ${activeTab === tab
+                  className={`flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 ${activeTab === tab
                     ? 'bg-indigo-600 shadow-sm text-white font-black'
                     : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
@@ -154,7 +155,7 @@ export default function SwarmsList() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)] pb-5 max-w-lg mx-auto w-full">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+9.2rem)] pb-5 max-w-lg mx-auto w-full">
 
         {/* ── HERO SECTION ── */}
         {activeTab === 'Active' && (
@@ -179,7 +180,7 @@ export default function SwarmsList() {
               </div>
             </div>
 
-            <div className="relative z-20 -mt-6 mx-4 bg-white dark:bg-primary rounded-xl p-3  flex flex-col gap-2 border border-emerald-500/30">
+            <div className="relative z-20 -mt-6 mx-4 bg-slate-200 dark:bg-primary rounded-xl p-3  flex flex-col gap-2 border border-emerald-500/30">
               <div className="grid grid-cols-3 gap-2 mt-1">
                 {(() => {
                   const totalPooledKg = swarms.reduce((acc: number, s: any) => acc + (s.current_weight || 0), 0);
@@ -199,22 +200,22 @@ export default function SwarmsList() {
                     <>
                       <div className="flex items-center gap-2 justify-center">
                         <div className="w-6 h-6 flex items-center justify-center shrink-0">
-                          <Scale className="w-5 h-5 text-emerald-600" />
+                          <Weight className="w-5 h-5 text-emerald-600" />
                         </div>
                         <div className="flex flex-col text-left">
                           <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{formatNumber(totalPooledKg)}</p>
-                          <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">Pooled Kg</p>
+                          <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">Pooled Kg</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 border-x border-slate-200 dark:border-black/20 px-2 justify-center">
+                      <div className="flex items-center gap-2 border-x border-slate-600 dark:border-black/20 px-2 justify-center">
                         <div className="w-6 h-6 flex items-center justify-center shrink-0">
-                          <Coins className="w-5 h-5 text-amber-600" />
+                          <DollarSign className="w-5 h-5 text-amber-600" />
                         </div>
                         <div className="flex flex-col text-left">
                           <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">
                             {formatNumber(totalPotentialPayout)}
                           </p>
-                          <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">Est Value</p>
+                          <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">Paid Out</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 pl-2 justify-center">
@@ -223,7 +224,7 @@ export default function SwarmsList() {
                         </div>
                         <div className="flex flex-col text-left">
                           <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{swarms.filter(s => s.status === 'active' && new Date(s.closes_at) > new Date()).length}</p>
-                          <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">Active</p>
+                          <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">Active</p>
                         </div>
                       </div>
                     </>
@@ -330,23 +331,23 @@ export default function SwarmsList() {
 
                 {/* Row 3: Key Details */}
                 <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-2 pb-2 mt-1.5">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-8">
                     <div className="flex items-center gap-1.5">
                       <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
-                        <Truck className="w-3.5 h-3.5 text-slate-400" />
+                        <Truck className="w-4 h-4 text-slate-400" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[11px] font-semibold text-slate-900 dark:text-white leading-none mb-0.5">{swarm.target_weight.toLocaleString()}kg</p>
-                        <p className="text-[9px] font-semibold text-slate-400 leading-none">Target</p>
+                        <p className="text-[14px] font-semibold text-slate-900 dark:text-white leading-none mb-0.5">{swarm.target_weight.toLocaleString()}kg</p>
+                        <p className="text-[11px] font-semibold text-slate-400 leading-none">Target</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
-                        <Scale className="w-3.5 h-3.5 text-slate-400" />
+                        <Scale className="w-4 h-4 text-slate-400" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[11px] font-semibold text-slate-900 dark:text-white leading-none mb-0.5">{swarm.current_weight.toLocaleString()}kg</p>
-                        <p className="text-[9px] font-semibold text-slate-400 leading-none">Collected</p>
+                        <p className="text-[14px] font-semibold text-primary dark:text-white leading-none mb-0.5">{swarm.current_weight.toLocaleString()}kg</p>
+                        <p className="text-[11px] font-semibold text-slate-400 leading-none">Collected</p>
                       </div>
                     </div>
                   </div>

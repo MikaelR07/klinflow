@@ -396,9 +396,8 @@ export default function UserHome() {
             {/* ── MARKET PRICES ── */}
             <button 
               onClick={() => navigate("/market-pulse")}
-              className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-500 border border-purple-500 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer transition-all shadow-sm group relative overflow-hidden"
+              className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-500 border border-indigo-500 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer transition-all shadow-sm group relative overflow-hidden"
             >
-              
               <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
                 <BarChart3Icon className="w-5 h-5 text-white" />
               </div>

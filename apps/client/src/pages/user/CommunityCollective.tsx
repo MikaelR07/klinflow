@@ -141,7 +141,7 @@ export default function CommunityCollective() {
 
         {/* ── SELLER STATS BLOCK (Below Hero) ── */}
         {profile?.role === 'seller' && (
-          <div className="relative z-20 -mt-6 mx-4 bg-white dark:bg-primary rounded-xl p-3  mb-2 flex flex-col gap-2 border border-blue-500/30">
+          <div className="relative z-20 -mt-6 mx-4 bg-slate-200 dark:bg-primary rounded-xl p-3  mb-2 flex flex-col gap-2 border border-blue-500/30">
             <div className="grid grid-cols-3 gap-2 mt-1">
               <div className="flex items-center gap-2 justify-center">
                 <div className="w-6 h-6 flex items-center justify-center shrink-0">
@@ -149,7 +149,7 @@ export default function CommunityCollective() {
                 </div>
                 <div className="flex flex-col text-left">
                   <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
-                  <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">
+                  <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">
                     Group RFQs
                   </p>
                 </div>
@@ -169,7 +169,7 @@ export default function CommunityCollective() {
                       return Math.floor(val).toLocaleString();
                     })()}
                   </p>
-                  <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">
+                  <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">
                     Earned
                   </p>
                 </div>
@@ -181,7 +181,7 @@ export default function CommunityCollective() {
                 </div>
                 <div className="flex flex-col text-left">
                   <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{estateStats?.fulfilledIndividualRFQs || 0}</p>
-                  <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">
+                  <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">
                     Solo RFQs
                   </p>
                 </div>

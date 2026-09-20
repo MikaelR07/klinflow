@@ -495,20 +495,20 @@ export default function SellerHome() {
         <motion.div variants={itemVariants} className="!mt-3">
           <button 
             onClick={() => navigate("/market-pulse")}
-            className="w-full bg-gradient-to-br from-amber-600 to-amber-700 border border-amber-500/30 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+            className="w-full bg-slate-300 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
           >
             <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0">
-                <BarChart3Icon className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-black/20 dark:bg-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0">
+                <BarChart3Icon className="w-6 h-6 text-slate-900" />
               </div>
               <div className="text-left min-w-0">
-                <h3 className="text-[14px] font-bold tracking-tight leading-none mb-1 text-white">Market Prices</h3>
-                <p className="text-[11px] font-semibold text-amber-100/90 leading-tight">View Live material prices</p>
+                <h3 className="text-[14px] font-bold tracking-tight leading-none mb-1 text-slate-900 dark:text-white">Market Prices</h3>
+                <p className="text-[11px] font-bold text-slate-600 dark:text-slate-300 leading-tight">View Live material prices</p>
               </div>
             </div>
-            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors relative z-10 shrink-0">
-              <ChevronRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />
+            <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center group-hover:bg-white/30 transition-colors relative z-10 shrink-0">
+              <ChevronRight className="w-4 h-4 text-slate-900 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </button>
         </motion.div>
