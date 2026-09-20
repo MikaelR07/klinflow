@@ -334,7 +334,7 @@ export default function DiscoveryHub() {
                     <div className="shrink-0 mt-0.5">
                       <div className={`w-[50px] h-[50px] rounded-full flex items-center justify-center text-2xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-600 dark:bg-indigo-900/30 text-white' : 'bg-[#138a53] text-white'}`}>
                         {partner.avatarUrl ? (
-                          <OptimizedImage src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
+                          <img src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" alt="" />
                         ) : (
                           isCompany ? '🏢' : <Truck className="w-7 h-7" />
                         )}

@@ -74,6 +74,12 @@ export default function SwarmsList() {
         s.material?.toLowerCase().includes(q) ||
         s.estate?.toLowerCase().includes(q)
       );
+    })
+    .sort((a: any, b: any) => {
+      if (activeTab === 'My Swarms' || activeTab === 'Completed') {
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+      return 0;
     });
 
   return (
@@ -173,7 +179,7 @@ export default function SwarmsList() {
               </div>
             </div>
 
-            <div className="relative z-20 -mt-2 mx-4 bg-white dark:bg-primary rounded-xl p-3 shadow-lg flex flex-col gap-2 border border-emerald-500/30">
+            <div className="relative z-20 -mt-6 mx-4 bg-white dark:bg-primary rounded-xl p-3  flex flex-col gap-2 border border-emerald-500/30">
               <div className="grid grid-cols-3 gap-2 mt-1">
                 {(() => {
                   const totalPooledKg = swarms.reduce((acc: number, s: any) => acc + (s.current_weight || 0), 0);
@@ -347,14 +353,11 @@ export default function SwarmsList() {
                   
                   {swarm.closes_at && (
                     <div className="flex items-center gap-1.5">
-                      <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
-                        <Clock className="w-3.5 h-3.5 text-slate-400" />
-                      </div>
                       <div className="min-w-0 text-right">
                         <p className={`text-[11px] font-semibold leading-none mb-0.5 ${new Date(swarm.closes_at).getTime() < new Date().getTime() ? 'text-rose-600 dark:text-rose-400' : 'text-slate-600 dark:text-slate-300'}`}>
                           {new Date(swarm.closes_at).toLocaleDateString('en-GB')}
                         </p>
-                        <p className="text-[11px] font-semibold text-slate-500 leading-none">
+                        <p className="text-[11px] font-semibold text-rose-500 leading-none">
                           Deadline
                         </p>
                       </div>

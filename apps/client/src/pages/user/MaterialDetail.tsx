@@ -506,7 +506,7 @@ export default function MaterialDetail() {
 
           {/* Unified Material Info Card */}
           <div className="flex flex-col justify-center">
-            <div className="bg-emerald-700 dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm h-full flex flex-col overflow-hidden">
+            <div className="bg-gradient-to-tr from-primary to-emerald-600 dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm h-full flex flex-col overflow-hidden">
               
               {/* Header Section */}
               <div className="p-4 md:p-6 pb-0 md:pb-0">

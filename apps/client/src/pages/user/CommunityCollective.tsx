@@ -141,7 +141,7 @@ export default function CommunityCollective() {
 
         {/* ── SELLER STATS BLOCK (Below Hero) ── */}
         {profile?.role === 'seller' && (
-          <div className="relative z-20 -mt-2 mx-4 bg-white dark:bg-primary rounded-xl p-3 shadow-lg mb-2 flex flex-col gap-2 border border-blue-500/30">
+          <div className="relative z-20 -mt-6 mx-4 bg-white dark:bg-primary rounded-xl p-3  mb-2 flex flex-col gap-2 border border-blue-500/30">
             <div className="grid grid-cols-3 gap-2 mt-1">
               <div className="flex items-center gap-2 justify-center">
                 <div className="w-6 h-6 flex items-center justify-center shrink-0">

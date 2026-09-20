@@ -455,7 +455,7 @@ export default function SellerHome() {
         </motion.div>
 
         {/* ── BUSINESS TOOLS ── */}
-        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
+        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-900 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
           <div className="space-y-2">
             <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Business Tools</h3>
           </div>
@@ -463,30 +463,29 @@ export default function SellerHome() {
             {/* ── CONTRACTS ── */}
             <button 
               onClick={() => navigate("/community-collective")}
-              className="w-full h-full bg-gradient-to-br from-emerald-600 to-teal-600 border border-emerald-400/30 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+              className="w-full h-full  bg-gradient-to-br from-indigo-500 to-purple-500 border border-emerald-400/30 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
             >
               <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
+              <div className="w-10 h-10 bg-white/20 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
                 <Users className="w-5 h-5 text-white" />
               </div>
               <div className="text-left relative z-10 mt-auto">
                 <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Contracts</h4>
-                <p className="text-[10px] font-semibold text-emerald-100/90 leading-tight">View Active Contracts</p>
+                <p className="text-[10px] font-semibold text-slate-200  leading-tight">View Active Contracts</p>
               </div>
             </button>
 
             {/* ── SWARMS ── */}
             <button 
               onClick={() => navigate("/swarms")}
-              className="w-full h-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+              className="w-full h-full bg-gradient-to-br from-primary to-emerald-600  border border-slate-200 dark:border-slate-700/50 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
             >
-              <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-indigo-50 dark:bg-indigo-900/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
-                <Users className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <div className="w-10 h-10 bg-white/20  dark:bg-indigo-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
+                <Users className="w-5 h-5 text-white dark:text-indigo-400" />
               </div>
               <div className="text-left relative z-10 mt-auto">
-                <h4 className="text-[13px] font-black text-slate-900 dark:text-white leading-tight mb-0.5">Swarms</h4>
-                <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight">Join Logistics Swarms</p>
+                <h4 className="text-[13px] font-black text-white dark:text-white leading-tight mb-0.5">Swarms</h4>
+                <p className="text-[10px] font-semibold text-emerald-100/90 leading-tight">Join Logistics Swarms</p>
               </div>
             </button>
           </div>
