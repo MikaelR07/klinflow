@@ -82,9 +82,20 @@ Return ONLY a JSON object:
     // ── CASE B: CHAT ADVISOR ──────────────────────────────────────────
     
     // 1. Fetch User Profile
-    const { data: profile } = await supabase.from('profiles').select('*').eq('id', userId).single();
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*, user_wallets(cash_balance, payout_balance, available_points)')
+      .eq('id', userId)
+      .single();
+      
     const user = profile || { role: 'user' };
-
+    
+    // Use user_wallets balances instead of deprecated profiles.wallet_balance
+    const userWallet = Array.isArray(user.user_wallets) ? user.user_wallets[0] : user.user_wallets;
+    if (userWallet) {
+      user.wallet_balance = userWallet.cash_balance || 0;
+      user.reward_points = userWallet.available_points || 0;
+    }
     // 2. Pre-Fetch Live Context (Parallel)
     const [bookingsRes, marketRes, swarmsRes, pendingRes, historyRes] = await Promise.all([
       supabase.from('bookings').select('waste_type, status').eq('user_id', userId).order('created_at', { ascending: false }).limit(3),
