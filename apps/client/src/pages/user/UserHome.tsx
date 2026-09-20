@@ -337,7 +337,7 @@ export default function UserHome() {
                   onClick={() => navigate(`/materials/${identifier}`)}
                   className={`snap-start relative shrink-0 w-[140px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-3 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col h-full overflow-hidden`}
                   style={bgImage ? {
-                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8)), url(${bgImage})`,
+                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.2)), url(${bgImage})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   } : {}}
