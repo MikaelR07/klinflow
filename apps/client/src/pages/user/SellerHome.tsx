@@ -388,7 +388,24 @@ export default function SellerHome() {
           </div>
           
           <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
-            {(categories.length > 0 ? categories : catalogItems as any[]).map((item: any, idx: number) => {
+            {(() => {
+              const items = categories.length > 0 ? categories : catalogItems as any[];
+              const getSortIndex = (i: any) => {
+                const id = (i.slug || i.id || '').toLowerCase();
+                const name = (i.label || i.name || '').toLowerCase();
+                if (id.includes('metal') || name.includes('metal')) return 0;
+                if (id.includes('plastic') || name.includes('plastic')) return 1;
+                if (id.includes('paper') || name.includes('paper') || id.includes('cardboard') || name.includes('cardboard')) return 2;
+                if (id.includes('glass') || name.includes('glass')) return 3;
+                if (id.includes('ewaste') || name.includes('ewaste') || id.includes('e-waste') || name.includes('electronic')) return 4;
+                if (id.includes('organic') || name.includes('organic') || id.includes('food')) return 5;
+                if (id.includes('textile') || name.includes('textile') || id.includes('clothes')) return 6;
+                if (id.includes('mix') || name.includes('mix') || id.includes('recyclable')) return 7;
+                return 99;
+              };
+              
+              return [...items].sort((a, b) => getSortIndex(a) - getSortIndex(b));
+            })().map((item: any, idx: number) => {
               const palette = COLOR_PALETTES[idx % COLOR_PALETTES.length];
               const isDB = categories.length > 0;
               const priceVal = isDB ? (item.price_per_unit || item.price_per_kg || 0) : null;
