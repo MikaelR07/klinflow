@@ -224,7 +224,7 @@ export default function SellerHome() {
   };
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-[#0f172a] relative overflow-x-hidden font-sans pb-4">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 relative overflow-x-hidden font-sans pb-4">
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal isOpen={showPushPrompt} onClose={handleDismissPush} />
 
@@ -284,16 +284,16 @@ export default function SellerHome() {
         {/* ── ECO-REWARDS HERO CARD (MERCHANT REVENUE) ── */}
         <div className="relative z-10 px-4 max-w-xl mx-auto mt-6">
           <motion.div variants={itemVariants} initial="hidden" animate="show" className="relative group overflow-hidden rounded-[24px] bg-white/10  border border-emerald-500/50  p-5">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary to-emerald-700/50 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary pointer-events-none" />
             <div className="relative z-10 flex flex-col gap-2">
               <div className="flex justify-between items-start mb-1">
                 <div>
                   <p className="text-[10px] font-black text-emerald-100 uppercase tracking-widest mb-1 flex items-center gap-1">
-                    <Wallet className="w-4 h-4" /> Available Balance
+                    <Wallet className="w-4 h-4" /> Wallet Balance
                   </p>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl font-bold text-white/90">Ksh</span>
-                    <h2 className="text-3xl font-black text-white tracking-tighter leading-none drop-shadow-md">
+                    <h2 className="text-2xl font-black text-white tracking-tighter leading-none drop-shadow-md">
                       {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </h2>
                   </div>
@@ -315,7 +315,7 @@ export default function SellerHome() {
                   <span className="text-base font-black text-white">{totalSoldKg}</span>
                   <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Scale className="w-3 h-3" /> KG Sold</span>
                 </div>
-                <div onClick={() => navigate("/impact-hub")} className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 cursor-pointer hover:bg-white/20 transition-colors">
+                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20">
                   <span className="text-base font-black text-amber-300 drop-shadow-sm">{gfpBalance.toLocaleString()}</span>
                   <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
                 </div>
@@ -326,17 +326,17 @@ export default function SellerHome() {
       </div>
 
 
-      <div className="max-w-xl mx-auto px-2.5 space-y-5 pt-3 pb-24">
-        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-2 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
+      <div className="max-w-xl mx-auto px-2.5 space-y-5 pt-3  pb-5">
+        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-900 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           <div className="space-y-2">
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
             <div className="grid grid-cols-4 gap-1 !mt-1">
               {[
-                { label: 'Sell', icon: <CircleFadingPlus className="w-6 h-6" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Listings', icon: <Package className="w-6 h-6" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Trades', icon: <Handshake className="w-6 h-6" />, route: '/my-trades', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
-                { label: 'Wallet', icon: <Wallet className="w-6 h-6" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Sell', icon: <CircleFadingPlus className="w-5 h-5" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Listings', icon: <Package className="w-5 h-5" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Trades', icon: <Handshake className="w-5 h-5" />, route: '/my-trades', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
+                { label: 'Wallet', icon: <Wallet className="w-5 h-5" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
                 <button
                   key={service.label}
@@ -367,8 +367,8 @@ export default function SellerHome() {
                     <Receipt className="w-6 h-6 text-white dark:text-slate-900" />
                   </div>
                   <div className="text-left min-w-0">
-                    <h3 className="text-[16px] font-black tracking-tight leading-none mb-1">Submitted RFQ Proposals</h3>
-                    <p className="text-[11px] font-semibold text-white/80 dark:text-slate-500 leading-tight">Track Requests To Buyers</p>
+                    <h3 className="text-[14px] font-bold tracking-tight leading-none mb-1">Submitted RFQ Proposals</h3>
+                    <p className="text-[11px] font-semibold text-white/80 dark:text-slate-100 leading-tight">Track Requests To Buyers</p>
                   </div>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center group-hover:bg-white/30 dark:group-hover:bg-slate-900/20 transition-colors">
@@ -381,13 +381,13 @@ export default function SellerHome() {
         </motion.div>
 
         {/* ── CATALOG: E-COMMERCE SCROLL ── */}
-        <motion.div variants={itemVariants} className="space-y-2 !mt-3">
+        <motion.div variants={itemVariants} className="space-y-2 ">
           <div className="flex items-center justify-between px-1">
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
             
           </div>
           
-          <div className="flex gap-1 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
+          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
             {(categories.length > 0 ? categories : catalogItems as any[]).map((item: any, idx: number) => {
               const palette = COLOR_PALETTES[idx % COLOR_PALETTES.length];
               const isDB = categories.length > 0;
@@ -438,7 +438,7 @@ export default function SellerHome() {
         </motion.div>
 
         {/* ── BUSINESS TOOLS ── */}
-        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
+        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
           <div className="space-y-2">
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Business Tools</h3>
           </div>
@@ -459,23 +459,23 @@ export default function SellerHome() {
                 </div>
               </div>
               <div className="relative z-10 mt-auto">
-                <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Community Hub</h4>
-                <p className="text-[9px] font-semibold text-emerald-50 leading-tight">Join group pickups</p>
+                <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Community  Collective</h4>
+                <p className="text-[9px] font-semibold text-emerald-50 leading-tight">Join group contracts & pickups</p>
               </div>
             </div>
 
             {/* ── MARKET PULSE ── */}
             <div 
               onClick={() => navigate("/market-pulse")}
-              className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-[20px] p-3 flex flex-col justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group min-h-[105px] relative overflow-hidden"
+              className=" bg-white dark:bg-amber-600 border border-white dark:border-slate-700/50 rounded-[20px] p-3 flex flex-col justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group min-h-[105px] relative overflow-hidden"
             >
               <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 dark:bg-emerald-900/20 rounded-full blur-xl pointer-events-none" />
               <div className="flex items-start justify-between mb-2 relative z-10">
                 <div className="w-9 h-9 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
-                  <BarChart3Icon className="w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400" />
+                  <BarChart3Icon className="w-4.5 h-4.5 text-emerald-600 dark:text-white" />
                 </div>
                 <div className="w-6 h-6 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-slate-100 dark:group-hover:bg-slate-700 transition-colors">
-                  <ChevronRight className="w-3 h-3 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                  <ChevronRight className="w-3 h-3 text-slate-400" />
                 </div>
               </div>
               <div className="relative z-10 mt-auto">

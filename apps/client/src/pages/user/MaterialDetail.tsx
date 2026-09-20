@@ -462,25 +462,21 @@ export default function MaterialDetail() {
     <div className="min-h-screen bg-white dark:bg-[#0a0c10] pb-10">
 
       {/* ═══════════ FIXED TOP NAV ═══════════ */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-[#0f1117]/90 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60">
-        <div className="max-w-7xl mx-auto px-1.5 py-3 flex items-center justify-between mt-[env(safe-area-inset-top)]">
-          <div className="flex items-center gap-3">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-[#0f1117]/90 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 flex items-center justify-between">
+          <div className="flex items-center gap-3.5">
             <button
               onClick={() => navigate(-1)}
-              className="w-9 h-9 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 active:scale-95 transition-all hover:bg-slate-100 dark:hover:bg-slate-700"
+              className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
             >
-              <ArrowLeft className="w-4.5 h-4.5" />
+              <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
             </button>
-            <span className="text-[13px] font-bold text-slate-800 dark:text-white tracking-widest uppercase">Material Details</span>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <button className="w-9 h-9 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors">
-              <Share className="w-4.5 h-4.5" />
-            </button>
-            <button className="w-9 h-9 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors">
-              <Bookmark className="w-4.5 h-4.5" />
-            </button>
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Material Details</span>
+              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+               Know more about what buyers want
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -493,7 +489,7 @@ export default function MaterialDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-5xl mx-auto">
           
           {/* Image Card (Restored Style) */}
-          <div className="relative h-[300px] md:h-full w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm min-h-[300px]">
+          <div className="relative h-[240px] md:h-full w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm min-h-[240px]">
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${mat.heroImage})` }}
@@ -510,79 +506,59 @@ export default function MaterialDetail() {
 
           {/* Unified Material Info Card */}
           <div className="flex flex-col justify-center">
-            <div className="bg-white dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm h-full flex flex-col overflow-hidden">
+            <div className="bg-emerald-700 dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm h-full flex flex-col overflow-hidden">
               
               {/* Header Section */}
-              <div className="p-5 md:p-6 pb-0 md:pb-0">
+              <div className="p-4 md:p-6 pb-0 md:pb-0">
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <h1 className="text-[18px] md:text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">
+                  <h1 className="text-[18px] md:text-2xl font-black text-white leading-tight tracking-tight">
                     {title}
                   </h1>
                   <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border shrink-0 ${
                     displayDemand === 'Critical' || displayDemand === 'High'
-                    ? 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+                    ? 'text-emerald-100 bg-emerald-900/40 border-emerald-500/30 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
                     : displayDemand === 'Calculating...'
-                    ? 'text-slate-500 bg-slate-100 border-slate-200 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700'
-                    : 'text-amber-700 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20'
+                    ? 'text-slate-100 bg-slate-900/40 border-slate-500/30 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700'
+                    : 'text-amber-100 bg-amber-900/40 border-amber-500/30 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20'
                   }`}>
                     {displayDemand} {displayDemand !== 'Calculating...' ? 'Demand' : ''}
                   </div>
                 </div>
-                <p className="text-[12px] md:text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
+                <p className="text-[12px] md:text-[13px] font-medium text-emerald-100 leading-relaxed">
                   {mat.subtitle}
                 </p>
               </div>
 
               {/* Market Snapshot in Top Card */}
               <div className="mt-auto p-4 md:p-6 pt-2 md:pt-2">
-                <div className="bg-slate-200 dark:bg-slate-800/60 rounded-xl p-1.5 md:p-2 mb-3 shadow-inner">
+                <div className="bg-black/15 dark:bg-slate-800/60 rounded-xl p-1.5 md:p-2 mb-3 shadow-inner">
                   <div className="grid grid-cols-3 gap-1.5 md:gap-2">
                     {/* Metric 1 */}
-                    <div className="bg-white dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Current Price</p>
-                      <p className="text-[13px] md:text-[15px] font-black text-slate-900 dark:text-white leading-none mb-1">
+                    <div className="bg-emerald-800 dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center border border-emerald-600/30">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-200 mb-1">Current Price</p>
+                      <p className="text-[13px] md:text-[15px] font-black text-white leading-none mb-1">
                         {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'}
                       </p>
-                      <p className="text-[9px] font-semibold text-slate-500 leading-tight truncate">Market Rate</p>
+                      <p className="text-[9px] font-semibold text-emerald-300/80 leading-tight truncate">Market Rate</p>
                     </div>
                     {/* Metric 2 */}
-                    <div className="bg-white dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">Demand Level</p>
-                      <p className="text-[13px] md:text-[15px] font-black text-slate-900 dark:text-white leading-none mb-1 truncate">{displayDemand}</p>
-                      <p className="text-[9px] font-semibold text-slate-500 leading-tight truncate">Buyer activity</p>
+                    <div className="bg-emerald-800 dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center border border-emerald-600/30">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-200 mb-1">Demand Level</p>
+                      <p className="text-[13px] md:text-[15px] font-black text-white leading-none mb-1 truncate">{displayDemand}</p>
+                      <p className="text-[9px] font-semibold text-emerald-300/80 leading-tight truncate">Buyer activity</p>
                     </div>
                     {/* Metric 3 */}
-                    <div className="bg-white dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">30-Day Trend</p>
-                      <p className={`text-[13px] md:text-[15px] font-black ${isTrendUp ? 'text-emerald-600 dark:text-emerald-500' : isTrendDown ? 'text-rose-600 dark:text-rose-500' : 'text-slate-600 dark:text-slate-400'} leading-none mb-1`}>
+                    <div className="bg-emerald-800 dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center border border-emerald-600/30">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-200 mb-1">30-Day Trend</p>
+                      <p className={`text-[13px] md:text-[15px] font-black ${isTrendUp ? 'text-emerald-300 dark:text-emerald-500' : isTrendDown ? 'text-rose-300 dark:text-rose-500' : 'text-emerald-100 dark:text-slate-400'} leading-none mb-1`}>
                         {isTrendUp ? '▲' : isTrendDown ? '▼' : ''} {displayTrend}
                       </p>
-                      <p className="text-[9px] font-semibold text-slate-500 leading-tight truncate">Past 30 days</p>
+                      <p className="text-[9px] font-semibold text-emerald-300/80 leading-tight truncate">Past 30 days</p>
                     </div>
                   </div>
                 </div>
 
-                {/* ── WHY IT'S WORTH COLLECTING ── */}
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 mt-2">
-                  <h2 className="text-sm font-black text-slate-900 dark:text-white tracking-tight mb-2">
-                    Why it's worth collecting
-                  </h2>
-                  <p className="text-[12px] text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
-                    {mat.whyCollectorsBuy}
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {mat.valueProps.map((vp, i) => (
-                      <div key={i} className="flex items-start gap-2 bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-lg p-2.5 shadow-sm">
-                        <div className="w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
-                          <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                        </div>
-                        <div className="pt-0.5">
-                          <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">{vp}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
               </div>
 
             </div>
@@ -600,39 +576,50 @@ export default function MaterialDetail() {
           {/* LEFT COLUMN (7 cols) */}
           <div className="lg:col-span-7 space-y-4">
             
-
-
+            {/* ── WHY IT'S WORTH COLLECTING ── */}
+            <motion.div variants={fadeUp} className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 md:p-6 mb-8 border border-slate-200 dark:border-slate-700/50">
+              <h2 className="text-base font-black text-slate-900 dark:text-white tracking-tight mb-3">
+                Why it's worth collecting
+              </h2>
+              <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
+                {mat.whyCollectorsBuy}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {mat.valueProps.map((vp, i) => (
+                  <div key={i} className="flex items-start gap-3 bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-xl p-3 shadow-sm">
+                    <div className="w-6 h-6 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                      <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    <div className="pt-0.5">
+                      <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{vp}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
             {/* ── MATERIAL QUALITY (Horizontal) ── */}
-            <motion.div variants={fadeUp}>
+            <motion.div variants={fadeUp} className='pl-3'>
               <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-2">
-                What gets the better offer?
+                What are the grades?
               </h2>
               <p className="text-[13px] text-slate-500 dark:text-slate-400 mb-5">
-                Condition and sorting affect what collectors may offer you.
+                How you prepare materials affects what buyers may offer you.
               </p>
               
-              <div className="w-full overflow-x-auto pb-4 no-scrollbar">
-                <div className="flex min-w-[500px]">
+              <div className="w-full overflow-x-auto pb-6 no-scrollbar">
+                <div className="flex gap-4 min-w-max pr-4">
                   {GRADES.map((g, i) => (
-                    <div key={g.key} className="flex-1 relative">
-                      {/* Connection Line */}
-                      {i < GRADES.length - 1 && (
-                        <div className="absolute top-2.5 left-[50%] w-full h-[2px] bg-slate-200 dark:bg-slate-800" />
-                      )}
-                      
-                      <div className="flex flex-col items-center text-center relative z-10 px-2">
-                        {/* Dot */}
-                        <div className={`w-5 h-5 rounded-full border-4 border-white dark:border-[#0a0c10] flex items-center justify-center mb-3 shadow-sm ${
-                          i === 0 ? 'bg-emerald-500' : i === 1 ? 'bg-emerald-400' : i === 2 ? 'bg-amber-400' : 'bg-slate-400'
-                        }`} />
-                        
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white mb-1">
+                    <div key={g.key} className="flex flex-col items-center w-[120px] shrink-0">
+                      <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-2  border border-slate-600 dark:border-slate-800 ${
+                        i === 0 ? 'bg-primary' : i === 1 ? 'bg-emerald-500' : i === 2 ? 'bg-amber-400' : 'bg-red-500'
+                      }`}>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-white text-center px-2 leading-tight">
                           {g.label}
                         </span>
-                        <span className="text-[11px] font-medium text-slate-500 leading-tight max-w-[100px]">
-                          {g.desc}
-                        </span>
                       </div>
+                      <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 text-center leading-tight">
+                        {g.desc}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -646,40 +633,48 @@ export default function MaterialDetail() {
             
             {/* ── PREPARE YOUR MATERIAL ── */}
             <motion.div variants={fadeUp}>
-              <div className="bg-slate-200 dark:bg-slate-800/50 rounded-2xl p-4 md:p-5">
+              <div className="bg-gradient-to-r from-amber-600 to-amber-700 rounded-2xl p-4 md:p-5">
                 <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-4">
-                  Prepare your material
+                  How to prepare your material
                 </h2>
                 
-                <div className="flex flex-col gap-3">
-                  {/* DO Box */}
-                  <div className="bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-xl p-4 md:p-5 shadow-sm">
-                    <h3 className="text-[11px] font-black text-emerald-800 dark:text-emerald-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                      Do
-                    </h3>
-                    <ul className="space-y-2.5">
-                      {mat.doList.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-500 shrink-0 mt-0.5" />
-                          <span className="text-[13px] font-medium text-slate-800 dark:text-slate-300 leading-snug">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                <div className="-mx-4 md:mx-0 px-4 md:px-0">
+                  <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar snap-x snap-mandatory">
+                    {/* DO Box */}
+                    <div className="w-[85%] md:w-[48%] shrink-0 snap-start bg-white dark:bg-[#12141c] border border-emerald-100 dark:border-emerald-900/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 opacity-5">
+                        <Check className="w-24 h-24 text-emerald-500" />
+                      </div>
+                      <h3 className="text-[11px] font-black text-emerald-800 dark:text-emerald-500 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
+                        Do
+                      </h3>
+                      <ul className="space-y-3 relative z-10">
+                        {mat.doList.map((item, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-500 shrink-0 mt-0.5" />
+                            <span className="text-[13px] font-medium text-slate-800 dark:text-slate-300 leading-snug">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
 
-                  {/* AVOID Box */}
-                  <div className="bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-xl p-4 md:p-5 shadow-sm">
-                    <h3 className="text-[11px] font-black text-amber-800 dark:text-amber-600 uppercase tracking-widest mb-3 flex items-center gap-2">
-                      Avoid
-                    </h3>
-                    <ul className="space-y-2.5">
-                      {mat.dontList.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <X className="w-4 h-4 text-amber-600 dark:text-amber-600 shrink-0 mt-0.5" />
-                          <span className="text-[13px] font-medium text-slate-800 dark:text-slate-400 leading-snug">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {/* AVOID Box */}
+                    <div className="w-[85%] md:w-[48%] shrink-0 snap-start bg-white dark:bg-[#12141c] border border-rose-100 dark:border-rose-900/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 opacity-5">
+                        <X className="w-24 h-24 text-rose-500" />
+                      </div>
+                      <h3 className="text-[11px] font-black text-rose-800 dark:text-rose-600 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
+                        Avoid
+                      </h3>
+                      <ul className="space-y-3 relative z-10">
+                        {mat.dontList.map((item, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <X className="w-4 h-4 text-rose-600 dark:text-rose-500 shrink-0 mt-0.5" />
+                            <span className="text-[13px] font-medium text-slate-800 dark:text-slate-400 leading-snug">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>

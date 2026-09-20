@@ -143,7 +143,7 @@ export default function UserHome() {
   }
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-[#0f172a] relative overflow-x-hidden  font-sans">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 relative overflow-x-hidden  font-sans">
       <PushNotificationModal isOpen={showPushPrompt} onClose={() => setShowPushPrompt(false)} />
 
       {/* ── TOP SECTION: PREMIUM GRADIENT ── */}
@@ -212,11 +212,11 @@ export default function UserHome() {
               <div className="flex justify-between items-start mb-1">
                 <div>
                   <p className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1">
-                    <Wallet className="w-4 h-4" /> Available Balance
+                    <Wallet className="w-4 h-4" /> Wallet Balance
                   </p>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl font-bold text-white/90">Ksh</span>
-                    <h2 className="text-3xl font-black text-white tracking-tighter leading-none drop-shadow-md">
+                    <h2 className="text-2xl font-black text-white tracking-tighter leading-none drop-shadow-md">
                       {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </h2>
                   </div>
@@ -245,7 +245,7 @@ export default function UserHome() {
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto px-2.5 space-y-5 pt-3 pb-24">
+      <div className="max-w-xl mx-auto px-2.5 space-y-5 pt-3 pb-5">
 
         {/* ── ACTION HUB (QUICK LINKS + CTA) ── */}
         <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
@@ -254,10 +254,10 @@ export default function UserHome() {
             <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1 !mt-1">
               {[
-                { label: 'Wallet', icon: <Wallet className="w-6 h-6" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Bookings', icon: <RecycleIcon className="w-6 h-6" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Dashboard', icon: <BarChart className="w-6 h-6" />, route: '/Analytics', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Discover', icon: <Search className="w-6 h-6" />, route: '/discovery', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Wallet', icon: <Wallet className="w-5 h-5" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Bookings', icon: <RecycleIcon className="w-5 h-5" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Dashboard', icon: <BarChart className="w-5 h-5" />, route: '/Analytics', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Discover', icon: <Search className="w-5 h-5" />, route: '/discovery', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
                 <button 
                   key={service.label} 
@@ -284,8 +284,8 @@ export default function UserHome() {
                   <Truck className="w-6 h-6 text-white dark:text-slate-900" />
                 </div>
                 <div className="text-left min-w-0">
-                  <h3 className="text-[16px] font-black tracking-tight leading-none mb-1">Book Pickup</h3>
-                  <p className="text-[11px] font-semibold text-white/80 dark:text-slate-500 leading-tight">Turn Recyclables to cash</p>
+                  <h3 className="text-[14px] font-bold tracking-tight leading-none mb-1">Book Pickup</h3>
+                  <p className="text-[11px] font-semibold text-white/80 dark:text-slate-100 leading-tight">Turn Recyclables to cash</p>
                 </div>
               </div>
               <div className="w-8 h-8 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center group-hover:bg-white/30 dark:group-hover:bg-slate-900/20 transition-colors">
@@ -305,7 +305,7 @@ export default function UserHome() {
             </button> */}
           </div>
           
-          <div className="flex gap-1 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
+          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
             {(categories.length > 0 ? categories : catalogItems as any[]).map((item: any, idx: number) => {
               const palette = COLOR_PALETTES[idx % COLOR_PALETTES.length];
               const isDB = categories.length > 0;

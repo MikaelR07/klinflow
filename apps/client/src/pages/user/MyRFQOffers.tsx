@@ -31,7 +31,7 @@ export default function MyRFQOffers() {
         .select(`
           id, rfq_id, offered_price, offered_weight, status, created_at,
           rfq:rfqs(
-            material_grade, category, pickup_area, target_price,
+            material_grade, category, pickup_area, target_price, images,
             buyer:profiles!buyer_id(company_name, name)
           ),
           fulfillment_orders(status)
@@ -57,6 +57,7 @@ export default function MyRFQOffers() {
             location: o.rfq?.pickup_area || '',
             quantity: `${o.offered_weight}kg`,
             quotedPrice: o.offered_price,
+            image: o.rfq?.images?.[0] || null,
             status: computedStatus,
             submittedAt: new Date(o.created_at).toLocaleString(),
             clientTargetPrice: o.rfq?.target_price || 0,
@@ -97,7 +98,7 @@ export default function MyRFQOffers() {
             <div>
               <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Submitted Quotes</h1>
               <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> RFQ Pipeline
+                view bids made to buyer requests
               </p>
             </div>
           </div>
@@ -171,49 +172,61 @@ export default function MyRFQOffers() {
                   <div className={`absolute left-0 top-0 bottom-0 w-1 ${quote.status === 'accepted' ? 'bg-emerald-500' : quote.status === 'declined' ? 'bg-rose-500' : 'bg-amber-500'
                     }`} />
 
-                  <div className="pl-5 pr-4 py-3">
-                    {/* Row 1: Material Name + Status Badge */}
-                    <div className="flex items-center justify-between mb-3">
-                      <h4 className="text-[15px] font-black text-slate-900 dark:text-white capitalize leading-none truncate max-w-[200px]">
-                        {materialPrices?.find(m => m.id === quote.material)?.material_name || getSubcategoryLabel(quote.category, quote.material) || quote.material}
-                      </h4>
+                  <div className="pl-5 pr-4 py-3 flex justify-between items-start">
+                    {/* Left: Image and Meta */}
+                    <div className="flex gap-3 items-start flex-1">
+                      <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+                        <img 
+                          src={quote.image || `/material-categories/${(quote.category || '').toLowerCase()}.webp`}
+                          onError={(e) => { e.currentTarget.src = "/material-categories/recyclables.webp" }}
+                          alt={quote.category}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col py-0.5 flex-1">
+                        <h4 className="text-[15px] font-black text-slate-900 dark:text-white tracking-tight leading-tight line-clamp-1 max-w-[160px]">
+                          {(() => {
+                            let raw = materialPrices?.find(m => m.id === quote.material || `${quote.category}_${m.id}` === quote.material)?.material_name;
+                            if (!raw) raw = getSubcategoryLabel(quote.category, quote.material);
+                            if (!raw) raw = quote.material;
+                            
+                            // As a final fallback strip any residual UUID or Prefix_UUID formats
+                            return (raw || '').replace(/^(?:[A-Za-z]+_)?(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})[\s-]*/i, '').replace(/^[A-Za-z]+_/, '');
+                          })()}
+                        </h4>
+                        
+                        <div className="flex flex-col gap-1 mt-2">
+                          <div className="flex items-center gap-1.5">
+                            <Scale className="w-3.5 h-3.5 text-slate-900 dark:text-white shrink-0" />
+                            <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300">{quote.quantity}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5 text-slate-900 dark:text-white shrink-0" />
+                            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate max-w-[120px]">{quote.location.split(',')[0]}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-slate-900 dark:text-white shrink-0" />
+                            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate max-w-[120px]">{quote.company}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Right: Badges, Price, and Meta */}
+                    <div className="flex flex-col items-end justify-between self-stretch shrink-0 pb-0.5">
+                      {/* Top Right: Status Badge */}
                       <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border}`}>
                         <StatusIcon className="w-3 h-3" />
                         <span className="text-[8px] font-bold uppercase tracking-wider leading-none">{statusConfig.label}</span>
                       </div>
-                    </div>
 
-                    {/* Row 2: Structured meta + Price */}
-                    <div className="flex items-end justify-between">
-                      {/* Left: Meta details with icons */}
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-400 truncate max-w-[140px]">{quote.company}</span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1">
-                            <Scale className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                            <span className="text-[11px] font-semibold text-slate-500">{quote.quantity}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                            <span className="text-[11px] font-semibold text-slate-500 truncate max-w-[80px]">{quote.location.split(',')[0]}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right: Price + Arrow */}
-                      <div className="flex items-center gap-3 shrink-0">
-                        <div className="text-right">
-                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Your Quote</p>
-                          <p className="text-base font-black text-emerald-600 leading-none">
-                            KSh {quote.quotedPrice}<span className="text-[9px] text-emerald-600/70">/kg</span>
-                          </p>
-                        </div>
-                        <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center text-slate-400 border border-slate-100 dark:border-slate-700 shadow-sm group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-colors">
-                          <ArrowRight className="w-4 h-4" />
-                        </div>
+                      {/* Bottom Right: Quote Price */}
+                      <div className="text-right mt-auto">
+                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Your Quote</p>
+                        <p className="text-base font-black text-emerald-600 leading-none">
+                          KSh {quote.quotedPrice}<span className="text-[9px] text-emerald-600/70">/kg</span>
+                        </p>
                       </div>
                     </div>
                   </div>

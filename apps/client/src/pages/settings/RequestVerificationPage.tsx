@@ -57,7 +57,7 @@ export default function RequestVerificationPage() {
 
   if (isAlreadyVerified) {
     return (
-      <div className="flex flex-col bg-slate-50 dark:bg-slate-950  font-sans overflow-hidden">
+      <div className="flex flex-col bg-slate-50 dark:bg-slate-800  font-sans overflow-hidden">
         <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-xl mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4 flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
@@ -67,37 +67,18 @@ export default function RequestVerificationPage() {
           </div>
         </div>
         
-        <main className="flex-1 px-4 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] pb-12 max-w-xl mx-auto w-full flex items-center justify-center relative">
+        <main className="flex-1 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+6rem)] pb-12 max-w-xl mx-auto w-full flex items-center justify-center relative">
           
-          {/* Animated Background Elements (Premium Confetti Alternative) */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden flex justify-center items-center">
-            <motion.div animate={{ rotate: 360 }} transition={{ duration: 50, repeat: Infinity, ease: "linear" }} className="absolute w-64 h-64 bg-emerald-500/20 blur-3xl rounded-full" />
-            <motion.div animate={{ rotate: -360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} className="absolute w-48 h-48 bg-blue-500/20 blur-3xl rounded-full mt-32 ml-32" />
-            
-            {/* Floating particles */}
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 100, x: (Math.random() - 0.5) * 300 }}
-                animate={{ opacity: [0, 1, 0], y: -300, x: (Math.random() - 0.5) * 300, rotate: Math.random() * 360 }}
-                transition={{ duration: 4 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 3 }}
-                className="absolute text-emerald-400/30"
-              >
-                <ShieldCheck className="w-6 h-6" />
-              </motion.div>
-            ))}
-          </div>
-
           <motion.div 
             initial={{ opacity: 0, scale: 0.9, y: 20 }} 
             animate={{ opacity: 1, scale: 1, y: 0 }} 
             transition={{ type: "spring", bounce: 0.5 }}
-            className="w-full bg-gradient-to-br from-slate-800 via-slate-800 to-slate-900 rounded-[2rem] p-1  shadow-2xl relative z-10"
+            className="w-full bg-gradient-to-br from-amber-500/20 via-amber-600/20 to-amber-900/40  rounded-[2rem] p-1 shadow-2xl relative z-10"
           >
-            <div className="bg-gradient-to-br from-emerald-900/40 to-slate-900 rounded-[1.85rem] p-8 md:p-10 text-center relative overflow-hidden">
+            <div className="bg-gradient-to-br from-amber-600 to-amber-700 rounded-[1.85rem] p-8 md:p-10 text-center relative overflow-hidden">
               
               {/* Shine effect */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-400/50 to-transparent" />
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
               
               {/* Confetti Emojis */}
               <div className="absolute top-4 left-0 right-0 h-32 pointer-events-none flex justify-center z-0">
@@ -111,37 +92,37 @@ export default function RequestVerificationPage() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", bounce: 0.6, delay: 0.2 }}
-                className="w-24 h-24 mx-auto bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center  mb-6 border-4 border-slate-100 relative z-10"
+                className="w-24 h-24 mx-auto bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center  mb-6 border-4 border-amber-100 dark:border-slate-800 relative z-10"
               >
                 <CheckCircle2 className="w-12 h-12 text-white" />
               </motion.div>
               
-              <h2 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-white tracking-tight mb-2">
+              <h2 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-100 to-amber-400 dark:from-amber-300 dark:to-white tracking-tight mb-2">
                 Identity Confirmed
               </h2>
               
-              <p className="text-sm text-slate-300 max-w-sm mx-auto mb-8 leading-relaxed">
+              <p className="text-sm text-slate-200 max-w-sm mx-auto mb-8 leading-relaxed">
                 Your professional identity has been verified on the Klinflow network. You now have full access to premium trust badges and priority visibility.
               </p>
 
-              <div className="bg-slate-900 rounded-2xl p-4 border border-slate-700/50 mb-8 backdrop-blur-sm">
+              <div className="bg-slate-100 dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/50 mb-8 backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Account Holder</span>
-                  <span className="text-xs font-bold text-white">{profile?.name}</span>
+                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Account Holder</span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">{profile?.name}</span>
                 </div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Klinflow ID</span>
-                  <span className="text-xs font-mono font-bold text-emerald-400">{profile?.klinflowId || profile?.id?.slice(0,8).toUpperCase()}</span>
+                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Klinflow ID</span>
+                  <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400">{profile?.klinflowId || profile?.id?.slice(0,8).toUpperCase()}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</span>
-                  <span className="text-[10px] font-bold text-emerald-900 bg-emerald-400 px-2 py-0.5 rounded-full uppercase tracking-widest">Verified</span>
+                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Status</span>
+                  <span className="text-[10px] font-bold text-amber-900 bg-amber-400 px-2 py-0.5 rounded-full uppercase tracking-widest">Verified</span>
                 </div>
               </div>
 
               <button 
                 onClick={() => navigate('/circular-resume')} 
-                className="w-full px-6 py-4 bg-white text-slate-900 rounded-xl font-black text-sm active:scale-95 transition-all shadow-lg hover:bg-slate-100 flex items-center justify-center gap-2"
+                className="w-full px-6 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-sm active:scale-95 transition-all shadow-lg hover:bg-slate-800 dark:hover:bg-slate-100 flex items-center justify-center gap-2"
               >
                 View Circular Resume <ArrowLeft className="w-4 h-4 rotate-180" />
               </button>
@@ -154,7 +135,7 @@ export default function RequestVerificationPage() {
 
   if (submitted) {
     return (
-      <div className="flex flex-col bg-slate-50 dark:bg-slate-950 min-h-screen font-sans">
+      <div className="flex flex-col bg-slate-50 dark:bg-slate-800 min-h-screen font-sans">
         <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800">
           <div className="max-w-xl mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4 flex items-center gap-3">
             <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
@@ -180,7 +161,7 @@ export default function RequestVerificationPage() {
   }
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-950 font-sans">
+    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 font-sans">
       {/* Top Nav */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-xl mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4 flex items-center gap-3">

@@ -12,7 +12,6 @@ export default function CommunityCollective() {
   const profile = useAuthStore(s => s.profile);
   const estateName = profile?.location?.estate || profile?.estate || 'Nairobi';
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-
   const {
     swarms, estateStats,
     fetchSwarms, fetchEstateStats,
@@ -24,7 +23,7 @@ export default function CommunityCollective() {
     fetchEstateStats(estateName);
     setupSubscriptions(estateName, profile?.role);
     return () => cleanupSubscriptions();
-  }, [estateName]);
+  }, [estateName, profile?.id]);
 
   return (
     <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors pb-5">
@@ -35,7 +34,10 @@ export default function CommunityCollective() {
             <ArrowLeft className="w-6 h-6" />
           </button>
 
-          <h1 className="text-lg font-bold text-slate-600 dark:text-white">Community Collective</h1>
+          <div className="flex flex-col items-center">
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">Community Collective</h1>
+            <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 capitalize tracking-wide">A greener way to connect</span>
+          </div>
 
           <button 
             onClick={() => setIsHelpModalOpen(true)}
@@ -46,224 +48,241 @@ export default function CommunityCollective() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] max-w-lg mx-auto w-full px-1.5 space-y-4">
+      <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.25rem)] max-w-lg mx-auto w-full px-1.5 space-y-4">
 
-        {/* ── HERO SECTION ── */}
-        <div className="relative w-full rounded-2xl overflow-hidden border border-slate-200/50 dark:border-slate-800 shadow-sm bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+        {/* ── HERO & STATS GROUP ── */}
+        <div className="flex flex-col">
+          {/* ── HERO SECTION ── */}
+          <div className="relative w-full rounded-3xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60">
+          {/* Background Image & Overlay */}
           <img 
-            src="/vectors/community-banner-real.webp" 
-            alt="Community Collective"
-            className="w-full h-auto object-contain"
+            src={profile?.role === 'user' ? "/vectors/resident-banner.webp" : "/vectors/community-banner-real.webp"} 
+            alt="Community Background" 
+            className="absolute inset-0 w-full h-full object-cover object-right"
           />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 to-transparent dark:from-slate-950/95 dark:via-emerald-950/80"></div>
+          {/* via-emerald-950/80 */}
+          <div className="relative z-10 p-4 flex flex-col gap-4">
+            {/* Top: Text */}
+            {profile?.role === 'user' ? (
+              <div className="min-h-[200px] flex flex-col justify-center">
+                <h2 className="text-2xl font-black text-white leading-tight mb-1.5 tracking-tight">
+                  Recycle Together.<br/>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Earn Together.</span>
+                </h2>
+                <p className="text-[12px] text-slate-200 font-medium leading-relaxed max-w-[280px]">
+                  Join your neighborhood's group pickups. Pool your recyclables to unlock premium rates and build a cleaner estate!
+                </p>
+              </div>
+            ) : (
+              <div className="min-h-[180px] flex flex-col justify-center">
+                <h2 className="text-2xl font-black text-white leading-tight mb-1.5 tracking-tight">
+                  More Impact.<br/>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">More Rewards.</span>
+                </h2>
+                <p className="text-[12px] text-slate-200 font-medium leading-relaxed max-w-[280px]">
+                  Access contracts from trusted buyers and earn premium rates by joining the community network.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* ── CHOOSE HOW TO GROW ── */}
-        <div className="flex items-center justify-center gap-2 py-2 ">
-          <Leaf className="w-4 h-4 text-[#329845]" />
-          <h2 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white">How do you want to grow together?</h2>
-          <Leaf className="w-4 h-4 text-[#329845] scale-x-[-1]" />
-        </div>
-
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-4">
-            {/* SWARMS CARD */}
-            <motion.div whileHover={{ y: -2 }} className="bg-slate-200 dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
-              <div className="w-full aspect-[2/1] relative bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                <img
-                  src="/vectors/klin-swarms-real.webp"
-                  alt="Swarms"
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-4 left-4 flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 backdrop-blur-md flex items-center justify-center border border-emerald-500/30">
-                    <Users className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <h3 className="text-[18px] font-black text-white leading-tight drop-shadow-sm">Join a Swarm</h3>
+        {/* ── RESIDENT STATS BLOCK (Below Hero) ── */}
+        {profile?.role === 'user' && (
+          <div className="relative z-20 -mt-5 mx-4 bg-gradient-to-tr from-emerald-600 to-primary rounded-xl p-3 shadow-lg mb-2 flex flex-col gap-2 border border-emerald-500/30">
+            {/* <div className="text-center px-2">
+              <h3 className="text-white font-black text-[13px] tracking-wide">Communities are driving real change</h3>
+            </div> */}
+            
+            <div className="grid grid-cols-3 gap-2 mt-1">
+              <div className="flex items-center gap-2 justify-center">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
+                  <Handshake className="w-4 h-4 text-black" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <p className="text-base font-black text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
+                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                    Completed
+                  </p>
                 </div>
               </div>
               
-              <div className="flex flex-col p-4 md:p-5">
-                <p className="text-[13px] text-slate-600 dark:text-slate-400 font-medium mb-5">
-                  Team up nearby. Fill the truck together. Unlock premium rates and earn more.
-                </p>
-                
-                {/* 3 Steps */}
-                <div className="flex items-center justify-between gap-2 mb-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
-                  <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                    <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">1. Join</span>
-                  </div>
-                  <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
-                  <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                    <Leaf className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">2. Add Waste</span>
-                  </div>
-                  <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
-                  <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                    <DollarSign className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">3. Earn</span>
-                  </div>
+              <div className="flex items-center gap-2 border-x border-white/20 px-2 justify-center">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
+                  <DollarSign className="w-4 h-4 text-black" />
                 </div>
-                
-                <Link
-                  to="/swarms"
-                  className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-emerald-600/20"
-                >
-                  <span>Explore Swarms</span>
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
+                <div className="flex flex-col text-left">
+                  <p className="text-base font-black text-white leading-none mb-0.5">
+                    {estateStats?.totalEarned ? (estateStats.totalEarned >= 1000000 ? (estateStats.totalEarned / 1000000).toFixed(1) + 'M' : (estateStats.totalEarned >= 1000 ? (estateStats.totalEarned / 1000).toFixed(1) + 'k' : estateStats.totalEarned.toString())) : 0}
+                  </p>
+                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                    Payout
+                  </p>
+                </div>
               </div>
-            </motion.div>
-
-            {/* GROUP RFQS CARD (ONLY FOR SELLERS) */}
-            {profile?.role === 'seller' && (
-              <motion.div whileHover={{ y: -2 }} className="bg-slate-200 dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
-                <div className="w-full aspect-[2/1] relative bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                  <img
-                    src="/vectors/klin-contract-real.webp"
-                    alt="Group Contracts"
-                    className="absolute inset-0 w-full h-full object-cover object-center"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-4 left-4 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-500/20 backdrop-blur-md flex items-center justify-center border border-blue-500/30">
-                      <Handshake className="w-4 h-4 text-blue-400" />
-                    </div>
-                    <h3 className="text-[18px] font-black text-white leading-tight drop-shadow-sm">Group Contracts</h3>
-                  </div>
+              
+              <div className="flex items-center gap-2 pl-2 justify-center">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
+                  <Users className="w-4 h-4 text-black" />
                 </div>
-                
-                <div className="flex flex-col p-4 md:p-5">
-                  <p className="text-[13px] text-slate-600 dark:text-slate-400 font-medium mb-5">
-                    Pool resources with other sellers to fulfill large volume orders from major buyers.
+                <div className="flex flex-col text-left">
+                  <p className="text-base font-black text-white leading-none mb-0.5">{swarms.filter(s => s.status === 'active' && new Date(s.closes_at) > new Date()).length}</p>
+                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                    Active
                   </p>
-                  
-                  {/* 3 Steps */}
-                  <div className="flex items-center justify-between gap-2 mb-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
-                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                      <Target className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">1. Find</span>
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
-                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                      <Users className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">2. Pool</span>
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
-                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                      <Award className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">3. Fulfill</span>
-                    </div>
-                  </div>
-
-                  <Link
-                    to="/group-rfqs"
-                    className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-blue-600/20"
-                  >
-                    <span>View Contracts</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </Link>
                 </div>
-              </motion.div>
-            )}
-
-            {/* INDIVIDUAL RFQS CARD (ONLY FOR SELLERS) */}
-            {profile?.role === 'seller' && (
-              <motion.div whileHover={{ y: -2 }} className="bg-slate-200 dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
-                <div className="w-full aspect-[2/1] relative bg-slate-100 dark:bg-slate-800 overflow-hidden">
-                  <img
-                    src="/vectors/individual-rfq-real.webp"
-                    alt="Individual RFQs"
-                    className="absolute inset-0 w-full h-full object-cover object-center"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-4 left-4 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-rose-500/20 backdrop-blur-md flex items-center justify-center border border-rose-500/30">
-                      <Target className="w-4 h-4 text-rose-400" />
-                    </div>
-                    <h3 className="text-[18px] font-black text-white leading-tight drop-shadow-sm">Individual Contracts</h3>
-                  </div>
-                </div>
-                
-                <div className="flex flex-col p-4 md:p-5">
-                  <p className="text-[13px] text-slate-600 dark:text-slate-400 font-medium mb-5">
-                    Go solo. Bid on and fulfill direct requests from verified buyers on the network.
-                  </p>
-                  
-                  {/* 3 Steps */}
-                  <div className="flex items-center justify-between gap-2 mb-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-800">
-                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                      <Search className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">1. Find</span>
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
-                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                      <Handshake className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">2. Bid</span>
-                    </div>
-                    <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600 shrink-0" />
-                    <div className="flex flex-col items-center gap-1.5 text-center flex-1">
-                      <CheckCircle2 className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-                      <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">3. Win</span>
-                    </div>
-                  </div>
-
-                  <Link
-                    to="/individual-rfqs"
-                    className="w-full py-3.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-rose-600/20"
-                  >
-                    <span>View Open RFQs</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </motion.div>
-            )}
-
+              </div>
+            </div>
           </div>
+        )}
+
+        {/* ── SELLER STATS BLOCK (Below Hero) ── */}
+        {profile?.role === 'seller' && (
+          <div className="relative z-20 -mt-5 mx-4 bg-gradient-to-l from-primary to-emerald-700 rounded-xl p-3 shadow-lg mb-2 flex flex-col gap-2 border border-blue-500/30">
+            <div className="grid grid-cols-3 gap-2 mt-1">
+              <div className="flex items-center gap-2 justify-center">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
+                  <Handshake className="w-4 h-4 text-black" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <p className="text-base font-black text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
+                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                    Group RFQs
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 border-x border-white/20 px-2 justify-center">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
+                  <DollarSign className="w-4 h-4 text-black" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <p className="text-base font-black text-white leading-none mb-0.5">
+                    {estateStats?.totalEarned ? (estateStats.totalEarned >= 1000000 ? (estateStats.totalEarned / 1000000).toFixed(1) + 'M' : (estateStats.totalEarned >= 1000 ? (estateStats.totalEarned / 1000).toFixed(1) + 'k' : estateStats.totalEarned.toString())) : 0}
+                  </p>
+                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                    Earned
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2 pl-2 justify-center">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
+                  <Target className="w-4 h-4 text-black" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <p className="text-base font-black text-white leading-none mb-0.5">{estateStats?.fulfilledIndividualRFQs || 0}</p>
+                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                    Solo RFQs
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         </div>
 
-        {/* ── STATS BANNER ── */}
-        <div className="bg-primary rounded-xl p-4 md:p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-5 mt-2 text-white">
-          <div className="md:w-1/3 border-b md:border-b-0 border-white/10 pb-3 md:pb-0">
-            <p className="text-[10px] font-semibold text-white/80 tracking-wide mb-1">Together, We Achieve More</p>
-            <h3 className="text-sm sm:text-base font-bold leading-tight">Communities are driving real change</h3>
+
+        <div className="space-y-4 mt-2">
+          {/* GROUP & INDIVIDUAL CONTRACTS (Horizontal Scroll) */}
+          {profile?.role === 'seller' && (
+            <div className="flex flex-col">
+              <div className="mb-2 px-1 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                 
+                  <h2 className="text-[15px] font-black text-slate-600 dark:text-white tracking-tight">
+                    See what's new
+                  </h2>
+                </div>
+                
+              </div>
+              
+              <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1.5 px-1.5 no-scrollbar">
+                {/* GROUP RFQS */}
+              <motion.div whileHover={{ y: -2 }} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative group min-w-[280px] w-[80%] max-w-[320px] snap-center shrink-0 overflow-hidden">
+                <div className="w-full h-36 relative bg-slate-100 dark:bg-slate-800">
+                  <img src="/vectors/klin-contract-real.webp" alt="Group Contracts" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+                
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight mb-1.5">Group Contracts</h3>
+                  <p className="text-[12px] text-slate-500 dark:text-slate-400 font-medium mb-4 flex-1 leading-relaxed">
+                    Pool resources with other sellers to fulfill large volume orders from major buyers.
+                  </p>
+                  <Link
+                    to="/group-rfqs"
+                    className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all group-hover:bg-blue-600 group-hover:text-white"
+                  >
+                    View Contracts
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </motion.div>
+
+              {/* INDIVIDUAL RFQS */}
+              <motion.div whileHover={{ y: -2 }} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative group min-w-[280px] w-[80%] max-w-[320px] snap-center shrink-0 overflow-hidden">
+                <div className="w-full h-36 relative bg-slate-100 dark:bg-slate-800">
+                  <img src="/vectors/individual-rfq-real.webp" alt="Individual RFQs" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+                
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight mb-1.5">Individual Contracts</h3>
+                  <p className="text-[12px] text-slate-500 dark:text-slate-400 font-medium mb-4 flex-1 leading-relaxed">
+                    Go solo. Bid on and fulfill direct requests from verified buyers on the network.
+                  </p>
+                  <Link
+                    to="/individual-rfqs"
+                    className="w-full py-2.5 bg-rose-600 text-white rounded-xl font-bold text-[12px] flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    View Open RFQs
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+            </div>
+          )}
+
+          {/* SWARMS SECTION */}
+          <div className="flex flex-col mt-2">
+            <div className="mb-1 px-1">
+              <h2 className="text-[15px] font-bold text-slate-600 dark:text-white tracking-tight leading-tight">
+                Ready to find your swarm?
+              </h2>
+              
+            </div>
+
+            {/* SWARMS CARD (Full Width, Image on Top) */}
+            <motion.div whileHover={{ y: -2 }} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
+            <div className="w-full h-40 sm:h-48 relative bg-slate-100 dark:bg-slate-800">
+              <img
+                src="/vectors/klin-swarms-real.webp"
+                alt="Swarms"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            </div>
+            
+            <div className="p-5 flex flex-col justify-center">
+              <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight mb-1">Join a Swarm</h3>
+              <p className="text-[14px] text-slate-500 dark:text-slate-400 font-medium mb-5 leading-relaxed">
+                Team up with nearby recyclers, Book group Pickups and Unlock better rates and earn more collectively.
+              </p>
+              <Link
+                to="/swarms"
+                className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm shadow-emerald-600/20"
+              >
+                <span>Explore Swarms</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </motion.div>
           </div>
 
-          <div className="flex flex-wrap md:flex-nowrap gap-4 md:gap-6 md:w-2/3 justify-between items-center">
-            {/* 1. Group RFQs */}
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shrink-0 shadow-sm">
-                <Handshake className="w-3.5 h-3.5 text-black" />
-              </div>
-              <div>
-                <p className="text-sm font-black leading-tight">154</p>
-                <p className="text-[9px] text-white/80 font-medium uppercase tracking-wider">Group RFQs</p>
-              </div>
-            </div>
 
-            {/* 2. KSh Earned (Middle) */}
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center shrink-0 shadow-sm">
-                <Trophy className="w-4 h-4 text-black" />
-              </div>
-              <div>
-                <p className="text-sm font-black leading-tight">KSh 4.2M+</p>
-                <p className="text-[9px] text-white/80 font-medium uppercase tracking-wider">Earned</p>
-              </div>
-            </div>
-
-            {/* 3. Indiv RFQs */}
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shrink-0 shadow-sm">
-                <Target className="w-3.5 h-3.5 text-black" />
-              </div>
-              <div>
-                <p className="text-sm font-black leading-tight">892</p>
-                <p className="text-[9px] text-white/80 font-medium uppercase tracking-wider">Indiv. RFQs</p>
-              </div>
-            </div>
-          </div>
         </div>
 
       </main>

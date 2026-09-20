@@ -317,10 +317,14 @@ export default function SubmittedQuoteDetailsPage() {
                 Submitted Quote
               </p>
               <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
-                {materialPrices?.find((m) => m.id === quote.materialId)
-                  ?.material_name ||
-                  getSubcategoryLabel(quote.categoryId, quote.materialId) ||
-                  quote.materialId}
+                {(() => {
+                  let raw = materialPrices?.find(m => m.id === quote.materialId || `${quote.categoryId}_${m.id}` === quote.materialId)?.material_name;
+                  if (!raw) raw = getSubcategoryLabel(quote.categoryId, quote.materialId);
+                  if (!raw) raw = quote.materialId;
+                  
+                  // Strip any residual UUID or Prefix_UUID formats
+                  return (raw || '').replace(/^(?:[A-Za-z]+_)?(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})[\s-]*/i, '').replace(/^[A-Za-z]+_/, '');
+                })()}
               </h2>
             </div>
             <div

@@ -81,7 +81,7 @@ export default function SupportPage() {
         variants={stagger} 
         initial="hidden" 
         animate="show" 
-        className="pt-[calc(env(safe-area-inset-top,0px)+5.5rem)] pb-24 px-4 max-w-xl mx-auto space-y-8"
+        className="pt-[calc(env(safe-area-inset-top,0px)+5.5rem)] pb-24 px-4 max-w-xl mx-auto space-y-6"
       >
 
         {/* ── HEADER INTRO ── */}
@@ -96,14 +96,14 @@ export default function SupportPage() {
         <motion.div variants={fadeUp} className="grid grid-cols-2 gap-2">
            <a 
              href={`tel:${supportPhone}`} 
-             className="group relative overflow-hidden p-2 rounded-[14px] bg-white dark:bg-[#12141c] border border-slate-200 dark:border-slate-800/80 active:scale-[0.97] transition-all shadow-sm flex items-center gap-2.5"
+             className="group relative overflow-hidden p-5 rounded-[14px] bg-white dark:bg-[#12141c] border border-slate-200 dark:border-slate-800/80 active:scale-[0.97] transition-all shadow-sm flex items-center gap-2.5"
            >
              <div className="w-7 h-7 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-lg flex items-center justify-center shrink-0">
-               <PhoneCall className="w-3.5 h-3.5" />
+               <PhoneCall className="w-5 h-5" />
              </div>
              <div className="min-w-0">
-               <div className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">Call Direct</div>
-               <div className="text-[8px] font-semibold uppercase tracking-wider text-slate-400">Toll Free</div>
+               <div className="text-[12px] font-bold text-slate-900 dark:text-white leading-tight">Call Direct</div>
+               <div className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Toll Free</div>
              </div>
            </a>
 
@@ -114,11 +114,11 @@ export default function SupportPage() {
              className="group relative overflow-hidden p-2 rounded-[14px] bg-white dark:bg-[#12141c] border border-slate-200 dark:border-slate-800/80 active:scale-[0.97] transition-all shadow-sm flex items-center gap-2.5"
            >
              <div className="w-7 h-7 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 rounded-lg flex items-center justify-center shrink-0">
-               <MessageCircle className="w-3.5 h-3.5" />
+               <MessageCircle className="w-5 h-5" />
              </div>
              <div className="min-w-0">
-               <div className="text-[11px] font-bold text-slate-900 dark:text-white leading-tight">WhatsApp</div>
-               <div className="text-[8px] font-semibold uppercase tracking-wider text-slate-400">Fast Reply</div>
+               <div className="text-[12px] font-bold text-slate-900 dark:text-white leading-tight">WhatsApp</div>
+               <div className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Fast Reply</div>
              </div>
            </a>
         </motion.div>
@@ -138,9 +138,9 @@ export default function SupportPage() {
                 key={idx}
                 type="button"
                 onClick={() => setForm(f => ({ ...f, subject: issue.subject }))}
-                className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-[#12141c] border border-slate-200 dark:border-slate-800 rounded-xl text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                className="shrink-0 flex items-center gap-1.5 px-4 py-3 bg-white dark:bg-[#12141c] border border-slate-200 dark:border-slate-800 rounded-xl text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
               >
-                <issue.icon className="w-3.5 h-3.5 text-slate-400" />
+                <issue.icon className="w-4 h-4 text-slate-400" />
                 {issue.label}
               </button>
             ))}

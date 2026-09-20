@@ -115,8 +115,8 @@ export default function MarketIntelligenceHub() {
             </button>
             <div>
               <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Market Intelligence</h1>
-              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Price Ticker
+              <p className="text-[10px] font-bold text-slate-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+                 View Live market prices
               </p>
             </div>
           </div>

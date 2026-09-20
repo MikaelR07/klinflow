@@ -6,7 +6,8 @@ import { useState, useEffect } from 'react';
 import {
   ArrowLeft, Target, Search, SlidersHorizontal, X, ChevronDown,
   ArrowUpRight, ShieldCheck, MapPin, Bookmark, CircleCheck,
-  Package, Flame, Scale, Clock, User, Recycle
+  Package, Flame, Scale, Clock, User, Recycle,
+  Receipt
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,6 +31,7 @@ interface IndividualRFQ {
   offersSubmitted: number;
   avatar?: string;
   postedAt?: string;
+  hasBid?: boolean;
 }
 
 export default function IndividualRFQs() {
@@ -64,6 +66,17 @@ export default function IndividualRFQs() {
       if (data) {
         const storeMaterials = useServiceStore.getState().materialPrices;
         const storeCategories = useServiceStore.getState().categories;
+
+        let userBidIds = new Set<string>();
+        if (profile?.id) {
+          const { data: myOffers } = await supabase
+            .from('rfq_offers')
+            .select('rfq_id')
+            .eq('seller_id', profile.id);
+          if (myOffers) {
+            userBidIds = new Set(myOffers.map(o => o.rfq_id));
+          }
+        }
 
         const mapped = data
           .filter((r: any) => !r.is_group_collection) // Only individual RFQs
@@ -112,6 +125,7 @@ export default function IndividualRFQs() {
                 if (diffHours > 0) return `${diffHours} hrs ago`;
                 return 'Just now';
               })() : undefined,
+              hasBid: userBidIds.has(r.id),
             };
           });
         setRfqsList(mapped);
@@ -176,6 +190,10 @@ export default function IndividualRFQs() {
     }
 
     return matchesSearch && matchesRegion && matchesCategory && matchesQuantity && matchesUrgency;
+  }).sort((a, b) => {
+    if (a.hasBid && !b.hasBid) return 1;
+    if (!a.hasBid && b.hasBid) return -1;
+    return 0;
   });
 
   const hasActiveFilters = selectedCategory !== 'All' || selectedRegion !== 'All' || selectedQuantity !== 'All' || selectedUrgency !== 'All';
@@ -364,55 +382,70 @@ export default function IndividualRFQs() {
             <p className="text-[10px] text-slate-500 mt-1 max-w-[200px] mx-auto font-medium">There are currently no active buyer requests matching your criteria.</p>
           </div>
         ) : (
-          <div className="space-y-1">
+          <div className="space-y-2">
             {filteredRFQs.map((rfq) => (
-              <div key={rfq.id} className="bg-white dark:bg-slate-900 p-2 px-3 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group">
-                {/* Row 1: Tags & Price */}
+              <div 
+                key={rfq.id} 
+                onClick={() => navigate(`/rfq/${rfq.id}`)}
+                className={`bg-white dark:bg-slate-900 p-3 px-4 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 ${rfq.hasBid ? 'opacity-80 grayscale-[0.2]' : ''}`}
+              >
                 <div className="flex justify-between items-start mb-1">
-                  <div className="flex flex-wrap gap-1.5 items-center mt-1">
-                    <span className="flex items-center gap-1 px-1.5 py-0.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/50 rounded text-[9px] font-bold">
-                      <Recycle className="w-3 h-3" />
-                      {rfq.material}
-                    </span>
-                    {rfq.price > 50 && (
-                      <span className="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-800/50 rounded text-[9px] font-bold">
-                        <Flame className="w-3 h-3" />
-                        High Value
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-start gap-2 mt-4">
-                    <div className="text-right">
-                      <p className="text-sm font-black text-emerald-500 leading-none">
-                        KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
+                  {/* Left: Material Image and Title */}
+                  <div className="flex gap-3 items-start">
+                    <div className="relative w-20 h-20 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+                      <img 
+                        src={`/material-categories/${(rfq.category || '').toLowerCase()}.webp`}
+                        onError={(e) => { e.currentTarget.src = "/material-categories/recyclables.webp" }}
+                        alt={rfq.material}
+                        className="w-full h-full object-cover"
+                      />
+                      {rfq.hasBid && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[1px]">
+                          <div className="flex flex-col items-center">
+                            <CircleCheck className="w-6 h-6 text-emerald-400 mb-0.5" strokeWidth={2.5} />
+                            <span className="text-[9px] font-black text-white uppercase tracking-wider">Bid Sent</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col h-20 py-0.5">
+                      <h4 className="text-[16px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
+                      <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">{rfq.category}</p>
+                      <p className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-0.5 flex items-center gap-1">
+                        <Receipt className="w-3 h-3" /> {rfq.offersSubmitted} {rfq.offersSubmitted === 1 ? 'bid' : 'bids'} sent
                       </p>
+                      <div className="flex items-center gap-1.5 mt-auto">
+                        <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                          {rfq.avatar ? (
+                            <img src={getThumbnailUrl(rfq.avatar, { width: 50 })} className="w-full h-full object-cover" alt={rfq.company} />
+                          ) : (
+                            <User className="w-3 h-3 text-slate-400" />
+                          )}
+                        </div>
+                        <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[120px]">{rfq.company}</span>
+                        {rfq.verified && <CircleCheck className="w-3 h-3 text-blue-500 shrink-0" fill="currentColor" stroke="white" strokeWidth={2} />}
+                      </div>
                     </div>
-                    <button className="text-slate-300 hover:text-slate-400 dark:text-slate-600 transition-colors">
-                      <Bookmark className="w-3.5 h-3.5" />
-                    </button>
                   </div>
-                </div>
 
-                {/* Row 2: Buyer Profile */}
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
-                    {rfq.avatar ? (
-                      <img src={getThumbnailUrl(rfq.avatar, { width: 150 })} className="w-full h-full object-cover" alt={rfq.company} />
-                    ) : (
-                      <User className="w-4 h-4 text-slate-400" />
-                    )}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1 mb-0.5">
-                      <h4 className="text-[14px] font-semibold text-slate-900 dark:text-white leading-none">{rfq.company}</h4>
-                      {rfq.verified && <CircleCheck className="w-4 h-4 text-blue-500" fill="currentColor" stroke="white" strokeWidth={2} />}
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500">
-                      {rfq.verified && (
-                        <span className="flex items-center gap-0.5 ">
-                          <ShieldCheck className="w-2.5 h-2.5 text-emerald-600" /> Verified Buyer
+                  {/* Right: Badges and Price */}
+                  <div className="flex flex-col items-end gap-1.5">
+                    <div className="flex flex-wrap justify-end gap-1.5">
+                      <span className="flex items-center gap-1 px-1.5 py-0.5 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-800/50 rounded text-[9px] font-bold">
+                        <Clock className="w-3 h-3" />
+                        {rfq.deadline}
+                      </span>
+                      {rfq.price > 50 && (
+                        <span className="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-800/50 rounded text-[9px] font-bold">
+                          <Flame className="w-3 h-3" />
+                          High Value
                         </span>
                       )}
+                    </div>
+                    <div className="text-right mt-1">
+                      <p className="text-base font-black text-emerald-500 leading-none">
+                        KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -438,28 +471,13 @@ export default function IndividualRFQs() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-6 h-6 rounded bg-rose-50 dark:bg-rose-900/10 flex items-center justify-center shrink-0">
-                      <Clock className="w-3.5 h-3.5 text-rose-500" />
+                    <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
+                      <Clock className="w-3.5 h-3.5 text-slate-400" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[11px] font-semibold text-rose-500 leading-none mb-0.5">{rfq.deadline}</p>
-                      <p className="text-[9px] font-semibold text-slate-400 leading-none">Deadline</p>
+                      <p className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 leading-none mb-0.5">{rfq.postedAt ? rfq.postedAt : '3 hrs ago'}</p>
+                      <p className="text-[9px] font-semibold text-slate-400 leading-none">Posted</p>
                     </div>
-                  </div>
-                </div>
-
-                {/* Row 4: Footer Actions */}
-                <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-2">
-                  <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
-                    {rfq.postedAt ? `Posted ${rfq.postedAt}` : 'Posted 3 hrs ago'}
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => navigate(`/rfq/${rfq.id}`)}
-                      className="px-3 py-1.5 bg-primary text-white text-[12px] font-bold rounded-lg flex items-center gap-1 transition-colors"
-                    >
-                      Respond <ArrowUpRight className="w-3 h-3" />
-                    </button>
                   </div>
                 </div>
               </div>

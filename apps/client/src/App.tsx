@@ -163,30 +163,32 @@ export default function App() {
       <OfflineBanner />
 
 
-      <Routes>
-        <Route path="/welcome" element={isAuthenticated ? <Navigate to="/" replace /> : <Welcome />} />
-        <Route path="/role-selection" element={isAuthenticated ? <Navigate to="/" replace /> : <RoleSelection />} />
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
-        <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} />
-        
-        {/* Public Verification Route */}
-        <Route path="/verify/:id" element={<PublicCircularResume />} />
+      <Suspense fallback={<LoadingScreen message="Loading..." />}>
+        <Routes>
+          <Route path="/welcome" element={isAuthenticated ? <Navigate to="/" replace /> : <Welcome />} />
+          <Route path="/role-selection" element={isAuthenticated ? <Navigate to="/" replace /> : <RoleSelection />} />
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
+          <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} />
+          
+          {/* Public Verification Route */}
+          <Route path="/verify/:id" element={<PublicCircularResume />} />
 
-        <Route element={<ProtectedLayout />}>
-          <Route path="/hygenex" element={<HygeneXPage />} />
-          <Route path="/rfq/:rfqId" element={<RFQDetailsPage />} />
-          <Route path="/fulfillment/:id" element={<FulfillmentTrackingPage />} />
-          <Route path="/my-rfq-offers/:quoteId" element={<SubmittedQuoteDetailsPage />} />
-          <Route element={<MobileLayout />}>
-            {getResidentRoutes()}
-            {getSellerRoutes()}
-            {getCommunityRoutes()}
-            {getSettingsRoutes()}
+          <Route element={<ProtectedLayout />}>
+            <Route path="/hygenex" element={<HygeneXPage />} />
+            <Route path="/rfq/:rfqId" element={<RFQDetailsPage />} />
+            <Route path="/fulfillment/:id" element={<FulfillmentTrackingPage />} />
+            <Route path="/my-rfq-offers/:quoteId" element={<SubmittedQuoteDetailsPage />} />
+            <Route element={<MobileLayout />}>
+              {getResidentRoutes()}
+              {getSellerRoutes()}
+              {getCommunityRoutes()}
+              {getSettingsRoutes()}
 
-            <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </Suspense>
 
       {isAuthenticated && (
         <>

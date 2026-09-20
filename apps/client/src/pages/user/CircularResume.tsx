@@ -43,15 +43,13 @@ function ShareResumeModal({ isOpen, onClose, profile, stats, trustScore, level }
           </div>
 
           <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 flex flex-col items-center text-center border border-slate-100 dark:border-slate-800 mb-6 relative overflow-hidden">
-            {/* Mock QR Code Pattern */}
-            <div className="w-32 h-32 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2 flex items-center justify-center mb-4">
-              <div className="w-full h-full border-4 border-slate-800 dark:border-slate-200 rounded relative" style={{ backgroundImage: 'radial-gradient(currentColor 2px, transparent 0)', backgroundSize: '8px 8px', color: 'rgba(15, 23, 42, 0.2)' }}>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-emerald-500 p-1.5 rounded-lg">
-                    <ShieldCheck className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-              </div>
+            {/* Scannable QR Code */}
+            <div className="w-36 h-36 bg-white rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 flex items-center justify-center mb-4">
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`${window.location.origin}/verify/${profile?.id}`)}&margin=0`}
+                alt="QR Code"
+                className="w-full h-full object-contain"
+              />
             </div>
 
             <h4 className="text-lg font-black text-slate-900 dark:text-white mb-0.5">{profile?.name}</h4>
@@ -113,7 +111,7 @@ function ShareResumeModal({ isOpen, onClose, profile, stats, trustScore, level }
 
 function OverviewTab({ profile, stats, level, trustScore, badges, timeOnPlatform, progression }: any) {
   return (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
       
       {/* Verified Economic Activity */}
       <section>
@@ -217,18 +215,36 @@ function OverviewTab({ profile, stats, level, trustScore, badges, timeOnPlatform
         <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Skills & Verifications</h3>
         <div className="grid gap-2">
           {badges.map((badge: any, i: number) => (
-            <div key={i} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm flex items-start gap-4">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                badge.color === 'emerald' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' :
-                badge.color === 'blue' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400' :
-                'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
-              }`}>
-                <badge.icon className="w-5 h-5" />
+            <div key={i} className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col gap-2 overflow-hidden group hover:border-emerald-500/30 transition-colors">
+              
+              {/* Subtle background glow based on badge color */}
+              <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl -mr-10 -mt-10 opacity-20 pointer-events-none ${
+                badge.color === 'emerald' ? 'bg-emerald-400' :
+                badge.color === 'blue' ? 'bg-blue-400' :
+                'bg-indigo-400'
+              }`} />
+              
+              <div className="flex items-center justify-between relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm border ${
+                    badge.color === 'emerald' ? 'bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-500/20 dark:to-emerald-500/5 border-emerald-200 dark:border-emerald-500/30' :
+                    badge.color === 'blue' ? 'bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-500/20 dark:to-blue-500/5 border-blue-200 dark:border-blue-500/30' :
+                    'bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-500/20 dark:to-indigo-500/5 border-indigo-200 dark:border-indigo-500/30'
+                  }`}>
+                    <badge.icon className="w-5 h-5 text-black dark:text-black" />
+                  </div>
+                  <h4 className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight">{badge.title}</h4>
+                </div>
+                <span className={`text-[8px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shrink-0 ${
+                  badge.color === 'emerald' ? 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400' :
+                  badge.color === 'blue' ? 'bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-400' :
+                  'bg-indigo-100 dark:bg-indigo-500/15 text-indigo-700 dark:text-indigo-400'
+                }`}>Verified</span>
               </div>
-              <div>
-                <h4 className="text-[13px] font-bold text-slate-900 dark:text-white">{badge.title}</h4>
-                <p className="text-[11px] font-medium text-slate-500 leading-relaxed mt-0.5">{badge.desc}</p>
-              </div>
+              
+              <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed relative z-10">
+                {badge.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -239,90 +255,126 @@ function OverviewTab({ profile, stats, level, trustScore, badges, timeOnPlatform
 }
 
 function ActivityTab({ bookings, stats }: any) {
+  const [agentNames, setAgentNames] = useState<Record<string, string>>({});
+
+  // Resolve agent names from IDs
+  useMemo(() => {
+    const completed = bookings.filter((b: any) => b.status === 'completed');
+    const agentIds = [...new Set(completed.map((b: any) => b.agentId).filter(Boolean))] as string[];
+    
+    if (agentIds.length === 0) return;
+
+    import('@klinflow/core/lib/supabaseClient').then(({ supabase }) => {
+      supabase
+        .from('profiles')
+        .select('id, name')
+        .in('id', agentIds)
+        .then(({ data }) => {
+          if (data) {
+            const mapping: Record<string, string> = {};
+            data.forEach((p: any) => { mapping[p.id] = p.name || 'Agent'; });
+            setAgentNames(mapping);
+          }
+        });
+    });
+  }, [bookings]);
+
   return (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
       
-      {/* Environmental Impact */}
+      {/* Impact & Work History */}
       <section>
-        <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Environmental Impact</h3>
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-5">
+        <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Impact & History</h3>
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
           
-          <div className="grid grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-800 pb-5">
+          {/* Impact Stats */}
+          <div className="p-5 space-y-5">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Carbon Saved</p>
+                <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">{(stats.totalCarbon * 1000).toFixed(0)} kg</p>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Diverted Waste</p>
+                <p className="text-lg font-black text-slate-900 dark:text-white">{stats.totalKg.toLocaleString()} kg</p>
+              </div>
+            </div>
+
             <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">CO₂e Avoided</p>
-              <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">{stats.totalCarbon.toFixed(1)} tCO₂e</p>
-            </div>
-            <div>
-              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Diverted Waste</p>
-              <p className="text-lg font-black text-slate-900 dark:text-white">{stats.totalKg.toLocaleString()} kg</p>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-3">Material Breakdown</h4>
-            <div className="space-y-3">
-              {Object.entries(stats.breakdown).map(([type, weight]: any) => (
-                <div key={type} className="space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px] font-bold">
-                    <span className="text-slate-600 dark:text-slate-300 capitalize">{type}</span>
-                    <span className="text-slate-900 dark:text-white">{weight} kg</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-slate-900 dark:bg-slate-400" style={{ width: `${(weight / stats.totalKg) * 100}%` }} />
-                  </div>
-                </div>
-              ))}
-              {Object.keys(stats.breakdown).length === 0 && (
-                <p className="text-xs text-slate-500 italic">No verified materials recorded yet.</p>
-              )}
-            </div>
-          </div>
-
-          <p className="text-[9px] font-medium text-slate-400 leading-relaxed pt-2 border-t border-slate-100 dark:border-slate-800">
-            Impact estimates are calculated using Klinflow's verified material weight and standardized lifecycle analysis (LCA) factors.
-          </p>
-        </div>
-      </section>
-
-      {/* Verified Work History */}
-      <section>
-        <div className="flex items-center justify-between mb-3 px-1">
-          <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Verified Work History</h3>
-          <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-1 rounded-md">Ledger</span>
-        </div>
-        
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-1 shadow-sm">
-          {bookings.filter((b: any) => b.status === 'completed').length === 0 ? (
-            <div className="p-8 text-center text-sm font-medium text-slate-500">No verified jobs found on network.</div>
-          ) : (
-            <div className="divide-y divide-slate-100 dark:divide-slate-800">
-              {bookings.filter((b: any) => b.status === 'completed').map((b: any, i: number) => (
-                <div key={i} className="p-4 flex gap-4">
-                  <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-500/20">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <h4 className="text-[11px] font-bold text-slate-900 dark:text-white mb-3">Material Breakdown</h4>
+              <div className="space-y-3">
+                {Object.entries(stats.breakdown).map(([type, weight]: any) => (
+                  <div key={type} className="space-y-1.5">
+                    <div className="flex items-center justify-between text-[11px] font-bold">
+                      <span className="text-slate-600 dark:text-slate-300 capitalize">{type}</span>
+                      <span className="text-slate-900 dark:text-white">{weight} kg</span>
                     </div>
-                    {i !== bookings.length - 1 && <div className="w-px h-full bg-slate-100 dark:bg-slate-800 mt-2" />}
+                    <div className="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 dark:bg-emerald-400 rounded-full" style={{ width: `${(weight / stats.totalKg) * 100}%` }} />
+                    </div>
                   </div>
-                  <div className="flex-1 pb-2">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h4 className="text-[13px] font-bold text-slate-900 dark:text-white capitalize">{b.wasteType || 'General Waste'} Collection</h4>
-                        <p className="text-[11px] font-medium text-slate-500 mt-0.5">Verified Corporate Buyer</p>
+                ))}
+                {Object.keys(stats.breakdown).length === 0 && (
+                  <p className="text-xs text-slate-500 italic">No verified materials recorded yet.</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Divider with Work History label */}
+          <div className="flex items-center justify-between px-5 py-3 bg-slate-50 dark:bg-slate-800/50 border-y border-slate-100 dark:border-slate-800">
+            <h4 className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Latest Work History</h4>
+            <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-md">Ledger</span>
+          </div>
+
+          {/* Work History Table */}
+          {(() => {
+            const completed = bookings.filter((b: any) => b.status === 'completed')
+              .sort((a: any, b: any) => new Date(b.createdAt || b.created_at || 0).getTime() - new Date(a.createdAt || a.created_at || 0).getTime());
+            const shown = completed.slice(0, 5);
+            const remaining = completed.length - shown.length;
+
+            return completed.length === 0 ? (
+              <div className="p-8 text-center text-sm font-medium text-slate-500">No verified jobs found on network.</div>
+            ) : (
+              <>
+                {/* Table Header */}
+                <div className="grid grid-cols-[1fr_1fr_0.7fr_0.8fr_0.6fr] gap-1 px-4 py-2.5 border-b border-slate-100 dark:border-slate-800">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Material</span>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Buyer</span>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Qty</span>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Date</span>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-right">Status</span>
+                </div>
+
+                {/* Table Rows */}
+                <div className="divide-y divide-slate-50 dark:divide-slate-800/50">
+                  {shown.map((b: any, i: number) => {
+                    const dateStr = (() => { const d = new Date(b.createdAt || b.created_at || b.date); return isNaN(d.getTime()) ? 'N/A' : `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`; })();
+                    const buyerName = b.agentId ? (agentNames[b.agentId] || '...') : 'Direct';
+                    
+                    return (
+                      <div key={i} className="grid grid-cols-[1fr_1fr_0.7fr_0.8fr_0.6fr] gap-1 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                        <span className="text-[12px] font-bold text-slate-900 dark:text-white capitalize truncate">{b.wasteType || 'Mixed'}</span>
+                        <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 capitalize truncate">{buyerName}</span>
+                        <span className="text-[12px] font-black text-slate-900 dark:text-white">{Number(b.actualWeightKg) || Number(b.weightKg) || 0} kg</span>
+                        <span className="text-[11px] font-medium text-slate-400">{dateStr}</span>
+                        <span className="text-[9px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded-md text-center uppercase tracking-wider">Verified</span>
                       </div>
-                      <span className="text-[11px] font-black text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
-                        {Number(b.actualWeightKg) || Number(b.weightKg) || 0} kg
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 mt-3 text-[10px] font-semibold text-slate-400">
-                      <span className="flex items-center gap-1"><CalendarDays className="w-3 h-3" /> {new Date(b.created_at).toLocaleDateString()}</span>
-                      <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-500"><ShieldCheck className="w-3 h-3" /> Verified</span>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
-          )}
+
+                {remaining > 0 && (
+                  <div className="px-5 py-3 text-center border-t border-slate-100 dark:border-slate-800">
+                    <p className="text-[11px] font-bold text-slate-400">
+                      + {remaining} more verified job{remaining !== 1 ? 's' : ''} on record ({completed.length} total)
+                    </p>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       </section>
 
@@ -530,11 +582,11 @@ export default function CircularResume() {
 
   // ── PROFESSIONAL PROGRESSION (Tier System) ──
   const TIERS = [
-    { name: 'Starter', minJobs: 0, minKg: 0, icon: '🌱' },
-    { name: 'Professional Operator', minJobs: 50, minKg: 50, icon: '✅' },
-    { name: 'Elite Operator', minJobs: 100, minKg: 300, icon: '⭐' },
-    { name: 'Master Operator', minJobs: 400, minKg: 1000, icon: '🏆' },
-    { name: 'Legendary Operator', minJobs: 800, minKg: 10000, icon: '💎' },
+    { name: 'Registered Collector', minJobs: 0, minKg: 0, icon: '🌱' },
+    { name: 'Established Partner', minJobs: 5, minKg: 200, icon: '🤝' },
+    { name: 'Bronze Partner', minJobs: 20, minKg: 1000, icon: '🥉' },
+    { name: 'Silver Partner', minJobs: 50, minKg: 5000, icon: '🥈' },
+    { name: 'Gold Partner', minJobs: 100, minKg: 20000, icon: '🥇' },
   ];
 
   const progression = useMemo(() => {
@@ -609,10 +661,10 @@ export default function CircularResume() {
 
 
   return (
-    <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-950 min-h-screen transition-colors font-sans">
+    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 min-h-screen transition-colors font-sans">
       
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600 transition-all">
         <div className="max-w-xl mx-auto pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -655,15 +707,15 @@ export default function CircularResume() {
         </div>
       </div>
 
-      <main className="flex-1 px-4 pt-[calc(env(safe-area-inset-top,1rem)+7.5rem)] pb-12 max-w-xl mx-auto w-full space-y-6">
+      <main className="flex-1 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+7.5rem)] pb-12 max-w-xl mx-auto w-full space-y-6">
 
         {/* ── PROFESSIONAL IDENTITY CARD ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-[1.5rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+        <div className="bg-slate-200 dark:bg-slate-900 rounded-[1.5rem] p-6 shadow-sm border border-slate-200 dark:border-slate-800">
           <div className="flex flex-col md:flex-row gap-6 md:items-start md:justify-between">
             
             <div className="flex gap-5 items-start">
               <div className="relative shrink-0">
-                <div className="w-20 h-20 rounded-2xl border-2 border-slate-100 dark:border-slate-800 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full border-2 border-slate-100 dark:border-slate-800 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                   {profile?.avatarUrl ? (
                     <OptimizedImage src={getThumbnailUrl(profile.avatarUrl, { width: 200 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                   ) : (
@@ -693,20 +745,50 @@ export default function CircularResume() {
                       <ShieldCheck className="w-3.5 h-3.5" /> Get Verified
                     </button>
                   )}
-                  <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-wide">
-                    {profile?.county || profile?.estate || 'Nairobi, Kenya'} • Member since {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently'}
-                  </p>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-wide">
+                      {profile?.county || profile?.estate || 'Nairobi, Kenya'}
+                    </p>
+                    <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-wide">
+                      Member since {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800 flex flex-col md:items-end justify-center">
-              <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1 md:text-right">Klinflow Trust Score</p>
-              <div className="flex items-baseline gap-1 md:justify-end">
-                <span className="text-2xl font-black text-slate-900 dark:text-white leading-none">{trustScore}</span>
-                <span className="text-[10px] font-bold text-slate-400">/ 1000</span>
+            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800 flex items-center gap-4">
+              <div className="flex flex-col md:items-end justify-center flex-1">
+                <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1 md:text-right">Klinflow Trust Score</p>
+                <div className="flex items-baseline gap-1 md:justify-end">
+                  <span className="text-2xl font-black text-emerald-600 dark:text-white leading-none">{trustScore}</span>
+                  <span className="text-[12px] font-bold text-slate-400">/ 1000</span>
+                </div>
               </div>
-              <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-500 mt-1 md:text-right">Strong reliability & activity.</p>
+              
+              <div className="relative w-14 h-14 shrink-0">
+                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                  <path
+                    className="text-slate-200 dark:text-slate-700"
+                    strokeWidth="3.5"
+                    stroke="currentColor"
+                    fill="none"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                  <path
+                    className="text-emerald-500 drop-shadow-sm transition-all duration-1000 ease-out"
+                    strokeDasharray={`${Math.min(100, Math.max(0, (trustScore / 1000) * 100))}, 100`}
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    stroke="currentColor"
+                    fill="none"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-[11px] font-black text-slate-700 dark:text-white">{Math.round((trustScore / 1000) * 100)}%</span>
+                </div>
+              </div>
             </div>
 
           </div>

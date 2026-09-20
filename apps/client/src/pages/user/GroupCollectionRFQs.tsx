@@ -313,57 +313,72 @@ export default function GroupCollectionRFQs() {
                   : 0;
 
                 return (
-                  <div key={rfq.id} className="bg-white dark:bg-slate-900 -mx-1.5 p-2 px-1.5 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group">
-                    {/* Row 1: Tags & Price */}
-                    <div className="flex justify-between items-start mb-1">
-                      <div className="flex flex-wrap gap-1.5 items-center mt-1">
-                        <span className="flex items-center gap-1 px-1.5 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-100 dark:border-blue-800/50 rounded text-[9px] font-bold">
-                          <Users className="w-3 h-3" />
-                          Group Contract
-                        </span>
-                        <span className="flex items-center gap-1 px-1.5 py-0.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/50 rounded text-[9px] font-bold">
-                          <Recycle className="w-3 h-3" />
-                          {rfq.material}
-                        </span>
-                        {rfq.price > 50 && (
-                          <span className="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-800/50 rounded text-[9px] font-bold">
-                            <Flame className="w-3 h-3" />
-                            High Value
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-start gap-2 mt-4">
-                        <div className="text-right">
-                          <p className="text-sm font-black text-emerald-500 leading-none">
-                            KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
+                  <div 
+                    key={rfq.id} 
+                    onClick={() => navigate(`/group-rfqs/${rfq.id}`)}
+                    className={`bg-white dark:bg-slate-900 -mx-1.5 p-3 px-3 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 ${rfq.hasMyPledge ? 'opacity-80 grayscale-[0.2]' : ''}`}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      {/* Left: Material Image and Title */}
+                      <div className="flex gap-3 items-start">
+                        <div className="relative w-20 h-20 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+                          <img 
+                            src={`/material-categories/${(rfq.category || '').toLowerCase()}.webp`}
+                            onError={(e) => { e.currentTarget.src = "/material-categories/recyclables.webp" }}
+                            alt={rfq.material}
+                            className="w-full h-full object-cover"
+                          />
+                          {rfq.hasMyPledge && (
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[1px]">
+                              <div className="flex flex-col items-center">
+                                <CircleCheck className="w-6 h-6 text-emerald-400 mb-0.5" strokeWidth={2.5} />
+                                <span className="text-[8px] font-black text-white uppercase tracking-wider text-center leading-tight">Pledge<br/>Sent</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-col h-20 py-0.5">
+                          <h4 className="text-[16px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
+                          <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">{rfq.category}</p>
+                          <p className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-0.5 flex items-center gap-1">
+                            <Users className="w-3 h-3" /> {rfq.offersSubmitted} seller{rfq.offersSubmitted !== 1 ? 's' : ''} joined
                           </p>
+                          <div className="flex items-center gap-1.5 mt-auto">
+                            <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                              {rfq.avatar ? (
+                                <img src={getThumbnailUrl(rfq.avatar, { width: 50 })} className="w-full h-full object-cover" alt={rfq.company} />
+                              ) : (
+                                <User className="w-3 h-3 text-slate-400" />
+                              )}
+                            </div>
+                            <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[120px]">{rfq.company}</span>
+                            {rfq.verified && <CircleCheck className="w-3 h-3 text-blue-500 shrink-0" fill="currentColor" stroke="white" strokeWidth={2} />}
+                          </div>
                         </div>
-                        <button className="text-slate-300 hover:text-slate-400 dark:text-slate-600 transition-colors">
-                          <Bookmark className="w-3.5 h-3.5" />
-                        </button>
                       </div>
-                    </div>
 
-                    {/* Row 2: Buyer Profile */}
-                    <div className="flex items-center gap-2 ">
-                      <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
-                        {rfq.avatar ? (
-                          <img src={getThumbnailUrl(rfq.avatar, { width: 150 })} className="w-full h-full object-cover" alt={rfq.company} />
-                        ) : (
-                          <User className="w-4 h-4 text-slate-400" />
-                        )}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-1 mb-0.5">
-                          <h4 className="text-[12px] font-bold text-slate-900 dark:text-white leading-none">{rfq.company}</h4>
-                          {rfq.verified && <CircleCheck className="w-3.5 h-3.5 text-blue-500" fill="currentColor" stroke="white" strokeWidth={2} />}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-500">
-                          {rfq.verified && (
-                            <span className="flex items-center gap-0.5">
-                              <ShieldCheck className="w-2.5 h-2.5 text-emerald-600" /> Verified Buyer
+                      {/* Right: Badges and Price */}
+                      <div className="flex flex-col items-end gap-1.5">
+                        <div className="flex flex-wrap justify-end gap-1.5">
+                          <span className="flex items-center gap-1 px-1.5 py-0.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-100 dark:border-blue-800/50 rounded text-[9px] font-bold">
+                            <Users className="w-3 h-3" />
+                            Group Contract
+                          </span>
+                          <span className="flex items-center gap-1 px-1.5 py-0.5 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-800/50 rounded text-[9px] font-bold">
+                            <Clock className="w-3 h-3" />
+                            {rfq.deadline}
+                          </span>
+                          {rfq.price > 50 && (
+                            <span className="flex items-center gap-1 px-1.5 py-0.5 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-100 dark:border-amber-800/50 rounded text-[9px] font-bold">
+                              <Flame className="w-3 h-3" />
+                              High Value
                             </span>
                           )}
+                        </div>
+                        <div className="text-right mt-1">
+                          <p className="text-base font-black text-emerald-500 leading-none">
+                            KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -387,7 +402,7 @@ export default function GroupCollectionRFQs() {
                     </div>
 
                     {/* Row 4: Key Details */}
-                    <div className="flex items-center gap-6 border-t border-slate-200 dark:border-slate-800 pt-2 pb-2">
+                    <div className="flex items-center gap-6 border-t border-slate-200 dark:border-slate-800 pt-2 mt-2">
                       <div className="flex items-center gap-1.5">
                         <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
                           <Scale className="w-3.5 h-3.5 text-slate-400" />
@@ -407,30 +422,13 @@ export default function GroupCollectionRFQs() {
                         </div>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <div className="w-6 h-6 rounded bg-rose-50 dark:bg-rose-900/10 flex items-center justify-center shrink-0">
-                          <Clock className="w-3.5 h-3.5 text-rose-500" />
+                        <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
+                          <Clock className="w-3.5 h-3.5 text-slate-400" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[11px] font-bold text-rose-500 leading-none mb-0.5">{rfq.deadline}</p>
-                          <p className="text-[9px] font-semibold text-slate-400 leading-none">Deadline</p>
+                          <p className="text-[11px] font-bold text-slate-600 dark:text-slate-300 leading-none mb-0.5">{rfq.postedAt ? rfq.postedAt : '3 hrs ago'}</p>
+                          <p className="text-[9px] font-semibold text-slate-400 leading-none">Posted</p>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Row 5: Footer Actions */}
-                    <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-2">
-                      <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
-                        {rfq.postedAt ? `Posted ${rfq.postedAt}` : 'Posted recently'}
-                        <span className="text-slate-300">·</span>
-                        <span className="text-blue-500 font-bold">{rfq.offersSubmitted} seller{rfq.offersSubmitted !== 1 ? 's' : ''} joined</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={() => navigate(`/group-rfqs/${rfq.id}`)}
-                          className="px-3 py-1.5 bg-blue-600 text-white text-[10px] font-bold rounded-lg flex items-center gap-1 transition-colors hover:bg-blue-700"
-                        >
-                          View & Pledge <ArrowUpRight className="w-3 h-3" />
-                        </button>
                       </div>
                     </div>
                   </div>

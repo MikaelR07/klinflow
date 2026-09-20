@@ -75,7 +75,7 @@ export default function MarketIntelPricesTab({ marketData, filteredTrends }: Mar
                     <span className="text-sm font-black text-white mt-0.5">{stableCount}</span>
                   </div>
                   <div className="flex flex-col border-l border-amber-500/20 pl-2">
-                    <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Update Freq</span>
+                    <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Update Frequency</span>
                     <span className="text-sm font-black text-white mt-0.5 flex items-center gap-1">Real-time</span>
                   </div>
                 </div>
