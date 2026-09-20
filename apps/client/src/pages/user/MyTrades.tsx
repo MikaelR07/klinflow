@@ -247,12 +247,10 @@ export default function MyTrades() {
                   placeholder="Search materials, locations, or names..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:font-medium placeholder:text-slate-400"
+                  className="w-full pl-9 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:font-medium placeholder:text-slate-400"
                 />
               </div>
-              <button className="w-10 h-10 shrink-0 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center text-slate-500 hover:text-primary transition-colors active:scale-95">
-                <Filter className="w-4 h-4" />
-              </button>
+              
             </div>
 
             <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-2">
@@ -262,7 +260,7 @@ export default function MyTrades() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex-1 py-2 px-1 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shrink-0 ${activeTab === tab.id
+                    className={`flex-1 py-2 px-1 rounded-xl text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shrink-0 ${activeTab === tab.id
                       ? "bg-primary text-white border-transparent"
                       : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                       }`}
@@ -282,7 +280,7 @@ export default function MyTrades() {
         </div>
       )}
 
-      <div className={`flex-1 space-y-0 pb-24 ${!selectedOfferId && !expandedId && !reschedulingTrade ? "pt-[calc(env(safe-area-inset-top,1rem)+8rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}>
+      <div className={`flex-1 space-y-0 pb-24 ${!selectedOfferId && !expandedId && !reschedulingTrade ? "pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}>
         
         {/* BIDS VIEW */}
         {activeTab === "Bids" && !selectedOfferId && (
@@ -296,25 +294,27 @@ export default function MyTrades() {
                 <motion.div key={offer.id} onClick={() => setSelectedOfferId(offer.id)} className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500" />
                   <div className="flex gap-3 pl-4 pr-3.5 py-3">
-                    <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
-                      {offer.photo ? <OptimizedImage src={getThumbnailUrl(offer.photo, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-5 h-5 text-slate-200" />}
+                    <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
+                      {offer.photo ? <OptimizedImage src={getThumbnailUrl(offer.photo, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />}
                     </div>
-                    <div className="flex-1 min-w-0 flex flex-col justify-center">
+                    <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate tracking-tight">{offer.material}</h3>
+                          <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{offer.material}</h3>
                           <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 flex items-center gap-0.5 shrink-0">BID</span>
                           {(offer.listing?.pickupMode === 'dropoff' || offer.listing?.pickup_mode === 'dropoff') && (
                             <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 flex items-center gap-0.5 shrink-0"><Home className="w-2.5 h-2.5" />DROP-OFF</span>
                           )}
                         </div>
-                        <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {offer.offeredPrice}/kg</span>
+                        <div className="text-right shrink-0 ml-2 mt-1">
+                          <p className="text-base font-black text-emerald-600 leading-none tracking-tighter">KSh {offer.offeredPrice}<span className="text-[9px] text-emerald-600/70 font-black">/kg</span></p>
+                        </div>
                       </div>
                       <div className="flex items-center justify-between mt-0.5">
-                        <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]"><User className="w-3 h-3 text-slate-400" /> {offer.buyerName || "Buyer"}</p>
+                        <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]"><User className="w-3 h-3 text-emerald-600" /> {offer.buyerName || "Buyer"}</p>
                       </div>
                       <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
-                        <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0"><Clock className="w-2.5 h-2.5 text-slate-400" /> {offer.createdAt ? new Date(offer.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}</p>
+                        <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0"><Clock className="w-2.5 h-2.5 text-slate-900" /> {offer.createdAt ? new Date(offer.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}</p>
                         <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {offer.quantity} KG</p>
                       </div>
                     </div>
@@ -420,16 +420,16 @@ export default function MyTrades() {
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500" />
                         <button onClick={() => setExpandedCounterId(isCounterOpen ? null : b.id)} className="w-full p-4 pl-5 flex items-center gap-4 text-left active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors">
                           <div className="relative">
-                            <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden flex items-center justify-center text-xl shrink-0 border border-slate-100 dark:border-slate-700">
-                              {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 100 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <span>{waste?.icon || "📦"}</span>}
+                            <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-center justify-center text-xl shrink-0 border border-slate-200 dark:border-slate-700">
+                              {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 100 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />}
                             </div>
                             <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center ${status.color.split(' ')[0]} ${status.color.split(' ')[1]}`}>
                               <status.icon className="w-3 h-3" />
                             </div>
                           </div>
-                          <div className="flex-1 min-w-0">
+                          <div className="flex-1 min-w-0 py-0.5">
                             <div className="flex items-center justify-between mb-0.5">
-                              <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate">{waste?.label || formatMaterial(materialVal)}</h3>
+                              <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
                               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
                                 Counter Offer
                               </span>
@@ -477,15 +477,17 @@ export default function MyTrades() {
                     <motion.div key={b.id} onClick={() => { if (!b.isOffer) setExpandedId(b.id); }} className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-800 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
                       <div className={`absolute left-0 top-0 bottom-0 w-1 ${accentColor}`} />
                       <div className="flex gap-3 relative z-10 pl-4 pr-3.5 py-3">
-                        <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden flex items-center justify-center text-2xl shrink-0 border border-slate-100 dark:border-slate-700">
-                          {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <span>{waste?.icon || "📦"}</span>}
+                        <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-center justify-center text-2xl shrink-0 border border-slate-200 dark:border-slate-700">
+                          {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />}
                         </div>
-                        <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1.5 min-w-0">
-                              <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate tracking-tight">{waste?.label || formatMaterial(materialVal)}</h3>
+                              <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
                             </div>
-                            <span className={`text-sm font-black tracking-tighter shrink-0 ml-2 ${b.status === 'cancelled' ? 'text-slate-400 line-through' : 'text-emerald-600 dark:text-emerald-400'}`}>KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</span>
+                            <div className="text-right shrink-0 ml-2 mt-1">
+                              <p className={`text-base font-black leading-none tracking-tighter ${b.status === 'cancelled' ? 'text-slate-400 line-through' : 'text-emerald-600 dark:text-emerald-400'}`}>KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p>
+                            </div>
                           </div>
                           <div className="flex items-center justify-between mt-0.5">
                             {b.bookingType === 'dropoff' ? (

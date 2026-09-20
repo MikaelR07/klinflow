@@ -632,49 +632,47 @@ export default function MaterialDetail() {
           <div className="lg:col-span-5 space-y-8">
             
             {/* ── PREPARE YOUR MATERIAL ── */}
-            <motion.div variants={fadeUp}>
-              <div className="bg-gradient-to-r from-amber-600 to-amber-700 rounded-2xl p-4 md:p-5">
-                <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-4">
-                  How to prepare your material
-                </h2>
-                
-                <div className="-mx-4 md:mx-0 px-4 md:px-0">
-                  <div className="flex overflow-x-auto gap-4 pb-4 no-scrollbar snap-x snap-mandatory">
-                    {/* DO Box */}
-                    <div className="w-[85%] md:w-[48%] shrink-0 snap-start bg-white dark:bg-[#12141c] border border-emerald-100 dark:border-emerald-900/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-4 opacity-5">
-                        <Check className="w-24 h-24 text-emerald-500" />
-                      </div>
-                      <h3 className="text-[11px] font-black text-emerald-800 dark:text-emerald-500 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
-                        Do
-                      </h3>
-                      <ul className="space-y-3 relative z-10">
-                        {mat.doList.map((item, i) => (
-                          <li key={i} className="flex items-start gap-3">
-                            <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-500 shrink-0 mt-0.5" />
-                            <span className="text-[13px] font-medium text-slate-800 dark:text-slate-300 leading-snug">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+            <motion.div variants={fadeUp} className="pl-3">
+              <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-4">
+                How to prepare your material
+              </h2>
+              
+              <div className="w-full overflow-x-auto pb-6 no-scrollbar">
+                <div className="flex gap-4 min-w-max pr-4 snap-x snap-mandatory">
+                  {/* DO Box */}
+                  <div className="w-[280px] md:w-[320px] shrink-0 snap-start bg-gradient-to-tr from-primary to-emerald-600 dark:bg-[#12141c] border border-emerald-100 dark:border-emerald-900/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                      <Check className="w-24 h-24 text-white" />
                     </div>
+                    <h3 className="text-[11px] text-white text-emerald-800 dark:text-emerald-500 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
+                      Do
+                    </h3>
+                    <ul className="space-y-3 relative z-10">
+                      {mat.doList.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 w-full">
+                          <Check className="w-4 h-4 text-emerald-200 dark:text-emerald-500 shrink-0 mt-0.5" />
+                          <span className="text-[13px] font-medium text-white dark:text-slate-300 leading-snug whitespace-normal">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-                    {/* AVOID Box */}
-                    <div className="w-[85%] md:w-[48%] shrink-0 snap-start bg-white dark:bg-[#12141c] border border-rose-100 dark:border-rose-900/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-4 opacity-5">
-                        <X className="w-24 h-24 text-rose-500" />
-                      </div>
-                      <h3 className="text-[11px] font-black text-rose-800 dark:text-rose-600 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
-                        Avoid
-                      </h3>
-                      <ul className="space-y-3 relative z-10">
-                        {mat.dontList.map((item, i) => (
-                          <li key={i} className="flex items-start gap-3">
-                            <X className="w-4 h-4 text-rose-600 dark:text-rose-500 shrink-0 mt-0.5" />
-                            <span className="text-[13px] font-medium text-slate-800 dark:text-slate-400 leading-snug">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                  {/* AVOID Box */}
+                  <div className="w-[280px] md:w-[320px] shrink-0 snap-start bg-gradient-to-br from-amber-500 to-amber-600 dark:bg-[#12141c] border border-rose-100 dark:border-rose-900/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-20">
+                      <X className="w-24 h-24 text-rose-500" />
                     </div>
+                    <h3 className="text-[11px] font-black text-rose-800 dark:text-rose-600 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
+                      Avoid
+                    </h3>
+                    <ul className="space-y-3 relative z-10">
+                      {mat.dontList.map((item, i) => (
+                        <li key={i} className="flex items-start gap-3 w-full">
+                          <X className="w-4 h-4 text-rose-600 dark:text-rose-500 shrink-0 mt-0.5" />
+                          <span className="text-[13px] font-medium text-slate-800 dark:text-slate-400 leading-snug whitespace-normal">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>

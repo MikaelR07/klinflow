@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
   ArrowLeft, HelpCircle, Leaf, Users, TrendingUp, ShieldCheck,
-  CheckCircle2, ChevronRight, Trophy, Gift, Award, Handshake, Target, DollarSign, X, Search
+  CheckCircle2, ChevronRight, Trophy, Gift, Award, Handshake, Target, DollarSign, X, Search,
+  MonitorCheck,
+  Coins
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore } from '@klinflow/core';
@@ -139,41 +141,47 @@ export default function CommunityCollective() {
 
         {/* ── SELLER STATS BLOCK (Below Hero) ── */}
         {profile?.role === 'seller' && (
-          <div className="relative z-20 -mt-5 mx-4 bg-gradient-to-l from-primary to-emerald-700 rounded-xl p-3 shadow-lg mb-2 flex flex-col gap-2 border border-blue-500/30">
+          <div className="relative z-20 -mt-2 mx-4 bg-white dark:bg-primary rounded-xl p-3 shadow-lg mb-2 flex flex-col gap-2 border border-blue-500/30">
             <div className="grid grid-cols-3 gap-2 mt-1">
               <div className="flex items-center gap-2 justify-center">
-                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
-                  <Handshake className="w-4 h-4 text-black" />
+                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                  <Handshake className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-base font-black text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
-                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
+                  <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">
                     Group RFQs
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-2 border-x border-white/20 px-2 justify-center">
-                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
-                  <DollarSign className="w-4 h-4 text-black" />
+              <div className="flex items-center gap-2 border-x border-black/20 px-2 justify-center">
+                <div className="w-6 h-6  flex items-center justify-center shrink-0">
+                  <Coins className="w-5 h-5 text-amber-600" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-base font-black text-white leading-none mb-0.5">
-                    {estateStats?.totalEarned ? (estateStats.totalEarned >= 1000000 ? (estateStats.totalEarned / 1000000).toFixed(1) + 'M' : (estateStats.totalEarned >= 1000 ? (estateStats.totalEarned / 1000).toFixed(1) + 'k' : estateStats.totalEarned.toString())) : 0}
+                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">
+                    {(() => {
+                      const val = estateStats?.totalEarned || 0;
+                      if (!val) return '0';
+                      if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
+                      if (val >= 100000) return (val / 1000).toFixed(1) + 'k';
+                      return Math.floor(val).toLocaleString();
+                    })()}
                   </p>
-                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                  <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">
                     Earned
                   </p>
                 </div>
               </div>
               
               <div className="flex items-center gap-2 pl-2 justify-center">
-                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shrink-0">
-                  <Target className="w-4 h-4 text-black" />
+                <div className="w-6 h-6  flex items-center justify-center shrink-0">
+                  <Target className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-base font-black text-white leading-none mb-0.5">{estateStats?.fulfilledIndividualRFQs || 0}</p>
-                  <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
+                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{estateStats?.fulfilledIndividualRFQs || 0}</p>
+                  <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">
                     Solo RFQs
                   </p>
                 </div>
@@ -192,7 +200,7 @@ export default function CommunityCollective() {
                 <div className="flex items-center gap-2">
                  
                   <h2 className="text-[15px] font-black text-slate-600 dark:text-white tracking-tight">
-                    See what's new
+                    View Active Contracts
                   </h2>
                 </div>
                 
@@ -203,13 +211,13 @@ export default function CommunityCollective() {
               <motion.div whileHover={{ y: -2 }} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative group min-w-[280px] w-[80%] max-w-[320px] snap-center shrink-0 overflow-hidden">
                 <div className="w-full h-36 relative bg-slate-100 dark:bg-slate-800">
                   <img src="/vectors/klin-contract-real.webp" alt="Group Contracts" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" /> */}
                 </div>
                 
                 <div className="p-4 flex flex-col flex-1">
                   <h3 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight mb-1.5">Group Contracts</h3>
                   <p className="text-[12px] text-slate-500 dark:text-slate-400 font-medium mb-4 flex-1 leading-relaxed">
-                    Pool resources with other sellers to fulfill large volume orders from major buyers.
+                    Fulfill large volume orders from major buyers.
                   </p>
                   <Link
                     to="/group-rfqs"
@@ -225,13 +233,13 @@ export default function CommunityCollective() {
               <motion.div whileHover={{ y: -2 }} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative group min-w-[280px] w-[80%] max-w-[320px] snap-center shrink-0 overflow-hidden">
                 <div className="w-full h-36 relative bg-slate-100 dark:bg-slate-800">
                   <img src="/vectors/individual-rfq-real.webp" alt="Individual RFQs" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" /> */}
                 </div>
                 
                 <div className="p-4 flex flex-col flex-1">
                   <h3 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight mb-1.5">Individual Contracts</h3>
                   <p className="text-[12px] text-slate-500 dark:text-slate-400 font-medium mb-4 flex-1 leading-relaxed">
-                    Go solo. Bid on and fulfill direct requests from verified buyers on the network.
+                    Go solo. Bid on and fulfill direct requests.
                   </p>
                   <Link
                     to="/individual-rfqs"
@@ -245,43 +253,6 @@ export default function CommunityCollective() {
             </div>
             </div>
           )}
-
-          {/* SWARMS SECTION */}
-          <div className="flex flex-col mt-2">
-            <div className="mb-1 px-1">
-              <h2 className="text-[15px] font-bold text-slate-600 dark:text-white tracking-tight leading-tight">
-                Ready to find your swarm?
-              </h2>
-              
-            </div>
-
-            {/* SWARMS CARD (Full Width, Image on Top) */}
-            <motion.div whileHover={{ y: -2 }} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col relative overflow-hidden">
-            <div className="w-full h-40 sm:h-48 relative bg-slate-100 dark:bg-slate-800">
-              <img
-                src="/vectors/klin-swarms-real.webp"
-                alt="Swarms"
-                className="absolute inset-0 w-full h-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            </div>
-            
-            <div className="p-5 flex flex-col justify-center">
-              <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight mb-1">Join a Swarm</h3>
-              <p className="text-[14px] text-slate-500 dark:text-slate-400 font-medium mb-5 leading-relaxed">
-                Team up with nearby recyclers, Book group Pickups and Unlock better rates and earn more collectively.
-              </p>
-              <Link
-                to="/swarms"
-                className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm shadow-emerald-600/20"
-              >
-                <span>Explore Swarms</span>
-                <ChevronRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </motion.div>
-          </div>
-
 
         </div>
 

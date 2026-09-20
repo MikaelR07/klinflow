@@ -10,7 +10,11 @@ import {
   Leaf,
   LeafyGreen,
   Clock,
-  MapPin
+  MapPin,
+  Handshake,
+  DollarSign,
+  Coins,
+  Scale
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore, useCollectiveStore, useServiceStore } from '@klinflow/core';
@@ -24,7 +28,7 @@ export default function SwarmsList() {
   const userId = useAuthStore(s => s.userId);
   const estateName = profile?.location?.estate || profile?.estate || 'Nairobi';
 
-  const { swarms, loadingSwarms, fetchSwarms, setupSubscriptions, cleanupSubscriptions } = useCollectiveStore();
+  const { swarms, loadingSwarms, estateStats, fetchSwarms, fetchEstateStats, setupSubscriptions, cleanupSubscriptions } = useCollectiveStore();
   const fetchMaterialPrices = useServiceStore(s => s.fetchMaterialPrices);
   const materialPrices = useServiceStore(s => s.materialPrices);
 
@@ -36,6 +40,7 @@ export default function SwarmsList() {
     if (estateName) {
       fetchSwarms(estateName, profile?.role);
       fetchMaterialPrices();
+      fetchEstateStats(estateName);
       setupSubscriptions(estateName, profile?.role);
 
       // Check which swarms have been posted to the marketplace
@@ -78,7 +83,7 @@ export default function SwarmsList() {
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)]  px-4 space-y-2.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <button onClick={() => navigate('/community-collective')} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+              <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
                 <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
               </button>
               <div>
@@ -90,10 +95,10 @@ export default function SwarmsList() {
             </div>
             <Link
               to="/community-collective/swarm/create"
-              className="flex items-center gap-1.5 px-2 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider active:scale-95 transition-all shadow-sm"
+              className="flex items-center gap-1 px-2 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-bold uppercase tracking-wider active:scale-95 transition-all shadow-sm"
             >
               <Plus className="w-3.5 h-3.5" strokeWidth={2.5} />
-              Create Group
+              Add Swarm
             </Link>
           </div>
 
@@ -144,6 +149,85 @@ export default function SwarmsList() {
       </div>
 
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)] pb-5 max-w-lg mx-auto w-full">
+
+        {/* ── HERO SECTION ── */}
+        {activeTab === 'Active' && (
+          <div className="flex flex-col px-1.5 mb-4">
+            <div className="relative w-full rounded-3xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60">
+              <img 
+                src="/vectors/klin-swarms-real.webp" 
+                alt="Swarms Background" 
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 to-slate-900/20 dark:from-slate-950/95 dark:to-slate-950/40" />
+              <div className="relative z-10 p-4 flex flex-col gap-4">
+                <div className="min-h-[160px] flex flex-col justify-center">
+                  <h2 className="text-xl font-black text-white leading-tight mb-1.5 tracking-tight">
+                    Find Your Swarm.<br/>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Maximize Earnings.</span>
+                  </h2>
+                  <p className="text-[11px] text-slate-200 font-medium leading-relaxed max-w-[260px]">
+                    Team up with others in your area, pool your collections, and fulfill large volume requests together.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative z-20 -mt-2 mx-4 bg-white dark:bg-primary rounded-xl p-3 shadow-lg flex flex-col gap-2 border border-emerald-500/30">
+              <div className="grid grid-cols-3 gap-2 mt-1">
+                {(() => {
+                  const totalPooledKg = swarms.reduce((acc: number, s: any) => acc + (s.current_weight || 0), 0);
+                  const totalPotentialPayout = swarms.reduce((acc: number, s: any) => {
+                    const marketRate = materialPrices.find(m => m.material_name === s.material)?.price_per_kg || 0;
+                    return acc + ((s.current_weight || 0) * marketRate);
+                  }, 0);
+                  
+                  const formatNumber = (val: number) => {
+                    if (!val) return '0';
+                    if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
+                    if (val >= 100000) return (val / 1000).toFixed(1) + 'k';
+                    return Math.floor(val).toLocaleString();
+                  };
+
+                  return (
+                    <>
+                      <div className="flex items-center gap-2 justify-center">
+                        <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                          <Scale className="w-5 h-5 text-emerald-600" />
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{formatNumber(totalPooledKg)}</p>
+                          <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">Pooled Kg</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 border-x border-slate-200 dark:border-black/20 px-2 justify-center">
+                        <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                          <Coins className="w-5 h-5 text-amber-600" />
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">
+                            {formatNumber(totalPotentialPayout)}
+                          </p>
+                          <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">Est Value</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 pl-2 justify-center">
+                        <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                          <Users className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div className="flex flex-col text-left">
+                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{swarms.filter(s => s.status === 'active' && new Date(s.closes_at) > new Date()).length}</p>
+                          <p className="text-[9px] text-slate-600 dark:text-white font-bold uppercase tracking-wider leading-none">Active</p>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Loading */}
         {loadingSwarms && swarms.length === 0 && (
           <div className="space-y-3 px-1.5">
@@ -175,42 +259,44 @@ export default function SwarmsList() {
             const rewardPool = swarm.target_weight * marketRate;
 
             return (
-              <Link
-                to={`/community-collective/swarm/${swarm.id}`}
+              <div
                 key={swarm.id}
-                className="
-                  block
-                  bg-white dark:bg-slate-900
-                  rounded-[1.25rem]
-                  border border-slate-100 dark:border-slate-800 shadow-sm
-                  p-2.5
-                  transition-all duration-200
-                  hover:shadow-md
-                  active:scale-[0.98]
-                "
+                onClick={() => navigate(`/community-collective/swarm/${swarm.id}`)}
+                className="bg-white dark:bg-slate-900 p-3 px-4 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50"
               >
-                {/* Header & Image */}
-                <div className="flex items-start gap-3">
-                  {/* Image on the left */}
-                  <div className="shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm relative">
-                    <img 
-                      src={(swarm.images && swarm.images[0]) || 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80&w=200'} 
-                      alt={swarm.material || 'Material'} 
-                      className="w-full h-full object-cover"
-                    />
-                    {swarm.images && swarm.images.length > 1 && (
-                      <div className="absolute bottom-1 right-1 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-widest">
-                        +{swarm.images.length - 1}
+                <div className="flex justify-between items-start mb-1">
+                  {/* Left: Material Image and Title */}
+                  <div className="flex gap-3 items-start">
+                    <div className="relative w-20 h-20 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+                      <img 
+                        src={(swarm.images && swarm.images[0]) || 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80&w=200'} 
+                        alt={swarm.material || 'Material'} 
+                        className="w-full h-full object-cover"
+                      />
+                      {swarm.images && swarm.images.length > 1 && (
+                        <div className="absolute bottom-1 right-1 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-widest">
+                          +{swarm.images.length - 1}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col h-20 py-0.5">
+                      <h4 className="text-[16px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{swarm.material}</h4>
+                      <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">
+                        {materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}
+                      </p>
+                      <p className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-0.5 flex items-center gap-1">
+                        <Users className="w-3 h-3" /> {swarm.participants_count || 0} members
+                      </p>
+                      <div className="flex items-center gap-1.5 mt-auto">
+                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                        <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[120px]">{swarm.estate}</span>
                       </div>
-                    )}
+                    </div>
                   </div>
 
-                  {/* Details on the right */}
-                  <div className="flex-1 min-w-0 py-0.5">
-                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                      <p className="text-[11px] font-medium text-slate-500 uppercase dark:text-slate-400 leading-none">
-                        <span className="font-semibold uppercase text-slate-900 text-[13px] dark:text-white">{materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}</span>
-                      </p>
+                  {/* Right: Badges and Price */}
+                  <div className="flex flex-col items-end gap-1.5">
+                    <div className="flex flex-wrap justify-end gap-1.5">
                       {swarm.status === 'active' && postedSwarmIds.has(swarm.id) && (
                         <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 leading-none">
                           Posted
@@ -227,61 +313,55 @@ export default function SwarmsList() {
                         </span>
                       )}
                     </div>
-
-                    <h3 className="text-xs font-semibold text-[#5c50e6] dark:text-indigo-400 mb-2 leading-tight tracking-tight">
-                      Material-Type: {swarm.material}
-                    </h3>
-
-                    <div className="flex items-center gap-1.5 mb-1.5 text-slate-500 dark:text-slate-400">
-                      <MapPin className="w-3.5 h-3.5 shrink-0" />
-                      <p className="text-[11px] font-medium truncate">{swarm.estate}</p>
+                    <div className="text-right mt-1">
+                      <p className="text-base font-black text-emerald-500 leading-none">
+                        {isMixed ? 'Varies' : `KSh ${rewardPool.toLocaleString()}`}
+                      </p>
+                      <span className="text-[10px] text-slate-400 font-semibold">Reward</span>
                     </div>
+                  </div>
+                </div>
 
-                    {swarm.closes_at && (
-                      <div className={`flex items-center gap-1.5 font-bold mt-1 ${new Date(swarm.closes_at).getTime() < new Date().getTime() ? 'text-rose-500' : 'text-[#e65100] dark:text-amber-500'}`}>
-                        <Clock className="w-3.5 h-3.5 shrink-0" />
-                        <p className="text-[10px] uppercase tracking-wide">
-                          {new Date(swarm.closes_at).getTime() < new Date().getTime() ? 'Expired: ' : 'Deadline: '}
-                          {new Date(swarm.closes_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                {/* Row 3: Key Details */}
+                <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-2 pb-2 mt-1.5">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
+                        <Truck className="w-3.5 h-3.5 text-slate-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-semibold text-slate-900 dark:text-white leading-none mb-0.5">{swarm.target_weight.toLocaleString()}kg</p>
+                        <p className="text-[9px] font-semibold text-slate-400 leading-none">Target</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
+                        <Scale className="w-3.5 h-3.5 text-slate-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-semibold text-slate-900 dark:text-white leading-none mb-0.5">{swarm.current_weight.toLocaleString()}kg</p>
+                        <p className="text-[9px] font-semibold text-slate-400 leading-none">Collected</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {swarm.closes_at && (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-6 h-6 rounded bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center shrink-0">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                      </div>
+                      <div className="min-w-0 text-right">
+                        <p className={`text-[11px] font-semibold leading-none mb-0.5 ${new Date(swarm.closes_at).getTime() < new Date().getTime() ? 'text-rose-600 dark:text-rose-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                          {new Date(swarm.closes_at).toLocaleDateString('en-GB')}
+                        </p>
+                        <p className="text-[11px] font-semibold text-slate-500 leading-none">
+                          Deadline
                         </p>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
-
-                <div className="my-2 border-t border-slate-200 dark:border-slate-700 w-full" />
-
-                {/* Metrics & Action */}
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-4">
-                    {/* Reward Pool */}
-                    <div>
-                      <p className="text-[12px] text-[#868e96] dark:text-slate-400 mb-0.5">Reward</p>
-                      <p className="text-[11px] font-bold text-[#2e7d32] dark:text-green-500">{isMixed ? 'Varies' : `ksh ${rewardPool.toLocaleString()}`}</p>
-                    </div>
-
-                    <div className="w-px h-6 bg-[#f1f3f5] dark:bg-slate-800" />
-
-                    {/* Participants */}
-                    <div>
-                      <p className="text-[12px] text-[#868e96] dark:text-slate-400 mb-0.5">Members</p>
-                      <p className="text-[11px] font-bold text-slate-900 dark:text-white">{swarm.participants_count || 0}</p>
-                    </div>
-
-                    <div className="w-px h-6 bg-[#f1f3f5] dark:bg-slate-800" />
-
-                    {/* Target */}
-                    <div>
-                      <p className="text-[12px] text-[#868e96] dark:text-slate-400 mb-0.5">Target</p>
-                      <p className="text-[11px] font-bold text-slate-900 dark:text-white">{swarm.target_weight.toLocaleString()}kg</p>
-                    </div>
-                  </div>
-
-                  <div className="px-3 py-1.5 bg-[#2e7d32] hover:bg-[#1b5e20] text-white text-[10px] font-bold rounded-lg transition-colors shrink-0 shadow-sm">
-                    View Details
-                  </div>
-                </div>
-              </Link>
+              </div>
             );
           })}
         </div>

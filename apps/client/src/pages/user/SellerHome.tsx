@@ -419,7 +419,7 @@ export default function SellerHome() {
                   onClick={() => navigate(`/materials/${identifier}`)}
                   className={`snap-start relative shrink-0 w-[140px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-3 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col h-full overflow-hidden`}
                   style={bgImage ? {
-                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8)), url(${bgImage})`,
+                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.2)), url(${bgImage})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   } : {}}
@@ -438,52 +438,63 @@ export default function SellerHome() {
         </motion.div>
 
         {/* ── BUSINESS TOOLS ── */}
-        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
+        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
           <div className="space-y-2">
-            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Business Tools</h3>
+            <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Business Tools</h3>
           </div>
-          {/* ── GRID OF COLLECTIVE & MARKET PRICES ── */}
-          <div className="grid grid-cols-2 gap-1">
-            {/* ── COMMUNITY COLLECTIVE ── */}
-            <div 
+          <div className="grid grid-cols-2 gap-1.5">
+            {/* ── CONTRACTS ── */}
+            <button 
               onClick={() => navigate("/community-collective")}
-              className="bg-gradient-to-br from-primary to-emerald-600 border border-emerald-400/50 dark:border-emerald-500/50 rounded-[20px] p-3 flex flex-col justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group min-h-[105px] relative overflow-hidden"
+              className="w-full h-full bg-gradient-to-br from-emerald-600 to-teal-600 border border-emerald-400/30 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
             >
-              <div className="absolute -left-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
-              <div className="flex items-start justify-between mb-2 relative z-10">
-                <div className="w-9 h-9 bg-white/20 dark:bg-white/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
-                  <Users className="w-4.5 h-4.5 text-white" />
-                </div>
-                <div className="w-6 h-6 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                  <ChevronRight className="w-3 h-3 text-white group-hover:translate-x-0.5 transition-transform" />
-                </div>
+              <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
+                <Users className="w-5 h-5 text-white" />
               </div>
-              <div className="relative z-10 mt-auto">
-                <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Community  Collective</h4>
-                <p className="text-[9px] font-semibold text-emerald-50 leading-tight">Join group contracts & pickups</p>
+              <div className="text-left relative z-10 mt-auto">
+                <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Contracts</h4>
+                <p className="text-[10px] font-semibold text-emerald-100/90 leading-tight">View Active Contracts</p>
               </div>
-            </div>
+            </button>
 
-            {/* ── MARKET PULSE ── */}
-            <div 
-              onClick={() => navigate("/market-pulse")}
-              className=" bg-white dark:bg-amber-600 border border-white dark:border-slate-700/50 rounded-[20px] p-3 flex flex-col justify-between cursor-pointer hover:shadow-md active:scale-95 transition-all shadow-sm group min-h-[105px] relative overflow-hidden"
+            {/* ── SWARMS ── */}
+            <button 
+              onClick={() => navigate("/swarms")}
+              className="w-full h-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
             >
-              <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/5 dark:bg-emerald-900/20 rounded-full blur-xl pointer-events-none" />
-              <div className="flex items-start justify-between mb-2 relative z-10">
-                <div className="w-9 h-9 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
-                  <BarChart3Icon className="w-4.5 h-4.5 text-emerald-600 dark:text-white" />
-                </div>
-                <div className="w-6 h-6 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-slate-100 dark:group-hover:bg-slate-700 transition-colors">
-                  <ChevronRight className="w-3 h-3 text-slate-400" />
-                </div>
+              <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-indigo-50 dark:bg-indigo-900/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
+                <Users className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div className="relative z-10 mt-auto">
-                <h4 className="text-[13px] font-black text-slate-900 dark:text-white leading-tight mb-0.5">Market Prices</h4>
-                <p className="text-[9px] font-semibold text-slate-500 leading-tight">Live recyclable prices</p>
+              <div className="text-left relative z-10 mt-auto">
+                <h4 className="text-[13px] font-black text-slate-900 dark:text-white leading-tight mb-0.5">Swarms</h4>
+                <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight">Join Logistics Swarms</p>
+              </div>
+            </button>
+          </div>
+        </motion.div>
+
+        {/* ── MARKET PRICES (Horizontal Banner) ── */}
+        <motion.div variants={itemVariants} className="!mt-3">
+          <button 
+            onClick={() => navigate("/market-pulse")}
+            className="w-full bg-gradient-to-br from-amber-600 to-amber-700 border border-amber-500/30 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+          >
+            <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0">
+                <BarChart3Icon className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-left min-w-0">
+                <h3 className="text-[14px] font-bold tracking-tight leading-none mb-1 text-white">Market Prices</h3>
+                <p className="text-[11px] font-semibold text-amber-100/90 leading-tight">View Live material prices</p>
               </div>
             </div>
-          </div>
+            <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors relative z-10 shrink-0">
+              <ChevronRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </button>
         </motion.div>
 
 

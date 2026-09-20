@@ -181,7 +181,7 @@ export default function MarketplaceInventory() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                  className={`flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                     activeTab === tab
                       ? "bg-primary dark:bg-primary shadow-sm text-white dark:text-white font-black"
                       : "text-slate-500 bg-slate-300 dark:bg-slate-900 hover:text-slate-600 dark:hover:text-slate-300"
@@ -479,7 +479,7 @@ export default function MarketplaceInventory() {
                         className="bg-white dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
                       >
                         <div className="flex gap-3">
-                          <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
+                          <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
                             {listing.photoUrl ? (
                               <OptimizedImage
                                 src={getThumbnailUrl(listing.photoUrl, {
@@ -489,14 +489,14 @@ export default function MarketplaceInventory() {
                                 wrapperClassName="w-full h-full"
                               />
                             ) : (
-                              <Package className="w-5 h-5 text-slate-200" />
+                              <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />
                             )}
                           </div>
-                          <div className="flex-1 min-w-0 flex flex-col justify-center">
+                          <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
                             {/* Row 1: Material & Price */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5 min-w-0">
-                                <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight">
+                                <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
                                   {listing.material}
                                 </h3>
                                 <span
@@ -510,15 +510,17 @@ export default function MarketplaceInventory() {
                                   <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 flex items-center gap-0.5 shrink-0"><Home className="w-2.5 h-2.5" />DROP-OFF</span>
                                 )}
                               </div>
-                              <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">
-                                KSh {listing.pricePerKg}/kg
-                              </span>
+                              <div className="text-right shrink-0 ml-2 mt-1">
+                                <p className="text-base font-black text-emerald-600 leading-none tracking-tighter">
+                                  KSh {listing.pricePerKg}<span className="text-[9px] text-emerald-600/70 font-black">/kg</span>
+                                </p>
+                              </div>
                             </div>
 
                             {/* Row 2: Location -> Trade ID */}
                             <div className="flex items-center justify-between mt-0.5">
                               <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                                <Tag className="w-2.5 h-2.5 text-indigo-500" />{" "}
+                                <Tag className="w-2.5 h-2.5 text-slate-900" />{" "}
                                 KF-{listing.id?.slice(0, 8)}
                               </p>
                             </div>
@@ -526,7 +528,7 @@ export default function MarketplaceInventory() {
                             {/* Row 3: Timestamp & Quantity */}
                             <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
                               <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
-                                <Clock className="w-2.5 h-2.5 text-slate-400" />{" "}
+                                <Clock className="w-2.5 h-2.5 text-slate-900" />{" "}
                                 {listing.createdAt
                                   ? new Date(listing.createdAt).toLocaleString(
                                       [],
