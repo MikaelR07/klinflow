@@ -463,7 +463,7 @@ export default function SellerHome() {
             {/* ── CONTRACTS ── */}
             <button 
               onClick={() => navigate("/community-collective")}
-              className="w-full h-full  bg-gradient-to-br from-indigo-500 to-purple-500 border border-emerald-400/30 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+              className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-500 border border-emerald-400/30 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
             >
               <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
               <div className="w-10 h-10 bg-white/20 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">

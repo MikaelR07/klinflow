@@ -140,7 +140,7 @@ export default function CompanyProfile() {
               <div className="relative w-[90px] h-[90px] shrink-0">
                 <div className="w-full h-full rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-4xl overflow-hidden shadow-inner border-[2px] border-white/20">
                   {company?.avatarUrl || company?.avatar_url ? (
-                    <OptimizedImage src={getThumbnailUrl(company.avatarUrl || company.avatar_url, { width: 250 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
+                    <img src={getThumbnailUrl(company.avatarUrl || company.avatar_url, { width: 250 })} className="w-full h-full object-cover" alt="" />
                   ) : (
                     isFleetAdmin ? '🏢' : '🚛'
                   )}
