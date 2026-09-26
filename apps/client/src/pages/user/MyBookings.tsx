@@ -327,48 +327,48 @@ export default function MyBookings() {
               return (
                 <div
                   key={b.id}
-                  className="w-full bg-white dark:bg-slate-900/50 rounded-none border-y border-x-0 border-slate-100 dark:border-slate-800/80 hover:shadow-lg transition-all overflow-hidden"
+                  className="bg-white dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
                 >
                   {/* Clickable Header */}
                   <div
-                    className="p-4 cursor-pointer active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
+                    className="pl-5 pr-4 py-3 flex justify-between items-start active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
                     onClick={() => setSelectedBooking(b)}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-2xl shadow-inner border border-slate-100 dark:border-slate-700 shrink-0 overflow-hidden">
-                          {b.photoUrl ? (
-                            <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
-                          ) : (
-                            waste?.icon || '📦'
-                          )}
+                    <div className="flex gap-3 items-start flex-1">
+                      <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-3xl">
+                        {b.photoUrl ? (
+                          <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
+                        ) : (
+                          waste?.icon || '📦'
+                        )}
+                      </div>
+                      <div className="flex flex-col py-0.5 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[15px] font-black text-slate-900 dark:text-white tracking-tight leading-tight capitalize line-clamp-1 max-w-[160px]">{waste?.label || wasteTypeVal}</span>
+                          <span className={`text-[8px] font-black tracking-widest px-1.5 py-0.5 rounded-md ${status.color} uppercase shrink-0`}>
+                            {status.label}
+                          </span>
                         </div>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-slate-900 dark:text-white text-[14px] font-bold capitalize">{waste?.label || wasteTypeVal}</span>
-                            <span className={`text-[8px] font-black tracking-widest px-1.5 py-0.5 rounded-md ${status.color} uppercase`}>
-                              {status.label}
-                            </span>
-                          </div>
-                          <p className="text-[10px] font-semibold text-slate-500 flex items-center gap-1.5">
-                            <MapPin className="w-3 h-3 text-green-500" /> {b.estate}
+                        <div className="flex flex-col gap-1 mt-2">
+                          <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 truncate max-w-[150px]">
+                            <MapPin className="w-3.5 h-3.5 text-green-500 shrink-0" /> {b.estate}
                           </p>
-                          <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">
-                            Pickup ID: <span className="text-primary font-mono text-[11px]">{b.trackingId || b.tracking_id || b.id.slice(0, 8).toUpperCase()}</span>
+                          <p className="text-[11px] font-semibold text-slate-400 capitalize tracking-wide truncate max-w-[150px]">
+                            Pickup ID: <span className="text-primary font-mono text-[9px]">{b.trackingId || b.tracking_id || b.id.slice(0, 8).toUpperCase()}</span>
                           </p>
                         </div>
                       </div>
-                      <div className="text-right flex flex-col items-end justify-between self-stretch py-0.5">
-                        <p className="text-[9px] font-bold text-slate-400 text-right leading-tight">
-                          Booked: {new Date(b.createdAt || b.created_at || b.updatedAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          <br/>
-                          <span className="font-semibold text-slate-300 dark:text-slate-500">{new Date(b.createdAt || b.created_at || b.updatedAt || Date.now()).toLocaleDateString([], { day: 'numeric', month: 'short' })}</span>
-                        </p>
-                        <ChevronDown className="w-4 h-4 text-slate-300 -rotate-90 my-1.5" />
-                        <p className="text-[9px] font-bold text-slate-500 flex items-center gap-1 mt-auto">
-                          <Clock className="w-2.5 h-2.5 text-blue-500" /> {b.timeSlot || b.time_slot || 'ASAP'}
-                        </p>
-                      </div>
+                    </div>
+                    <div className="text-right flex flex-col items-end justify-between self-stretch shrink-0 pb-0.5">
+                      <p className="text-[9px] font-bold text-slate-400 text-right leading-tight">
+                        Booked: {new Date(b.createdAt || b.created_at || b.updatedAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        <br/>
+                        <span className="font-semibold text-slate-300 dark:text-slate-500">{new Date(b.createdAt || b.created_at || b.updatedAt || Date.now()).toLocaleDateString([], { day: 'numeric', month: 'short' })}</span>
+                      </p>
+                      <ChevronDown className="w-4 h-4 text-slate-300 -rotate-90 my-1.5" />
+                      <p className="text-[9px] font-bold text-slate-500 flex items-center gap-1 mt-auto">
+                        <Clock className="w-2.5 h-2.5 text-blue-500 shrink-0" /> {b.timeSlot || b.time_slot || 'ASAP'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -503,74 +503,78 @@ export default function MyBookings() {
 
                 <div className="space-y-4">
 
-                  {/* ── SPECIFICATIONS CARD ── */}
-                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Requested</p>
-                        <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
-                          {String(waste?.label || wasteTypeVal)}
-                        </h2>
-                      </div>
-                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${status.color} border border-current/20 bg-current/10`}>
-                        <Clock className="w-3.5 h-3.5" />
-                        <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{String(status.label)}</span>
-                      </div>
-                    </div>
-
-                    <hr className="border-slate-100 dark:border-slate-800/60" />
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex items-start gap-3">
-                        <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                  {/* ── SPECIFICATIONS & PAYMENT CARD ── */}
+                  <div className="bg-slate-200 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800/40 overflow-hidden flex flex-col shadow-sm">
+                    {/* Top Section: Specifications */}
+                    <div className="p-4 space-y-4">
+                      <div className="flex items-start justify-between">
                         <div>
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
-                          <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 capitalize block max-w-[120px]">{String(b.estate || '')}</span>
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Requested</p>
+                          <h2 className="text-[16px] font-bold text-indigo-700 dark:text-white capitalize leading-tight">
+                            {String(waste?.label || wasteTypeVal)}
+                          </h2>
+                        </div>
+                        <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${status.color} border border-current/20 bg-current/10`}>
+                          <Clock className="w-3.5 h-3.5" />
+                          <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{String(status.label)}</span>
                         </div>
                       </div>
-                      
-                      <div className="flex items-start gap-3">
-                        <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight Booked</p>
-                          <p className="text-[11px] font-black text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg ? `${b.actualWeightKg || b.weightKg} KG` : 'Est at Pickup'}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 rounded-[1rem] !mt space-y-3 relative overflow-hidden">
-                    <div className="flex items-center justify-between relative z-10">
-                      <div className="space-y-1">
-                        <p className="text-[11px] font-bold text-emerald-100 capitalize tracking-widest">Settlement Value</p>
-                        {b.status === 'completed' ? (
-                          <p className="text-3xl font-black text-white tracking-tighter leading-none">
-                            KSh {(b.totalPrice || 0).toLocaleString()}
-                          </p>
-                        ) : b.status === 'cancelled' ? (
-                          <p className="text-xl font-black text-emerald-200 capitalize tracking-[0.2em] italic leading-none opacity-50">Cancelled</p>
-                        ) : (
-                          <div className="flex flex-col gap-1">
-                            <p className="text-sm font-black text-white tracking-tighter flex items-center gap-2 leading-none">
-                              <Zap className="w-4 h-4 fill-emerald-300" /> Awaiting Verification
-                            </p>
+                      <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-start gap-3">
+                          <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
+                            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 capitalize block max-w-[120px]">{String(b.estate || '')}</span>
                           </div>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest mb-2">Est. Weight</p>
-                        <div className="flex items-center gap-2 justify-end">
-                          <Scale className="w-4 h-4 text-emerald-200" />
-                          <p className="text-lg font-black text-white capitalize leading-none">{b.actualWeightKg || b.weightKg || 0} KG</p>
+                        </div>
+                        
+                        <div className="flex items-start gap-3">
+                          <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight Booked</p>
+                            <p className="text-[11px] font-black text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg ? `${b.actualWeightKg || b.weightKg} KG` : 'Est at Pickup'}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div className="h-px bg-white/10 relative z-10" />
-                    <div className="space-y-2 relative z-10">
-                      <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest">Scheduled Slot</p>
-                      <div className="flex items-center gap-3">
-                        <Clock className="w-4 h-4 text-emerald-200" />
-                        <p className="text-base font-bold text-white capitalize tracking-tight">{String((b as any).timeSlot || 'ASAP Request')}</p>
+
+                    {/* Bottom Section: Payment Value */}
+                    <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 p-6 space-y-3 relative overflow-hidden">
+                      <div className="flex items-center justify-between relative z-10">
+                        <div className="space-y-1">
+                          <p className="text-[11px] font-bold text-emerald-100 capitalize tracking-widest">Payment Value</p>
+                          {b.status === 'completed' ? (
+                            <p className="text-3xl font-black text-white tracking-tighter leading-none">
+                              KSh {(b.totalPrice || 0).toLocaleString()}
+                            </p>
+                          ) : b.status === 'cancelled' ? (
+                            <p className="text-xl font-black text-emerald-200 capitalize tracking-[0.2em] italic leading-none opacity-50">Cancelled</p>
+                          ) : (
+                            <div className="flex flex-col gap-1">
+                              <p className="text-sm font-black text-white tracking-tighter flex items-center gap-2 leading-none">
+                                <Zap className="w-4 h-4 fill-emerald-300" /> Awaiting Verification
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest mb-2">Est. Weight</p>
+                          <div className="flex items-center gap-2 justify-end">
+                            <Scale className="w-4 h-4 text-emerald-200" />
+                            <p className="text-lg font-black text-white capitalize leading-none">{b.actualWeightKg || b.weightKg || 0} KG</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="h-px bg-white/10 relative z-10" />
+                      <div className="space-y-2 relative z-10">
+                        <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest">Scheduled Slot</p>
+                        <div className="flex items-center gap-3">
+                          <Clock className="w-4 h-4 text-emerald-200" />
+                          <p className="text-base font-bold text-white capitalize tracking-tight">{String((b as any).timeSlot || 'ASAP Request')}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -584,7 +588,7 @@ export default function MyBookings() {
                   {(b.notes || b.wasteType) && (
                     <div className="bg-slate-200 dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm">
                       <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
-                        <Info className="w-4 h-4 text-primary" /> Collector Instructions
+                        <Info className="w-4 h-4 text-primary" /> Collection Note
                       </h4>
                       <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
                         "{String(b.notes || `Please collect ${waste?.label || wasteTypeVal} from ${b.estate || 'location'}. Standard verification applies.`)}"

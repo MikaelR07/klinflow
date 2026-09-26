@@ -11,7 +11,7 @@ function ReviewCard({ review, isCompanyOwner }: { review: any, isCompanyOwner?: 
   const isPositive = review.rating >= 4;
 
   return (
-    <div className={`bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl shadow-sm p-4 ${isCompanyOwner ? 'h-full flex flex-col' : ''}`}>
+    <div className={`bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700/50 rounded-2xl shadow-sm p-4 ${isCompanyOwner ? 'h-full flex flex-col' : ''}`}>
       {/* Top Row: User Info and Date */}
       <div className="flex items-start justify-between mb-3">
          <div className="flex items-center gap-2">
@@ -92,7 +92,7 @@ export default function ReviewsPage() {
   }, [recentReviews]);
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-800  pb-2">
+    <div className="flex flex-col bg-white dark:bg-slate-800  pb-2">
       {/* FIXED TOP NAV */}
       <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto bg-white dark:bg-slate-800 shadow-sm border-b border-slate-100 dark:border-slate-800">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
@@ -116,42 +116,45 @@ export default function ReviewsPage() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] px-1.5 mx-auto max-w-lg w-full space-y-6">
 
       {/* Rating & Breakdown */}
-      <div className="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-700/50">
-        <div className="flex gap-5 sm:gap-8">
+      <div className="bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 rounded-xl p-6  border border-amber-400/50 relative overflow-hidden">
+        {/* Subtle decorative background element */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+
+        <div className="flex gap-5 sm:gap-8 relative z-10">
           {/* Left: Rating Summary */}
-          <div className="flex flex-col items-center justify-center shrink-0 border-r border-slate-100 dark:border-slate-800 pr-5 sm:pr-8">
-            <p className="text-[12px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-[0.2em] mb-1">Rating</p>
+          <div className="flex flex-col items-center justify-center shrink-0 border-r border-amber-400/30 pr-5 sm:pr-8">
+            <p className="text-[12px] font-black text-amber-100 uppercase tracking-[0.2em] mb-1">Rating</p>
             <div className="flex items-baseline gap-1">
-              <h2 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
-              <span className="text-base font-bold text-slate-400">/5</span>
+              <h2 className="text-3xl font-black tracking-tighter text-white">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
+              <span className="text-base font-bold text-amber-200/80">/5</span>
             </div>
             <div className="flex gap-0.5 mt-1.5">
               {[1, 2, 3, 4, 5].map(s => (
-                <Star key={s} className={`w-3 h-3 ${s <= Math.round(Number(stats.total === 0 ? 0 : (stats.average || profile?.rating || 0))) ? 'fill-primary text-primary' : 'text-slate-300 dark:text-slate-600'}`} />
+                <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.round(Number(stats.total === 0 ? 0 : (stats.average || profile?.rating || 0))) ? 'fill-white text-white' : 'text-amber-700/40'}`} />
               ))}
             </div>
-            <p className="text-[14px] text-slate-400 mt-1.5 font-medium">{stats.total} review{stats.total !== 1 ? 's' : ''}</p>
+            <p className="text-[13px] text-amber-100 mt-1.5 font-bold">{stats.total} review{stats.total !== 1 ? 's' : ''}</p>
           </div>
 
           {/* Right: Breakdown Bars */}
           <div className="flex-1 space-y-2 justify-center flex flex-col">
             {stats.breakdown.length > 0 ? stats.breakdown.map((item) => (
               <div key={item.stars} className="flex items-center gap-2">
-                <span className="text-[11px] font-bold text-slate-400 w-3">{item.stars}★</span>
-                <div className="flex-1 h-2 bg-slate-300 dark:bg-slate-800 rounded-full overflow-hidden">
+                <span className="text-[11px] font-black text-amber-100 w-3">{item.stars}★</span>
+                <div className="flex-1 h-2 bg-amber-700/30 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-primary rounded-full transition-all duration-1000"
+                    className="h-full bg-white rounded-full transition-all duration-1000"
                     style={{ width: `${item.percentage}%` }}
                   />
                 </div>
-                <span className="text-[11px] font-bold text-slate-500 w-8 text-right">{Math.round(item.percentage)}%</span>
+                <span className="text-[11px] font-black text-white w-8 text-right">{Math.round(item.percentage)}%</span>
               </div>
             )) : (
               [5, 4, 3, 2, 1].map(s => (
                 <div key={s} className="flex items-center gap-2">
-                  <span className="text-[9px] font-bold text-slate-400 w-3">{s}★</span>
-                  <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full" />
-                  <span className="text-[9px] font-bold text-slate-400 w-6 text-right">0%</span>
+                  <span className="text-[10px] font-black text-amber-100 w-3">{s}★</span>
+                  <div className="flex-1 h-1.5 bg-amber-700/30 rounded-full" />
+                  <span className="text-[10px] font-black text-amber-100 w-6 text-right">0%</span>
                 </div>
               ))
             )}

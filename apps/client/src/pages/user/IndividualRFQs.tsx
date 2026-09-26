@@ -16,6 +16,7 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
+import ContractsTabBar from '../../components/user/ContractsTabBar';
 
 interface IndividualRFQ {
   id: string;
@@ -169,7 +170,8 @@ export default function IndividualRFQs() {
     const matchesSearch = rfq.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
       rfq.material.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesRegion = selectedRegion === 'All' || rfq.region === selectedRegion;
-    const matchesCategory = selectedCategory === 'All' || rfq.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || 
+      (rfq.category && rfq.category.toLowerCase() === selectedCategory.toLowerCase());
 
     let matchesQuantity = true;
     if (selectedQuantity !== 'All') {
@@ -202,7 +204,7 @@ export default function IndividualRFQs() {
     <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3 px-4 flex items-center justify-between">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
@@ -259,27 +261,6 @@ export default function IndividualRFQs() {
               className="overflow-hidden border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50"
             >
               <div className="p-4 grid grid-cols-2 gap-3">
-                {/* Category Filter */}
-                <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Category</label>
-                  <div className="relative">
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-emerald-500"
-                    >
-                      <option value="All">All Categories</option>
-                      <option value="Plastic">Plastic</option>
-                      <option value="Metal">Metal</option>
-                      <option value="Paper">Paper</option>
-                      <option value="Organic">Organic</option>
-                      <option value="Glass">Glass</option>
-                      <option value="E-waste">E-waste</option>
-                    </select>
-                    <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
-                  </div>
-                </div>
-
                 {/* Region Filter */}
                 <div className="flex flex-col gap-1">
                   <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Region</label>
@@ -352,10 +333,58 @@ export default function IndividualRFQs() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <ContractsTabBar />
       </div>
 
       {/* ── CONTENT AREA ── */}
-      <main className={`flex-1 pb-5 max-w-lg mx-auto w-full space-y-0.5 transition-all duration-300 ${isFilterOpen ? 'pt-[calc(env(safe-area-inset-top,1rem)+15rem)]' : 'pt-[calc(env(safe-area-inset-top,1rem)+6rem)]'}`}>
+      <main className={`flex-1 pb-5 max-w-lg mx-auto w-full space-y-0.5 transition-all duration-300 ${isFilterOpen ? 'pt-[calc(env(safe-area-inset-top,1rem)+15rem)]' : 'pt-[calc(env(safe-area-inset-top,1rem)+9rem)]'}`}>
+        
+        {/* ── HERO BANNER ── */}
+        <div className="px-1.5 mb-4 mt-2">
+          <div className="relative w-full h-[160px] rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800/60">
+            <img src="/vectors/individual-rfq-real.webp" alt="Individual Contracts" className="absolute inset-0 w-full h-full object-cover object-right" />
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-950 via-emerald-900/60 to-transparent dark:from-slate-950/95 dark:via-emerald-950/80"></div>
+            <div className="relative z-10 p-4 h-full flex flex-col justify-center">
+              <h3 className="text-[22px] font-black text-emerald-400 leading-tight">Direct Contracts.</h3>
+              <h3 className="text-[22px] font-black text-white leading-tight">Maximum Profit.</h3>
+              <p className="text-[11px] font-semibold text-emerald-50/90 leading-tight max-w-[240px] mt-1.5">
+                Browse and bid on specific requests from verified buyers to maximize your earnings with zero intermediaries.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Category Pills (Scrollable) */}
+        <div className="flex px-1.5 pb-4 gap-1.5 overflow-x-auto no-scrollbar">
+          {(['All', 'Plastic', 'Metal', 'Paper', 'Organic', 'Glass', 'E-waste'] as const).map((category) => {
+            const count = category === 'All'
+              ? rfqsList.length
+              : rfqsList.filter(r => r.category && r.category.toLowerCase() === category.toLowerCase()).length;
+
+            return (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`py-1.5 px-2.5 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shadow-sm shrink-0 ${selectedCategory === category
+                  ? 'bg-emerald-600 text-white border-transparent'
+                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                  }`}
+              >
+                <span>{category}</span>
+                {count > 0 && (
+                  <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${selectedCategory === category
+                    ? 'bg-emerald-700 text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                    }`}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
         {/* Active Buy Requests Header */}
         <div className="flex items-center justify-between px-3.5 pb-1">
           <div className="flex items-center gap-1.5">
@@ -387,12 +416,12 @@ export default function IndividualRFQs() {
               <div 
                 key={rfq.id} 
                 onClick={() => navigate(`/rfq/${rfq.id}`)}
-                className={`bg-white dark:bg-slate-900 p-3 px-4 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 ${rfq.hasBid ? 'opacity-80 grayscale-[0.2]' : ''}`}
+                className={`bg-slate-50 dark:bg-slate-900 p-3 px-4 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/80 ${rfq.hasBid ? 'opacity-80 grayscale-[0.2]' : ''}`}
               >
                 <div className="flex justify-between items-start mb-1">
                   {/* Left: Material Image and Title */}
-                  <div className="flex gap-3 items-start">
-                    <div className="relative w-20 h-20 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+                  <div className="flex gap-4 items-start">
+                    <div className="relative w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
                       <img 
                         src={`/material-categories/${(rfq.category || '').toLowerCase()}.webp`}
                         onError={(e) => { e.currentTarget.src = "/material-categories/recyclables.webp" }}
@@ -409,20 +438,16 @@ export default function IndividualRFQs() {
                       )}
                     </div>
                     <div className="flex flex-col h-20 py-0.5">
-                      <h4 className="text-[16px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
-                      <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">{rfq.category}</p>
-                      <p className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-0.5 flex items-center gap-1">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h4 className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
+                        <span className="px-1.5 py-0.5 rounded bg-slate-200/80 dark:bg-slate-700 text-[8px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">{rfq.category}</span>
+                      </div>
+                      <p className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-1 flex items-center gap-1">
                         <Receipt className="w-3 h-3" /> {rfq.offersSubmitted} {rfq.offersSubmitted === 1 ? 'bid' : 'bids'} sent
                       </p>
-                      <div className="flex items-center gap-1.5 mt-auto">
-                        <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
-                          {rfq.avatar ? (
-                            <img src={getThumbnailUrl(rfq.avatar, { width: 50 })} className="w-full h-full object-cover" alt={rfq.company} />
-                          ) : (
-                            <User className="w-3 h-3 text-slate-400" />
-                          )}
-                        </div>
-                        <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 truncate max-w-[120px]">{rfq.company}</span>
+                      <div className="flex items-center gap-1 mt-auto">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Buyer:</span>
+                        <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200 truncate max-w-[120px]">{rfq.company.split(' ')[0]}</span>
                         {rfq.verified && <CircleCheck className="w-3 h-3 text-blue-500 shrink-0" fill="currentColor" stroke="white" strokeWidth={2} />}
                       </div>
                     </div>
@@ -446,6 +471,7 @@ export default function IndividualRFQs() {
                       <p className="text-base font-black text-emerald-500 leading-none">
                         KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
                       </p>
+
                     </div>
                   </div>
                 </div>

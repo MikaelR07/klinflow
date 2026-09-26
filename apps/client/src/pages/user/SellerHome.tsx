@@ -228,15 +228,15 @@ export default function SellerHome() {
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal isOpen={showPushPrompt} onClose={handleDismissPush} />
 
-      {/* ── TOP SECTION: PREMIUM GRADIENT ── */}
-      <div className="bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 pt-[calc(env(safe-area-inset-top,1.5rem)+4rem)] pb-4 rounded-b-[2.5rem] shadow-lg shadow-emerald-900/20 relative z-20 overflow-hidden">
-        
+      {/* ── TOP SECTION ── */}
+      <div className="bg-gradient-to-b from-primary from-60% via-primary/80 to-[#f8fafc] dark:from-slate-800 dark:via-slate-800 dark:to-slate-800 relative z-10 pt-[calc(env(safe-area-inset-top,1.5rem)+4rem)] pb-16 overflow-hidden">
+      
         {/* Decorative background orbs */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-300/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none z-10" />
+        <div className="absolute top-[100px] left-0 w-48 h-48 bg-teal-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none z-10" />
 
         {/* ── TOP NAV (FIXED) ── */}
-        <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 ${isScrolled ? 'bg-gradient-to-br from-[#064e3b] to-emerald-700 backdrop-blur-md shadow-md border-b border-white/10' : 'bg-transparent '}`}>
+        <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 ${isScrolled ? 'bg-gradient-to-br from-primary to-emerald-600 backdrop-blur-md shadow-md border-b border-white/10' : 'bg-transparent '}`}>
           <div className="max-w-xl mx-auto px-5 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-md p-[2px] shadow-sm border border-white/20">
@@ -282,10 +282,10 @@ export default function SellerHome() {
         </div>
 
         {/* ── ECO-REWARDS HERO CARD (MERCHANT REVENUE) ── */}
-        <div className="relative z-10 px-4 max-w-xl mx-auto mt-6">
-          <motion.div variants={itemVariants} initial="hidden" animate="show" className="relative group overflow-hidden rounded-[24px] bg-white/10  border border-emerald-500/50  p-5">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary pointer-events-none" />
-            <div className="relative z-10 flex flex-col gap-2">
+        <div className="relative z-10 px-2 max-w-xl mx-auto mt-6">
+          <motion.div variants={itemVariants} initial="hidden" animate="show" className="relative group overflow-hidden rounded-[24px] bg-white/10 border border-emerald-600 p-5">
+            <div className="absolute inset-0 bg-gradient-to-b from-emerald-700 to-emerald-800 pointer-events-none" />
+            <div className="relative z-10 flex flex-col gap-1">
               <div className="flex justify-between items-start mb-1">
                 <div>
                   <p className="text-[10px] font-black text-emerald-100 uppercase tracking-widest mb-1 flex items-center gap-1">
@@ -326,8 +326,8 @@ export default function SellerHome() {
       </div>
 
 
-      <div className="max-w-xl mx-auto px-2.5 space-y-5 pt-3  pb-5">
-        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-900 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
+      <div className="max-w-xl mx-auto px-2.5 space-y-5 -mt-10 pb-5 relative z-20">
+        <motion.div variants={itemVariants} className="bg-white dark:bg-slate-900 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           <div className="space-y-2">
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
@@ -341,7 +341,7 @@ export default function SellerHome() {
                 <button
                   key={service.label}
                   onClick={() => navigate(service.route)}
-                  className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                  className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
                 >
                   <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
                     {service.badge && service.badge > 0 ? (
@@ -356,27 +356,6 @@ export default function SellerHome() {
               ))}
             </div>
             
-            {/* ── PRIMARY CTAS ── */}
-            <div className="grid grid-cols-1 gap-1">
-              <button 
-                onClick={() => navigate('/my-rfq-offers')}
-                className="w-full bg-gradient-to-br from-indigo-400 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-[20px] shadow-sm shadow-slate-900/5 active:scale-[0.98] transition-all group p-3 flex items-center justify-between border border-white/10 dark:border-slate-900/10"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <Receipt className="w-6 h-6 text-white dark:text-slate-900" />
-                  </div>
-                  <div className="text-left min-w-0">
-                    <h3 className="text-[14px] font-bold tracking-tight leading-none mb-1">Submitted RFQ Proposals</h3>
-                    <p className="text-[11px] font-semibold text-white/80 dark:text-slate-100 leading-tight">Track Requests To Buyers</p>
-                  </div>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center group-hover:bg-white/30 dark:group-hover:bg-slate-900/20 transition-colors">
-                  <ChevronRight className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-0.5 transition-transform" />
-                </div>
-              </button>
-            </div>
-
           </div>
         </motion.div>
 
@@ -462,7 +441,7 @@ export default function SellerHome() {
           <div className="grid grid-cols-2 gap-1.5">
             {/* ── CONTRACTS ── */}
             <button 
-              onClick={() => navigate("/community-collective")}
+              onClick={() => navigate("/group-rfqs")}
               className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-500 border border-emerald-400/30 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
             >
               <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
@@ -495,12 +474,12 @@ export default function SellerHome() {
         <motion.div variants={itemVariants} className="!mt-3">
           <button 
             onClick={() => navigate("/market-pulse")}
-            className="w-full bg-slate-300 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+            className="w-full bg-slate-300 dark:bg-slate-500 border border-slate-300 dark:border-slate-700 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
           >
             <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
             <div className="flex items-center gap-4 relative z-10">
               <div className="w-12 h-12 bg-black/20 dark:bg-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0">
-                <BarChart3Icon className="w-6 h-6 text-slate-900" />
+                <BarChart3Icon className="w-6 h-6 text-slate-900 dark:text-white" />
               </div>
               <div className="text-left min-w-0">
                 <h3 className="text-[14px] font-bold tracking-tight leading-none mb-1 text-slate-900 dark:text-white">Market Prices</h3>

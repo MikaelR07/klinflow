@@ -109,101 +109,108 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-4 py-8 relative overflow-hidden">
-      {/* Background Decor (Matched to Welcome Page) */}
-      <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
-      <div className="max-w-md w-full mx-auto animate-slide-up">
+    <div className="flex flex-col bg-gradient-to-br from-emerald-500 to-primary min-h-[100dvh] relative font-sans">
 
-        {/* Branding */}
-        <div className="text-center mb-10">
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
-            Klin<span className="text-secondary">Agent</span>
-          </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">
-            Green Agent Operations Portal
-          </p>
-        </div>
+      {/* ── Header Section ── */}
+      <div className="px-8 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] pb-32">
+        <h1 className="text-[38px] font-bold text-white tracking-tight leading-tight">
+          Hello Agent!
+        </h1>
+        <p className="text-white/90 text-[15px] font-medium mt-2">
+          Welcome back!
+        </p>
+      </div>
 
-        {/* Login Form */}
-        <div className="glass p-6 sm:p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none min-h-[340px] flex flex-col justify-center">
-          <form onSubmit={handleLogin} className="space-y-5 animate-slide-up">
-            <div className="text-center mb-6">
-              <h2 className="text-lg font-semibold text-slate-800 dark:text-white pb-1">Agent Sign In</h2>
-              <p className="text-xs text-slate-500">Access your jobs and routes</p>
+      {/* ── Login Card Area ── */}
+      <div className="flex-1 w-full bg-slate-50 rounded-t-[40px] px-8 pt-10 pb-8 shadow-[0_-8px_30px_rgba(0,0,0,0.1)] flex flex-col relative">
+        <div className="w-full max-w-md mx-auto flex-1 flex flex-col">
+          
+          <div className="mb-8 text-center">
+            {/* <h2 className="text-[26px] font-bold text-[#064e3b] tracking-tight">Welcome back</h2> */}
+            <p className="text-slate-500 text-[14px] font-medium mt-1">
+              Ready to make an impact today?
+            </p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+              </div>
+              <input
+                type="tel"
+                placeholder="07XX XXX XXX"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-[15px]"
+                required
+              />
             </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Phone Number</label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-secondary">
-                  <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-secondary transition-colors" />
-                </div>
-                <input
-                  type="tel"
-                  placeholder="07XX XXX XXX"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                  className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-medium focus:ring-2 text-base focus:ring-secondary/50 focus:border-secondary transition-colors placeholder:font-normal"
-                  required
-                />
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
               </div>
+              <input
+                type={showPin ? 'text' : 'password'}
+                placeholder="Password"
+                minLength={8}
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                className="w-full pl-12 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-[15px]"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPin(!showPin)}
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-emerald-500 transition-colors"
+              >
+                {showPin ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300">Agent PIN</label>
-                <button type="button" onClick={() => setRecoveryStep('phone')} className="text-xs font-semibold text-secondary hover:text-blue-700 transition-colors">
-                  Forgot PIN?
-                </button>
-              </div>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-secondary">
-                  <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-secondary transition-colors" />
-                </div>
-                <input
-                  type={showPin ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  minLength={8}
-                  value={pin}
-                  onChange={(e) => setPin(e.target.value)}
-                  className="w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white font-medium focus:ring-2 text-base focus:ring-secondary/50 focus:border-secondary transition-colors tracking-widest placeholder:font-normal placeholder:tracking-normal"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPin(!showPin)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-secondary transition-colors"
-                >
-                  {showPin ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={() => setRecoveryStep('phone')}
+                className="text-[13px] font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
+              >
+                Forgot password?
+              </button>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 bg-secondary hover:bg-blue-700 text-white rounded-xl font-semibold text-[15px] shadow-lg shadow-secondary/30 transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+              className="w-full py-4 mt-2 bg-primary hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed active:scale-[0.98]"
             >
               {isLoading && recoveryStep === 'none' ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Authenticating Agent...
-                </>
+                <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                'Start Shift'
+                'Sign in'
               )}
             </button>
           </form>
+
+          {/* Footer Actions */}
+          <div className="mt-6 relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-slate-50 px-2 text-slate-400 font-medium tracking-wide">Or</span>
+            </div>
+          </div>
+          
+          <button
+            type="button"
+            onClick={() => navigate('/register')}
+            className="w-full py-4 mt-4 bg-white border border-slate-200 hover:border-emerald-500 text-slate-600 hover:text-emerald-600 rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 active:scale-[0.98] shadow-sm shadow-slate-200/50"
+          >
+            Create Account
+          </button>
+
         </div>
-
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8 font-medium">
-          Don't have an account?{' '}
-          <Link to="/role-selection" className="text-secondary font-semibold hover:underline">
-            Register Here
-          </Link>
-        </p>
-
       </div>
 
       {/* ── RECOVERY OVERLAY: PHONE STEP ── */}
@@ -215,7 +222,7 @@ export default function Login() {
             </button>
 
             <div className="text-center space-y-6">
-              <div className="w-16 h-16 bg-secondary/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-secondary">
+              <div className="w-16 h-16 bg-emerald-500/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-emerald-500">
                 <Lock className="w-8 h-8" />
               </div>
 
@@ -236,7 +243,7 @@ export default function Login() {
                     value={recoveryPhone}
                     onChange={(e) => setRecoveryPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                     placeholder="07XX XXX XXX"
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-semibold tracking-widest focus:ring-4 focus:ring-secondary/10 focus:border-secondary outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-semibold tracking-widest focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
                   />
                 </div>
               </div>
@@ -244,7 +251,7 @@ export default function Login() {
               <button
                 onClick={handleSendRecoveryOtp}
                 disabled={isLoading || recoveryPhone.length !== 10}
-                className="w-full py-4 bg-secondary text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] flex justify-center items-center gap-2 disabled:opacity-50"
+                className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] flex justify-center items-center gap-2 disabled:opacity-50 hover:bg-emerald-500 transition-colors"
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Send Recovery Code'}
               </button>
@@ -269,14 +276,14 @@ export default function Login() {
                 <ArrowLeft className="w-5 h-5" />
               </button>
 
-              <div className="w-16 h-16 bg-secondary/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-secondary mt-2">
+              <div className="w-16 h-16 bg-emerald-500/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-emerald-500 mt-2">
                 <ShieldCheck className="w-8 h-8" />
               </div>
 
               <div>
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Secure Reset</h3>
                 <p className="text-sm text-slate-500 font-medium mt-1">
-                  Code sent to <span className="text-secondary font-bold">{recoveryPhone}</span>
+                  Code sent to <span className="text-emerald-500 font-bold">{recoveryPhone}</span>
                 </p>
               </div>
 
@@ -290,36 +297,36 @@ export default function Login() {
                     value={recoveryOtp}
                     onChange={(e) => setRecoveryOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     placeholder="000000"
-                    className="w-full text-center text-3xl font-semibold tracking-[0.5em] py-3 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:border-secondary outline-none transition-all placeholder:text-slate-300"
+                    className="w-full text-center text-3xl font-semibold tracking-[0.5em] py-3 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:border-emerald-500 outline-none transition-all placeholder:text-slate-300"
                   />
                 </div>
 
                 <div className="flex items-center justify-between px-2">
                   <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">Expires in:</p>
-                  <span className={`text-xs font-bold tracking-widest ${timeLeft < 60 ? 'text-rose-500' : 'text-secondary'}`}>
+                  <span className={`text-xs font-bold tracking-widest ${timeLeft < 60 ? 'text-rose-500' : 'text-emerald-500'}`}>
                     {formatTime(timeLeft)}
                   </span>
                 </div>
 
                 <div className="pt-2 space-y-3">
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-secondary transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
                     <input
                       type="password"
                       value={newPin}
                       onChange={(e) => setNewPin(e.target.value)}
                       placeholder="New Passcode"
-                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                     />
                   </div>
                   <div className="relative group">
-                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-secondary transition-colors" />
+                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
                     <input
                       type="password"
                       value={confirmNewPin}
                       onChange={(e) => setConfirmNewPin(e.target.value)}
                       placeholder="Confirm Passcode"
-                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-secondary/20 focus:border-secondary outline-none transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -329,7 +336,7 @@ export default function Login() {
                 <button
                   onClick={handleResetPin}
                   disabled={isLoading || recoveryOtp.length < 6 || newPin.length < 8}
-                  className="w-full py-4 bg-secondary text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50"
+                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50"
                 >
                   {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Reset & Login'}
                 </button>
@@ -340,7 +347,7 @@ export default function Login() {
                   onClick={handleSendRecoveryOtp}
                   className={`py-2 rounded-full text-[11px] font-semibold capitalize tracking-widest transition-all ${timeLeft > 0
                       ? 'text-slate-400 cursor-not-allowed'
-                      : 'text-secondary hover:bg-secondary/10'
+                      : 'text-emerald-500 hover:bg-emerald-500/10'
                     }`}
                 >
                   Resend Recovery Code

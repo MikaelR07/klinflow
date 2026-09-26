@@ -6,6 +6,7 @@ import { MapContainer, TileLayer, Marker, Polyline, Popup, useMap } from 'react-
 import L from 'leaflet';
 import { supabase } from '@klinflow/supabase';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useAgentLocation } from '../../features/agentHome/useAgentLocation';
 import { toast } from 'sonner';
 import VerificationWorkflowModal from '../../components/fulfillment/VerificationWorkflowModal';
 import { useFulfillmentStore } from '@klinflow/core/stores/fulfillmentStore';
@@ -36,10 +37,21 @@ function MapBounds({ bounds }: { bounds: [number, number][] }) {
   const map = useMap();
   useEffect(() => {
     if (bounds && bounds.length > 0) {
-      map.fitBounds(bounds, { padding: [40, 40] });
+      map.fitBounds(bounds, { paddingTopLeft: [40, 40], paddingBottomRight: [40, 350] });
     }
   }, [bounds, map]);
   return null;
+}
+
+function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371e3;
+  const p1 = lat1 * Math.PI / 180;
+  const p2 = lat2 * Math.PI / 180;
+  const dp = (lat2 - lat1) * Math.PI / 180;
+  const dl = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dp / 2) * Math.sin(dp / 2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) * Math.sin(dl / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
 export default function NavigateGroupPickupPage() {
@@ -102,8 +114,10 @@ export default function NavigateGroupPickupPage() {
     setLoading(false);
   };
 
-  // Agent location (fallback to default)
-  const agentPos: [number, number] = profile?.location?.latitude ? [profile.location.latitude, profile.location.longitude as number] : [-1.2921, 36.8219];
+  // Agent location (live tracking)
+  const { position: livePos } = useAgentLocation();
+  const fallbackPos: [number, number] = profile?.location?.latitude ? [profile.location.latitude, profile.location.longitude as number] : [-1.2921, 36.8219];
+  const agentPos: [number, number] = livePos ? [livePos.lat, livePos.lng] : fallbackPos;
 
   // Client locations — prefer seller's own location, fallback to RFQ pickup area
   const clientPositions = useMemo(() => {
@@ -124,9 +138,17 @@ export default function NavigateGroupPickupPage() {
     return positions;
   }, [orders]);
 
+  const [lastRoutedPos, setLastRoutedPos] = useState<[number, number] | null>(null);
+
   useEffect(() => {
     const fetchRoute = async () => {
       if (!agentPos || clientPositions.length === 0) return;
+
+      if (lastRoutedPos) {
+        const dist = getDistance(agentPos[0], agentPos[1], lastRoutedPos[0], lastRoutedPos[1]);
+        if (dist < 50) return;
+      }
+
       try {
         // Construct waypoints: agent -> client1 -> client2 ...
         const allPoints = [agentPos, ...clientPositions];
@@ -139,6 +161,7 @@ export default function NavigateGroupPickupPage() {
         if (data.code === 'Ok' && data.routes.length > 0) {
           const points = data.routes[0].geometry.coordinates.map((c: any) => [c[1], c[0]]);
           setRoadPath(points);
+          setLastRoutedPos(agentPos);
         } else {
           // Fallback: straight lines
           setRoadPath([agentPos, ...clientPositions]);
@@ -203,7 +226,7 @@ export default function NavigateGroupPickupPage() {
   const allCompleted = orders.length > 0 && orders.every(o => ['pickup_completed', 'completed', 'in_transit', 'delivered'].includes(o.status));
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-slate-100 dark:bg-slate-900">
+    <div className="fixed inset-0 overflow-hidden bg-slate-100 dark:bg-slate-900" style={{ zIndex: 50 }}>
       <div className="absolute top-[calc(env(safe-area-inset-top,1rem)+1rem)] left-4 right-4 z-[1000] flex items-center justify-between pointer-events-none">
         <button
           onClick={() => navigate(-1)}
@@ -223,7 +246,14 @@ export default function NavigateGroupPickupPage() {
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <MapBounds bounds={[agentPos, ...clientPositions]} />
           <Polyline positions={roadPath.length > 0 ? roadPath : [agentPos, ...clientPositions]} color="#3B82F6" weight={4} dashArray="10, 15" opacity={0.8} />
-          <Marker position={agentPos} icon={agentIcon} />
+          <Marker position={agentPos} icon={agentIcon}>
+            <Popup className="font-sans">
+              <div className="text-center px-1 py-0.5">
+                <p className="font-black text-slate-800 text-[13px]">⚡ You (Agent)</p>
+                <p className="text-[10px] font-medium text-slate-500 mt-0.5">{profile?.name || 'Agent'}</p>
+              </div>
+            </Popup>
+          </Marker>
           {orders.map((o, idx) => {
              const sellerLoc = o.proposal?.seller?.location;
              const pos = sellerLoc?.latitude && sellerLoc?.longitude

@@ -1,17 +1,3 @@
-export interface RFQ {
-  id: string;
-  company: string;
-  material: string;
-  quantity: string;
-  price: number;
-  deadline: string;
-  verified: boolean;
-  region: string;
-  category: string;
-  delivery: string;
-  offersSubmitted: number;
-}
-
 export interface CommodityTrend {
   id: string;
   label: string;
@@ -53,20 +39,14 @@ export interface Recommendation {
   priority: string;
 }
 
-export interface Insight {
-  iconName: string;
-  color: string;
-  category: string;
-  badge: string;
-  title: string;
-  text: string;
-}
-
 export interface MarketData {
   commodity_trends?: CommodityTrend[];
+  ai_trends?: any[];
+  actionable_insights?: any[];
   opportunities?: MarketOpportunity[];
   market_signals?: MarketSignal[];
   hotspots?: Hotspot[];
   recommendations?: Recommendation[];
-  insights?: Insight[];
+  insights?: any[];
+  [key: string]: any;
 }

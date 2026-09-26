@@ -2,21 +2,21 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Clock, CheckCircle2, XCircle,
-  Building2, MapPin, Scale, MessageSquare, ArrowRight, Package, Receipt
+  Building2, MapPin, Scale, MessageSquare, ArrowRight, Package, Receipt, Search, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@klinflow/core/lib/supabaseClient';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
-
-
+import ContractsTabBar from '../../components/user/ContractsTabBar';
 
 export default function MyRFQOffers() {
   const navigate = useNavigate();
   const profile = useAuthStore(s => s.profile);
   const { materialPrices, fetchMaterialPrices } = useServiceStore();
   const [filter, setFilter] = useState<'pending' | 'accepted' | 'completed' | 'declined'>('pending');
+  const [searchQuery, setSearchQuery] = useState('');
   const [quotes, setQuotes] = useState<any[]>([]);
 
   useEffect(() => {
@@ -84,28 +84,82 @@ export default function MyRFQOffers() {
     }
   }, [profile?.id]);
 
-  const filteredQuotes = quotes.filter(q => q.status === filter);
+  const filteredQuotes = quotes.filter(q => {
+    if (q.status !== filter) return false;
+    if (searchQuery) {
+      const qLower = searchQuery.toLowerCase();
+      return (
+        (q.material && q.material.toLowerCase().includes(qLower)) ||
+        (q.category && q.category.toLowerCase().includes(qLower)) ||
+        (q.company && q.company.toLowerCase().includes(qLower))
+      );
+    }
+    return true;
+  });
 
   return (
     <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
             </button>
             <div>
-              <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Submitted Quotes</h1>
+              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Submitted Quotes</h1>
               <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
                 view bids made to buyer requests
               </p>
             </div>
           </div>
         </div>
+        
+        {/* Search */}
+        <div className="px-4 pb-2">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search by material, category or buyer..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-8 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 rounded-xl text-xs font-medium text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              >
+                <X className="w-3 h-3 text-slate-400" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        <ContractsTabBar />
+      </div>
+
+      {/* ── CONTENT AREA ── */}
+      <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 pt-[calc(env(safe-area-inset-top,1rem)+9rem)]">
+
+        {/* ── HERO BANNER ── */}
+        <div className="px-1.5 mb-4 mt-2">
+          <div className="relative w-full h-[140px] rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800/60">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 dark:from-emerald-900 dark:via-emerald-800 dark:to-teal-900"></div>
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
+            <div className="relative z-10 p-4 h-full flex flex-col justify-center">
+              <h3 className="text-[20px] font-black text-white leading-tight">Track Your Proposals.</h3>
+              <h3 className="text-[20px] font-black text-emerald-100 leading-tight">Secure More Deals.</h3>
+              <p className="text-[11px] font-semibold text-emerald-50/90 leading-tight max-w-[240px] mt-1.5">
+                Monitor the status of your submitted quotes and engage directly with buyers to finalize contracts.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Status Filters */}
-        <div className="flex px-4 pb-3 gap-1.5 overflow-x-auto no-scrollbar">
+        <div className="flex px-1.5 pb-4 gap-1.5 overflow-x-auto no-scrollbar">
           {(['pending', 'accepted', 'completed', 'declined'] as const).map((statusOption) => {
             const count = quotes.filter(q => q.status === statusOption).length;
 
@@ -113,15 +167,15 @@ export default function MyRFQOffers() {
               <button
                 key={statusOption}
                 onClick={() => setFilter(statusOption)}
-                className={`flex-1 py-2 px-1 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shrink-0 ${filter === statusOption
-                  ? 'bg-primary text-white border-transparent '
-                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                className={`flex-1 py-2 px-1 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shadow-sm shrink-0 ${filter === statusOption
+                  ? 'bg-emerald-600 text-white border-transparent '
+                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
                   }`}
               >
                 <span>{statusOption}</span>
                 <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${filter === statusOption
-                  ? 'bg-white/25 text-white'
-                  : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                  ? 'bg-emerald-700 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                   }`}>
                   {count}
                 </span>
@@ -129,10 +183,7 @@ export default function MyRFQOffers() {
             );
           })}
         </div>
-      </div>
 
-      {/* ── CONTENT AREA ── */}
-      <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 pt-[calc(env(safe-area-inset-top,1rem)+5.85rem)]">
         <AnimatePresence>
           {filteredQuotes.length === 0 ? (
             <motion.div
@@ -166,7 +217,7 @@ export default function MyRFQOffers() {
                   transition={{ duration: 0.25, ease: 'easeOut' }}
                   key={quote.id}
                   onClick={() => navigate(`/my-rfq-offers/${quote.id}`)}
-                  className="bg-white dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
+                  className="bg-slate-50 dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
                 >
                   {/* Status accent bar on left edge */}
                   <div className={`absolute left-0 top-0 bottom-0 w-1 ${quote.status === 'accepted' ? 'bg-emerald-500' : quote.status === 'declined' ? 'bg-rose-500' : 'bg-amber-500'

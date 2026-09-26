@@ -31,6 +31,7 @@ const AgentTradeHub = lazy(() => import('./pages/agent/AgentTradeHub'));
 const AgentSellStock = lazy(() => import('./pages/agent/AgentSellStock'));
 const Sourcing = lazy(() => import('./pages/agent/Sourcing'));
 const MyTrades = lazy(() => import('./pages/agent/MyTrades'));
+const MyBids = lazy(() => import('./pages/agent/MyBids'));
 const MyRecommendations = lazy(() => import('./pages/agent/MyRecommendations'));
 const HygeneXPage = lazy(() => import('./pages/shared/HygeneXPage'));
 const CreateRFQPage = lazy(() => import('./pages/agent/CreateRFQPage'));
@@ -44,6 +45,8 @@ const NavigateGroupPickupPage = lazy(() => import('./pages/agent/NavigateGroupPi
 const ExpectedArrivalsPage = lazy(() => import('./pages/agent/ExpectedArrivalsPage'));
 const MarketPulse = lazy(() => import('./pages/agent/MarketPulse'));
 const DepositPage = lazy(() => import('./pages/agent/DepositPage'));
+const TradeDetailsPage = lazy(() => import('./pages/agent/TradeDetailsPage'));
+const JobDetailsPage = lazy(() => import('./pages/agent/JobDetailsPage'));
 
 // Settings Pages
 const SettingsMenu = lazy(() => import('./pages/settings/SettingsMenu'));
@@ -55,6 +58,7 @@ const NotificationsFeed = lazy(() => import('./pages/agent/NotificationsFeed'));
 const PrivacySecurityPage = lazy(() => import('./pages/settings/PrivacySecurityPage'));
 const SupportPage = lazy(() => import('./pages/settings/SupportPage'));
 const FeedbackPage = lazy(() => import('./pages/settings/FeedbackPage'));
+const GeneralSettingsPage = lazy(() => import('./pages/settings/GeneralSettingsPage'));
 import Welcome from './pages/auth/Welcome';
 import RoleSelection from './pages/auth/RoleSelection';
 import Login from './pages/auth/Login';
@@ -91,7 +95,6 @@ function MobileLayout() {
   const AGENT_NAV = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/jobs', icon: Briefcase, label: isFleetDriver ? 'Missions' : 'Jobs' },
-    ...(isFleetDriver ? [] : [{ path: '/warehouse', icon: Package, label: 'Warehouse' }]),
     { path: '/sourcing', icon: Store, label: 'MarketPlace' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
@@ -247,6 +250,7 @@ export default function App() {
             <Route path="/warehouse/trade" element={<AgentTradeHub />} />
             <Route path="/warehouse/sell" element={<AgentSellStock />} />
             <Route path="/sourcing" element={<Sourcing />} />
+            <Route path="/bids" element={<MyBids />} />
             <Route path="/market-pulse" element={<MarketPulse />} />
             <Route path="/rfq/create" element={<CreateRFQPage />} />
             <Route path="/rfqs" element={<MyRFQs />} />
@@ -256,11 +260,13 @@ export default function App() {
             <Route path="/pickups/:id" element={<ActivePickupDetailsPage />} />
             <Route path="/expected-arrivals" element={<ExpectedArrivalsPage />} />
             <Route path="/trades" element={<TradesOrRecommendations />} />
+            <Route path="/trades/:id" element={<TradeDetailsPage />} />
             <Route path="/wallet" element={<AgentWallet />} />
             <Route path="/payout-history" element={<PayoutHistory />} />
             <Route path="/deposit" element={<DepositPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/notifications" element={<NotificationsFeed />} />
+            <Route path="/jobs/:id" element={<JobDetailsPage />} />
 
             <Route path="/admin/services" element={<CompanyServicesConfigPage />} />
 
@@ -286,6 +292,7 @@ export default function App() {
               <Route path="privacy" element={<PrivacySecurityPage />} />
               <Route path="support" element={<SupportPage />} />
               <Route path="feedback" element={<FeedbackPage />} />
+              <Route path="general" element={<GeneralSettingsPage />} />
 
             </Route>
 

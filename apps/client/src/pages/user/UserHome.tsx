@@ -144,14 +144,15 @@ export default function UserHome() {
 
   return (
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 relative overflow-x-hidden  font-sans">
+      {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal isOpen={showPushPrompt} onClose={() => setShowPushPrompt(false)} />
 
-      {/* ── TOP SECTION: PREMIUM GRADIENT ── */}
-      <div className="bg-gradient-to-br from-primary via-primary/80 to-emerald-500 pt-[calc(env(safe-area-inset-top,1.5rem)+4rem)] pb-4 rounded-b-[2.5rem] shadow-lg shadow-emerald-900/20 relative z-20 overflow-hidden">
-        
+      {/* ── TOP SECTION ── */}
+      <div className="bg-gradient-to-b from-primary from-60% via-primary/80 to-[#f8fafc] dark:from-slate-800 dark:via-slate-800 dark:to-slate-800 relative z-10 pt-[calc(env(safe-area-inset-top,1.5rem)+4rem)] pb-16 overflow-hidden">
+      
         {/* Decorative background orbs */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-300/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none z-10" />
+        <div className="absolute top-[100px] left-0 w-48 h-48 bg-teal-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none z-10" />
 
         {/* ── TOP NAV (FIXED) ── */}
         <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 ${isScrolled ? 'bg-gradient-to-br from-primary to-emerald-600 backdrop-blur-md shadow-md border-b border-white/10' : 'bg-transparent '}`}>
@@ -205,11 +206,11 @@ export default function UserHome() {
         </div>
 
         {/* ── ECO-REWARDS HERO CARD ── */}
-        <div className="relative z-10 px-4 max-w-xl mx-auto mt-6">
+        <div className="relative z-10 px-2 max-w-xl mx-auto mt-6">
           <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative group overflow-hidden rounded-[24px] bg-white/10  border border-emerald-600  p-5">
-            <div className="absolute inset-0 bg-gradient-to-b from-emerald-600 to-emerald-600 pointer-events-none" />
-            <div className="relative z-10 flex flex-col gap-2">
-              <div className="flex justify-between items-start mb-1">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-700 to-emerald-800 pointer-events-none" />
+            <div className="relative z-10 flex flex-col gap-1">
+              <div className="flex justify-between items-start mb-2">
                 <div>
                   <p className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1">
                     <Wallet className="w-4 h-4" /> Wallet Balance
@@ -226,7 +227,7 @@ export default function UserHome() {
                 </button>
               </div>
 
-              <div className="flex items-center gap-1 pt-3 border-t border-white/20">
+              <div className="flex items-center gap-1 pt-2 border-t border-white/20">
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
                   <span className="text-base font-black text-white">{metrics.totalPickups}</span>
                   <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
@@ -245,7 +246,7 @@ export default function UserHome() {
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto px-2.5 space-y-5 pt-3 pb-5">
+      <div className="max-w-xl mx-auto px-2.5 space-y-5 -mt-10 pb-5 relative z-20">
 
         {/* ── ACTION HUB (QUICK LINKS + CTA) ── */}
         <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">

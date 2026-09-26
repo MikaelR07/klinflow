@@ -1,106 +1,118 @@
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Truck, Briefcase, ArrowRight, Brain, Zap, ShieldCheck, Navigation, UserCheck } from 'lucide-react';
-import { OptimizedImage } from '@klinflow/ui';
+import { Truck, UserCheck, ArrowRight, ArrowLeft, Leaf, ShieldCheck, Clock, TrendingUp, Navigation, Briefcase, Zap } from 'lucide-react';
+
+const roles = [
+  {
+    id: 'independent',
+    title: 'Independent Agent',
+    subtitle: 'Your Business, Your Rules',
+    description: 'Perfect for entrepreneurs with their own transport. Accept jobs, manage your own schedule, and earn directly for every kilogram you deliver to the market.',
+    icon: UserCheck,
+    cardClasses: 'bg-gradient-to-br from-primary to-emerald-700',
+    iconBg: 'rgba(255,255,255,0.15)',
+    benefits: [
+      { icon: Clock, text: 'Send contracts' },
+      { icon: TrendingUp, text: 'Direct earnings' },
+    ],
+  },
+  {
+    id: 'fleet_driver',
+    title: 'Fleet Driver',
+    subtitle: 'Optimized Operations',
+    description: 'Work for a registered logistics company. Follow assigned routes, manage professional fleet assets, and execute tasks as part of a larger recycling team.',
+    icon: Truck,
+    cardClasses: 'bg-gradient-to-br from-slate-800 to-slate-600',
+    iconBg: 'rgba(255,255,255,0.15)',
+    benefits: [
+      { icon: Briefcase, text: 'Assigned tasks' },
+      { icon: ShieldCheck, text: 'Fleet support ' },
+    ],
+  },
+];
 
 export default function RoleSelection() {
   const navigate = useNavigate();
 
-  const roles = [
-    {
-      id: 'independent',
-      title: 'Independent Agent',
-      subtitle: 'Your Business, Your Rules',
-      description: 'Perfect for entrepreneurs with their own transport. Accept jobs, manage your own schedule, and earn directly for every kilogram you deliver to the market.',
-      icon: UserCheck,
-      accent: 'emerald',
-      bgColor: 'bg-emerald-500',
-      borderColor: 'border-emerald-600',
-      iconColor: 'text-white',
-      textColor: 'text-emerald-600 dark:text-emerald-400',
-      benefits: ['Flexible Hours', 'Direct Earnings', 'Business Growth']
-    },
-    {
-      id: 'fleet_driver',
-      title: 'Fleet Driver',
-      subtitle: 'Optimized Operations',
-      description: 'Work for a registered logistics company. Follow assigned routes, manage professional fleet assets, and execute tasks as part of a larger recycling team.',
-      icon: Truck,
-      accent: 'blue',
-      bgColor: 'bg-blue-600',
-      borderColor: 'border-blue-700',
-      iconColor: 'text-white',
-      textColor: 'text-blue-600 dark:text-blue-400',
-      benefits: ['Assigned Tasks', 'Fleet Support', 'Smart Routing']
-    }
-  ];
-
   return (
-    <div className=" bg-slate-50 dark:bg-slate-900 flex flex-col p-4 relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+    <div className="flex flex-col bg-white min-h-[100dvh] w-full max-w-lg mx-auto relative font-sans">
 
-      <header className="relative z-10 pt-2 mb-3">
+      {/* Header */}
+      <div className="px-4 pt-[calc(env(safe-area-inset-top,1rem)+1rem)]">
         <button
           onClick={() => navigate(-1)}
-          className="p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-white/5 text-slate-400 shadow-sm"
+          className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors mb-8"
         >
-          <ArrowRight className="w-5 h-5 rotate-180" />
+          <ArrowLeft className="w-[18px] h-[18px]" />
         </button>
-        <p className="text-slate-500 dark:text-slate-400 font-medium mt-4">
-          How will you be operating within the network?
+
+        <h1 className="text-[28px] font-bold text-slate-900 leading-tight tracking-tight mb-1 text-center">
+          Agent Roles <br />Explained
+        </h1>
+        <p className="text-[15px] text-slate-500 leading-relaxed text-center">
+          Learn about the different ways you can operate within the Klinflow network.
         </p>
-      </header>
+      </div>
 
-      <div className="flex-1 space-y-3 relative z-10">
-        {roles.map((role, idx) => (
-          <motion.button
+      {/* Role Cards */}
+      <div className="flex-1 px-2 pt-4 space-y-2 pb-4">
+        {roles.map((role) => (
+          <div
             key={role.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            onClick={() => navigate(`/register?type=${role.id}`)}
-            className="w-full text-left group relative active:scale-[0.98] transition-transform"
+            className={`relative rounded-2xl p-6 shadow-lg ${role.cardClasses}`}
           >
-            {/* No Glow */}
-
-            <div className="relative bg-[#FFFFFF] dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 rounded-[2rem] p-5 transition-all md:group-hover:border-emerald-500/30 md:group-hover:-translate-y-1">
-              <div className="flex items-start justify-between mb-3">
-                <div className={`w-12 h-12 rounded-xl ${role.bgColor} flex items-center justify-center ${role.iconColor} border ${role.borderColor}`}>
-                  <role.icon className="w-6 h-6" />
-                </div>
+            {/* Header Row: Icon + Title */}
+            <div className="flex items-center gap-4 mb-4">
+              <div
+                className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                style={{ backgroundColor: role.iconBg }}
+              >
+                <role.icon className="w-5 h-5 text-white" />
               </div>
-
-              <h2 className="text-base font-semibold text-slate-900 dark:text-white mb-0.5">{role.title}</h2>
-              <p className={`text-[10px] font-semibold capitalize tracking-widest ${role.textColor} mb-2`}>{role.subtitle}</p>
-
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-3">
-                {role.description}
-              </p>
-
-              <div className="flex flex-wrap gap-1.5">
-                {role.benefits.map((benefit, bIdx) => (
-                  <div key={bIdx} className="flex items-center gap-1 px-2 py-1 bg-emerald-100 dark:bg-emerald-900 rounded-full border border-emerald-200 dark:border-emerald-800">
-                    <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-xs font-semibold text-emerald-800 dark:text-emerald-300">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="absolute bottom-5 right-5 w-8 h-8 rounded-full bg-slate-900 dark:bg-emerald-500 text-white flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-all translate-x-4 md:group-hover:translate-x-0 hidden md:flex">
-                <ArrowRight className="w-5 h-5" />
+              <div>
+                <h2 className="text-lg font-bold text-white tracking-tight mb-0.5">
+                  {role.title}
+                </h2>
+                <p className="text-[13px] font-semibold text-white/70">
+                  {role.subtitle}
+                </p>
               </div>
             </div>
-          </motion.button>
+            <p className="text-sm text-slate-200 leading-relaxed mb-5">
+              {role.description}
+            </p>
+
+            {/* Benefits */}
+            <div className="grid grid-cols-2 gap-2">
+              {role.benefits.map((benefit, i) => (
+                <div key={i} className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-xl">
+                  <benefit.icon className="w-3.5 h-3.5 text-white/60 shrink-0" />
+                  <span className="text-[11px] font-medium text-white/70">{benefit.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
 
-      <footer className="py-8 text-center relative z-10">
-        <p className="text-xs text-slate-400 font-medium">
-          Powered by <span className="text-emerald-500 font-semibold">Klinflow</span>
-        </p>
-      </footer>
+      {/* CTA Footer */}
+      <div className="px-6 pb-8 pt-2 space-y-3">
+        <button
+          onClick={() => navigate('/register')}
+          className="w-full py-[16px] bg-[#064e3b] text-white rounded-2xl font-bold text-[15px] shadow-lg shadow-emerald-900/20 transition-all flex items-center justify-center gap-2 active:scale-[0.98] hover:bg-[#022c22]"
+        >
+          Start Registration <ArrowRight className="w-[18px] h-[18px]" />
+        </button>
+        <div className="flex items-center justify-center gap-1.5">
+          <span className="text-sm font-medium text-slate-400">Already have an account?</span>
+          <button
+            onClick={() => navigate('/login')}
+            className="text-sm font-bold text-[#064e3b] hover:text-emerald-700 transition-colors"
+          >
+            Log In
+          </button>
+        </div>
+      </div>
+
     </div>
   );
 }

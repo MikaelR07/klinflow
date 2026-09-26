@@ -2,8 +2,7 @@
  * Agent Home — Command Center for Klinflow Founder Agents
  * Refactored: UI components extracted into `components/AgentHome`
  */
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Brain } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -16,7 +15,8 @@ import { toast } from 'sonner';
 
 import AgentHomeHeader from '../../features/agentHome/AgentHomeHeader';
 import AgentHomeStats from '../../features/agentHome/AgentHomeStats';
-import AgentHomeActivePickup from '../../features/agentHome/AgentHomeActivePickup';
+import AgentHomeMap from '../../features/agentHome/AgentHomeMap';
+import { useAgentLocation } from '../../features/agentHome/useAgentLocation';
 
 export default function AgentHome() {
   const profile = useAuthStore(s => (s as any).profile);
@@ -42,7 +42,7 @@ export default function AgentHome() {
 
   const [lastSynced, setLastSynced] = useState<Date>(new Date());
   const [performanceChange, setPerformanceChange] = useState<number>(0);
-  const [activePickup, setActivePickup] = useState<any>(null);
+
 
   useEffect(() => {
     const fetchDynamicData = async () => {
@@ -75,21 +75,6 @@ export default function AgentHome() {
         else setPerformanceChange(((todayCount - yesterdayCount) / yesterdayCount) * 100);
       }
 
-      // Fetch Active Pickup Quote
-      const { data: pickupData } = await supabase
-        .from('fulfillment_orders')
-        .select(`
-          id, status, pickup_address, created_at, actual_weight,
-          rfq:rfqs(category, material_grade, requested_weight)
-        `)
-        .eq('assigned_agent_id', profile.id)
-        .not('status', 'in', '(completed,cancelled,delivered,disputed,pickup_completed)')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
-
-      if (pickupData) setActivePickup(pickupData);
-      else setActivePickup(null);
 
       setLastSynced(new Date());
     };
@@ -153,32 +138,32 @@ export default function AgentHome() {
     };
   }, []);
 
-  useEffect(() => {
-    const isMobileAgent = profile?.agentAccountType === 'fleet_driver' ||
-      profile?.agentAccountType === 'independent' ||
-      profile?.agentAccountType === 'company_admin' ||
-      profile?.agentAccountType === 'owner';
+  // ── SINGLE GPS SOURCE: useAgentLocation ──
+  // Backend broadcasting is handled via the onLocationUpdate callback.
+  // This replaces the old duplicate watchPosition that was here.
+  const broadcastRef = useRef(broadcastLocation);
+  broadcastRef.current = broadcastLocation;
 
-    if (!profile?.isOnline || !isMobileAgent) return;
+  const handleLocationUpdate = useCallback((lat: number, lng: number, accuracy: number) => {
+    // Only broadcast to backend when agent is online and is a mobile agent
+    const currentProfile = useAuthStore.getState().profile as any;
+    const isMobileAgent = currentProfile?.agentAccountType === 'fleet_driver' ||
+      currentProfile?.agentAccountType === 'independent' ||
+      currentProfile?.agentAccountType === 'company_admin' ||
+      currentProfile?.agentAccountType === 'owner';
 
-    if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(pos => {
-        if (pos.coords.accuracy > 100) return;
-        broadcastLocation(pos.coords.latitude, pos.coords.longitude, 'active');
-      }, (err) => {
-        if (err.code === 3) {
-          console.warn('[GPS] Signal weak (timeout). Holding last known position...');
-        } else {
-          console.error('GPS Watch Error:', err);
-        }
-      }, {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 15000
-      });
-      return () => navigator.geolocation.clearWatch(watchId);
+    if (currentProfile?.isOnline && isMobileAgent) {
+      broadcastRef.current(lat, lng, 'active');
     }
-  }, [profile?.isOnline, broadcastLocation]);
+  }, []);
+
+  const {
+    position: agentPosition,
+    accuracy: agentAccuracy,
+    hasLocation,
+    permissionState,
+    error: locationError,
+  } = useAgentLocation(handleLocationUpdate);
 
   const handleToggle = async () => {
     if (isToggling) return;
@@ -189,23 +174,29 @@ export default function AgentHome() {
       let coords = null;
 
       if (isGoingOnline) {
-        const getCoords = () => new Promise<{ latitude: number; longitude: number }>((resolve, reject) => {
-          if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
-          navigator.geolocation.getCurrentPosition(
-            (pos) => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-            (err) => reject(err),
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-          );
-        });
-
-        try {
-          coords = await toast.promise(getCoords(), {
-            loading: '📡 Acquiring GPS signal...',
-            success: 'Location synced! You are now live.',
-            error: 'GPS error. Using last known location.',
+        // Use the continuous watcher's position if we already have it!
+        // This avoids creating a duplicate, competing GPS request.
+        if (agentPosition && hasLocation) {
+          coords = { latitude: agentPosition.lat, longitude: agentPosition.lng };
+        } else {
+          const getCoords = () => new Promise<{ latitude: number; longitude: number }>((resolve, reject) => {
+            if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
+            navigator.geolocation.getCurrentPosition(
+              (pos) => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+              (err) => reject(err),
+              { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
           });
-        } catch (err) {
-          coords = null;
+
+          try {
+            coords = await toast.promise(getCoords(), {
+              loading: '📡 Acquiring GPS signal...',
+              success: 'Location synced! You are now live.',
+              error: 'GPS error. Using last known location.',
+            });
+          } catch (err) {
+            coords = null;
+          }
         }
       }
 
@@ -225,7 +216,7 @@ export default function AgentHome() {
   };
 
   return (
-    <div className="space-y-6 px-1 pb-16">
+    <div className="relative h-[100dvh] bg-[#e5e9ea] dark:bg-slate-950 overflow-hidden font-sans -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] -mb-[calc(env(safe-area-inset-bottom,0px)+6rem)]" style={{ width: 'calc(100% + 0.5rem)' }}>
       <PushNotificationModal
         isOpen={showPushPrompt}
         onClose={() => setShowPushPrompt(false)}
@@ -240,6 +231,16 @@ export default function AgentHome() {
         lastSynced={lastSynced}
       />
 
+      {/* ── LEAFLET MAP ── */}
+      <AgentHomeMap
+        isOnline={!!profile?.isOnline}
+        agentPosition={agentPosition}
+        agentAccuracy={agentAccuracy}
+        hasLocation={hasLocation}
+        permissionState={permissionState}
+        locationError={locationError}
+      />
+
       <AgentHomeStats
         profile={profile}
         earnings={earnings}
@@ -248,22 +249,16 @@ export default function AgentHome() {
         navigate={navigate}
       />
 
-      <AgentHomeActivePickup
-        activePickup={activePickup}
-        navigate={navigate}
-      />
-
-
       {/* Floating AI Voice Assistant */}
-      <motion.button
+      {/* <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => navigate('/hygenex')}
-        className="fixed bottom-20 right-2 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 dark:border-slate-800"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom,1rem)+17rem)] right-4 w-14 h-14 bg-emerald-500 rounded-full flex items-center justify-center z-50 shadow-xl border-2 border-white dark:border-slate-800"
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
         <Brain className="w-6 h-6 text-white" />
-      </motion.button>
+      </motion.button> */}
     </div>
   );
 }

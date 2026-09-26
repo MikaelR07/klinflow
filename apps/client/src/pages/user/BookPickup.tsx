@@ -34,9 +34,21 @@ import BookPickupConfirmModal from '../../features/bookPickup/BookPickupConfirmM
 
 const userIcon = L.divIcon({
   className: 'custom-user-icon',
-  html: `<div class="w-6 h-6 rounded-full bg-slate-900 border-2 border-white shadow-lg flex items-center justify-center"><span class="text-xs">🏠</span></div>`,
-  iconSize: [24, 24],
-  iconAnchor: [12, 12]
+  html: `
+    <div style="position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:40px;height:56px;">
+      <div style="position:absolute;bottom:0;width:40px;height:40px;border-radius:50%;background:rgba(16,185,129,0.3);animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite;"></div>
+      <svg style="position:relative;z-index:10;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.3));" width="28" height="42" viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 0C7.16 0 0 7.16 0 16c0 12 16 28 16 28s16-16 16-28C32 7.16 24.84 0 16 0z" fill="#0f172a"/>
+        <circle cx="16" cy="15" r="7" fill="white"/>
+        <circle cx="16" cy="15" r="3.5" fill="#10b981"/>
+      </svg>
+    </div>
+    <style>
+      @keyframes ping { 75%,100% { transform:scale(2.5); opacity:0; } }
+    </style>
+  `,
+  iconSize: [40, 56],
+  iconAnchor: [20, 56]
 });
 
 const agentIcon = (isSelected: boolean, isCompany = false) => L.divIcon({

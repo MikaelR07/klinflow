@@ -34,6 +34,11 @@ export default function Register() {
   const navigate = useNavigate();
   const { register, checkAvailability, sendOtp, verifyOtp } = useAuthStore();
 
+  const roleTabs = [
+    { id: ROLES.USER, label: 'Resident / Business', icon: HomeIcon },
+    { id: 'seller', label: 'Pro-Seller', icon: ShoppingBag },
+  ];
+
   // ── WEB OTP API LISTENER ──────────────────────────────────────────
   useEffect(() => {
     if (!isVerifying) return;
@@ -183,17 +188,34 @@ export default function Register() {
 
         {/* Scrollable Foreground */}
         <div className="flex-1 w-full relative z-10 overflow-y-auto overflow-x-hidden flex flex-col">
-          <div className="flex-1 flex flex-col px-6 pt-10 pb-8 bg-white rounded-t-[40px] mt-[30vh] shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
+          <div className="flex-1 flex flex-col px-6 pt-4 pb-8 bg-white rounded-t-[40px] mt-[42vh] shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
             
             {/* Header */}
-            <div className="mb-6">
-              <h1 className="text-[28px] font-bold text-emerald-700 mb-1.5 tracking-tight">Create your account</h1>
-              <p className="text-[#64748b] text-[15px] leading-relaxed max-w-[300px]">
-                {currentStep === 1 ? 'Join the Klinflow community and turn recyclables into value.' : 'Secure your account and set your location.'}
-              </p>
+            <div className="mb-1">
+              <h1 className="text-[24px] font-bold text-emerald-700 mb-1.5 tracking-tight">Create your account</h1>
             </div>
 
-          <form onSubmit={initiateRegistration} className="space-y-3.5 flex-1">
+            {currentStep === 1 && (
+              <div className="flex bg-slate-100 rounded-2xl p-1.5 mb-2">
+                {roleTabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, role: tab.id }))}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-[13px] font-bold transition-all ${
+                      formData.role === tab.id
+                        ? 'bg-emerald-200 text-emerald-900 shadow-sm'
+                        : 'text-slate-400 hover:text-slate-500'
+                    }`}
+                  >
+                    <tab.icon className="w-4 h-4" />
+                    <span className="truncate">{tab.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+          <form onSubmit={initiateRegistration} className="space-y-2.5 flex-1">
             {currentStep === 1 ? (
               <>
             

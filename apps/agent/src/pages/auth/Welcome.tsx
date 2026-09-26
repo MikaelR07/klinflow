@@ -1,140 +1,139 @@
-import { useNavigate } from "react-router-dom";
-import {
-  ArrowRight,
-  Truck,
-  Brain,
-  Zap,
-  Sparkles,
-  Briefcase,
-  TrendingUp,
-  Store,
-  CreditCard,
-} from "lucide-react";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowRight, ArrowLeft, Truck } from 'lucide-react';
+
+const slides = [
+  {
+    image: '/welcome/welcome1.webp',
+    title: <>Your Direct <br/> <span className="text-emerald-500">Marketplace.</span></>,
+    subtitle: 'Connect directly to a thriving marketplace to access, request, and trade recyclable materials effortlessly.',
+  },
+  {
+    image: '/welcome/welcome2.webp',
+    title: <>All The Materials <br/> <span className="text-emerald-500">You Need.</span></>,
+    subtitle: 'From plastics, metals, Papers and more, gain instant access to a diverse range of graded materials.',
+  },
+  {
+    image: '/welcome/welcome3.webp',
+    title: <>Built for <br/> <span className="text-emerald-500">Every Agent.</span></>,
+    subtitle: 'Whether you\'re an independent agent, a fleet driver, or a company owner needing full operational overview, Klinflow adapts to you.',
+  },
+];
 
 export default function Welcome() {
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = () => {
+    if (currentSlide < 2) {
+      setCurrentSlide(prev => prev + 1);
+    } else {
+      navigate('/role-selection');
+    }
+  };
 
   return (
-    <div className="min-h-[100dvh] bg-slate-50 dark:bg-slate-900 flex flex-col p-4 overflow-hidden relative">
-      {/* Background Decor */}
-      <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-green-500/10 rounded-full blur-3xl" />
-
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="flex-1 flex flex-col"
-      >
-        {/* Hero Section */}
-        <div className="flex-1 flex flex-col justify-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 mb-4 w-fit">
-            <Sparkles className="w-4 h-4 text-emerald-500" />
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest">
-              Logistics & Dispatch
-            </span>
+    <div className="flex flex-col bg-white dark:bg-slate-900 h-[100dvh] fixed inset-0 w-full max-w-lg mx-auto relative overflow-hidden font-sans">
+      
+      {/* ── HEADER (Logo & Pagination) ── */}
+      <div className="absolute top-0 left-0 right-0 z-50 px-6 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-4">
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-4">
+            {currentSlide > 0 && (
+              <button 
+                onClick={() => setCurrentSlide(prev => prev - 1)}
+                className="w-10 h-10 shrink-0 rounded-full bg-slate-900/10 dark:bg-white/10 backdrop-blur-md flex items-center justify-center hover:bg-slate-900/20 transition-all active:scale-95 animate-in fade-in zoom-in duration-200"
+              >
+                <ArrowLeft className="w-5 h-5 text-slate-900 dark:text-white" />
+              </button>
+            )}
+            <div className="flex items-center gap-2">
+             
+              {currentSlide === 0 && (
+                <div className="flex flex-col animate-in fade-in slide-in-from-left-2 duration-300">
+                  <span className="text-xl font-bold text-slate-900 dark:text-white leading-none tracking-tight">Klinflow Agent</span>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Logistics & Dispatch</span>
+                </div>
+              )}
+            </div>
           </div>
 
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white leading-[0.95] mb-2 tracking-tighter">
-            Clean Cities & <br />
-            <span className="text-emerald-500 ">Unlimited Earnings.</span>
-          </h1>
-
-          <p className="text-lg text-slate-500 dark:text-slate-400 font-medium max-w-sm mb-4 leading-relaxed">
-            Klinflow Agent is the command center for modern recyclers. Navigate,
-            collect, and trade waste-assets with AI-powered efficiency.
-          </p>
-
-          {/* Feature Highlights */}
-          <div className="grid grid-cols-1 gap-8 mb-12">
-            <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-emerald-500 shrink-0 border border-slate-100 dark:border-slate-700">
-                <Brain className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="font-semibold text-slate-900 dark:text-white text-base">
-                  HygeneX Ops Manager
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-                  Let AI optimize your routes and grade your collections.
-                  Minimize fuel, maximize recovery, and grow your recycling
-                  empire.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-blue-500 shrink-0 border border-slate-100 dark:border-slate-700">
-                <Store className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="font-semibold text-slate-900 dark:text-white text-base">
-                  Waste Marketplace
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-                  Sell your collected inventory directly to Weaver Hubs. Get
-                  instant payouts and access top market prices for every
-                  kilogram.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-amber-500 shrink-0 border border-slate-100 dark:border-slate-700">
-                <Truck className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="font-semibold text-slate-900 dark:text-white text-base">
-                  Fleet Operations Hub
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-                  Own a fleet? Manage your entire team from one dashboard.
-                  Monitor collections in real-time, track aggregate earnings,
-                  and optimize your logistics network.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-4 group">
-              <div className="w-14 h-14 rounded-2xl bg-white dark:bg-slate-800  flex items-center justify-center text-orange-500 shrink-0 border border-slate-100 dark:border-slate-700">
-                <CreditCard className="w-7 h-7" />
-              </div>
-              <div>
-                <p className="font-semibold text-slate-900 dark:text-white text-base">
-                  Micro-Credit for Growth
-                </p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
-                  Need a better truck or more bags? Access low-interest
-                  micro-credit based on your verified collection performance and
-                  asset history.
-                </p>
-              </div>
-            </div>
+          {/* Pagination Dots */}
+          <div className="flex items-center gap-1.5">
+            {[0, 1, 2].map((i) => (
+              <button 
+                key={i}
+                onClick={() => setCurrentSlide(i)}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  currentSlide === i 
+                    ? 'w-5 bg-emerald-500' 
+                    : 'w-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300'
+                }`}
+              />
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* Footer Actions */}
-        <div className="relative z-10  space-y-2">
-          <button
-            onClick={() => navigate("/role-selection")}
-            className="w-full py-3 bg-emerald-600 text-white rounded-[2rem] font-semibold text-base flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+      {/* ── SLIDES TRACK ── */}
+      <motion.div
+        className="absolute inset-0 flex w-[300%]"
+        animate={{ x: `${-currentSlide * (100 / 3)}%` }}
+        transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
+      >
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className="relative w-1/3 h-full flex flex-col bg-white dark:bg-slate-900"
           >
-            Start Collecting <ArrowRight className="w-5 h-5" />
+            {/* Top Image Section */}
+            <div className="flex-1 w-full relative z-0">
+              <img
+                src={slide.image}
+                alt={`Slide ${index + 1}`}
+                className="absolute inset-0 w-full h-full object-cover object-top"
+                draggable={false}
+              />
+            </div>
+
+            {/* Bottom Text Section */}
+            <div className="w-full bg-white dark:bg-slate-900 px-6 pt-4 pb-[130px] relative z-20 rounded-t-xl -mt-[30px] shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
+              <h1 className="text-[28px] font-black text-slate-900 dark:text-white leading-[1.15] mb-2 tracking-tight">
+                {slide.title}
+              </h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-[400px] leading-relaxed">
+                {slide.subtitle}
+              </p>
+            </div>
+          </div>
+        ))}
+      </motion.div>
+
+      {/* ── SHARED BOTTOM FOOTER ── */}
+      <div className="absolute bottom-0 left-0 right-0 z-50 pb-8 px-6 pointer-events-none">
+        {/* Action Button & Login */}
+        <div className="space-y-3 pointer-events-auto">
+          <button
+            onClick={nextSlide}
+            className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black text-base shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+          >
+            {currentSlide === 2 ? 'Get Started' : 'Next'} <ArrowRight className="w-5 h-5" />
           </button>
 
-          <div className="flex items-center justify-center gap-2">
-            <p className="text-sm text-slate-400 font-medium">
-              Already an Agent?
-            </p>
-            <button
-              onClick={() => navigate("/login")}
-              className="text-sm text-emerald-500 font-semibold capitalize tracking-widest"
+          {/* Login Link */}
+          <div className="flex items-center justify-center gap-1.5">
+            <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Already an Agent?</span>
+            <button 
+              onClick={() => navigate('/login')}
+              className="text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 transition-colors"
             >
               Log In
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
+
     </div>
   );
 }

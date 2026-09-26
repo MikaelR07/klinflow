@@ -25,7 +25,7 @@ export default function MarketIntelPricesTab({ marketData, filteredTrends }: Mar
         <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-orange-500/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
         
-        <div className="relative z-10 flex flex-col gap-4">
+        <div className="relative z-10 flex flex-col gap-3">
           <div className="flex items-center justify-between border-b border-amber-500/15 pb-2.5">
             <h3 className="text-[10px] font-bold capitalize tracking-[0.2em] text-white">Market Overview</h3>
             <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase text-white">

@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, PackageCheck, MapPin, Phone, Truck, ShieldCheck, Clock, CheckCircle2, Eye, Info, Navigation, Activity } from 'lucide-react';
+import { ArrowLeft, PackageCheck, MapPin, Phone, Truck, ShieldCheck, Clock, CheckCircle2, Eye, Info, Navigation, Activity, FastForward } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { supabase } from '@klinflow/supabase';
 import { OptimizedImage } from '@klinflow/ui';
 import { format } from 'date-fns';
+import { useFulfillmentStore } from '@klinflow/core/stores/fulfillmentStore';
+import { useServiceStore } from '@klinflow/core/stores/serviceStore';
+import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
+import VerificationWorkflowModal from '../../components/fulfillment/VerificationWorkflowModal';
+import { toast } from 'sonner';
 
 const STATUS_PIPELINE = [
   'agent_assigned',
@@ -39,7 +44,17 @@ export default function ActivePickupDetailsPage() {
   const [order, setOrder] = useState<any>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
+  const { updateFulfillmentStatus } = useFulfillmentStore();
+  const { materialPrices, fetchMaterialPrices, categories, fetchCategories } = useServiceStore();
+  const [isVerificationOpen, setIsVerificationOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const isCompanyAdmin = profile?.agentAccountType === 'company_admin';
+
+  useEffect(() => {
+    if (materialPrices.length === 0) fetchMaterialPrices();
+    if (categories.length === 0) fetchCategories();
+  }, [fetchMaterialPrices, fetchCategories]);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -50,7 +65,7 @@ export default function ActivePickupDetailsPage() {
         .select(`
           *,
           rfq:rfqs(*),
-          proposal:rfq_offers(*, seller:profiles!rfq_offers_seller_id_fkey(name, company_name)),
+          proposal:rfq_offers(*, seller:profiles!rfq_offers_seller_id_fkey(name, company_name, phone, avatar_url)),
           agent:profiles!fulfillment_orders_assigned_agent_id_fkey(name, phone, avatar_url),
           verifications:material_verifications(*)
         `)
@@ -114,8 +129,20 @@ export default function ActivePickupDetailsPage() {
   const verification = order.verifications?.[0]; // Assuming one verification per order for simplicity
   const images = verification?.photos || order.rfq?.images || [];
 
+  const sellerName = order.proposal?.seller?.company_name || order.proposal?.seller?.name || 'Seller';
+  const sellerPhone = order.proposal?.seller?.phone || '+254700000000';
+  const location = order.pickup_address || order.rfq?.pickup_area || 'Address not specified';
+
+  const materialName = order.rfq ? (
+    materialPrices?.find(m => m.id === order.rfq.material_grade)?.material_name
+    || getSubcategoryLabel(order.rfq.category, order.rfq.material_grade)
+    || categories?.find(c => c.id === order.rfq.category)?.label
+    || order.rfq.category
+    || 'Material'
+  ) : 'Material';
+
   return (
-    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-16 transition-colors">
+    <div className="flex flex-col max-w-lg mx-auto bg-white dark:bg-slate-800 pb-16 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
@@ -125,7 +152,7 @@ export default function ActivePickupDetailsPage() {
           <div>
             <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Pickup Details</h1>
             <p className="text-[10px] font-bold text-amber-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> Live Monitoring
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 " />Active RFQ Pickup
             </p>
           </div>
         </div>
@@ -173,147 +200,83 @@ export default function ActivePickupDetailsPage() {
           </div>
         )}
 
-        {/* ── ORDER DETAILS ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
-          <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-            <Info className="w-4 h-4" /> Pickup Details
-          </h3>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Material Requested</p>
-              <h2 className="text-[15px] font-black text-slate-900 dark:text-white capitalize leading-tight">{order.rfq?.category || 'Material'}</h2>
-            </div>
-            
-            <div>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Volume</p>
-              <p className="text-[15px] font-black text-emerald-600 leading-none">{order.proposal?.offered_weight}kg</p>
-            </div>
-
-            <div>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Seller Name</p>
-              <p className="text-[13px] font-bold text-slate-900 dark:text-white capitalize leading-tight">
-                {order.proposal?.seller?.company_name || order.proposal?.seller?.name || 'Unknown Seller'}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offer Price</p>
-              <p className="text-[13px] font-bold text-emerald-600 leading-tight">
-                KSh {order.proposal?.offered_price}
-              </p>
-            </div>
-
-            <div className="col-span-2 flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p>
-                <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300">{order.pickup_address || order.rfq?.pickup_area || 'Address not specified'}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── TRACKING PROGRESS (Horizontal) ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <Activity className="w-4 h-4" /> Live Progress
-            </h3>
-            <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${statusConfig.color}`}>
-              {statusConfig.label}
-            </span>
-          </div>
-
-          {/* Row 1: Steps 1-3 */}
-          <div className="flex items-start relative mb-6">
-            {STATUS_PIPELINE.slice(0, 3).map((step, i) => {
-              const currentIdx = STATUS_PIPELINE.indexOf(order.status);
-              const isCompleted = i < currentIdx || currentIdx === -1 && ['completed', 'delivered'].includes(order.status);
-              const isCurrent = i === currentIdx;
-              const stepDisplay = getStatusDisplay(step);
-              return (
-                <div key={step} className="flex flex-col items-center flex-1 relative">
-                  {i < 2 && (
-                    <div className={`absolute top-2.5 left-[50%] w-full h-[2px] ${isCompleted ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'}`} style={{ zIndex: 0 }} />
-                  )}
-                  <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 mb-2 relative z-10 ${
-                    isCompleted ? 'bg-emerald-500 border-emerald-500' : 
-                    isCurrent ? 'bg-white border-blue-500 dark:bg-slate-900 shadow-[0_0_0_4px_rgba(59,130,246,0.2)]' : 
-                    'bg-white border-slate-300 dark:bg-slate-900 dark:border-slate-700'
-                  }`} />
-                  <p className={`text-[9px] font-bold text-center uppercase tracking-wider leading-tight transition-colors px-1 ${
-                    isCompleted ? 'text-slate-900 dark:text-white' :
-                    isCurrent ? 'text-blue-600 dark:text-blue-400' :
-                    'text-slate-400'
-                  }`}>
-                    {stepDisplay.label}
-                  </p>
+        {/* ── COMBINED SELLER INFO & DETAILS GRID ── */}
+        <div className="bg-slate-50 dark:bg-slate-900/60 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm mb-4 mt-2 overflow-hidden flex flex-col">
+          {/* HEADER: SELLER INFO */}
+          <div className="flex items-center justify-between p-4 border-b border-slate-200/60 dark:border-slate-800/60">
+            <div className="flex items-center gap-3.5">
+              {order.proposal?.seller?.avatar_url ? (
+                <img src={order.proposal.seller.avatar_url} alt={sellerName} className="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-100 dark:border-emerald-900/50" />
+              ) : (
+                <div className="w-14 h-14 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-2xl border border-emerald-100 dark:border-emerald-800/50">
+                  {sellerName.charAt(0)}
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Row 2: Steps 4-6 */}
-          <div className="flex items-start relative">
-            {STATUS_PIPELINE.slice(3).map((step, i) => {
-              const realIdx = i + 3;
-              const currentIdx = STATUS_PIPELINE.indexOf(order.status);
-              const isCompleted = realIdx < currentIdx || currentIdx === -1 && ['completed', 'delivered'].includes(order.status);
-              const isCurrent = realIdx === currentIdx;
-              const stepDisplay = getStatusDisplay(step);
-              return (
-                <div key={step} className="flex flex-col items-center flex-1 relative">
-                  {i < 2 && (
-                    <div className={`absolute top-2.5 left-[50%] w-full h-[2px] ${isCompleted ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-700'}`} style={{ zIndex: 0 }} />
-                  )}
-                  <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 mb-2 relative z-10 ${
-                    isCompleted ? 'bg-emerald-500 border-emerald-500' : 
-                    isCurrent ? 'bg-white border-blue-500 dark:bg-slate-900 shadow-[0_0_0_4px_rgba(59,130,246,0.2)]' : 
-                    'bg-white border-slate-300 dark:bg-slate-900 dark:border-slate-700'
-                  }`} />
-                  <p className={`text-[9px] font-bold text-center uppercase tracking-wider leading-tight transition-colors px-1 ${
-                    isCompleted ? 'text-slate-900 dark:text-white' :
-                    isCurrent ? 'text-blue-600 dark:text-blue-400' :
-                    'text-slate-400'
-                  }`}>
-                    {stepDisplay.label}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-
-
-        {/* ── AGENT INFO ── */}
-        {order.agent && (
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm flex items-center justify-between mt-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
-                {order.agent.avatar_url ? (
-                  <OptimizedImage src={order.agent.avatar_url} alt="Agent" className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
-                ) : (
-                  '👤'
-                )}
-              </div>
+              )}
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Assigned Agent</p>
-                <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{order.agent.name}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Pickup From</p>
+                <h3 className="text-base font-black text-slate-900 dark:text-white leading-none tracking-tight">{sellerName}</h3>
               </div>
             </div>
-            {order.agent.phone && (
-              <a href={`tel:${order.agent.phone}`} className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 text-blue-500 flex items-center justify-center active:scale-95 transition-all">
+            {order.proposal?.seller?.phone && (
+              <button
+                onClick={() => window.location.href = `tel:${order.proposal.seller.phone}`}
+                className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center active:scale-95 transition-all shadow-md shadow-emerald-500/20 shrink-0"
+              >
                 <Phone className="w-5 h-5" />
-              </a>
+              </button>
             )}
           </div>
-        )}
+
+          {/* DETAILS GRID */}
+          <div className="p-5 space-y-5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <Info className="w-4 h-4" /> Mission Details
+              </h3>
+              <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${statusConfig.color}`}>
+                {statusConfig.label}
+              </span>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+              <div className="flex items-start gap-3">
+                <PackageCheck className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
+                  <p className="text-sm font-black text-slate-900 dark:text-white capitalize leading-tight">{materialName}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <Activity className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Volume</p>
+                  <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{order.proposal?.offered_weight}kg</p>
+                </div>
+              </div>
+
+              <div className="col-span-2 flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Pickup Location</p>
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 leading-snug block">{location}</span>
+                </div>
+              </div>
+
+              <div className="col-span-2 flex items-start gap-3 pt-2 border-t border-dashed border-slate-100 dark:border-slate-800">
+                <Clock className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Agreed Rate</p>
+                  <p className="text-sm font-black text-emerald-600 dark:text-emerald-400 leading-none">KSh {order.proposal?.offered_price} / kg</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* ── VERIFICATION DATA (If Available) ── */}
         {verification && (
-          <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-3xl p-5 border border-emerald-100 dark:border-emerald-800/40 shadow-sm space-y-4">
+          <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-3xl p-5 border border-emerald-100 dark:border-emerald-800/40 shadow-sm space-y-4 mb-4">
             <h3 className="text-[11px] font-bold text-emerald-600 uppercase tracking-widest flex items-center gap-2">
               <ShieldCheck className="w-4 h-4" /> Verified Material Info
             </h3>
@@ -332,7 +295,102 @@ export default function ActivePickupDetailsPage() {
           </div>
         )}
 
+        {/* ── AGENT ACTION BUTTONS ── */}
+        {!isCompanyAdmin && order && (
+          <div className="pt-2 pb-6 flex flex-col gap-3">
+            {['agent_assigned', 'pending_coordination', 'pickup_scheduled'].includes(order.status) && (
+              <>
+                <button
+                  onClick={async () => {
+                    setIsUpdating(true);
+                    try {
+                      await updateFulfillmentStatus(order.id, 'agent_on_the_way');
+                      navigate(`/pickups/navigate/${order.id}`);
+                    } catch (e) {
+                      toast.error('Failed to start route');
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                  disabled={isUpdating}
+                  className="w-full py-4 rounded-2xl bg-blue-600 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50"
+                >
+                  <Navigation className="w-4 h-4" /> Navigate to Seller
+                </button>
+                <button
+                  onClick={async () => {
+                    setIsUpdating(true);
+                    try {
+                      await updateFulfillmentStatus(order.id, 'agent_on_the_way');
+                    } catch (e) {
+                      toast.error('Failed to update status');
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                  disabled={isUpdating}
+                  className="w-full py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border-2 border-blue-100 dark:border-blue-900/30 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
+                >
+                  <FastForward className="w-4 h-4" /> I Know The Way
+                </button>
+              </>
+            )}
+
+            {order.status === 'agent_on_the_way' && (
+              <button
+                onClick={async () => {
+                  setIsUpdating(true);
+                  try {
+                    await updateFulfillmentStatus(order.id, 'arrived');
+                  } catch (e) {
+                    toast.error('Failed to update status');
+                  } finally {
+                    setIsUpdating(false);
+                  }
+                }}
+                disabled={isUpdating}
+                className="w-full py-4 rounded-2xl bg-emerald-500 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
+              >
+                <MapPin className="w-4 h-4" /> I've Arrived
+              </button>
+            )}
+
+            {order.status === 'arrived' && (
+              <button
+                onClick={() => setIsVerificationOpen(true)}
+                className="w-full py-4 rounded-2xl bg-amber-500 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-amber-500/20"
+              >
+                <ShieldCheck className="w-4 h-4" /> Verify Material
+              </button>
+            )}
+
+            {!['agent_assigned', 'pending_coordination', 'pickup_scheduled', 'agent_on_the_way', 'arrived'].includes(order.status) && !['completed', 'delivered', 'pickup_completed', 'in_transit'].includes(order.status) && (
+              <div className="flex gap-2">
+                {order.proposal?.seller?.phone && (
+                  <a href={`tel:${order.proposal.seller.phone}`} className="flex-[0.5] py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <Phone className="w-4 h-4" /> Call
+                  </a>
+                )}
+                <button
+                  onClick={() => setIsVerificationOpen(true)}
+                  className="flex-1 py-4 rounded-2xl bg-emerald-500 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-emerald-500/20"
+                >
+                  <ShieldCheck className="w-4 h-4" /> View Verification
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
+      
+      {isVerificationOpen && order && (
+        <VerificationWorkflowModal
+          isOpen={isVerificationOpen}
+          onClose={() => setIsVerificationOpen(false)}
+          order={order}
+        />
+      )}
     </div>
   );
 }

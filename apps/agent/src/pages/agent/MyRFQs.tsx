@@ -107,6 +107,13 @@ export default function MyRFQs() {
               </p>
             </div>
           </div>
+          
+          <button
+            onClick={() => navigate('/rfq/create')}
+            className="w-[38px] h-[38px] shrink-0 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-sm active:scale-95 transition-all hover:bg-amber-600"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          </button>
         </div>
 
         {/* Status Filters (Exactly styled like seller pipeline page) */}
@@ -181,59 +188,58 @@ export default function MyRFQs() {
                   transition={{ duration: 0.25, ease: 'easeOut' }}
                   key={rfq.id}
                   onClick={() => navigate(`/rfqs/${rfq.id}`)}
-                  className="bg-white dark:bg-slate-900/60 border-b border-slate-100 dark:border-slate-700 cursor-pointer select-none group"
+                  className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 cursor-pointer select-none group active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors relative overflow-hidden"
                 >
-                  <div className="py-3 px-3.5">
-                    <div className="flex gap-3">
-                      <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800 relative">
-                        {rfq.images && rfq.images.length > 0 ? (
-                          <OptimizedImage src={rfq.images[0]} alt={rfq.material} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
-                        ) : (
-                          <Package className="w-5 h-5 text-slate-300 dark:text-slate-600" />
+                  <div className={`absolute left-0 top-0 bottom-0 w-1 ${rfq.status === 'pending' ? 'bg-amber-500' : rfq.status === 'accepted' ? 'bg-emerald-500' : rfq.status === 'completed' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+                  <div className="flex gap-3 pl-4 pr-3.5 py-3">
+                    <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
+                      {rfq.images && rfq.images.length > 0 ? (
+                        <OptimizedImage src={rfq.images[0]} alt={rfq.material} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
+                      ) : (
+                        <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
+                      {/* Row 1: Material & Budget */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
+                            {materialPrices?.find(m => m.id === rfq.material)?.material_name || getSubcategoryLabel(rfq.category, rfq.material) || rfq.material}
+                          </h3>
+                          <div className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border} shrink-0`}>
+                            <StatusIcon className="w-2.5 h-2.5" />
+                            <span className="text-[8px] font-semibold uppercase tracking-wider leading-none">{statusConfig.label}</span>
+                          </div>
+                        </div>
+                        <div className="text-right shrink-0 ml-2 mt-1">
+                          <p className="text-base font-black text-emerald-600 leading-none tracking-tighter">KSh {rfq.targetPrice}<span className="text-[9px] text-emerald-600/70 font-black">/kg</span></p>
+                        </div>
+                      </div>
+
+                      {/* Row 2: Location & Bids */}
+                      <div className="flex items-center justify-between mt-0.5">
+                        <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                          <MapPin className="w-3 h-3 text-emerald-600" /> {rfq.location.split(',')[0]}
+                        </p>
+                        {rfq.bidsCount > 0 && (
+                          <span className="px-1 py-0.5 bg-amber-500/10 text-amber-600 text-[8px] font-black uppercase tracking-widest rounded shrink-0">
+                            {rfq.bidsCount} BID{rfq.bidsCount !== 1 ? 'S' : ''}
+                          </span>
                         )}
                       </div>
-                      <div className="flex-1 min-w-0 flex flex-col justify-center">
-                        {/* Row 1: Material & Budget */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 min-w-0">
-                            <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate tracking-tight">
-                              {materialPrices?.find(m => m.id === rfq.material)?.material_name || getSubcategoryLabel(rfq.category, rfq.material) || rfq.material}
-                            </h3>
-                            <div className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border} shrink-0`}>
-                              <StatusIcon className="w-2.5 h-2.5" />
-                              <span className="text-[8px] font-semibold uppercase tracking-wider leading-none">{statusConfig.label}</span>
-                            </div>
-                          </div>
-                          <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {rfq.targetPrice}/kg</span>
-                        </div>
 
-                        {/* Row 2: Location & Bids */}
-                        <div className="flex items-center justify-between mt-0.5">
-                          <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                            <MapPin className="w-2.5 h-2.5 text-green-500" /> {rfq.location.split(',')[0]}
-                          </p>
-                          {rfq.bidsCount > 0 && (
-                            <span className="px-1 py-0.5 bg-amber-500/10 text-amber-600 text-[6px] font-black capitalize tracking-[0.2em] rounded shrink-0">
-                              {rfq.bidsCount} BID{rfq.bidsCount !== 1 ? 'S' : ''}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Row 3: Quantity & Date */}
-                        <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50 mt-1">
-                          <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
-                            <Clock className="w-2.5 h-2.5 text-slate-400" /> {rfq.createdAt ? new Date(rfq.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}
-                          </p>
-                          <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
-                            <span className="text-[9px] text-slate-400 not-italic font-bold mr-1 opacity-70">Quantity:</span>
-                            <Scale className="w-2.5 h-2.5" /> {rfq.quantity}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-center text-slate-300">
-                        <ChevronRight className="w-4 h-4" />
+                      {/* Row 3: Quantity & Date */}
+                      <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50 mt-1">
+                        <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
+                          <Clock className="w-2.5 h-2.5 text-slate-900" /> {rfq.createdAt ? new Date(rfq.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}
+                        </p>
+                        <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
+                          <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span>
+                          <Scale className="w-2.5 h-2.5" /> {rfq.quantity}
+                        </p>
                       </div>
                     </div>
+                    <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
                   </div>
                 </motion.div>
               );

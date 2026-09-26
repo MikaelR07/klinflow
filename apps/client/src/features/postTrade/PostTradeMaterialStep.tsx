@@ -141,7 +141,7 @@ export default function PostTradeMaterialStep({
                   : 'border-slate-100 dark:border-slate-800 hover:border-emerald-500/40'
                   }`}
                 style={bgImage ? {
-                  backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.6)), url(${bgImage})`,
+                  backgroundImage: `url(${bgImage})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
                 } : {}}
@@ -149,12 +149,11 @@ export default function PostTradeMaterialStep({
                 {!bgImage && <div className={`absolute inset-0 ${isSelected ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : 'bg-slate-100 dark:bg-slate-800'}`} />}
                 {!bgImage && <div className="absolute top-0 right-0 w-12 h-12 bg-emerald-500/5 rounded-bl-3xl -mr-4 -mt-4 group-hover:bg-emerald-500/10 transition-colors z-0" />}
 
-                <div className={`relative z-10 w-7 h-7 rounded-lg flex items-center justify-center text-sm group-hover:scale-110 transition-transform ${bgImage ? 'bg-white/10 backdrop-blur-md' : (isSelected ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600' : 'bg-slate-50 dark:bg-slate-800/50')
+                <div className={`absolute z-10 top-2 left-2 w-7 h-7 rounded-lg flex items-center justify-center text-sm group-hover:scale-110 transition-transform ${bgImage ? 'bg-white/20 backdrop-blur-md' : (isSelected ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600' : 'bg-slate-50 dark:bg-slate-800/50')
                   }`}>
                   {cat.icon || '📦'}
                 </div>
-                <span className={`relative z-10 text-[9px] font-black capitalize tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : (isSelected ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white')
-                  }`}>
+                <span className={`absolute bottom-2 right-2 px-2 py-1 rounded-md text-[9px] font-black capitalize tracking-widest text-right leading-none italic drop-shadow-sm ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10 text-white' : `bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border ${isSelected ? 'border-emerald-500/50 text-emerald-600 dark:text-emerald-400' : 'border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'}`}`}>
                   {cat.label}
                 </span>
               </button>

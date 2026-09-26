@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation, useSearchParams } from 'react-router-dom';
-import { Recycle, User, Phone, Lock, Hash, Loader2, ArrowLeft, ShieldCheck, Briefcase, Mail } from 'lucide-react';
+import { User, Phone, Lock, Hash, Loader2, ArrowLeft, ArrowRight, ShieldCheck, Briefcase, Mail, X, UserCheck, Truck, Zap, Clock, TrendingUp, Navigation } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { ROLES } from '@klinflow/constants';
@@ -9,7 +9,7 @@ import LocationSelector from '@klinflow/ui/components/LocationSelector';
 export default function Register() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const accountType = searchParams.get('type') || location.state?.accountType || 'independent';
+  const initialType = searchParams.get('type') || location.state?.accountType || 'independent';
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,7 +20,7 @@ export default function Register() {
     role: ROLES.AGENT,
     location: null,
     idNumber: '',
-    agent_account_type: accountType,
+    agent_account_type: initialType,
     fleet_invite_code: '',
     company_name: '',
     gender: '',
@@ -31,6 +31,10 @@ export default function Register() {
   const [phoneAvailable, setPhoneAvailable] = useState<boolean | null>(null);
   const [companyDocs, setCompanyDocs] = useState<string[]>([]);
   const [isCheckingCode, setIsCheckingCode] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [timeLeft, setTimeLeft] = useState(600);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const navigate = useNavigate();
   const { register, checkAvailability, sendOtp, verifyOtp } = useAuthStore();
 
@@ -39,30 +43,42 @@ export default function Register() {
     if (!isVerifying) return;
     if ('OTPCredential' in window) {
       const ac = new AbortController();
-      navigator.credentials.get({
+      (navigator.credentials as any).get({
         otp: { transport: ['sms'] },
         signal: ac.signal
-      }).then(otp => {
+      }).then((otp: any) => {
         setFormData(prev => ({ ...prev, otp: otp.code }));
         toast.success('OTP Received', { description: 'Code auto-filled from SMS.' });
-      }).catch(err => {
+      }).catch((err: any) => {
         console.log('Web OTP listener closed:', err);
       });
       return () => ac.abort();
     }
   }, [isVerifying]);
 
-  const handleInputChange = async (e) => {
+  // ── OTP TIMER LOGIC ──────────────────────────────────────────────
+  useEffect(() => {
+    if (isVerifying && timeLeft > 0) {
+      const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isVerifying, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    // 1. Full Name Validation (Alpha-only + space)
     if (name === 'name') {
       const clean = value.replace(/[^a-zA-Z\s]/g, '');
       setFormData(prev => ({ ...prev, [name]: clean }));
       return;
     }
 
-    // 2. Phone mask: digits only, max 10
     if (name === 'phone') {
       const clean = value.replace(/\D/g, '').slice(0, 10);
       setFormData(prev => ({ ...prev, [name]: clean }));
@@ -99,7 +115,7 @@ export default function Register() {
         .select('required_documents')
         .eq('fleet_invite_code', code)
         .single();
-      
+
       if (!error && data) {
         setCompanyDocs((data.required_documents as string[]) || []);
       } else {
@@ -119,31 +135,36 @@ export default function Register() {
       setFormData(prev => ({ ...prev, documents: newDocs }));
       return;
     }
-    
-    if (file.size > 5242880) { // 5MB limit
+
+    if (file.size > 5242880) {
       toast.error('File too large', { description: 'Please upload a file smaller than 5MB.' });
       return;
     }
-    
+
     setFormData(prev => ({
       ...prev,
       documents: { ...prev.documents, [docName]: file }
     }));
   };
 
-  const initiateRegistration = async (e) => {
-    e.preventDefault();
-
-    // ── STRICT VALIDATION GATE ──
+  const handleNextStep = () => {
     const nameParts = formData.name.trim().split(/\s+/);
     if (nameParts.length < 2) return toast.error('Incomplete Name', { description: 'Please provide at least a First and Last name.' });
+    if (!formData.email) return toast.error('Field Missing', { description: 'Please provide an email address.' });
     if (formData.phone.length !== 10) return toast.error('Format Error', { description: 'Phone must be exactly 10 digits.' });
     if (phoneAvailable === false) return toast.error('Blocked', { description: 'This number is already registered.' });
+    if (formData.idNumber.length !== 8) return toast.error('Field Error', { description: 'National ID must be exactly 8 characters.' });
+    if (!formData.gender) return toast.error('Field Missing', { description: 'Please select your gender.' });
+    setCurrentStep(2);
+  };
+
+  const initiateRegistration = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (formData.pin.length < 8) return toast.error('Security Risk', { description: 'Passcode must be at least 8 characters.' });
     if (formData.pin !== formData.confirmPin) return toast.error('Match Error', { description: 'Passcodes do not match.' });
     if (!formData.location?.estate) return toast.error('Field Missing', { description: 'Please select your operating location.' });
-    if (formData.idNumber.length !== 8) return toast.error('Field Error', { description: 'National ID must be exactly 8 characters.' });
-    if (!formData.gender) return toast.error('Field Missing', { description: 'Please select your gender.' });
+
     if (formData.agent_account_type === 'fleet_driver' && formData.fleet_invite_code.trim().length < 5) return toast.error('Missing Code', { description: 'Please enter a valid Company Invite Code.' });
 
     if (formData.agent_account_type === 'fleet_driver' && companyDocs.length > 0) {
@@ -153,13 +174,12 @@ export default function Register() {
       }
     }
 
-    // Send real OTP via Africa's Talking
     setIsLoading(true);
     try {
       await sendOtp(formData.phone);
       setIsVerifying(true);
       toast.success('Code Sent!', { description: `A 6-digit OTP has been sent to ${formData.phone}` });
-    } catch (err) {
+    } catch (err: any) {
       toast.error('SMS Failed', { description: err.message });
     } finally {
       setIsLoading(false);
@@ -169,13 +189,11 @@ export default function Register() {
   const handleFinalSubmit = async () => {
     setIsLoading(true);
     try {
-      // 1. Verify the OTP
       await verifyOtp(formData.phone, formData.otp);
-      // 2. OTP passed — create the agent account
       await register(formData);
       toast.success('Agent Account Activated!', { description: 'Your identity has been verified. Welcome to the network.' });
       navigate('/', { replace: true });
-    } catch (err) {
+    } catch (err: any) {
       toast.error('Verification Failed', { description: err.message });
       if (err.message.includes('Incorrect') || err.message.includes('expired')) {
         setFormData(prev => ({ ...prev, otp: '' }));
@@ -187,236 +205,369 @@ export default function Register() {
     }
   };
 
-  if (isVerifying) {
-    return (
-      <div className="min-h-dvh flex flex-col justify-center  bg-slate-900 px-4 py-8 animate-in fade-in">
-        <div className="max-w-md w-full mx-auto relative z-10 glass p-8 rounded-3xl border border-slate-700 shadow-2xl">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold text-white tracking-widest capitalize">Identity Verification</h2>
-            <p className="text-sm text-slate-400 mt-2">Enter the secure PIN sent to <br /><span className="text-white font-semibold">{formData.phone}</span></p>
-          </div>
+  const handleResendOTP = async () => {
+    if (timeLeft > 0) return;
+    try {
+      await sendOtp(formData.phone);
+      setTimeLeft(600);
+      toast.success('Code Resent', { description: 'A new OTP has been sent to your phone.' });
+    } catch (err: any) {
+      toast.error('Resend Failed', { description: err.message });
+    }
+  };
 
-          <div className="space-y-6">
-            <input
-              type="text"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              value={formData.otp}
-              onChange={(e) => setFormData(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
-              placeholder="0 0 0 0 0 0"
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-2xl py-5 text-center text-3xl font-semibold tracking-[0.5em] text-white focus:ring-4 text-base focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-slate-600"
-              autoFocus
-            />
-
-            <button
-              onClick={handleFinalSubmit}
-              disabled={isLoading || formData.otp.length !== 6}
-              className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold text-[15px] hover:shadow-lg hover:shadow-blue-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><ShieldCheck className="w-5 h-5" /> Verify & Access Portal</>}
-            </button>
-            <button
-              type="button"
-              onClick={async () => {
-                try {
-                  await sendOtp(formData.phone);
-                  toast.success('Code Resent', { description: 'A new OTP has been sent to your phone.' });
-                } catch (err) {
-                  toast.error('Resend Failed', { description: err.message });
-                }
-              }}
-              className="w-full py-3 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
-            >
-              Resend OTP
-            </button>
-            <button onClick={() => setIsVerifying(false)} className="w-full py-2 text-xs font-semibold text-slate-500 hover:text-white transition-colors">
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const roleTabs = [
+    { id: 'independent', label: 'Individual Agent', icon: UserCheck },
+    { id: 'fleet_driver', label: 'Fleet Agent', sublabel: '(Under Company)', icon: Truck },
+  ];
 
   return (
-    <div className="min-h-dvh flex flex-col justify-center bg-slate-50 dark:bg-slate-900 px-2 py-8 relative overflow-hidden">
-      {/* Background Decor (Matched to Welcome Page) */}
-      <div className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-[20%] right-[-10%] w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
-      <div className="max-w-md w-full mx-auto animate-slide-up">
+    <div className="flex flex-col bg-white sm:bg-slate-100 min-h-[100dvh] relative overflow-hidden font-sans">
+      <div className="flex-1 flex flex-col w-full max-w-lg mx-auto relative shadow-2xl overflow-hidden bg-white">
 
-        {/* Header */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-full flex items-center justify-between mb-6">
-            <Link to="/login" className="p-2 -ml-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <div className="w-9" /> {/* Spacer */}
-          </div>
+        {/* Fixed Background Image */}
+        <div className={`absolute top-0 left-0 right-0 h-[50vh] pointer-events-none z-0 ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
+          <img
+            src="/welcome/agentRegister.webp"
+            alt="Create your account"
+            className={`w-full h-full object-cover object-top transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            draggable={false}
+            onLoad={() => setImageLoaded(true)}
+          />
         </div>
 
-        <div>
-          <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">Agent Registration</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-6 font-medium">Join Klinflow as a Green Agent and start earning.</p>
+        {/* Back Button (floating over image) */}
+        <div className="absolute top-0 left-0 right-0 z-50 px-5 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)]">
+          <button
+            onClick={() => currentStep === 2 ? setCurrentStep(1) : navigate(-1)}
+            className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-slate-600  transition-all active:scale-95"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={initiateRegistration} className="glass p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-4">
+        {/* Scrollable Foreground */}
+        <div className="flex-1 w-full relative z-10 overflow-y-auto overflow-x-hidden flex flex-col">
+          <div className="flex-1 flex flex-col px-6 pt-8 pb-8 bg-white rounded-t-3xl mt-[35vh] shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
 
-          {/* Base Fields */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Full Legal Name</label>
-            <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-              <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="First Last" className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Email Address</label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-              <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="agent@gmail.com" className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 text-sm" required />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Phone Number</label>
-            <div className="relative text-slate-400 group-focus-within:text-primary transition-colors">
-              <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5" />
-              <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="07XX XXX XXX" className={`w-full pl-11 pr-12 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 text-sm transition-all ${phoneAvailable === false ? 'border-rose-300 ring-rose-100' : ''}`} required />
-              {phoneAvailable === true && (
-                <ShieldCheck className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500 animate-in fade-in" />
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Create PIN</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-                <input type="password" name="pin" value={formData.pin} onChange={handleInputChange} placeholder="••••••••" minLength={8} className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 tracking-widest text-sm" required />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Confirm PIN</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-                <input type="password" name="confirmPin" value={formData.confirmPin} onChange={handleInputChange} placeholder="••••••••" minLength={8} className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-primary/50 tracking-widest text-sm" required />
-              </div>
-            </div>
-          </div>
-
-          {/* Conditional Agent Fields */}
-          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-4 animate-slide-up">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">National ID Number</label>
-              <div className="relative">
-                <Hash className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-                <input type="text" name="idNumber" value={formData.idNumber} onChange={handleInputChange} placeholder="12345678" minLength={8} maxLength={8} className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-secondary/50 text-sm tracking-widest" required />
-              </div>
-            </div>
-
-
-
-            {formData.agent_account_type === 'fleet_driver' && (
-              <div className="pt-2 animate-slide-up space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1.5 capitalize tracking-wider">Company Invite Code</label>
-                  <div className="relative">
-                    <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-orange-400" />
-                    <input type="text" name="fleet_invite_code" value={formData.fleet_invite_code} onChange={handleInputChange} placeholder="CF-XXXXXX" className="w-full pl-11 pr-4 py-3 bg-orange-50 dark:bg-orange-900/10 border border-orange-200 dark:border-orange-500/30 rounded-xl text-slate-900 dark:text-white focus:ring-2 text-base focus:ring-orange-500/50 text-sm tracking-widest capitalize" required />
-                    {isCheckingCode && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-orange-400" />}
+            {/* Role Selection Tabs */}
+            <div className="flex bg-slate-200 rounded-2xl p-1.5 mb-6">
+              {roleTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setFormData(prev => ({ ...prev, agent_account_type: tab.id }));
+                    // Reset fleet-specific fields when switching away
+                    if (tab.id !== 'fleet_driver') {
+                      setFormData(prev => ({ ...prev, fleet_invite_code: '', documents: {} }));
+                      setCompanyDocs([]);
+                    }
+                  }}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-[13px] font-bold transition-all ${
+                    formData.agent_account_type === tab.id
+                      ? 'bg-emerald-200 text-emerald-900'
+                      : 'text-slate-400 hover:text-slate-500'
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  <div className="flex flex-col items-start leading-tight">
+                    <span>{tab.label}</span>
+                    {tab.sublabel && <span className="text-[10px] font-medium opacity-60">{tab.sublabel}</span>}
                   </div>
-                  <p className="text-xs text-slate-500 mt-1.5 ml-1">Ask your Company Admin for this 6-character code.</p>
-                </div>
+                </button>
+              ))}
+            </div>
 
-                {companyDocs.length > 0 && (
-                  <div className="p-4 bg-orange-50 dark:bg-orange-500/5 border border-orange-200 dark:border-orange-500/20 rounded-xl space-y-4">
-                    <h3 className="text-xs font-bold text-orange-700 dark:text-orange-400 flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4" /> Required Documents
-                    </h3>
-                    <p className="text-[10px] text-orange-600 dark:text-orange-300 font-medium">Please upload the following documents requested by your company (Images or PDF, max 5MB).</p>
-                    
-                    <div className="space-y-3">
-                      {companyDocs.map(doc => (
-                        <div key={doc} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-3">
-                          <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-2">{doc}</label>
-                          <input 
-                            type="file" 
-                            accept="image/jpeg, image/png, application/pdf"
-                            onChange={(e) => handleFileUpload(doc, e.target.files?.[0] || null)}
-                            className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                            required
-                          />
-                        </div>
-                      ))}
+            {/* Form */}
+            <form onSubmit={initiateRegistration} className="space-y-2.5 flex-1">
+              {currentStep === 1 ? (
+                <>
+                  {/* Full Name */}
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <User className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    </div>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Full Legal Name"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      required
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Mail className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    </div>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Email Address"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      required
+                    />
+                  </div>
+
+                  {/* Phone */}
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Phone className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    </div>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="Phone Number (07XX XXX XXX)"
+                      className={`w-full pl-12 pr-12 py-[16px] bg-white border rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px] ${phoneAvailable === false ? 'border-rose-300 ring-rose-100' : 'border-slate-200'}`}
+                      required
+                    />
+                    {phoneAvailable === true && (
+                      <ShieldCheck className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-600 animate-in fade-in zoom-in" />
+                    )}
+                  </div>
+
+                  {/* National ID */}
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Hash className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    </div>
+                    <input
+                      type="text"
+                      name="idNumber"
+                      value={formData.idNumber}
+                      onChange={handleInputChange}
+                      placeholder="National ID Number"
+                      minLength={8}
+                      maxLength={8}
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      required
+                    />
+                  </div>
+
+                  {/* Gender Select */}
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <User className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    </div>
+                    <select
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleInputChange}
+                      className="w-full pl-12 pr-10 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px] appearance-none cursor-pointer"
+                      required
+                    >
+                      <option value="" disabled hidden>Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                      <svg className="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
                     </div>
                   </div>
-                )}
-              </div>
-            )}
 
-            {true && (
-              <div className="pt-2 animate-slide-up">
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 capitalize tracking-wider">Gender</label>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                  { id: 'male', label: 'Male', color: 'text-blue-500', bg: 'bg-blue-500/10' },
-                  { id: 'female', label: 'Female', color: 'text-rose-500', bg: 'bg-rose-500/10' }
-                ].map((g) => (
+                  {/* Continue Button */}
+                  <button
+                    type="button"
+                    onClick={handleNextStep}
+                    className="w-full py-[18px] mt-4 bg-[#064e3b] hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 active:scale-[0.98]"
+                  >
+                    Continue <ArrowRight className="w-[18px] h-[18px]" />
+                  </button>
+                </>
+              ) : (
+                <>
+                  {/* Passcode */}
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Lock className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    </div>
+                    <input
+                      type="password"
+                      name="pin"
+                      value={formData.pin}
+                      onChange={handleInputChange}
+                      placeholder="Password (Min 8 characters)"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      required
+                    />
+                  </div>
+
+                  {/* Confirm Passcode */}
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <Lock className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                    </div>
+                    <input
+                      type="password"
+                      name="confirmPin"
+                      value={formData.confirmPin}
+                      onChange={handleInputChange}
+                      placeholder="Confirm Password"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      required
+                    />
+                  </div>
+
+                  {/* Fleet Invite Code (only for fleet_driver) */}
+                  {formData.agent_account_type === 'fleet_driver' && (
+                    <div className="pt-1 space-y-3">
+                      <div className="relative group">
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <Briefcase className="h-[18px] w-[18px] text-emerald-600" />
+                        </div>
+                        <input
+                          type="text"
+                          name="fleet_invite_code"
+                          value={formData.fleet_invite_code}
+                          onChange={handleInputChange}
+                          placeholder="Company Invite Code (e.g. CF-XXXX)"
+                          className="w-full pl-12 pr-12 py-[16px] bg-emerald-50/50 border border-emerald-200 rounded-2xl text-slate-900 font-bold placeholder:text-emerald-700/40 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none transition-all text-[15px] uppercase tracking-widest"
+                          required
+                        />
+                        {isCheckingCode && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 animate-spin text-emerald-500" />}
+                      </div>
+
+                      {companyDocs.length > 0 && (
+                        <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl space-y-4">
+                          <h3 className="text-[11px] font-black text-emerald-700 uppercase tracking-widest flex items-center gap-2">
+                            <ShieldCheck className="w-4 h-4" /> Required Documents
+                          </h3>
+                          <div className="space-y-3">
+                            {companyDocs.map(doc => (
+                              <div key={doc} className="bg-white border border-emerald-100 rounded-xl p-3">
+                                <label className="block text-[11px] font-bold text-slate-700 mb-2">{doc}</label>
+                                <input
+                                  type="file"
+                                  accept="image/jpeg, image/png, application/pdf"
+                                  onChange={(e) => handleFileUpload(doc, e.target.files?.[0] || null)}
+                                  className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors"
+                                  required
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Location Selector */}
+                  <div className="pt-2 pb-2">
+                    <LocationSelector
+                      value={formData.location}
+                      onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))}
+                    />
+                  </div>
+
+                  {/* Submit Buttons */}
+                  <div className="flex gap-3 mt-4">
                     <button
-                      key={g.id}
                       type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, gender: g.id }))}
-                      className={`flex items-center justify-center gap-3 p-3 rounded-xl border-2 transition-all active:scale-95 ${formData.gender === g.id
-                        ? 'border-secondary bg-secondary/5'
-                        : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-800'
-                        }`}
+                      onClick={() => setCurrentStep(1)}
+                      className="w-[60px] shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl flex items-center justify-center transition-colors py-[18px]"
                     >
-
-                      <span className={`text-[11px] font-semibold capitalize tracking-widest ${formData.gender === g.id ? 'text-secondary' : 'text-slate-400'}`}>
-                        {g.label}
-                      </span>
+                      <ArrowLeft className="w-5 h-5" />
                     </button>
-                  ))}
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="flex-1 py-[18px] bg-[#064e3b] hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed active:scale-[0.98]"
+                    >
+                      {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Complete Registration'}
+                    </button>
+                  </div>
+                </>
+              )}
+            </form>
+
+            {/* Footer Link */}
+            <p className="text-center text-[13px] font-medium text-slate-500 mt-6 mb-2">
+              Already have an account? <Link to="/login" className="text-[#064e3b] font-bold hover:underline">Sign In</Link>
+            </p>
+
+
+          </div>
+        </div>
+      </div>
+
+      {/* ── VERIFICATION OVERLAY ────────────────────────────────────── */}
+      {isVerifying && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="max-w-sm w-full bg-white rounded-[2.5rem] p-8 shadow-2xl relative animate-in zoom-in slide-in-from-bottom-8 duration-500 ease-out">
+            <button
+              onClick={() => setIsVerifying(false)}
+              className="absolute right-6 top-6 p-2 rounded-full hover:bg-slate-100 text-slate-400 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-center space-y-6">
+              <div className="w-20 h-20 bg-emerald-50 rounded-[1.5rem] flex items-center justify-center mx-auto mb-2 text-emerald-600">
+                <ShieldCheck className="w-10 h-10" />
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900">Verify Phone</h3>
+                <p className="text-sm text-slate-500 font-medium mt-2">
+                  Enter the 6-digit code sent to <br />
+                  <span className="text-emerald-600 font-bold">{formData.phone}</span>
+                </p>
+              </div>
+
+              <div className="relative group">
+                <input
+                  autoFocus
+                  autoComplete="one-time-code"
+                  type="text"
+                  inputMode="numeric"
+                  value={formData.otp}
+                  onChange={(e) => setFormData(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
+                  placeholder="000000"
+                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-emerald-600 outline-none transition-all placeholder:text-slate-300"
+                />
+                <div className="flex flex-col items-center mt-5 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <p className="text-[11px] font-bold text-slate-400 capitalize tracking-[0.2em]">Expires in:</p>
+                    <span className={`text-sm font-bold tracking-widest ${timeLeft < 60 ? 'text-rose-500' : 'text-emerald-600'}`}>
+                      {formatTime(timeLeft)}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    disabled={timeLeft > 0}
+                    onClick={handleResendOTP}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold capitalize tracking-widest transition-all ${timeLeft > 0
+                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-50'
+                      : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 cursor-pointer'
+                      }`}
+                  >
+                    Resend Code
+                  </button>
                 </div>
               </div>
-            )}
-          </div>
 
-          {/* Location Block */}
-          <div className="pt-4 mt-2 border-t border-slate-100 dark:border-slate-800 animate-slide-up -mx-6 overflow-hidden">
-            <div className="px-6 mb-3">
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 capitalize tracking-wider">Location Area</label>
-            </div>
-            <div className="min-h-[140px] relative z-0 w-full">
-              <LocationSelector
-                value={formData.location}
-                onChange={(newLoc) => setFormData(prev => ({ ...prev, location: newLoc }))}
-                hideHeaderText={true}
-                hideFooterText={true}
-              />
+              <button
+                onClick={handleFinalSubmit}
+                disabled={isLoading || formData.otp.length < 6}
+                className="w-full py-4 bg-[#064e3b] text-white rounded-2xl font-bold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-[#064e3b]/20 active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50"
+              >
+                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm & Register'}
+              </button>
             </div>
           </div>
-
-          <button
-            type="submit"
-            className="w-full py-4 mt-4 bg-secondary hover:bg-blue-700 text-white rounded-xl font-semibold text-[15px] shadow-lg shadow-secondary/30 transition-all flex justify-center items-center gap-2"
-          >
-            Register
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8 font-medium">
-          Already an Agent?{' '}
-          <Link to="/login" className="text-secondary font-semibold hover:underline">
-            Sign In Here
-          </Link>
-        </p>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
-

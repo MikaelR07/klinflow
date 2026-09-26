@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, ArrowLeft, Phone, Navigation, CheckCircle, ShieldCheck, Truck, Clock, PackageCheck } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { supabase } from '@klinflow/supabase';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useAgentLocation } from '../../features/agentHome/useAgentLocation';
 import { useFulfillmentStore } from '@klinflow/core/stores/fulfillmentStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { getSubcategoryLabel } from '@klinflow/core/data/wasteDefinitions';
@@ -31,10 +32,23 @@ function MapBounds({ bounds }: { bounds: [number, number][] }) {
   const map = useMap();
   useEffect(() => {
     if (bounds && bounds.length > 0) {
-      map.fitBounds(bounds, { padding: [40, 40] });
+      // Offset bottom by 350px to account for the sliding bottom sheet
+      map.fitBounds(bounds, { paddingTopLeft: [40, 40], paddingBottomRight: [40, 350] });
     }
   }, [bounds, map]);
   return null;
+}
+
+// Helper to check distance for re-routing
+function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371e3;
+  const p1 = lat1 * Math.PI / 180;
+  const p2 = lat2 * Math.PI / 180;
+  const dp = (lat2 - lat1) * Math.PI / 180;
+  const dl = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dp / 2) * Math.sin(dp / 2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) * Math.sin(dl / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
 export default function NavigatePickupPage() {
@@ -100,12 +114,24 @@ export default function NavigatePickupPage() {
     }
   }, [id]);
 
-  const agentPos: [number, number] = profile?.location?.latitude ? [profile.location.latitude, profile.location.longitude as number] : [-1.2921, 36.8219];
+  const { position: livePos } = useAgentLocation();
+  const fallbackPos: [number, number] = profile?.location?.latitude ? [profile.location.latitude, profile.location.longitude as number] : [-1.2921, 36.8219];
+  const agentPos: [number, number] = livePos ? [livePos.lat, livePos.lng] : fallbackPos;
+  
   const clientPos: [number, number] = order?.rfq?.latitude ? [order.rfq.latitude, order.rfq.longitude as number] : [-1.2851, 36.8119];
+
+  const [lastRoutedPos, setLastRoutedPos] = useState<[number, number] | null>(null);
 
   useEffect(() => {
     const fetchRoute = async () => {
       if (!agentPos || !clientPos) return;
+
+      // Only recalculate route if we've moved more than 50 meters from the last routing calculation
+      if (lastRoutedPos) {
+        const dist = getDistance(agentPos[0], agentPos[1], lastRoutedPos[0], lastRoutedPos[1]);
+        if (dist < 50) return;
+      }
+
       try {
         const url = `https://router.project-osrm.org/route/v1/driving/${agentPos[1]},${agentPos[0]};${clientPos[1]},${clientPos[0]}?overview=full&geometries=geojson`;
         const res = await fetch(url);
@@ -113,6 +139,7 @@ export default function NavigatePickupPage() {
         if (data.code === 'Ok' && data.routes.length > 0) {
           const points = data.routes[0].geometry.coordinates.map((c: any) => [c[1], c[0]]);
           setRoadPath(points);
+          setLastRoutedPos(agentPos);
         } else {
           setRoadPath([agentPos, clientPos]);
         }
@@ -121,7 +148,7 @@ export default function NavigatePickupPage() {
       }
     };
     fetchRoute();
-  }, [agentPos[0], clientPos[0]]);
+  }, [agentPos[0], agentPos[1], clientPos[0], clientPos[1]]);
 
   const handleConfirmArrival = async () => {
     if (!order) return;
@@ -182,7 +209,7 @@ export default function NavigatePickupPage() {
   const material = resolveMaterialName(order.rfq);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-slate-100 dark:bg-slate-900">
+    <div className="fixed inset-0 overflow-hidden bg-slate-100 dark:bg-slate-900" style={{ zIndex: 50 }}>
       {/* Top Header Overlay */}
       <div className="absolute top-[calc(env(safe-area-inset-top,1rem)+1rem)] left-4 right-4 z-[1000] flex items-center justify-between pointer-events-none">
         <button
@@ -204,8 +231,23 @@ export default function NavigatePickupPage() {
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <MapBounds bounds={[agentPos, clientPos]} />
           <Polyline positions={roadPath.length > 0 ? roadPath : [agentPos, clientPos]} color="#00A651" weight={4} dashArray="10, 15" opacity={0.8} />
-          <Marker position={agentPos} icon={agentIcon} />
-          <Marker position={clientPos} icon={clientIcon} />
+          <Marker position={agentPos} icon={agentIcon}>
+            <Popup className="font-sans">
+              <div className="text-center px-1 py-0.5">
+                <p className="font-black text-slate-800 text-[13px]">⚡ You (Agent)</p>
+                <p className="text-[10px] font-medium text-slate-500 mt-0.5">{profile?.name || 'Agent'}</p>
+              </div>
+            </Popup>
+          </Marker>
+          <Marker position={clientPos} icon={clientIcon}>
+            <Popup className="font-sans">
+              <div className="text-center px-1 py-0.5">
+                <p className="font-black text-slate-800 text-[13px]">👤 {sellerName}</p>
+                <p className="text-[10px] font-medium text-slate-500 mt-0.5">{location}</p>
+                {sellerPhone && <p className="text-[10px] font-bold text-blue-600 mt-0.5">{sellerPhone}</p>}
+              </div>
+            </Popup>
+          </Marker>
         </MapContainer>
       </div>
 

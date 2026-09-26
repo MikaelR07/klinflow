@@ -7,7 +7,7 @@ import {
   Search, MapPin, Scale, TrendingUp,
   ChevronRight, MessageSquareQuote, Check,
   ArrowLeft, Clock, Package, CheckCircle2, Info, User, Users,
-  SlidersHorizontal, X, ChevronDown
+  SlidersHorizontal, X, ChevronDown, Receipt, Sparkles, FileText
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
@@ -60,6 +60,7 @@ export default function Sourcing() {
   const [filterMaterial, setFilterMaterial] = useState('All');
   const [filterPriceRange, setFilterPriceRange] = useState('All');
   const [filterWeight, setFilterWeight] = useState('All');
+  const [isMoreCategoriesOpen, setIsMoreCategoriesOpen] = useState(false);
 
   const [activeBidsCount, setActiveBidsCount] = useState(0);
   const [acceptedTradesCount, setAcceptedTradesCount] = useState(0);
@@ -356,13 +357,13 @@ export default function Sourcing() {
               {/* Filter Panel Toggle */}
               <button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className={`p-3 rounded-xl border flex items-center justify-center gap-1.5 transition-all shrink-0 ${isFilterOpen || filterMaterial !== 'All' || filterPriceRange !== 'All' || filterWeight !== 'All'
+                className={`p-3 rounded-xl border flex items-center justify-center gap-1.5 transition-all shrink-0 ${isFilterOpen || filterPriceRange !== 'All' || filterWeight !== 'All'
                   ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500/30 text-indigo-600 dark:text-indigo-400'
                   : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-750'
                   }`}
               >
                 <SlidersHorizontal className="w-4 h-4" />
-                {(filterMaterial !== 'All' || filterPriceRange !== 'All' || filterWeight !== 'All') && (
+                {(filterPriceRange !== 'All' || filterWeight !== 'All') && (
                   <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
                 )}
               </button>
@@ -377,29 +378,7 @@ export default function Sourcing() {
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden mt-2 bg-slate-50/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl"
                 >
-                  <div className="p-3 grid grid-cols-3 gap-2">
-                    {/* Material Filter */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Material</label>
-                      <div className="relative">
-                        <select
-                          value={filterMaterial}
-                          onChange={(e) => setFilterMaterial(e.target.value)}
-                          className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-indigo-500"
-                        >
-                          <option value="All">All Materials</option>
-                          <option value="Plastic">Plastic</option>
-                          <option value="Metal">Metal</option>
-                          <option value="Paper">Paper</option>
-                          <option value="Organic">Organic</option>
-                          <option value="Glass">Glass</option>
-                          <option value="E-waste">E-waste</option>
-                        </select>
-                        <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
-                      </div>
-                    </div>
-
-                    {/* Weight Filter */}
+                  <div className="p-3 grid grid-cols-2 gap-2">                    {/* Weight Filter */}
                     <div className="flex flex-col gap-1">
                       <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Weight</label>
                       <div className="relative">
@@ -437,11 +416,10 @@ export default function Sourcing() {
                   </div>
                   
                   {/* Clear filters bar */}
-                  {(filterMaterial !== 'All' || filterWeight !== 'All' || filterPriceRange !== 'All') && (
+                  {(filterWeight !== 'All' || filterPriceRange !== 'All') && (
                     <div className="px-3 pb-2 flex justify-end">
                       <button
                         onClick={() => {
-                          setFilterMaterial('All');
                           setFilterWeight('All');
                           setFilterPriceRange('All');
                         }}
@@ -461,7 +439,7 @@ export default function Sourcing() {
                 <button
                   key={tab}
                   onClick={() => setSelectedTab(tab)}
-                  className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 relative ${selectedTab === tab
+                  className={`flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 relative ${selectedTab === tab
                     ? tab === 'Drop-offs' ? 'bg-amber-600 shadow-sm text-white font-black' : 'bg-indigo-600 shadow-sm text-white font-black'
                     : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
@@ -477,7 +455,7 @@ export default function Sourcing() {
         </div>
       )}
 
-      <div className={`flex-1 space-y-0 pb-24 ${!selectedId ? 'pt-0' : 'pt-0'} relative max-w-lg mx-auto w-full`}>
+      <div className={`flex-1 space-y-0 pb-5 ${!selectedId ? 'pt-0' : 'pt-0'} relative max-w-lg mx-auto w-full`}>
 
         {/* ── CONTENT AREA ── */}
         <main>
@@ -765,8 +743,172 @@ export default function Sourcing() {
               </div>
             </motion.div>
           ) : (
-            /* ── MAIN RADAR VIEW ── */
-            <div className="space-y-1 pb-32">
+            <div className="space-y-1 pb-5">
+
+              {/* ── SCROLLABLE BANNERS ── */}
+              <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 px-3 pt-2 pb-1 no-scrollbar">
+                {/* Banner 1 */}
+                <div className="snap-start relative shrink-0 w-[320px] h-[160px] rounded-2xl overflow-hidden shadow-lg border border-indigo-500/20 bg-indigo-900 group cursor-pointer">
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/95 via-indigo-900/60 to-transparent z-10" />
+                  <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="relative z-20 p-4 h-full flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-[17px] font-black text-white tracking-tight leading-tight">Source & Earn</h3>
+                      <p className="text-[12px] font-semibold text-white/80 leading-tight mt-1 max-w-[200px]">Browse materials listed by sellers near you and place bids to start collecting.</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-2 py-1 border border-white/10">
+                        <TrendingUp className="w-3 h-3 text-emerald-400" />
+                        <span className="text-[10px] font-bold text-white">{filteredListings.length} Active</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-2 py-1 border border-white/10">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                        <span className="text-[10px] font-bold text-white">{acceptedTradesCount} Trades</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Banner 2 */}
+                <div className="snap-start relative shrink-0 w-[320px] h-[160px] rounded-2xl overflow-hidden shadow-lg border border-emerald-500/20 bg-emerald-900 group cursor-pointer">
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 via-emerald-900/60 to-transparent z-10" />
+                  <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="relative z-20 p-4 h-full flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-[17px] font-black text-white tracking-tight leading-tight">Explore Categories</h3>
+                      <p className="text-[12px] font-semibold text-white/80 leading-tight mt-1 max-w-[200px]">Discover various categories of recyclable materials traded through our platform.</p>
+                    </div>
+                    <button className="self-start text-[10px] font-black uppercase tracking-widest bg-white text-emerald-700 px-3 py-1.5 rounded-lg active:scale-95 transition-transform shadow-sm">
+                      View All
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── MATERIAL CATEGORY CHIPS ── */}
+              <div className="relative">
+                <div className="flex overflow-x-auto no-scrollbar gap-2 px-3 py-2">
+                  {[
+                    { id: 'All', label: 'All', icon: '♻️' },
+                    { id: 'Plastic', label: 'Plastic', icon: '🧴' },
+                    { id: 'Metal', label: 'Metal', icon: '🥫' },
+                    { id: 'Paper', label: 'Paper', icon: '📄' },
+                    { id: 'Glass', label: 'Glass', icon: '🍾' }
+                  ].map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        setFilterMaterial(cat.id);
+                        setIsMoreCategoriesOpen(false);
+                      }}
+                      className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border shrink-0 ${
+                        filterMaterial === cat.id
+                          ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      }`}
+                    >
+                      <span>{cat.icon}</span>
+                      <span>{cat.label}</span>
+                    </button>
+                  ))}
+                  
+                  {/* More Dropdown Button */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setIsMoreCategoriesOpen(!isMoreCategoriesOpen)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition-all border shrink-0 ${
+                        ['Organic', 'E-waste', 'Textile'].includes(filterMaterial) || isMoreCategoriesOpen
+                          ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/30'
+                          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      }`}
+                    >
+                      <span>{['Organic', 'E-waste', 'Textile'].includes(filterMaterial) ? filterMaterial : 'More'}</span>
+                      <ChevronDown className={`w-3 h-3 transition-transform ${isMoreCategoriesOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                  </div>
+                </div>
+                
+                {/* Dropdown Menu */}
+                    <AnimatePresence>
+                      {isMoreCategoriesOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          className="absolute right-3 top-full mt-1 w-32 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 z-50 overflow-hidden"
+                        >
+                          {[
+                            { id: 'Organic', label: 'Organic', icon: '🍎' },
+                            { id: 'E-waste', label: 'E-waste', icon: '💻' },
+                            { id: 'Textile', label: 'Textile', icon: '👕' }
+                          ].map(cat => (
+                            <button
+                              key={cat.id}
+                              onClick={() => {
+                                setFilterMaterial(cat.id);
+                                setIsMoreCategoriesOpen(false);
+                              }}
+                              className={`w-full flex items-center gap-2 px-3 py-2 text-[11px] font-bold transition-colors ${
+                                filterMaterial === cat.id
+                                  ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600'
+                                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                              }`}
+                            >
+                              <span>{cat.icon}</span>
+                              <span>{cat.label}</span>
+                            </button>
+                          ))}
+                        </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* ── ACTION CARDS (My Bids & Buyer Requests) ── */}
+              {!isFleetDriver && (
+                <div className="px-3 pb-2 pt-2 grid grid-cols-2 gap-2">
+                  {/* My Active Bids */}
+                  <button
+                    onClick={() => navigate('/bids')}
+                    className="w-full bg-indigo-900 rounded-xl p-2.5 shadow-sm border border-indigo-500/20 relative overflow-hidden group flex items-center active:scale-[0.98] transition-all"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/95 to-indigo-800/80 z-10" />
+                    <div className="relative z-20 flex items-center gap-2.5 w-full">
+                      <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/10 shrink-0">
+                        <Receipt className="w-4 h-4 text-indigo-300" />
+                      </div>
+                      <div className="text-left">
+                        <h3 className="text-[11px] font-black text-white tracking-tight leading-none mb-1">My Bids</h3>
+                        {activeBidsCount > 0 ? (
+                           <p className="text-[9px] font-bold text-emerald-400 leading-none">{activeBidsCount} Active</p>
+                        ) : (
+                           <p className="text-[9px] font-semibold text-indigo-300 leading-none">View offers</p>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Buyer Requests */}
+                  <button
+                    onClick={() => navigate('/rfqs')}
+                    className="w-full relative overflow-hidden rounded-xl p-2.5 shadow-sm group border border-violet-500/30 flex items-center active:scale-[0.98] transition-all"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-95" />
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+                    <div className="relative z-20 flex items-center gap-2.5 w-full">
+                      <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/10 shrink-0">
+                        <FileText className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <h3 className="text-[11px] font-black text-white tracking-tight leading-none mb-1">Open Market Requests</h3>
+                        <p className="text-[9px] font-semibold text-violet-100 leading-none">Send Material Requests</p>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              )}
+
+              {/* ── LISTINGS HEADER ── */}
+             
               {filteredListings.length === 0 ? (
                 <div className="py-20 text-center px-4">
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
@@ -781,21 +923,22 @@ export default function Sourcing() {
                   itemContent={(index, listing) => (
                     <div
                       onClick={() => setSelectedId(listing.id)}
-                      className="bg-white dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
+                      className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden"
                     >
-                      <div className="flex gap-3">
-                        <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
+                      <div className="flex gap-3 pl-4 pr-3.5 py-3">
+                        <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
                           {(listing.photoUrl || listing.photo) ? (
                             <OptimizedImage src={getThumbnailUrl(listing.photoUrl || listing.photo, { width: 150 })} alt={listing.material} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                           ) : (
-                            <Package className="w-5 h-5 text-slate-200" />
+                            <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />
                           )}
                         </div>
-                        <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
                           {/* Row 1: Material & Price */}
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-                              <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize tracking-tight">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
                                 {listing.materialSubcategory || listing.material}
                               </h3>
                               {(() => {
@@ -803,7 +946,7 @@ export default function Sourcing() {
                                 if (!category) return null;
                                 const style = getCategoryStyle(category);
                                 return (
-                                  <span className={`px-1.5 py-0.5 rounded text-[8px] font-semibold whitespace-nowrap ${style.bg} ${style.text} ${style.darkBg} ${style.darkText}`}>
+                                  <span className={`px-1 py-0.5 rounded text-[8px] font-semibold whitespace-nowrap ${style.bg} ${style.text} ${style.darkBg} ${style.darkText}`}>
                                     {category}
                                   </span>
                                 );
@@ -814,41 +957,41 @@ export default function Sourcing() {
                                 </span>
                               )}
                             </div>
-                            <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {listing.pricePerKg}/kg</span>
+                            <div className="text-right shrink-0 ml-2 mt-1">
+                              <p className="text-base font-black text-emerald-600 leading-none tracking-tighter">KSh {listing.pricePerKg}<span className="text-[9px] text-emerald-600/70 font-black">/kg</span></p>
+                            </div>
                           </div>
 
-                          {/* Row 2: Location & Optional Badge */}
+                          {/* Row 2: Location & Badge */}
                           <div className="flex items-center justify-between mt-0.5">
                             {(listing as any).pickupMode === 'dropoff' ? (
                               <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 flex items-center gap-1 shrink-0">
                                 <MapPin className="w-2.5 h-2.5" /> Seller-Drop-off
                               </span>
                             ) : (
-                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                                <MapPin className="w-2.5 h-2.5 text-green-500" /> {listing.location}
+                              <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                                <MapPin className="w-3 h-3 text-emerald-600" /> {listing.location}
                               </p>
                             )}
                             {(isFleetDriver ? getHasRecommended(listing.id) : getHasOffer(listing.id)) && (
-                              <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[6px] font-black capitalize tracking-[0.2em] rounded shrink-0">
+                              <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[8px] font-black uppercase tracking-widest rounded shrink-0">
                                 {isFleetDriver ? 'RECOMMENDED' : 'ACTIVE BID'}
                               </span>
                             )}
                           </div>
 
                           {/* Row 3: Timestamp & Quantity */}
-                          <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50">
+                          <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
                             <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
-                              <Clock className="w-2.5 h-2.5 text-slate-400" /> {listing.createdAt ? new Date(listing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'ASAP'}
+                              <Clock className="w-2.5 h-2.5 text-slate-900" /> {listing.createdAt ? new Date(listing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'ASAP'}
                             </p>
                             <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
-                              <span className="text-[9px] text-slate-400 not-italic font-bold mr-1 opacity-70">Quantity:</span>
+                              <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span>
                               <Scale className="w-2.5 h-2.5" /> {listing.quantity} KG
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center justify-center text-slate-300">
-                          <ChevronRight className="w-4 h-4" />
-                        </div>
+                        <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
                       </div>
                     </div>
                   )}

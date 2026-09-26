@@ -11,6 +11,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import { supabase } from '@klinflow/supabase';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
@@ -36,6 +37,7 @@ export default function AvailableJobs() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filterMaterial, setFilterMaterial] = useState('All');
   const [filterTime, setFilterTime] = useState('All');
+  const [selectedBookingType, setSelectedBookingType] = useState(location.state?.filter || 'All');
 
   const availableJobs = useAgentStore(s => s.availableJobs);
   const activeJobs = useAgentStore(s => s.activeJobs);
@@ -61,6 +63,8 @@ export default function AvailableJobs() {
   const activeFulfillments = useFulfillmentStore(s => s.activeFulfillments);
   const fetchActiveFulfillments = useFulfillmentStore(s => s.fetchActiveFulfillments);
 
+  const [activeTrades, setActiveTrades] = useState<any[]>([]);
+
   const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
 
   useEffect(() => {
@@ -71,8 +75,31 @@ export default function AvailableJobs() {
     fetchPrices();
     if (profile?.id) {
       fetchActiveFulfillments(profile.id, 'agent');
+      fetchActiveTrades();
     }
   }, [profile?.id]);
+
+  const fetchActiveTrades = async () => {
+    if (!profile?.id) return;
+    try {
+      const { data, error } = await supabase
+        .from('bookings')
+        .select(`
+          *,
+          listing:marketplace_listings(*)
+        `)
+        .eq('agent_id', profile.id)
+        .or('is_market_trade.eq.true,booking_type.eq.marketplace_pickup')
+        .neq('status', 'cancelled')
+        .order('created_at', { ascending: false });
+
+      if (!error && data) {
+        setActiveTrades(data);
+      }
+    } catch (err) {
+      console.error('Fetch trades failed:', err);
+    }
+  };
 
   const handleAccept = async (job: AgentJob) => {
     try {
@@ -105,14 +132,35 @@ export default function AvailableJobs() {
         customerName: 'Marketplace Seller',
         pay: 0,
         photo_url: null,
+        photo_url: null,
         photoUrl: null,
         photos: [],
         phone: '',
-        is_market_trade: true,
+        is_market_trade: false,
         booking_type: 'rfq'
       } as AgentJob));
-    return [...activeJobs, ...rfqs];
-  }, [activeJobs, activeFulfillments]);
+      
+    const trades = activeTrades
+      .filter(t => t.status !== 'completed' && t.status !== 'cancelled')
+      .map(t => ({
+        ...t,
+        material: t.waste_type || t.listing?.material || 'Recyclables',
+        weight_kg: t.actual_weight_kg || t.listing?.quantity || 0,
+        location: t.estate,
+        time: t.scheduled_time || 'ASAP',
+        customerName: 'Verified Partner',
+        is_market_trade: true,
+        booking_type: 'marketplace_pickup'
+      } as any));
+
+    const combined = [...activeJobs, ...rfqs, ...trades];
+    const uniqueIds = new Set();
+    return combined.filter(job => {
+      if (uniqueIds.has(job.id)) return false;
+      uniqueIds.add(job.id);
+      return true;
+    });
+  }, [activeJobs, activeFulfillments, activeTrades]);
 
   const combinedCompletedJobs = useMemo(() => {
     const rfqs = activeFulfillments
@@ -130,14 +178,35 @@ export default function AvailableJobs() {
         customerName: 'Marketplace Seller',
         pay: 0,
         photo_url: null,
+        photo_url: null,
         photoUrl: null,
         photos: [],
         phone: '',
-        is_market_trade: true,
+        is_market_trade: false,
         booking_type: 'rfq'
       } as AgentJob));
-    return [...completedJobs, ...rfqs];
-  }, [completedJobs, activeFulfillments]);
+      
+    const trades = activeTrades
+      .filter(t => t.status === 'completed')
+      .map(t => ({
+        ...t,
+        material: t.waste_type || t.listing?.material || 'Recyclables',
+        weight_kg: t.actual_weight_kg || t.listing?.quantity || 0,
+        location: t.estate,
+        time: t.scheduled_time || 'ASAP',
+        customerName: 'Verified Partner',
+        is_market_trade: true,
+        booking_type: 'marketplace_pickup'
+      } as any));
+
+    const combined = [...completedJobs, ...rfqs, ...trades];
+    const uniqueIds = new Set();
+    return combined.filter(job => {
+      if (uniqueIds.has(job.id)) return false;
+      uniqueIds.add(job.id);
+      return true;
+    });
+  }, [completedJobs, activeFulfillments, activeTrades]);
 
   const currentJobs = activeTab === 'available'
     ? availableJobs
@@ -149,6 +218,15 @@ export default function AvailableJobs() {
 
   const filteredJobs = useMemo(() => {
     let result = currentJobs;
+
+    if (activeTab === 'active' && selectedBookingType !== 'All') {
+      result = result.filter(j => {
+        if (selectedBookingType === 'RFQ') return j.booking_type === 'rfq';
+        if (selectedBookingType === 'Market trades') return j.is_market_trade === true;
+        if (selectedBookingType === 'Resident') return j.booking_type !== 'rfq' && j.is_market_trade !== true;
+        return true;
+      });
+    }
 
     if (filterMaterial !== 'All') {
       result = result.filter(j => {
@@ -175,7 +253,7 @@ export default function AvailableJobs() {
       const client = (j.customerName || j.customer || '').toLowerCase();
       return matName.includes(term) || loc.includes(term) || client.includes(term);
     });
-  }, [currentJobs, searchTerm, filterMaterial, filterTime, categories]);
+  }, [currentJobs, searchTerm, filterMaterial, filterTime, categories, activeTab, selectedBookingType]);
 
   const formatJobTime = (job: AgentJob) => {
     if (job.time?.toUpperCase() === 'ASAP') return 'ASAP';
@@ -339,28 +417,53 @@ export default function AvailableJobs() {
         </AnimatePresence>
 
         {/* Tabs - Pill style */}
-        <div className="mt-1 flex bg-slate-100 dark:bg-slate-900/80 p-1.5 rounded-xl">
+        <div className="mt-1 flex bg-slate-100 dark:bg-slate-900/80 p-1.5 rounded-2xl">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex-1 py-1 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-0.5 ${activeTab === tab.id
+              className={`relative flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-xl transition-all flex items-center justify-center gap-1 ${activeTab === tab.id
                 ? 'bg-indigo-600 shadow-sm text-white font-black'
                 : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                 }`}
             >
               <span className="truncate">{tab.label}</span>
-              {tab.count > 0 && (
-                <span className={`min-w-[16px] h-4 px-1 text-[8px] font-bold rounded-full flex items-center justify-center ${activeTab === tab.id ? 'bg-white text-indigo-600' : 'bg-indigo-500/20 text-indigo-600 dark:bg-indigo-500/30 dark:text-indigo-400'}`}>
-                  {tab.count}
-                </span>
-              )}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="flex-1 space-y-px pb-24 pt-[calc(env(safe-area-inset-top,1rem)+8rem)] relative max-w-lg mx-auto w-full">
+      <div className="flex-1 space-y-px pb-12 relative max-w-lg mx-auto w-full pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)]">
+
+        {/* Accepted Pickups Filter Card */}
+        {activeTab === 'active' && (
+          <div className="mx-4 mt-4 mb-2 p-2.5 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+            <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+              {(['All', 'Resident', 'Market trades', 'RFQ'] as const).map((type) => {
+                const count = currentJobs.filter(j => {
+                  if (type === 'RFQ') return j.booking_type === 'rfq';
+                  if (type === 'Market trades') return j.is_market_trade === true;
+                  if (type === 'Resident') return j.booking_type !== 'rfq' && j.is_market_trade !== true;
+                  return true;
+                }).length;
+
+                return (
+                  <button
+                    key={type}
+                    onClick={() => setSelectedBookingType(type)}
+                    className={`py-2 px-3.5 rounded-xl text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all shrink-0 ${
+                      selectedBookingType === type
+                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
+                      : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                    }`}
+                  >
+                    <span>{type}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {isLoadingJobs ? (
           <div className="space-y-4 p-4">
@@ -613,62 +716,96 @@ export default function AvailableJobs() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                
               >
                 {filteredJobs.map((job) => {
                   const waste = categories.find((w) => w.slug === job.material) ||
                     categories.find((w) => w.id === job.material);
                   const photoUrl = job.photoUrl || job.photo_url || job.photos?.[0];
+                  
+                  // Determine Origin Badge and Navigation Route
+                  let badgeIcon = '🏠';
+                  let badgeText = 'Resident';
+                  let badgeColor = 'bg-sky-100 text-sky-800 dark:bg-sky-500/20 dark:text-sky-300 border-sky-300 dark:border-sky-500/40';
+                  let navRoute = `/jobs/${job.id}`;
+
+                  if (job.booking_type === 'rfq' && job.is_group_pickup) {
+                    badgeIcon = '👥';
+                    badgeText = 'Group RFQ';
+                    badgeColor = 'bg-blue-200 text-blue-900 dark:bg-blue-500/30 dark:text-blue-300 border-blue-400 dark:border-blue-500/50';
+                    navRoute = `/pickups/${job.id}`;
+                  } else if (job.booking_type === 'rfq') {
+                    badgeIcon = '📋';
+                    badgeText = 'RFQ';
+                    badgeColor = 'bg-violet-200 text-violet-900 dark:bg-violet-500/30 dark:text-violet-300 border-violet-400 dark:border-violet-500/50';
+                    navRoute = `/pickups/${job.id}`;
+                  } else if (job.booking_type === 'marketplace_pickup' || job.is_market_trade) {
+                    badgeIcon = '🏪';
+                    badgeText = 'Trade';
+                    badgeColor = 'bg-emerald-200 text-emerald-900 dark:bg-emerald-500/30 dark:text-emerald-300 border-emerald-400 dark:border-emerald-500/50';
+                    navRoute = `/trades/${job.id}`;
+                  } else if (job.is_group_pickup) {
+                    badgeIcon = '👥';
+                    badgeText = 'Swarm';
+                    badgeColor = 'bg-indigo-200 text-indigo-900 dark:bg-indigo-500/30 dark:text-indigo-300 border-indigo-400 dark:border-indigo-500/50';
+                    navRoute = `/jobs/${job.id}`;
+                  }
 
                   return (
                     <div
                       key={job.id}
-                      className="bg-white dark:bg-slate-900/60 border-b border-slate-100 dark:border-slate-800 transition-all overflow-hidden"
+                      className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden"
                     >
+                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${
+                        job.booking_type === 'rfq' ? 'bg-violet-500' :
+                        job.booking_type === 'marketplace_pickup' || job.is_market_trade ? 'bg-emerald-500' :
+                        job.is_group_pickup ? 'bg-indigo-500' :
+                        'bg-blue-500'
+                      }`} />
                       <div
-                        onClick={() => setExpandedId(job.id)}
-                        className="bg-white dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
+                        onClick={() => navigate(navRoute)}
+                        className="flex gap-3 pl-4 pr-3.5 py-3"
                       >
-                        <div className="flex gap-3">
-                          <div className="w-16 h-16 rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-100 dark:border-slate-800">
+                          <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
                             {photoUrl ? (
                               <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={waste?.label || job.material} />
                             ) : (
                               waste?.icon || '📦'
                             )}
                           </div>
-                          <div className="flex-1 min-w-0 flex flex-col justify-center">
-                            {/* Row 1: Material & Value/Time */}
+                          <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
+                            {/* Row 1: Material & Origin Badge */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5 min-w-0">
-                                <h3 className="text-[14px] font-semibold text-slate-900 dark:text-white capitalize truncate tracking-tight">{waste?.label || job.material}</h3>
-                                {job.is_group_pickup && (
-                                  <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center gap-0.5 shrink-0">
-                                    <Users className="w-2.5 h-2.5" /> Group
-                                  </span>
-                                )}
+                                <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || job.material}</h3>
                               </div>
-                              <span className={`text-[9px] font-black tracking-widest px-2 py-0.5 rounded-md uppercase shrink-0 ml-2 ${
+                              <span className={`px-2 py-1 rounded-lg text-[10px] font-black border flex items-center gap-1.5 shrink-0 ml-2 uppercase tracking-wider ${badgeColor}`}>
+                                <span className="text-sm">{badgeIcon}</span> {badgeText}
+                              </span>
+                            </div>
+
+                            {/* Row 2: Location & Status */}
+                            <div className="flex items-center justify-between mt-0.5">
+                              <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                                <MapPin className="w-3 h-3 text-emerald-600" /> {job.location || 'Nairobi'}
+                              </p>
+                              <span className={`text-[9px] font-black tracking-widest px-1.5 py-0.5 rounded-md uppercase shrink-0 ${
                                 activeTab === 'completed' ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20' :
                                 activeTab === 'active' ? 'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20' :
                                 activeTab === 'rejected' ? 'bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20' :
-                                job.time?.toUpperCase() === 'ASAP' ? 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20'
+                                job.time?.toUpperCase() === 'ASAP' ? 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20' : 'bg-slate-100 dark:bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20'
                               }`}>
                                 {activeTab === 'completed' ? 'completed' : activeTab === 'rejected' ? 'rejected' : formatJobTime(job)}
                               </span>
                             </div>
 
-                            {/* Row 2: Location & Client */}
-                            <div className="flex items-center justify-between mt-0.5">
-                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                                <MapPin className="w-2.5 h-2.5 text-green-500" /> {job.location}
-                              </p>
-                            </div>
-
                             {/* Row 3: Timestamp/User & Quantity/Value */}
                             <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50 mt-1">
                               <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
-                                <User className="w-2.5 h-2.5 text-slate-400" /> {job.customerName || job.customer || 'Resident'}
+                                {job.booking_type === 'marketplace_pickup' || job.booking_type === 'rfq' ? (
+                                  <><Zap className="w-2.5 h-2.5 text-amber-500" /> {job.weight_kg} KG Locked</>
+                                ) : (
+                                  <><User className="w-2.5 h-2.5 text-slate-400" /> {job.customerName || job.customer || 'Resident'}</>
+                                )}
                               </p>
                               <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
                                 <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Value:</span>
@@ -683,7 +820,6 @@ export default function AvailableJobs() {
                           <div className="flex items-center justify-center text-slate-300">
                             <ChevronRight className="w-4 h-4" />
                           </div>
-                        </div>
                       </div>
                     </div>
                   );

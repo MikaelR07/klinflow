@@ -269,7 +269,7 @@ export default function SwarmsList() {
               <div
                 key={swarm.id}
                 onClick={() => navigate(`/community-collective/swarm/${swarm.id}`)}
-                className="bg-white dark:bg-slate-900 p-3 px-4 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                className="bg-slate-50 dark:bg-slate-900 p-3 px-4 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50"
               >
                 <div className="flex justify-between items-start mb-1">
                   {/* Left: Material Image and Title */}
