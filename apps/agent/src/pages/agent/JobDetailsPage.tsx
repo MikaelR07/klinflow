@@ -38,7 +38,7 @@ export default function JobDetailsPage() {
   const getPriceForMaterial = usePriceStore(s => s.getPriceForMaterial);
   const fetchPrices = usePriceStore(s => s.fetchPrices);
   const { verifyAsset } = useAssetStore();
-  const { addNotification } = useNotificationStore();
+  /* useNotificationStore removed */
   
   const acceptJob = useAgentStore(s => s.acceptJob);
   const rejectJob = useAgentStore(s => s.rejectJob);
@@ -366,30 +366,12 @@ export default function JobDetailsPage() {
                             .neq('status', 'withdrawn');
                           const participantIds = participants?.map((p: any) => p.user_id).filter(Boolean) || [];
                           const allTargets = [...new Set([...participantIds, job.user_id || (job as any).userId])].filter(Boolean);
-                          addNotification(
-                            "Agent has Arrived at your Community! 🏘️",
-                            `${agentName} has arrived for your community group pickup. Please meet them with your materials ready.`,
-                            NOTIFICATION_TYPES.SUCCESS,
-                            'user',
-                            allTargets
-                          );
+                          /* addNotification removed for v3 migration */
                         } catch (err) {
-                          addNotification(
-                            "Agent has Arrived!",
-                            `${agentName} has arrived at your location. Please meet them to begin the pickup.`,
-                            NOTIFICATION_TYPES.SUCCESS,
-                            'client',
-                            job.user_id || (job as any).userId
-                          );
+                          /* addNotification removed for v3 migration */
                         }
                       } else {
-                        addNotification(
-                          "Agent has Arrived!",
-                          `${agentName} has arrived at your location. Please meet them to begin the pickup.`,
-                          NOTIFICATION_TYPES.SUCCESS,
-                          'client',
-                          job.user_id || (job as any).userId
-                        );
+                        /* addNotification removed for v3 migration */
                       }
 
                       setHasArrived(true);
@@ -508,13 +490,7 @@ export default function JobDetailsPage() {
                     const bookingOwner = (job as any).userId || job.user_id;
                     const otherParticipants = participantIds.filter((uid: string) => uid !== bookingOwner);
                     if (otherParticipants.length > 0) {
-                      addNotification(
-                        "Community Pickup Completed! 💰",
-                        `Your group pickup of ${data.weightKg}kg has been verified. Payouts and GFP are being distributed to all contributors.`,
-                        NOTIFICATION_TYPES.SUCCESS,
-                        'user',
-                        otherParticipants
-                      );
+                      /* addNotification removed for v3 migration */
                     }
                   } catch (err) {
                     console.error('[JobDetails] Failed to notify group participants on completion:', err);

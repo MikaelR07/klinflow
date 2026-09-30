@@ -53,7 +53,7 @@ export default function RequestGroupPickup() {
   const [participants, setParticipants] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [customLocation] = useState(profile?.location || { estate: 'Current Location', latitude: -1.2635, longitude: 36.8048 });
+  const [customLocation, setCustomLocation] = useState(profile?.location || { estate: 'Current Location', latitude: -1.2635, longitude: 36.8048 });
   const [photos, setPhotos] = useState<any[]>([]);
   const [customDescription, setCustomDescription] = useState('');
 
@@ -67,6 +67,28 @@ export default function RequestGroupPickup() {
   const [customDate, setCustomDate] = useState(new Date().toLocaleDateString('en-CA'));
   const [customTime, setCustomTime] = useState('09:00');
 
+  // ── SMART GEOLOCATION: Runs once on mount ──
+  useEffect(() => {
+    const fetchLoc = async () => {
+      try {
+        const { useLocationStore } = await import('@klinflow/core/stores/locationStore');
+        const store = useLocationStore.getState();
+        if (store.status === 'idle') store.startTracking();
+        
+        const loc = await store.getCurrentLocation();
+        setCustomLocation({
+          estate: store.liveAddress || 'Current Location',
+          latitude: loc.latitude,
+          longitude: loc.longitude
+        });
+      } catch (err) {
+        console.log('[RequestGroupPickup] GPS Permission Denied or Failed. Using profile fallback.', err);
+      }
+    };
+    fetchLoc();
+  }, []);
+
+  // ── DATA FETCHING: Swarm, agents, categories ──
   useEffect(() => {
     const loadSwarm = async () => {
       if (!id) return;
@@ -175,14 +197,7 @@ export default function RequestGroupPickup() {
         throw new Error('Database operation failed. Please ensure the latest migrations are applied.');
       }
 
-      await useNotificationStore.getState().addNotification(
-        "New Group Pickup! 🏘️",
-        `A high-density community drive for ${quantity}kg of ${swarm.material} is available in ${customLocation.estate}.`,
-        'info',
-        'agent',
-        selectedAgent?.id || null,
-        { wasteType: swarm.material, isGroup: true }
-      );
+      /* addNotification removed for v3 migration */
 
       setShowEscrowModal(false);
       toast.success("Group Pickup Requested Successfully!");

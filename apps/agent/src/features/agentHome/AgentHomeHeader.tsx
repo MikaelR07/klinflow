@@ -5,6 +5,7 @@
 import { Bell, MapPin, Loader2 } from 'lucide-react';
 import { OptimizedImage } from '@klinflow/ui';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
+import { useLocationStore } from '@klinflow/core/stores/locationStore';
 
 interface AgentHomeHeaderProps {
   profile: any;
@@ -19,11 +20,23 @@ export default function AgentHomeHeader({
   profile, unreadCount, navigate,
   isToggling, handleToggle,
 }: AgentHomeHeaderProps) {
+  const { status, liveAddress } = useLocationStore();
+
+  let displayLocation = 'Locating...';
+  let locationStatusIcon = null;
+  
+  if (status === 'tracking') {
+    displayLocation = liveAddress || 'Live GPS';
+  } else if (status === 'stale') {
+    displayLocation = liveAddress ? `⏳ ${liveAddress}` : 'Location Stale';
+  } else if (status === 'denied' || status === 'error') {
+    displayLocation = `Base: ${profile?.location?.estate || profile?.estate || 'Offline'}`;
+  }
 
   return (
     <>
       {/* Fixed Top Nav */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-slate-50 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center justify-between">
           {/* Left: Avatar + Greeting + Location */}
           <div className="flex items-center gap-2.5 min-w-0">
@@ -42,8 +55,8 @@ export default function AgentHomeHeader({
               </h1>
               {/* Location pill - greenish card style */}
               <div className="flex items-center gap-1 mt-1.5 text-[10px] text-emerald-700 dark:text-emerald-300 font-semibold capitalize tracking-wider bg-emerald-50 dark:bg-emerald-950/30 px-2.5 py-[3px] rounded-full border border-emerald-200 dark:border-emerald-800/50 w-fit">
-                <MapPin className="w-3 h-3 text-emerald-500 shrink-0" />
-                <span className="truncate max-w-[90px]">{profile?.location?.estate || profile?.estate || 'searching...'}</span>
+                <MapPin className={`w-3 h-3 shrink-0 ${status === 'tracking' ? 'text-emerald-500 animate-pulse' : 'text-slate-400'}`} />
+                <span className="truncate max-w-[90px]">{displayLocation}</span>
               </div>
             </div>
           </div>
@@ -86,7 +99,7 @@ export default function AgentHomeHeader({
             {/* Notification Bell */}
             <button
               onClick={() => navigate('/notifications')}
-              className="relative w-[38px] h-[38px] rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all active:scale-95 group"
+              className="relative w-[38px] h-[38px] rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all active:scale-95 group"
             >
               <Bell className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-emerald-500 transition-colors" />
               {unreadCount > 0 && (

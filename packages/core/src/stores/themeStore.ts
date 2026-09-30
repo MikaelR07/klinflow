@@ -21,7 +21,7 @@ export const useThemeStore = create<ThemeState>()(
       }
     }),
     {
-      name: 'klinflow-theme-state-v7',
+      name: 'klinflow-theme-state-v8',
       onRehydrateStorage: () => (state) => {
         if (state) state.initTheme();
       }

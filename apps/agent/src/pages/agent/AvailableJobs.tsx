@@ -6,7 +6,7 @@ import {
   Sparkles, MapPin, Clock, Package, CheckCircle, XCircle, Users,
   RefreshCw, Loader2, Navigation, Zap, Truck, User, ArrowLeft,
   ChevronRight, Calendar, Scale, ChevronDown, Info, DollarSign,
-  Search, X, SlidersHorizontal
+  Search, X, SlidersHorizontal, Home, FileText, Store
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -106,7 +106,7 @@ export default function AvailableJobs() {
       const success = await acceptJob(job.id);
       if (success) {
         setActiveTab('active');
-        toast.success(`Pickup accepted! 🚀`);
+        toast.success(`Pickup accepted!`);
       } else {
         toast.error("Could not claim job");
         fetchAvailableJobs();
@@ -219,7 +219,7 @@ export default function AvailableJobs() {
   const filteredJobs = useMemo(() => {
     let result = currentJobs;
 
-    if (activeTab === 'active' && selectedBookingType !== 'All') {
+    if ((activeTab === 'active' || activeTab === 'completed') && selectedBookingType !== 'All') {
       result = result.filter(j => {
         if (selectedBookingType === 'RFQ') return j.booking_type === 'rfq';
         if (selectedBookingType === 'Market trades') return j.is_market_trade === true;
@@ -435,32 +435,74 @@ export default function AvailableJobs() {
 
       <div className="flex-1 space-y-px pb-12 relative max-w-lg mx-auto w-full pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)]">
 
-        {/* Accepted Pickups Filter Card */}
-        {activeTab === 'active' && (
-          <div className="mx-4 mt-4 mb-2 p-2.5 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
-            <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
-              {(['All', 'Resident', 'Market trades', 'RFQ'] as const).map((type) => {
-                const count = currentJobs.filter(j => {
-                  if (type === 'RFQ') return j.booking_type === 'rfq';
-                  if (type === 'Market trades') return j.is_market_trade === true;
-                  if (type === 'Resident') return j.booking_type !== 'rfq' && j.is_market_trade !== true;
-                  return true;
-                }).length;
+        {/* Requested Hero Card */}
+        {activeTab === 'available' && (
+          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-emerald-700 to-teal-800 rounded-2xl border border-emerald-500/20 relative overflow-hidden">
+            {/* Background glows */}
+            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-emerald-500/30 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-teal-500/20 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="min-w-0">
+                <h2 className="text-lg font-black text-white tracking-tight leading-tight">Resident Requests</h2>
+                <p className="text-[10px] font-medium text-emerald-200/80 mt-0.5 capitalize tracking-widest">Pickup requests from residents in your area</p>
+              </div>
+              <div className="ml-3 shrink-0 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-2.5 flex flex-col items-center justify-center">
+                <span className="text-lg font-black text-white leading-none">{availableJobs.length}</span>
+                <span className="text-[8px] font-bold text-emerald-200/70 uppercase tracking-widest mt-1 leading-none">Requests</span>
+              </div>
+            </div>
+          </div>
+        )}
 
-                return (
-                  <button
-                    key={type}
-                    onClick={() => setSelectedBookingType(type)}
-                    className={`py-2 px-3.5 rounded-xl text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all shrink-0 ${
-                      selectedBookingType === type
-                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                      : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
-                    }`}
-                  >
-                    <span>{type}</span>
-                  </button>
-                );
-              })}
+        {/* Pickups Hero Filter Card */}
+        {(activeTab === 'active' || activeTab === 'completed') && (
+          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-indigo-900 to-purple-900 rounded-2xl shadow-xl shadow-indigo-900/10 border border-indigo-500/20 relative overflow-hidden">
+            
+            
+            <div className="relative z-10 mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-black text-white tracking-tight leading-tight">
+                  {activeTab === 'active' ? 'Filter Active Pickups' : 'Filter Completed Pickups'}
+                </h2>
+                <p className="text-[10px] font-medium text-indigo-200/80 mt-0.5 capitalize tracking-widest">Select by the source of the material</p>
+              </div>
+              {activeTab === 'completed' && currentJobs.length > 0 ? (
+                <button 
+                  onClick={async () => {
+                    await clearJobHistory();
+                    fetchEarnings();
+                    toast.success('Completed history cleared');
+                  }}
+                  className="px-3 h-10 rounded-2xl bg-rose-500/20 text-rose-200 hover:bg-rose-500/40 hover:text-white flex items-center justify-center gap-1.5 backdrop-blur-md border border-rose-500/30 shrink-0 transition-colors text-[10px] font-black uppercase tracking-wider"
+                >
+                  <XCircle className="w-4 h-4" /> Clear
+                </button>
+              ) : (
+                <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/10 shrink-0">
+                  <Truck className="w-5 h-5 text-indigo-300" />
+                </div>
+              )}
+            </div>
+
+            <div className="relative z-10 p-1 bg-black/20 backdrop-blur-md rounded-[14px] border border-white/10">
+              <div className="flex gap-1 overflow-x-auto no-scrollbar">
+                {(['All', 'Resident', 'Market trades', 'RFQ'] as const).map((type) => {
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => setSelectedBookingType(type)}
+                      className={`py-2.5 px-3.5 rounded-[10px] text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all shrink-0 ${
+                        selectedBookingType === type
+                        ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'
+                        : 'text-indigo-200/60 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <span>{type}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
@@ -521,7 +563,7 @@ export default function AvailableJobs() {
                               </div>
                             )) : (
                               <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800">
-                                <div className="text-6xl mb-4">{waste?.icon || '📦'}</div>
+                                <Package className="w-16 h-16 text-slate-400 mb-4" />
                                 <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">Asset Visual Unavailable</p>
                               </div>
                             )}
@@ -723,28 +765,28 @@ export default function AvailableJobs() {
                   const photoUrl = job.photoUrl || job.photo_url || job.photos?.[0];
                   
                   // Determine Origin Badge and Navigation Route
-                  let badgeIcon = '🏠';
+                  let badgeIcon = <Home className="w-3 h-3" />;
                   let badgeText = 'Resident';
                   let badgeColor = 'bg-sky-100 text-sky-800 dark:bg-sky-500/20 dark:text-sky-300 border-sky-300 dark:border-sky-500/40';
                   let navRoute = `/jobs/${job.id}`;
 
                   if (job.booking_type === 'rfq' && job.is_group_pickup) {
-                    badgeIcon = '👥';
+                    badgeIcon = <Users className="w-3 h-3" />;
                     badgeText = 'Group RFQ';
                     badgeColor = 'bg-blue-200 text-blue-900 dark:bg-blue-500/30 dark:text-blue-300 border-blue-400 dark:border-blue-500/50';
                     navRoute = `/pickups/${job.id}`;
                   } else if (job.booking_type === 'rfq') {
-                    badgeIcon = '📋';
+                    badgeIcon = <FileText className="w-3 h-3" />;
                     badgeText = 'RFQ';
                     badgeColor = 'bg-violet-200 text-violet-900 dark:bg-violet-500/30 dark:text-violet-300 border-violet-400 dark:border-violet-500/50';
                     navRoute = `/pickups/${job.id}`;
                   } else if (job.booking_type === 'marketplace_pickup' || job.is_market_trade) {
-                    badgeIcon = '🏪';
+                    badgeIcon = <Store className="w-3 h-3" />;
                     badgeText = 'Trade';
                     badgeColor = 'bg-emerald-200 text-emerald-900 dark:bg-emerald-500/30 dark:text-emerald-300 border-emerald-400 dark:border-emerald-500/50';
                     navRoute = `/trades/${job.id}`;
                   } else if (job.is_group_pickup) {
-                    badgeIcon = '👥';
+                    badgeIcon = <Users className="w-3 h-3" />;
                     badgeText = 'Swarm';
                     badgeColor = 'bg-indigo-200 text-indigo-900 dark:bg-indigo-500/30 dark:text-indigo-300 border-indigo-400 dark:border-indigo-500/50';
                     navRoute = `/jobs/${job.id}`;
@@ -769,7 +811,7 @@ export default function AvailableJobs() {
                             {photoUrl ? (
                               <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={waste?.label || job.material} />
                             ) : (
-                              waste?.icon || '📦'
+                              <Package className="w-8 h-8 text-slate-400" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
@@ -779,7 +821,7 @@ export default function AvailableJobs() {
                                 <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || job.material}</h3>
                               </div>
                               <span className={`px-2 py-1 rounded-lg text-[10px] font-black border flex items-center gap-1.5 shrink-0 ml-2 uppercase tracking-wider ${badgeColor}`}>
-                                <span className="text-sm">{badgeIcon}</span> {badgeText}
+                                {badgeIcon} {badgeText}
                               </span>
                             </div>
 
@@ -830,18 +872,12 @@ export default function AvailableJobs() {
         )}
 
         {/* Clear History Button */}
-        {(activeTab === 'completed' || activeTab === 'rejected') && currentJobs.length > 0 && (
+        {activeTab === 'rejected' && currentJobs.length > 0 && (
           <div className="px-4 pt-4 pb-2">
             <button
               onClick={async () => {
-                if (activeTab === 'completed') {
-                  await clearJobHistory();
-                  fetchEarnings();
-                  toast.success('Completed history cleared');
-                } else {
-                  rejectedJobs.forEach(j => restoreJob(j.id));
-                  toast.success('Rejected history cleared');
-                }
+                rejectedJobs.forEach(j => restoreJob(j.id));
+                toast.success('Rejected history cleared');
               }}
               className="w-full py-3 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-bold text-xs capitalize tracking-widest border border-rose-200 dark:border-rose-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >

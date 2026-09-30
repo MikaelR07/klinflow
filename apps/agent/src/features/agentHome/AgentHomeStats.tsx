@@ -145,37 +145,37 @@ export default function AgentHomeStats({
           <div className="px-1 pb-1">
             <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1 mb-2 mt-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1">
-              <button onClick={handlePickupsClick} className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:shadow-md active:scale-95 transition-all group relative">
-                {newPickupsCount > 0 && (
-                  <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center shadow-sm z-10">
-                    <span className="text-[11px] font-semibold text-white">{newPickupsCount > 99 ? '99+' : newPickupsCount}</span>
-                  </div>
-                )}
-                <div className="w-9 h-9 shrink-0 bg-indigo-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
+              <button onClick={handlePickupsClick} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
+                <div className="relative w-9 h-9 shrink-0 bg-indigo-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
+                  {newPickupsCount > 0 && (
+                    <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center shadow-sm z-10">
+                      <span className="text-[10px] font-semibold text-white">{newPickupsCount > 99 ? '99+' : newPickupsCount}</span>
+                    </div>
+                  )}
                   <MapPinPlus className="w-5 h-5" />
                 </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider leading-none">{profile?.agentAccountType !== 'fleet_driver' ? 'Drop-Offs' : 'Pickups'}</span>
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{profile?.agentAccountType !== 'fleet_driver' ? 'Drop-Offs' : 'Pickups'}</span>
               </button>
 
-              <button onClick={() => navigate('/reviews')} className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:shadow-md active:scale-95 transition-all group relative">
-                <div className="w-9 h-9 shrink-0 bg-emerald-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
+              <button onClick={() => navigate('/reviews')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
+                <div className="relative w-9 h-9 shrink-0 bg-emerald-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
                   <Star className="w-5 h-5" />
                 </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider leading-none">Rating</span>
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Rating</span>
               </button>
 
-              <button onClick={() => navigate('/warehouse')} className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:shadow-md active:scale-95 transition-all group">
-                <div className="w-9 h-9 shrink-0 bg-purple-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
+              <button onClick={() => navigate('/warehouse')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
+                <div className="relative w-9 h-9 shrink-0 bg-purple-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
                   <Package className="w-5 h-5" />
                 </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider leading-none">Warehouse</span>
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Warehouse</span>
               </button>
 
-              <button onClick={() => navigate(profile?.agentAccountType === 'fleet_driver' ? '/deposit' : '/wallet')} className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1.5 shadow-sm hover:shadow-md active:scale-95 transition-all group">
-                <div className="w-9 h-9 shrink-0 bg-amber-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
+              <button onClick={() => navigate(profile?.agentAccountType === 'fleet_driver' ? '/deposit' : '/wallet')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
+                <div className="relative w-9 h-9 shrink-0 bg-amber-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a8 8 0 0 1-5-1.52.5.5 0 0 1-.1-.63l2.25-3.82a.5.5 0 0 0-.1-.63z"/><path d="M5 21h14a2 2 0 0 0 2-2v-3.5"/><path d="M5 21a2 2 0 0 1-2-2V7"/><path d="M11 7v13"/></svg>
                 </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider leading-none">Wallet</span>
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Wallet</span>
               </button>
             </div>
 

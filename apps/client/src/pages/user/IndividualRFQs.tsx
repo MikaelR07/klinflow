@@ -7,7 +7,7 @@ import {
   ArrowLeft, Target, Search, SlidersHorizontal, X, ChevronDown,
   ArrowUpRight, ShieldCheck, MapPin, Bookmark, CircleCheck,
   Package, Flame, Scale, Clock, User, Recycle,
-  Receipt
+  Receipt, Droplets, Cog, ScrollText, Wine, Leaf, Cpu
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -356,24 +356,33 @@ export default function IndividualRFQs() {
         </div>
         
         {/* Category Pills (Scrollable) */}
-        <div className="flex px-1.5 pb-4 gap-1.5 overflow-x-auto no-scrollbar">
-          {(['All', 'Plastic', 'Metal', 'Paper', 'Organic', 'Glass', 'E-waste'] as const).map((category) => {
-            const count = category === 'All'
+        <div className="flex px-4 pb-2 gap-2 overflow-x-auto no-scrollbar">
+          {[
+            { id: 'All', label: 'All', Icon: Recycle },
+            { id: 'Plastic', label: 'Plastic', Icon: Droplets },
+            { id: 'Metal', label: 'Metal', Icon: Cog },
+            { id: 'Paper', label: 'Paper', Icon: ScrollText },
+            { id: 'Glass', label: 'Glass', Icon: Wine },
+            { id: 'Organic', label: 'Organic', Icon: Leaf },
+            { id: 'E-waste', label: 'E-waste', Icon: Cpu }
+          ].map((cat) => {
+            const count = cat.id === 'All'
               ? rfqsList.length
-              : rfqsList.filter(r => r.category && r.category.toLowerCase() === category.toLowerCase()).length;
+              : rfqsList.filter(r => r.category && r.category.toLowerCase() === cat.id.toLowerCase()).length;
 
             return (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`py-1.5 px-2.5 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shadow-sm shrink-0 ${selectedCategory === category
-                  ? 'bg-emerald-600 text-white border-transparent'
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border shrink-0 ${selectedCategory === cat.id
+                  ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                   }`}
               >
-                <span>{category}</span>
+                <cat.Icon className={`w-4 h-4 ${selectedCategory === cat.id ? 'text-white' : 'text-slate-600 dark:text-slate-500'}`} />
+                <span>{cat.label}</span>
                 {count > 0 && (
-                  <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${selectedCategory === category
+                  <span className={`px-1.5 py-0.5 rounded-md text-[9px] leading-none ml-1 ${selectedCategory === cat.id
                     ? 'bg-emerald-700 text-white'
                     : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                     }`}>

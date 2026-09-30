@@ -31,27 +31,7 @@ const getSwarmParticipantIds = async (swarmId: string): Promise<string[]> => {
   }
 };
 
-/**
- * Send a notification to every participant in a group pickup swarm.
- * For non-group pickups, sends to the single booking owner.
- */
-const notifyGroupOrSingle = async (
-  job: AgentJob,
-  title: string,
-  body: string,
-  type: string = 'success'
-) => {
-  const { addNotification } = useNotificationStore.getState();
-  
-  if (job.is_group_pickup && job.swarm_id) {
-    const participantIds = await getSwarmParticipantIds(job.swarm_id);
-    // Also include the booking creator in case they're not a participant
-    const allTargets = [...new Set([...participantIds, job.user_id])];
-    await addNotification(title, body, type, 'user', allTargets);
-  } else {
-    await addNotification(title, body, type, 'user', job.user_id);
-  }
-};
+
 
 export const useAgentStore = create<AgentStore>()(
   persist(
@@ -89,8 +69,35 @@ export const useAgentStore = create<AgentStore>()(
   isLoadingReviews: false,
   coachInsights: AI_COACH_INSIGHTS as unknown as CoachInsight[],
   isLoadingJobs: false,
+  isInitialized: false,
   currentInsightIndex: 0,
   jobSubscription: null,
+  
+  initializeAgentData: async () => {
+    // Uber-style initialization gate: fetch everything concurrently
+    const state = get();
+    // Only drop the gate (show skeleton) if we genuinely have NO data yet.
+    // If we have data, we stay initialized and do a silent background refresh.
+    const hasExistingData = state.activeJobs.length > 0 || state.availableJobs.length > 0 || state.arrivedJobIds.length > 0;
+    
+    set({ 
+      isLoadingJobs: true, 
+      isInitialized: hasExistingData ? true : false 
+    });
+    
+    try {
+      // We fire all critical fetches together
+      await Promise.allSettled([
+        get().fetchAvailableJobs(),
+        get().fetchActiveJobs()
+      ]);
+    } catch (error) {
+      console.error('[AgentStore] Initialization failed partially:', error);
+    } finally {
+      // ALWAYS unlock the gate, even if network fails
+      set({ isLoadingJobs: false, isInitialized: true });
+    }
+  },
   
   // ── Fleet Management ──────────────────────────────
   fleetDrivers: [],
@@ -817,21 +824,7 @@ export const useAgentStore = create<AgentStore>()(
       await get().fetchAvailableJobs();
       await get().fetchActiveJobs();
 
-      // Notify the Resident(s) — for group pickups, notify ALL swarm participants
-      const job = get().activeJobs.find(j => j.id === jobId);
-      if (job) {
-        const agentName = profile?.fullName || profile?.name || 'an Agent';
-        const isGroup = job.is_group_pickup && job.swarm_id;
-        
-        await notifyGroupOrSingle(
-          job,
-          isGroup ? "Community Pickup Accepted! 🏘️" : "Mission Accepted! 🚛",
-          isGroup
-            ? `Agent ${agentName} has accepted your community group pickup and is preparing to head your way. Get your materials ready!`
-            : `Agent ${agentName} has claimed your pickup and is preparing to head your way.`,
-          'success'
-        );
-      }
+
 
       return true;
     } catch (err) {

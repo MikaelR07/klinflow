@@ -38,21 +38,13 @@ export const LocationSchema = z.object({
 });
 
 export const NotificationPrefsSchema = z.object({
-  push: z.boolean().default(true),
-  email: z.boolean().default(true),
-  sms: z.boolean().default(false),
-  marketing: z.boolean().default(false),
-  pickupReminders: z.boolean().default(true),
-  aiInsights: z.boolean().default(true),
-  rewardAlerts: z.boolean().default(true),
-  emergencyAlerts: z.boolean().default(true),
-  agentJobAlerts: z.boolean().default(true),
-  systemAlerts: z.boolean().default(true),
-  communityNews: z.boolean().default(true),
-  feedbackAlerts: z.boolean().default(true),
-  dailyKpi: z.boolean().default(false),
-  staffAlerts: z.boolean().default(true),
-  channel: z.string().default('push'),
+  pushEnabled: z.boolean().default(true),
+  emailEnabled: z.boolean().default(false),
+  quietHoursEnabled: z.boolean().default(false),
+  quietHoursStart: z.string().default('22:00:00'),
+  quietHoursEnd: z.string().default('07:00:00'),
+  timezone: z.string().default('Africa/Nairobi'),
+  disabledCategories: z.array(z.string()).default([]),
 });
 
 export const ProfileSchema = z.object({
@@ -236,13 +228,17 @@ export const TelemetryPayloadSchema = z.object({
 
 export const AppNotificationSchema = z.object({
   id: z.string(),
+  domainEventId: z.string().uuid().nullable().optional(),
   title: z.string(),
-  content: z.string(),
-  type: z.enum(['success', 'warning', 'reward', 'info', 'cargo', 'security', 'facility', 'system']).default('info'),
-  targetRole: z.string().nullable().optional(),
-  targetUser: z.string().uuid().nullable().optional(),
+  body: z.string(), // Maps to content
+  content: z.string().optional(), // Used by UI temporarily
+  category: z.string().default('system'),
+  priority: z.enum(['low', 'normal', 'high', 'critical']).default('normal'),
+  actionUrl: z.string().nullable().optional(),
   isRead: z.boolean().default(false),
   read: z.boolean().default(false), // Logic alias
+  archived: z.boolean().default(false),
+  metadata: z.record(z.string(), z.any()).optional(),
   createdAt: z.string(),
 });
 

@@ -210,13 +210,7 @@ export default function CreateRFQPage() {
       if (insertError) throw insertError;
 
       // Broadcast Notification to all sellers (client role)
-      await useNotificationStore.getState().addNotification(
-        'New Market Request 🔔',
-        `An agent is requesting ${formData.weight}kg of ${formData.materialName} in ${formData.pickupArea}.`,
-        NOTIFICATION_TYPES.INFO,
-        'seller',
-        null
-      );
+      /* addNotification removed for v3 migration */
 
       toast.success("RFQ Broadcasted Successfully! 🚀", {
         description: "Sellers in your area will be notified of your request."

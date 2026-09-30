@@ -25,7 +25,7 @@ export default function AgentHome() {
   const fetchProfile = useAuthStore(s => (s as any).fetchProfile);
 
   const earnings = useAgentStore(s => s.earnings);
-  const fetchAvailableJobs = useAgentStore(s => s.fetchAvailableJobs);
+  const initializeAgentData = useAgentStore(s => s.initializeAgentData);
   const fetchEarnings = useAgentStore(s => s.fetchEarnings);
   const fetchDynamicInsights = useAgentStore(s => s.fetchDynamicInsights);
   const broadcastLocation = useAgentStore(s => s.broadcastLocation);
@@ -108,7 +108,7 @@ export default function AgentHome() {
     fetchEarnings();
     fetchProfile();
 
-    const jobsTimer = setTimeout(() => fetchAvailableJobs(), 100);
+    const jobsTimer = setTimeout(() => initializeAgentData(), 100);
     const assetsTimer = setTimeout(() => fetchAssets(), 300);
     const aiTimer = setTimeout(() => fetchDynamicInsights(), 600);
 
@@ -179,21 +179,14 @@ export default function AgentHome() {
         if (agentPosition && hasLocation) {
           coords = { latitude: agentPosition.lat, longitude: agentPosition.lng };
         } else {
-          const getCoords = () => new Promise<{ latitude: number; longitude: number }>((resolve, reject) => {
-            if (!navigator.geolocation) return reject(new Error('Geolocation not supported'));
-            navigator.geolocation.getCurrentPosition(
-              (pos) => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
-              (err) => reject(err),
-              { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
-          });
-
           try {
-            coords = await toast.promise(getCoords(), {
+            const { useLocationStore } = await import('@klinflow/core/stores/locationStore');
+            const locCoords = await toast.promise(useLocationStore.getState().getCurrentLocation(), {
               loading: '📡 Acquiring GPS signal...',
               success: 'Location synced! You are now live.',
               error: 'GPS error. Using last known location.',
             });
+            coords = { latitude: locCoords.latitude, longitude: locCoords.longitude };
           } catch (err) {
             coords = null;
           }
@@ -203,7 +196,7 @@ export default function AgentHome() {
       await toggleOnline(coords);
 
       if (isGoingOnline) {
-        fetchAvailableJobs();
+        initializeAgentData();
         toast.success('You are now Online! 👋', { description: 'Ready to receive missions.' });
       } else {
         toast.info('You are now Offline');

@@ -142,6 +142,8 @@ export interface AgentStore {
   isLoadingReviews: boolean;
   coachInsights: CoachInsight[];
   isLoadingJobs: boolean;
+  isInitialized: boolean;
+  initializeAgentData: () => Promise<void>;
   currentInsightIndex: number;
   jobSubscription: { unsubscribe: () => void } | null;
   reviewSubscription: { unsubscribe: () => void } | null;

@@ -11,6 +11,7 @@ import { supabase } from '@klinflow/supabase';
 import { MATERIAL_LABELS } from '@klinflow/core/data/wasteDefinitions';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { normalizeKeys } from '@klinflow/core/validation';
+import { useLocationStore } from '@klinflow/core/stores/locationStore';
 
 const SCALE_DEFS = [
   { id: 'all', label: 'Any Scale', icon: Truck, description: 'Show all partners' },
@@ -62,32 +63,26 @@ export default function DiscoveryHub() {
 
   const materials = ['all', 'recyclable', 'metal', 'ewaste', 'paper', 'glass', 'organic', 'general'];
 
-  // Request user's GPS location
+  // Request user's GPS location via unified locationStore
   useEffect(() => {
-    if (!navigator.geolocation) {
-      setLocationStatus('denied');
-      return;
-    }
-    setLocationStatus('requesting');
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        // Reject (0,0) and obviously invalid coordinates
-        if (validCoords(lat, lng)) {
-          setUserCoords({ lat, lng });
+    const fetchLoc = async () => {
+      try {
+        const { useLocationStore } = await import('@klinflow/core/stores/locationStore');
+        const store = useLocationStore.getState();
+        if (store.status === 'idle') store.startTracking();
+        
+        const loc = await store.getCurrentLocation();
+        if (validCoords(loc.latitude, loc.longitude)) {
+          setUserCoords({ lat: loc.latitude, lng: loc.longitude });
           setLocationStatus('granted');
         } else {
-          console.warn('[Discovery] Browser returned invalid GPS coords:', lat, lng);
           setLocationStatus('denied');
         }
-      },
-      (err) => {
-        console.warn('[Discovery] Geolocation error:', err.message);
+      } catch (err) {
         setLocationStatus('denied');
-      },
-      { timeout: 8000, maximumAge: 300000 }
-    );
+      }
+    };
+    fetchLoc();
   }, []);
 
   useEffect(() => {

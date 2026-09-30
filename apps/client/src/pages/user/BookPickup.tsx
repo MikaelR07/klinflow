@@ -19,7 +19,7 @@ import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { usePriceStore } from '@klinflow/core/stores/priceStore';
 import { useSystemStore } from '@klinflow/core/stores/systemStore';
-import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+
 import { supabase } from '@klinflow/supabase';
 import { uploadFile } from '@klinflow/core/lib/storage';
 import { MATERIAL_TYPES } from '@klinflow/core/stores/assetStore';
@@ -131,21 +131,27 @@ export default function BookPickup() {
 
 
   useEffect(() => {
-    // ── SMART GEOLOCATION: Detect current position if no saved profile location ──
-    if (!profile?.location && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
+    // ── SMART GEOLOCATION: Prioritize Live GPS, fallback to profile location ──
+    if (!rescheduleId) {
+      const fetchLoc = async () => {
+        try {
+          const { useLocationStore } = await import('@klinflow/core/stores/locationStore');
+          const store = useLocationStore.getState();
+          if (store.status === 'idle') store.startTracking();
+          
+          const loc = await store.getCurrentLocation();
           setCustomLocation({
-            estate: 'Current Location',
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude
+            estate: store.liveAddress || 'Current Location',
+            latitude: loc.latitude,
+            longitude: loc.longitude
           });
-        },
-        (err) => console.log('[Booking] GPS Permission Denied or Failed', err),
-        { enableHighAccuracy: true }
-      );
+        } catch (err) {
+          console.log('[Booking] GPS Permission Denied or Failed. Using profile fallback.', err);
+        }
+      };
+      fetchLoc();
     }
-  }, [profile?.id]);
+  }, [rescheduleId]);
 
   const [photo, setPhoto] = useState<any>(null);
   const [customDescription, setCustomDescription] = useState('');
@@ -332,15 +338,7 @@ export default function BookPickup() {
         if (!result) throw new Error("Failed to create pickup request. Please try again.");
       }
 
-      // Instantly notify the specific agent (or all available agents if none selected)
-      await useNotificationStore.getState().addNotification(
-        "New Dispatch Mission! 🚛",
-        `A pickup request for ${quantity}kg of ${selected.label || (selected.slug || selected.id)} is available in ${customLocation.estate || 'your area'}.`,
-        'info', // type
-        'agent', // target role
-        targetAgentId, // targeted agent if manually selected
-        { wasteType: selected.slug || selected.id } // metadata for client-side filtering
-      );
+
 
       setShowEscrowModal(false);
       toast.success("Pickup Requested!");

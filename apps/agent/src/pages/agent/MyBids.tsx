@@ -2,9 +2,10 @@
  * MyBids Page — Tracks agent negotiations and offers on Marketplace listings.
  */
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowLeft, Clock, CheckCircle2, XCircle, ChevronRight, Package, Receipt, MapPin, User
+  ArrowLeft, Clock, CheckCircle2, XCircle, ChevronRight, Package, Receipt, MapPin, User, TrendingUp,
+  Recycle, Droplets, Cog, ScrollText, Wine, ChevronDown, Apple, Cpu, Shirt
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -44,6 +45,8 @@ export default function MyBids() {
   const [bids, setBids] = useState<Bid[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'pending' | 'accepted' | 'rejected'>('pending');
+  const [filterMaterial, setFilterMaterial] = useState('All');
+  const [isMoreCategoriesOpen, setIsMoreCategoriesOpen] = useState(false);
 
   useEffect(() => {
     if (!profile?.id) return;
@@ -100,10 +103,14 @@ export default function MyBids() {
     fetchBids();
   }, [profile?.id]);
 
-  const filteredBids = bids.filter(bid => bid.status === activeTab);
+  const filteredBids = bids.filter(bid => {
+    if (bid.status !== activeTab) return false;
+    if (filterMaterial !== 'All' && bid.listing.material !== filterMaterial && bid.listing.materialCategory !== filterMaterial) return false;
+    return true;
+  });
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50 dark:bg-slate-900 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-900 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       <div className="h-[calc(env(safe-area-inset-top,1rem)+7rem)]" />
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-800 max-w-lg mx-auto">
@@ -115,7 +122,7 @@ export default function MyBids() {
 
           <div>
             <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">My Bids</h1>
-            <p className="text-[10px] font-bold text-indigo-500 capitalize tracking-[0.2em] mt-1">Negotiation History</p>
+            <p className="text-[11px] font-bold text-indigo-500 capitalize tracking-[0.2em] mt-1">Negotiation History</p>
           </div>
         </div>
 
@@ -135,7 +142,7 @@ export default function MyBids() {
                 className={`relative flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-xl transition-all flex items-center justify-center gap-1.5 ${
                   isActive
                     ? 'bg-indigo-600 shadow-sm text-white font-black'
-                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
+                    : 'text-slate-600 hover:text-slate-600 dark:hover:text-slate-300'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -149,26 +156,118 @@ export default function MyBids() {
       {/* ── CONTENT AREA ── */}
       <div className="flex-1 overflow-y-auto no-scrollbar max-w-lg mx-auto w-full px-1.5 pb-12">
         {/* Top Hero Stats Card */}
-        <div className="bg-indigo-900 rounded-2xl p-5 mb-5 border border-indigo-500/30 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <Receipt className="w-24 h-24 text-white" />
-          </div>
-          <div className="relative z-10 flex items-center justify-between">
+        <div className="relative w-full rounded-[1.25rem] overflow-hidden border border-indigo-600 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 shadow-sm mb-5">
+          <div className="relative z-20 p-5 flex flex-col gap-4">
             <div>
-              <p className="text-[10px] font-bold text-indigo-300 capitalize tracking-[0.2em] mb-1">Success Rate</p>
-              <div className="flex items-baseline gap-1.5">
-                <h2 className="text-3xl font-black text-white">
-                  {bids.length > 0 
-                    ? Math.round((bids.filter(b => b.status === 'accepted').length / bids.length) * 100) 
-                    : 0}%
-                </h2>
+              <h2 className="text-[17px] font-black text-white tracking-tight leading-none mb-1.5">Negotiation Performance</h2>
+              <p className="text-[11px] font-semibold text-slate-400">Track your success rate and manage active market offers.</p>
+            </div>
+            
+            <div className="flex gap-3">
+              <div className="flex-1 bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-md flex items-center justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-indigo-300 uppercase tracking-widest mb-0.5">Success Rate</p>
+                  <h3 className="text-xl font-black text-white leading-none">
+                    {bids.length > 0 ? Math.round((bids.filter(b => b.status === 'accepted').length / bids.length) * 100) : 0}%
+                  </h3>
+                </div>
+                <div className="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
+                  <TrendingUp className="w-4 h-4 text-indigo-300" />
+                </div>
+              </div>
+              <div className="flex-1 bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-md flex items-center justify-between">
+                <div>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Bids</p>
+                  <h3 className="text-xl font-black text-white leading-none">{bids.length}</h3>
+                </div>
+                <div className="w-8 h-8 rounded-lg bg-slate-500/20 border border-slate-500/30 flex items-center justify-center">
+                  <Receipt className="w-4 h-4 text-slate-300" />
+                </div>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-[10px] font-bold text-indigo-300 capitalize tracking-[0.2em] mb-1">Total Bids</p>
-              <h2 className="text-3xl font-black text-white">{bids.length}</h2>
+          </div>
+        </div>
+
+        {/* ── MATERIAL CATEGORY CHIPS ── */}
+        <div className="relative mb-2">
+          <div className="flex justify-between items-end px-1 mb-2">
+             <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-widest">Filter by Category</p>
+             <p className="text-[10px] font-bold text-indigo-500/70 capitalize tracking-widest">{filteredBids.length} Bids</p>
+          </div>
+          <div className="flex overflow-x-auto no-scrollbar gap-2 pb-1">
+            {[
+              { id: 'All', label: 'All', Icon: Recycle },
+              { id: 'Plastic', label: 'Plastic', Icon: Droplets },
+              { id: 'Metal', label: 'Metal', Icon: Cog },
+              { id: 'Paper', label: 'Paper', Icon: ScrollText },
+              { id: 'Glass', label: 'Glass', Icon: Wine }
+            ].map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => {
+                  setFilterMaterial(cat.id);
+                  setIsMoreCategoriesOpen(false);
+                }}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
+                  filterMaterial === cat.id
+                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                    : 'bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                }`}
+              >
+                <cat.Icon className={`w-4 h-4 ${filterMaterial === cat.id ? 'text-white' : 'text-slate-600'}`} />
+                <span>{cat.label}</span>
+              </button>
+            ))}
+            
+            {/* More Dropdown Button */}
+            <div className="relative">
+              <button
+                onClick={() => setIsMoreCategoriesOpen(!isMoreCategoriesOpen)}
+                className={`flex items-center gap-1.5 px-3.5 py-3 rounded-xl text-[12px] font-bold whitespace-nowrap transition-all border shrink-0 ${
+                  ['Organic', 'E-waste', 'Textile'].includes(filterMaterial) || isMoreCategoriesOpen
+                    ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/30'
+                    : 'bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                }`}
+              >
+                <span>{['Organic', 'E-waste', 'Textile'].includes(filterMaterial) ? filterMaterial : 'More'}</span>
+                <ChevronDown className={`w-3 h-3 transition-transform ${isMoreCategoriesOpen ? 'rotate-180' : ''}`} />
+              </button>
             </div>
           </div>
+          
+          {/* Dropdown Menu */}
+          <AnimatePresence>
+            {isMoreCategoriesOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                className="absolute right-0 top-full mt-1 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 z-50 overflow-hidden"
+              >
+                {[
+                  { id: 'Organic', label: 'Organic', Icon: Apple },
+                  { id: 'E-waste', label: 'E-waste', Icon: Cpu },
+                  { id: 'Textile', label: 'Textile', Icon: Shirt }
+                ].map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => {
+                      setFilterMaterial(cat.id);
+                      setIsMoreCategoriesOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[11px] font-bold transition-colors ${
+                      filterMaterial === cat.id
+                        ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600'
+                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    <cat.Icon className={`w-3.5 h-3.5 ${filterMaterial === cat.id ? 'text-indigo-500' : 'text-slate-400'}`} />
+                    <span>{cat.label}</span>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {isLoading ? (
@@ -177,7 +276,7 @@ export default function MyBids() {
           </div>
         ) : filteredBids.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center py-12 px-6 bg-slate-100 dark:bg-slate-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-slate-700">
-            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center shadow-sm mb-4">
+            <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center shadow-sm mb-4">
               <Receipt className="w-8 h-8 text-slate-300 dark:text-slate-600" />
             </div>
             <h3 className="text-[15px] font-black text-slate-700 dark:text-slate-300 mb-1">No {activeTab} bids</h3>
@@ -196,13 +295,13 @@ export default function MyBids() {
             )}
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-1">
             {filteredBids.map((bid) => (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 key={bid.id}
-                className="bg-white dark:bg-slate-900 rounded-[1.25rem] p-3 border border-slate-100 dark:border-slate-800/60 shadow-sm relative overflow-hidden"
+                className="bg-slate-50 dark:bg-slate-900 rounded-[1.25rem] p-3 border border-slate-100 dark:border-slate-800/60 shadow-sm relative overflow-hidden"
               >
                 <div className="flex gap-3 relative z-10">
                   <div className="w-[84px] h-[84px] shrink-0 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-hidden relative border border-slate-200/50 dark:border-slate-700/50">

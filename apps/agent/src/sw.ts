@@ -69,7 +69,8 @@ self.addEventListener('push', (event) => {
       icon: '/logo.png',
       badge: '/icons/icon-192.png',
       data: {
-        url: data.data?.url || '/'
+        // V3 Migration: Parse structured deep links dynamically passed from the Outbox edge function
+        url: data.data?.url || data.action_url || '/'
       },
       vibrate: [200, 100, 200, 100, 200], // Stronger vibration for agents
       tag: 'mission-alert',

@@ -4,60 +4,14 @@
  */
 import { useState, useEffect } from 'react';
 import {
-  Zap, Star, ChevronRight, X, Clock, Truck, AlertCircle, Search, Loader2, User, ShieldCheck, LocateFixed
+  Zap, Star, ChevronRight, X, Clock, Truck, AlertCircle, Search, Loader2, User, ShieldCheck
 } from 'lucide-react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Marker, Popup } from 'react-leaflet';
+import { SharedMap } from '../../components/ui/SharedMap';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { supabase } from '@klinflow/supabase';
 import type { BookPickupAgent } from './bookPickup.types';
-import { useMap } from 'react-leaflet';
-import L from 'leaflet';
-
-function RecenterButton({ center }: { center: [number, number] }) {
-  const map = useMap();
-  return (
-    <div className="leaflet-bottom leaflet-right" style={{ pointerEvents: 'none' }}>
-      <div className="leaflet-control" style={{ pointerEvents: 'auto', marginBottom: '16px', marginRight: '16px' }}>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            map.setView(center, 15, { animate: true });
-          }}
-          className="w-11 h-11 bg-white dark:bg-slate-800 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center active:scale-90 transition-all text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary"
-          title="Recenter Map"
-        >
-          <LocateFixed className="w-5 h-5" />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function MapBounds({ center, agents }: { center: [number, number], agents?: any[] }) {
-  const map = useMap();
-  useEffect(() => {
-    const bounds = L.latLngBounds([center]);
-    let hasMarkers = false;
-    
-    if (agents?.length) {
-      agents.forEach(a => {
-        const lat = a.location?.latitude || center[0];
-        const lng = a.location?.longitude || center[1];
-        bounds.extend([lat, lng]);
-        hasMarkers = true;
-      });
-    }
-
-    if (hasMarkers) {
-      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 16, animate: true });
-    } else {
-      map.setView(center, 14, { animate: true });
-    }
-  }, [center, agents, map]);
-  return null;
-}
 
 interface BookPickupAgentStepProps {
   center: [number, number];
@@ -93,12 +47,7 @@ export default function BookPickupAgentStep({
   const [searchError, setSearchError] = useState<string | null>(null);
   const [searchedAgent, setSearchedAgent] = useState<any | null>(null);
   const [searchAttempted, setSearchAttempted] = useState(false);
-  const [mapLoaded, setMapLoaded] = useState(false);
 
-  useEffect(() => {
-    const t = setTimeout(() => setMapLoaded(true), 1200);
-    return () => clearTimeout(t);
-  }, []);
 
   const handleAgentSearch = async () => {
     setSearchError(null);
@@ -179,22 +128,7 @@ export default function BookPickupAgentStep({
           </motion.div>
         )}
 
-        <div className="h-[350px] -mx-3.5 w-auto rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 relative shadow-sm group">
-          {/* ── Premium Glass Loading Overlay ── */}
-          <div className={`absolute inset-0 z-50 pointer-events-none bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm flex items-center justify-center transition-opacity duration-1000 ${mapLoaded ? 'opacity-0' : 'opacity-100'}`}>
-            <div className="flex flex-col items-center gap-4 bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700">
-               <div className="relative flex items-center justify-center">
-                 <div className="w-12 h-12 rounded-full border-4 border-slate-100 dark:border-slate-700" />
-                 <div className="absolute inset-0 w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-               </div>
-               <p className="text-xs font-black text-slate-600 dark:text-slate-300 tracking-widest uppercase">Loading Map...</p>
-            </div>
-          </div>
-
-          <MapContainer center={center as [number, number]} zoom={13} zoomControl={false} className="h-full w-full z-0">
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <MapBounds center={center as [number, number]} agents={filteredAgents} />
-            <RecenterButton center={center as [number, number]} />
+        <SharedMap center={center as [number, number]} height="h-[350px]" boundsItems={filteredAgents}>
             <Marker position={center as any} {...({ icon: userIcon } as any)} />
 
             {filteredAgents.map((agent, index) => {
@@ -250,8 +184,7 @@ export default function BookPickupAgentStep({
                 </Marker>
               );
             })}
-          </MapContainer>
-        </div>
+          </SharedMap>
 
         {/* Active Selection Cards */}
         {(selectedAgent || selectedCompanyId) && (

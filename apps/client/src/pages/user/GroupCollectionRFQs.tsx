@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import {
   ArrowLeft, Search, Users, Scale, MapPin, Clock,
   Recycle, Flame, Bookmark, User, Handshake,
-  CircleCheck, ShieldCheck, ArrowUpRight, ChevronDown
+  CircleCheck, ShieldCheck, ArrowUpRight, ChevronDown,
+  Droplets, Cog, ScrollText, Wine, Leaf, Cpu
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core';
@@ -252,14 +253,16 @@ export default function GroupCollectionRFQs() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+9rem)] pb-5 max-w-lg mx-auto w-full">
 
         {/* ── HERO BANNERS CAROUSEL ── */}
-        <div className="flex gap-3 px-1.5 mb-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-1">
+        <div className="flex gap-2 mb-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-1 scroll-pl-3">
+          {/* Left spacer */}
+          <div className="w-0.5 shrink-0" />
           {/* Banner 1: My Proposals */}
           <div className="relative w-[92%] shrink-0 h-[160px] rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60 snap-start">
             <img src="/vectors/community-banner-real.webp" alt="More Impact. More Rewards." className="absolute inset-0 w-full h-full object-cover object-right" />
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-950 via-emerald-900/60 to-transparent dark:from-slate-950/95 dark:via-emerald-950/80"></div>
             <div className="relative z-10 p-4 h-full flex flex-col justify-center">
-              <h3 className="text-[22px] font-black text-emerald-400 leading-tight">More Impact.</h3>
-              <h3 className="text-[22px] font-black text-amber-500 leading-tight">More Rewards.</h3>
+              <h3 className="text-[22px] font-black text-amber-500 leading-tight">More Impact.</h3>
+              <h3 className="text-[22px] font-black text-emerald-400 leading-tight">More Rewards.</h3>
               <p className="text-[11px] font-semibold text-slate-200/90 leading-tight max-w-[240px] mt-1.5">
                 Access contracts from trusted buyers and earn premium rates by Joining the Community Network.
               </p>
@@ -292,7 +295,7 @@ export default function GroupCollectionRFQs() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-2.5 rounded-xl text-[9.5px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all ${
+                  className={`flex-1 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 font-bold capitalise tracking-wider transition-all ${
                     activeTab === tab
                     ? 'bg-blue-600 text-white shadow-md border border-blue-500'
                     : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
@@ -315,9 +318,17 @@ export default function GroupCollectionRFQs() {
         </div>
 
         {/* ── CATEGORY FILTERS ── */}
-        <div className="flex px-2 pb-4 gap-1.5 overflow-x-auto no-scrollbar">
-          {(['All', 'Plastic', 'Metal', 'Paper', 'Organic', 'Glass', 'E-waste'] as const).map((category) => {
-            const count = category === 'All' 
+        <div className="flex px-4 pb-2 gap-2 overflow-x-auto no-scrollbar">
+          {[
+            { id: 'All', label: 'All', Icon: Recycle },
+            { id: 'Plastic', label: 'Plastic', Icon: Droplets },
+            { id: 'Metal', label: 'Metal', Icon: Cog },
+            { id: 'Paper', label: 'Paper', Icon: ScrollText },
+            { id: 'Glass', label: 'Glass', Icon: Wine },
+            { id: 'Organic', label: 'Organic', Icon: Leaf },
+            { id: 'E-waste', label: 'E-waste', Icon: Cpu }
+          ].map((cat) => {
+            const count = cat.id === 'All' 
               ? rfqs.filter(r => {
                   if (activeTab === 'Open') return r.status === 'open' && r.deadline !== 'Expired';
                   if (activeTab === 'My Pledges') return r.hasMyPledge && r.status !== 'completed' && r.status !== 'fulfilled';
@@ -325,7 +336,7 @@ export default function GroupCollectionRFQs() {
                   return true;
                 }).length 
               : rfqs.filter(r => {
-                  if (!(r.category && r.category.toLowerCase() === category.toLowerCase())) return false;
+                  if (!(r.category && r.category.toLowerCase() === cat.id.toLowerCase())) return false;
                   if (activeTab === 'Open') return r.status === 'open' && r.deadline !== 'Expired';
                   if (activeTab === 'My Pledges') return r.hasMyPledge && r.status !== 'completed' && r.status !== 'fulfilled';
                   if (activeTab === 'Fulfilled') return r.status === 'fulfilled' || r.status === 'completed' || r.totalPledgedWeight >= r.requestedWeight;
@@ -334,18 +345,19 @@ export default function GroupCollectionRFQs() {
 
             return (
               <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`py-1.5 px-2.5 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shadow-sm shrink-0 ${
-                  selectedCategory === category
-                  ? 'bg-emerald-600 text-white border-transparent'
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border shrink-0 ${
+                  selectedCategory === cat.id
+                  ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
-                <span>{category}</span>
+                <cat.Icon className={`w-4 h-4 ${selectedCategory === cat.id ? 'text-white' : 'text-slate-600 dark:text-slate-500'}`} />
+                <span>{cat.label}</span>
                 {count > 0 && (
-                  <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${
-                    selectedCategory === category
+                  <span className={`px-1.5 py-0.5 rounded-md text-[9px] leading-none ml-1 ${
+                    selectedCategory === cat.id
                     ? 'bg-emerald-700 text-white'
                     : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                   }`}>
@@ -355,7 +367,7 @@ export default function GroupCollectionRFQs() {
               </button>
             );
           })}
-        </div>
+        </div> 
 
         {/* Loading */}
         {loading && (

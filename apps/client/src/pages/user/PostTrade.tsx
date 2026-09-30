@@ -87,7 +87,7 @@ export default function PostTrade() {
   const [selectedSubcategory, setSelectedSubcategory] = useState<string>('');
   const [selectedSubItem, setSelectedSubItem] = useState<any>(null);
   const [quantity, setQuantity] = useState<any>(1);
-  const [customLocation] = useState(profile?.location || { estate: 'Westlands', latitude: -1.2635, longitude: 36.8048 });
+  const [customLocation, setCustomLocation] = useState(profile?.location || { estate: 'Westlands', latitude: -1.2635, longitude: 36.8048 });
   const [grade, setGrade] = useState('Standard');
   const [photos, setPhotos] = useState<any[]>([]); // Array of up to 4 photos
   const [customDescription, setCustomDescription] = useState('');
@@ -120,6 +120,28 @@ export default function PostTrade() {
   const [customTime, setCustomTime] = useState('09:00');
   const [customPricePerKg, setCustomPricePerKg] = useState<number | null>(null);
 
+  // ── SMART GEOLOCATION: Runs once on mount, separate from data-fetching effect ──
+  useEffect(() => {
+    const fetchLoc = async () => {
+      try {
+        const { useLocationStore } = await import('@klinflow/core/stores/locationStore');
+        const store = useLocationStore.getState();
+        if (store.status === 'idle') store.startTracking();
+        
+        const loc = await store.getCurrentLocation();
+        setCustomLocation({
+          estate: store.liveAddress || 'Current Location',
+          latitude: loc.latitude,
+          longitude: loc.longitude
+        });
+      } catch (err) {
+        console.log('[PostTrade] GPS Permission Denied or Failed. Using profile fallback.', err);
+      }
+    };
+    fetchLoc();
+  }, []);
+
+  // ── DATA FETCHING: Agents, categories, hubs ──
   useEffect(() => {
     fetchCategories();
     fetchMaterialPrices();
@@ -136,7 +158,6 @@ export default function PostTrade() {
       try {
         const { data, error } = await supabase.rpc('get_nearby_hubs_with_territory', { p_lat: lat, p_lon: lng });
         if (!error && data) {
-          // Adapt the returned data to match what the UI expects
           setNearbyHubs(data.map((hub: any) => ({
             ...hub,
             companyName: hub.name,
@@ -167,7 +188,7 @@ export default function PostTrade() {
     }
 
     return () => cleanupAgents();
-  }, [initialMode, categories.length, quantity, cleanupAgents, fetchCategories, fetchMaterialPrices, fetchConfig, fetchNearbyAgents, fetchPrices, subscribeToAgents, customLocation]);
+  }, [initialMode, categories.length, quantity, customLocation.latitude, customLocation.longitude]);
 
   // ── PRICING (Powered by Market Hub) ──
   const selected = selectedSubItem || wasteType;
@@ -236,14 +257,7 @@ export default function PostTrade() {
       });
 
       // 3. Notify the Market (Agents & Weavers)
-      await useNotificationStore.getState().addNotification(
-        "New Material for Sale! ♻️",
-        `${profile?.name} listed ${quantity}kg of ${selected.label || selected.slug} at KSh ${askingPrice}/kg.`,
-        'info',
-        'agent', // Notify Agents
-        null,
-        { wasteType: selected.slug } // Metadata for client-side filtering
-      );
+      /* addNotification removed for v3 migration */
 
       toast.success("Collection Posted!");
       navigate('/');

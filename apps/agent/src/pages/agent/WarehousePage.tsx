@@ -18,18 +18,12 @@ import { toast } from 'sonner';
 export default function WarehousePage() {
    const { profile } = useAuthStore();
    const { assets } = useAssetStore();
-   const { addNotification } = useNotificationStore();
+   /* useNotificationStore removed */
 
    const totalWeight = assets.reduce((acc, asset) => acc + (parseFloat(asset.weight) || 0), 0);
 
    const handleDispatch = () => {
-      addNotification(
-         "Incoming Bulk Drop! 🚚",
-         `Agent ${profile.name} is heading to the Hub with a full truck (~${totalWeight.toFixed(1)}kg).`,
-         'info',
-         'hub',
-         profile.companyId || null // Targeted Hub Manager if available
-      );
+      /* addNotification removed for v3 migration */
       toast.success("Dispatch Notification Sent! 🏢", {
          description: "The Hub Manager has been notified of your arrival."
       });

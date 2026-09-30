@@ -296,7 +296,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
     try {
       const { error } = await supabase
         .from('marketplace_listings')
-        .delete()
+        .update({ status: 'archived' })
         .eq('seller_id', userId)
         .neq('status', 'active');
 
@@ -365,14 +365,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
         myOrders: [newOrder, ...state.myOrders]
       }));
 
-      // Notify Seller
-      useNotificationStore.getState().addNotification(
-        'New Order Received! 📦',
-        `A buyer wants to purchase ${quantity}kg of ${listing.material}.`,
-        'info',
-        'business',
-        listing.sellerId
-      );
+
     } catch (error) {
       console.error('Error placing order:', error);
     }
@@ -494,14 +487,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
         myOrders: state.myOrders.map(o => o.id === order.id ? { ...o, status: 'completed' as any } : o)
       }));
 
-      // Notify Seller
-      useNotificationStore.getState().addNotification(
-        'Payment Released! 💸',
-        `Funds for order ${order.id.slice(0,8)} have been credited to your wallet.`,
-        'success',
-        'business',
-        order.sellerId
-      );
+
     } catch (error) {
       console.error('Error releasing escrow:', error);
     }
@@ -610,14 +596,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
         sentOffers: [newOffer, ...state.sentOffers]
       }));
 
-      // Notify Seller
-      useNotificationStore.getState().addNotification(
-        'New Offer Received! 🤝',
-        `A buyer offered KSh ${price}/kg for your ${listing.material}.`,
-        'info',
-        'business',
-        listing.sellerId
-      );
+
     } catch (error) {
       console.error('Error making offer:', error);
     }
@@ -703,14 +682,7 @@ export const useMarketplaceStore = create<MarketplaceStore>()(
 
       get().fetchReceivedOrders();
 
-      // Notify Buyer
-      useNotificationStore.getState().addNotification(
-        'Offer Accepted! 🎉',
-        `Your offer for ${offer.material || 'Recyclables'} has been accepted. Proceed to checkout.`,
-        'success',
-        'business',
-        offer.buyerId
-      );
+
     } catch (error) {
       console.error('Error accepting offer:', error);
     }

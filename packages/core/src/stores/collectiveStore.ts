@@ -33,7 +33,13 @@ export interface SwarmParticipant {
 
 interface CollectiveState {
   swarms: Swarm[];
-  estateStats: { totalRecovery: number; activeSellers: number } | null;
+  estateStats: { 
+    totalRecovery: number; 
+    activeSellers: number;
+    fulfilledGroupRFQs: number;
+    fulfilledIndividualRFQs: number;
+    totalEarned: number;
+  } | null;
   loadingSwarms: boolean;
   fetchSwarms: (estate: string, userRole?: string) => Promise<void>;
   fetchEstateStats: (estate: string) => Promise<void>;
@@ -102,7 +108,34 @@ export const useCollectiveStore = create<CollectiveState>((set, get) => ({
         .select('*', { count: 'exact', head: true })
         .eq('role', 'seller');
 
-      set({ estateStats: { totalRecovery: totalRecovery, activeSellers: activeSellers || 0 } });
+      // Get RFQ stats (fulfilled or completed)
+      const { data: rfqsData } = await supabase
+        .from('rfqs')
+        .select('is_group_collection, target_price, requested_weight')
+        .in('status', ['fulfilled', 'completed']);
+        
+      let fulfilledGroupRFQs = 0;
+      let fulfilledIndividualRFQs = 0;
+      let totalEarned = 0;
+      
+      if (rfqsData) {
+        rfqsData.forEach(r => {
+          if (r.is_group_collection) fulfilledGroupRFQs++;
+          else fulfilledIndividualRFQs++;
+          
+          totalEarned += (r.target_price || 0) * (r.requested_weight || 0);
+        });
+      }
+
+      set({ 
+        estateStats: { 
+          totalRecovery: totalRecovery, 
+          activeSellers: activeSellers || 0,
+          fulfilledGroupRFQs,
+          fulfilledIndividualRFQs,
+          totalEarned
+        } 
+      });
     } catch (error) {
       console.error('Error fetching estate stats:', error);
     }

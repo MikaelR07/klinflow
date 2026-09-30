@@ -84,7 +84,7 @@ export default function BookPickupMaterialStep({
                   )}
                 </div>
 
-                <div className="grid grid-cols-3 gap-1">
+                <div className="grid grid-cols-2 gap-1">
                   {categories.filter(cat =>
                     (cat.label || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                     (cat.slug || '').toLowerCase().includes(searchQuery.toLowerCase())

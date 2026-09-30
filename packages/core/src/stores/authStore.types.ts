@@ -33,6 +33,7 @@ export interface AuthState {
   
   // Profile Actions
   updateProfile: (updates: Partial<Profile>) => Promise<boolean>;
+  updateNotificationPrefs: (prefs: Partial<NotificationPrefs>) => Promise<void>;
   refreshProfile: () => Promise<void>;
   fetchProfile: () => Promise<void>;
   uploadAvatar: (file: File) => Promise<string>;

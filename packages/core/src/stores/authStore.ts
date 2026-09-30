@@ -65,10 +65,9 @@ export const getBusinessLabel = (type: string, mode: string = 'id'): string => {
 
 function defaultNotifPrefs(): NotificationPrefs {
   return {
-    push: true, email: true, sms: false, marketing: false, communityNews: true,
-    pickupReminders: true, aiInsights: true, rewardAlerts: true,
-    emergencyAlerts: true, agentJobAlerts: true, systemAlerts: true,
-    feedbackAlerts: true, dailyKpi: false, staffAlerts: true, channel: 'push',
+    pushEnabled: true, emailEnabled: false, quietHoursEnabled: false,
+    quietHoursStart: '22:00:00', quietHoursEnd: '07:00:00',
+    timezone: 'Africa/Nairobi', disabledCategories: [],
   };
 }
 
@@ -199,7 +198,7 @@ export const useAuthStore = create<AuthState>()(
 
               const { data: profileData } = await supabase
                 .from('profiles')
-                .select('*, user_wallets(cash_balance, payout_balance, available_points)')
+                .select('*, user_wallets(cash_balance, payout_balance, available_points), notification_preferences(*)')
                 .eq('id', session.user.id)
                 .maybeSingle();
               
@@ -231,11 +230,15 @@ export const useAuthStore = create<AuthState>()(
                 set({ userId: session.user.id });
                 await get().fetchHubData();
 
+                const prefs = Array.isArray(profileData.notification_preferences) ? profileData.notification_preferences[0] : profileData.notification_preferences;
+                const parsedPrefs = prefs ? safeParseOrNull(NotificationPrefsSchema, normalizeKeys(prefs), 'Notification Prefs') || defaultNotifPrefs() : defaultNotifPrefs();
+
                 set({ 
                   isAuthenticated: true, 
                   userId: session.user.id, 
                   profile: uiProfile,
-                  role: uiProfile.role || 'user'
+                  role: uiProfile.role || 'user',
+                  notificationPrefs: parsedPrefs
                 });
                 get().subscribeToProfileChanges(session.user.id);
               }
@@ -333,17 +336,20 @@ export const useAuthStore = create<AuthState>()(
         if (!userId) return;
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('*, user_wallets(cash_balance, payout_balance, available_points)')
+          .select('*, user_wallets(cash_balance, payout_balance, available_points), notification_preferences(*)')
           .eq('id', userId)
           .maybeSingle();
         if (profileData) {
           const uiProfile = get()._mapProfile(profileData as ProfileRow);
           if (uiProfile) {
+            const prefs = Array.isArray(profileData.notification_preferences) ? profileData.notification_preferences[0] : profileData.notification_preferences;
+            const parsedPrefs = prefs ? safeParseOrNull(NotificationPrefsSchema, normalizeKeys(prefs), 'Notification Prefs') || defaultNotifPrefs() : defaultNotifPrefs();
             set({ 
               profile: uiProfile,
               rewardPoints: uiProfile.rewardPoints || 0,
               walletBalance: uiProfile.walletBalance || 0,
-              payoutBalance: uiProfile.payoutBalance || 0
+              payoutBalance: uiProfile.payoutBalance || 0,
+              notificationPrefs: parsedPrefs
             });
           }
         }
@@ -399,6 +405,14 @@ export const useAuthStore = create<AuthState>()(
             event: '*', 
             schema: 'public', 
             table: 'user_wallets', 
+            filter: `user_id=eq.${id}` 
+          }, async () => {
+            await get().fetchProfile();
+          })
+          .on('postgres_changes', { 
+            event: '*', 
+            schema: 'public', 
+            table: 'notification_preferences', 
             filter: `user_id=eq.${id}` 
           }, async () => {
             await get().fetchProfile();
@@ -537,6 +551,28 @@ export const useAuthStore = create<AuthState>()(
         return true;
       },
 
+      updateNotificationPrefs: async (newData: Partial<NotificationPrefs>) => {
+        const { userId, notificationPrefs } = get();
+        if (!userId) throw new Error("Not authenticated");
+        
+        const merged = { ...notificationPrefs, ...newData };
+        const dbPayload = {
+          user_id: userId,
+          push_enabled: merged.pushEnabled,
+          email_enabled: merged.emailEnabled,
+          quiet_hours_enabled: merged.quietHoursEnabled,
+          quiet_hours_start: merged.quietHoursStart,
+          quiet_hours_end: merged.quietHoursEnd,
+          timezone: merged.timezone,
+          disabled_categories: merged.disabledCategories
+        };
+
+        const { error } = await supabase.from('notification_preferences').upsert(dbPayload);
+        if (error) throw new Error(error.message);
+        
+        set({ notificationPrefs: merged });
+      },
+
       uploadAvatar: async (file: File) => {
         const { userId, updateProfile } = get();
         if (!userId) throw new Error("Not authenticated");
@@ -595,49 +631,47 @@ export const useAuthStore = create<AuthState>()(
         const { userId, profile } = get();
         if (!userId || !profile?.isOnline) return;
 
-        // Helper to update Supabase heartbeat
-        const updateHeartbeat = async (coords?: { latitude: number, longitude: number }) => {
-          const locationPayload = {
-            ...((profile?.location as any) || {}),
-            status: 'active',
-            last_pulse: new Date().toISOString()
-          };
-          if (coords) {
-            locationPayload.latitude = coords.latitude;
-            locationPayload.longitude = coords.longitude;
-          }
+        // Ensure location engine is tracking if online
+        const { useLocationStore } = await import('./locationStore');
+        const locationStore = useLocationStore.getState();
+        if (locationStore.status === 'idle') {
+          locationStore.startTracking();
+        }
 
-          const { error } = await supabase.from('profiles')
-            .update({ location: locationPayload } as any)
-            .eq('id', userId);
-          
-          if (!error) {
-            set({
-              profile: {
-                ...profile,
-                location: locationPayload
-              } as Profile
-            });
-          }
+        const coords = locationStore.coords;
+
+        // Prepare the unified pulse payload
+        const updates: any = {};
+        
+        // 1. Maintain active status in profile.location (without mutating coordinates!)
+        updates.location = {
+          ...((profile?.location as any) || {}),
+          status: 'active',
+          last_pulse: new Date().toISOString()
         };
 
-        // 1. Get exact hardware GPS coordinates
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            async (pos) => {
-              await updateHeartbeat({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
-            },
-            async (err) => {
-              console.warn('[Agent Pulse] GPS skipped, falling back to basic heartbeat:', err);
-              // Fallback: Still send the heartbeat to keep agent online, just don't update GPS coords
-              await updateHeartbeat();
-            },
-            // Increased timeout and added maximumAge to prevent immediate timeout errors
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 }
-          );
-        } else {
-          // Fallback if geolocation isn't supported by the browser
-          await updateHeartbeat();
+        // 2. Safely sync live GPS tracking data to a separate live_location column
+        if (coords) {
+          updates.live_location = {
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            accuracy: coords.accuracy,
+            timestamp: coords.timestamp,
+            last_pulse: new Date().toISOString()
+          };
+        }
+
+        const { error } = await supabase.from('profiles')
+          .update(updates)
+          .eq('id', userId);
+        
+        if (!error) {
+          set({
+            profile: {
+              ...profile,
+              ...updates
+            } as Profile
+          });
         }
       },
 
@@ -882,14 +916,7 @@ export const useAuthStore = create<AuthState>()(
            
            if (requestError) console.error("Error creating join request:", requestError);
            
-           // Notify admin
-           await supabase.from('notifications').insert([{
-             target_user: companyId,
-             title: 'New Fleet Driver Request',
-             body: `${name} has requested to join your fleet and submitted ${documentsUploadedCount} document(s).`,
-             type: 'info',
-             is_read: false
-           }]);
+
         }
 
         await get().fetchProfile();

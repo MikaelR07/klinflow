@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Gift, Phone, AlertCircle,
   Wallet, Loader2,
-  X, CheckCircle2, Copy, Clock
+  X, CheckCircle2, Copy, Clock,
+  ChevronRight, Leaf, Zap, Flame
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { walletService, REWARDS_CATALOG, RewardItem, RedemptionResult } from '@klinflow/core';
@@ -240,8 +241,8 @@ export default function RedeemGFP() {
             ))}
           </div>
 
-          {/* Grid - Switched to 2 columns for Providers */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Grid - Switched to 1 column for horizontal cards */}
+          <div className="grid grid-cols-1 gap-3">
             {filteredRewards.map((reward: RewardItem) => {
               const isAffordable = gfpBalance >= reward.min_gfp;
               const Icon = reward.icon === 'phone' ? Phone : Gift;
@@ -251,34 +252,44 @@ export default function RedeemGFP() {
                   key={reward.id}
                   onClick={() => handleCardClick(reward)}
                   disabled={isLoadingWallet || !isAffordable}
-                  className={`relative flex flex-col text-left rounded-2xl p-4 border transition-all duration-200
+                  className={`relative flex items-stretch text-left rounded-2xl border transition-all duration-200 overflow-hidden min-h-[100px]
                     ${isAffordable 
-                      ? 'bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-700 shadow-sm active:scale-95 hover:border-emerald-500/30' 
-                      : 'bg-slate-50 dark:bg-slate-900/30 border-slate-100 dark:border-slate-800 opacity-60 grayscale-[30%]'
+                      ? 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 shadow-sm active:scale-95 hover:shadow-md' 
+                      : 'bg-white/50 dark:bg-slate-900/50 border-slate-100 dark:border-slate-800 opacity-60 grayscale-[30%]'
                     }`}
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 shadow-sm ${reward.bg}`}>
-                    <Icon className="w-5 h-5 text-white" />
+                  {/* Left Image Block */}
+                  <div className="w-[52%] shrink-0 relative overflow-hidden bg-slate-100 dark:bg-slate-800">
+                    <img 
+                      src={`/vectors/${reward.id === 'saf' ? 'safaricom' : reward.id === 'air' ? 'airtel' : reward.id === 'khe' ? 'khetias' : 'naivas'}.webp`} 
+                      alt={reward.title}
+                      className={`absolute inset-0 w-full h-full object-cover ${reward.id === 'nai' ? 'object-left' : 'object-center'}`}
+                    />
                   </div>
                   
-                  <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight leading-none mb-1">
-                    {reward.title}
-                  </h3>
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-tight mb-4">
-                    {reward.value_label}
-                  </p>
-                  
-                  <div className="mt-auto">
-                    {isAffordable ? (
-                      <div className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded-lg border border-emerald-100 dark:border-emerald-800/50">
-                        <span className="text-[11px] font-extrabold text-emerald-600 dark:text-emerald-400">{reward.min_gfp}</span>
-                        <span className="text-[8px] font-bold text-emerald-600/70 dark:text-emerald-400/70">GFP MIN</span>
-                      </div>
-                    ) : (
-                      <div className="text-[9px] font-bold text-slate-400">
-                        Need {reward.min_gfp - gfpBalance} more
-                      </div>
-                    )}
+                  {/* Right Content */}
+                  <div className="flex-1 p-3 flex flex-col justify-center items-end text-right">
+                    <div className="mb-1.5">
+                      <h3 className="text-[13px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+                        {reward.title}
+                      </h3>
+                      <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
+                        {reward.value_label}
+                      </p>
+                    </div>
+                    
+                    <div className="mt-2">
+                      {isAffordable ? (
+                        <div className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-md border border-emerald-100 dark:border-emerald-800/50">
+                          <Leaf className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                          <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400">{reward.min_gfp} GFP</span>
+                        </div>
+                      ) : (
+                        <div className="text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
+                          Need {reward.min_gfp - gfpBalance} more
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </button>
               );

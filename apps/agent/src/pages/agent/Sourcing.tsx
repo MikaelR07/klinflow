@@ -7,7 +7,8 @@ import {
   Search, MapPin, Scale, TrendingUp,
   ChevronRight, MessageSquareQuote, Check,
   ArrowLeft, Clock, Package, CheckCircle2, Info, User, Users,
-  SlidersHorizontal, X, ChevronDown, Receipt, Sparkles, FileText
+  SlidersHorizontal, X, ChevronDown, Receipt, Sparkles, FileText,
+  Recycle, Droplets, Cog, ScrollText, Wine, Cpu, Shirt, Apple
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
@@ -746,31 +747,27 @@ export default function Sourcing() {
             <div className="space-y-1 pb-5">
 
               {/* ── SCROLLABLE BANNERS ── */}
-              <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 px-3 pt-2 pb-1 no-scrollbar">
+              <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pt-2 pb-1 px-2 no-scrollbar">
                 {/* Banner 1 */}
-                <div className="snap-start relative shrink-0 w-[320px] h-[160px] rounded-2xl overflow-hidden shadow-lg border border-indigo-500/20 bg-indigo-900 group cursor-pointer">
-                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/95 via-indigo-900/60 to-transparent z-10" />
-                  <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="snap-start relative shrink-0 w-[85vw] max-w-[340px] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/70 to-transparent z-10" />
+                  <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-right scale-125 group-hover:scale-[1.35] transition-transform duration-700 ease-out" />
                   <div className="relative z-20 p-4 h-full flex flex-col justify-between">
                     <div>
                       <h3 className="text-[17px] font-black text-white tracking-tight leading-tight">Source & Earn</h3>
                       <p className="text-[12px] font-semibold text-white/80 leading-tight mt-1 max-w-[200px]">Browse materials listed by sellers near you and place bids to start collecting.</p>
                     </div>
                     <div className="flex gap-2">
-                      <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-2 py-1 border border-white/10">
-                        <TrendingUp className="w-3 h-3 text-emerald-400" />
-                        <span className="text-[10px] font-bold text-white">{filteredListings.length} Active</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-2 py-1 border border-white/10">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                        <span className="text-[10px] font-bold text-white">{acceptedTradesCount} Trades</span>
+                      <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 border border-white/10">
+                        <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-[11px] font-bold text-white">{filteredListings.length} Listings</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Banner 2 */}
-                <div className="snap-start relative shrink-0 w-[320px] h-[160px] rounded-2xl overflow-hidden shadow-lg border border-emerald-500/20 bg-emerald-900 group cursor-pointer">
+                <div className="snap-start relative shrink-0 w-[85vw] max-w-[340px] h-[160px] rounded-2xl overflow-hidden border border-emerald-500/20 bg-emerald-900 group cursor-pointer">
                   <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 via-emerald-900/60 to-transparent z-10" />
                   <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="relative z-20 p-4 h-full flex flex-col justify-between">
@@ -785,15 +782,58 @@ export default function Sourcing() {
                 </div>
               </div>
 
+              {/* ── ACTION CARDS (My Bids & Buyer Requests) ── */}
+              {!isFleetDriver && (
+                <div className="px-2 pb-2 pt-2 grid grid-cols-2 gap-2">
+                  {/* My Active Bids */}
+                  <button
+                    onClick={() => navigate('/bids')}
+                    className="w-full bg-indigo-500 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
+                  >
+                    <div className="w-10 h-10 rounded-[11px] bg-indigo-400 dark:bg-indigo-500/10 flex items-center justify-center border border-indigo-400 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                      <Receipt className="w-5 h-5" />
+                    </div>
+                    <div className="text-left relative z-10 min-w-0">
+                      <h3 className="text-sm font-black text-slate-50 dark:text-white tracking-tight leading-none mb-1 truncate">Bids History</h3>
+                      {activeBidsCount > 0 ? (
+                         <p className="text-[11px] font-bold text-indigo-200 dark:text-emerald-400 leading-none truncate">{activeBidsCount} Active</p>
+                      ) : (
+                         <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-none truncate">View offers</p>
+                      )}
+                    </div>
+                    <ChevronRight className="absolute bottom-2.5 right-2.5 w-4 h-4 text-white/40 dark:text-slate-500 group-hover:text-white dark:group-hover:text-slate-300 transition-colors" />
+                  </button>
+
+                  {/* Buyer Requests */}
+                  <button
+                    onClick={() => navigate('/rfqs')}
+                    className="w-full bg-gradient-to-br from-amber-500 to-amber-600 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
+                  >
+                    <div className="w-10 h-10 rounded-[11px] bg-amber-500 dark:bg-violet-500/10 flex items-center justify-center border border-amber-500 dark:border-violet-500/20 text-slate-50 dark:text-violet-400 shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <div className="text-left relative z-10 min-w-0">
+                      <h3 className="text-sm font-black text-slate-50 dark:text-white tracking-tight leading-none mb-1 truncate">RFQ  Requests</h3>
+                      <p className="text-[11px] font-semibold text-slate-200 dark:text-slate-400 leading-none truncate">Send requests</p>
+                    </div>
+                    <ChevronRight className="absolute bottom-2.5 right-2.5 w-4 h-4 text-white/40 dark:text-slate-500 group-hover:text-white dark:group-hover:text-slate-300 transition-colors" />
+                  </button>
+                </div>
+              )}
+
               {/* ── MATERIAL CATEGORY CHIPS ── */}
-              <div className="relative">
-                <div className="flex overflow-x-auto no-scrollbar gap-2 px-3 py-2">
+              <div className="relative mt-2">
+                <div className="flex justify-between items-end px-4 mb-2">
+                   <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-widest">Filter by Category</p>
+                   <p className="text-[10px] font-bold text-indigo-500/70 capitalize tracking-widest">{filteredListings.length} Available</p>
+                </div>
+                <div className="flex overflow-x-auto no-scrollbar gap-2 px-4 pb-1">
                   {[
-                    { id: 'All', label: 'All', icon: '♻️' },
-                    { id: 'Plastic', label: 'Plastic', icon: '🧴' },
-                    { id: 'Metal', label: 'Metal', icon: '🥫' },
-                    { id: 'Paper', label: 'Paper', icon: '📄' },
-                    { id: 'Glass', label: 'Glass', icon: '🍾' }
+                    { id: 'All', label: 'All', Icon: Recycle },
+                    { id: 'Plastic', label: 'Plastic', Icon: Droplets },
+                    { id: 'Metal', label: 'Metal', Icon: Cog },
+                    { id: 'Paper', label: 'Paper', Icon: ScrollText },
+                    { id: 'Glass', label: 'Glass', Icon: Wine }
                   ].map(cat => (
                     <button
                       key={cat.id}
@@ -801,13 +841,13 @@ export default function Sourcing() {
                         setFilterMaterial(cat.id);
                         setIsMoreCategoriesOpen(false);
                       }}
-                      className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border shrink-0 ${
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
                         filterMaterial === cat.id
                           ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                          : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                     >
-                      <span>{cat.icon}</span>
+                      <cat.Icon className={`w-4.5 h-4.5 ${filterMaterial === cat.id ? 'text-white' : 'text-slate-600 dark:text-slate-500'}`} />
                       <span>{cat.label}</span>
                     </button>
                   ))}
@@ -816,10 +856,10 @@ export default function Sourcing() {
                   <div className="relative">
                     <button
                       onClick={() => setIsMoreCategoriesOpen(!isMoreCategoriesOpen)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap transition-all border shrink-0 ${
+                      className={`flex items-center gap-1.5 px-3.5 py-3 rounded-xl text-[12px] font-bold whitespace-nowrap transition-all border shrink-0 ${
                         ['Organic', 'E-waste', 'Textile'].includes(filterMaterial) || isMoreCategoriesOpen
                           ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/30'
-                          : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                          : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                     >
                       <span>{['Organic', 'E-waste', 'Textile'].includes(filterMaterial) ? filterMaterial : 'More'}</span>
@@ -835,12 +875,12 @@ export default function Sourcing() {
                           initial={{ opacity: 0, y: -5 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -5 }}
-                          className="absolute right-3 top-full mt-1 w-32 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 z-50 overflow-hidden"
+                          className="absolute right-4 top-full mt-1 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 z-50 overflow-hidden"
                         >
                           {[
-                            { id: 'Organic', label: 'Organic', icon: '🍎' },
-                            { id: 'E-waste', label: 'E-waste', icon: '💻' },
-                            { id: 'Textile', label: 'Textile', icon: '👕' }
+                            { id: 'Organic', label: 'Organic', Icon: Apple },
+                            { id: 'E-waste', label: 'E-waste', Icon: Cpu },
+                            { id: 'Textile', label: 'Textile', Icon: Shirt }
                           ].map(cat => (
                             <button
                               key={cat.id}
@@ -848,13 +888,13 @@ export default function Sourcing() {
                                 setFilterMaterial(cat.id);
                                 setIsMoreCategoriesOpen(false);
                               }}
-                              className={`w-full flex items-center gap-2 px-3 py-2 text-[11px] font-bold transition-colors ${
+                              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[11px] font-bold transition-colors ${
                                 filterMaterial === cat.id
                                   ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600'
                                   : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                               }`}
                             >
-                              <span>{cat.icon}</span>
+                              <cat.Icon className={`w-3.5 h-3.5 ${filterMaterial === cat.id ? 'text-indigo-500' : 'text-slate-400'}`} />
                               <span>{cat.label}</span>
                             </button>
                           ))}
@@ -863,52 +903,7 @@ export default function Sourcing() {
                 </AnimatePresence>
               </div>
 
-              {/* ── ACTION CARDS (My Bids & Buyer Requests) ── */}
-              {!isFleetDriver && (
-                <div className="px-3 pb-2 pt-2 grid grid-cols-2 gap-2">
-                  {/* My Active Bids */}
-                  <button
-                    onClick={() => navigate('/bids')}
-                    className="w-full bg-indigo-900 rounded-xl p-2.5 shadow-sm border border-indigo-500/20 relative overflow-hidden group flex items-center active:scale-[0.98] transition-all"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/95 to-indigo-800/80 z-10" />
-                    <div className="relative z-20 flex items-center gap-2.5 w-full">
-                      <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/10 shrink-0">
-                        <Receipt className="w-4 h-4 text-indigo-300" />
-                      </div>
-                      <div className="text-left">
-                        <h3 className="text-[11px] font-black text-white tracking-tight leading-none mb-1">My Bids</h3>
-                        {activeBidsCount > 0 ? (
-                           <p className="text-[9px] font-bold text-emerald-400 leading-none">{activeBidsCount} Active</p>
-                        ) : (
-                           <p className="text-[9px] font-semibold text-indigo-300 leading-none">View offers</p>
-                        )}
-                      </div>
-                    </div>
-                  </button>
-
-                  {/* Buyer Requests */}
-                  <button
-                    onClick={() => navigate('/rfqs')}
-                    className="w-full relative overflow-hidden rounded-xl p-2.5 shadow-sm group border border-violet-500/30 flex items-center active:scale-[0.98] transition-all"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600 opacity-95" />
-                    <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full blur-xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
-                    <div className="relative z-20 flex items-center gap-2.5 w-full">
-                      <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/10 shrink-0">
-                        <FileText className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="text-left">
-                        <h3 className="text-[11px] font-black text-white tracking-tight leading-none mb-1">Open Market Requests</h3>
-                        <p className="text-[9px] font-semibold text-violet-100 leading-none">Send Material Requests</p>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              )}
-
-              {/* ── LISTINGS HEADER ── */}
-             
+              {/* ── LISTINGS ── */}
               {filteredListings.length === 0 ? (
                 <div className="py-20 text-center px-4">
                   <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
@@ -983,7 +978,7 @@ export default function Sourcing() {
                           {/* Row 3: Timestamp & Quantity */}
                           <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
                             <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
-                              <Clock className="w-2.5 h-2.5 text-slate-900" /> {listing.createdAt ? new Date(listing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'ASAP'}
+                              <Clock className="w-2.5 h-2.5 text-slate-900" />Posted  {listing.createdAt ? new Date(listing.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'ASAP'}
                             </p>
                             <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
                               <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span>

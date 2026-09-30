@@ -46,7 +46,8 @@ import {
   ChevronDown,
   BarChart3Icon,
   Headset,
-  ChevronDownCircle
+  ChevronDownCircle,
+  MapPinned
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -55,6 +56,7 @@ import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
 import { supabase } from '@klinflow/supabase';
+import { useLocationStore } from '@klinflow/core/stores/locationStore';
 import { walletService } from '@klinflow/core';
 import type { SellerWalletStats } from '@klinflow/core/services/walletService';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
@@ -121,12 +123,16 @@ export default function SellerHome() {
   const [gfpBalance, setGfpBalance] = useState(0);
   const [stats, setStats] = useState<SellerWalletStats | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeContractsCount, setActiveContractsCount] = useState(0);
+  const [activeSwarmsCount, setActiveSwarmsCount] = useState(0);
+  const { status, liveAddress, startTracking } = useLocationStore();
 
   useEffect(() => {
+    startTracking();
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [startTracking]);
 
   useEffect(() => {
     fetchBookings();
@@ -151,11 +157,27 @@ export default function SellerHome() {
           setStats(data);
         }
       });
+      // Fetch active contracts count
+      supabase.rpc('get_visible_rfqs', { p_seller_id: profile.id }).then(({ data }) => {
+        if (data) {
+          const count = data.filter((r: any) => r.status === 'open' && (!r.deadline || new Date(r.deadline).getTime() > new Date().getTime())).length;
+          setActiveContractsCount(count);
+        }
+      });
+      // Fetch active swarms count
+      if (profile.estate) {
+        supabase.from('swarms').select('id, status, closes_at').eq('estate', profile.estate).then(({ data }) => {
+          if (data) {
+            const count = data.filter((s: any) => s.status === 'active' && new Date(s.closes_at).getTime() > new Date().getTime()).length;
+            setActiveSwarmsCount(count);
+          }
+        });
+      }
       // Realtime subscription handled globally by App.tsx
     }
 
     return () => { };
-  }, [profile?.id, role]);
+  }, [profile?.id, profile?.estate, role]);
 
   useEffect(() => {
     // Show prompt if user hasn't allowed/denied notifications yet
@@ -253,8 +275,8 @@ export default function SellerHome() {
                   Hello, {(profile?.fullName || profile?.name || 'Merchant').split(' ')[0]}!👋
                 </h1>
                 <div className="flex items-center gap-1.5 mt-1 text-[10px] text-white/90 font-semibold capitalize tracking-wider bg-black/10 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/20 w-fit">
-                  <MapPin className="w-3 h-3" />
-                  {profile?.location?.estate || profile?.estate || 'searching...'}
+                  <MapPin className={`w-3 h-3 ${status === 'tracking' ? 'animate-pulse text-emerald-400' : ''}`} />
+                  {status === 'tracking' ? (liveAddress || "Live GPS") : (status === 'stale' && liveAddress ? ("⏳ " + liveAddress) : (profile?.location?.estate || profile?.estate || "Location not set"))}
                 </div>
               </div>
             </div>
@@ -309,7 +331,7 @@ export default function SellerHome() {
               <div className="flex items-center gap-1 pt-3 border-t border-white/20">
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
                   <span className="text-base font-black text-white">{totalDeals}</span>
-                  <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3" /> Deals</span>
+                  <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3" /> Active Trades</span>
                 </div>
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
                   <span className="text-base font-black text-white">{totalSoldKg}</span>
@@ -331,7 +353,7 @@ export default function SellerHome() {
           <div className="space-y-2">
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
-            <div className="grid grid-cols-4 gap-1 !mt-1">
+            <div className="grid grid-cols-4 gap-1">
               {[
                 { label: 'Sell', icon: <CircleFadingPlus className="w-5 h-5" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Listings', icon: <Package className="w-5 h-5" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
@@ -366,7 +388,9 @@ export default function SellerHome() {
             
           </div>
           
-          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
+          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory pr-6">
+            {/* Left spacer */}
+            <div className="w-0.5 shrink-0" />
             {(() => {
               const items = categories.length > 0 ? categories : catalogItems as any[];
               const getSortIndex = (i: any) => {
@@ -413,18 +437,16 @@ export default function SellerHome() {
                 <div 
                   key={item.id} 
                   onClick={() => navigate(`/materials/${identifier}`)}
-                  className={`snap-start relative shrink-0 w-[140px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-3 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col h-full overflow-hidden`}
+                  className={`snap-start relative shrink-0 w-[110px] h-[105px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-2.5 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col overflow-hidden`}
                   style={bgImage ? {
-                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.2)), url(${bgImage})`,
+                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.3)), url(${bgImage})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   } : {}}
                 >
-                  <div className={`text-2xl mb-2 w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border relative z-10 ${bgImage ? 'bg-white/20 backdrop-blur-md border-white/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700'}`}>
-                    {item.icon || '♻️'}
-                  </div>
-                  <h4 className={`text-xs font-black mb-2 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
-                  <div className={`rounded-lg px-2 py-1.5 mt-auto relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
+                  <div className="flex-1" />
+                  <h4 className={`text-[12px] font-black mb-1 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
+                  <div className={`rounded-lg px-1.5 py-1.5 relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
                     <p className={`text-[9px] font-black text-center leading-none ${bgImage ? 'text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>{displayPrice}</p>
                   </div>
                 </div>
@@ -433,61 +455,110 @@ export default function SellerHome() {
           </div>
         </motion.div>
 
-        {/* ── BUSINESS TOOLS ── */}
-        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-900 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
-          <div className="space-y-2">
-            <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Business Tools</h3>
+        {/* ── KLINFLOW BANNERS ── */}
+        <motion.div variants={itemVariants} className="!mt-1">
+          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
+            {/* Left spacer */}
+            {/* <div className="w-0.5 shrink-0" /> */}
+            {/* Banner 1 */}
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] p-4 flex flex-col justify-center overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 min-h-[130px]">
+              <img src="/vectors/ecoBanner.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+              <div className="relative z-10 flex flex-col gap-1 w-[65%] sm:w-[65%]">
+                <h3 className="text-[16px] font-black text-amber-500 dark:text-white leading-tight mb-1">
+                  Endless Possibilities<br />for Everyone <ArrowRight className="inline w-3.5 h-3.5 ml-1" />
+                </h3>
+                <p className="text-[11px] font-medium text-emerald-100 dark:text-emerald-300/80 leading-tight">
+                  Whether you collect, buy, sell or create, we connect you to opportunities.
+                </p>
+              </div>
+            </div>
+
+            {/* Banner 2 */}
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 min-h-[130px] bg-slate-900">
+              <img src="/vectors/ecoBanner2.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-1.5">
+        </motion.div>
+
+        {/* ── BUSINESS TOOLS ── */}
+        <motion.div variants={itemVariants} className="!mt-1 space-y-2 px-1.5">
+          <div className="flex items-center justify-between">
+            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">Business Tools</h3>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-2">
             {/* ── CONTRACTS ── */}
             <button 
               onClick={() => navigate("/group-rfqs")}
-              className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-500 border border-emerald-400/30 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+              className="w-full bg-indigo-100 dark:bg-slate-800 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
-              <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="w-10 h-10 bg-white/20 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
-                <Users className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 shrink-0 bg-[#f3f0ff] dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
+                <Receipt className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div className="text-left relative z-10 mt-auto">
-                <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Contracts</h4>
-                <p className="text-[10px] font-semibold text-slate-200  leading-tight">View Active Contracts</p>
+              <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
+                <div>
+                  <h4 className="text-[13px] font-black text-slate-800 dark:text-white leading-none mb-1">Contracts</h4>
+                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Active material agreements</p>
+                </div>
+                
+                <div className="flex items-center justify-between w-full mt-auto">
+                  <div className="bg-indigo-50 dark:bg-indigo-900/40 px-2 py-0.5 rounded-[8px] flex items-center gap-1">
+                    <ArrowRight className="w-2.5 h-2.5 text-indigo-500" />
+                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">{activeContractsCount} active</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600" />
+                </div>
               </div>
             </button>
 
-            {/* ── SWARMS ── */}
+            {/* ── MARKET PRICES ── */}
             <button 
-              onClick={() => navigate("/swarms")}
-              className="w-full h-full bg-gradient-to-br from-primary to-emerald-600  border border-slate-200 dark:border-slate-700/50 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+              onClick={() => navigate("/market-pulse")}
+              className="w-full bg-slate-50 dark:bg-slate-800 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
-              <div className="w-10 h-10 bg-white/20  dark:bg-indigo-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
-                <Users className="w-5 h-5 text-white dark:text-indigo-400" />
+              <div className="w-10 h-10 shrink-0 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
+                <BarChart3Icon className="w-5 h-5 text-amber-600 dark:text-amber-400" />
               </div>
-              <div className="text-left relative z-10 mt-auto">
-                <h4 className="text-[13px] font-black text-white dark:text-white leading-tight mb-0.5">Swarms</h4>
-                <p className="text-[10px] font-semibold text-emerald-100/90 leading-tight">Join Logistics Swarms</p>
+              <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
+                <div>
+                  <h4 className="text-[13px] font-black text-slate-800 dark:text-white leading-none mb-1">Market Prices</h4>
+                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View live material prices</p>
+                </div>
+                
+                <div className="flex items-center justify-between w-full mt-auto">
+                  <div className="bg-amber-50 dark:bg-amber-900/40 px-2 py-0.5 rounded-[8px] flex items-center gap-1">
+                    <TrendingUp className="w-2.5 h-2.5 text-amber-500" />
+                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">Live</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600" />
+                </div>
               </div>
             </button>
           </div>
         </motion.div>
 
-        {/* ── MARKET PRICES (Horizontal Banner) ── */}
-        <motion.div variants={itemVariants} className="!mt-3">
+        {/* ── SWARMS (Horizontal Card) ── */}
+        <motion.div variants={itemVariants} className="!mt-2 px-1.5">
           <button 
-            onClick={() => navigate("/market-pulse")}
-            className="w-full bg-slate-300 dark:bg-slate-500 border border-slate-300 dark:border-slate-700 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+            onClick={() => navigate("/swarms")}
+            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
           >
-            <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-black/20 dark:bg-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0">
-                <BarChart3Icon className="w-6 h-6 text-slate-900 dark:text-white" />
+              <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                <MapPinned className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="text-left min-w-0">
-                <h3 className="text-[14px] font-bold tracking-tight leading-none mb-1 text-slate-900 dark:text-white">Market Prices</h3>
-                <p className="text-[11px] font-bold text-slate-600 dark:text-slate-300 leading-tight">View Live material prices</p>
+                <h4 className="text-[14px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Swarms</h4>
+                <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight">Join collection & logistics networks nearby</p>
               </div>
             </div>
-            <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center group-hover:bg-white/30 transition-colors relative z-10 shrink-0">
-              <ChevronRight className="w-4 h-4 text-slate-900 group-hover:translate-x-0.5 transition-transform" />
+            <div className="flex items-center gap-2 shrink-0 relative z-10">
+              <div className="bg-emerald-50 dark:bg-emerald-900/40 px-2 py-0.5 rounded-lg flex items-center gap-1">
+                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">{activeSwarmsCount} nearby</span>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center group-hover:bg-slate-200 dark:group-hover:bg-slate-600 transition-colors">
+                <ChevronRight className="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+              </div>
             </div>
           </button>
         </motion.div>

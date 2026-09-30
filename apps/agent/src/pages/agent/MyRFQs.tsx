@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Clock, CheckCircle2, XCircle,
-  MapPin, Scale, MessageSquare, ChevronRight, Package, Receipt
+  MapPin, Scale, MessageSquare, ChevronRight, Package, Receipt,
+  TrendingUp, Recycle, Droplets, Cog, ScrollText, Wine, ChevronDown, Apple, Cpu, Shirt, FileText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@klinflow/supabase';
@@ -23,6 +24,8 @@ export default function MyRFQs() {
   const profile = useAuthStore(s => s.profile);
   const { materialPrices, fetchMaterialPrices } = useServiceStore();
   const [filter, setFilter] = useState<'pending' | 'accepted' | 'completed' | 'closed'>('pending');
+  const [filterMaterial, setFilterMaterial] = useState('All');
+  const [isMoreCategoriesOpen, setIsMoreCategoriesOpen] = useState(false);
   const [rfqs, setRfqs] = useState<any[]>([]);
   const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
 
@@ -87,8 +90,14 @@ export default function MyRFQs() {
   }, [profile?.id]);
 
   const filteredRFQs = rfqs.filter(rfq => {
-    if (filter === 'closed') return rfq.status === 'closed' || rfq.status === 'cancelled';
-    return rfq.status === filter;
+    if (filter === 'closed') {
+      if (rfq.status !== 'closed' && rfq.status !== 'cancelled') return false;
+    } else {
+      if (rfq.status !== filter) return false;
+    }
+
+    if (filterMaterial !== 'All' && rfq.category !== filterMaterial && rfq.material !== filterMaterial) return false;
+    return true;
   });
 
   return (
@@ -134,7 +143,7 @@ export default function MyRFQs() {
               <button
                 key={statusOption}
                 onClick={() => setFilter(statusOption)}
-                className={`flex-1 py-2 px-1 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shrink-0 ${filter === statusOption
+                className={`flex-1 py-2 px-1 rounded-xl text-[11px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shrink-0 ${filter === statusOption
                   ? 'bg-primary text-white border-transparent shadow-md shadow-primary/20'
                   : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
                   }`}
@@ -154,6 +163,125 @@ export default function MyRFQs() {
 
       {/* ── CONTENT AREA ── */}
       <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 space-y-px pt-[calc(env(safe-area-inset-top,1rem)+5.85rem)] bg-slate-100 dark:bg-slate-800">
+        
+        {/* TOP WRAPPER FOR HERO & FILTERS */}
+        <div className="bg-[#F8F9FF] dark:bg-slate-800 pt-3 pb-4 px-2 space-y-5">
+          {/* Top Hero Stats Card */}
+          <div className="relative w-full rounded-[1.25rem] overflow-hidden border border-amber-600 bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 shadow-sm">
+            <div className="relative z-20 p-5 flex flex-col gap-4">
+              <div>
+                <h2 className="text-[17px] font-black text-white tracking-tight leading-none mb-1.5">Material Requests</h2>
+                <p className="text-[11px] font-semibold text-amber-100">Manage your material requests and track incoming offers.</p>
+              </div>
+              
+              <div className="flex gap-3">
+                <div className="flex-1 bg-white/10 border border-white/20 rounded-xl p-3 backdrop-blur-md flex items-center justify-between">
+                  <div>
+                    <p className="text-[9px] font-bold text-amber-200 uppercase tracking-widest mb-0.5">Total Requests</p>
+                    <h3 className="text-2xl font-black text-white leading-none">{rfqs.length}</h3>
+                  </div>
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/30 border border-amber-500/40 flex items-center justify-center">
+                    <FileText className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+                <div className="flex-1 bg-white/10 border border-white/20 rounded-xl p-3 backdrop-blur-md flex items-center justify-between">
+                  <div>
+                    <p className="text-[9px] font-bold text-amber-200 uppercase tracking-widest mb-0.5">Active Bids</p>
+                    <h3 className="text-2xl font-black text-white leading-none">
+                      {rfqs.reduce((acc, curr) => acc + (curr.bidsCount || 0), 0)}
+                    </h3>
+                  </div>
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/30 border border-amber-500/40 flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── MATERIAL CATEGORY CHIPS ── */}
+          <div className="relative">
+            <div className="flex justify-between items-end mb-2">
+               <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-widest">Filter by Category</p>
+
+            </div>
+            <div className="flex overflow-x-auto no-scrollbar gap-2 pb-1 -mx-4 px-4">
+              {[
+                { id: 'All', label: 'All', Icon: Recycle },
+                { id: 'Plastic', label: 'Plastic', Icon: Droplets },
+                { id: 'Metal', label: 'Metal', Icon: Cog },
+                { id: 'Paper', label: 'Paper', Icon: ScrollText },
+                { id: 'Glass', label: 'Glass', Icon: Wine }
+              ].map(cat => (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    setFilterMaterial(cat.id);
+                    setIsMoreCategoriesOpen(false);
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
+                    filterMaterial === cat.id
+                      ? 'bg-amber-600 text-white border-amber-600 shadow-sm'
+                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  <cat.Icon className={`w-4 h-4 ${filterMaterial === cat.id ? 'text-white' : 'text-slate-500'}`} />
+                  <span>{cat.label}</span>
+                </button>
+              ))}
+              
+              {/* More Dropdown Button */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsMoreCategoriesOpen(!isMoreCategoriesOpen)}
+                  className={`flex items-center gap-1.5 px-3.5 py-3 rounded-xl text-[12px] font-bold whitespace-nowrap transition-all border shrink-0 ${
+                    ['Organic', 'E-waste', 'Textile'].includes(filterMaterial) || isMoreCategoriesOpen
+                      ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
+                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  <span>{['Organic', 'E-waste', 'Textile'].includes(filterMaterial) ? filterMaterial : 'More'}</span>
+                  <ChevronDown className={`w-3 h-3 transition-transform ${isMoreCategoriesOpen ? 'rotate-180' : ''}`} />
+                </button>
+              </div>
+            </div>
+            
+            {/* Dropdown Menu */}
+            <AnimatePresence>
+              {isMoreCategoriesOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  className="absolute right-0 top-full mt-1 w-36 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-100 dark:border-slate-700 z-50 overflow-hidden"
+                >
+                  {[
+                    { id: 'Organic', label: 'Organic', Icon: Apple },
+                    { id: 'E-waste', label: 'E-waste', Icon: Cpu },
+                    { id: 'Textile', label: 'Textile', Icon: Shirt }
+                  ].map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        setFilterMaterial(cat.id);
+                        setIsMoreCategoriesOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[11px] font-bold transition-colors ${
+                        filterMaterial === cat.id
+                          ? 'bg-amber-50 dark:bg-amber-500/10 text-amber-600'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      }`}
+                    >
+                      <cat.Icon className={`w-3.5 h-3.5 ${filterMaterial === cat.id ? 'text-amber-500' : 'text-slate-400'}`} />
+                      <span>{cat.label}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+
         <AnimatePresence mode="popLayout">
           {filteredRFQs.length === 0 ? (
             <motion.div

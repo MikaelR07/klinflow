@@ -20,6 +20,7 @@ import { useAuthStore } from "@klinflow/core/stores/authStore";
 import { useNotificationStore } from "@klinflow/core/stores/notificationStore";
 import { useServiceStore } from "@klinflow/core/stores/serviceStore";
 import { supabase } from "@klinflow/supabase";
+import { useLocationStore } from "@klinflow/core/stores/locationStore";
 import { getThumbnailUrl } from "@klinflow/core/utils/imageUtils";
 import { toast } from "sonner";
 import PushNotificationModal from "@klinflow/ui/components/PushNotificationModal";
@@ -72,12 +73,14 @@ export default function UserHome() {
   const [showPushPrompt, setShowPushPrompt] = useState(false);
   const [userRank, setUserRank] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { status, liveAddress, startTracking } = useLocationStore();
 
   useEffect(() => {
+    startTracking();
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [startTracking]);
 
   useEffect(() => {
     fetchBookings();
@@ -172,8 +175,8 @@ export default function UserHome() {
                   Hello, {(profile?.fullName || profile?.name || "Resident").split(" ")[0]}!👋
                 </h1>
                 <div className="flex items-center gap-1.5 mt-1 text-[10px] text-white/90 font-semibold capitalize tracking-wider bg-black/10 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/20 w-fit">
-                  <MapPin className="w-3 h-3" />
-                  {profile?.location?.estate || profile?.estate || "Location not set"}
+                  <MapPin className={`w-3 h-3 ${status === 'tracking' ? 'animate-pulse text-emerald-400' : ''}`} />
+                  {status === 'tracking' ? (liveAddress || "Live GPS") : (status === 'stale' && liveAddress ? ("⏳ " + liveAddress) : (profile?.location?.estate || profile?.estate || "Location not set"))}
                 </div>
               </div>
             </div>
@@ -249,50 +252,29 @@ export default function UserHome() {
       <div className="max-w-xl mx-auto px-2.5 space-y-5 -mt-10 pb-5 relative z-20">
 
         {/* ── ACTION HUB (QUICK LINKS + CTA) ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-white dark:bg-slate-900 rounded-[12px] p-1.5 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           {/* ── APP SERVICES GRID ── */}
           <div className="space-y-2">
-            <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
-            <div className="grid grid-cols-4 gap-1 !mt-1">
+            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
+            <div className="grid grid-cols-4 gap-1">
               {[
+                { label: 'Book', icon: <Truck className="w-5 h-5" />, route: '/book-pickup', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Wallet', icon: <Wallet className="w-5 h-5" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Bookings', icon: <RecycleIcon className="w-5 h-5" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Dashboard', icon: <BarChart className="w-5 h-5" />, route: '/Analytics', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Discover', icon: <Search className="w-5 h-5" />, route: '/discovery', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
                 <button 
                   key={service.label} 
                   onClick={() => navigate(service.route)}
-                  className="bg-white dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                  className={`${service.label === 'Book' ? 'bg-gradient-to-br from-indigo-400 to-purple-500 border border-indigo-400/30' : 'bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50'} rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group`}
                 >
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
+                  <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.label === 'Book' ? 'bg-white/20 text-white' : service.color} group-hover:scale-110 transition-transform`}>
                     {service.icon}
                   </div>
-                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{service.label}</span>
+                  <span className={`text-[11px] font-bold capitalize tracking-wider ${service.label === 'Book' ? 'text-white' : 'text-slate-600 dark:text-slate-300'}`}>{service.label}</span>
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* ── PRIMARY CTAS ── */}
-          <div className="grid grid-cols-1 gap-1">
-            <button 
-              onClick={() => navigate("/book-pickup")}
-              className="w-full bg-gradient-to-br from-indigo-400 to-purple-400 text-white dark:bg-white dark:text-slate-900 rounded-[20px] shadow-sm shadow-slate-900/5 active:scale-[0.98] transition-all group p-3 flex items-center justify-between border border-white/10 dark:border-slate-900/10"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <Truck className="w-6 h-6 text-white dark:text-slate-900" />
-                </div>
-                <div className="text-left min-w-0">
-                  <h3 className="text-[16px] font-bold tracking-tight leading-none mb-1">Book Pickup</h3>
-                  <p className="text-[11px] font-semibold text-white/80 dark:text-slate-100 leading-tight">Turn Recyclables to cash</p>
-                </div>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center group-hover:bg-white/30 dark:group-hover:bg-slate-900/20 transition-colors">
-                <ChevronRight className="w-4 h-4 text-white dark:text-slate-900 group-hover:translate-x-0.5 transition-transform" />
-              </div>
-            </button>
           </div>
         </motion.div>
         
@@ -300,13 +282,15 @@ export default function UserHome() {
         {/* ── CATALOG: E-COMMERCE SCROLL ── */}
         <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.2 }} className="space-y-2">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-wide">What Collectors Buy!</h3>
+            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
             {/* <button onClick={() => navigate("/discovery")} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest hover:underline flex items-center">
               view details <ChevronDownCircle className="w-3 h-3 ml-0.5" />
             </button> */}
           </div>
           
-          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory -mx-1.5 px-1.5 pr-6 sm:mx-0 sm:px-0">
+          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory pr-6">
+            {/* Left spacer */}
+            <div className="w-0.5 shrink-0" />
             {(() => {
               const items = categories.length > 0 ? categories : catalogItems as any[];
               const getSortIndex = (i: any) => {
@@ -353,18 +337,16 @@ export default function UserHome() {
                 <div 
                   key={item.id} 
                   onClick={() => navigate(`/materials/${identifier}`)}
-                  className={`snap-start relative shrink-0 w-[140px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-3 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col h-full overflow-hidden`}
+                  className={`snap-start relative shrink-0 w-[110px] h-[105px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-2.5 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col overflow-hidden`}
                   style={bgImage ? {
-                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.2)), url(${bgImage})`,
+                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.3)), url(${bgImage})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                   } : {}}
                 >
-                  <div className={`text-2xl mb-2 w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border relative z-10 ${bgImage ? 'bg-white/20 backdrop-blur-md border-white/20' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700'}`}>
-                    {item.icon || '♻️'}
-                  </div>
-                  <h4 className={`text-xs font-black mb-2 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
-                  <div className={`rounded-lg px-2 py-1.5 mt-auto relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
+                  <div className="flex-1" />
+                  <h4 className={`text-[12px] font-black mb-1 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
+                  <div className={`rounded-lg px-1.5 py-1.5 relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
                     <p className={`text-[9px] font-black text-center leading-none ${bgImage ? 'text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>{displayPrice}</p>
                   </div>
                 </div>
@@ -373,38 +355,81 @@ export default function UserHome() {
           </div>
         </motion.div>
 
-        {/* ── COMMUNITY TOOLS ── */}
-        <motion.div variants={itemVariants} className="bg-slate-200 dark:bg-slate-800/40 rounded-[12px] p-1.5 !mt-1 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-2">
-          <div className="space-y-2">
-            <h3 className="text-[13px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Community Tools</h3>
+        {/* ── KLINFLOW BANNERS ── */}
+        <motion.div variants={itemVariants} className="!mt-1">
+          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
+            {/* Banner 1 */}
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] p-4 flex flex-col justify-center overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 min-h-[130px]">
+              <img src="/vectors/ecoBanner.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+              <div className="relative z-10 flex flex-col gap-1 w-[65%] sm:w-[65%]">
+                <h3 className="text-[16px] font-black text-amber-500 dark:text-white leading-tight mb-1">
+                  Endless Possibilities<br />for Everyone <ArrowRight className="inline w-3.5 h-3.5 ml-1" />
+                </h3>
+                <p className="text-[11px] font-medium text-emerald-100 dark:text-emerald-300/80 leading-tight">
+                  Whether you collect, buy, sell or create, we connect you to opportunities.
+                </p>
+              </div>
+            </div>
+
+            {/* Banner 2 (Resident Only) */}
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 min-h-[130px] bg-slate-900">
+              <img src="/vectors/ecoBanner3.webp" alt="Promo 3" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-1.5">
+        </motion.div>
+
+        {/* ── COMMUNITY TOOLS ── */}
+        <motion.div variants={itemVariants} className="!mt-1 space-y-2 px-1.5">
+          <div className="flex items-center justify-between">
+            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">Community Tools</h3>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-2">
             {/* ── SWARMS ── */}
             <button 
               onClick={() => navigate("/swarms")}
-              className="w-full h-full bg-gradient-to-br from-primary to-emerald-600 border border-emerald-400/30 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+              className="w-full bg-slate-50 dark:bg-slate-800 rounded-2xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
-              <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
-                <Users className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 shrink-0 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
+                <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <div className="text-left relative z-10 mt-auto">
-                <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Join a Swarm</h4>
-                <p className="text-[10px] font-semibold text-emerald-100/90 leading-tight">Pool pickups & earn together</p>
+              <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
+                <div>
+                  <h4 className="text-[13px] font-black text-slate-800 dark:text-white leading-none mb-1">Join a Swarm</h4>
+                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Pool pickups & earn together</p>
+                </div>
+                
+                <div className="flex items-center justify-between w-full mt-auto">
+                  <div className="bg-emerald-50 dark:bg-emerald-900/40 px-2 py-0.5 rounded-[8px] flex items-center gap-1">
+                    <ArrowRight className="w-2.5 h-2.5 text-emerald-500" />
+                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Join</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600" />
+                </div>
               </div>
             </button>
 
             {/* ── MARKET PRICES ── */}
             <button 
               onClick={() => navigate("/market-pulse")}
-              className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-500 border border-indigo-500 rounded-[20px] p-3.5 flex flex-col items-start justify-between gap-3 cursor-pointer transition-all shadow-sm group relative overflow-hidden"
+              className="w-full bg-slate-50 dark:bg-slate-800 rounded-2xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
-              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm shrink-0 relative z-10">
-                <BarChart3Icon className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 shrink-0 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
+                <BarChart3Icon className="w-5 h-5 text-amber-600 dark:text-amber-400" />
               </div>
-              <div className="text-left relative z-10 mt-auto">
-                <h4 className="text-[13px] font-black text-white leading-tight mb-0.5">Market Prices</h4>
-                <p className="text-[10px] font-semibold text-slate-100 leading-tight">Live recyclable rates & trends</p>
+              <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
+                <div>
+                  <h4 className="text-[13px] font-black text-slate-800 dark:text-white leading-none mb-1">Market Prices</h4>
+                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Live recyclable rates & trends</p>
+                </div>
+                
+                <div className="flex items-center justify-between w-full mt-auto">
+                  <div className="bg-amber-50 dark:bg-amber-900/40 px-2 py-0.5 rounded-[8px] flex items-center gap-1">
+                    <TrendingUp className="w-2.5 h-2.5 text-amber-500" />
+                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">Live</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600" />
+                </div>
               </div>
             </button>
           </div>

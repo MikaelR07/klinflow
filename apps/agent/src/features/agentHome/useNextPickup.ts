@@ -6,10 +6,10 @@ export interface NormalizedNextPickup {
   id: string;
   source: 'bookings' | 'fulfillment_orders' | 'market_trades';
   status: string;
-  pickupAddress: string;
-  latitude?: number;
-  longitude?: number;
-  material: string;
+  pickupAddress: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  material: string | null;
   estimatedWeight: number;
   actualWeight?: number;
   scheduledAt: string;
@@ -24,11 +24,13 @@ export function useNextPickup(): { nextPickup: NormalizedNextPickup | null, isLo
   const availableJobs = useAgentStore(s => s.availableJobs); // For pending jobs
   const arrivedJobIds = useAgentStore(s => s.arrivedJobIds);
   const isLoadingJobs = useAgentStore(s => s.isLoadingJobs);
+  const isInitialized = useAgentStore(s => s.isInitialized);
   
   const activeFulfillments = useFulfillmentStore(s => s.activeFulfillments);
-  const isLoadingFulfillments = useFulfillmentStore(s => s.isLoadingActiveFulfillments);
 
-  const nextPickup = useMemo(() => {
+  const nextPickup = useMemo<NormalizedNextPickup | null>(() => {
+    if (!isInitialized) return null; // Gate: don't calculate until everything is fetched
+
     // 1. Normalize active Jobs (Standard & Market Trades)
     const normalizedJobs: NormalizedNextPickup[] = activeJobs.map(j => ({
       id: j.id,
@@ -57,7 +59,7 @@ export function useNextPickup(): { nextPickup: NormalizedNextPickup | null, isLo
         pickupAddress: f.pickup_address || 'Address hidden',
         latitude: undefined,
         longitude: undefined,
-        material: f.rfq?.material_type || 'Mixed Material',
+        material: (f as any).rfq?.material_type || 'Mixed Material',
         estimatedWeight: (f as any).proposal?.offered_weight || (f as any).rfq?.target_quantity || 0,
         actualWeight: f.actual_weight || f.verified_weight || undefined,
         scheduledAt: f.scheduled_time || 'ASAP',
@@ -122,10 +124,10 @@ export function useNextPickup(): { nextPickup: NormalizedNextPickup | null, isLo
     if (pendingJob) return pendingJob;
 
     return null;
-  }, [activeJobs, activeFulfillments, availableJobs, arrivedJobIds]);
+  }, [activeJobs, activeFulfillments, availableJobs, arrivedJobIds, isInitialized]);
 
   return {
     nextPickup,
-    isLoading: isLoadingJobs || isLoadingFulfillments,
+    isLoading: !isInitialized, // Only show skeleton if the gate is locked
   };
 }

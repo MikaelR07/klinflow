@@ -489,7 +489,7 @@ export default function MaterialDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-5xl mx-auto">
           
           {/* Image Card (Restored Style) */}
-          <div className="relative h-[240px] md:h-full w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm min-h-[240px]">
+          <div className="relative h-[220px] md:h-full w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm min-h-[220px]">
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${mat.heroImage})` }}
@@ -514,14 +514,15 @@ export default function MaterialDetail() {
                   <h1 className="text-[18px] md:text-2xl font-black text-white leading-tight tracking-tight">
                     {title}
                   </h1>
-                  <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border shrink-0 ${
+                  <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border shrink-0 flex items-center gap-1 ${
                     displayDemand === 'Critical' || displayDemand === 'High'
                     ? 'text-emerald-100 bg-emerald-900/40 border-emerald-500/30 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
                     : displayDemand === 'Calculating...'
                     ? 'text-slate-100 bg-slate-900/40 border-slate-500/30 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700'
                     : 'text-amber-100 bg-amber-900/40 border-amber-500/30 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20'
                   }`}>
-                    {displayDemand} {displayDemand !== 'Calculating...' ? 'Demand' : ''}
+                    {displayDemand !== 'Calculating...' && <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>}
+                    {displayDemand} {displayDemand !== 'Calculating...' ? 'Market Demand' : ''}
                   </div>
                 </div>
                 <p className="text-[12px] md:text-[13px] font-medium text-emerald-100 leading-relaxed">
@@ -531,36 +532,30 @@ export default function MaterialDetail() {
 
               {/* Market Snapshot in Top Card */}
               <div className="mt-auto p-4 md:p-6 pt-2 md:pt-2">
-                <div className="bg-black/15 dark:bg-slate-800/60 rounded-xl p-1.5 md:p-2 mb-3 shadow-inner">
-                  <div className="grid grid-cols-3 gap-1.5 md:gap-2">
+                <div className="bg-white/10 dark:bg-slate-800/40 rounded-2xl p-2 mb-3 shadow-inner border border-white/5 dark:border-white/5">
+                  <div className="grid grid-cols-3 gap-2">
                     {/* Metric 1 */}
-                    <div className="bg-emerald-800 dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center border border-emerald-600/30">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-200 mb-1">Current Price</p>
-                      <p className="text-[13px] md:text-[15px] font-black text-white leading-none mb-1">
+                    <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100/70 mb-1">Average Price</p>
+                      <p className="text-[13px] md:text-[15px] font-black text-white leading-none mb-1 truncate">
                         {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'}
                       </p>
-                      <p className="text-[9px] font-semibold text-emerald-300/80 leading-tight truncate">Market Rate</p>
                     </div>
                     {/* Metric 2 */}
-                    <div className="bg-emerald-800 dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center border border-emerald-600/30">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-200 mb-1">Demand Level</p>
+                    <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100/70 mb-1">Market Demand</p>
                       <p className="text-[13px] md:text-[15px] font-black text-white leading-none mb-1 truncate">{displayDemand}</p>
-                      <p className="text-[9px] font-semibold text-emerald-300/80 leading-tight truncate">Buyer activity</p>
                     </div>
                     {/* Metric 3 */}
-                    <div className="bg-emerald-800 dark:bg-[#12141c] rounded-lg p-2.5 md:p-3 shadow-sm flex flex-col justify-center border border-emerald-600/30">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-200 mb-1">30-Day Trend</p>
-                      <p className={`text-[13px] md:text-[15px] font-black ${isTrendUp ? 'text-emerald-300 dark:text-emerald-500' : isTrendDown ? 'text-rose-300 dark:text-rose-500' : 'text-emerald-100 dark:text-slate-400'} leading-none mb-1`}>
-                        {isTrendUp ? '▲' : isTrendDown ? '▼' : ''} {displayTrend}
+                    <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
+                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100/70 mb-1">Price Movement</p>
+                      <p className={`text-[13px] md:text-[15px] font-black ${isTrendUp ? 'text-emerald-300' : isTrendDown ? 'text-rose-300' : 'text-emerald-100'} leading-none mb-1 truncate`}>
+                        {isTrendUp ? 'Going Up ▲' : isTrendDown ? 'Going Down ▼' : 'Stable -'}
                       </p>
-                      <p className="text-[9px] font-semibold text-emerald-300/80 leading-tight truncate">Past 30 days</p>
                     </div>
                   </div>
                 </div>
-
-
               </div>
-
             </div>
           </div>
 

@@ -77,7 +77,8 @@ self.addEventListener('push', (event) => {
       icon: '/logo.png', // Ensure this exists in your public folder
       badge: '/icons/icon-192.png',
       data: {
-        url: data.data?.url || '/'
+        // V3 Migration: Parse structured deep links dynamically passed from the Outbox edge function
+        url: data.data?.url || data.action_url || '/'
       },
       vibrate: [100, 50, 100],
       actions: [
@@ -97,6 +98,7 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
+  // V3 Migration: Handle explicit action_url routing dynamically
   const urlToOpen = event.notification.data.url || '/';
 
   event.waitUntil(

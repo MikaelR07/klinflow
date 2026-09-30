@@ -39,7 +39,7 @@ export default function AgentWarehouse() {
   const navigate = useNavigate();
   const { profile, subscribeToProfileChanges } = useAuthStore() as any;
   const { assets } = useAssetStore();
-  const { addNotification } = useNotificationStore();
+  /* useNotificationStore removed */
   const { materialPrices, fetchMaterialPrices, categories, fetchCategories, allCategories, fetchAllCategories } = useServiceStore();
   const { agentConfig, fetchAgentConfig } = useAgentStore();
   const [realAssets, setRealAssets] = useState([]);
@@ -235,13 +235,7 @@ export default function AgentWarehouse() {
       const { updateProfile } = useAuthStore.getState() as any;
       await updateProfile({ hubTransferPin: pin, isEnRoute: true });
 
-      addNotification(
-        "Incoming Bulk Drop! 🚚",
-        `Agent ${profile.name} is heading to the Hub with a full truck (~${totalVerifiedWeight.toFixed(1)}kg).`,
-        'info',
-        'hub',
-        profile.companyId || null
-      );
+      /* addNotification removed for v3 migration */
 
       toast.success("Check-In Requested! 🏢", {
         description: "Please show your secure PIN at the gate."

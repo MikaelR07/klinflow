@@ -45,44 +45,28 @@ export const useNotificationStore = create<NotificationStore>()(
   fetchNotifications: async (userId, role) => {
     set({ isLoading: true });
     const lastCleared = localStorage.getItem(`cf_nots_cleared_${userId}`) || '1970-01-01T00:00:00Z';
-    const currentCompanyId = useAuthStore.getState().currentCompanyId;
     
     try {
-      let orQuery = `target_user.eq.${userId},target_role.eq.${(role || '').toLowerCase()},target_role.eq.all`;
-      if (currentCompanyId) {
-        orQuery += `,target_user.eq.${currentCompanyId}`;
-      }
-
+      // Fetch v2 notifications only
       const { data, error } = await supabase
-        .from('notifications')
+        .from('notifications_v2')
         .select('*')
-        .or(orQuery)
+        .eq('recipient_id', userId)
         .gt('created_at', lastCleared)
         .order('created_at', { ascending: false })
         .limit(50);
 
       if (!error && data) {
         const rawMapped = data.map((n: any) => {
-          const parsed = parseSerializedMetadata(n);
-          const normalized = normalizeKeys(parsed);
+          const normalized = normalizeKeys(n);
           // Standardize content/body mapping
-          normalized.content = normalized.content || normalized.body;
+          normalized.content = normalized.body;
           normalized.read = normalized.isRead;
           return normalized;
         });
         
         const validNotifications = safeParseArray(AppNotificationSchema, rawMapped, 'Notifications Fetch');
-        
-        // Filter out missions for Company Admins in history
-        const isCompanyAdmin = (useAuthStore.getState().profile as any)?.agentAccountType === 'company_admin';
-        const filtered = isCompanyAdmin 
-          ? validNotifications.filter(n => {
-              const title = n.title?.toLowerCase() || '';
-              return !title.includes('mission') && !title.includes('dispatch');
-            })
-          : validNotifications;
-
-        set({ notifications: filtered });
+        set({ notifications: validNotifications });
       }
     } finally {
       set({ isLoading: false });
@@ -160,167 +144,50 @@ export const useNotificationStore = create<NotificationStore>()(
     const uniqueId = Math.random().toString(36).substring(7);
     const channelName = `user-notifs-${userId}-${uniqueId}`; 
     
-    const sub = supabase.channel(channelName)
+    const subV2 = supabase.channel(channelName)
       .on('postgres_changes', { 
         event: 'INSERT', 
         schema: 'public', 
-        table: 'notifications' 
+        table: 'notifications_v2',
+        filter: `recipient_id=eq.${userId}`
       }, async (payload: any) => {
         const rawN = payload.new;
-        const n = parseSerializedMetadata(rawN);
-        const targetRole = (n.target_role || '').toLowerCase();
-        const targetUser = n.target_user;
+        const normalized = normalizeKeys(rawN);
+        normalized.content = normalized.body;
+        normalized.read = false;
+        normalized.isRead = false;
         
-        const isMission = n.title?.toLowerCase().includes('mission') || n.title?.toLowerCase().includes('dispatch');
-        const isTradePost = n.title?.toLowerCase().includes('material') || n.title?.toLowerCase().includes('trade');
-        
-        const { hubRoles, membershipRole, profile } = await import('./authStore').then(m => m.useAuthStore.getState());
-        const isSalesManager = hubRoles?.includes('sales_manager') || membershipRole === 'owner';
-        const isCompanyAdmin = agentAccountType === 'company_admin' || profile?.agentAccountType === 'company_admin';
-        
-        // 1. Filter missions for company admins: ONLY Sales Managers (and Owners) should see them in real-time
-        if (isMission && isCompanyAdmin && !isSalesManager) return;
- 
-        // 2. TARGETING LOGIC & NORMALIZATION
-        // Normalize 'client' role to 'user' to ensure cross-app compatibility
-        const normalizedTargetRole = targetRole === 'client' ? 'user' : targetRole;
-        const normalizedMyRole = myRole === 'client' ? 'user' : myRole;
- 
-        const currentUserId = get().userId;
-        const currentCompanyId = useAuthStore.getState().currentCompanyId;
-        const isDirectPing = targetUser && (targetUser === currentUserId || targetUser === currentCompanyId);
-        const isRolePing = 
-          normalizedTargetRole === normalizedMyRole || 
-          normalizedTargetRole === 'all' ||
-          (normalizedTargetRole === 'agent' && normalizedMyRole === 'driver') ||
-          (normalizedTargetRole === 'agent' && normalizedMyRole === 'hub'); // Hubs are targeted by Agent alerts (like dispatch missions)
-        
-         let shouldProcess = isDirectPing || isRolePing;
- 
-         // 3. MATERIAL FILTERING (For open market missions & B2B trade posts)
-         // NOTE: The agent config page saves WASTE_CATEGORIES[].id (e.g. 'recyclable' for plastic),
-         // but the seller PostTrade sends DB waste_categories.slug (e.g. 'plastic').
-         // We use a bidirectional alias map to bridge this naming drift.
-         if (shouldProcess && !isDirectPing && (isMission || isTradePost) && n.metadata?.wasteType && (normalizedMyRole === 'agent' || normalizedMyRole === 'driver')) {
-             try {
-                 const { useAgentStore } = await import('./agentStore');
-                 const accepted = (useAgentStore.getState().agentConfig?.accepted_materials || []) as any[];
-                 if (accepted.length > 0) {
-                     const wasteLower = String(n.metadata.wasteType).toLowerCase();
-
-                     // Bidirectional alias map: maps between WASTE_CATEGORIES IDs and DB slugs/labels
-                     const MATERIAL_ALIASES: Record<string, string[]> = {
-                       'recyclable': ['plastic', 'plastics', 'pet', 'hdpe', 'ldpe', 'pp', 'mixed_plastic'],
-                       'plastic': ['recyclable'],
-                       'metal': ['aluminium', 'copper', 'steel', 'brass', 'scrap'],
-                       'ewaste': ['e-waste', 'electronics', 'batteries', 'cables', 'screens', 'logic_boards'],
-                       'paper': ['cardboard', 'newsprint', 'office_paper'],
-                       'glass': ['clear_glass', 'colored_glass'],
-                       'organic': ['food_scraps', 'green_waste', 'compost'],
-                       'general': ['household_trash', 'mixed', 'general_waste'],
-                     };
-
-                     const isAccepted = accepted.some(mat => {
-                       if (!mat) return false;
-                       let matStr = '';
-                       if (typeof mat === 'string') {
-                         matStr = mat;
-                       } else if (typeof mat === 'object') {
-                         matStr = mat.id || mat.name || '';
-                       }
-                       const matLower = String(matStr).toLowerCase();
-                       if (!matLower) return false;
-                       // Direct match
-                       if (matLower === wasteLower) return true;
-                       // Check if the incoming wasteType is an alias of any accepted material
-                       const aliases = MATERIAL_ALIASES[matLower] || [];
-                       return aliases.includes(wasteLower);
-                     });
-
-                     if (!isAccepted) {
-                         shouldProcess = false; // Ignore notification — material not accepted
-                     }
-                 }
-             } catch (e) {}
-         }
-        
-        // A notification is valid if it's specifically for ME OR generally for my ROLE
-        if (shouldProcess) {
-          const normalized = normalizeKeys(n);
-          normalized.content = normalized.content || normalized.body;
-          normalized.read = false;
-          normalized.isRead = false;
+        const finalNotif = safeParseOrNull(AppNotificationSchema, normalized, 'Realtime V2 Insert');
+        if (finalNotif) {
+          set((state) => {
+            if (state.notifications.some(notif => notif.id === finalNotif.id)) return state;
+            return { notifications: [finalNotif, ...state.notifications].slice(0, 50) };
+          });
           
-          const finalNotif = safeParseOrNull(AppNotificationSchema, normalized, 'Realtime Notification Insert');
-          
-          if (finalNotif) {
-            set((state) => {
-              if (state.notifications.some(notif => notif.id === finalNotif.id)) {
-                return state; // Deduplicate
-              }
-              return {
-                notifications: [finalNotif, ...state.notifications].slice(0, 50)
-              };
-            });
-            
-            // Handle sound and OS notification popup intelligently based on visibility
-            const isTradeEvent = finalNotif.title?.toLowerCase().includes('offer') || 
-                                 finalNotif.title?.toLowerCase().includes('order') ||
-                                 finalNotif.title?.toLowerCase().includes('material') || 
-                                 finalNotif.title?.toLowerCase().includes('trade');
-            
-            // 100% SOUND SUPPRESSION FOR HUB APP
-            const isHubApp = myRole === 'hub';
-            const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-            const isMarketplacePage = pathname.startsWith('/marketplace');
-            
-            const isSilentEnterpriseAlert = isMission && isCompanyAdmin && isSalesManager;
-            
-            if (!isHubApp) {
-                const soundFile = isTradeEvent ? '/notification-sound/seller-notification.mp3' : '/notification.mp3';
-                get().playNotificationSound(finalNotif.title, finalNotif.content, soundFile);
-            }
-            
-            // Only trigger high-visibility green/red Sonner toasts when the app is actively open in the foreground
-            const isForeground = typeof document !== 'undefined' && document.visibilityState === 'visible';
-            if (isForeground) {
-              const toastOptions = {
-                description: finalNotif.content,
-                duration: isMission ? 8000 : 5000,
-                icon: isMission ? '🚛' : undefined
-              };
+          const isTradeEvent = finalNotif.category === 'marketplace';
+          const isHubApp = myRole === 'hub';
 
-              if (isMission && isCompanyAdmin) {
-                if (isSalesManager && isMarketplacePage) {
-                  // Enterprise-grade silent indigo toast for Sales Managers ONLY on marketplace pages
-                  toast(`⚡ ${finalNotif.title}`, {
-                    description: finalNotif.content,
-                    duration: 10000,
-                    style: {
-                      background: '#0f172a',
-                      border: '1px solid rgba(99,102,241,0.5)',
-                      boxShadow: '0 0 20px rgba(99,102,241,0.3)',
-                      color: '#ffffff',
-                      fontWeight: '700',
-                      animation: 'pulse 2s cubic-bezier(0.4,0,0.6,1) infinite',
-                    },
-                    descriptionClassName: 'text-indigo-200',
-                  });
-                }
-              } else if (finalNotif.type === 'success' || finalNotif.type === 'reward') {
+          if (!isHubApp) {
+              const soundFile = isTradeEvent ? '/notification-sound/seller-notification.mp3' : '/notification.mp3';
+              get().playNotificationSound(finalNotif.title, finalNotif.content, soundFile);
+          }
+          
+          const isForeground = typeof document !== 'undefined' && document.visibilityState === 'visible';
+          if (isForeground) {
+              const toastOptions = { description: finalNotif.content, duration: finalNotif.priority === 'critical' ? 8000 : 5000 };
+              if (finalNotif.category === 'earnings' || finalNotif.category === 'rewards') {
                 toast.success(finalNotif.title, toastOptions);
-              } else if (finalNotif.type === 'warning') {
+              } else if (finalNotif.category === 'system' || finalNotif.priority === 'high') {
                 toast.warning(finalNotif.title, toastOptions);
               } else {
                 toast(finalNotif.title, { ...toastOptions, icon: '🔔' });
               }
-            }
           }
         }
       })
       .subscribe();
     
-    set({ subscription: sub });
+    set({ subscription: subV2 });
   },
 
   cleanup: () => {
@@ -331,46 +198,21 @@ export const useNotificationStore = create<NotificationStore>()(
     }
   },
 
-  addNotification: async (title, content, type = NOTIFICATION_TYPES.INFO, targetRole = 'all', targetUser = null, metadata = undefined) => {
-    const normalizedRole = targetRole === 'client' ? 'user' : targetRole;
-
-    const serializeBody = (bodyContent: string, meta?: any) => {
-      if (!meta) return bodyContent;
-      return `${bodyContent}\n\n===METADATA===\n${JSON.stringify(meta)}`;
+  addNotification: async (title, content, category = 'system', targetRole = 'all', targetUser = null, metadata = undefined) => {
+    // V3: Frontend should not insert into notifications natively anymore (handled by backend triggers).
+    // However, if we need to show a local fake notification:
+    const id = `NT-${Date.now()}`;
+    const localNotif: AppNotification = {
+      id, title, content, body: content, category: category as any, priority: 'normal',
+      isRead: false, read: false, archived: false, createdAt: new Date().toISOString(), metadata
     };
-
-    const insertData = Array.isArray(targetUser) ? targetUser.map(uid => ({
-      title,
-      body: serializeBody(content, metadata),
-      type,
-      target_role: (normalizedRole || 'all').toLowerCase(),
-      target_user: uid
-    })) : [{
-      title,
-      body: serializeBody(content, metadata),
-      type,
-      target_role: (normalizedRole || 'all').toLowerCase(),
-      target_user: targetUser
-    }];
-
-    const { error } = await supabase.from('notifications').insert(insertData as any);
-
-    if (error) {
-      console.error('[NotificationStore] INSERT ERROR:', error.message);
-      // Fallback local notification
-      const id = `NT-${Date.now()}`;
-      const localNotif: AppNotification = {
-        id, title, content, type: type as any, 
-        isRead: false, read: false, createdAt: new Date().toISOString()
-      };
-      set((state) => ({
-        notifications: [localNotif, ...state.notifications].slice(0, 50),
-      }));
-    }
+    set((state) => ({
+      notifications: [localNotif, ...state.notifications].slice(0, 50),
+    }));
   },
 
   markAsRead: async (id) => {
-    await supabase.from('notifications').update({ is_read: true } as any).eq('id', id);
+    await supabase.from('notifications_v2').update({ is_read: true }).eq('id', id);
     set((state) => ({
       notifications: state.notifications.map(n => n.id === id ? { ...n, read: true, isRead: true } : n),
     }));
@@ -385,18 +227,27 @@ export const useNotificationStore = create<NotificationStore>()(
       notifications: state.notifications.map(n => ({ ...n, read: true, isRead: true })),
     }));
     
-    await supabase.from('notifications').update({ is_read: true } as any).in('id', unreadIds);
+    await supabase.from('notifications_v2').update({ is_read: true }).in('id', unreadIds);
   },
 
   clearAll: async () => {
     const { userId } = useAuthStore.getState();
-    if (!userId) {
-      set({ notifications: [] });
-      return;
+    const { notifications } = get();
+
+    // Mark all unread as read in DB (non-destructive)
+    const unreadIds = notifications.filter(n => !n.read).map(n => n.id);
+    if (unreadIds.length > 0) {
+      await supabase.from('notifications_v2').update({ is_read: true }).in('id', unreadIds);
     }
-    await supabase.from('notifications').delete().eq('target_user', userId);
+
+    // Save a "cleared at" timestamp — fetchNotifications already uses this
+    // to filter out older notifications, so they won't reappear
     const now = new Date().toISOString();
-    localStorage.setItem(`cf_nots_cleared_${userId}`, now);
+    if (userId) {
+      localStorage.setItem(`cf_nots_cleared_${userId}`, now);
+    }
+
+    // Clear local state (notifications stay safe in DB)
     set({ notifications: [] });
   },
 

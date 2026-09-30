@@ -24,6 +24,7 @@ import L from 'leaflet';
 import { useNavigate } from 'react-router-dom';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
+import { useLocationStore } from '@klinflow/core/stores/locationStore';
 import { toast } from 'sonner';
 
 // ── CUSTOM ICONS ──
@@ -116,23 +117,23 @@ export default function MyRoutes() {
       toast.info("Route Updated", { description: "Mission parameters have changed." });
     });
 
-    if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
-        (pos) => {
-          // Only update if accuracy is high (< 100m) to prevent snapping to Nairobi
-          if (pos.coords.accuracy < 100) {
-            setCurrentPos([pos.coords.latitude, pos.coords.longitude]);
-          }
-        },
-        null,
-        { enableHighAccuracy: true, maximumAge: 0 }
-      );
-      return () => {
-        navigator.geolocation.clearWatch(watchId);
-        channel.unsubscribe();
-      };
+    const unsubscribeLocation = useLocationStore.subscribe((state) => {
+      if (state.coords) {
+        if (state.coords.accuracy < 100) {
+          setCurrentPos([state.coords.latitude, state.coords.longitude]);
+        }
+      }
+    });
+
+    const locationStore = useLocationStore.getState();
+    if (locationStore.status === 'idle') {
+      locationStore.startTracking();
     }
-    return () => channel.unsubscribe();
+
+    return () => {
+      channel.unsubscribe();
+      unsubscribeLocation();
+    };
   }, [initialPos[0], initialPos[1]]);
 
   // Sync currentPos when initialPos changes (e.g. settings update)

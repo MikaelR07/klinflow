@@ -33,14 +33,12 @@ export default function RequestVerificationPage() {
 
     setIsSubmitting(true);
     try {
-      // Insert a verification request into the notifications table for admin review
-      const { error } = await supabase.from('notifications').insert({
-        title: '🔒 Verification Request',
-        content: `Seller "${profile?.name}" (${profile?.phone}) is requesting Klinflow Verification.\n\nID/Reg: ${idNumber}\nBusiness: ${businessName || 'N/A'}\nReason: ${reason || 'Standard verification'}\nProfile ID: ${profile?.id}`,
-        type: 'security',
-        target_role: 'admin',
-        target_user: null,
-        is_read: false,
+      // Insert a verification request into the verification_requests table
+      const { error } = await supabase.from('verification_requests').insert({
+        profile_id: profile?.id,
+        id_number: idNumber,
+        business_name: businessName || null,
+        reason: reason || null
       });
 
       if (error) throw error;

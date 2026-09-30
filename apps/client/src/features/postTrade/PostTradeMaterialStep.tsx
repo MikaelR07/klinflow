@@ -100,7 +100,7 @@ export default function PostTradeMaterialStep({
         </div>
 
         <h3 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">Select Material Type</h3>
-        <div className="grid grid-cols-3 gap-1">
+        <div className="grid grid-cols-2 gap-1">
           {categories.filter((cat: any) =>
             (cat.label || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
             (cat.slug || '').toLowerCase().includes(searchQuery.toLowerCase())

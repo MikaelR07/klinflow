@@ -64,7 +64,7 @@ export default function PostBulkTrade() {
   const [participants, setParticipants] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [customLocation] = useState(profile?.location || { estate: 'Westlands', latitude: -1.2635, longitude: 36.8048 });
+  const [customLocation, setCustomLocation] = useState(profile?.location || { estate: 'Westlands', latitude: -1.2635, longitude: 36.8048 });
   const [photos, setPhotos] = useState<any[]>([]);
   const [customDescription, setCustomDescription] = useState('');
   const [selectedAgent, setSelectedAgent] = useState<any>(null);
@@ -90,6 +90,28 @@ export default function PostBulkTrade() {
   const getCategoryPrice = usePriceStore(s => s.getCategoryPrice);
   const quantity = swarm?.current_weight || 0;
 
+  // ── SMART GEOLOCATION: Runs once on mount, separate from data-fetching effect ──
+  useEffect(() => {
+    const fetchLoc = async () => {
+      try {
+        const { useLocationStore } = await import('@klinflow/core/stores/locationStore');
+        const store = useLocationStore.getState();
+        if (store.status === 'idle') store.startTracking();
+        
+        const loc = await store.getCurrentLocation();
+        setCustomLocation({
+          estate: store.liveAddress || 'Current Location',
+          latitude: loc.latitude,
+          longitude: loc.longitude
+        });
+      } catch (err) {
+        console.log('[PostBulkTrade] GPS Permission Denied or Failed. Using profile fallback.', err);
+      }
+    };
+    fetchLoc();
+  }, []);
+
+  // ── DATA FETCHING: Swarm, agents, categories, hubs ──
   useEffect(() => {
     const loadSwarm = async () => {
       if (!id) return;
@@ -119,7 +141,6 @@ export default function PostBulkTrade() {
       try {
         const { data, error } = await supabase.rpc('get_nearby_hubs_with_territory', { p_lat: lat, p_lon: lng });
         if (!error && data) {
-          // Adapt the returned data to match what the UI expects
           setNearbyHubs(data.map((hub: any) => ({
             ...hub,
             companyName: hub.name,
@@ -138,7 +159,7 @@ export default function PostBulkTrade() {
     loadSwarm();
 
     return () => cleanupAgents();
-  }, [id, categories.length, quantity, cleanupAgents, fetchCategories, fetchConfig, fetchNearbyAgents, subscribeToAgents, customLocation]);
+  }, [id, categories.length, quantity, customLocation.latitude, customLocation.longitude]);
 
   const liveRatePerKg = getCategoryPrice(swarm?.material || '');
 
@@ -189,12 +210,7 @@ export default function PostBulkTrade() {
         }
       });
 
-      await useNotificationStore.getState().addNotification(
-        "Community Bulk Drive! 🏆",
-        `${swarm.estate} just listed ${quantity}kg of ${swarm.material} as a bulk drive!`,
-        'success',
-        'agent'
-      );
+      /* addNotification removed for v3 migration */
 
       toast.success("Bulk Drive Posted to KlinMarket!");
       navigate('/my-trades');

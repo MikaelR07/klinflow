@@ -668,19 +668,24 @@ export default function CompanyServicesConfigPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    if (navigator.geolocation) {
-                      navigator.geolocation.getCurrentPosition(
-                        (pos) => {
-                          setHubData(prev => ({
-                            ...prev,
-                            coords: { latitude: pos.coords.latitude, longitude: pos.coords.longitude }
-                          }));
-                          toast.success('Moved to your current location');
-                        },
-                        () => toast.error('GPS access denied'),
-                        { enableHighAccuracy: true }
-                      );
+                  onClick={async () => {
+                    try {
+                      const { useLocationStore } = await import('@klinflow/core/stores/locationStore');
+                      const store = useLocationStore.getState();
+                      if (store.status === 'idle') store.startTracking();
+                      
+                      const loc = await toast.promise(store.getCurrentLocation(), {
+                        loading: 'Getting location...',
+                        success: 'Moved to your current location',
+                        error: 'Failed to get location'
+                      });
+                      
+                      setHubData(prev => ({
+                        ...prev,
+                        coords: { latitude: loc.latitude, longitude: loc.longitude }
+                      }));
+                    } catch (err) {
+                      toast.error('GPS access denied');
                     }
                   }}
                   className="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center active:scale-95 transition-all"

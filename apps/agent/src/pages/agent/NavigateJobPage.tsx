@@ -65,7 +65,7 @@ export default function NavigateJobPage() {
   const navigate = useNavigate();
   const { profile } = useAuthStore();
   const { activeJobs, fetchActiveJobs, arrivedJobIds, setJobArrived, fetchAgentConfig } = useAgentStore();
-  const { addNotification } = useNotificationStore();
+  /* useNotificationStore removed */
   
   const job = activeJobs.find(j => j.id === id);
   const { fetchCategories } = useServiceStore();
@@ -401,32 +401,14 @@ export default function NavigateJobPage() {
                         const participantIds = participants?.map((p: any) => p.user_id).filter(Boolean) || [];
                         const allTargets = [...new Set([...participantIds, activeJob.user_id || activeJob.userId])].filter(Boolean);
                         
-                        addNotification(
-                          "Agent has Arrived at your Community! 🏘️",
-                          `${agentName} has arrived for your community group pickup. Please meet them with your materials ready.`,
-                          NOTIFICATION_TYPES.SUCCESS,
-                          'user',
-                          allTargets
-                        );
+                        /* addNotification removed for v3 migration */
                       } catch (err) {
                         console.error('[NavigateJob] Failed to notify group participants:', err);
                         // Fallback: notify just the booking owner
-                        addNotification(
-                          "Agent has Arrived!",
-                          `${agentName} has arrived at your location. Please meet them to begin the pickup.`,
-                          NOTIFICATION_TYPES.SUCCESS,
-                          'client',
-                          activeJob.user_id || activeJob.userId
-                        );
+                        /* addNotification removed for v3 migration */
                       }
                     } else {
-                      addNotification(
-                        "Agent has Arrived!",
-                        `${agentName} has arrived at your location. Please meet them to begin the pickup.`,
-                        NOTIFICATION_TYPES.SUCCESS,
-                        'client',
-                        activeJob.user_id || activeJob.userId
-                      );
+                      /* addNotification removed for v3 migration */
                     }
                     
                     setHasArrived(true);
@@ -539,13 +521,7 @@ export default function NavigateJobPage() {
                   const otherParticipants = participantIds.filter((uid: string) => uid !== bookingOwner);
                   
                   if (otherParticipants.length > 0) {
-                    addNotification(
-                      "Community Pickup Completed! 💰",
-                      `Your group pickup of ${data.weightKg}kg has been verified. Payouts and GFP are being distributed to all contributors.`,
-                      NOTIFICATION_TYPES.SUCCESS,
-                      'user',
-                      otherParticipants
-                    );
+                    /* addNotification removed for v3 migration */
                   }
                 } catch (err) {
                   console.error('[NavigateJob] Failed to notify group participants on completion:', err);
