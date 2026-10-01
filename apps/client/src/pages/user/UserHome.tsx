@@ -108,9 +108,10 @@ export default function UserHome() {
       }
       const { count, error } = await supabase
         .from("profiles")
-        .select("id", { count: "exact", head: true })
+        .select("id", { count: "exact" })
         .eq("role", "user")
-        .gt("reward_points", userPoints);
+        .gt("reward_points", userPoints)
+        .limit(1);
       if (!error) setUserRank(((count as number) || 0) + 1);
     };
     fetchRank();
@@ -249,7 +250,7 @@ export default function UserHome() {
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto px-2.5 space-y-5 -mt-10 pb-5 relative z-20">
+      <div className="max-w-xl mx-auto px-2.5 space-y-6 -mt-10 pb-5 relative z-20">
 
         {/* ── ACTION HUB (QUICK LINKS + CTA) ── */}
         <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-white dark:bg-slate-900 rounded-[12px] p-1.5 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
@@ -266,12 +267,12 @@ export default function UserHome() {
                 <button 
                   key={service.label} 
                   onClick={() => navigate(service.route)}
-                  className={`${service.label === 'Book' ? 'bg-gradient-to-br from-indigo-400 to-purple-500 border border-indigo-400/30' : 'bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50'} rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group`}
+                  className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
                 >
-                  <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.label === 'Book' ? 'bg-white/20 text-white' : service.color} group-hover:scale-110 transition-transform`}>
+                  <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
                     {service.icon}
                   </div>
-                  <span className={`text-[11px] font-bold capitalize tracking-wider ${service.label === 'Book' ? 'text-white' : 'text-slate-600 dark:text-slate-300'}`}>{service.label}</span>
+                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{service.label}</span>
                 </button>
               ))}
             </div>
@@ -384,27 +385,27 @@ export default function UserHome() {
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">Community Tools</h3>
           </div>
           
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1">
             {/* ── SWARMS ── */}
             <button 
               onClick={() => navigate("/swarms")}
-              className="w-full bg-slate-50 dark:bg-slate-800 rounded-2xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
+              className="w-full bg-slate-50 dark:bg-slate-900 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
               <div className="w-10 h-10 shrink-0 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <Users className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <Users className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
               </div>
               <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
-                <div>
-                  <h4 className="text-[13px] font-black text-slate-800 dark:text-white leading-none mb-1">Join a Swarm</h4>
-                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Pool pickups & earn together</p>
+                <div className="min-w-0">
+                  <h4 className="text-[12px] min-[390px]:text-[14px] font-black text-slate-800 dark:text-white leading-none mb-1">Join a Swarm</h4>
+                  <p className="text-[9.5px] min-[390px]:text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Pool pickups & earn together</p>
                 </div>
                 
-                <div className="flex items-center justify-between w-full mt-auto">
-                  <div className="bg-emerald-50 dark:bg-emerald-900/40 px-2 py-0.5 rounded-[8px] flex items-center gap-1">
-                    <ArrowRight className="w-2.5 h-2.5 text-emerald-500" />
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Join</span>
+                <div className="flex items-center justify-between gap-1 w-full mt-auto">
+                  <div className="bg-emerald-50 dark:bg-emerald-900/40 px-1.5 py-0.5 rounded-[8px] flex items-center gap-1 min-w-0 shrink">
+                    <ArrowRight className="w-2.5 h-2.5 text-emerald-500 shrink-0" />
+                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 truncate">Join</span>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600 shrink-0" />
                 </div>
               </div>
             </button>
@@ -412,23 +413,23 @@ export default function UserHome() {
             {/* ── MARKET PRICES ── */}
             <button 
               onClick={() => navigate("/market-pulse")}
-              className="w-full bg-slate-50 dark:bg-slate-800 rounded-2xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
+              className="w-full bg-amber-50 dark:bg-slate-900 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
               <div className="w-10 h-10 shrink-0 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <BarChart3Icon className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                <BarChart3Icon className="w-6 h-6 text-amber-600 dark:text-amber-400" />
               </div>
               <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
-                <div>
-                  <h4 className="text-[13px] font-black text-slate-800 dark:text-white leading-none mb-1">Market Prices</h4>
-                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Live recyclable rates & trends</p>
+                <div className="min-w-0">
+                  <h4 className="text-[12px] min-[390px]:text-[14px] font-black text-slate-800 dark:text-white leading-none mb-1">Market Prices</h4>
+                  <p className="text-[9.5px] min-[390px]:text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Live recyclable rates & trends</p>
                 </div>
                 
-                <div className="flex items-center justify-between w-full mt-auto">
-                  <div className="bg-amber-50 dark:bg-amber-900/40 px-2 py-0.5 rounded-[8px] flex items-center gap-1">
-                    <TrendingUp className="w-2.5 h-2.5 text-amber-500" />
-                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">Live</span>
+                <div className="flex items-center justify-between gap-1 w-full mt-auto">
+                  <div className="bg-amber-50 dark:bg-amber-900/40 px-1.5 py-0.5 rounded-[8px] flex items-center gap-1 min-w-0 shrink">
+                    <TrendingUp className="w-2.5 h-2.5 text-amber-500 shrink-0" />
+                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 truncate">Live</span>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600 shrink-0" />
                 </div>
               </div>
             </button>

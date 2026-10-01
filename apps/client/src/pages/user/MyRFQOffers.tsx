@@ -146,11 +146,11 @@ export default function MyRFQOffers() {
         {/* ── HERO BANNER ── */}
         <div className="px-1.5 mb-4 mt-2">
           <div className="relative w-full h-[140px] rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800/60">
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 dark:from-emerald-900 dark:via-emerald-800 dark:to-teal-900"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 dark:from-emerald-900 dark:via-emerald-800 dark:to-teal-900"></div>
             <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
             <div className="relative z-10 p-4 h-full flex flex-col justify-center">
               <h3 className="text-[20px] font-black text-white leading-tight">Track Your Proposals.</h3>
-              <h3 className="text-[20px] font-black text-emerald-100 leading-tight">Secure More Deals.</h3>
+              <h3 className="text-[20px] font-black text-amber-200 leading-tight">Secure More Deals.</h3>
               <p className="text-[11px] font-semibold text-emerald-50/90 leading-tight max-w-[240px] mt-1.5">
                 Monitor the status of your submitted quotes and engage directly with buyers to finalize contracts.
               </p>
@@ -167,7 +167,7 @@ export default function MyRFQOffers() {
               <button
                 key={statusOption}
                 onClick={() => setFilter(statusOption)}
-                className={`flex-1 py-2 px-1 rounded-xl text-[9px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shadow-sm shrink-0 ${filter === statusOption
+                className={`flex-1 py-2 px-1 rounded-xl text-[11px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shadow-sm shrink-0 ${filter === statusOption
                   ? 'bg-emerald-600 text-white border-transparent '
                   : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
                   }`}

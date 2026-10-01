@@ -223,7 +223,7 @@ export default function NotificationsFeed() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all active:scale-95 border ${
+                className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold capitalize tracking-widest transition-all active:scale-95 border ${
                   isActive
                     ? 'bg-emerald-500 border-emerald-500 text-white shadow-md shadow-emerald-500/20'
                     : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400'

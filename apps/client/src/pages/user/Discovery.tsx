@@ -19,31 +19,7 @@ const SCALE_DEFS = [
   { id: 'bulk', label: 'Bulk', icon: Building2, description: 'Estates & large loads (50kg+)' }
 ];
 
-/** Haversine formula — returns distance in KM between two lat/lng pairs */
-function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLng = ((lng2 - lng1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
 
-/** Returns true if coordinates are a real, non-zero, in-range position */
-function validCoords(lat: any, lng: any): boolean {
-  const la = Number(lat);
-  const lo = Number(lng);
-  return (
-    lat !== null && lat !== undefined &&
-    lng !== null && lng !== undefined &&
-    !isNaN(la) && !isNaN(lo) &&
-    !(la === 0 && lo === 0) &&
-    Math.abs(la) <= 90 && Math.abs(lo) <= 180
-  );
-}
 
 function formatDistance(km: number): string {
   if (km < 1) return `${Math.round(km * 1000)}m away`;
@@ -87,89 +63,42 @@ export default function DiscoveryHub() {
 
   useEffect(() => {
     const fetchPartners = async () => {
+      // We only fetch when we have a location or it has definitively failed
+      if (locationStatus === 'requesting' || locationStatus === 'idle') return;
+
       setIsLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select(`
-            id, name, company_name, role, location, agent_account_type, rating, total_pickups, avatar_url,
-            service_profile,
-            agent_configurations(*)
-          `)
-          .in('role', ['agent', 'admin'])
-          .in('agent_account_type', ['independent', 'company_admin'])
-          .eq('is_online', true);
+        const lat = userCoords?.lat || -1.2921; // fallback to default location if denied
+        const lng = userCoords?.lng || 36.8219;
+
+        const { data, error } = await supabase.rpc('get_discovery_partners', {
+          p_lat: lat,
+          p_lng: lng,
+          p_material: activeMaterial,
+          p_scale: activeScale,
+          p_max_results: 30
+        });
 
         if (error) throw error;
-
-        // Fetch review counts
-        const { data: bookingsData, error: bookingsError } = await supabase
-          .from('bookings')
-          .select('agent_id')
-          .not('agent_rating', 'is', null);
-
-        const reviewCounts: Record<string, number> = {};
-        if (!bookingsError && bookingsData) {
-          bookingsData.forEach((b: any) => {
-            if (b.agent_id) {
-              reviewCounts[b.agent_id] = (reviewCounts[b.agent_id] || 0) + 1;
-            }
-          });
-        }
-
-        const normalized = (data as any[]).map(p => {
-          const norm = normalizeKeys(p);
-          norm.reviewCount = reviewCounts[p.id] || 0;
-          return norm;
-        });
-        setPartners(normalized);
+        setPartners(data || []);
       } catch (err) {
-        console.error('[Discovery] Error:', err);
+        console.error('[Discovery] RPC Error:', err);
       } finally {
         setIsLoading(false);
       }
     };
     fetchPartners();
-  }, []);
+  }, [userCoords, locationStatus, activeMaterial, activeScale]);
 
   const filteredPartners = useMemo(() => {
-    const list = partners.filter(p => {
-      const config = (Array.isArray(p.agentConfigurations) ? p.agentConfigurations[0] : p.agentConfigurations) || {};
-      const acceptedMaterials = config.acceptedMaterials || p.serviceProfile?.categories?.filter((c: any) => c.enabled).map((c: any) => c.name) || [];
-      const scale = config.serviceScale || p.serviceProfile?.scale || (p.agentAccountType === 'company_admin' ? 'bulk' : 'standard');
+    if (!searchQuery) return partners;
 
-      const matchMaterial = activeMaterial === 'all' || acceptedMaterials.includes(activeMaterial);
-      const matchScale = activeScale === 'all' || scale === activeScale;
-      const matchSearch = !searchQuery ||
-        p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.companyName?.toLowerCase().includes(searchQuery.toLowerCase());
-
-      return matchMaterial && matchScale && matchSearch;
+    return partners.filter(p => {
+      const nameMatch = p.name?.toLowerCase().includes(searchQuery.toLowerCase());
+      const companyMatch = p.company_name?.toLowerCase().includes(searchQuery.toLowerCase());
+      return nameMatch || companyMatch;
     });
-
-    // Attach distance and sort — agents without valid coordinates go last
-    if (userCoords) {
-      return list
-        .map(p => {
-          // Location may be nested in location JSONB; normalizeKeys only camelCases top-level keys
-          const loc = p.location || {};
-          const lat = loc.latitude ?? loc.lat ?? null;
-          const lng = loc.longitude ?? loc.lng ?? null;
-          const distKm = validCoords(lat, lng)
-            ? haversineKm(userCoords.lat, userCoords.lng, Number(lat), Number(lng))
-            : null;
-          return { ...p, distKm };
-        })
-        .sort((a, b) => {
-          if (a.distKm === null && b.distKm === null) return 0;
-          if (a.distKm === null) return 1;
-          if (b.distKm === null) return -1;
-          return a.distKm - b.distKm;
-        });
-    }
-
-    return list.map(p => ({ ...p, distKm: null }));
-  }, [partners, activeMaterial, activeScale, searchQuery, userCoords]);
+  }, [partners, searchQuery]);
 
   return (
     <div className="bg-slate-50 dark:bg-slate-800 transition-colors">
@@ -181,7 +110,7 @@ export default function DiscoveryHub() {
               <ArrowLeft className="w-4 h-4 dark:text-white" />
             </button>
             <div className="flex-1">
-              <h1 className="text-lg font-bold dark:text-white tracking-tight leading-none mb-0.5">Find a Partner</h1>
+              <h1 className="text-lg font-bold dark:text-white tracking-tight leading-none mb-0.5">Explore Nearby Collectors</h1>
               <div className="flex items-center gap-1.5">
                 {locationStatus === 'granted' && (
                   <>
@@ -193,7 +122,7 @@ export default function DiscoveryHub() {
                   <p className="text-[10px] font-bold text-amber-500 tracking-[0.15em]">Getting your location…</p>
                 )}
                 {(locationStatus === 'denied' || locationStatus === 'idle') && (
-                  <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Verified Collectors Near You</p>
+                  <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Select from verified collectors near you</p>
                 )}
               </div>
             </div>
@@ -312,11 +241,13 @@ export default function DiscoveryHub() {
             </div>
           ) : filteredPartners.length > 0 ? (
             filteredPartners.map((partner: any, i) => {
-              const config = (Array.isArray(partner.agentConfigurations) ? partner.agentConfigurations[0] : partner.agentConfigurations) || {};
-              const acceptedMaterials = config.acceptedMaterials || partner.serviceProfile?.categories?.filter((c: any) => c.enabled).map((c: any) => c.name) || [];
-              const scale = config.serviceScale || partner.serviceProfile?.scale || (partner.agentAccountType === 'company_admin' ? 'bulk' : 'standard');
-              const isCompany = partner.agentAccountType === 'company_admin';
-              const hasDistance = partner.distKm !== null && partner.distKm !== undefined && !isNaN(partner.distKm) && partner.distKm >= 0;
+              const acceptedMaterials = partner.accepted_materials || [];
+              const scale = partner.service_scale || 'standard';
+              const isCompany = partner.agent_account_type === 'company_admin';
+              const hasDistance = partner.distance_km !== null && partner.distance_km !== undefined;
+              
+              // Determine online status based on freshness
+              const isOnlineNow = partner.is_online && partner.last_pulse && (new Date().getTime() - new Date(partner.last_pulse).getTime() <= 5 * 60 * 1000);
 
               return (
                 <div
@@ -327,11 +258,11 @@ export default function DiscoveryHub() {
                   <div className="p-2 flex gap-3 relative">
                     {/* Avatar */}
                     <div className="shrink-0 mt-0.5">
-                      <div className={`w-[50px] h-[50px] rounded-full flex items-center justify-center text-2xl shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-600 dark:bg-indigo-900/30 text-white' : 'bg-[#138a53] text-white'}`}>
-                        {partner.avatarUrl ? (
-                          <img src={getThumbnailUrl(partner.avatarUrl, { width: 150 })} className="w-full h-full object-cover" alt="" />
+                      <div className={`w-[50px] h-[50px] rounded-full flex items-center justify-center text-xl font-bold shadow-inner relative overflow-hidden ${isCompany ? 'bg-indigo-600 dark:bg-indigo-900/30 text-white' : 'bg-[#138a53] text-white'}`}>
+                        {partner.avatar_url ? (
+                          <img src={getThumbnailUrl(partner.avatar_url, { width: 150 })} className="w-full h-full object-cover" alt="" />
                         ) : (
-                          isCompany ? '🏢' : <Truck className="w-7 h-7" />
+                          <span>{(partner.name || 'P').charAt(0).toUpperCase()}</span>
                         )}
                       </div>
                     </div>
@@ -341,8 +272,11 @@ export default function DiscoveryHub() {
                         {/* Name & Badge */}
                         <div className="flex items-center gap-1 mb-1">
                           <h4 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white truncate">
-                            {isCompany ? (partner.companyName || partner.name) : partner.name}
+                            {partner.name}
                           </h4>
+                          {isOnlineNow && (
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" title="Online Now" />
+                          )}
                         </div>
 
                         {/* Rating & Distance */}
@@ -359,7 +293,8 @@ export default function DiscoveryHub() {
                           {hasDistance && (
                             <span className="flex items-center gap-0.5 text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-1.5 py-0.5 rounded">
                               <MapPin className="w-2.5 h-2.5" />
-                              {formatDistance(partner.distKm)}
+                              {partner.entity_type === 'agent' ? 'Base: ' : 'Depot: '}
+                              {formatDistance(partner.distance_km)}
                             </span>
                           )}
                         </div>
@@ -372,7 +307,7 @@ export default function DiscoveryHub() {
                           </div>
                           <div className="flex items-center gap-1.5">
                             <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">{partner.location?.estate || 'Nairobi'}</span>
+                            <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">{partner.estate || 'Nairobi'}</span>
                           </div>
                         </div>
 
@@ -428,8 +363,8 @@ export default function DiscoveryHub() {
 
         {/* ── INFO BOX ── */}
         <div className="px-1.5">
-          <div className="bg-gradient-to-br from-purple-400 to-indigo-500 p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
-            <div className="w-10 h-10 bg-purple-800 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center shrink-0">
+          <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 p-3 rounded-[1rem] border border-blue-100/50 dark:border-slate-800 flex items-start gap-4">
+            <div className="w-10 h-10 bg-emerald-600 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center shrink-0">
               <Info className="w-5 h-5 text-white" />
             </div>
             <div>

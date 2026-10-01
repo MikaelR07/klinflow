@@ -114,14 +114,12 @@ export default function CompanyProfile() {
               <ArrowLeft className="w-5 h-5 dark:text-white" />
             </button>
             <div>
-              <h1 className="text-sm font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Company Profile</h1>
-              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.25em]">Partner Details</p>
+              <h1 className="text-sm font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Collector Profile</h1>
+              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.25em]">View Partner Details</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button className="p-2.5 bg-white dark:bg-slate-800 rounded-xl active:scale-90 transition-all border border-slate-200 dark:border-slate-700">
-              <Share className="w-5 h-5 dark:text-white" />
-            </button>
+            
             <button className="p-2.5 bg-white dark:bg-slate-800 rounded-xl active:scale-90 transition-all border border-slate-200 dark:border-slate-700">
               <MoreVertical className="w-5 h-5 dark:text-white" />
             </button>
@@ -131,7 +129,7 @@ export default function CompanyProfile() {
 
       <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-5 px-1.5 space-y-4 max-w-lg mx-auto">
         {/* Hero */}
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 p-4 text-white shadow-lg shadow-indigo-900/30">
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-emerald-700 via-emerald-700 to-emerald-600 p-4 text-white shadow-lg shadow-indigo-900/30">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-300/20 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
           
@@ -145,7 +143,7 @@ export default function CompanyProfile() {
                     isFleetAdmin ? '🏢' : '🚛'
                   )}
                 </div>
-                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 backdrop-blur-md px-3 py-1 rounded-full border flex items-center gap-1.5 z-10 shadow-sm ${company?.is_online ? 'bg-emerald-500/90 border-emerald-300/50' : 'bg-amber-500/90 border-amber-300/50'}`}>
+                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 backdrop-blur-md px-3 py-1 rounded-full border flex items-center gap-1.5 z-10 shadow-sm ${company?.is_online ? 'bg-primary border-primary/50' : 'bg-amber-500/90 border-amber-300/50'}`}>
                   <div className={`w-1.5 h-1.5 rounded-full bg-white ${company?.is_online ? 'animate-pulse shadow-[0_0_5px_white]' : ''}`} />
                   <span className="text-[9px] font-bold text-white capitalize tracking-widest pr-0.5">
                     {company?.is_online ? 'Online' : 'Offline'}

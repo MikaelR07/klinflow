@@ -261,7 +261,7 @@ export default function GroupCollectionRFQs() {
             <img src="/vectors/community-banner-real.webp" alt="More Impact. More Rewards." className="absolute inset-0 w-full h-full object-cover object-right" />
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-950 via-emerald-900/60 to-transparent dark:from-slate-950/95 dark:via-emerald-950/80"></div>
             <div className="relative z-10 p-4 h-full flex flex-col justify-center">
-              <h3 className="text-[22px] font-black text-amber-500 leading-tight">More Impact.</h3>
+              <h3 className="text-[22px] font-black text-amber-500 leading-tight">More Impact</h3>
               <h3 className="text-[22px] font-black text-emerald-400 leading-tight">More Rewards.</h3>
               <p className="text-[11px] font-semibold text-slate-200/90 leading-tight max-w-[240px] mt-1.5">
                 Access contracts from trusted buyers and earn premium rates by Joining the Community Network.

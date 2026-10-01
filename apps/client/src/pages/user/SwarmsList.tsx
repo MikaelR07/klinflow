@@ -160,15 +160,14 @@ export default function SwarmsList() {
         {/* ── HERO SECTION ── */}
         {activeTab === 'Active' && (
           <div className="flex flex-col px-1.5 mb-4">
-            <div className="relative w-full rounded-3xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60">
+            <div className="relative w-full h-[170px] rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60 bg-slate-900">
               <img 
                 src="/vectors/klin-swarms-real.webp" 
                 alt="Swarms Background" 
                 className="absolute inset-0 w-full h-full object-cover object-center"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 to-slate-900/20 dark:from-slate-950/95 dark:to-slate-950/40" />
-              <div className="relative z-10 p-4 flex flex-col gap-4">
-                <div className="min-h-[160px] flex flex-col justify-center">
+              <div className="relative z-20 p-4 h-full flex flex-col justify-center gap-1">
+                <div>
                   <h2 className="text-xl font-black text-white leading-tight mb-1.5 tracking-tight">
                     Find Your Swarm.<br/>
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Maximize Earnings.</span>
@@ -180,7 +179,7 @@ export default function SwarmsList() {
               </div>
             </div>
 
-            <div className="relative z-20 -mt-6 mx-4 bg-slate-200 dark:bg-primary rounded-xl p-3  flex flex-col gap-2 border border-emerald-500/30">
+            <div className="relative z-20 -mt-6 mx-4 bg-slate-50 dark:bg-primary rounded-xl p-3  flex flex-col gap-2 border border-emerald-500/30">
               <div className="grid grid-cols-3 gap-2 mt-1">
                 {(() => {
                   const totalPooledKg = swarms.reduce((acc: number, s: any) => acc + (s.current_weight || 0), 0);

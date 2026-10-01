@@ -20,7 +20,7 @@ export default function ContractsTabBar() {
           <button
             key={tab.id}
             onClick={() => navigate(tab.path)}
-            className={`flex-1 py-2.5 px-2 rounded-xl text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border relative ${
+            className={`flex-1 py-2.5 px-2 rounded-xl text-[11px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border relative ${
               isActive
                 ? 'bg-primary text-white border-transparent shadow-sm'
                 : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400'

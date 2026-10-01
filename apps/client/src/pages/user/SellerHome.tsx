@@ -47,7 +47,8 @@ import {
   BarChart3Icon,
   Headset,
   ChevronDownCircle,
-  MapPinned
+  MapPinned,
+  ScrollText
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -348,7 +349,7 @@ export default function SellerHome() {
       </div>
 
 
-      <div className="max-w-xl mx-auto px-2.5 space-y-5 -mt-10 pb-5 relative z-20">
+      <div className="max-w-xl mx-auto px-2.5 space-y-6 -mt-10 pb-5 relative z-20">
         <motion.div variants={itemVariants} className="bg-white dark:bg-slate-900 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           <div className="space-y-2">
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
@@ -456,7 +457,7 @@ export default function SellerHome() {
         </motion.div>
 
         {/* ── KLINFLOW BANNERS ── */}
-        <motion.div variants={itemVariants} className="!mt-1">
+        <motion.div variants={itemVariants} className="!mt-2">
           <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
             {/* Left spacer */}
             {/* <div className="w-0.5 shrink-0" /> */}
@@ -481,7 +482,7 @@ export default function SellerHome() {
         </motion.div>
 
         {/* ── BUSINESS TOOLS ── */}
-        <motion.div variants={itemVariants} className="!mt-1 space-y-2 px-1.5">
+        <motion.div variants={itemVariants} className="!mt-2 space-y-2 px-1.5">
           <div className="flex items-center justify-between">
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">Business Tools</h3>
           </div>
@@ -490,23 +491,23 @@ export default function SellerHome() {
             {/* ── CONTRACTS ── */}
             <button 
               onClick={() => navigate("/group-rfqs")}
-              className="w-full bg-indigo-100 dark:bg-slate-800 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
+              className="w-full bg-indigo-100 dark:bg-slate-900 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
-              <div className="w-10 h-10 shrink-0 bg-[#f3f0ff] dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <Receipt className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <div className="w-10 h-10 shrink-0 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
+                <ScrollText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
               </div>
               <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
-                <div>
-                  <h4 className="text-[13px] font-black text-slate-800 dark:text-white leading-none mb-1">Contracts</h4>
-                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Active material agreements</p>
+                <div className="min-w-0">
+                  <h4 className="text-[12px] min-[390px]:text-[14px] font-black text-slate-800 dark:text-white leading-none mb-1">Contracts</h4>
+                  <p className="text-[9.5px] min-[390px]:text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Material Requests</p>
                 </div>
                 
-                <div className="flex items-center justify-between w-full mt-auto">
-                  <div className="bg-indigo-50 dark:bg-indigo-900/40 px-2 py-0.5 rounded-[8px] flex items-center gap-1">
-                    <ArrowRight className="w-2.5 h-2.5 text-indigo-500" />
-                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400">{activeContractsCount} active</span>
+                <div className="flex items-center justify-between gap-1 w-full mt-auto">
+                  <div className="bg-indigo-50 dark:bg-indigo-900/40 px-1.5 py-0.5 rounded-[8px] flex items-center gap-1 min-w-0 shrink">
+                    <ArrowRight className="w-2.5 h-2.5 text-indigo-500 shrink-0" />
+                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 truncate">{activeContractsCount} active</span>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600 shrink-0" />
                 </div>
               </div>
             </button>
@@ -514,23 +515,23 @@ export default function SellerHome() {
             {/* ── MARKET PRICES ── */}
             <button 
               onClick={() => navigate("/market-pulse")}
-              className="w-full bg-slate-50 dark:bg-slate-800 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
+              className="w-full bg-amber-50 dark:bg-slate-900 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
               <div className="w-10 h-10 shrink-0 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <BarChart3Icon className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                <BarChart3Icon className="w-6 h-6 text-amber-600 dark:text-amber-400" />
               </div>
               <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
-                <div>
-                  <h4 className="text-[13px] font-black text-slate-800 dark:text-white leading-none mb-1">Market Prices</h4>
-                  <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View live material prices</p>
+                <div className="min-w-0">
+                  <h4 className="text-[12px] min-[390px]:text-[14px] font-black text-slate-800 dark:text-white leading-none mb-1">Market Prices</h4>
+                  <p className="text-[9.5px] min-[390px]:text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View material prices</p>
                 </div>
                 
-                <div className="flex items-center justify-between w-full mt-auto">
-                  <div className="bg-amber-50 dark:bg-amber-900/40 px-2 py-0.5 rounded-[8px] flex items-center gap-1">
-                    <TrendingUp className="w-2.5 h-2.5 text-amber-500" />
-                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">Live</span>
+                <div className="flex items-center justify-between gap-1 w-full mt-auto">
+                  <div className="bg-amber-50 dark:bg-amber-900/40 px-1.5 py-0.5 rounded-[8px] flex items-center gap-1 min-w-0 shrink">
+                    <TrendingUp className="w-2.5 h-2.5 text-amber-500 shrink-0" />
+                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 truncate">Live</span>
                   </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600 shrink-0" />
                 </div>
               </div>
             </button>
@@ -541,23 +542,23 @@ export default function SellerHome() {
         <motion.div variants={itemVariants} className="!mt-2 px-1.5">
           <button 
             onClick={() => navigate("/swarms")}
-            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-[20px] p-3 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
+            className="w-full bg-gradient-to-tl from-primary to-emerald-600 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-[20px] p-4 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
           >
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                <MapPinned className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+              <div className="w-12 h-12 bg-white/10 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+                <MapPinned className="w-6 h-6 text-emerald-100 dark:text-emerald-400" />
               </div>
               <div className="text-left min-w-0">
-                <h4 className="text-[14px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Swarms</h4>
-                <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight">Join collection & logistics networks nearby</p>
+                <h4 className="text-[14px] font-bold text-slate-50 dark:text-white tracking-tight leading-none mb-1">Swarms</h4>
+                <p className="text-[11px] font-semibold text-slate-200 dark:text-slate-400 leading-tight">Join group collection networks nearby</p>
               </div>
             </div>
             <div className="flex items-center gap-2 shrink-0 relative z-10">
               <div className="bg-emerald-50 dark:bg-emerald-900/40 px-2 py-0.5 rounded-lg flex items-center gap-1">
                 <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">{activeSwarmsCount} nearby</span>
               </div>
-              <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center group-hover:bg-slate-200 dark:group-hover:bg-slate-600 transition-colors">
-                <ChevronRight className="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+              <div className="w-8 h-8 rounded-full dark:bg-slate-700 flex items-center justify-center group-hover:bg-slate-200 dark:group-hover:bg-slate-600 transition-colors">
+                <ChevronRight className="w-4 h-4 text-white dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>
           </button>

@@ -332,11 +332,11 @@ export default function AgentWallet() {
 
   return (
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-800  relative overflow-x-hidden ">
-      {/* ── TOP SECTION: BLUE WITH ROUNDED BOTTOM ── */}
-      <div className="bg-blue-700 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2rem] shadow-sm relative z-20">
+      {/* ── TOP SECTION: EMERALD GRADIENT WITH ROUNDED BOTTOM ── */}
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2rem] shadow-sm relative z-20">
         
         {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-blue-700 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-3 px-4 flex items-center gap-3 shadow-sm max-w-lg mx-auto">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-emerald-600/90 to-emerald-800/90 dark:from-emerald-600/90 dark:to-emerald-800/90 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-3 px-4 flex items-center gap-3 shadow-sm max-w-lg mx-auto">
           <button onClick={() => navigate(-1)} className="w-10 h-10 flex items-center justify-center active:scale-95 transition-all shrink-0">
             <ArrowLeft className="w-5 h-5 text-white" />
           </button>
@@ -346,10 +346,10 @@ export default function AgentWallet() {
         </div>
 
         {/* Centered Total Balance */}
-        <div className="text-center px-4 mb-6">
-          <p className="text-blue-100 text-[11px] font-bold tracking-widest uppercase mb-1">Total Balance</p>
+        <div className="text-center px-4 mt-4 mb-6">
+          <p className="text-emerald-100 text-[11px] font-bold tracking-widest uppercase mb-1">Total Balance</p>
           <div className="flex items-baseline justify-center gap-1">
-            <span className="text-2xl font-bold text-blue-200">KSh</span>
+            <span className="text-2xl font-bold text-emerald-200">KSh</span>
             <h2 className="text-2xl font-black text-white tracking-tight">
               {(walletBalance + (payoutBalance || 0)).toLocaleString()}
             </h2>
@@ -359,47 +359,47 @@ export default function AgentWallet() {
         {/* Scrollable Cards */}
         <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 px-4 snap-x">
           {/* Card 1: Trading Balance */}
-          <div className="min-w-[280px] bg-blue-600 rounded-2xl p-5 border border-blue-500 snap-center ">
-            <p className="text-blue-100 text-xs font-medium tracking-wide mb-1">Trading Balance</p>
+          <div className="min-w-[280px] bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 snap-center ">
+            <p className="text-emerald-100 text-xs font-medium tracking-wide mb-1">Trading Balance</p>
             <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-xl font-bold text-blue-200">KSh</span>
+              <span className="text-xl font-bold text-emerald-200">KSh</span>
               <h2 className="text-xl font-black text-white tracking-tight">{walletBalance.toLocaleString()}</h2>
             </div>
             <div className="bg-white/10 px-3 py-1.5 rounded-full inline-flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse" />
-              <span className="text-[10px] text-white font-bold uppercase tracking-wider">Available for sourcing</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
+              <span className="text-[10px] text-white font-bold capitalize tracking-wider">Available for sourcing</span>
             </div>
           </div>
 
           {/* Card 2: Payout Balance */}
-          <div className="min-w-[280px] bg-blue-600 rounded-2xl p-5 border border-blue-500 snap-center">
-            <p className="text-blue-100 text-xs font-medium tracking-wide mb-1">Payout Balance</p>
+          <div className="min-w-[280px] bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 snap-center">
+            <p className="text-emerald-100 text-xs font-medium tracking-wide mb-1">Payout Balance</p>
             <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-xl font-bold text-blue-200">KSh</span>
+              <span className="text-xl font-bold text-emerald-200">KSh</span>
               <h2 className="text-xl font-black text-white tracking-tight">{(payoutBalance || 0).toLocaleString()}</h2>
             </div>
             <div className="flex items-center gap-2">
               <div className="bg-white/10 px-3 py-1.5 rounded-full inline-flex items-center gap-1">
-                <ArrowUpCircle className="w-3 h-3 text-blue-200" />
-                <span className="text-[10px] text-white font-bold uppercase tracking-wider">Ready to withdraw</span>
+                <ArrowUpCircle className="w-3 h-3 text-emerald-200" />
+                <span className="text-[10px] text-white font-bold capitalize tracking-wider">Ready to withdraw</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between mt-6 px-4 gap-2">
-          <button onClick={() => setActiveFlow('deposit')} className="flex-1 py-3 bg-blue-600 text-white border border-blue-500 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold">
+        <div className="flex items-center justify-between mt-4 px-4 gap-2">
+          <button onClick={() => setActiveFlow('deposit')} className="flex-1 py-3 bg-white/15 backdrop-blur-sm text-white border border-white/10 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold hover:bg-white/25">
             <ArrowDownCircle className="w-4 h-4" />
             <span className="text-[10px] tracking-wide uppercase">Deposit</span>
           </button>
           
-          <button onClick={() => setActiveFlow('transfer')} className="flex-1 py-3 bg-blue-600 text-white border border-blue-500 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold">
+          <button onClick={() => setActiveFlow('transfer')} className="flex-1 py-3 bg-white/15 backdrop-blur-sm text-white border border-white/10 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold hover:bg-white/25">
             <Send className="w-4 h-4" />
             <span className="text-[10px] tracking-wide uppercase">Transfer</span>
           </button>
 
-          <button onClick={() => setActiveFlow('withdraw')} className="flex-1 py-3 bg-blue-600 text-white border border-blue-500 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold">
+          <button onClick={() => setActiveFlow('withdraw')} className="flex-1 py-3 bg-white/15 backdrop-blur-sm text-white border border-white/10 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold hover:bg-white/25">
             <ArrowUpCircle className="w-4 h-4" />
             <span className="text-[10px] tracking-wide uppercase">Withdraw</span>
           </button>

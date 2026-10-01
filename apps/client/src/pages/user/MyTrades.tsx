@@ -253,14 +253,14 @@ export default function MyTrades() {
               
             </div>
 
-            <div className="flex overflow-x-auto no-scrollbar gap-1.5 pb-2">
+            <div className="flex overflow-x-auto no-scrollbar gap-1 pb-2">
               {TABS.map((tab) => {
                 const count = tab.id === "Bids" ? pendingOffers.length : tab.id === "Active" ? activeBookings.length : tab.id === "Counters" ? counterBookings.length : historyBookings.length;
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex-1 py-2 px-1 rounded-xl text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shrink-0 ${activeTab === tab.id
+                    className={`flex-1 py-2 px-1 rounded-xl text-[11px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shrink-0 ${activeTab === tab.id
                       ? "bg-primary text-white border-transparent"
                       : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                       }`}

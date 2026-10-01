@@ -106,8 +106,11 @@ export default function AgentConfigurationPage() {
     accepted_materials: [],
     custom_rates: {},
     min_weight: 5,
-    max_weight: 100
+    max_weight: 100,
+    base_location: null as any,
+    operating_radius_km: 10
   });
+  const [showAreaMapModal, setShowAreaMapModal] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
@@ -146,6 +149,8 @@ export default function AgentConfigurationPage() {
       cashback_percentage: agentConfig.cashback_percentage ?? 10,
       accepted_materials: filteredMaterials,
       custom_rates: agentConfig.custom_rates || {},
+      base_location: agentConfig.base_location || null,
+      operating_radius_km: agentConfig.operating_radius_km ?? 10
     }));
   }, [agentConfig, categories]);
 
@@ -209,7 +214,9 @@ export default function AgentConfigurationPage() {
         base_logistics_fee: Math.max(0, formData.base_logistics_fee === '' ? 0 : parseFloat(formData.base_logistics_fee) || 0),
         cashback_percentage: formData.cashback_percentage,
         accepted_materials: formData.accepted_materials,
-        custom_rates: parsedRates
+        custom_rates: parsedRates,
+        base_location: formData.base_location,
+        operating_radius_km: parseFloat(formData.operating_radius_km as any) || 10
       });
 
       if (!legacySuccess) throw new Error(configError || 'Failed to update agent configuration');
@@ -377,7 +384,150 @@ export default function AgentConfigurationPage() {
           </div>
         )}
 
-        {/* ── HUB LOCATION PICKER MODAL ── */}
+        
+        {/* 📍 PICKUP OPERATING AREA (Independent Agents Only) */}
+        {isIndividualAgent && (
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center border bg-blue-50 dark:bg-blue-500/10 text-blue-500 border-blue-100 dark:border-blue-500/20">
+                <Navigation className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize tracking-widest">Pickup Service Area</h3>
+                <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-widest">Where you operate</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {formData.base_location?.latitude ? (
+                <div className="rounded-xl overflow-hidden border border-blue-200 dark:border-blue-800/40">
+                  <div className="h-32 relative">
+                    <MapContainer
+                      center={[formData.base_location.latitude, formData.base_location.longitude]}
+                      zoom={12}
+                      zoomControl={false}
+                      dragging={false}
+                      scrollWheelZoom={false}
+                      doubleClickZoom={false}
+                      className="h-full w-full z-0"
+                    >
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      <Marker position={[formData.base_location.latitude, formData.base_location.longitude]} />
+                    </MapContainer>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+                    <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-3 h-3 text-blue-400" />
+                        <span className="text-[10px] font-bold text-white/90 tracking-wide">
+                          Radius: {formData.operating_radius_km} km
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowAreaMapModal(true)}
+                        className="px-2.5 py-1 bg-white/20 backdrop-blur-sm text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-white/30 transition-colors pointer-events-auto"
+                      >
+                        Edit Area
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowAreaMapModal(true)}
+                  className="w-full p-6 border-2 border-dashed border-blue-300 dark:border-blue-700 rounded-xl bg-blue-50/50 dark:bg-blue-900/10 text-center space-y-2 hover:border-blue-500 transition-colors active:scale-[0.98]"
+                >
+                  <Navigation className="w-8 h-8 text-blue-500 mx-auto" />
+                  <p className="text-xs font-bold text-blue-700 dark:text-blue-400">Set Operating Area</p>
+                  <p className="text-[10px] font-semibold text-slate-400">Required to receive pickups from residents</p>
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── OPERATING AREA PICKER MODAL ── */}
+        {showAreaMapModal && createPortal(
+          <div className="fixed inset-0 z-[9999] flex flex-col bg-white dark:bg-slate-900 max-w-lg mx-auto w-full">
+            <div className="pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-4 px-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 shrink-0 shadow-sm z-10">
+              <button
+                type="button"
+                onClick={() => setShowAreaMapModal(false)}
+                className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all"
+              >
+                <X className="w-5 h-5 text-slate-500" />
+              </button>
+              <div className="flex-1">
+                <h2 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">Pickup Service Area</h2>
+                <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest mt-0.5">Set your base and radius</p>
+              </div>
+            </div>
+
+            <div className="flex-1 relative">
+              <MapContainer
+                center={[
+                  formData.base_location?.latitude || profile?.location?.latitude || -1.2635,
+                  formData.base_location?.longitude || profile?.location?.longitude || 36.8048
+                ]}
+                zoom={12}
+                zoomControl={false}
+                className="h-full w-full z-0"
+                key={showAreaMapModal ? 'open_area' : 'closed_area'}
+              >
+                <MapInvalidator />
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <MapDragHandler
+                  onMove={(lat, lng) => {
+                    setFormData(prev => ({
+                      ...prev,
+                      base_location: { latitude: lat, longitude: lng }
+                    }));
+                  }}
+                />
+              </MapContainer>
+              
+              <FixedCenterPin />
+              
+              <div className="absolute top-4 left-4 right-4 z-[400] bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 flex items-center gap-3">
+                <Navigation className="w-5 h-5 text-blue-600 shrink-0" />
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-snug">Drag the map to set your operating base</p>
+              </div>
+            </div>
+
+            <div className="shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 pb-[calc(env(safe-area-inset-bottom,1rem)+0.5rem)] space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Operating Radius</label>
+                  <span className="text-xs font-bold text-blue-600">{formData.operating_radius_km} km</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="50"
+                  step="1"
+                  value={formData.operating_radius_km}
+                  onChange={(e) => setFormData(prev => ({ ...prev, operating_radius_km: parseInt(e.target.value) }))}
+                  className="w-full accent-blue-600 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+              <button
+                type="button"
+                disabled={!formData.base_location?.latitude}
+                onClick={() => {
+                  setShowAreaMapModal(false);
+                  toast.success('Operating area updated!');
+                }}
+                className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold text-sm uppercase tracking-widest shadow-lg shadow-blue-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-40"
+              >
+                <CheckCircle2 className="w-5 h-5" />
+                Confirm Area
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
+{/* ── HUB LOCATION PICKER MODAL ── */}
         {showHubMapModal && createPortal(
           <div className="fixed inset-0 z-[9999] flex flex-col bg-white dark:bg-slate-900 max-w-lg mx-auto w-full">
             {/* Modal Header */}

@@ -111,7 +111,7 @@ export default function SellerWallet() {
           <div className="flex items-center justify-center gap-2">
             <div className="flex items-baseline gap-1.5 text-white">
               <span className="text-lg font-medium opacity-70">KSh</span>
-              <span className={`text-[2.5rem] font-black leading-none tracking-tight transition-all duration-300 ${!balanceVisible ? 'blur-lg select-none' : ''}`}>
+              <span className={`text-3xl font-black leading-none tracking-tight transition-all duration-300 ${!balanceVisible ? 'blur-lg select-none' : ''}`}>
                 {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </div>

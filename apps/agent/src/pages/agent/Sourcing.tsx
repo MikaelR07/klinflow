@@ -747,7 +747,7 @@ export default function Sourcing() {
             <div className="space-y-1 pb-5">
 
               {/* ── SCROLLABLE BANNERS ── */}
-              <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pt-2 pb-1 px-2 no-scrollbar">
+              <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pt-2 pb-1 px-4 no-scrollbar">
                 {/* Banner 1 */}
                 <div className="snap-start relative shrink-0 w-[85vw] max-w-[340px] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
                   <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/70 to-transparent z-10" />
