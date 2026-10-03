@@ -758,7 +758,7 @@ export default function Sourcing() {
                     className="w-full bg-indigo-500 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
                   >
                     <div className="w-10 h-10 rounded-[11px] bg-indigo-400 dark:bg-indigo-500/10 flex items-center justify-center border border-indigo-400 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 shrink-0 group-hover:scale-110 transition-transform relative z-10">
-                      <Receipt className="w-5 h-5" />
+                      <Receipt className="w-6 h-6" />
                     </div>
                     <div className="text-left relative z-10 min-w-0">
                       <h3 className="text-sm font-black text-slate-50 dark:text-white tracking-tight leading-none mb-1 truncate">Bids History</h3>
@@ -774,16 +774,16 @@ export default function Sourcing() {
                   {/* Buyer Requests */}
                   <button
                     onClick={() => navigate('/rfqs')}
-                    className="w-full bg-gradient-to-br from-amber-500 to-amber-600 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
                   >
-                    <div className="w-10 h-10 rounded-[11px] bg-amber-500 dark:bg-violet-500/10 flex items-center justify-center border border-amber-500 dark:border-violet-500/20 text-slate-50 dark:text-violet-400 shrink-0 group-hover:scale-110 transition-transform relative z-10">
-                      <FileText className="w-5 h-5" />
+                    <div className="w-10 h-10 rounded-[11px] bg-slate-500 dark:bg-violet-500/10 flex items-center justify-center border border-slate-200 dark:border-violet-500/20 text-slate-50 dark:text-violet-400 shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                      <FileText className="w-6 h-6" />
                     </div>
                     <div className="text-left relative z-10 min-w-0">
-                      <h3 className="text-sm font-black text-slate-50 dark:text-white tracking-tight leading-none mb-1 truncate">RFQ  Requests</h3>
-                      <p className="text-[11px] font-semibold text-slate-200 dark:text-slate-400 leading-none truncate">Send requests</p>
+                      <h3 className="text-sm font-black text-slate-700 dark:text-white tracking-tight leading-none mb-1 truncate">RFQ  Requests</h3>
+                      <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-none truncate">Send requests</p>
                     </div>
-                    <ChevronRight className="absolute bottom-2.5 right-2.5 w-4 h-4 text-white/40 dark:text-slate-500 group-hover:text-white dark:group-hover:text-slate-300 transition-colors" />
+                    <ChevronRight className="absolute bottom-2.5 right-2.5 w-4 h-4 text-slate-600 dark:text-slate-500 group-hover:text-white dark:group-hover:text-slate-300 transition-colors" />
                   </button>
                 </div>
               )}
@@ -830,7 +830,7 @@ export default function Sourcing() {
               <div className="relative pt-3">
                 <div className="flex justify-between items-end px-4 mb-2">
                    <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-widest">Filter by Category</p>
-                   <p className="text-[10px] font-bold text-indigo-500/70 capitalize tracking-widest">{filteredListings.length} Available</p>
+                   
                 </div>
                 <div className="flex overflow-x-auto no-scrollbar gap-2 px-4 pb-1">
                   {[
@@ -893,7 +893,7 @@ export default function Sourcing() {
                                 setFilterMaterial(cat.id);
                                 setIsMoreCategoriesOpen(false);
                               }}
-                              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[11px] font-bold transition-colors ${
+                              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-[12px] font-bold transition-colors ${
                                 filterMaterial === cat.id
                                   ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600'
                                   : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'

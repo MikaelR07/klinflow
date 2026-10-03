@@ -435,7 +435,7 @@ export default function AvailableJobs() {
 
         {/* Requested Hero Card */}
         {activeTab === 'available' && (
-          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-emerald-700 to-teal-800 rounded-2xl border border-emerald-500/20 relative overflow-hidden">
+          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 rounded-2xl border border-emerald-500/20 relative overflow-hidden">
             {/* Background glows */}
             <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-emerald-500/30 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-teal-500/20 rounded-full blur-2xl pointer-events-none" />
@@ -443,11 +443,11 @@ export default function AvailableJobs() {
             <div className="relative z-10 mb-4 flex items-center justify-between">
               <div className="min-w-0">
                 <h2 className="text-lg font-black text-white tracking-tight leading-tight">Resident Requests</h2>
-                <p className="text-[10px] font-medium text-emerald-200/80 mt-0.5 capitalize tracking-widest">Pickup requests from residents in your area</p>
+                <p className="text-[10px] font-medium text-emerald-100 mt-0.5 capitalize tracking-widest">Pickup requests from residents in your area</p>
               </div>
               <div className="ml-3 shrink-0 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-2.5 flex flex-col items-center justify-center">
                 <span className="text-lg font-black text-white leading-none">{requestedTab === 'available' ? availableJobs.length : rejectedJobs.length}</span>
-                <span className="text-[8px] font-bold text-emerald-200/70 uppercase tracking-widest mt-1 leading-none">{requestedTab === 'available' ? 'Available' : 'Rejected'}</span>
+                <span className="text-[8px] font-bold text-emerald-100 uppercase tracking-widest mt-1 leading-none">{requestedTab === 'available' ? 'Received' : 'Rejected'}</span>
               </div>
             </div>
 
@@ -483,15 +483,15 @@ export default function AvailableJobs() {
 
         {/* Pickups Hero Filter Card */}
         {(activeTab === 'active' || activeTab === 'completed') && (
-          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-indigo-900 to-purple-900 rounded-2xl shadow-xl shadow-indigo-900/10 border border-indigo-500/20 relative overflow-hidden">
+          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-[#2e1065] via-purple-800 to-indigo-600 rounded-2xl shadow-xl shadow-indigo-900/10 border border-indigo-500/20 relative overflow-hidden">
             
             
             <div className="relative z-10 mb-4 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-black text-white tracking-tight leading-tight">
-                  {activeTab === 'active' ? 'Filter Active Pickups' : 'Filter Completed Pickups'}
+                  {activeTab === 'active' ? 'Active Pickups' : 'Completed Pickups'}
                 </h2>
-                <p className="text-[10px] font-medium text-indigo-200/80 mt-0.5 capitalize tracking-widest">Select by the source of the material</p>
+                <p className="text-[10px] font-medium text-slate-50 mt-0.5 capitalize tracking-widest">Select by the source of the material</p>
               </div>
               {activeTab === 'completed' && currentJobs.length > 0 ? (
                 <button 
@@ -520,8 +520,8 @@ export default function AvailableJobs() {
                       onClick={() => setSelectedBookingType(type)}
                       className={`py-2.5 px-3.5 rounded-[10px] text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all shrink-0 ${
                         selectedBookingType === type
-                        ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20'
-                        : 'text-indigo-200/60 hover:text-white hover:bg-white/5'
+                        ? 'bg-purple-500 text-white'
+                        : 'text-purple-200/80'
                       }`}
                     >
                       <span>{type}</span>

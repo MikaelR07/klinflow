@@ -414,14 +414,14 @@ export default function AgentHomeStats({
 
         {/* ── MARKET INTELLIGENCE ── */}
         <div className="w-full mt-1">
-          <button onClick={() => navigate("/market-pulse")} className="w-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white dark:bg-white dark:text-slate-900 rounded-[20px] shadow-sm shadow-slate-900/5 active:scale-[0.98] transition-all group p-3 flex items-center justify-between border border-white/10 dark:border-slate-900/10 relative overflow-hidden">
+          <button onClick={() => navigate("/market-pulse")} className="w-full bg-slate-50 text-slate-900 rounded-[20px] shadow-sm shadow-slate-900/5 active:scale-[0.98] transition-all group p-3 flex items-center justify-between border border-white/10 dark:border-slate-900/10 relative overflow-hidden">
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-white/20 dark:bg-slate-900/10 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                <BarChart3Icon className="w-6 h-6 text-white dark:text-slate-900" />
+              <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700/50 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                <BarChart3Icon className="w-6 h-6 text-slate-600 dark:text-slate-200" />
               </div>
               <div className="text-left min-w-0">
-                <h3 className="text-[16px] font-bold tracking-tight leading-none mb-1 text-white dark:text-slate-200">Market Intelligence</h3>
-                <p className="text-[11px] font-semibold text-white/80 dark:text-slate-300 leading-tight">Live prices & trade data</p>
+                <h3 className="text-[16px] font-bold tracking-tight leading-none mb-1 text-slate-700 dark:text-slate-200">Market Intelligence</h3>
+                <p className="text-[11px] font-semibold text-slate-600/80 dark:text-slate-300 leading-tight">Live prices & trade data</p>
               </div>
             </div>
             <div className="w-8 h-8 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center group-hover:bg-white/30 dark:group-hover:bg-slate-900/20 transition-colors relative z-10 shrink-0">

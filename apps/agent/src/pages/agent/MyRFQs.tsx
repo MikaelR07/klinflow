@@ -112,7 +112,7 @@ export default function MyRFQs() {
             <div>
               <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">My RFQ Requests</h1>
               <p className="text-[10px] font-bold text-amber-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 " /> Sourcing Pipeline
+                 Sourcing Pipeline
               </p>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function MyRFQs() {
         {/* TOP WRAPPER FOR HERO & FILTERS */}
         <div className="bg-[#F8F9FF] dark:bg-slate-800 pt-3 pb-4 px-2 space-y-5">
           {/* Top Hero Stats Card */}
-          <div className="relative w-full rounded-[1.25rem] overflow-hidden border border-amber-600 bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 shadow-sm">
+          <div className="relative w-full rounded-[1.25rem] overflow-hidden border border-amber-600 bg-gradient-to-br from-amber-600 via-amber-700 to-amber-700 shadow-sm">
             <div className="relative z-20 p-5 flex flex-col gap-4">
               <div>
                 <h2 className="text-[17px] font-black text-white tracking-tight leading-none mb-1.5">Material Requests</h2>

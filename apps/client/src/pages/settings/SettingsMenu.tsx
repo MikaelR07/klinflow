@@ -174,7 +174,7 @@ export default function SettingsMenu() {
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3 ">
           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-4 ">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
@@ -201,13 +201,13 @@ export default function SettingsMenu() {
             {/* ── NOTIFICATIONS ── */}
             <button
               onClick={() => navigate('/settings/notifications')}
-              className="w-full bg-slate-100 rounded-2xl p-4 flex items-center gap-4  active:scale-[0.98] transition-transform relative overflow-hidden group"
+              className="w-full bg-white dark:bg-slate-900 rounded-2xl p-4 flex items-center gap-4  active:scale-[0.98] transition-transform relative overflow-hidden group"
             >
-              <div className="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
-                <Bell className="w-5 h-5 text-slate-600" />
+              <div className="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                <Bell className="w-5 h-5 text-slate-600 dark:text-white" />
               </div>
               <div className="flex-1 text-left relative z-10">
-                <p className="text-[14px] font-bold text-slate-900 leading-tight">Notifications</p>
+                <p className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight">Notifications</p>
                 <p className="text-[10px] font-bold text-slate-400/80 capitalize tracking-widest mt-0.5">Manage Alerts & Sounds</p>
               </div>
               <ChevronRight className="w-5 h-5 text-slate-400/60 group-hover:translate-x-1 transition-transform relative z-10" />
@@ -216,7 +216,7 @@ export default function SettingsMenu() {
         </div>
 
         {/* ── VERIFICATION + SETTINGS LINKS ── */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
           <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {/* Seller-Only: Verification Row */}
             {isSeller && (
