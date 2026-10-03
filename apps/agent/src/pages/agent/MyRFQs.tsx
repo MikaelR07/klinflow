@@ -119,9 +119,10 @@ export default function MyRFQs() {
           
           <button
             onClick={() => navigate('/rfq/create')}
-            className="w-[38px] h-[38px] shrink-0 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-sm active:scale-95 transition-all hover:bg-amber-600"
+            className="px-3 h-[38px] shrink-0 rounded-xl bg-amber-500 text-white flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all hover:bg-amber-600"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            <span className="text-[11px] font-bold uppercase tracking-widest mt-0.5">Send RFQ</span>
           </button>
         </div>
 
