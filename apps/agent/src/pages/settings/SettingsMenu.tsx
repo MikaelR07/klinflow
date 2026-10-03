@@ -37,7 +37,6 @@ export default function SettingsMenu() {
 
   const quickActions = [
     { label: 'Wallet', icon: DollarSign, path: isFleet ? '/deposit' : '/wallet', color: 'bg-indigo-500' },
-    { label: 'Pricing', icon: Settings, path: isCompanyOwner ? '/admin/services' : '/settings/configuration', color: 'bg-blue-500' },
     { label: 'Reviews', icon: Star, path: '/reviews', color: 'bg-amber-500' },
   ];
 
@@ -100,7 +99,7 @@ export default function SettingsMenu() {
           </div>
 
           {/* Quick Stats Grid */}
-          <div className="grid grid-cols-3 gap-3 mt-4 pt-6 border-t border-slate-500/30">
+          <div className="grid grid-cols-2 gap-3 mt-4 pt-6 border-t border-slate-500/30">
             {quickActions.map((action, i) => (
               <button
                 key={i}
@@ -150,10 +149,36 @@ export default function SettingsMenu() {
           </div>
         )}
 
+        {/* ── CONFIGURATION & SETUP ── */}
+        <div className="space-y-3">
+          <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Getting Started</p>
+          <button
+            onClick={() => navigate(isCompanyOwner ? '/admin/services' : '/settings/configuration')}
+            className="w-full bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-5 flex flex-col items-start gap-4 shadow-lg shadow-blue-500/10 active:scale-[0.98] transition-transform border border-blue-400/30 relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/4 pointer-events-none bg-indigo-400/40" />
+            
+            <div className="flex items-center gap-4 w-full relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-inner">
+                <Settings className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1 text-left">
+                <h3 className="text-lg font-black text-white leading-tight mb-1">Configuration</h3>
+                <p className="text-[11px] font-semibold text-blue-100/90 leading-snug">
+                  Set up pricing, materials, and service areas to start receiving pickups.
+                </p>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                <ChevronRight className="w-4 h-4 text-white group-hover:translate-x-0.5 transition-transform" />
+              </div>
+            </div>
+          </button>
+        </div>
+
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3">
           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
@@ -180,13 +205,13 @@ export default function SettingsMenu() {
             {/* ── NOTIFICATIONS ── */}
             <button
               onClick={() => navigate('/settings/notifications')}
-              className="w-full bg-slate-100 rounded-2xl p-4 flex items-center gap-4  active:scale-[0.98] transition-transform relative overflow-hidden group"
+              className="w-full bg-slate-200 dark:bg-slate-900 rounded-2xl p-4 flex items-center gap-4  active:scale-[0.98] transition-transform relative overflow-hidden group"
             >
-              <div className="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
-                <Bell className="w-5 h-5 text-slate-600" />
+              <div className="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                <Bell className="w-5 h-5 text-slate-600 dark:text-white" />
               </div>
               <div className="flex-1 text-left relative z-10">
-                <p className="text-[14px] font-bold text-slate-900 leading-tight">Notifications</p>
+                <p className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight">Notifications</p>
                 <p className="text-[10px] font-bold text-slate-400/80 capitalize tracking-widest mt-0.5">Manage Alerts & Sounds</p>
               </div>
               <ChevronRight className="w-5 h-5 text-slate-400/60 group-hover:translate-x-1 transition-transform relative z-10" />
@@ -220,7 +245,7 @@ export default function SettingsMenu() {
             {/* Settings — leads to Profile, Privacy, Support, Feedback */}
             <button
               onClick={() => navigate('/settings/general')}
-              className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
+              className="w-full flex items-center gap-4 p-5 dark:bg-slate-900  transition-colors group"
             >
               <div className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-600 bg-slate-50 dark:text-slate-400 dark:bg-slate-500/10">
                 <Settings className="w-5 h-5" />
@@ -242,7 +267,7 @@ export default function SettingsMenu() {
             toast.success('Logged Out');
             navigate('/login', { replace: true });
           }}
-          className="mx-auto p-8 py-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
+          className="mx-auto p-8 py-5 bg-rose-100 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
         >
           <LogOut className="w-5 h-5" /> Logout
         </button>
