@@ -186,8 +186,8 @@ export default function App() {
   // 1. Stable, global Notification real-time subscription (Decoupled from online/offline job toggles)
   useEffect(() => {
     if (isAuthenticated && userId) {
-      fetchNotifications(userId, role);
-      subscribeToRealtime(userId, role, profile?.agentAccountType || undefined);
+      fetchNotifications(userId, 'agent');
+      subscribeToRealtime(userId, 'agent', profile?.agentAccountType || undefined);
       fetchAgentConfig(); // Ensure agent config is loaded globally on login
     }
   }, [isAuthenticated, checkAppRole, userId, role, profile?.agentAccountType, fetchNotifications, subscribeToRealtime, fetchAgentConfig]);

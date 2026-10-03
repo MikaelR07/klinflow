@@ -144,7 +144,7 @@ export default function SellerHome() {
     fetchSentOffers();
 
     if (profile?.id) {
-      fetchNotifications(profile.id, role);
+      fetchNotifications(profile.id, 'client');
       subscribeToProfileChanges(profile.id);
       // Fetch real wallet balance from user_wallets (includes RFQ payouts)
       walletService.getWalletDetails(profile.id).then(data => {
@@ -487,19 +487,19 @@ export default function SellerHome() {
             <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">Business Tools</h3>
           </div>
           
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1.5">
             {/* ── CONTRACTS ── */}
             <button 
               onClick={() => navigate("/group-rfqs")}
-              className="w-full bg-indigo-100 dark:bg-slate-900 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
+              className="w-full bg-indigo-100 dark:bg-slate-900 rounded-xl p-4 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
               <div className="w-10 h-10 shrink-0 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <ScrollText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                <ScrollText className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
               </div>
               <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
                 <div className="min-w-0">
-                  <h4 className="text-[12px] min-[390px]:text-[14px] font-black text-slate-800 dark:text-white leading-none mb-1">Contracts</h4>
-                  <p className="text-[9.5px] min-[390px]:text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Material Requests</p>
+                  <h4 className="text-sm max-[390px]:text-[12px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Contracts</h4>
+                  <p className="text-[11px] max-[390px]:text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View material requests</p>
                 </div>
                 
                 <div className="flex items-center justify-between gap-1 w-full mt-auto">
@@ -515,15 +515,15 @@ export default function SellerHome() {
             {/* ── MARKET PRICES ── */}
             <button 
               onClick={() => navigate("/market-pulse")}
-              className="w-full bg-amber-50 dark:bg-slate-900 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
+              className="w-full bg-amber-50 dark:bg-slate-900 rounded-xl p-4 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
             >
               <div className="w-10 h-10 shrink-0 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <BarChart3Icon className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                <BarChart3Icon className="w-8 h-8 text-amber-600 dark:text-amber-400" />
               </div>
               <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
                 <div className="min-w-0">
-                  <h4 className="text-[12px] min-[390px]:text-[14px] font-black text-slate-800 dark:text-white leading-none mb-1">Market Prices</h4>
-                  <p className="text-[9.5px] min-[390px]:text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View material prices</p>
+                  <h4 className="text-sm max-[390px]:text-[12px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Market Prices</h4>
+                  <p className="text-[11px] max-[390px]:text-[9.5px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View live material prices</p>
                 </div>
                 
                 <div className="flex items-center justify-between gap-1 w-full mt-auto">
@@ -549,7 +549,7 @@ export default function SellerHome() {
                 <MapPinned className="w-6 h-6 text-emerald-100 dark:text-emerald-400" />
               </div>
               <div className="text-left min-w-0">
-                <h4 className="text-[14px] font-bold text-slate-50 dark:text-white tracking-tight leading-none mb-1">Swarms</h4>
+                <h4 className="text-sm font-bold text-slate-50 dark:text-white tracking-tight leading-none mb-1">Swarms</h4>
                 <p className="text-[11px] font-semibold text-slate-200 dark:text-slate-400 leading-tight">Join group collection networks nearby</p>
               </div>
             </div>

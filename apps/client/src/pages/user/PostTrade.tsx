@@ -158,14 +158,16 @@ export default function PostTrade() {
       try {
         const { data, error } = await supabase.rpc('get_nearby_hubs_with_territory', { p_lat: lat, p_lon: lng });
         if (!error && data) {
-          setNearbyHubs(data.map((hub: any) => ({
+          const mapped = data.map((hub: any) => ({
             ...hub,
             companyName: hub.name,
-            hubAddress: `${hub.operating_radius_km}km coverage zone`,
-            lat: hub.lat,
-            lng: hub.lon,
-            distance: hub.operating_radius_km
-          })));
+            hubAddress: hub.hub_address || `${hub.operating_radius_km}km coverage zone`,
+            lat: parseFloat(hub.lat),
+            lng: parseFloat(hub.lon),
+            distance: parseFloat(hub.operating_radius_km)
+          }));
+          console.log('[Hubs] Loaded', mapped.length, 'nearby hubs');
+          setNearbyHubs(mapped);
         }
       } catch (err) {
         console.error("Failed to fetch hubs:", err);

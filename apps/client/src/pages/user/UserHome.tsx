@@ -87,7 +87,7 @@ export default function UserHome() {
     fetchCategories();
     if (profile?.id) {
       fetchProfile();
-      fetchNotifications(profile.id, role);
+      fetchNotifications(profile.id, 'client');
       subscribeToProfileChanges(profile.id);
     }
 

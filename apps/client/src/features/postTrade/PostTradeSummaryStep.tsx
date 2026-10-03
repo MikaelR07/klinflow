@@ -89,7 +89,7 @@ export default function PostTradeSummaryStep({
             </div>
             <div className="flex justify-between items-center">
               <span className="text-xs font-semibold text-slate-400 capitalize">Pickup Time</span>
-              <span className="text-xs font-semibold text-emerald-600">{isManualTime ? `${customDate} @ ${customTime}` : 'ASAP (4-12 mins)'}</span>
+              <span className="text-xs font-semibold text-emerald-600">{isManualTime ? `${customDate} @ ${customTime}` : 'ASAP (1-2 Hours)'}</span>
             </div>
           </div>
         ) : (

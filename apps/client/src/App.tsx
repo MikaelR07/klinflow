@@ -136,9 +136,9 @@ export default function App() {
     if (isAuthenticated && userId) {
       const targetRole = role || ROLES.USER;
       
-      // Initialize Realtime Listeners
-      fetchNotifications(userId, targetRole);
-      subscribeToRealtime(userId, targetRole);
+      // Initialize Realtime Listeners — scope to 'client' application
+      fetchNotifications(userId, 'client');
+      subscribeToRealtime(userId, 'client');
       subscribeToBookings(userId); 
       
       // Seller Specific Listeners

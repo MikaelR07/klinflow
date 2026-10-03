@@ -6,7 +6,8 @@ import { useState, useEffect } from 'react';
 import {
   Handshake, Truck, Star, Zap, Briefcase, Receipt, PlusSquare,
   MapPinPlus, Package, BarChart3Icon, ChevronRight, Route,
-  Navigation, Radar, Moon, MapPin, CheckCircle, XCircle
+  Navigation, Radar, Moon, MapPin, CheckCircle, XCircle,
+  User, Clock, Scale, Store, FileText, Users
 } from 'lucide-react';
 import { supabase } from '@klinflow/supabase';
 import type { AgentEarningsData } from './agentHome.types';
@@ -198,26 +199,62 @@ export default function AgentHomeStats({
              <div className="h-8 bg-slate-200 dark:bg-slate-700/50 rounded-xl mt-auto w-full" />
           </div>
         ) : nextPickup && nextPickup.status === 'pending' ? (
-          <div className="bg-indigo-600 dark:bg-indigo-900/60 rounded-2xl p-4 flex flex-col gap-3 min-h-[140px] shrink-0 border border-indigo-500/30 shadow-xl shadow-indigo-600/10 relative overflow-hidden">
+          <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-4 flex flex-col gap-4 shrink-0 border border-slate-200/60 dark:border-slate-700 shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none bg-indigo-500/10" />
+            
+            {/* HEADER ROW */}
             <div className="flex justify-between items-start relative z-10">
-              <div className="flex gap-3 min-w-0">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                  <Zap className="w-5 h-5 text-white animate-pulse" />
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="relative shrink-0">
+                  <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm overflow-hidden">
+                    {nextPickup.originalJob?.customerAvatar || nextPickup.originalJob?.sellerAvatar ? (
+                      <img src={nextPickup.originalJob?.customerAvatar || nextPickup.originalJob?.sellerAvatar} alt="Customer" className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-5 h-5 text-slate-400" />
+                    )}
+                  </div>
+                  <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-indigo-500 border-2 border-white dark:border-slate-800 rounded-full animate-ping" />
                 </div>
-                <div className="pt-0.5 min-w-0">
-                  <h3 className="text-[10px] font-bold text-indigo-200 uppercase tracking-widest leading-none mb-1">New Request</h3>
-                  <h4 className="text-[13px] font-black text-white leading-tight truncate">{nextPickup.material}</h4>
-                  <p className="text-[11px] text-indigo-100/80 font-medium leading-tight mt-0.5 truncate flex items-center gap-1">
-                    <MapPin className="w-3 h-3" /> {nextPickup.pickupAddress}
-                  </p>
+                <div className="min-w-0 flex flex-col justify-center">
+                  <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                    {nextPickup.customerName || 'Resident Client'}
+                  </h3>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className="px-2 py-0.5 rounded flex items-center gap-1 text-[9px] font-black uppercase tracking-wider bg-indigo-100 text-indigo-800 dark:bg-indigo-500/20 dark:text-indigo-300">
+                      <Zap className="w-3 h-3" /> New Request
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div className="bg-black/20 rounded-lg px-2.5 py-1.5 flex flex-col items-end border border-white/10 shrink-0 ml-2">
-                <span className="text-[9px] font-bold text-indigo-200 uppercase tracking-widest leading-none mb-1">Est</span>
-                <span className="text-xs font-black text-white leading-none">{nextPickup.estimatedWeight} kg</span>
               </div>
             </div>
+
+            {/* LOCATION ROW */}
+            <div className="relative z-10 flex items-start gap-2.5 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+              <MapPin className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+              <p className="text-[12px] font-bold text-slate-700 dark:text-slate-300 leading-snug line-clamp-2">
+                {nextPickup.pickupAddress || 'Address details pending...'}
+              </p>
+            </div>
+
+            {/* DETAILS GRID */}
+            <div className="relative z-10 grid grid-cols-3 gap-2">
+               <div className="flex flex-col gap-1">
+                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Package className="w-3 h-3" /> Material</p>
+                 <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate capitalize">{nextPickup.material}</p>
+               </div>
+               <div className="flex flex-col gap-1">
+                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Scale className="w-3 h-3" /> Weight</p>
+                 <p className="text-[12px] font-black text-slate-900 dark:text-white">{nextPickup.estimatedWeight} kg</p>
+               </div>
+               <div className="flex flex-col gap-1">
+                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Clock className="w-3 h-3" /> Schedule</p>
+                 <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate">
+                   {nextPickup.scheduledAt?.toUpperCase() === 'ASAP' ? 'ASAP' : nextPickup.scheduledAt || 'Scheduled'}
+                 </p>
+               </div>
+            </div>
             
+            {/* ACTION BUTTONS */}
             <div className="flex gap-2 mt-auto relative z-10">
               <button 
                 onClick={async () => {
@@ -227,9 +264,9 @@ export default function AgentHomeStats({
                      else toast.error("Could not accept pickup");
                   }
                 }}
-                className="flex-[2] bg-white text-indigo-600 hover:bg-indigo-50 font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm"
+                className="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[12px] uppercase tracking-widest py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
               >
-                <CheckCircle className="w-4 h-4" /> Accept
+                <CheckCircle className="w-4 h-4" /> Accept Pickup
               </button>
               <button 
                 onClick={() => {
@@ -237,9 +274,9 @@ export default function AgentHomeStats({
                      rejectJob(nextPickup.id);
                   }
                 }}
-                className="flex-[1] bg-black/10 hover:bg-black/20 text-white font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+                className="flex-[1] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-black text-[12px] uppercase tracking-widest py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700"
               >
-                <XCircle className="w-4 h-4" />
+                <XCircle className="w-4 h-4" /> Decline
               </button>
             </div>
           </div>
@@ -249,84 +286,110 @@ export default function AgentHomeStats({
               if (nextPickup.source === 'fulfillment_orders') navigate(`/pickups/${nextPickup.id}`);
               else navigate(`/jobs/navigate/${nextPickup.id}`);
             }}
-            className={`rounded-2xl p-4 flex flex-col gap-3 min-h-[140px] shrink-0 border shadow-xl cursor-pointer active:scale-95 transition-transform relative overflow-hidden ${
-              useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) 
-                ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-700/50' 
-                : nextPickup.status === 'in_progress'
-                ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700/50'
-                : 'bg-slate-900 dark:bg-slate-800 border-slate-800 dark:border-slate-700'
-            }`}
+            className={`rounded-2xl p-4 flex flex-col gap-4 shrink-0 shadow-lg cursor-pointer active:scale-[0.98] transition-transform relative overflow-hidden bg-white dark:bg-slate-800/90 border border-slate-200/60 dark:border-slate-700`}
           >
-            {/* Subtle highlight effect */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-            
-            <div className="flex justify-between items-start relative z-10">
-              <div className="flex gap-3 min-w-0">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                   useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400' :
-                   nextPickup.status === 'in_progress' ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400' :
-                   'bg-emerald-500/20 text-emerald-400'
-                }`}>
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div className="pt-0.5 min-w-0">
-                  <h3 className={`text-[10px] font-bold uppercase tracking-widest leading-none mb-1 flex items-center gap-1.5 ${
-                     useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? 'text-amber-600 dark:text-amber-500' :
-                     nextPickup.status === 'in_progress' ? 'text-blue-600 dark:text-blue-500' :
-                     'text-slate-400'
-                  }`}>
-                    {useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? (
-                      <><span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" /> Arrived</>
-                    ) : nextPickup.status === 'in_progress' ? (
-                      <><span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" /> In Progress</>
+            {/* Soft background accents based on status */}
+            <div className={`absolute top-0 right-0 w-48 h-48 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none ${
+              useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? 'bg-amber-500/10' :
+              nextPickup.status === 'in_progress' ? 'bg-blue-500/10' : 'bg-emerald-500/10'
+            }`} />
+
+            {/* HEADER ROW: Customer Info, Status Badge & Location */}
+            <div className="flex justify-between items-start relative z-10 mb-1">
+              <div className="flex items-center gap-3 min-w-0 pr-2">
+                <div className="relative shrink-0">
+                  <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm overflow-hidden">
+                    {nextPickup.originalJob?.customerAvatar || nextPickup.originalJob?.sellerAvatar ? (
+                      <img src={nextPickup.originalJob?.customerAvatar || nextPickup.originalJob?.sellerAvatar} alt="Customer" className="w-full h-full object-cover" />
                     ) : (
-                      'Next Pickup'
+                      <User className="w-5 h-5 text-slate-400" />
                     )}
+                  </div>
+                  {useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? (
+                    <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-amber-500 border-2 border-white dark:border-slate-800 rounded-full" />
+                  ) : nextPickup.status === 'in_progress' ? (
+                    <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-blue-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse" />
+                  ) : null}
+                </div>
+                <div className="min-w-0 flex flex-col justify-center">
+                  <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                    {nextPickup.customerName || 'Resident Client'}
                   </h3>
-                  <h4 className={`text-[13px] font-black leading-tight truncate ${
-                     (useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) || nextPickup.status === 'in_progress')
-                     ? 'text-slate-900 dark:text-white' 
-                     : 'text-white'
-                  }`}>{nextPickup.material}</h4>
-                  <p className={`text-[11px] font-medium leading-tight mt-0.5 truncate ${
-                     (useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) || nextPickup.status === 'in_progress')
-                     ? 'text-slate-600 dark:text-slate-400'
-                     : 'text-slate-400'
-                  }`}>
-                    {nextPickup.pickupAddress}
-                  </p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    {(() => {
+                      const job = nextPickup.originalJob;
+                      let badgeIcon = <User className="w-3 h-3" />;
+                      let badgeText = 'Resident';
+                      let badgeColor = 'bg-sky-100 text-sky-800 dark:bg-sky-500/20 dark:text-sky-300';
+                      
+                      if (nextPickup.source === 'fulfillment_orders') {
+                        if (job.rfq?.is_group_collection) { badgeIcon = <Users className="w-3 h-3" />; badgeText = 'Group RFQ'; badgeColor = 'bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300'; }
+                        else { badgeIcon = <FileText className="w-3 h-3" />; badgeText = 'RFQ'; badgeColor = 'bg-violet-100 text-violet-800 dark:bg-violet-500/20 dark:text-violet-300'; }
+                      } else {
+                        if (job.is_group_pickup) { badgeIcon = <Users className="w-3 h-3" />; badgeText = 'Swarm'; badgeColor = 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/20 dark:text-indigo-300'; }
+                        else if (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) { badgeIcon = <Store className="w-3 h-3" />; badgeText = 'Trade'; badgeColor = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300'; }
+                      }
+                      
+                      return (
+                        <span className={`px-2 py-0.5 rounded flex items-center gap-1 text-[9px] font-black uppercase tracking-wider ${badgeColor}`}>
+                          {badgeIcon} {badgeText}
+                        </span>
+                      );
+                    })()}
+                  </div>
                 </div>
               </div>
-              <div className={`rounded-lg px-2.5 py-1.5 flex flex-col items-end border shrink-0 ml-2 ${
-                 (useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) || nextPickup.status === 'in_progress')
-                 ? 'bg-white/50 dark:bg-black/20 border-slate-200 dark:border-white/10'
-                 : 'bg-slate-800/80 border-slate-700'
-              }`}>
-                <span className={`text-[9px] font-bold uppercase tracking-widest leading-none mb-1 ${
-                   (useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) || nextPickup.status === 'in_progress')
-                   ? 'text-slate-500' : 'text-slate-400'
-                }`}>Est</span>
-                <span className={`text-xs font-black leading-none ${
-                   useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? 'text-amber-600 dark:text-amber-400' :
-                   nextPickup.status === 'in_progress' ? 'text-blue-600 dark:text-blue-400' :
-                   'text-emerald-400'
-                }`}>
-                  {nextPickup.estimatedWeight} kg
-                </span>
+              
+              {/* Location on the right */}
+              <div className="flex flex-col items-end text-right shrink-0 max-w-[130px]">
+                <div className="flex items-center justify-end gap-1 mb-0.5 text-slate-400">
+                  <MapPin className="w-3 h-3 text-emerald-500 shrink-0" />
+                  <span className="text-[9px] font-bold uppercase tracking-widest">Location</span>
+                </div>
+                <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-snug line-clamp-2">
+                  {nextPickup.pickupAddress || 'Address pending'}
+                </p>
               </div>
             </div>
+
+            {/* DETAILS GRID */}
+            <div className="relative z-10 grid grid-cols-3 gap-2">
+               <div className="flex flex-col gap-1">
+                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Package className="w-3 h-3" /> Material</p>
+                 <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate capitalize">{nextPickup.material}</p>
+               </div>
+               <div className="flex flex-col gap-1">
+                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Scale className="w-3 h-3" /> Weight</p>
+                 <p className="text-[12px] font-black text-slate-900 dark:text-white">{nextPickup.estimatedWeight} kg</p>
+               </div>
+               <div className="flex flex-col gap-1">
+                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Clock className="w-3 h-3" /> Schedule</p>
+                 <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate">
+                   {nextPickup.scheduledAt?.toUpperCase() === 'ASAP' ? 'ASAP (Urgent)' : nextPickup.scheduledAt || 'Scheduled'}
+                 </p>
+               </div>
+            </div>
             
-            <button className={`w-full font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors mt-auto flex items-center justify-center gap-2 relative z-10 shadow-sm ${
+            {/* ACTION BUTTON */}
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                if (nextPickup.source === 'fulfillment_orders') navigate(`/pickups/${nextPickup.id}`);
+                else navigate(`/jobs/navigate/${nextPickup.id}`);
+              }}
+              className={`w-full font-black text-[12px] uppercase tracking-widest py-3.5 rounded-xl transition-all relative z-10 flex items-center justify-center gap-2 ${
                useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) 
-                 ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/20'
+                 ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20'
                  : nextPickup.status === 'in_progress'
-                 ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/20'
-                 : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20'
-            }`}>
-              <Navigation className="w-4 h-4" /> {
+                 ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20'
+                 : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20'
+              }`}
+            >
+              <Navigation className="w-4 h-4" /> 
+              {
                 useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? 'Verify Collection' :
                 nextPickup.status === 'in_progress' ? 'Continue Route' :
-                'Navigate'
+                'Navigate to Pickup'
               }
             </button>
           </div>

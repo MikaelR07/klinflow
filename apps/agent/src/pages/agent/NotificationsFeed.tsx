@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
+import { routeNotification } from '@klinflow/core/utils/notificationRouter';
 
 // ── Date grouping helpers ──
 function getDateGroup(dateString: string | null): string {
@@ -138,12 +139,10 @@ export default function NotificationsFeed() {
   // ── Tap navigation (V3 Dynamic Routing) ──
   const handleTap = useCallback((n: any) => {
     markAsRead(n.id);
-    if (n.actionUrl) {
-      if (n.actionUrl.startsWith('http')) {
-        window.open(n.actionUrl, '_blank');
-      } else {
-        navigate(n.actionUrl);
-      }
+    if (n.actionUrl && n.actionUrl.startsWith('http')) {
+      window.open(n.actionUrl, '_blank');
+    } else {
+      routeNotification(n, navigate);
     }
   }, [navigate, markAsRead]);
 

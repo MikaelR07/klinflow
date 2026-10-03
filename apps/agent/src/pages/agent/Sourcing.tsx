@@ -52,7 +52,7 @@ export default function Sourcing() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedId, setSelectedId] = useState(null);
-  const [selectedTab, setSelectedTab] = useState<'All' | 'Individual' | 'Bulk Sells' | 'Drop-offs'>('All');
+  const [selectedTab, setSelectedTab] = useState<'All' | 'Direct Requests' | 'Bulk Sells'>('All');
   const [offerPrice, setOfferPrice] = useState('');
   const [offerQty, setOfferQty] = useState(1);
   const [recommendations, setRecommendations] = useState<any[]>([]);
@@ -121,18 +121,22 @@ export default function Sourcing() {
         (payload) => {
           if (payload.eventType === 'INSERT') {
             const mapped = mapListing(payload.new);
+            const currentUserId = useAuthStore.getState().userId;
+            
             if (!payload.new.target_agent_id) {
               useMarketplaceStore.setState(s => ({ listings: [mapped, ...s.listings] }));
-            } else if (payload.new.target_agent_id === profile?.id) {
+            } else if (payload.new.target_agent_id === currentUserId) {
               useMarketplaceStore.setState(s => ({ targetedDropoffs: [mapped, ...s.targetedDropoffs] }));
             }
           } else if (payload.eventType === 'UPDATE') {
             const mapped = mapListing(payload.new);
+            const currentUserId = useAuthStore.getState().userId;
+            
             if (!payload.new.target_agent_id) {
               useMarketplaceStore.setState(s => ({
                 listings: s.listings.map(l => l.id === payload.new.id ? { ...l, ...mapped } : l)
               }));
-            } else if (payload.new.target_agent_id === profile?.id) {
+            } else if (payload.new.target_agent_id === currentUserId) {
               useMarketplaceStore.setState(s => ({
                 targetedDropoffs: s.targetedDropoffs.map(l => l.id === payload.new.id ? { ...l, ...mapped } : l)
               }));
@@ -145,7 +149,7 @@ export default function Sourcing() {
         }
       )
       .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'marketplace_offers', filter: `buyer_id=eq.${profile?.id}` },
+        { event: '*', schema: 'public', table: 'marketplace_offers', filter: `buyer_id=eq.${useAuthStore.getState().userId}` },
         () => fetchSentOffers()
       )
       .subscribe();
@@ -153,7 +157,7 @@ export default function Sourcing() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [fetchListings, fetchSentOffers]);
+  }, [fetchListings, fetchSentOffers, profile?.id]);
 
   const selectedListing = useMemo(() => {
     return listings.find(l => l.id === selectedId) || targetedDropoffs.find(l => l.id === selectedId);
@@ -240,8 +244,8 @@ export default function Sourcing() {
   };
 
   const filteredListings = useMemo(() => {
-    // If the Drop-offs tab is active, show targeted dropoffs instead
-    if (selectedTab === 'Drop-offs') {
+    // If the Direct Requests tab is active, show targeted listings (both pickup & dropoff)
+    if (selectedTab === 'Direct Requests') {
       let result = targetedDropoffs;
       
       if (!isFleetDriver) {
@@ -269,8 +273,8 @@ export default function Sourcing() {
       result = result.filter(l => (l as any).pickupMode !== 'dropoff');
     }
 
-    if (selectedTab === 'Individual') {
-      result = result.filter(l => !l.isBulkDrive);
+    if (selectedTab === 'All') {
+      // "All" tab shows all public marketplace listings
     } else if (selectedTab === 'Bulk Sells') {
       result = result.filter(l => l.isBulkDrive);
     }
@@ -436,17 +440,17 @@ export default function Sourcing() {
 
             {/* Tabs */}
             <div className="mt-1 flex bg-slate-100 dark:bg-slate-900/80 p-1.5 rounded-xl">
-              {([...(['All', 'Individual', 'Bulk Sells'] as const), ...(!isFleetDriver ? ['Drop-offs' as const] : [])] ).map(tab => (
+              {([...(['All', 'Bulk Sells'] as const), ...(!isFleetDriver ? ['Direct Requests' as const] : [])] ).map(tab => (
                 <button
                   key={tab}
                   onClick={() => setSelectedTab(tab)}
                   className={`flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 relative ${selectedTab === tab
-                    ? tab === 'Drop-offs' ? 'bg-amber-600 shadow-sm text-white font-black' : 'bg-indigo-600 shadow-sm text-white font-black'
+                    ? tab === 'Direct Requests' ? 'bg-amber-600 shadow-sm text-white font-black' : 'bg-indigo-600 shadow-sm text-white font-black'
                     : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                 >
                   <span className="truncate">{tab}</span>
-                  {tab === 'Drop-offs' && targetedDropoffs.length > 0 && selectedTab !== 'Drop-offs' && (
+                  {tab === 'Direct Requests' && targetedDropoffs.length > 0 && selectedTab !== 'Direct Requests' && (
                     <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[8px] font-black rounded-full flex items-center justify-center">{targetedDropoffs.length > 9 ? '9+' : targetedDropoffs.length}</span>
                   )}
                 </button>
@@ -744,47 +748,10 @@ export default function Sourcing() {
               </div>
             </motion.div>
           ) : (
-            <div className="space-y-1 pb-5">
-
-              {/* ── SCROLLABLE BANNERS ── */}
-              <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pt-2 pb-1 px-4 no-scrollbar">
-                {/* Banner 1 */}
-                <div className="snap-start relative shrink-0 w-[85vw] max-w-[340px] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
-                  <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/70 to-transparent z-10" />
-                  <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-right scale-125 group-hover:scale-[1.35] transition-transform duration-700 ease-out" />
-                  <div className="relative z-20 p-4 h-full flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-[17px] font-black text-white tracking-tight leading-tight">Source & Earn</h3>
-                      <p className="text-[12px] font-semibold text-white/80 leading-tight mt-1 max-w-[200px]">Browse materials listed by sellers near you and place bids to start collecting.</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 border border-white/10">
-                        <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-[11px] font-bold text-white">{filteredListings.length} Listings</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Banner 2 */}
-                <div className="snap-start relative shrink-0 w-[85vw] max-w-[340px] h-[160px] rounded-2xl overflow-hidden border border-emerald-500/20 bg-emerald-900 group cursor-pointer">
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 via-emerald-900/60 to-transparent z-10" />
-                  <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="relative z-20 p-4 h-full flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-[17px] font-black text-white tracking-tight leading-tight">Explore Categories</h3>
-                      <p className="text-[12px] font-semibold text-white/80 leading-tight mt-1 max-w-[200px]">Discover various categories of recyclable materials traded through our platform.</p>
-                    </div>
-                    <button className="self-start text-[10px] font-black uppercase tracking-widest bg-white text-emerald-700 px-3 py-1.5 rounded-lg active:scale-95 transition-transform shadow-sm">
-                      View All
-                    </button>
-                  </div>
-                </div>
-              </div>
-
+            <div className="space-y-0.5 pb-5">
               {/* ── ACTION CARDS (My Bids & Buyer Requests) ── */}
               {!isFleetDriver && (
-                <div className="px-2 pb-2 pt-2 grid grid-cols-2 gap-2">
+                <div className="px-2 pb-1 pt-2 grid grid-cols-2 gap-1">
                   {/* My Active Bids */}
                   <button
                     onClick={() => navigate('/bids')}
@@ -821,8 +788,46 @@ export default function Sourcing() {
                 </div>
               )}
 
+              {/* ── SCROLLABLE BANNERS ── */}
+              <div className="px-3">
+                <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pt-1 pb-1 no-scrollbar pr-4">
+                  {/* Banner 1 */}
+                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/70 to-transparent z-10" />
+                    <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-right scale-125 group-hover:scale-[1.35] transition-transform duration-700 ease-out" />
+                    <div className="relative z-20 p-4 h-full flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-[17px] font-black text-white tracking-tight leading-tight">Source & Earn</h3>
+                        <p className="text-[12px] font-semibold text-white/80 leading-tight mt-1 max-w-[200px]">Browse materials listed by sellers near you and place bids to start collecting.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 border border-white/10">
+                          <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-[11px] font-bold text-white">{filteredListings.length} Listings</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Banner 2 */}
+                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-emerald-500/20 bg-emerald-900 group cursor-pointer">
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 via-emerald-900/60 to-transparent z-10" />
+                    <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div className="relative z-20 p-4 h-full flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-[17px] font-black text-white tracking-tight leading-tight">Explore Categories</h3>
+                        <p className="text-[12px] font-semibold text-white/80 leading-tight mt-1 max-w-[200px]">Discover various categories of recyclable materials traded through our platform.</p>
+                      </div>
+                      <button className="self-start text-[10px] font-black uppercase tracking-widest bg-white text-emerald-700 px-3 py-1.5 rounded-lg active:scale-95 transition-transform shadow-sm">
+                        View All
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* ── MATERIAL CATEGORY CHIPS ── */}
-              <div className="relative mt-2">
+              <div className="relative pt-3">
                 <div className="flex justify-between items-end px-4 mb-2">
                    <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 capitalize tracking-widest">Filter by Category</p>
                    <p className="text-[10px] font-bold text-indigo-500/70 capitalize tracking-widest">{filteredListings.length} Available</p>
@@ -959,14 +964,28 @@ export default function Sourcing() {
 
                           {/* Row 2: Location & Badge */}
                           <div className="flex items-center justify-between mt-0.5">
-                            {(listing as any).pickupMode === 'dropoff' ? (
-                              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 flex items-center gap-1 shrink-0">
-                                <MapPin className="w-2.5 h-2.5" /> Seller-Drop-off
-                              </span>
+                            {selectedTab === 'Direct Requests' ? (
+                              /* Direct Requests tab: show pickup/dropoff type badge */
+                              (listing as any).pickupMode === 'dropoff' ? (
+                                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 flex items-center gap-1 shrink-0">
+                                  <Package className="w-2.5 h-2.5" /> DIRECT DROP-OFF
+                                </span>
+                              ) : (
+                                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center gap-1 shrink-0">
+                                  <MapPin className="w-2.5 h-2.5" />DIRECT PICKUP
+                                </span>
+                              )
                             ) : (
-                              <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                                <MapPin className="w-3 h-3 text-emerald-600" /> {listing.location}
-                              </p>
+                              /* All / Bulk Sells tabs: show location or pickup mode */
+                              (listing as any).pickupMode === 'dropoff' ? (
+                                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400 flex items-center gap-1 shrink-0">
+                                  <MapPin className="w-2.5 h-2.5" /> Seller-Drop-off
+                                </span>
+                              ) : (
+                                <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
+                                  <MapPin className="w-3 h-3 text-emerald-600" /> {listing.location}
+                                </p>
+                              )
                             )}
                             {(isFleetDriver ? getHasRecommended(listing.id) : getHasOffer(listing.id)) && (
                               <span className="px-1 py-0.5 bg-blue-500/10 text-blue-600 text-[8px] font-black uppercase tracking-widest rounded shrink-0">
