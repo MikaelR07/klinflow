@@ -101,41 +101,41 @@ export default function AgentHomeStats({
       {/* SCROLLABLE CONTENT AREA */}
       <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-2 mt-2">
         {/* ── HERO CARD (Balances + Performance Stats) ── */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 p-5 border border-emerald-500/30 shrink-0">
+        <div className="relative overflow-hidden rounded-3xl bg-slate-50 dark:bg-slate-800 p-5 border border-slate-200/60 dark:border-slate-700 shadow-sm shrink-0">
             
             {/* ── BALANCES SECTION ── */}
             <div className="relative z-10 flex items-start justify-between gap-4 mb-2">
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold text-emerald-100/80 mb-0.5 tracking-widest uppercase">Collected Value</p>
+                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-0.5 tracking-widest uppercase">Collected Value</p>
                 <div className="flex items-baseline gap-1 min-w-0">
-                  <span className="text-sm font-bold text-emerald-300 shrink-0">KSh</span>
-                  <h2 className="text-2xl font-black text-white truncate">{(earnings?.inventoryValue || 0).toLocaleString()}</h2>
+                  <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 shrink-0">KSh</span>
+                  <h2 className="text-2xl font-black text-slate-900 dark:text-white truncate">{(earnings?.inventoryValue || 0).toLocaleString()}</h2>
                 </div>
-                <div className="text-[10px] font-bold mt-0.5 text-emerald-100 flex items-center gap-1">
+                <div className="text-[10px] font-bold mt-0.5 text-slate-500 dark:text-slate-400 flex items-center gap-1">
                   {performanceChange >= 0 ? (
-                    <span className="text-emerald-100 bg-emerald-500/40 px-1.5 py-0.5 rounded">↑ {performanceChange.toFixed(0)}%</span>
+                    <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-500/20 px-1.5 py-0.5 rounded">↑ {performanceChange.toFixed(0)}%</span>
                   ) : (
-                    <span className="text-rose-100 bg-rose-500/40 px-1.5 py-0.5 rounded">↓ {Math.abs(performanceChange).toFixed(0)}%</span>
+                    <span className="text-rose-700 dark:text-rose-300 bg-rose-100 dark:bg-rose-500/20 px-1.5 py-0.5 rounded">↓ {Math.abs(performanceChange).toFixed(0)}%</span>
                   )}
                   today
                 </div>
               </div>
-              <div className="w-px h-12 self-center bg-emerald-500/30" />
+              <div className="w-px h-12 self-center bg-slate-200 dark:bg-slate-700" />
               <div className="flex-1 min-w-0 flex flex-col items-end text-right">
-                <p className="text-[10px] font-bold text-emerald-100/80 mb-0.5 tracking-widest uppercase">Trading Balance</p>
+                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-0.5 tracking-widest uppercase">Trading Balance</p>
                 <div className="flex items-baseline justify-end gap-1 min-w-0 w-full">
-                  <span className="text-sm font-bold text-emerald-300 shrink-0">KSh</span>
-                  <h2 className="text-2xl font-black text-white truncate">{(profile?.walletBalance || 0).toLocaleString()}</h2>
+                  <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 shrink-0">KSh</span>
+                  <h2 className="text-2xl font-black text-slate-900 dark:text-white truncate">{(profile?.walletBalance || 0).toLocaleString()}</h2>
                 </div>
-                <p className="text-[10px] font-bold text-emerald-100 mt-0.5">Available Cash</p>
+                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mt-0.5">Available Cash</p>
               </div>
             </div>
 
             {/* ── PICKUPS INDICATOR ── */}
-            <div className="relative z-10 flex items-center gap-2.5 border-t border-emerald-500/30 pt-2">
-              <Truck className="w-5 h-5  text-emerald-200 shrink-0" />
-              <span className="text-[12px] font-bold text-emerald-100">
-                <span className="text-white font-black">{profile?.stats?.totalPickups || 0}</span> pickups completed
+            <div className="relative z-10 flex items-center gap-2.5 border-t border-slate-200 dark:border-slate-700 pt-2">
+              <Truck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span className="text-[12px] font-bold text-slate-500 dark:text-slate-400">
+                <span className="text-slate-900 dark:text-white font-black">{profile?.stats?.totalPickups || 0}</span> pickups completed
               </span>
             </div>
         </div>
@@ -199,7 +199,7 @@ export default function AgentHomeStats({
              <div className="h-8 bg-slate-200 dark:bg-slate-700/50 rounded-xl mt-auto w-full" />
           </div>
         ) : nextPickup && nextPickup.status === 'pending' ? (
-          <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-4 flex flex-col gap-4 shrink-0 border border-slate-200/60 dark:border-slate-700 shadow-lg relative overflow-hidden">
+          <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-3.5 flex flex-col gap-3 shrink-0 border border-slate-200/60 dark:border-slate-700 shadow-lg relative overflow-hidden">
             <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none bg-indigo-500/10" />
             
             {/* HEADER ROW */}
@@ -237,20 +237,14 @@ export default function AgentHomeStats({
             </div>
 
             {/* DETAILS GRID */}
-            <div className="relative z-10 grid grid-cols-3 gap-2">
-               <div className="flex flex-col gap-1">
+            <div className="relative z-10 grid grid-cols-2 gap-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-xl border border-slate-100/50 dark:border-slate-800/50">
+               <div className="flex flex-col gap-1 pl-1">
                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Package className="w-3 h-3" /> Material</p>
                  <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate capitalize">{nextPickup.material}</p>
                </div>
-               <div className="flex flex-col gap-1">
+               <div className="flex flex-col gap-1 pl-1">
                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Scale className="w-3 h-3" /> Weight</p>
                  <p className="text-[12px] font-black text-slate-900 dark:text-white">{nextPickup.estimatedWeight} kg</p>
-               </div>
-               <div className="flex flex-col gap-1">
-                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Clock className="w-3 h-3" /> Schedule</p>
-                 <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate">
-                   {nextPickup.scheduledAt?.toUpperCase() === 'ASAP' ? 'ASAP' : nextPickup.scheduledAt || 'Scheduled'}
-                 </p>
                </div>
             </div>
             
@@ -264,7 +258,7 @@ export default function AgentHomeStats({
                      else toast.error("Could not accept pickup");
                   }
                 }}
-                className="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[12px] uppercase tracking-widest py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
+                className="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
               >
                 <CheckCircle className="w-4 h-4" /> Accept Pickup
               </button>
@@ -274,7 +268,7 @@ export default function AgentHomeStats({
                      rejectJob(nextPickup.id);
                   }
                 }}
-                className="flex-[1] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-black text-[12px] uppercase tracking-widest py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700"
+                className="flex-[1] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700"
               >
                 <XCircle className="w-4 h-4" /> Decline
               </button>
@@ -286,33 +280,33 @@ export default function AgentHomeStats({
               if (nextPickup.source === 'fulfillment_orders') navigate(`/pickups/${nextPickup.id}`);
               else navigate(`/jobs/navigate/${nextPickup.id}`);
             }}
-            className={`rounded-2xl p-4 flex flex-col gap-4 shrink-0 shadow-lg cursor-pointer active:scale-[0.98] transition-transform relative overflow-hidden bg-white dark:bg-slate-800/90 border border-slate-200/60 dark:border-slate-700`}
+            className={`rounded-2xl p-3.5 flex flex-col gap-3 shrink-0 shadow-lg cursor-pointer active:scale-[0.98] transition-transform relative overflow-hidden bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 border border-emerald-500/30`}
           >
             {/* Soft background accents based on status */}
             <div className={`absolute top-0 right-0 w-48 h-48 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none ${
-              useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? 'bg-amber-500/10' :
-              nextPickup.status === 'in_progress' ? 'bg-blue-500/10' : 'bg-emerald-500/10'
+              useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? 'bg-amber-500/20' :
+              nextPickup.status === 'in_progress' ? 'bg-blue-500/20' : 'bg-emerald-400/20'
             }`} />
 
             {/* HEADER ROW: Customer Info, Status Badge & Location */}
             <div className="flex justify-between items-start relative z-10 mb-1">
               <div className="flex items-center gap-3 min-w-0 pr-2">
                 <div className="relative shrink-0">
-                  <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm overflow-hidden">
+                  <div className="w-11 h-11 rounded-full bg-emerald-700/50 flex items-center justify-center border-2 border-emerald-500 shadow-sm overflow-hidden">
                     {nextPickup.originalJob?.customerAvatar || nextPickup.originalJob?.sellerAvatar ? (
                       <img src={nextPickup.originalJob?.customerAvatar || nextPickup.originalJob?.sellerAvatar} alt="Customer" className="w-full h-full object-cover" />
                     ) : (
-                      <User className="w-5 h-5 text-slate-400" />
+                      <User className="w-5 h-5 text-emerald-200" />
                     )}
                   </div>
                   {useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) ? (
-                    <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-amber-500 border-2 border-white dark:border-slate-800 rounded-full" />
+                    <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-amber-500 border-2 border-emerald-700 rounded-full" />
                   ) : nextPickup.status === 'in_progress' ? (
-                    <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-blue-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse" />
+                    <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-blue-500 border-2 border-emerald-700 rounded-full animate-pulse" />
                   ) : null}
                 </div>
                 <div className="min-w-0 flex flex-col justify-center">
-                  <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                  <h3 className="text-[15px] font-bold text-white capitalize truncate leading-tight">
                     {nextPickup.customerName || 'Resident Client'}
                   </h3>
                   <div className="flex items-center gap-1.5 mt-0.5">
@@ -320,14 +314,14 @@ export default function AgentHomeStats({
                       const job = nextPickup.originalJob;
                       let badgeIcon = <User className="w-3 h-3" />;
                       let badgeText = 'Resident';
-                      let badgeColor = 'bg-sky-100 text-sky-800 dark:bg-sky-500/20 dark:text-sky-300';
+                      let badgeColor = 'bg-white/20 text-white';
                       
                       if (nextPickup.source === 'fulfillment_orders') {
-                        if (job.rfq?.is_group_collection) { badgeIcon = <Users className="w-3 h-3" />; badgeText = 'Group RFQ'; badgeColor = 'bg-blue-100 text-blue-800 dark:bg-blue-500/20 dark:text-blue-300'; }
-                        else { badgeIcon = <FileText className="w-3 h-3" />; badgeText = 'RFQ'; badgeColor = 'bg-violet-100 text-violet-800 dark:bg-violet-500/20 dark:text-violet-300'; }
+                        if (job.rfq?.is_group_collection) { badgeIcon = <Users className="w-3 h-3" />; badgeText = 'Group RFQ'; badgeColor = 'bg-blue-500/30 text-blue-100'; }
+                        else { badgeIcon = <FileText className="w-3 h-3" />; badgeText = 'RFQ'; badgeColor = 'bg-violet-500/30 text-violet-100'; }
                       } else {
-                        if (job.is_group_pickup) { badgeIcon = <Users className="w-3 h-3" />; badgeText = 'Swarm'; badgeColor = 'bg-indigo-100 text-indigo-800 dark:bg-indigo-500/20 dark:text-indigo-300'; }
-                        else if (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) { badgeIcon = <Store className="w-3 h-3" />; badgeText = 'Trade'; badgeColor = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300'; }
+                        if (job.is_group_pickup) { badgeIcon = <Users className="w-3 h-3" />; badgeText = 'Swarm'; badgeColor = 'bg-indigo-500/30 text-indigo-100'; }
+                        else if (job.is_market_trade || job.booking_type === 'marketplace_pickup' || job.listing_id) { badgeIcon = <Store className="w-3 h-3" />; badgeText = 'Trade'; badgeColor = 'bg-emerald-500/30 text-emerald-100'; }
                       }
                       
                       return (
@@ -342,31 +336,25 @@ export default function AgentHomeStats({
               
               {/* Location on the right */}
               <div className="flex flex-col items-end text-right shrink-0 max-w-[130px]">
-                <div className="flex items-center justify-end gap-1 mb-0.5 text-slate-400">
-                  <MapPin className="w-3 h-3 text-emerald-500 shrink-0" />
+                <div className="flex items-center justify-end gap-1 mb-0.5 text-emerald-200/80">
+                  <MapPin className="w-3 h-3 text-emerald-300 shrink-0" />
                   <span className="text-[9px] font-bold uppercase tracking-widest">Location</span>
                 </div>
-                <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-snug line-clamp-2">
+                <p className="text-[11px] font-bold text-white leading-snug line-clamp-2">
                   {nextPickup.pickupAddress || 'Address pending'}
                 </p>
               </div>
             </div>
 
             {/* DETAILS GRID */}
-            <div className="relative z-10 grid grid-cols-3 gap-2">
-               <div className="flex flex-col gap-1">
-                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Package className="w-3 h-3" /> Material</p>
-                 <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate capitalize">{nextPickup.material}</p>
+            <div className="relative z-10 grid grid-cols-2 gap-2 bg-black/20 p-2 rounded-xl border border-white/10">
+               <div className="flex flex-col gap-1 pl-1">
+                 <p className="text-[9px] font-bold text-emerald-200/80 uppercase tracking-widest flex items-center gap-1"><Package className="w-3 h-3" /> Material</p>
+                 <p className="text-[12px] font-bold text-white truncate capitalize">{nextPickup.material}</p>
                </div>
-               <div className="flex flex-col gap-1">
-                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Scale className="w-3 h-3" /> Weight</p>
-                 <p className="text-[12px] font-black text-slate-900 dark:text-white">{nextPickup.estimatedWeight} kg</p>
-               </div>
-               <div className="flex flex-col gap-1">
-                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Clock className="w-3 h-3" /> Schedule</p>
-                 <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate">
-                   {nextPickup.scheduledAt?.toUpperCase() === 'ASAP' ? 'ASAP (Urgent)' : nextPickup.scheduledAt || 'Scheduled'}
-                 </p>
+               <div className="flex flex-col gap-1 pl-1">
+                 <p className="text-[9px] font-bold text-emerald-200/80 uppercase tracking-widest flex items-center gap-1"><Scale className="w-3 h-3" /> Weight</p>
+                 <p className="text-[12px] font-black text-white">{nextPickup.estimatedWeight} kg</p>
                </div>
             </div>
             
@@ -377,12 +365,12 @@ export default function AgentHomeStats({
                 if (nextPickup.source === 'fulfillment_orders') navigate(`/pickups/${nextPickup.id}`);
                 else navigate(`/jobs/navigate/${nextPickup.id}`);
               }}
-              className={`w-full font-black text-[12px] uppercase tracking-widest py-3.5 rounded-xl transition-all relative z-10 flex items-center justify-center gap-2 ${
+              className={`w-full font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-all relative z-10 flex items-center justify-center gap-2 ${
                useAgentStore.getState().arrivedJobIds.includes(nextPickup.id) 
                  ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20'
                  : nextPickup.status === 'in_progress'
                  ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20'
-                 : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20'
+                 : 'bg-white hover:bg-emerald-50 text-emerald-800 shadow-lg shadow-black/10'
               }`}
             >
               <Navigation className="w-4 h-4" /> 
