@@ -27,6 +27,7 @@ export default function AvailableJobs() {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(location.state?.tab || 'available');
+  const [requestedTab, setRequestedTab] = useState<'available' | 'rejected'>('available');
   const [weighingJob, setWeighingJob] = useState(null);
   const [weightValue, setWeightValue] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -209,12 +210,10 @@ export default function AvailableJobs() {
   }, [completedJobs, activeFulfillments, activeTrades]);
 
   const currentJobs = activeTab === 'available'
-    ? availableJobs
+    ? (requestedTab === 'available' ? availableJobs : rejectedJobs.slice(0, 10))
     : activeTab === 'active'
       ? combinedActiveJobs
-      : activeTab === 'completed'
-        ? combinedCompletedJobs
-        : rejectedJobs.slice(0, 10);
+      : combinedCompletedJobs;
 
   const filteredJobs = useMemo(() => {
     let result = currentJobs;
@@ -303,14 +302,13 @@ export default function AvailableJobs() {
     { id: 'active', label: 'Dispatched', count: combinedActiveJobs.length },
     { id: 'completed', label: 'Completed', count: combinedCompletedJobs.length },
   ] : [
-    { id: 'available', label: 'Requested', count: availableJobs.length },
+    { id: 'available', label: 'Requested', count: availableJobs.length + rejectedJobs.length },
     { id: 'active', label: 'Accepted', count: combinedActiveJobs.length },
     { id: 'completed', label: 'Completed', count: combinedCompletedJobs.length },
-    { id: 'rejected', label: 'Rejected', count: rejectedJobs.length },
   ];
 
   useEffect(() => {
-    if (isFleetDriver && (activeTab === 'available' || activeTab === 'rejected')) {
+    if (isFleetDriver && activeTab === 'available') {
       setActiveTab('active');
     }
   }, [isFleetDriver, activeTab]);
@@ -442,14 +440,42 @@ export default function AvailableJobs() {
             <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-emerald-500/30 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-teal-500/20 rounded-full blur-2xl pointer-events-none" />
             
-            <div className="relative z-10 flex items-center justify-between">
+            <div className="relative z-10 mb-4 flex items-center justify-between">
               <div className="min-w-0">
                 <h2 className="text-lg font-black text-white tracking-tight leading-tight">Resident Requests</h2>
                 <p className="text-[10px] font-medium text-emerald-200/80 mt-0.5 capitalize tracking-widest">Pickup requests from residents in your area</p>
               </div>
               <div className="ml-3 shrink-0 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-2.5 flex flex-col items-center justify-center">
-                <span className="text-lg font-black text-white leading-none">{availableJobs.length}</span>
-                <span className="text-[8px] font-bold text-emerald-200/70 uppercase tracking-widest mt-1 leading-none">Requests</span>
+                <span className="text-lg font-black text-white leading-none">{requestedTab === 'available' ? availableJobs.length : rejectedJobs.length}</span>
+                <span className="text-[8px] font-bold text-emerald-200/70 uppercase tracking-widest mt-1 leading-none">{requestedTab === 'available' ? 'Available' : 'Rejected'}</span>
+              </div>
+            </div>
+
+            <div className="relative z-10 p-1 bg-black/20 backdrop-blur-md rounded-[14px] border border-white/10">
+              <div className="flex gap-1 overflow-x-auto no-scrollbar">
+                {(['available', 'rejected'] as const).map((type) => {
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => setRequestedTab(type)}
+                      className={`flex-1 py-2.5 px-3.5 rounded-[10px] text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all shrink-0 ${
+                        requestedTab === type
+                        ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                        : 'text-emerald-200/60 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <span>{type === 'available' ? 'Available' : 'Rejected'}</span>
+                      {type === 'rejected' && rejectedJobs.length > 0 && (
+                        <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${requestedTab === type
+                          ? 'bg-white/20 text-white'
+                          : 'bg-white/10 text-emerald-200/60'
+                          }`}>
+                          {rejectedJobs.length}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -598,12 +624,12 @@ export default function AvailableJobs() {
                             <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border ${
                                 activeTab === 'completed' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border-emerald-200 dark:border-emerald-500/20' :
                                 activeTab === 'active' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-500 border-blue-200 dark:border-blue-500/20' :
-                                activeTab === 'rejected' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-500 border-rose-200 dark:border-rose-500/20' :
+                                requestedTab === 'rejected' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-500 border-rose-200 dark:border-rose-500/20' :
                                 job.time?.toUpperCase() === 'ASAP' ? 'bg-rose-50 dark:bg-rose-500/10 text-rose-500 border-rose-200 dark:border-rose-500/20' : 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500 border-indigo-200 dark:border-indigo-500/20'
                               }`}>
-                              {activeTab === 'completed' ? <CheckCircle className="w-3.5 h-3.5" /> : activeTab === 'active' ? <Clock className="w-3.5 h-3.5" /> : activeTab === 'rejected' ? <XCircle className="w-3.5 h-3.5" /> : job.time?.toUpperCase() === 'ASAP' ? <Zap className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                              {activeTab === 'completed' ? <CheckCircle className="w-3.5 h-3.5" /> : activeTab === 'active' ? <Clock className="w-3.5 h-3.5" /> : requestedTab === 'rejected' ? <XCircle className="w-3.5 h-3.5" /> : job.time?.toUpperCase() === 'ASAP' ? <Zap className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
                               <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">
-                                {activeTab === 'completed' ? 'completed' : activeTab === 'rejected' ? 'rejected' : formatJobTime(job)}
+                                {activeTab === 'completed' ? 'completed' : requestedTab === 'rejected' ? 'rejected' : formatJobTime(job)}
                               </span>
                             </div>
                           </div>
@@ -712,7 +738,7 @@ export default function AvailableJobs() {
 
                         {/* Action Buttons */}
                         <div className="pt-2 pb-8 flex gap-3">
-                          {activeTab === 'available' ? (
+                          {activeTab === 'available' && requestedTab === 'available' ? (
                             <>
                               <button
                                 onClick={() => { rejectJob(job.id); setExpandedId(null); }}
