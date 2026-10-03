@@ -158,11 +158,11 @@ export default function AgentHomeStats({
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{profile?.agentAccountType !== 'fleet_driver' ? 'Drop-Offs' : 'Pickups'}</span>
               </button>
 
-              <button onClick={() => navigate('/reviews')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
-                <div className="relative w-9 h-9 shrink-0 bg-emerald-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
-                  <Star className="w-5 h-5" />
+              <button onClick={() => navigate(profile?.agentAccountType === 'fleet_driver' ? '/deposit' : '/wallet')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
+                <div className="relative w-9 h-9 shrink-0 bg-amber-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a8 8 0 0 1-5-1.52.5.5 0 0 1-.1-.63l2.25-3.82a.5.5 0 0 0-.1-.63z"/><path d="M5 21h14a2 2 0 0 0 2-2v-3.5"/><path d="M5 21a2 2 0 0 1-2-2V7"/><path d="M11 7v13"/></svg>
                 </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Rating</span>
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Wallet</span>
               </button>
 
               <button onClick={() => navigate('/warehouse')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
@@ -172,12 +172,13 @@ export default function AgentHomeStats({
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Warehouse</span>
               </button>
 
-              <button onClick={() => navigate(profile?.agentAccountType === 'fleet_driver' ? '/deposit' : '/wallet')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
-                <div className="relative w-9 h-9 shrink-0 bg-amber-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a8 8 0 0 1-5-1.52.5.5 0 0 1-.1-.63l2.25-3.82a.5.5 0 0 0-.1-.63z"/><path d="M5 21h14a2 2 0 0 0 2-2v-3.5"/><path d="M5 21a2 2 0 0 1-2-2V7"/><path d="M11 7v13"/></svg>
+              <button onClick={() => navigate('/reviews')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
+                <div className="relative w-9 h-9 shrink-0 bg-emerald-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
+                  <Star className="w-5 h-5" />
                 </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Wallet</span>
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Rating</span>
               </button>
+
             </div>
 
 
@@ -199,52 +200,55 @@ export default function AgentHomeStats({
              <div className="h-8 bg-slate-200 dark:bg-slate-700/50 rounded-xl mt-auto w-full" />
           </div>
         ) : nextPickup && nextPickup.status === 'pending' ? (
-          <div className="bg-white dark:bg-slate-800/90 rounded-2xl p-3.5 flex flex-col gap-3 shrink-0 border border-slate-200/60 dark:border-slate-700 shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none bg-indigo-500/10" />
+          <div className="bg-gradient-to-br from-[#2e1065] via-purple-800 to-indigo-600 rounded-2xl p-3.5 flex flex-col gap-3 shrink-0 border border-purple-500/30 shadow-lg relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none bg-indigo-400/20" />
             
-            {/* HEADER ROW */}
-            <div className="flex justify-between items-start relative z-10">
-              <div className="flex items-center gap-3 min-w-0">
+            {/* HEADER ROW: Customer Info, Badge & Location */}
+            <div className="flex justify-between items-start relative z-10 mb-1">
+              <div className="flex items-center gap-3 min-w-0 pr-2">
                 <div className="relative shrink-0">
-                  <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-700/50 flex items-center justify-center border-2 border-white dark:border-slate-800 shadow-sm overflow-hidden">
+                  <div className="w-11 h-11 rounded-full bg-purple-700/50 flex items-center justify-center border-2 border-purple-400 shadow-sm overflow-hidden">
                     {nextPickup.originalJob?.customerAvatar || nextPickup.originalJob?.sellerAvatar ? (
                       <img src={nextPickup.originalJob?.customerAvatar || nextPickup.originalJob?.sellerAvatar} alt="Customer" className="w-full h-full object-cover" />
                     ) : (
-                      <User className="w-5 h-5 text-slate-400" />
+                      <User className="w-5 h-5 text-purple-200" />
                     )}
                   </div>
-                  <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-indigo-500 border-2 border-white dark:border-slate-800 rounded-full animate-ping" />
+                  <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-indigo-400 border-2 border-purple-800 rounded-full animate-ping" />
                 </div>
                 <div className="min-w-0 flex flex-col justify-center">
-                  <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                  <h3 className="text-[15px] font-bold text-white capitalize truncate leading-tight">
                     {nextPickup.customerName || 'Resident Client'}
                   </h3>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className="px-2 py-0.5 rounded flex items-center gap-1 text-[9px] font-black uppercase tracking-wider bg-indigo-100 text-indigo-800 dark:bg-indigo-500/20 dark:text-indigo-300">
+                    <span className="px-2 py-0.5 rounded flex items-center gap-1 text-[9px] font-black uppercase tracking-wider bg-white/20 text-white">
                       <Zap className="w-3 h-3" /> New Request
                     </span>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* LOCATION ROW */}
-            <div className="relative z-10 flex items-start gap-2.5 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
-              <MapPin className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
-              <p className="text-[12px] font-bold text-slate-700 dark:text-slate-300 leading-snug line-clamp-2">
-                {nextPickup.pickupAddress || 'Address details pending...'}
-              </p>
+              
+              {/* Location on the right */}
+              <div className="flex flex-col items-end text-right shrink-0 max-w-[130px]">
+                <div className="flex items-center justify-end gap-1 mb-0.5 text-purple-200/80">
+                  <MapPin className="w-3 h-3 text-purple-300 shrink-0" />
+                  <span className="text-[9px] font-bold uppercase tracking-widest">Location</span>
+                </div>
+                <p className="text-[11px] font-bold text-white leading-snug line-clamp-2">
+                  {nextPickup.pickupAddress || 'Address pending'}
+                </p>
+              </div>
             </div>
 
             {/* DETAILS GRID */}
-            <div className="relative z-10 grid grid-cols-2 gap-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-xl border border-slate-100/50 dark:border-slate-800/50">
+            <div className="relative z-10 grid grid-cols-2 gap-2 bg-black/20 p-2 rounded-xl border border-white/10">
                <div className="flex flex-col gap-1 pl-1">
-                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Package className="w-3 h-3" /> Material</p>
-                 <p className="text-[12px] font-bold text-slate-900 dark:text-white truncate capitalize">{nextPickup.material}</p>
+                 <p className="text-[9px] font-bold text-purple-200/80 uppercase tracking-widest flex items-center gap-1"><Package className="w-3 h-3" /> Material</p>
+                 <p className="text-[12px] font-bold text-white truncate capitalize">{nextPickup.material}</p>
                </div>
                <div className="flex flex-col gap-1 pl-1">
-                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Scale className="w-3 h-3" /> Weight</p>
-                 <p className="text-[12px] font-black text-slate-900 dark:text-white">{nextPickup.estimatedWeight} kg</p>
+                 <p className="text-[9px] font-bold text-purple-200/80 uppercase tracking-widest flex items-center gap-1"><Scale className="w-3 h-3" /> Weight</p>
+                 <p className="text-[12px] font-black text-white">{nextPickup.estimatedWeight} kg</p>
                </div>
             </div>
             
@@ -258,7 +262,7 @@ export default function AgentHomeStats({
                      else toast.error("Could not accept pickup");
                   }
                 }}
-                className="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
+                className="flex-[2] bg-white hover:bg-purple-50 text-purple-800 font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-black/10"
               >
                 <CheckCircle className="w-4 h-4" /> Accept Pickup
               </button>
@@ -268,7 +272,7 @@ export default function AgentHomeStats({
                      rejectJob(nextPickup.id);
                   }
                 }}
-                className="flex-[1] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors flex items-center justify-center gap-2 border border-slate-200 dark:border-slate-700"
+                className="flex-[1] bg-white/10 hover:bg-white/20 text-white font-black text-[11px] uppercase tracking-widest py-3 rounded-xl transition-colors flex items-center justify-center gap-2 border border-white/10"
               >
                 <XCircle className="w-4 h-4" /> Decline
               </button>

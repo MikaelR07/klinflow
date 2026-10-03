@@ -113,11 +113,11 @@ export default function Login() {
 
       {/* ── Header Section ── */}
       <div className="px-8 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] pb-32">
-        <h1 className="text-[38px] font-bold text-white tracking-tight leading-tight">
-          Hello Champion!
+        <h1 className="text-[38px] font-bold text-amber-400 tracking-tight leading-tight">
+          Welcome back!
         </h1>
         <p className="text-white/90 text-[15px] font-medium mt-2">
-          Welcome back!
+          Ready to make an impact today?
         </p>
       </div>
 
@@ -127,7 +127,7 @@ export default function Login() {
           
           <div className="mb-8 text-center">
             <p className="text-slate-500 text-[14px] font-medium mt-1">
-              Ready to make an impact today?
+            Sign in to your account to continue
             </p>
           </div>
 
