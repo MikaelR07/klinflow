@@ -198,6 +198,20 @@ export default function SettingsMenu() {
               </button>
             </div>
             <ThemeToggleRow />
+            {/* ── NOTIFICATIONS ── */}
+            <button
+              onClick={() => navigate('/settings/notifications')}
+              className="w-full bg-slate-100 rounded-2xl p-4 flex items-center gap-4  active:scale-[0.98] transition-transform relative overflow-hidden group"
+            >
+              <div className="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                <Bell className="w-5 h-5 text-slate-600" />
+              </div>
+              <div className="flex-1 text-left relative z-10">
+                <p className="text-[14px] font-bold text-slate-900 leading-tight">Notifications</p>
+                <p className="text-[10px] font-bold text-slate-400/80 capitalize tracking-widest mt-0.5">Manage Alerts & Sounds</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-slate-400/60 group-hover:translate-x-1 transition-transform relative z-10" />
+            </button>
           </div>
         </div>
 

@@ -39,7 +39,6 @@ export default function SettingsMenu() {
     { label: 'Wallet', icon: DollarSign, path: isFleet ? '/deposit' : '/wallet', color: 'bg-indigo-500' },
     { label: 'Pricing', icon: Settings, path: isCompanyOwner ? '/admin/services' : '/settings/configuration', color: 'bg-blue-500' },
     { label: 'Reviews', icon: Star, path: '/reviews', color: 'bg-amber-500' },
-    { label: 'Notifications', icon: Bell, path: '/settings/notifications', color: 'bg-rose-500' },
   ];
 
   return (
@@ -101,7 +100,7 @@ export default function SettingsMenu() {
           </div>
 
           {/* Quick Stats Grid */}
-          <div className="grid grid-cols-4 gap-3 mt-4 pt-6 border-t border-slate-500/30">
+          <div className="grid grid-cols-3 gap-3 mt-4 pt-6 border-t border-slate-500/30">
             {quickActions.map((action, i) => (
               <button
                 key={i}
@@ -178,8 +177,24 @@ export default function SettingsMenu() {
               </button>
             </div>
             <ThemeToggleRow />
+            {/* ── NOTIFICATIONS ── */}
+            <button
+              onClick={() => navigate('/settings/notifications')}
+              className="w-full bg-slate-100 rounded-2xl p-4 flex items-center gap-4  active:scale-[0.98] transition-transform relative overflow-hidden group"
+            >
+              <div className="w-11 h-11 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                <Bell className="w-5 h-5 text-slate-600" />
+              </div>
+              <div className="flex-1 text-left relative z-10">
+                <p className="text-[14px] font-bold text-slate-900 leading-tight">Notifications</p>
+                <p className="text-[10px] font-bold text-slate-400/80 capitalize tracking-widest mt-0.5">Manage Alerts & Sounds</p>
+              </div>
+              <ChevronRight className="w-5 h-5 text-slate-400/60 group-hover:translate-x-1 transition-transform relative z-10" />
+            </button>
           </div>
         </div>
+
+       
 
         {/* ── HUB COMPLAINTS (Fleet Only) + SETTINGS LINK ── */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">

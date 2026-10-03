@@ -14,10 +14,7 @@ export default function GeneralSettingsPage() {
       icon: User, label: 'Profile Settings', subtitle: 'Edit Profile & Location',
       path: '/settings/profile', color: 'text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10'
     },
-    {
-      icon: Bell, label: 'Notifications', subtitle: 'Manage alerts & SMS',
-      path: '/settings/notifications', color: 'text-amber-600 bg-amber-50 dark:bg-amber-500/10'
-    },
+
     {
       icon: ShieldCheck, label: 'Privacy and Security', subtitle: 'Passcode & Encryption',
       path: '/settings/privacy', color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10'
