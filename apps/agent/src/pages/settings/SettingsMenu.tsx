@@ -35,10 +35,7 @@ export default function SettingsMenu() {
   const isFleet = isFleetDriver || isCompanyOwner;
   const agentTypeLabel = isFleet ? 'Fleet Agent' : 'Solo Agent';
 
-  const quickActions = [
-    { label: 'Wallet', icon: DollarSign, path: isFleet ? '/deposit' : '/wallet', color: 'bg-indigo-500' },
-    { label: 'Reviews', icon: Star, path: '/reviews', color: 'bg-amber-500' },
-  ];
+
 
   return (
     <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors pb-5">
@@ -98,19 +95,6 @@ export default function SettingsMenu() {
             </div>
           </div>
 
-          {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 gap-3 mt-4 pt-6 border-t border-slate-500/30">
-            {quickActions.map((action, i) => (
-              <button
-                key={i}
-                onClick={() => navigate(action.path)}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white transition-all border border-transparent active:scale-95 group"
-              >
-                <action.icon className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-slate-200 capitalize tracking-wide leading-none">{action.label}</p>
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* ── AGENT STATUS (Fleet Only) ── */}
@@ -154,7 +138,7 @@ export default function SettingsMenu() {
           <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Getting Started</p>
           <button
             onClick={() => navigate(isCompanyOwner ? '/admin/services' : '/settings/configuration')}
-            className="w-full bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-5 flex flex-col items-start gap-4 shadow-lg shadow-blue-500/10 active:scale-[0.98] transition-transform border border-blue-400/30 relative overflow-hidden group"
+            className="w-full bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-4 flex flex-col items-start gap-4 shadow-lg shadow-blue-500/10 active:scale-[0.98] transition-transform border border-blue-400/30 relative overflow-hidden group"
           >
             <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/4 pointer-events-none bg-indigo-400/40" />
             
