@@ -27,6 +27,7 @@ export * from './data/mockData';
 export * from './data/wasteDefinitions';
 export * from './hooks/usePWA';
 export * from './utils/imageUtils';
+export * from './utils/notificationRouter';
 export * from './validation';
 export * from './stores/collectiveStore';
 export * from './services/walletService';

@@ -7,9 +7,9 @@ export interface NotificationStore {
   subscription: any | null;
   userId: string | null;
   isLoading: boolean;
-  fetchNotifications: (userId: string, role?: string) => Promise<void>;
+  fetchNotifications: (userId: string, targetApp?: string) => Promise<void>;
   playNotificationSound: (title?: string, body?: string, soundFile?: string) => void;
-  subscribeToRealtime: (userId: string, role?: string, agentAccountType?: string) => Promise<void>;
+  subscribeToRealtime: (userId: string, targetApp?: string, agentAccountType?: string) => Promise<void>;
   cleanup: () => void;
   addNotification: (title: string, body: string, type?: string, targetRole?: string, targetUser?: string | string[] | null, metadata?: Record<string, any>) => Promise<void>;
   markAsRead: (id: string) => Promise<void>;

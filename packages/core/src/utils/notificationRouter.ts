@@ -48,8 +48,11 @@ export const routeNotification = (
       return navigate('/sourcing');
 
     case 'alert.trade.offer_received':
-    case 'alert.trade.offer_accepted':
       return navigate('/trades');
+      
+    case 'alert.trade.offer_accepted':
+    case 'alert.trade.offer_rejected':
+      return navigate(notification.targetApp === 'agent' ? '/bids' : '/trades');
       
     case 'alert.marketplace.order_received':
       return navigate('/business/orders');

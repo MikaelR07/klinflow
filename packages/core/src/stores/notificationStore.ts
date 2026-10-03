@@ -42,19 +42,27 @@ export const useNotificationStore = create<NotificationStore>()(
   userId: null,
   isLoading: false,
 
-  fetchNotifications: async (userId, role) => {
+  fetchNotifications: async (userId, targetApp) => {
     set({ isLoading: true });
     const lastCleared = localStorage.getItem(`cf_nots_cleared_${userId}`) || '1970-01-01T00:00:00Z';
     
     try {
-      // Fetch v2 notifications only
-      const { data, error } = await supabase
+      // Build query with application-scoped filtering
+      let query = supabase
         .from('notifications_v2')
         .select('*')
         .eq('recipient_id', userId)
         .gt('created_at', lastCleared)
         .order('created_at', { ascending: false })
         .limit(50);
+
+      // Filter by target_app when provided.
+      // Also include NULL target_app (legacy notifications) for backward compatibility.
+      if (targetApp) {
+        query = query.or(`target_app.eq.${targetApp},target_app.is.null`);
+      }
+
+      const { data, error } = await query;
 
       if (!error && data) {
         const rawMapped = data.map((n: any) => {
@@ -128,7 +136,7 @@ export const useNotificationStore = create<NotificationStore>()(
     }
   },
 
-  subscribeToRealtime: async (userId, role, agentAccountType?: string) => {
+  subscribeToRealtime: async (userId, targetApp, agentAccountType?: string) => {
     if (!userId || userId === '00000000-0000-0000-0000-000000000000') return;
 
     // Persist userId in store for strict filtering
@@ -140,18 +148,36 @@ export const useNotificationStore = create<NotificationStore>()(
       supabase.removeChannel(existing);
     }
 
-    const myRole = (role || '').toLowerCase();
+    const myApp = (targetApp || '').toLowerCase();
     const uniqueId = Math.random().toString(36).substring(7);
     const channelName = `user-notifs-${userId}-${uniqueId}`; 
+    
+    console.log(`[NOTIF-RT] Setting up Realtime subscription`, { channelName, userId, myApp, agentAccountType });
     
     const subV2 = supabase.channel(channelName)
       .on('postgres_changes', { 
         event: 'INSERT', 
         schema: 'public', 
-        table: 'notifications_v2',
-        filter: `recipient_id=eq.${userId}`
+        table: 'notifications_v2'
       }, async (payload: any) => {
         const rawN = payload.new;
+        console.log(`[NOTIF-RT] ✅ Realtime event received!`, { 
+          id: rawN?.id, 
+          title: rawN?.title, 
+          category: rawN?.category,
+          target_app: rawN?.target_app,
+          recipient_id: rawN?.recipient_id,
+          notification_rule: rawN?.notification_rule
+        });
+
+        // Client-side target_app filter: Supabase Realtime only supports
+        // single-column filters, so we filter the second dimension here.
+        // Allow notifications with matching target_app OR NULL (legacy).
+        if (myApp && rawN.target_app && rawN.target_app !== myApp) {
+          console.log(`[NOTIF-RT] ⛔ Filtered out: target_app mismatch`, { myApp, notifTargetApp: rawN.target_app });
+          return; // Notification belongs to a different application
+        }
+
         const normalized = normalizeKeys(rawN);
         normalized.content = normalized.body;
         normalized.read = false;
@@ -159,33 +185,35 @@ export const useNotificationStore = create<NotificationStore>()(
         
         const finalNotif = safeParseOrNull(AppNotificationSchema, normalized, 'Realtime V2 Insert');
         if (finalNotif) {
+          console.log(`[NOTIF-RT] ✅ Parsed successfully, showing toast + sound`, { title: finalNotif.title, category: finalNotif.category });
           set((state) => {
             if (state.notifications.some(notif => notif.id === finalNotif.id)) return state;
             return { notifications: [finalNotif, ...state.notifications].slice(0, 50) };
           });
           
           const isTradeEvent = finalNotif.category === 'marketplace';
-          const isHubApp = myRole === 'hub';
+          const isHubApp = myApp === 'hub';
 
           if (!isHubApp) {
               const soundFile = isTradeEvent ? '/notification-sound/seller-notification.mp3' : '/notification.mp3';
               get().playNotificationSound(finalNotif.title, finalNotif.content, soundFile);
           }
           
-          const isForeground = typeof document !== 'undefined' && document.visibilityState === 'visible';
-          if (isForeground) {
-              const toastOptions = { description: finalNotif.content, duration: finalNotif.priority === 'critical' ? 8000 : 5000 };
-              if (finalNotif.category === 'earnings' || finalNotif.category === 'rewards') {
-                toast.success(finalNotif.title, toastOptions);
-              } else if (finalNotif.category === 'system' || finalNotif.priority === 'high') {
-                toast.warning(finalNotif.title, toastOptions);
-              } else {
-                toast(finalNotif.title, { ...toastOptions, icon: '🔔' });
-              }
+          const toastOptions = { description: finalNotif.content, duration: finalNotif.priority === 'critical' ? 8000 : 5000 };
+          if (finalNotif.category === 'earnings' || finalNotif.category === 'rewards') {
+            toast.success(finalNotif.title, toastOptions);
+          } else if (finalNotif.category === 'system' || finalNotif.priority === 'high') {
+            toast.warning(finalNotif.title, toastOptions);
+          } else {
+            toast(finalNotif.title, { ...toastOptions, icon: '🔔' });
           }
+        } else {
+          console.warn(`[NOTIF-RT] ❌ Parse failed for notification`, normalized);
         }
       })
-      .subscribe();
+      .subscribe((status: string) => {
+        console.log(`[NOTIF-RT] Subscription status: ${status}`, { channelName });
+      });
     
     set({ subscription: subV2 });
   },

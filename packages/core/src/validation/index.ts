@@ -229,6 +229,8 @@ export const TelemetryPayloadSchema = z.object({
 export const AppNotificationSchema = z.object({
   id: z.string(),
   domainEventId: z.string().uuid().nullable().optional(),
+  notificationRule: z.string().nullable().optional(),
+  targetApp: z.string().nullable().optional(),
   title: z.string(),
   body: z.string(), // Maps to content
   content: z.string().optional(), // Used by UI temporarily
