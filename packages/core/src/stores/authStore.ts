@@ -15,6 +15,7 @@ import {
   ProfileSchema, 
   Profile, 
   NotificationPrefs,
+  NotificationPrefsSchema,
   safeParseOrNull
 } from '../validation';
 
