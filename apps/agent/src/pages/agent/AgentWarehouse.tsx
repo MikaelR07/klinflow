@@ -252,8 +252,8 @@ export default function AgentWarehouse() {
             <ArrowLeft className="w-5 h-5 text-white" />
           </button>
           <div>
-            <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Warehouse Portal</h1>
-            <p className="text-[9px] text-emerald-100 font-medium tracking-wider uppercase mt-0.5">Estimated Cargo & Analytics</p>
+            <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Sales Warehouse</h1>
+            <p className="text-[9px] text-emerald-100 font-medium tracking-wider capitalize mt-0.5">Manage your outbound collection sales.</p>
           </div>
         </div>
       </div>
@@ -266,7 +266,7 @@ export default function AgentWarehouse() {
           // --- INDEPENDENT AGENT VIEW: B2B TRADE HUB ---
           <div className="space-y-4 px-1 pb-2">
              {/* B2B Trade Hub Hero Card */}
-             <div className="relative overflow-hidden rounded-[2rem] bg-indigo-600 p-5 shadow-xl shadow-indigo-500/20 border border-indigo-500/30">
+             <div className="relative overflow-hidden rounded-2xl bg-indigo-600 p-5 shadow-xl shadow-indigo-500/20 border border-indigo-500/30">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-[60px] -mr-16 -mt-16" />
                 <div className="relative z-10 flex flex-col h-full">
                    <div className="flex items-start justify-between mb-5">
@@ -354,27 +354,52 @@ export default function AgentWarehouse() {
                      </div>
                    ) : (
                      mockListings.map((item) => (
-                       <div key={item.id} className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 hover:border-indigo-400/50 transition-all">
-                         <div className="flex items-center justify-between mb-3">
-                           <h3 className="font-bold text-sm text-slate-900 dark:text-white capitalize">{item.material}</h3>
-                           <span className="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100">Listed</span>
-                         </div>
-                         <div className="grid grid-cols-2 gap-3 mb-3">
-                           <div className="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
-                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quantity</p>
-                             <p className="text-sm font-black text-slate-700 dark:text-slate-300">{item.quantity} <span className="text-[10px]">KG</span></p>
+                       <div key={item.id} className="bg-white dark:bg-slate-900/60 shadow-sm border border-slate-200 dark:border-slate-800 rounded-2xl transition-colors relative overflow-hidden">
+                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500" />
+                         <div className="flex gap-3 pl-4 pr-3.5 py-3">
+                           {/* Image Placeholder */}
+                           <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                             <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />
                            </div>
-                           <div className="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
-                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Asking Price</p>
-                             <p className="text-sm font-black text-emerald-600">KSh {item.price}/kg</p>
+
+                           {/* Details */}
+                           <div className="flex-1 min-w-0 flex flex-col py-0.5">
+                             {/* Row 1: Name + Category + Status */}
+                             <div className="flex items-center justify-between mb-1">
+                               <div className="flex items-center gap-1.5 min-w-0">
+                                 <h3 className="text-[14px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
+                                   {item.material}
+                                 </h3>
+                                 <span className="px-1.5 py-0.5 rounded text-[8px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 whitespace-nowrap">
+                                   Plastic
+                                 </span>
+                               </div>
+                               <span className="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100 shrink-0 ml-2">Listed</span>
+                             </div>
+
+                             {/* Row 2: Quantity × Price + Total Value */}
+                             <div className="flex items-center justify-between mt-1">
+                               <div className="flex flex-col">
+                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Qty × Price</p>
+                                 <p className="text-xs font-black text-slate-700 dark:text-slate-300">
+                                   {item.quantity} KG <span className="text-slate-400 font-medium px-0.5">×</span> <span className="text-emerald-600">KSh {item.price}/kg</span>
+                                 </p>
+                               </div>
+                               <div className="text-right">
+                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Value</p>
+                                 <p className="text-xs font-black text-indigo-600">KSh {(item.quantity * item.price).toLocaleString()}</p>
+                               </div>
+                             </div>
+
+                             {/* Row 3: Timestamp + Manage */}
+                             <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                               <p className="text-[9px] font-bold text-slate-400 flex items-center gap-1">
+                                 <Clock className="w-3 h-3" />
+                                 {new Date(item.date).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                               </p>
+                               <button className="text-[9px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-2.5 py-1 rounded-lg active:scale-95 transition-transform">Manage</button>
+                             </div>
                            </div>
-                         </div>
-                         <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
-                           <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
-                             <Clock className="w-3 h-3" />
-                             {new Date(item.date).toLocaleDateString()}
-                           </p>
-                           <button className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1.5 rounded-lg active:scale-95 transition-transform">Manage</button>
                          </div>
                        </div>
                      ))
@@ -390,20 +415,55 @@ export default function AgentWarehouse() {
                      </div>
                    ) : (
                      mockBids.map((bid) => (
-                       <div key={bid.id} className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-indigo-100 dark:border-indigo-900/30 relative overflow-hidden hover:border-indigo-300 transition-all">
-                         <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500" />
-                         <div className="pl-3">
-                           <div className="flex items-center justify-between mb-2">
-                             <h3 className="font-bold text-sm text-slate-900 dark:text-white capitalize">{bid.material}</h3>
-                             <p className="text-sm font-black text-emerald-600">KSh {bid.offeredPrice}/kg</p>
+                       <div key={bid.id} className="bg-white dark:bg-slate-900/60 shadow-sm border border-indigo-100 dark:border-indigo-900/30 rounded-2xl relative overflow-hidden">
+                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500" />
+                         <div className="flex gap-3 pl-4 pr-3.5 py-3">
+                           {/* Image Placeholder */}
+                           <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200 dark:border-slate-700">
+                             <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />
                            </div>
-                           <div className="flex items-center justify-between mb-4">
-                             <p className="text-xs font-semibold text-slate-500">{bid.buyerName}</p>
-                             <p className="text-[10px] font-bold text-slate-400">{bid.quantity} KG Requested</p>
-                           </div>
-                           <div className="flex gap-2">
-                             <button className="flex-1 py-2.5 bg-white dark:bg-slate-800 text-rose-600 font-bold text-[10px] uppercase tracking-widest rounded-xl border border-rose-200 dark:border-rose-900/50 active:scale-95 transition-transform">Decline</button>
-                             <button className="flex-[2] py-2.5 bg-indigo-600 text-white font-bold text-[10px] uppercase tracking-widest rounded-xl shadow-md active:scale-95 transition-transform">Review Offer</button>
+
+                           {/* Details */}
+                           <div className="flex-1 min-w-0 flex flex-col py-0.5">
+                             {/* Row 1: Name + Category + Status */}
+                             <div className="flex items-center justify-between mb-1">
+                               <div className="flex items-center gap-1.5 min-w-0">
+                                 <h3 className="text-[14px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
+                                   {bid.material}
+                                 </h3>
+                                 <span className="px-1.5 py-0.5 rounded text-[8px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 whitespace-nowrap">
+                                   Plastic
+                                 </span>
+                               </div>
+                               <span className="px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-amber-50 text-amber-600 border border-amber-100 shrink-0 ml-2">Offer</span>
+                             </div>
+
+                             {/* Row 2: Buyer + Offer Amount */}
+                             <div className="flex items-center justify-between mt-1">
+                               <div className="flex flex-col">
+                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offered By</p>
+                                 <p className="text-xs font-black text-slate-700 dark:text-slate-300 truncate max-w-[100px]">
+                                   {bid.buyerName}
+                                 </p>
+                               </div>
+                               <div className="text-right">
+                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offer</p>
+                                 <p className="text-xs font-black text-emerald-600">
+                                   {bid.quantity} KG <span className="text-slate-400 font-medium px-0.5">@</span> KSh {bid.offeredPrice}/kg
+                                 </p>
+                               </div>
+                             </div>
+
+                             {/* Row 3: Total + Actions */}
+                             <div className="flex items-center justify-between mt-2 pt-2 border-t border-indigo-50 dark:border-slate-800">
+                               <p className="text-[10px] font-black text-indigo-600">
+                                 Total: KSh {(bid.quantity * bid.offeredPrice).toLocaleString()}
+                               </p>
+                               <div className="flex gap-1.5">
+                                 <button className="text-[9px] font-bold text-rose-600 uppercase tracking-widest bg-rose-50 px-2 py-1 rounded-lg active:scale-95 transition-transform">Decline</button>
+                                 <button className="text-[9px] font-bold text-white uppercase tracking-widest bg-indigo-600 px-3 py-1 rounded-lg active:scale-95 transition-transform shadow-sm">Review</button>
+                               </div>
+                             </div>
                            </div>
                          </div>
                        </div>
