@@ -169,7 +169,7 @@ export default function AgentHomeStats({
                 <div className="relative w-9 h-9 shrink-0 bg-purple-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
                   <Package className="w-5 h-5" />
                 </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Warehouse</span>
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{profile?.agentAccountType === 'fleet_driver' ? 'Warehouse' : 'Sales'}</span>
               </button>
 
               <button onClick={() => navigate('/reviews')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
@@ -414,14 +414,14 @@ export default function AgentHomeStats({
 
         {/* ── MARKET INTELLIGENCE ── */}
         <div className="w-full mt-1">
-          <button onClick={() => navigate("/market-pulse")} className="w-full bg-slate-50 text-slate-900 rounded-[20px] shadow-sm shadow-slate-900/5 active:scale-[0.98] transition-all group p-3 flex items-center justify-between border border-white/10 dark:border-slate-900/10 relative overflow-hidden">
+          <button onClick={() => navigate("/market-pulse")} className="w-full bg-slate-200 text-slate-900 rounded-[20px] shadow-sm shadow-slate-900/5 active:scale-[0.98] transition-all group p-3 flex items-center justify-between border border-white/10 dark:border-slate-900/10 relative overflow-hidden">
             <div className="flex items-center gap-4 relative z-10">
               <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700/50 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                 <BarChart3Icon className="w-6 h-6 text-slate-600 dark:text-slate-200" />
               </div>
               <div className="text-left min-w-0">
-                <h3 className="text-[16px] font-bold tracking-tight leading-none mb-1 text-slate-700 dark:text-slate-200">Market Intelligence</h3>
-                <p className="text-[11px] font-semibold text-slate-600/80 dark:text-slate-300 leading-tight">Live prices & trade data</p>
+                <h3 className="text-[15px] font-bold tracking-tight leading-none mb-1 text-slate-700 dark:text-slate-200">Market Intelligence</h3>
+                <p className="text-[11px] font-semibold text-slate-600/80 dark:text-slate-300 leading-tight">Live Market Prices</p>
               </div>
             </div>
             <div className="w-8 h-8 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center group-hover:bg-white/30 dark:group-hover:bg-slate-900/20 transition-colors relative z-10 shrink-0">

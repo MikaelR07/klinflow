@@ -498,8 +498,8 @@ export default function SellerHome() {
               </div>
               <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
                 <div className="min-w-0">
-                  <h4 className="text-sm max-[390px]:text-[12px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Contracts</h4>
-                  <p className="text-[11px] max-[390px]:text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View material requests</p>
+                  <h4 className="text-sm max-[360px]:text-[12px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Contracts</h4>
+                  <p className="text-[11px] max-[360px]:text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View material requests</p>
                 </div>
                 
                 <div className="flex items-center justify-between gap-1 w-full mt-auto">
@@ -522,8 +522,8 @@ export default function SellerHome() {
               </div>
               <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
                 <div className="min-w-0">
-                  <h4 className="text-sm max-[390px]:text-[12px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Market Prices</h4>
-                  <p className="text-[11px] max-[390px]:text-[9.5px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View live material prices</p>
+                  <h4 className="text-sm max-[360px]:text-[12px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Market Prices</h4>
+                  <p className="text-[11px] max-[360px]:text-[9.5px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View live material prices</p>
                 </div>
                 
                 <div className="flex items-center justify-between gap-1 w-full mt-auto">
