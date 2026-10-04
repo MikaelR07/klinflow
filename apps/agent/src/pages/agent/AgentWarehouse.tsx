@@ -228,138 +228,139 @@ export default function AgentWarehouse() {
       {/* ── CONTENT ── */}
       <div className="relative z-10 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] px-1.5 max-w-lg mx-auto space-y-6">
         
-        {/* ── TOP CAROUSEL ── */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-3 pb-2 -mx-1.5 px-1.5">
-          {/* HERO CARD */}
-          <div className={`snap-center shrink-0 ${profile?.agentAccountType === 'independent' ? 'w-[94%]' : 'w-full'}`}>
-            <div className="bg-blue-600 p-4 rounded-xl relative overflow-hidden group shadow-lg border border-blue-500/50 h-full flex flex-col justify-between">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-[60px] -mr-16 -mt-16" />
-              <div className="relative z-10 flex-1 flex flex-col">
-                {/* Top Estimated Weight */}
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <Warehouse className="w-4 h-4 text-white opacity-70" />
-                      <p className="text-[12px] font-bold text-white capitalize tracking-widest opacity-80">Estimated Stash Weight</p>
-                    </div>
-                    <div className="flex items-baseline gap-1.5 text-white">
-                      <h3 className="text-3xl font-bold">{(totalVerifiedWeight + totalOfflineWeight).toFixed(1)}</h3>
-                      <span className="text-xs font-bold opacity-70">KG</span>
-                    </div>
-                    <p className="text-[9px] font-semibold mt-1 text-blue-100 uppercase tracking-widest">
-                      Based on app collection records
-                    </p>
-                  </div>
+        {/* ── TOP SECTION ── */}
+        {profile?.agentAccountType === 'independent' ? (
+          // --- INDEPENDENT AGENT VIEW: SELLER STOREFRONT ---
+          <div className="space-y-4 px-1 pb-2">
+             <div className="mb-2">
+                <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize tracking-wide">Seller Storefront</h2>
+                <p className="text-[11px] text-slate-500 mt-1 font-medium leading-relaxed">Connect directly with large recyclers and hubs. List your materials and manage your business.</p>
+             </div>
+
+             {/* Banner 1: Sell Collection */}
+             <div 
+               onClick={() => navigate('/warehouse/sell')}
+               className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-800 p-6 shadow-xl shadow-blue-500/20 border border-blue-500/30 cursor-pointer active:scale-[0.98] transition-all group"
+             >
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors z-0 duration-300"></div>
+                <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-3xl z-0"></div>
+                
+                <div className="relative z-10 flex flex-col h-full min-h-[140px]">
+                   <div className="w-12 h-12 rounded-[1rem] bg-white/20 flex items-center justify-center backdrop-blur-md mb-auto border border-white/20 shadow-inner">
+                      <Tag className="w-6 h-6 text-white" />
+                   </div>
+                   <div className="mt-5">
+                     <h3 className="text-xl font-black text-white tracking-wide">Sell New Collection</h3>
+                     <p className="text-[11px] text-blue-100/90 mt-1.5 leading-relaxed font-medium max-w-[85%]">
+                       Ready to offload? Create a new listing and offer your collected materials to the highest bidders in the network.
+                     </p>
+                   </div>
+                   <div className="absolute right-0 bottom-2 bg-white/20 p-2.5 rounded-full backdrop-blur-xl border border-white/20 group-hover:bg-white/30 transition-colors">
+                     <ChevronRight className="w-5 h-5 text-white" />
+                   </div>
                 </div>
+             </div>
 
-                {/* 3 Metrics Row */}
-                <div className="grid grid-cols-3 gap-1.5 mb-4">
-                  <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
-                    <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center mb-0.5">
-                      <Wallet className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <p className="text-xs font-black text-white tracking-tight whitespace-nowrap">KSh {totalEstimatedValue.toLocaleString()}</p>
-                    <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Value</p>
-                  </div>
-
-                  <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
-                    <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
-                      <Scale className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <p className="text-xs font-black text-white tracking-tight whitespace-nowrap">{totalVerifiedWeight.toFixed(1)} KG</p>
-                    <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Online Verified</p>
-                  </div>
-
-                  <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
-                    <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
-                      <Package className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <p className="text-xs font-black text-white tracking-tight">{verifiedAssets.length}</p>
-                    <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Assets</p>
-                  </div>
+             {/* Banner 2: B2B Trade Hub */}
+             <div 
+               onClick={() => navigate('/warehouse/trade')}
+               className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-600 to-teal-800 p-6 shadow-xl shadow-emerald-500/20 border border-emerald-500/30 cursor-pointer active:scale-[0.98] transition-all group mt-4"
+             >
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors z-0 duration-300"></div>
+                <div className="absolute -left-10 top-0 w-40 h-40 bg-white/10 rounded-full blur-3xl z-0"></div>
+                
+                <div className="relative z-10 flex flex-col h-full min-h-[140px]">
+                   <div className="flex justify-between items-start">
+                     <div className="w-12 h-12 rounded-[1rem] bg-white/20 flex items-center justify-center backdrop-blur-md mb-auto border border-white/20 shadow-inner">
+                        <TrendingUp className="w-6 h-6 text-white" />
+                     </div>
+                     <div className="px-3.5 py-1.5 bg-white/20 rounded-full backdrop-blur-xl border border-white/20 shadow-inner">
+                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">{materialSales.filter((s:any) => s.status === 'open').length} Active</span>
+                     </div>
+                   </div>
+                   <div className="mt-5">
+                     <h3 className="text-xl font-black text-white tracking-wide">B2B Trade Hub</h3>
+                     <p className="text-[11px] text-emerald-100/90 mt-1.5 leading-relaxed font-medium max-w-[85%]">
+                       Manage your active listings, track pending orders from recyclers, and view your sales history.
+                     </p>
+                   </div>
+                   <div className="absolute right-0 bottom-2 bg-white/20 p-2.5 rounded-full backdrop-blur-xl border border-white/20 group-hover:bg-white/30 transition-colors">
+                     <ChevronRight className="w-5 h-5 text-white" />
+                   </div>
                 </div>
-
-                <div className="mt-auto">
-                {profile?.agentAccountType === 'independent' && (
-                  <button
-                    onClick={() => navigate('/warehouse/sell')}
-                    className="w-full flex items-center justify-between p-3.5 bg-white text-blue-600 rounded-[1rem] active:scale-95 transition-all shadow-md"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
-                        <Tag className="w-4 h-4 text-blue-600" />
-                      </div>
-                      <div className="text-left">
-                        <h3 className="text-xs font-bold uppercase dark:text-slate-600 tracking-wide">Sell Collection</h3>
-                        <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Direct-to-Recycler Trade</p>
-                      </div>
-                    </div>
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                )}
-
-                {profile?.agentAccountType === 'fleet_driver' && (
-                  <div className="mt-4">
-                    {profile?.hubTransferPin ? (
-                      <div className="p-4 bg-white/20 rounded-[1rem] text-center shadow-lg border border-white/30 backdrop-blur-sm animate-bounce-in">
-                        <p className="text-[10px] font-bold text-white uppercase tracking-widest mb-1">Gate PIN</p>
-                        <div className="text-3xl font-black text-white tracking-widest">{profile.hubTransferPin}</div>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={handleDispatch}
-                        disabled={verifiedAssets.length === 0}
-                        className="w-full py-3.5 bg-white text-blue-600 rounded-[1rem] font-black text-xs uppercase tracking-widest shadow-md active:scale-95 transition-all disabled:opacity-50"
-                      >
-                        Get Check-In Code
-                      </button>
-                    )}
-                  </div>
-                )}
-                </div>
-              </div>
-            </div>
+             </div>
           </div>
-
-          {/* MARKET OVERVIEW (TRADE HUB REDIRECT) */}
-          {profile?.agentAccountType === 'independent' && (
-            <div className="snap-center shrink-0 w-[92%]">
-              <div className="bg-indigo-600 rounded-xl p-5 border border-indigo-500/50 relative overflow-hidden group h-full flex flex-col justify-between">
+        ) : (
+          // --- FLEET DRIVER VIEW ---
+          <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-3 pb-2 -mx-1.5 px-1.5">
+            <div className="snap-center shrink-0 w-full">
+              <div className="bg-blue-600 p-4 rounded-xl relative overflow-hidden group border border-blue-500/50 h-full flex flex-col justify-between">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-[60px] -mr-16 -mt-16" />
                 <div className="relative z-10 flex-1 flex flex-col">
+                  {/* Top Estimated Weight */}
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="font-black text-sm text-white uppercase tracking-widest">B2B Trade Hub</h3>
-                      <p className="text-[10px] text-indigo-200 font-bold uppercase tracking-widest mt-1">Manage Outbound Sales</p>
-                    </div>
-                    <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-sm border border-white/10">
-                      <TrendingUp className="w-5 h-5 text-white" />
+                      <div className="flex items-center gap-2 mb-2">
+                        <Warehouse className="w-4 h-4 text-white opacity-70" />
+                        <p className="text-[12px] font-bold text-white capitalize tracking-widest opacity-80">Estimated Collection</p>
+                      </div>
+                      <div className="flex items-baseline gap-1.5 text-white">
+                        <h3 className="text-3xl text-white font-bold">{(totalVerifiedWeight + totalOfflineWeight).toFixed(1)}</h3>
+                        <span className="text-xs font-bold opacity-70">KG</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex gap-3 mb-4">
-                    <div className="flex-1 bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/10">
-                      <p className="text-2xl font-black text-white">{materialSales.filter((s:any) => s.status === 'open').length || 0}</p>
-                      <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Active Listings</p>
+                  {/* 3 Metrics Row */}
+                  <div className="grid grid-cols-3 gap-1 mb-4">
+                    <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
+                      <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center mb-0.5">
+                        <Wallet className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <p className="text-xs font-black text-white tracking-tight whitespace-nowrap">KSh {totalEstimatedValue.toLocaleString()}</p>
+                      <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Value</p>
                     </div>
-                    <div className="flex-1 bg-white/10 rounded-lg p-3 backdrop-blur-sm border border-white/10">
-                      <p className="text-2xl font-black text-white">{materialSales.filter((s:any) => s.status !== 'open').length || 0}</p>
-                      <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Orders</p>
+
+                    <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
+                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
+                        <Scale className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <p className="text-xs font-black text-white tracking-tight whitespace-nowrap">{totalVerifiedWeight.toFixed(1)} KG</p>
+                      <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Verified</p>
+                    </div>
+
+                    <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
+                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
+                        <Package className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <p className="text-xs font-black text-white tracking-tight">{verifiedAssets.length}</p>
+                      <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Assets</p>
                     </div>
                   </div>
 
                   <div className="mt-auto">
-                    <button 
-                      onClick={() => navigate('/warehouse/trade')}
-                      className="w-full py-3.5 bg-white text-indigo-700 font-black rounded-[1rem] text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md"
-                    >
-                      Manage B2B Sales <ChevronRight className="w-4 h-4" />
-                    </button>
+                    <div className="mt-4">
+                      {profile?.hubTransferPin ? (
+                        <div className="p-4 bg-white/20 rounded-[1rem] text-center shadow-lg border border-white/30 backdrop-blur-sm animate-bounce-in">
+                          <p className="text-[10px] font-bold text-white uppercase tracking-widest mb-1">Gate PIN</p>
+                          <div className="text-3xl font-black text-white tracking-widest">{profile.hubTransferPin}</div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={handleDispatch}
+                          disabled={verifiedAssets.length === 0}
+                          className="w-full py-3.5 bg-white text-blue-600 rounded-[1rem] font-black text-xs uppercase tracking-widest shadow-md active:scale-95 transition-all disabled:opacity-50"
+                        >
+                          Get Check-In Code
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="space-y-6 h-fit">
           
