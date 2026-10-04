@@ -483,15 +483,15 @@ export default function AvailableJobs() {
 
         {/* Pickups Hero Filter Card */}
         {(activeTab === 'active' || activeTab === 'completed') && (
-          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-[#2e1065] via-purple-800 to-indigo-600 rounded-2xl shadow-xl shadow-indigo-900/10 border border-indigo-500/20 relative overflow-hidden">
+          <div className="mx-1.5 mt-1 mb-2 p-5 bg-slate-50 dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 relative overflow-hidden">
             
             
             <div className="relative z-10 mb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-black text-white tracking-tight leading-tight">
+                <h2 className="text-lg font-black text-slate-800 dark:text-white tracking-tight leading-tight">
                   {activeTab === 'active' ? 'Active Pickups' : 'Completed Pickups'}
                 </h2>
-                <p className="text-[10px] font-medium text-slate-50 mt-0.5 capitalize tracking-widest">Select by the source of the material</p>
+                <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 capitalize tracking-widest">Select by the source of the material</p>
               </div>
               {activeTab === 'completed' && currentJobs.length > 0 ? (
                 <button 
@@ -500,18 +500,18 @@ export default function AvailableJobs() {
                     fetchEarnings();
                     toast.success('Completed history cleared');
                   }}
-                  className="px-3 h-10 rounded-2xl bg-rose-500/20 text-rose-200 hover:bg-rose-500/40 hover:text-white flex items-center justify-center gap-1.5 backdrop-blur-md border border-rose-500/30 shrink-0 transition-colors text-[10px] font-black uppercase tracking-wider"
+                  className="px-3 h-10 rounded-2xl bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 flex items-center justify-center gap-1.5 border border-rose-500/20 shrink-0 transition-colors text-[10px] font-black uppercase tracking-wider"
                 >
                   <XCircle className="w-4 h-4" /> Clear
                 </button>
               ) : (
-                <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/10 shrink-0">
-                  <Truck className="w-5 h-5 text-indigo-300" />
+                <div className="w-10 h-10 rounded-2xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center border border-slate-300 dark:border-slate-700 shrink-0">
+                  <Truck className="w-5 h-5 text-slate-500 dark:text-slate-400" />
                 </div>
               )}
             </div>
 
-            <div className="relative z-10 p-1 bg-black/20 backdrop-blur-md rounded-[14px] border border-white/10">
+            <div className="relative z-10 p-1 bg-slate-200/60 dark:bg-slate-800 rounded-[14px] border border-slate-300/50 dark:border-slate-700">
               <div className="flex gap-1 overflow-x-auto no-scrollbar">
                 {(['All', 'Resident', 'Market trades', 'RFQ'] as const).map((type) => {
                   return (
@@ -520,8 +520,8 @@ export default function AvailableJobs() {
                       onClick={() => setSelectedBookingType(type)}
                       className={`py-2.5 px-3.5 rounded-[10px] text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all shrink-0 ${
                         selectedBookingType === type
-                        ? 'bg-purple-500 text-white'
-                        : 'text-purple-200/80'
+                        ? 'bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm'
+                        : 'text-slate-500 dark:text-slate-400'
                       }`}
                     >
                       <span>{type}</span>
