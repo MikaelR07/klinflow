@@ -323,7 +323,7 @@ export default function AgentConfigurationPage() {
                       className="h-full w-full z-0"
                     >
                       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                      <Marker position={[formData.base_location.latitude, formData.base_location.longitude]} />
+                      <Marker position={[formData.base_location.latitude, formData.base_location.longitude]} icon={hubPinIcon} />
                     </MapContainer>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
                     <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between">
