@@ -755,7 +755,7 @@ export default function Sourcing() {
                   {/* My Active Bids */}
                   <button
                     onClick={() => navigate('/bids')}
-                    className="w-full bg-indigo-500 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
+                    className="w-full bg-indigo-500 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
                   >
                     <div className="w-10 h-10 rounded-[11px] bg-indigo-400 dark:bg-indigo-500/10 flex items-center justify-center border border-indigo-400 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 shrink-0 group-hover:scale-110 transition-transform relative z-10">
                       <Receipt className="w-6 h-6" />
@@ -774,7 +774,7 @@ export default function Sourcing() {
                   {/* Buyer Requests */}
                   <button
                     onClick={() => navigate('/rfqs')}
-                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
+                    className="w-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
                   >
                     <div className="w-10 h-10 rounded-[11px] bg-slate-500 dark:bg-violet-500/10 flex items-center justify-center border border-slate-200 dark:border-violet-500/20 text-slate-50 dark:text-violet-400 shrink-0 group-hover:scale-110 transition-transform relative z-10">
                       <FileText className="w-6 h-6" />
@@ -793,7 +793,7 @@ export default function Sourcing() {
                 <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pt-1 pb-1 no-scrollbar pr-4">
                   {/* Banner 1 */}
                   <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
-                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/70 to-transparent z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95  to-transparent z-10" />
                     <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-right scale-125 group-hover:scale-[1.35] transition-transform duration-700 ease-out" />
                     <div className="relative z-20 p-4 h-full flex flex-col justify-between">
                       <div>
@@ -852,7 +852,7 @@ export default function Sourcing() {
                           : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                       }`}
                     >
-                      <cat.Icon className={`w-4.5 h-4.5 ${filterMaterial === cat.id ? 'text-white' : 'text-slate-600 dark:text-slate-500'}`} />
+                      <cat.Icon className={`w-4 h-4 ${filterMaterial === cat.id ? 'text-white' : 'text-slate-600 dark:text-slate-500'}`} />
                       <span>{cat.label}</span>
                     </button>
                   ))}
@@ -923,7 +923,7 @@ export default function Sourcing() {
                   itemContent={(index, listing) => (
                     <div
                       onClick={() => setSelectedId(listing.id)}
-                      className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden"
+                      className="bg-white dark:bg-slate-900/60 shadow-sm border border-slate-200 dark:border-slate-800 rounded-2xl active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden mb-2.5 mx-1.5"
                     >
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
                       <div className="flex gap-3 pl-4 pr-3.5 py-3">
