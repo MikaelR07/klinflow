@@ -785,6 +785,7 @@ export default function AvailableJobs() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
+                className="space-y-2.5 mx-1.5"
               >
                 {filteredJobs.map((job) => {
                   const waste = categories.find((w) => w.slug === job.material) ||
@@ -822,7 +823,7 @@ export default function AvailableJobs() {
                   return (
                     <div
                       key={job.id}
-                      className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden"
+                      className="bg-white dark:bg-slate-900/60 shadow-sm border border-slate-200 dark:border-slate-800 rounded-2xl active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden"
                     >
                       <div className={`absolute left-0 top-0 bottom-0 w-1 ${
                         job.booking_type === 'rfq' ? 'bg-violet-500' :
