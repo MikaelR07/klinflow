@@ -9,8 +9,16 @@ import {
   Scale,
   ChevronRight,
   Wallet,
-  Warehouse
+  Warehouse,
+  Search,
+  Filter,
+  MessageSquareQuote,
+  Clock,
+  CheckCircle2,
+  HandCoins,
+  Plus
 } from 'lucide-react';
+import EmptyState from "@klinflow/ui/components/EmptyState";
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
 import { useAgentStore } from '@klinflow/core/stores/agentStore';
@@ -23,6 +31,23 @@ const CLAIM_STATUS = {
   pending: { label: 'Pending', color: 'text-amber-600 bg-amber-50 border-amber-100 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20' },
 };
 
+const TRADE_TABS = [
+  { id: "Listings", label: "Listings" },
+  { id: "Bids", label: "Bids" },
+  { id: "Counters", label: "Counters" },
+  { id: "History", label: "History" }
+];
+
+const mockListings = [
+  { id: "1", material: "PET Bottles (Clear)", quantity: 1500, price: 35, date: "2026-07-16T10:00:00Z", status: "active" },
+  { id: "2", material: "HDPE Plastics", quantity: 800, price: 42, date: "2026-07-15T14:30:00Z", status: "active" },
+  { id: "3", material: "Mixed Cardboard", quantity: 3200, price: 15, date: "2026-07-14T09:15:00Z", status: "active" },
+];
+
+const mockBids = [
+  { id: "101", listingId: "1", material: "PET Bottles (Clear)", quantity: 1500, offeredPrice: 33, buyerName: "EcoPlast Industries", date: "2026-07-17T08:10:00Z" }
+];
+
 export default function AgentWarehouse() {
   const navigate = useNavigate();
   const { profile, subscribeToProfileChanges } = useAuthStore() as any;
@@ -32,6 +57,14 @@ export default function AgentWarehouse() {
   const [isLoading, setIsLoading] = useState(true);
   const [materialSales, setMaterialSales] = useState([]);
   const [salesLoading, setSalesLoading] = useState(true);
+  const [activeTradeTab, setActiveTradeTab] = useState("Listings");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const getTradeCount = (tab: string) => {
+    if (tab === "Listings") return mockListings.length;
+    if (tab === "Bids") return mockBids.length;
+    return 0;
+  };
 
   const resolveMaterialName = (asset: any) => {
     const rawType = asset.material_type;
@@ -230,64 +263,166 @@ export default function AgentWarehouse() {
         
         {/* ── TOP SECTION ── */}
         {profile?.agentAccountType === 'independent' ? (
-          // --- INDEPENDENT AGENT VIEW: SELLER STOREFRONT ---
+          // --- INDEPENDENT AGENT VIEW: B2B TRADE HUB ---
           <div className="space-y-4 px-1 pb-2">
-             <div className="mb-2">
-                <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize tracking-wide">Seller Storefront</h2>
-                <p className="text-[11px] text-slate-500 mt-1 font-medium leading-relaxed">Connect directly with large recyclers and hubs. List your materials and manage your business.</p>
-             </div>
-
-             {/* Banner 1: Sell Collection */}
-             <div 
-               onClick={() => navigate('/warehouse/sell')}
-               className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-800 p-6 shadow-xl shadow-blue-500/20 border border-blue-500/30 cursor-pointer active:scale-[0.98] transition-all group"
-             >
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors z-0 duration-300"></div>
-                <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-3xl z-0"></div>
-                
-                <div className="relative z-10 flex flex-col h-full min-h-[140px]">
-                   <div className="w-12 h-12 rounded-[1rem] bg-white/20 flex items-center justify-center backdrop-blur-md mb-auto border border-white/20 shadow-inner">
-                      <Tag className="w-6 h-6 text-white" />
+             {/* B2B Trade Hub Hero Card */}
+             <div className="relative overflow-hidden rounded-[2rem] bg-indigo-600 p-5 shadow-xl shadow-indigo-500/20 border border-indigo-500/30">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-[60px] -mr-16 -mt-16" />
+                <div className="relative z-10 flex flex-col h-full">
+                   <div className="flex items-start justify-between mb-5">
+                     <div>
+                       <h3 className="font-black text-sm text-white uppercase tracking-widest">B2B Trade Hub</h3>
+                       <p className="text-[10px] text-indigo-200 font-bold uppercase tracking-widest mt-1">Manage Outbound Sales</p>
+                     </div>
+                     <button
+                       onClick={() => navigate('/warehouse/sell')}
+                       className="bg-white text-indigo-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest active:scale-95 transition-transform flex items-center gap-1.5 shadow-md"
+                     >
+                       <Plus className="w-3.5 h-3.5" /> Sell
+                     </button>
                    </div>
-                   <div className="mt-5">
-                     <h3 className="text-xl font-black text-white tracking-wide">Sell New Collection</h3>
-                     <p className="text-[11px] text-blue-100/90 mt-1.5 leading-relaxed font-medium max-w-[85%]">
-                       Ready to offload? Create a new listing and offer your collected materials to the highest bidders in the network.
-                     </p>
-                   </div>
-                   <div className="absolute right-0 bottom-2 bg-white/20 p-2.5 rounded-full backdrop-blur-xl border border-white/20 group-hover:bg-white/30 transition-colors">
-                     <ChevronRight className="w-5 h-5 text-white" />
+                   
+                   {/* 3 Metrics Row */}
+                   <div className="grid grid-cols-3 gap-2">
+                     <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
+                       <p className="text-xl font-black text-white tracking-tight">{mockListings.length}</p>
+                       <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Active Listings</p>
+                     </div>
+                     <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
+                       <p className="text-xl font-black text-white tracking-tight">{mockBids.length}</p>
+                       <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Offers</p>
+                     </div>
+                     <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
+                       <p className="text-xl font-black text-white tracking-tight">0</p>
+                       <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Completed</p>
+                     </div>
                    </div>
                 </div>
              </div>
 
-             {/* Banner 2: B2B Trade Hub */}
-             <div 
-               onClick={() => navigate('/warehouse/trade')}
-               className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-600 to-teal-800 p-6 shadow-xl shadow-emerald-500/20 border border-emerald-500/30 cursor-pointer active:scale-[0.98] transition-all group mt-4"
-             >
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors z-0 duration-300"></div>
-                <div className="absolute -left-10 top-0 w-40 h-40 bg-white/10 rounded-full blur-3xl z-0"></div>
-                
-                <div className="relative z-10 flex flex-col h-full min-h-[140px]">
-                   <div className="flex justify-between items-start">
-                     <div className="w-12 h-12 rounded-[1rem] bg-white/20 flex items-center justify-center backdrop-blur-md mb-auto border border-white/20 shadow-inner">
-                        <TrendingUp className="w-6 h-6 text-white" />
+             {/* Search and Filter */}
+             <div className="flex gap-2 mt-4">
+               <div className="relative flex-1">
+                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                 <input
+                   type="text"
+                   placeholder="Search materials or buyers..."
+                   value={searchQuery}
+                   onChange={(e) => setSearchQuery(e.target.value)}
+                   className="w-full pl-9 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-[1.25rem] text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:font-medium placeholder:text-slate-400 shadow-sm"
+                 />
+               </div>
+               <button className="w-11 h-11 shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-[1.25rem] flex items-center justify-center text-slate-500 hover:text-indigo-600 transition-colors shadow-sm active:scale-95">
+                 <Filter className="w-4 h-4" />
+               </button>
+             </div>
+
+             {/* Tabs */}
+             <div className="flex overflow-x-auto no-scrollbar gap-2 pb-1">
+               {TRADE_TABS.map((tab) => {
+                 const count = getTradeCount(tab.id);
+                 return (
+                   <button
+                     key={tab.id}
+                     onClick={() => setActiveTradeTab(tab.id)}
+                     className={`flex-1 py-2.5 px-2 rounded-xl text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all border shrink-0 ${
+                       activeTradeTab === tab.id
+                         ? "bg-indigo-600 text-white border-transparent shadow-md"
+                         : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400"
+                     }`}
+                   >
+                     <span>{tab.label}</span>
+                     <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${
+                       activeTradeTab === tab.id
+                         ? "bg-white/25 text-white"
+                         : "bg-slate-100 dark:bg-slate-700 text-slate-500"
+                     }`}>
+                       {count}
+                     </span>
+                   </button>
+                 );
+               })}
+             </div>
+
+             {/* Tab Content */}
+             <div className="mt-2 space-y-3 pb-6">
+               {activeTradeTab === "Listings" && (
+                 <>
+                   {mockListings.length === 0 ? (
+                     <div className="pt-6">
+                       <EmptyState icon={Tag} title="No Active Listings" subtitle="You have not posted any materials for sale." />
                      </div>
-                     <div className="px-3.5 py-1.5 bg-white/20 rounded-full backdrop-blur-xl border border-white/20 shadow-inner">
-                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">{materialSales.filter((s:any) => s.status === 'open').length} Active</span>
+                   ) : (
+                     mockListings.map((item) => (
+                       <div key={item.id} className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 hover:border-indigo-400/50 transition-all">
+                         <div className="flex items-center justify-between mb-3">
+                           <h3 className="font-bold text-sm text-slate-900 dark:text-white capitalize">{item.material}</h3>
+                           <span className="px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100">Listed</span>
+                         </div>
+                         <div className="grid grid-cols-2 gap-3 mb-3">
+                           <div className="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quantity</p>
+                             <p className="text-sm font-black text-slate-700 dark:text-slate-300">{item.quantity} <span className="text-[10px]">KG</span></p>
+                           </div>
+                           <div className="bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Asking Price</p>
+                             <p className="text-sm font-black text-emerald-600">KSh {item.price}/kg</p>
+                           </div>
+                         </div>
+                         <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+                           <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                             <Clock className="w-3 h-3" />
+                             {new Date(item.date).toLocaleDateString()}
+                           </p>
+                           <button className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1.5 rounded-lg active:scale-95 transition-transform">Manage</button>
+                         </div>
+                       </div>
+                     ))
+                   )}
+                 </>
+               )}
+
+               {activeTradeTab === "Bids" && (
+                 <>
+                   {mockBids.length === 0 ? (
+                     <div className="pt-6">
+                       <EmptyState icon={MessageSquareQuote} title="No incoming bids" subtitle="You have no pending offers." />
                      </div>
-                   </div>
-                   <div className="mt-5">
-                     <h3 className="text-xl font-black text-white tracking-wide">B2B Trade Hub</h3>
-                     <p className="text-[11px] text-emerald-100/90 mt-1.5 leading-relaxed font-medium max-w-[85%]">
-                       Manage your active listings, track pending orders from recyclers, and view your sales history.
-                     </p>
-                   </div>
-                   <div className="absolute right-0 bottom-2 bg-white/20 p-2.5 rounded-full backdrop-blur-xl border border-white/20 group-hover:bg-white/30 transition-colors">
-                     <ChevronRight className="w-5 h-5 text-white" />
-                   </div>
-                </div>
+                   ) : (
+                     mockBids.map((bid) => (
+                       <div key={bid.id} className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-indigo-100 dark:border-indigo-900/30 relative overflow-hidden hover:border-indigo-300 transition-all">
+                         <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500" />
+                         <div className="pl-3">
+                           <div className="flex items-center justify-between mb-2">
+                             <h3 className="font-bold text-sm text-slate-900 dark:text-white capitalize">{bid.material}</h3>
+                             <p className="text-sm font-black text-emerald-600">KSh {bid.offeredPrice}/kg</p>
+                           </div>
+                           <div className="flex items-center justify-between mb-4">
+                             <p className="text-xs font-semibold text-slate-500">{bid.buyerName}</p>
+                             <p className="text-[10px] font-bold text-slate-400">{bid.quantity} KG Requested</p>
+                           </div>
+                           <div className="flex gap-2">
+                             <button className="flex-1 py-2.5 bg-white dark:bg-slate-800 text-rose-600 font-bold text-[10px] uppercase tracking-widest rounded-xl border border-rose-200 dark:border-rose-900/50 active:scale-95 transition-transform">Decline</button>
+                             <button className="flex-[2] py-2.5 bg-indigo-600 text-white font-bold text-[10px] uppercase tracking-widest rounded-xl shadow-md active:scale-95 transition-transform">Review Offer</button>
+                           </div>
+                         </div>
+                       </div>
+                     ))
+                   )}
+                 </>
+               )}
+
+               {activeTradeTab === "Counters" && (
+                 <div className="pt-6">
+                   <EmptyState icon={HandCoins} title="No Active Counters" subtitle="No counter-offers pending your review." />
+                 </div>
+               )}
+
+               {activeTradeTab === "History" && (
+                 <div className="pt-6">
+                   <EmptyState icon={CheckCircle2} title="No Trade History" subtitle="Completed B2B sales will appear here." />
+                 </div>
+               )}
              </div>
           </div>
         ) : (
@@ -362,74 +497,73 @@ export default function AgentWarehouse() {
           </div>
         )}
 
-        <div className="space-y-6 h-fit">
-          
-          {/* ── DYNAMIC INVENTORY GRID ── */}
-          <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold text-sm text-slate-900 dark:text-white tracking-wide capitalize">Material Ledger</h3>
-              <span className="text-[10px] font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-full uppercase tracking-widest hidden sm:block">Recent Pickups</span>
-            </div>
-
-            {verifiedAssets.length === 0 ? (
-              <div className="text-center py-10 bg-slate-50 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">
-                <Package className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-                <p className="text-[10px] font-semibold text-slate-500 leading-relaxed uppercase tracking-widest">
-                  Inventory Empty.<br />No verified assets found.
-                </p>
+        {/* ── DYNAMIC INVENTORY GRID (Only for Fleet Drivers) ── */}
+        {profile?.agentAccountType !== 'independent' && (
+          <div className="space-y-6 h-fit">
+            <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="font-semibold text-sm text-slate-900 dark:text-white tracking-wide capitalize">Material Ledger</h3>
+                <span className="text-[10px] font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-full uppercase tracking-widest hidden sm:block">Recent Pickups</span>
               </div>
-            ) : (
-              <div className="space-y-2 pr-1">
-                {verifiedAssets.slice(0, 4).map((asset: any) => {
-                  const displayName = resolveMaterialName(asset);
-                  
-                  return (
-                    <div key={asset.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400/50 transition-all group">
-                      
-                      {/* Left: Name + Date + ID */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-col">
-                          <h4 className="font-bold text-[13px] text-slate-900 dark:text-white capitalize truncate leading-tight">
-                            {displayName}
-                          </h4>
-                          {asset.material_category && (
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                              {asset.material_category.replace(/_/g, ' ')}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-1.5 mt-1.5">
-                          <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                            {new Date(asset.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                          </p>
-                          <div className="flex items-center gap-1.5 self-start px-1.5 py-0.5 bg-white dark:bg-slate-800/80 rounded border border-slate-200/60 dark:border-slate-700/60">
-                            <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Tracking ID</span>
-                            <span className="text-[9px] font-mono font-bold text-slate-600 dark:text-slate-300">
-                              {asset.tracking_id || asset.origin_tracking_id || asset.id.substring(0,8).toUpperCase()}
-                            </span>
+
+              {verifiedAssets.length === 0 ? (
+                <div className="text-center py-10 bg-slate-50 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+                  <Package className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+                  <p className="text-[10px] font-semibold text-slate-500 leading-relaxed uppercase tracking-widest">
+                    Inventory Empty.<br />No verified assets found.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2 pr-1">
+                  {verifiedAssets.slice(0, 4).map((asset: any) => {
+                    const displayName = resolveMaterialName(asset);
+                    
+                    return (
+                      <div key={asset.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400/50 transition-all group">
+                        
+                        {/* Left: Name + Date + ID */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-col">
+                            <h4 className="font-bold text-[13px] text-slate-900 dark:text-white capitalize truncate leading-tight">
+                              {displayName}
+                            </h4>
+                            {asset.material_category && (
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                                {asset.material_category.replace(/_/g, ' ')}
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex flex-col gap-1.5 mt-1.5">
+                            <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
+                              {new Date(asset.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                            </p>
+                            <div className="flex items-center gap-1.5 self-start px-1.5 py-0.5 bg-white dark:bg-slate-800/80 rounded border border-slate-200/60 dark:border-slate-700/60">
+                              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Tracking ID</span>
+                              <span className="text-[9px] font-mono font-bold text-slate-600 dark:text-slate-300">
+                                {asset.tracking_id || asset.origin_tracking_id || asset.id.substring(0,8).toUpperCase()}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Right: Weight & Value */}
-                      <div className="flex flex-col items-end gap-1.5 shrink-0 ml-3">
-                        <div className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800/50">
-                          <p className="text-sm font-black tracking-tight whitespace-nowrap">{asset.weight_kg}<span className="text-[10px] font-bold ml-0.5">kg</span></p>
+                        {/* Right: Weight & Value */}
+                        <div className="flex flex-col items-end gap-1.5 shrink-0 ml-3">
+                          <div className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800/50">
+                            <p className="text-sm font-black tracking-tight whitespace-nowrap">{asset.weight_kg}<span className="text-[10px] font-bold ml-0.5">kg</span></p>
+                          </div>
+                          <p className="text-[9px] font-bold text-slate-400 tracking-wider">
+                            KSh {asset.estimated_value ? asset.estimated_value.toLocaleString() : (parseFloat(asset.weight_kg) * getPrice(asset.material_type)).toLocaleString()}
+                          </p>
                         </div>
-                        <p className="text-[9px] font-bold text-slate-400 tracking-wider">
-                          KSh {asset.estimated_value ? asset.estimated_value.toLocaleString() : (parseFloat(asset.weight_kg) * getPrice(asset.material_type)).toLocaleString()}
-                        </p>
+
                       </div>
-
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
-
-          {/* Market Overview moved to Top Carousel */}
-        </div>
+        )}
       </div>
 
 
