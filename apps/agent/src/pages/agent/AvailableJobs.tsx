@@ -780,10 +780,11 @@ export default function AvailableJobs() {
               </motion.div>
             ) : (
               <motion.div
-                key="list-view"
+                key={`list-view-${activeTab}-${requestedTab}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
               >
                 {filteredJobs.map((job) => {
                   const waste = categories.find((w) => w.slug === job.material) ||
