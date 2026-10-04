@@ -124,8 +124,8 @@ export default function NotificationsPage() {
       <div className="pt-[calc(env(safe-area-inset-top,1rem)+5rem)] px-3 space-y-6 max-w-lg mx-auto pb-6">
         
         {/* Native Push Authorization */}
-        <div className="relative overflow-hidden bg-slate-900 dark:bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-2xl">
-          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-emerald-500/20 blur-3xl rounded-full pointer-events-none" />
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 rounded-2xl p-6 border border-emerald-500/20 shadow-2xl">
+          <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-emerald-500/30 blur-3xl rounded-full pointer-events-none" />
           <div className="relative z-10 flex flex-col items-center text-center">
             <div className="w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mb-4">
               <BellRing className="w-6 h-6 text-emerald-400" />
