@@ -821,7 +821,7 @@ export default function Sourcing() {
                     <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-center scale-110" />
                     <div className="relative z-20 p-4 h-full flex flex-col justify-between">
                       <div>
-                        <h3 className="text-[18px] font-black  tracking-tight leading-tight">Source & Earn</h3>
+                        <h3 className="text-[22px] font-black text-amber-500  tracking-tight leading-tight">Source & Earn</h3>
                         <p className="text-[12px] font-semibold  leading-tight mt-1 max-w-[190px]">Browse materials listed by sellers near you and place bids to start collecting.</p>
                       </div>
                       <div className="flex gap-2">
@@ -838,7 +838,7 @@ export default function Sourcing() {
                     <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover object-right scale-105 " />
                     <div className="relative z-20 p-4 h-full flex flex-col justify-between">
                       <div>
-                        <h3 className="text-[18px] font-black  tracking-tight leading-tight">Get Exactly <span className="text-primary">What You Need</span></h3>
+                        <h3 className="text-[22px] font-black  tracking-tight leading-tight">Get <span className="text-primary">What You Need</span></h3>
                         <p className="text-[12px] font-semibold text-emerald-900  leading-tight mt-1 max-w-[190px]">Create Custom RFQ requests and connect with sellers to get the exact materials you need.</p>
                       </div>
                       <button className="self-start text-[10px] font-black capitalize tracking-wider bg-amber-900 text-amber-400 px-3 py-1.5 rounded-lg active:scale-95 transition-transform shadow-sm">
@@ -849,7 +849,7 @@ export default function Sourcing() {
 
                    {/* Banner 3  */}
                   <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
-                    <img src="/vectors/banner3.webp" alt="Welcome to Sourcing" className="absolute inset-0 w-full h-full object-cover object-center" />
+                    <img src="/vectors/banner3.webp" alt="Welcome to Sourcing" className="absolute inset-0 w-full h-full object-cover object-left" />
                   </div>
 
                 </div>
