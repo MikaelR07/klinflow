@@ -8,7 +8,7 @@ import {
   ChevronRight, MessageSquareQuote, Check,
   ArrowLeft, Clock, Package, CheckCircle2, Info, User, Users,
   SlidersHorizontal, X, ChevronDown, Receipt, Sparkles, FileText,
-  Recycle, Droplets, Cog, ScrollText, Wine, Cpu, Shirt, Apple
+  Recycle, Droplets, Cog, ScrollText, Wine, Cpu, Shirt, Apple, History
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMarketplaceStore } from '@klinflow/core/stores/marketplaceStore';
@@ -756,8 +756,8 @@ export default function Sourcing() {
             </motion.div>
           ) : (
             <div className="space-y-0.5 pb-5">
-              {/* ── ACTION CARDS (My Bids & Buyer Requests) ── */}
-              {!isFleetDriver && (
+              {/* ── ACTION CARDS ── */}
+              {!isFleetDriver ? (
                 <div className="px-2 pb-1 pt-2 grid grid-cols-2 gap-1">
                   {/* My Active Bids */}
                   <button
@@ -793,22 +793,35 @@ export default function Sourcing() {
                     <ChevronRight className="absolute bottom-2.5 right-2.5 w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
                   </button>
                 </div>
+              ) : (
+                <div className="px-2 pb-1 pt-2">
+                  <button
+                    onClick={() => navigate('/trades')}
+                    className="w-full bg-indigo-600 border border-indigo-500/30 rounded-xl p-3 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
+                  >
+                    <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none" />
+                    <div className="w-10 h-10 rounded-[11px] bg-white/20 flex items-center justify-center border border-white/10 text-white shrink-0 group-hover:scale-110 transition-transform relative z-10">
+                      <History className="w-6 h-6" />
+                    </div>
+                    <div className="text-left relative z-10 min-w-0">
+                      <h3 className="text-sm font-black text-white tracking-tight leading-none mb-1 truncate">Recommendation History</h3>
+                      <p className="text-[11px] font-semibold text-indigo-200 leading-none truncate">View past sourced drop-offs</p>
+                    </div>
+                    <ChevronRight className="absolute bottom-2.5 right-2.5 w-4 h-4 text-white/40 group-hover:text-white transition-colors" />
+                  </button>
+                </div>
               )}
 
               {/* ── SCROLLABLE BANNERS ── */}
               <div className="px-3">
-                <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pt-1 pb-1 no-scrollbar pr-4">
-                  {/* Banner 3 (New First) */}
-                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
-                    <img src="/vectors/banner3.webp" alt="Welcome to Sourcing" className="absolute inset-0 w-full h-full object-cover object-center" />
-                  </div>
-
+                <div className="flex overflow-x-auto snap-x snap-mandatory gap-1.5 pt-1 pb-1 no-scrollbar pr-4">
+                 
                   {/* Banner 1 */}
                   <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-primary bg-slate-900 group cursor-pointer">
-                    <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-center " />
+                    <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-center scale-110" />
                     <div className="relative z-20 p-4 h-full flex flex-col justify-between">
                       <div>
-                        <h3 className="text-[17px] font-black  tracking-tight leading-tight">Source & Earn</h3>
+                        <h3 className="text-[18px] font-black  tracking-tight leading-tight">Source & Earn</h3>
                         <p className="text-[12px] font-semibold  leading-tight mt-1 max-w-[190px]">Browse materials listed by sellers near you and place bids to start collecting.</p>
                       </div>
                       <div className="flex gap-2">
@@ -822,10 +835,10 @@ export default function Sourcing() {
 
                   {/* Banner 2 */}
                   <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-amber-400 bg-emerald-900 group cursor-pointer">
-                    <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover object-right " />
+                    <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover object-right scale-105 " />
                     <div className="relative z-20 p-4 h-full flex flex-col justify-between">
                       <div>
-                        <h3 className="text-[17px] font-black  tracking-tight leading-tight">Get Exactly <span className="text-primary">What You Need</span></h3>
+                        <h3 className="text-[18px] font-black  tracking-tight leading-tight">Get Exactly <span className="text-primary">What You Need</span></h3>
                         <p className="text-[12px] font-semibold text-emerald-900  leading-tight mt-1 max-w-[190px]">Create Custom RFQ requests and connect with sellers to get the exact materials you need.</p>
                       </div>
                       <button className="self-start text-[10px] font-black capitalize tracking-wider bg-amber-900 text-amber-400 px-3 py-1.5 rounded-lg active:scale-95 transition-transform shadow-sm">
@@ -833,6 +846,12 @@ export default function Sourcing() {
                       </button>
                     </div>
                   </div>
+
+                   {/* Banner 3  */}
+                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
+                    <img src="/vectors/banner3.webp" alt="Welcome to Sourcing" className="absolute inset-0 w-full h-full object-cover object-left " />
+                  </div>
+
                 </div>
               </div>
 
