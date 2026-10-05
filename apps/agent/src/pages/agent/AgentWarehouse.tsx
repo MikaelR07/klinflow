@@ -499,7 +499,7 @@ export default function AgentWarehouse() {
           // --- FLEET DRIVER VIEW ---
           <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-3 pb-2 -mx-1.5 px-1.5">
             <div className="snap-center shrink-0 w-full">
-              <div className="bg-blue-600 p-4 rounded-xl relative overflow-hidden group border border-blue-500/50 h-full flex flex-col justify-between">
+              <div className="bg-indigo-600 p-5 rounded-2xl relative overflow-hidden group shadow-xl shadow-indigo-500/20 border border-indigo-500/30 h-full flex flex-col justify-between">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-[60px] -mr-16 -mt-16" />
                 <div className="relative z-10 flex-1 flex flex-col">
                   {/* Top Estimated Weight */}
@@ -517,29 +517,29 @@ export default function AgentWarehouse() {
                   </div>
 
                   {/* 3 Metrics Row */}
-                  <div className="grid grid-cols-3 gap-1 mb-4">
-                    <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    <div className="p-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
                       <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center mb-0.5">
                         <Wallet className="w-3.5 h-3.5 text-white" />
                       </div>
                       <p className="text-xs font-black text-white tracking-tight whitespace-nowrap">KSh {totalEstimatedValue.toLocaleString()}</p>
-                      <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Value</p>
+                      <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Value</p>
                     </div>
 
-                    <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
+                    <div className="p-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
                       <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
                         <Scale className="w-3.5 h-3.5 text-white" />
                       </div>
                       <p className="text-xs font-black text-white tracking-tight whitespace-nowrap">{totalVerifiedWeight.toFixed(1)} KG</p>
-                      <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Verified</p>
+                      <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Verified</p>
                     </div>
 
-                    <div className="p-2 bg-blue-700 backdrop-blur-sm rounded-xl border border-blue-600 flex flex-col items-center justify-center text-center gap-1">
+                    <div className="p-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
                       <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
                         <Package className="w-3.5 h-3.5 text-white" />
                       </div>
                       <p className="text-xs font-black text-white tracking-tight">{verifiedAssets.length}</p>
-                      <p className="text-[8px] font-bold text-blue-100 uppercase tracking-widest">Assets</p>
+                      <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Assets</p>
                     </div>
                   </div>
 
@@ -554,7 +554,7 @@ export default function AgentWarehouse() {
                         <button
                           onClick={handleDispatch}
                           disabled={verifiedAssets.length === 0}
-                          className="w-full py-3.5 bg-white text-blue-600 rounded-[1rem] font-black text-xs uppercase tracking-widest shadow-md active:scale-95 transition-all disabled:opacity-50"
+                          className="w-full py-3.5 bg-white text-indigo-600 rounded-[1rem] font-black text-xs uppercase tracking-widest shadow-md active:scale-95 transition-all disabled:opacity-50"
                         >
                           Get Check-In Code
                         </button>
