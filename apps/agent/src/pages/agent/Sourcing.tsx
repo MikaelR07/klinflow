@@ -332,8 +332,8 @@ export default function Sourcing() {
               </button>
 
               <div className="text-center">
-                <h1 className="text-lg font-bold text-white capitalize tracking-tighter leading-none">Material Marketplace</h1>
-                <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-[0.2em] mt-1">Sourcing Portal</p>
+                <h1 className="text-lg font-bold text-white capitalize tracking-tighter leading-none">Klinflow Marketplace</h1>
+                <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-[0.2em] mt-1">Explore & Buy</p>
               </div>
 
               <div className="w-10" /> {/* Spacer */}
@@ -798,6 +798,11 @@ export default function Sourcing() {
               {/* ── SCROLLABLE BANNERS ── */}
               <div className="px-3">
                 <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 pt-1 pb-1 no-scrollbar pr-4">
+                  {/* Banner 3 (New First) */}
+                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
+                    <img src="/vectors/banner3.webp" alt="Welcome to Sourcing" className="absolute inset-0 w-full h-full object-cover object-center" />
+                  </div>
+
                   {/* Banner 1 */}
                   <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-primary bg-slate-900 group cursor-pointer">
                     <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-center " />
