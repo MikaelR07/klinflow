@@ -847,11 +847,7 @@ export default function Sourcing() {
                     </div>
                   </div>
 
-                   {/* Banner 3  */}
-                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-900 group cursor-pointer">
-                    <img src="/vectors/banner3.webp" alt="Welcome to Sourcing" className="absolute inset-0 w-full h-full object-cover object-left" />
-                  </div>
-
+                  
                 </div>
               </div>
 

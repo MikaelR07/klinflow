@@ -319,7 +319,7 @@ export default function AgentWarehouse() {
           // --- INDEPENDENT AGENT VIEW: B2B TRADE HUB ---
           <div className="space-y-4 px-1 pb-2">
              {/* B2B Trade Hub Hero Card */}
-             <div className="relative overflow-hidden rounded-2xl bg-indigo-600 p-5 shadow-xl shadow-indigo-500/20 border border-indigo-500/30">
+             <div className="relative overflow-hidden rounded-2xl bg-indigo-600 p-5  border border-indigo-500/30">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-[60px] -mr-16 -mt-16" />
                 <div className="relative z-10 flex flex-col h-full">
                    <div className="flex items-start justify-between mb-5">
@@ -499,7 +499,7 @@ export default function AgentWarehouse() {
           // --- FLEET DRIVER VIEW ---
           <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-3 pb-2 -mx-1.5 px-1.5">
             <div className="snap-center shrink-0 w-full">
-              <div className="bg-indigo-600 p-5 rounded-2xl relative overflow-hidden group shadow-xl shadow-indigo-500/20 border border-indigo-500/30 h-full flex flex-col justify-between">
+              <div className="bg-indigo-600 p-5 rounded-2xl relative overflow-hidden group border border-indigo-500/30 h-full flex flex-col justify-between">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-[60px] -mr-16 -mt-16" />
                 <div className="relative z-10 flex-1 flex flex-col">
                   {/* Top Estimated Weight */}
