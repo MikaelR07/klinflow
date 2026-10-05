@@ -101,41 +101,42 @@ export default function AgentHomeStats({
       {/* SCROLLABLE CONTENT AREA */}
       <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-2 mt-2">
         {/* ── HERO CARD (Balances + Performance Stats) ── */}
-        <div className="relative overflow-hidden rounded-3xl bg-slate-50 dark:bg-slate-800 p-5 border border-slate-200/60 dark:border-slate-700 shadow-sm shrink-0">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 p-5 border border-emerald-500/30 shadow-lg shrink-0">
+            <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none bg-emerald-400/20" />
             
             {/* ── BALANCES SECTION ── */}
             <div className="relative z-10 flex items-start justify-between gap-4 mb-2">
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-0.5 tracking-widest uppercase">Collected Value</p>
+                <p className="text-[10px] font-bold text-emerald-200/80 mb-0.5 tracking-widest uppercase">Collected Value</p>
                 <div className="flex items-baseline gap-1 min-w-0">
-                  <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 shrink-0">KSh</span>
-                  <h2 className="text-2xl font-black text-slate-900 dark:text-white truncate">{(earnings?.inventoryValue || 0).toLocaleString()}</h2>
+                  <span className="text-sm font-bold text-emerald-300 shrink-0">KSh</span>
+                  <h2 className="text-2xl font-black text-white truncate">{(earnings?.inventoryValue || 0).toLocaleString()}</h2>
                 </div>
-                <div className="text-[10px] font-bold mt-0.5 text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <div className="text-[10px] font-bold mt-0.5 text-emerald-200/70 flex items-center gap-1">
                   {performanceChange >= 0 ? (
-                    <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-500/20 px-1.5 py-0.5 rounded">↑ {performanceChange.toFixed(0)}%</span>
+                    <span className="text-emerald-100 bg-white/15 px-1.5 py-0.5 rounded">↑ {performanceChange.toFixed(0)}%</span>
                   ) : (
-                    <span className="text-rose-700 dark:text-rose-300 bg-rose-100 dark:bg-rose-500/20 px-1.5 py-0.5 rounded">↓ {Math.abs(performanceChange).toFixed(0)}%</span>
+                    <span className="text-rose-200 bg-rose-500/20 px-1.5 py-0.5 rounded">↓ {Math.abs(performanceChange).toFixed(0)}%</span>
                   )}
                   today
                 </div>
               </div>
-              <div className="w-px h-12 self-center bg-slate-200 dark:bg-slate-700" />
+              <div className="w-px h-12 self-center bg-white/20" />
               <div className="flex-1 min-w-0 flex flex-col items-end text-right">
-                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mb-0.5 tracking-widest uppercase">Trading Balance</p>
+                <p className="text-[10px] font-bold text-emerald-200/80 mb-0.5 tracking-widest uppercase">Trading Balance</p>
                 <div className="flex items-baseline justify-end gap-1 min-w-0 w-full">
-                  <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 shrink-0">KSh</span>
-                  <h2 className="text-2xl font-black text-slate-900 dark:text-white truncate">{(profile?.walletBalance || 0).toLocaleString()}</h2>
+                  <span className="text-sm font-bold text-emerald-300 shrink-0">KSh</span>
+                  <h2 className="text-2xl font-black text-white truncate">{(profile?.walletBalance || 0).toLocaleString()}</h2>
                 </div>
-                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mt-0.5">Available Cash</p>
+                <p className="text-[10px] font-bold text-emerald-200/70 mt-0.5">Available Cash</p>
               </div>
             </div>
 
             {/* ── PICKUPS INDICATOR ── */}
-            <div className="relative z-10 flex items-center gap-2.5 border-t border-slate-200 dark:border-slate-700 pt-2">
-              <Truck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span className="text-[12px] font-bold text-slate-500 dark:text-slate-400">
-                <span className="text-slate-900 dark:text-white font-black">{profile?.stats?.totalPickups || 0}</span> pickups completed
+            <div className="relative z-10 flex items-center gap-2.5 border-t border-white/15 pt-2">
+              <Truck className="w-5 h-5 text-emerald-300 shrink-0" />
+              <span className="text-[12px] font-bold text-emerald-200/80">
+                <span className="text-white font-black">{profile?.stats?.totalPickups || 0}</span> pickups completed
               </span>
             </div>
         </div>

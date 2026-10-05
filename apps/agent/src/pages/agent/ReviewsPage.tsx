@@ -116,7 +116,7 @@ export default function ReviewsPage() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] px-1.5 mx-auto max-w-lg w-full space-y-6">
 
       {/* Rating & Breakdown */}
-      <div className="bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 rounded-xl p-6  border border-amber-400/50 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-amber-600 via-amber-600 to-amber-700 rounded-xl p-6  border border-amber-400/50 relative overflow-hidden">
         {/* Subtle decorative background element */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
 
@@ -130,7 +130,7 @@ export default function ReviewsPage() {
             </div>
             <div className="flex gap-0.5 mt-1.5">
               {[1, 2, 3, 4, 5].map(s => (
-                <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.round(Number(stats.total === 0 ? 0 : (stats.average || profile?.rating || 0))) ? 'fill-white text-white' : 'text-amber-700/40'}`} />
+                <Star key={s} className={`w-3.5 h-3.5 ${s <= Math.round(Number(stats.total === 0 ? 0 : (stats.average || profile?.rating || 0))) ? 'fill-white text-white' : 'text-amber-200'}`} />
               ))}
             </div>
             <p className="text-[13px] text-amber-100 mt-1.5 font-bold">{stats.total} review{stats.total !== 1 ? 's' : ''}</p>
@@ -153,7 +153,7 @@ export default function ReviewsPage() {
               [5, 4, 3, 2, 1].map(s => (
                 <div key={s} className="flex items-center gap-2">
                   <span className="text-[10px] font-black text-amber-100 w-3">{s}★</span>
-                  <div className="flex-1 h-1.5 bg-amber-700/30 rounded-full" />
+                  <div className="flex-1 h-1.5 bg-amber-200/30 rounded-full" />
                   <span className="text-[10px] font-black text-amber-100 w-6 text-right">0%</span>
                 </div>
               ))

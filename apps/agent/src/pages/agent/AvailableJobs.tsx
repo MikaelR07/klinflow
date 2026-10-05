@@ -785,7 +785,7 @@ export default function AvailableJobs() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="space-y-2.5 mx-1.5"
+                className="space-y-2 mx-1.5"
               >
                 {filteredJobs.map((job) => {
                   const waste = categories.find((w) => w.slug === job.material) ||

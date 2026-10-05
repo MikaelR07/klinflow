@@ -115,7 +115,7 @@ export default function NotificationsPage() {
           </button>
           <div className="text-center">
             <h1 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight leading-none">Notifications</h1>
-            <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-1">Rule Engine V3</p>
+            <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-1">Set your notification preferences</p>
           </div>
           <div className="w-10 h-10 shrink-0" />
         </div>
@@ -131,7 +131,7 @@ export default function NotificationsPage() {
               <BellRing className="w-6 h-6 text-emerald-400" />
             </div>
             <h2 className="text-[15px] font-bold text-white tracking-tight mb-2">Native Push Alerts</h2>
-            <p className="text-[12px] text-slate-400 mb-6 font-medium leading-relaxed px-2">
+            <p className="text-[12px] text-slate-300 mb-6 font-medium leading-relaxed px-2">
               Receive critical dispatch and earnings alerts even when the app is closed.
             </p>
             <button 

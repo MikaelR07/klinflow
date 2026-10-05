@@ -213,11 +213,11 @@ export default function DepositPage() {
         )}
       </AnimatePresence>
 
-      {/* ── TOP SECTION: BLUE WITH ROUNDED BOTTOM ── */}
-      <div className="bg-blue-700 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)] pb-6 rounded-b-[2rem] shadow-sm relative z-20">
+      {/* ── TOP SECTION: EMERALD WITH ROUNDED BOTTOM ── */}
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)] pb-6 rounded-b-[2rem] shadow-sm relative z-20">
         
         {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-blue-700/90 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-3 px-4 max-w-lg mx-auto flex items-center gap-3 shadow-sm">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-emerald-600/90 to-emerald-800/90 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-3 px-4 max-w-lg mx-auto flex items-center gap-3 shadow-sm">
           <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center active:scale-95 transition-all border border-white/20">
             <ArrowLeft className="w-5 h-5 text-white" />
           </button>
@@ -228,7 +228,7 @@ export default function DepositPage() {
 
         {/* Centered Balance */}
         <div className="text-center px-4 mb-6">
-          <p className="text-[11px] font-bold text-blue-100/70 uppercase tracking-widest mb-1.5">Available Balance</p>
+          <p className="text-[11px] font-bold text-emerald-100/70 uppercase tracking-widest mb-1.5">Available Balance</p>
           <div className="flex items-baseline justify-center gap-1 text-white">
             <span className="text-xl font-bold">KSh</span>
             <span className="text-3xl font-black leading-none">
@@ -239,12 +239,12 @@ export default function DepositPage() {
         
         {/* ACTION BUTTONS */}
         <div className="flex items-center justify-center gap-3 px-4 mt-4">
-          <button onClick={() => setIsDepositModalOpen(true)} className="flex-1 py-3.5 px-2 bg-blue-600 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all border border-blue-600 shadow-inner backdrop-blur-sm">
+          <button onClick={() => setIsDepositModalOpen(true)} className="flex-1 py-3.5 px-2 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all border border-white/10">
             <ArrowDownToLine className="w-4 h-4 text-white" />
             <span className="text-[11px] font-bold text-white tracking-wider uppercase">Deposit</span>
           </button>
 
-          <button onClick={() => navigate('/payout-history')} className="flex-1 py-3.5 px-2 bg-blue-600 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all border border-blue-600">
+          <button onClick={() => navigate('/payout-history')} className="flex-1 py-3.5 px-2 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all border border-white/10">
             <History className="w-4 h-4 text-white" />
             <span className="text-[11px] font-bold text-white tracking-wider uppercase">History</span>
           </button>
