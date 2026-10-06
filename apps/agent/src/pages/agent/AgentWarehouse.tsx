@@ -324,14 +324,14 @@ export default function AgentWarehouse() {
                 <div className="relative z-10 flex flex-col h-full">
                    <div className="flex items-start justify-between mb-5">
                      <div>
-                       <h3 className="font-black text-sm text-white uppercase tracking-widest">B2B Trade Hub</h3>
+                       <h3 className="font-black text-sm text-white uppercase tracking-widest">Agent Sales Hub</h3>
                        <p className="text-[10px] text-indigo-200 font-bold uppercase tracking-widest mt-1">Manage Outbound Sales</p>
                      </div>
                      <button
                        onClick={() => navigate('/warehouse/sell')}
                        className="bg-white text-indigo-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest active:scale-95 transition-transform flex items-center gap-1.5 shadow-md"
                      >
-                       <Plus className="w-3.5 h-3.5" /> Sell
+                       <Plus className="w-3.5 h-3.5" /> Sell 
                      </button>
                    </div>
                    

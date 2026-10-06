@@ -756,9 +756,48 @@ export default function Sourcing() {
             </motion.div>
           ) : (
             <div className="space-y-0.5 pb-5">
+              {/* ── SCROLLABLE BANNERS ── */}
+              <div className="px-3 pb-1">
+                <div className="flex overflow-x-auto snap-x snap-mandatory gap-1.5 pt-1 pb-1 no-scrollbar pr-4">
+                 
+                  {/* Banner 1 */}
+                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-primary bg-slate-900 group cursor-pointer">
+                    <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-center scale-110" />
+                    <div className="relative z-20 p-4 h-full flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-[22px] font-black text-amber-600 dark:text-amber-600 tracking-tight leading-tight">Source & Earn</h3>
+                        <p className="text-[12px] font-semibold dark:text-slate-900 leading-tight mt-1 max-w-[190px]">Browse materials listed by sellers near you and place bids to start collecting.</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 border border-white/10">
+                          <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-[11px] font-bold text-white">{filteredListings.length} Listings</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Banner 2 */}
+                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-amber-400 bg-emerald-900 group cursor-pointer">
+                    <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover object-right scale-105 " />
+                    <div className="relative z-20 p-4 h-full flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-[22px] font-black text-green-600 dark:text-green-600 tracking-tight leading-tight">Get <span className="text-primary">What You Need</span></h3>
+                        <p className="text-[12px] font-semibold text-emerald-900  leading-tight mt-1 max-w-[190px]">Create Custom RFQ requests and connect with sellers to get the exact materials you need.</p>
+                      </div>
+                      <button className="self-start text-[10px] font-black capitalize tracking-wider bg-amber-900 text-amber-400 px-3 py-1.5 rounded-lg active:scale-95 transition-transform shadow-sm">
+                        Create RFQ
+                      </button>
+                    </div>
+                  </div>
+
+                  
+                </div>
+              </div>
+
               {/* ── ACTION CARDS ── */}
               {!isFleetDriver ? (
-                <div className="px-2 pb-1 pt-2 grid grid-cols-2 gap-1">
+                <div className="px-2 pb-1 grid grid-cols-2 gap-1">
                   {/* My Active Bids */}
                   <button
                     onClick={() => navigate('/bids')}
@@ -794,7 +833,7 @@ export default function Sourcing() {
                   </button>
                 </div>
               ) : (
-                <div className="px-2 pb-1 pt-2">
+                <div className="px-2 pb-1">
                   <button
                     onClick={() => navigate('/trades')}
                     className="w-full bg-indigo-600 border border-indigo-500/30 rounded-xl p-3 flex items-center gap-3.5 shadow-sm hover:shadow-md active:scale-[0.98] transition-all group relative overflow-hidden"
@@ -811,45 +850,6 @@ export default function Sourcing() {
                   </button>
                 </div>
               )}
-
-              {/* ── SCROLLABLE BANNERS ── */}
-              <div className="px-3">
-                <div className="flex overflow-x-auto snap-x snap-mandatory gap-1.5 pt-1 pb-1 no-scrollbar pr-4">
-                 
-                  {/* Banner 1 */}
-                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-primary bg-slate-900 group cursor-pointer">
-                    <img src="/vectors/banner1.webp" alt="Source and Earn" className="absolute inset-0 w-full h-full object-cover object-center scale-110" />
-                    <div className="relative z-20 p-4 h-full flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-[22px] font-black text-amber-500  tracking-tight leading-tight">Source & Earn</h3>
-                        <p className="text-[12px] font-semibold  leading-tight mt-1 max-w-[190px]">Browse materials listed by sellers near you and place bids to start collecting.</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <div className="flex items-center gap-1.5 bg-black/30 backdrop-blur-md rounded-lg px-3 py-2 border border-white/10">
-                          <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-[11px] font-bold text-white">{filteredListings.length} Listings</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Banner 2 */}
-                  <div className="snap-center relative shrink-0 w-[96%] sm:w-[85%] h-[160px] rounded-2xl overflow-hidden border border-amber-400 bg-emerald-900 group cursor-pointer">
-                    <img src="/vectors/banner2.webp" alt="Explore Categories" className="absolute inset-0 w-full h-full object-cover object-right scale-105 " />
-                    <div className="relative z-20 p-4 h-full flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-[22px] font-black  tracking-tight leading-tight">Get <span className="text-primary">What You Need</span></h3>
-                        <p className="text-[12px] font-semibold text-emerald-900  leading-tight mt-1 max-w-[190px]">Create Custom RFQ requests and connect with sellers to get the exact materials you need.</p>
-                      </div>
-                      <button className="self-start text-[10px] font-black capitalize tracking-wider bg-amber-900 text-amber-400 px-3 py-1.5 rounded-lg active:scale-95 transition-transform shadow-sm">
-                        Create RFQ
-                      </button>
-                    </div>
-                  </div>
-
-                  
-                </div>
-              </div>
 
               {/* ── MATERIAL CATEGORY CHIPS ── */}
               <div className="relative pt-3">

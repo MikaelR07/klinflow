@@ -782,7 +782,7 @@ export default function AvailableJobs() {
               </motion.div>
             ) : (
               <motion.div
-                key={`list-view-${activeTab}-${requestedTab}`}
+                key="list-view"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
