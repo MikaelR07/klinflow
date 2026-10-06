@@ -7,7 +7,9 @@ import {
   Handshake, Truck, Star, Zap, Briefcase, Receipt, PlusSquare,
   MapPinPlus, Package, BarChart3Icon, ChevronRight, Route,
   Navigation, Radar, Moon, MapPin, CheckCircle, XCircle,
-  User, Clock, Scale, Store, FileText, Users
+  User, Clock, Scale, Store, FileText, Users,
+  Wallet,
+  UserStar
 } from 'lucide-react';
 import { supabase } from '@klinflow/supabase';
 import type { AgentEarningsData } from './agentHome.types';
@@ -161,7 +163,7 @@ export default function AgentHomeStats({
 
               <button onClick={() => navigate(profile?.agentAccountType === 'fleet_driver' ? '/deposit' : '/wallet')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
                 <div className="relative w-9 h-9 shrink-0 bg-amber-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a8 8 0 0 1-5-1.52.5.5 0 0 1-.1-.63l2.25-3.82a.5.5 0 0 0-.1-.63z"/><path d="M5 21h14a2 2 0 0 0 2-2v-3.5"/><path d="M5 21a2 2 0 0 1-2-2V7"/><path d="M11 7v13"/></svg>
+                  <Wallet className="w-5 h-5" />
                 </div>
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Wallet</span>
               </button>
@@ -175,9 +177,9 @@ export default function AgentHomeStats({
 
               <button onClick={() => navigate('/reviews')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
                 <div className="relative w-9 h-9 shrink-0 bg-emerald-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
-                  <Star className="w-5 h-5" />
+                  <UserStar className="w-5 h-5" />
                 </div>
-                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Rating</span>
+                <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Reviews</span>
               </button>
 
             </div>

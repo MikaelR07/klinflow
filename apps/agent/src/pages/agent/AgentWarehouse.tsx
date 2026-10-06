@@ -255,7 +255,7 @@ export default function AgentWarehouse() {
             </button>
             <div>
               <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Sales Warehouse</h1>
-              <p className="text-[9px] text-emerald-100 font-medium tracking-wider capitalize mt-0.5">Manage your outbound collection sales.</p>
+              <p className="text-[9px] text-emerald-100 font-medium tracking-wider capitalize mt-0.5">Manage your outbound collection.</p>
             </div>
           </div>
         </div>
