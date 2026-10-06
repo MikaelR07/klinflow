@@ -1,7 +1,7 @@
 /**
  * Sourcing Page — Agent's marketplace portal for buying recyclable materials
  */
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, MapPin, Scale, TrendingUp,
@@ -17,7 +17,6 @@ import { supabase } from '@klinflow/supabase';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { OptimizedImage } from '@klinflow/ui';
 import { toast } from 'sonner';
-import { Virtuoso } from 'react-virtuoso';
 
 // Category badge color map
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; darkBg: string; darkText: string }> = {
@@ -67,10 +66,24 @@ export default function Sourcing() {
   const [acceptedTradesCount, setAcceptedTradesCount] = useState(0);
   const [activeBidsVolume, setActiveBidsVolume] = useState(0);
 
+  // Memoize offer/recommendation lookup sets for O(1) checks
+  const offerIdSet = useMemo(() => new Set(sentOffers.map(o => o.listingId)), [sentOffers]);
+  const recommendationIdSet = useMemo(() => new Set(recommendations.map(r => r.listing_id)), [recommendations]);
+
+  const getHasOfferMemo = useCallback((listingId: string) => offerIdSet.has(listingId), [offerIdSet]);
+  const getHasRecommendedMemo = useCallback((listingId: string) => recommendationIdSet.has(listingId), [recommendationIdSet]);
+
   useEffect(() => {
     setActiveBidsCount(sentOffers.length || 0);
 
-    // Fetch accepted trades count from bookings
+    // Sum volume directly from active sent offers
+    const volume = sentOffers
+      .reduce((acc, o) => acc + (Number(o.quantity || 0)), 0);
+    setActiveBidsVolume(volume);
+  }, [sentOffers]);
+
+  // Fetch accepted trades count separately — only when profile changes
+  useEffect(() => {
     if (profile?.id) {
       supabase
         .from('bookings')
@@ -81,12 +94,7 @@ export default function Sourcing() {
         .neq('status', 'cancelled')
         .then(({ count }) => setAcceptedTradesCount(count || 0));
     }
-
-    // Sum volume directly from active sent offers
-    const volume = sentOffers
-      .reduce((acc, o) => acc + (Number(o.quantity || 0)), 0);
-    setActiveBidsVolume(volume);
-  }, [sentOffers, listings, profile?.id]);
+  }, [profile?.id]);
 
   useEffect(() => {
     fetchListings();
@@ -235,13 +243,8 @@ export default function Sourcing() {
     }
   };
 
-  const getHasRecommended = (listingId: string) => {
-    return recommendations.some(r => r.listing_id === listingId);
-  };
-
-  const getHasOffer = (listingId) => {
-    return sentOffers.some(o => o.listingId === listingId);
-  };
+  const getHasRecommended = getHasRecommendedMemo;
+  const getHasOffer = getHasOfferMemo;
 
   const filteredListings = useMemo(() => {
     // If the Direct Requests tab is active, show targeted listings (both pickup & dropoff)
@@ -942,13 +945,12 @@ export default function Sourcing() {
                   <p className="text-sm font-semibold text-slate-400">No materials found nearby</p>
                 </div>
               ) : (
-                <Virtuoso
-                  useWindowScroll
-                  data={filteredListings}
-                  itemContent={(index, listing) => (
+                <div className="space-y-2 mx-1.5">
+                  {filteredListings.map((listing) => (
                     <div
+                      key={listing.id}
                       onClick={() => setSelectedId(listing.id)}
-                      className="bg-white dark:bg-slate-900/60 shadow-sm border border-slate-200 dark:border-slate-800 rounded-2xl active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden mb-2 mx-1.5"
+                      className="bg-white dark:bg-slate-900/60 shadow-sm border border-slate-200 dark:border-slate-800 rounded-2xl active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden"
                     >
                       <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
                       <div className="flex gap-3 pl-4 pr-3.5 py-3">
@@ -1033,8 +1035,8 @@ export default function Sourcing() {
                         <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
                       </div>
                     </div>
-                  )}
-                />
+                  ))}
+                </div>
               )}
             </div>
           )}
