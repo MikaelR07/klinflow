@@ -58,7 +58,7 @@ export default function SettingsMenu() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
 
         {/* ── PROFILE BENTO CARD ── */}
-        <div className="bg-gradient-to-t from-slate-600 to-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+        <div className="bg-gradient-to-tr from-amber-600 to-amber-700 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 relative overflow-hidden">
 
           <div className="flex items-center gap-4 relative z-10">
             <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-1 border-white dark:border-slate-900 overflow-hidden flex items-center justify-center text-3xl">
@@ -78,14 +78,14 @@ export default function SettingsMenu() {
                 
               </div>
               <div className="flex flex-col gap-1 items-start">
-                <p className="text-[11px] font-bold text-emerald-500 capitalize tracking-widest">{profile?.phone}</p>
+                <p className="text-[11px] font-bold text-amber-100 capitalize tracking-widest">{profile?.phone}</p>
                 {profile?.klinflowId && (
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(profile.klinflowId!);
                       toast.success('Klinflow ID copied');
                     }}
-                    className="flex items-center gap-1.5 bg-slate-800/60 hover:bg-slate-700/60 transition-colors px-2 py-1 rounded-md border border-slate-600/50 active:scale-95"
+                    className="flex items-center gap-1.5 bg-slate-800/60 px-2 py-1 rounded-md border border-slate-600/50 active:scale-95"
                   >
                     <span className="text-[10px] font-mono font-bold text-slate-200 tracking-wider">KLIN_ID: {profile.klinflowId}</span>
                     <Copy className="w-3 h-3 text-slate-400" />
