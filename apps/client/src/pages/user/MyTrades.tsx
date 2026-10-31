@@ -300,14 +300,14 @@ export default function MyTrades() {
                     <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{offer.material}</h3>
+                          <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{offer.material}</h3>
                           <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 flex items-center gap-0.5 shrink-0">BID</span>
                           {(offer.listing?.pickupMode === 'dropoff' || offer.listing?.pickup_mode === 'dropoff') && (
                             <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 flex items-center gap-0.5 shrink-0"><Home className="w-2.5 h-2.5" />DROP-OFF</span>
                           )}
                         </div>
                         <div className="text-right shrink-0 ml-2 mt-1">
-                          <p className="text-base font-black text-emerald-600 leading-none tracking-tighter">KSh {offer.offeredPrice}<span className="text-[9px] text-emerald-600/70 font-black">/kg</span></p>
+                          <p className="text-base font-bold text-emerald-600 leading-none tracking-tighter">KSh {offer.offeredPrice}<span className="text-[9px] text-emerald-600/70 font-bold">/kg</span></p>
                         </div>
                       </div>
                       <div className="flex items-center justify-between mt-0.5">
@@ -315,7 +315,7 @@ export default function MyTrades() {
                       </div>
                       <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
                         <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0"><Clock className="w-2.5 h-2.5 text-slate-900" /> {offer.createdAt ? new Date(offer.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}</p>
-                        <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {offer.quantity} KG</p>
+                        <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {offer.quantity} KG</p>
                       </div>
                     </div>
                     <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
@@ -365,9 +365,9 @@ export default function MyTrades() {
                     </div>
                     <hr className="border-slate-100 dark:border-slate-800/60" />
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="flex items-start gap-3"><User className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Agent Name</p><p className="text-xs font-black text-slate-900 dark:text-white capitalize">{selectedOffer.buyerName}</p></div></div>
-                      <div className="flex items-start gap-3"><Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Agent Bid</p><p className="text-xs font-black text-emerald-600 leading-none">KSh {selectedOffer.offeredPrice}/kg</p></div></div>
-                      <div className="flex items-start gap-3"><Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Requested Volume</p><p className="text-xs font-black text-slate-900 dark:text-white capitalize">{selectedOffer.quantity} KG</p></div></div>
+                      <div className="flex items-start gap-3"><User className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Agent Name</p><p className="text-xs font-bold text-slate-900 dark:text-white capitalize">{selectedOffer.buyerName}</p></div></div>
+                      <div className="flex items-start gap-3"><Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Agent Bid</p><p className="text-xs font-bold text-emerald-600 leading-none">KSh {selectedOffer.offeredPrice}/kg</p></div></div>
+                      <div className="flex items-start gap-3"><Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Requested Volume</p><p className="text-xs font-bold text-slate-900 dark:text-white capitalize">{selectedOffer.quantity} KG</p></div></div>
                       <div className="flex items-start gap-3"><MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p><span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block truncate max-w-[120px]">{selectedOffer.listing?.location || "Nairobi Hub"}</span></div></div>
                       <div className="flex items-start gap-3"><Clock className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Time Sent</p><span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{selectedOffer.createdAt ? new Date(selectedOffer.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}</span></div></div>
                     </div>
@@ -375,7 +375,7 @@ export default function MyTrades() {
                 </div>
                 <div className="bg-emerald-600 dark:bg-emerald-700 p-2 rounded-xl border border-emerald-500/20 flex flex-col justify-center text-center">
                   <p className="text-[10px] font-bold text-white dark:text-slate-200 capitalize tracking-widest mb-1">Expected Value</p>
-                  <p className="text-xl font-black text-white dark:text-white leading-none">KSh {(parseFloat(selectedOffer.listing?.pricePerKg || '0') * parseFloat(selectedOffer.listing?.quantity || '0')).toLocaleString()}</p>
+                  <p className="text-xl font-bold text-white dark:text-white leading-none">KSh {(parseFloat(selectedOffer.listing?.pricePerKg || '0') * parseFloat(selectedOffer.listing?.quantity || '0')).toLocaleString()}</p>
                   <p className="text-[10px] text-emerald-200 dark:text-emerald-100 font-bold capitalize mt-1.5">{selectedOffer.listing?.pricePerKg} × {selectedOffer.listing?.quantity}kg Total Stock</p>
                 </div>
                 <div className="bg-green-600 dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
@@ -387,7 +387,7 @@ export default function MyTrades() {
                     <div className="h-px bg-slate-100 dark:bg-slate-700" />
                     <div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-100">Difference</span>{(() => { const diff = (selectedOffer.offeredPrice || 0) - parseFloat(selectedOffer.listing?.pricePerKg || '0'); return (<span className={`text-xs font-semibold ${diff >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{diff >= 0 ? "+" : ""}{diff.toFixed(2)}/kg</span>); })()}</div>
                     <div className="h-px bg-slate-100 dark:bg-slate-700" />
-                    <div className="flex items-center justify-between pt-1"><div className="flex flex-col"><span className="text-xs font-bold text-slate-100 dark:text-white capitalize tracking-widest">Your Pay</span><span className="text-[10px] font-semibold text-slate-200">KSh {selectedOffer.offeredPrice} × {selectedOffer.quantity}kg</span></div><span className="text-sm font-black text-emerald-200">KSh {(selectedOffer.offeredPrice * selectedOffer.quantity).toLocaleString()}</span></div>
+                    <div className="flex items-center justify-between pt-1"><div className="flex flex-col"><span className="text-xs font-bold text-slate-100 dark:text-white capitalize tracking-widest">Your Pay</span><span className="text-[10px] font-semibold text-slate-200">KSh {selectedOffer.offeredPrice} × {selectedOffer.quantity}kg</span></div><span className="text-sm font-bold text-emerald-200">KSh {(selectedOffer.offeredPrice * selectedOffer.quantity).toLocaleString()}</span></div>
                   </div>
                 </div>
                 <div className="flex gap-3 pt-2">
@@ -429,7 +429,7 @@ export default function MyTrades() {
                           </div>
                           <div className="flex-1 min-w-0 py-0.5">
                             <div className="flex items-center justify-between mb-0.5">
-                              <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
+                              <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
                               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
                                 Counter Offer
                               </span>
@@ -440,7 +440,7 @@ export default function MyTrades() {
                                 <span className="text-[10px] font-bold text-slate-400 line-through">
                                   KSh {(b.totalPrice || b.amount || 0).toLocaleString()}
                                 </span>
-                                <span className="text-xs font-black text-amber-600 dark:text-amber-400 leading-none mt-0.5">
+                                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 leading-none mt-0.5">
                                   KSh {(b.counterOfferAmount || 0).toLocaleString()}
                                 </span>
                               </div>
@@ -455,8 +455,8 @@ export default function MyTrades() {
                                 <div className="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-3 border border-amber-100 dark:border-amber-800/30">
                                   <div className="flex items-center gap-2 mb-2"><Zap className="w-4 h-4 text-amber-500" /><p className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest">Agent proposes new terms:</p></div>
                                   <div className="grid grid-cols-2 gap-2 mb-3">
-                                    <div className="bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-100 dark:border-amber-800/30"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight</p><p className="text-xs font-black text-slate-800 dark:text-white">{b.actualWeightKg} kg</p></div>
-                                    <div className="bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-100 dark:border-amber-800/30"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Value</p><p className="text-xs font-black text-emerald-600">KSh {b.counterOfferAmount}</p></div>
+                                    <div className="bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-100 dark:border-amber-800/30"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight</p><p className="text-xs font-bold text-slate-800 dark:text-white">{b.actualWeightKg} kg</p></div>
+                                    <div className="bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-100 dark:border-amber-800/30"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Value</p><p className="text-xs font-bold text-emerald-600">KSh {b.counterOfferAmount}</p></div>
                                   </div>
                                   <div className="flex gap-2">
                                     <button onClick={() => setConfirmAction({ type: 'rejectCounter', id: b.id, title: 'Reject Counter', message: 'Are you sure you want to reject the new terms?' })} className="flex-1 py-2 bg-white dark:bg-slate-800 text-rose-600 font-bold text-[10px] uppercase tracking-widest rounded-lg border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors">Reject</button>
@@ -483,10 +483,10 @@ export default function MyTrades() {
                         <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1.5 min-w-0">
-                              <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
+                              <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
                             </div>
                             <div className="text-right shrink-0 ml-2 mt-1">
-                              <p className={`text-base font-black leading-none tracking-tighter ${b.status === 'cancelled' ? 'text-slate-400 line-through' : 'text-emerald-600 dark:text-emerald-400'}`}>KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p>
+                              <p className={`text-base font-bold leading-none tracking-tighter ${b.status === 'cancelled' ? 'text-slate-400 line-through' : 'text-emerald-600 dark:text-emerald-400'}`}>KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p>
                             </div>
                           </div>
                           <div className="flex items-center justify-between mt-0.5">
@@ -505,7 +505,7 @@ export default function MyTrades() {
                           </div>
                           <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
                             <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0"><Clock className="w-2.5 h-2.5 text-slate-400" /> {b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
-                            <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {b.actualWeightKg || b.weightKg || 0} KG</p>
+                            <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {b.actualWeightKg || b.weightKg || 0} KG</p>
                           </div>
                         </div>
                         <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
@@ -567,9 +567,9 @@ export default function MyTrades() {
                         </div>
                         <hr className="border-slate-100 dark:border-slate-800/60" />
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="flex items-start gap-3"><Tag className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Trade ID</p><p className="text-xs font-black text-slate-900 dark:text-white font-mono uppercase">CF-{b.id?.slice(0, 8)}</p></div></div>
-                          <div className="flex items-start gap-3"><Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Trade Value</p><p className="text-xs font-black text-emerald-600 leading-none">KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p></div></div>
-                          <div className="flex items-start gap-3"><Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quantity</p><p className="text-xs font-black text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg || 0} KG</p></div></div>
+                          <div className="flex items-start gap-3"><Tag className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Trade ID</p><p className="text-xs font-bold text-slate-900 dark:text-white font-mono uppercase">CF-{b.id?.slice(0, 8)}</p></div></div>
+                          <div className="flex items-start gap-3"><Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Trade Value</p><p className="text-xs font-bold text-emerald-600 leading-none">KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p></div></div>
+                          <div className="flex items-start gap-3"><Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quantity</p><p className="text-xs font-bold text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg || 0} KG</p></div></div>
                           <div className="flex items-start gap-3"><MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Location</p><span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block truncate max-w-[120px]">{b.estate || "Pickup point"}</span></div></div>
                         </div>
                       </div>
@@ -648,7 +648,7 @@ export default function MyTrades() {
                 <div className="p-5 space-y-5">
                   <div className="space-y-2"><label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest">New Date</label><input type="date" value={newDate} min={new Date().toLocaleDateString("en-CA")} onChange={(e) => setNewDate(e.target.value)} className="w-full p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl text-sm font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" /></div>
                   <div className="space-y-3"><label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest">New Time Window</label><div className="grid grid-cols-3 gap-2">{TIME_SLOTS.map((slot) => (<button key={slot.id} onClick={() => setNewTime(slot.value)} className={`py-3 rounded-xl text-xs font-bold transition-all border ${newTime === slot.value ? "bg-primary text-white border-primary shadow-md shadow-primary/20" : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"}`}>{slot.label}</button>))}</div></div>
-                  <button onClick={handleRescheduleSubmit} disabled={isSubmitting} className="w-full py-4 mt-2 bg-emerald-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-emerald-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button onClick={handleRescheduleSubmit} disabled={isSubmitting} className="w-full py-4 mt-2 bg-emerald-600 text-white rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-emerald-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                     {isSubmitting ? "Updating..." : "Confirm Schedule"}
                   </button>
                 </div>

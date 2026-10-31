@@ -203,7 +203,7 @@ export default function EditSwarm() {
                     }`}>
                     {cat.icon || '📦'}
                   </div>
-                  <span className={`relative z-10 text-xs font-black capitalize tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : (isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white')
+                  <span className={`relative z-10 text-xs font-bold capitalize tracking-widest text-center leading-none italic ${bgImage ? 'text-white' : (isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white')
                     }`}>
                     {cat.label}
                   </span>

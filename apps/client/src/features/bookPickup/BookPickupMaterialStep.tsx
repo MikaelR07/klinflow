@@ -142,7 +142,7 @@ export default function BookPickupMaterialStep({
                         <div className={`absolute top-2 left-2 w-8 h-8 ${bgImage ? 'bg-white/20 backdrop-blur-md' : 'bg-slate-50 dark:bg-slate-800/50'} rounded-xl flex items-center justify-center text-lg group-hover:scale-110 transition-transform`}>
                           {cat.icon || '📦'}
                         </div>
-                        <span className={`absolute bottom-2 right-2 px-2 py-1 rounded-md text-[10px] font-black capitalize tracking-widest text-right leading-none italic drop-shadow-sm ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10 text-white' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'}`}>
+                        <span className={`absolute bottom-2 right-2 px-2 py-1 rounded-md text-[10px] font-bold capitalize tracking-widest text-right leading-none italic drop-shadow-sm ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10 text-white' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'}`}>
                           {cat.label}
                         </span>
                       </button>
@@ -237,7 +237,7 @@ export default function BookPickupMaterialStep({
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-1.5">
                     <Camera className="w-5 h-5 text-primary" />
                   </div>
-                  <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize tracking-widest italic">Take Photo</p>
+                  <p className="text-[10px] font-bold text-slate-900 dark:text-white capitalize tracking-widest italic">Take Photo</p>
                   <input
                     id="photo-upload"
                     type="file"
@@ -252,7 +252,7 @@ export default function BookPickupMaterialStep({
                   <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center mb-1.5">
                     <Smartphone className="w-5 h-5 text-indigo-600" />
                   </div>
-                  <p className="text-[10px] font-black text-slate-900 dark:text-white capitalize tracking-widest italic">From Gallery</p>
+                  <p className="text-[10px] font-bold text-slate-900 dark:text-white capitalize tracking-widest italic">From Gallery</p>
                   <input
                     type="file"
                     accept="image/*"

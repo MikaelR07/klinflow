@@ -182,7 +182,7 @@ export default function ImpactHub() {
           <button onClick={() => navigate(-1)} className="w-9 h-9 shrink-0 rounded-full bg-white/15 border border-white/10 flex items-center justify-center active:scale-95 transition-all">
             <ArrowLeft className="w-4 h-4 text-white" />
           </button>
-          <h1 className="text-[14px] font-black text-white tracking-tight">GreenFlow Hub</h1>
+          <h1 className="text-[14px] font-bold text-white tracking-tight">GreenFlow Hub</h1>
           <button onClick={() => setShowBadgeModal(true)} className="w-9 h-9 shrink-0 rounded-full bg-white/15 border border-white/10 flex items-center justify-center active:scale-95 transition-all">
             <Award className="w-4 h-4 text-white" />
           </button>
@@ -200,18 +200,18 @@ export default function ImpactHub() {
               </div>
               <div className="flex-1">
                 <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] mb-1">Current Rank</p>
-                <h2 className="text-2xl font-black tracking-tight leading-none text-slate-900 dark:text-white drop-shadow-sm">{metrics.tier}</h2>
+                <h2 className="text-2xl font-bold tracking-tight leading-none text-slate-900 dark:text-white drop-shadow-sm">{metrics.tier}</h2>
               </div>
               <div className="text-right">
                 <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] mb-1">Impact Score</p>
-                <p className="text-xl font-black text-slate-900 dark:text-white drop-shadow-sm">{profile?.rewardPoints || 0} <span className="text-xs text-emerald-500">GFP</span></p>
+                <p className="text-xl font-bold text-slate-900 dark:text-white drop-shadow-sm">{profile?.rewardPoints || 0} <span className="text-xs text-emerald-500">GFP</span></p>
               </div>
             </div>
 
             <div className="space-y-2 mb-4">
               <div className="flex justify-between items-end">
                 <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Next: {metrics.nextTier}</span>
-                <span className="text-[11px] font-black text-slate-900 dark:text-white">{Math.round(metrics.progress)}%</span>
+                <span className="text-[11px] font-bold text-slate-900 dark:text-white">{Math.round(metrics.progress)}%</span>
               </div>
               <div className="h-2.5 w-full bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden p-[2px]">
                 <div
@@ -232,7 +232,7 @@ export default function ImpactHub() {
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Current Streak</p>
-                  <p className="text-[15px] font-black text-slate-900 dark:text-white leading-none">
+                  <p className="text-[15px] font-bold text-slate-900 dark:text-white leading-none">
                     {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'No active streak'}
                   </p>
                 </div>
@@ -250,7 +250,7 @@ export default function ImpactHub() {
         <div className="px-1.5 mb-8">
           <div className="bg-slate-200 dark:bg-slate-800/80 rounded-[2rem] p-5 shadow-sm">
             <div className="flex items-center justify-between mb-5 px-1">
-              <h3 className="text-[15px] font-black text-slate-900 dark:text-white tracking-tight">
+              <h3 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight">
                 Achievements
               </h3>
               <button
@@ -364,7 +364,7 @@ export default function ImpactHub() {
 
             <div className="px-5 pt-2 pb-4 flex items-center justify-between">
               <div>
-                <h3 className="font-black text-[17px] text-slate-900 dark:text-white leading-none">Achievements</h3>
+                <h3 className="font-bold text-[17px] text-slate-900 dark:text-white leading-none">Achievements</h3>
                 <p className="text-[11px] font-semibold text-slate-400 mt-1">
                   {unlockedCount} of {badges.length} unlocked
                 </p>

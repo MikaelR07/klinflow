@@ -40,7 +40,7 @@ export default function MarketIntelTrendsTab({ marketData, profile }: MarketInte
           </div>
           
           <div>
-            <h2 className="text-xl font-black text-white tracking-tight leading-tight mb-2">Automated Market Analytics</h2>
+            <h2 className="text-xl font-bold text-white tracking-tight leading-tight mb-2">Automated Market Analytics</h2>
             <p className="text-[11px] font-medium text-purple-200/70 leading-relaxed max-w-[90%]">
               Our scrap indexing AI is scanning the market. We analyze price trends, supply/demand imbalances, and regional heatmaps in real-time,to offer you the best intel ahead of others.
             </p>
@@ -125,9 +125,9 @@ export default function MarketIntelTrendsTab({ marketData, profile }: MarketInte
                 </div>
 
                 <div className="text-right">
-                  <p className="text-[13px] font-black text-slate-900 dark:text-white">{opp.metricValue}</p>
+                  <p className="text-[13px] font-bold text-slate-900 dark:text-white">{opp.metricValue}</p>
                   <div className="flex items-center justify-end gap-1 mt-1">
-                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-black flex items-center gap-0.5 ${
+                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold flex items-center gap-0.5 ${
                       opp.changeType === 'positive' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'
                     }`}>
                       {opp.changeType === 'positive' ? '▲' : '▼'} {opp.change}

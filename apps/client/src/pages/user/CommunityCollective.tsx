@@ -68,7 +68,7 @@ export default function CommunityCollective() {
             {/* Top: Text */}
             {profile?.role === 'user' ? (
               <div className="min-h-[200px] flex flex-col justify-center">
-                <h2 className="text-2xl font-black text-white leading-tight mb-1.5 tracking-tight">
+                <h2 className="text-2xl font-bold text-white leading-tight mb-1.5 tracking-tight">
                   Recycle Together.<br/>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Earn Together.</span>
                 </h2>
@@ -78,7 +78,7 @@ export default function CommunityCollective() {
               </div>
             ) : (
               <div className="min-h-[180px] flex flex-col justify-center">
-                <h2 className="text-2xl font-black text-white leading-tight mb-1.5 tracking-tight">
+                <h2 className="text-2xl font-bold text-white leading-tight mb-1.5 tracking-tight">
                   More Impact.<br/>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">More Rewards.</span>
                 </h2>
@@ -94,7 +94,7 @@ export default function CommunityCollective() {
         {profile?.role === 'user' && (
           <div className="relative z-20 -mt-5 mx-4 bg-gradient-to-tr from-emerald-600 to-primary rounded-xl p-3 shadow-lg mb-2 flex flex-col gap-2 border border-emerald-500/30">
             {/* <div className="text-center px-2">
-              <h3 className="text-white font-black text-[13px] tracking-wide">Communities are driving real change</h3>
+              <h3 className="text-white font-bold text-[13px] tracking-wide">Communities are driving real change</h3>
             </div> */}
             
             <div className="grid grid-cols-3 gap-2 mt-1">
@@ -103,7 +103,7 @@ export default function CommunityCollective() {
                   <Handshake className="w-4 h-4 text-black" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-base font-black text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
+                  <p className="text-base font-bold text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
                   <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
                     Completed
                   </p>
@@ -115,7 +115,7 @@ export default function CommunityCollective() {
                   <DollarSign className="w-4 h-4 text-black" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-base font-black text-white leading-none mb-0.5">
+                  <p className="text-base font-bold text-white leading-none mb-0.5">
                     {estateStats?.totalEarned ? (estateStats.totalEarned >= 1000000 ? (estateStats.totalEarned / 1000000).toFixed(1) + 'M' : (estateStats.totalEarned >= 1000 ? (estateStats.totalEarned / 1000).toFixed(1) + 'k' : estateStats.totalEarned.toString())) : 0}
                   </p>
                   <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
@@ -129,7 +129,7 @@ export default function CommunityCollective() {
                   <Users className="w-4 h-4 text-black" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-base font-black text-white leading-none mb-0.5">{swarms.filter(s => s.status === 'active' && new Date(s.closes_at) > new Date()).length}</p>
+                  <p className="text-base font-bold text-white leading-none mb-0.5">{swarms.filter(s => s.status === 'active' && new Date(s.closes_at) > new Date()).length}</p>
                   <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
                     Active
                   </p>
@@ -148,7 +148,7 @@ export default function CommunityCollective() {
                   <Handshake className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
+                  <p className="text-sm font-bold text-slate-800 dark:text-white leading-none mb-0.5">{estateStats?.fulfilledGroupRFQs || 0}</p>
                   <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">
                     Group RFQs
                   </p>
@@ -160,7 +160,7 @@ export default function CommunityCollective() {
                   <Coins className="w-5 h-5 text-amber-600" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">
+                  <p className="text-sm font-bold text-slate-800 dark:text-white leading-none mb-0.5">
                     {(() => {
                       const val = estateStats?.totalEarned || 0;
                       if (!val) return '0';
@@ -180,7 +180,7 @@ export default function CommunityCollective() {
                   <Target className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{estateStats?.fulfilledIndividualRFQs || 0}</p>
+                  <p className="text-sm font-bold text-slate-800 dark:text-white leading-none mb-0.5">{estateStats?.fulfilledIndividualRFQs || 0}</p>
                   <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">
                     Solo RFQs
                   </p>
@@ -199,7 +199,7 @@ export default function CommunityCollective() {
               <div className="mb-2 px-1 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                  
-                  <h2 className="text-[15px] font-black text-slate-600 dark:text-white tracking-tight">
+                  <h2 className="text-[15px] font-bold text-slate-600 dark:text-white tracking-tight">
                     View Active Contracts
                   </h2>
                 </div>
@@ -215,7 +215,7 @@ export default function CommunityCollective() {
                 </div>
                 
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight mb-1.5">Group Contracts</h3>
+                  <h3 className="text-[15px] font-bold text-slate-900 dark:text-white leading-tight mb-1.5">Group Contracts</h3>
                   <p className="text-[12px] text-slate-500 dark:text-slate-400 font-medium mb-4 flex-1 leading-relaxed">
                     Fulfill large volume orders from major buyers.
                   </p>
@@ -237,7 +237,7 @@ export default function CommunityCollective() {
                 </div>
                 
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight mb-1.5">Individual Contracts</h3>
+                  <h3 className="text-[15px] font-bold text-slate-900 dark:text-white leading-tight mb-1.5">Individual Contracts</h3>
                   <p className="text-[12px] text-slate-500 dark:text-slate-400 font-medium mb-4 flex-1 leading-relaxed">
                     Go solo. Bid on and fulfill direct requests.
                   </p>
@@ -269,7 +269,7 @@ export default function CommunityCollective() {
           >
             {/* Header - Truly Fixed */}
             <div className="w-full max-w-lg bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-5 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 flex items-center justify-between shrink-0">
-              <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">How it Works</h2>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">How it Works</h2>
               <button
                 onClick={() => setIsHelpModalOpen(false)}
                 className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all"
@@ -292,7 +292,7 @@ export default function CommunityCollective() {
                       <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
                         <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       </div>
-                      <h3 className="text-lg font-black text-slate-600 dark:text-white tracking-tight">Swarm Groups</h3>
+                      <h3 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">Swarm Groups</h3>
                     </div>
                     <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                       Swarms allow residents and sellers in the same location to pool their materials together. Once the swarm reaches its weight goal, an agent comes to pick it up, and everyone gets paid based on their individual contribution. It's a great way to save time and fuel on transport costs and earn more together!
@@ -311,7 +311,7 @@ export default function CommunityCollective() {
                         <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0">
                           <Handshake className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <h3 className="text-lg font-black text-slate-600 dark:text-white tracking-tight">Group Contracts</h3>
+                        <h3 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">Group Contracts</h3>
                       </div>
                       <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                         Group Contracts are massive, high-paying orders from major buyers that require a huge amount of material. Since one seller might not have enough stock, multiple sellers can pledge their available materials to fulfill the contract collectively. It's a collaborative way to secure big deals and guarantee sales!

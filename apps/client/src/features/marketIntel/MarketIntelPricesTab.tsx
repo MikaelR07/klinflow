@@ -47,7 +47,7 @@ export default function MarketIntelPricesTab({ marketData, filteredTrends }: Mar
                   <div>
                     <p className="text-[10px] font-semibold text-white/70 uppercase tracking-wider mb-1">Overall Sentiment</p>
                     <div className="flex items-baseline gap-2">
-                      <h2 className={`text-2xl font-black tracking-tighter ${isBullish ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      <h2 className={`text-2xl font-bold tracking-tighter ${isBullish ? 'text-emerald-400' : 'text-rose-400'}`}>
                         {isBullish ? 'BULLISH' : 'BEARISH'}
                       </h2>
                     </div>
@@ -68,15 +68,15 @@ export default function MarketIntelPricesTab({ marketData, filteredTrends }: Mar
                 <div className="grid grid-cols-3 gap-2 pt-2 border-t border-amber-500/20">
                   <div className="flex flex-col">
                     <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Tracked Assets</span>
-                    <span className="text-sm font-black text-white mt-0.5">{totalMaterials}</span>
+                    <span className="text-sm font-bold text-white mt-0.5">{totalMaterials}</span>
                   </div>
                   <div className="flex flex-col border-l border-amber-500/20 pl-2">
                     <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Stable</span>
-                    <span className="text-sm font-black text-white mt-0.5">{stableCount}</span>
+                    <span className="text-sm font-bold text-white mt-0.5">{stableCount}</span>
                   </div>
                   <div className="flex flex-col border-l border-amber-500/20 pl-2">
                     <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Update Frequency</span>
-                    <span className="text-sm font-black text-white mt-0.5 flex items-center gap-1">Real-time</span>
+                    <span className="text-sm font-bold text-white mt-0.5 flex items-center gap-1">Real-time</span>
                   </div>
                 </div>
               </div>
@@ -140,8 +140,8 @@ export default function MarketIntelPricesTab({ marketData, filteredTrends }: Mar
                 </div>
 
                 <div className="text-right">
-                  <p className="text-[13px] font-black text-slate-900 dark:text-white">KSh {item.price}<span className="text-[10px] text-slate-400 font-bold">/kg</span></p>
-                  <div className={`text-[10px] font-black flex items-center justify-end gap-1 mt-1`}>
+                  <p className="text-[13px] font-bold text-slate-900 dark:text-white">KSh {item.price}<span className="text-[10px] text-slate-400 font-bold">/kg</span></p>
+                  <div className={`text-[10px] font-bold flex items-center justify-end gap-1 mt-1`}>
                     <span className={`px-1.5 py-0.5 rounded flex items-center gap-0.5 ${
                       item.trend === 'up' ? 'bg-emerald-500/10 text-emerald-500' : 
                       item.trend === 'down' ? 'bg-rose-500/10 text-rose-500' : 

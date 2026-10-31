@@ -511,10 +511,10 @@ export default function MaterialDetail() {
               {/* Header Section */}
               <div className="p-4 md:p-6 pb-0 md:pb-0">
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <h1 className="text-[18px] md:text-2xl font-black text-white leading-tight tracking-tight">
+                  <h1 className="text-[18px] md:text-2xl font-bold text-white leading-tight tracking-tight">
                     {title}
                   </h1>
-                  <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border shrink-0 flex items-center gap-1 ${
+                  <div className={`px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border shrink-0 flex items-center gap-1 ${
                     displayDemand === 'Critical' || displayDemand === 'High'
                     ? 'text-emerald-100 bg-emerald-900/40 border-emerald-500/30 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
                     : displayDemand === 'Calculating...'
@@ -536,20 +536,20 @@ export default function MaterialDetail() {
                   <div className="grid grid-cols-3 gap-2">
                     {/* Metric 1 */}
                     <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100/70 mb-1">Average Price</p>
-                      <p className="text-[13px] md:text-[15px] font-black text-white leading-none mb-1 truncate">
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100/70 mb-1">Average Price</p>
+                      <p className="text-[13px] md:text-[15px] font-bold text-white leading-none mb-1 truncate">
                         {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'}
                       </p>
                     </div>
                     {/* Metric 2 */}
                     <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100/70 mb-1">Market Demand</p>
-                      <p className="text-[13px] md:text-[15px] font-black text-white leading-none mb-1 truncate">{displayDemand}</p>
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100/70 mb-1">Market Demand</p>
+                      <p className="text-[13px] md:text-[15px] font-bold text-white leading-none mb-1 truncate">{displayDemand}</p>
                     </div>
                     {/* Metric 3 */}
                     <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100/70 mb-1">Price Movement</p>
-                      <p className={`text-[13px] md:text-[15px] font-black ${isTrendUp ? 'text-emerald-300' : isTrendDown ? 'text-rose-300' : 'text-emerald-100'} leading-none mb-1 truncate`}>
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100/70 mb-1">Price Movement</p>
+                      <p className={`text-[13px] md:text-[15px] font-bold ${isTrendUp ? 'text-emerald-300' : isTrendDown ? 'text-rose-300' : 'text-emerald-100'} leading-none mb-1 truncate`}>
                         {isTrendUp ? 'Going Up ▲' : isTrendDown ? 'Going Down ▼' : 'Stable -'}
                       </p>
                     </div>
@@ -573,7 +573,7 @@ export default function MaterialDetail() {
             
             {/* ── WHY IT'S WORTH COLLECTING ── */}
             <motion.div variants={fadeUp} className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 md:p-6 mb-8 border border-slate-200 dark:border-slate-700/50">
-              <h2 className="text-base font-black text-slate-900 dark:text-white tracking-tight mb-3">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white tracking-tight mb-3">
                 Why it's worth collecting
               </h2>
               <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
@@ -594,7 +594,7 @@ export default function MaterialDetail() {
             </motion.div>
             {/* ── MATERIAL QUALITY (Horizontal) ── */}
             <motion.div variants={fadeUp} className='pl-3'>
-              <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-2">
+              <h2 className="text-sm md:text-base font-bold text-slate-900 dark:text-white tracking-tight mb-2">
                 What are the grades?
               </h2>
               <p className="text-[13px] text-slate-500 dark:text-slate-400 mb-5">
@@ -608,7 +608,7 @@ export default function MaterialDetail() {
                       <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-2  border border-slate-600 dark:border-slate-800 ${
                         i === 0 ? 'bg-primary' : i === 1 ? 'bg-emerald-500' : i === 2 ? 'bg-amber-400' : 'bg-red-500'
                       }`}>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-white text-center px-2 leading-tight">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-white text-center px-2 leading-tight">
                           {g.label}
                         </span>
                       </div>
@@ -628,7 +628,7 @@ export default function MaterialDetail() {
             
             {/* ── PREPARE YOUR MATERIAL ── */}
             <motion.div variants={fadeUp} className="pl-3">
-              <h2 className="text-sm md:text-base font-black text-slate-900 dark:text-white tracking-tight mb-4">
+              <h2 className="text-sm md:text-base font-bold text-slate-900 dark:text-white tracking-tight mb-4">
                 How to prepare your material
               </h2>
               
@@ -657,7 +657,7 @@ export default function MaterialDetail() {
                     <div className="absolute top-0 right-0 p-4 opacity-20">
                       <X className="w-24 h-24 text-rose-500" />
                     </div>
-                    <h3 className="text-[11px] font-black text-rose-800 dark:text-rose-600 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
+                    <h3 className="text-[11px] font-bold text-rose-800 dark:text-rose-600 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
                       Avoid
                     </h3>
                     <ul className="space-y-3 relative z-10">
@@ -676,7 +676,7 @@ export default function MaterialDetail() {
             {/* ── COLLECTOR TIP ── */}
             <motion.div variants={fadeUp}>
               <div className="bg-slate-50 dark:bg-[#12141c] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6">
-                <h3 className="text-[11px] font-black text-slate-800 dark:text-white uppercase tracking-widest mb-3 flex items-center gap-2">
+                <h3 className="text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-widest mb-3 flex items-center gap-2">
                   <span className="text-amber-500 text-base">💡</span> Collector tip
                 </h3>
                 <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
@@ -704,7 +704,7 @@ export default function MaterialDetail() {
                 {title}
               </p>
               <div className="flex items-center gap-2">
-                <span className="text-[12px] font-black text-slate-700 dark:text-slate-300">
+                <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300">
                   {displayPrice > 0 ? `KSh ${displayPrice}/kg` : 'Price varies'}
                 </span>
                 <span className={`text-[10px] font-bold hidden sm:inline-block ${isTrendUp ? 'text-emerald-600' : isTrendDown ? 'text-rose-600' : 'text-slate-500'}`}>

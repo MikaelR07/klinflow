@@ -269,7 +269,7 @@ export default function PublicCircularResume() {
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-6 h-6 text-emerald-500" />
               <div>
-                <h1 className="text-[13px] font-black text-slate-900 dark:text-white tracking-tight uppercase">Public Circular Resume</h1>
+                <h1 className="text-[13px] font-bold text-slate-900 dark:text-white tracking-tight uppercase">Public Circular Resume</h1>
                 <p className="text-[9px] font-bold text-emerald-600 tracking-widest uppercase">Verified Record</p>
               </div>
             </div>
@@ -304,8 +304,8 @@ export default function PublicCircularResume() {
               
               <div className="pt-1">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{profile?.name}</h2>
-                  <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">{profile?.name}</h2>
+                  <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border border-slate-200 dark:border-slate-700 whitespace-nowrap">
                     {progression.icon} {progression.name}
                   </span>
                 </div>
@@ -336,7 +336,7 @@ export default function PublicCircularResume() {
               <div className="flex flex-col md:items-end justify-center flex-1">
                 <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1 md:text-right">Klinflow Trust Score</p>
                 <div className="flex items-baseline gap-1 md:justify-end">
-                  <span className="text-2xl font-black text-emerald-600 dark:text-white leading-none">{trustScore}</span>
+                  <span className="text-2xl font-bold text-emerald-600 dark:text-white leading-none">{trustScore}</span>
                   <span className="text-[12px] font-bold text-slate-400">/ 1000</span>
                 </div>
               </div>
@@ -361,7 +361,7 @@ export default function PublicCircularResume() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-[11px] font-black text-slate-700 dark:text-white">{Math.round((trustScore / 1000) * 100)}%</span>
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-white">{Math.round((trustScore / 1000) * 100)}%</span>
                 </div>
               </div>
             </div>
@@ -372,14 +372,14 @@ export default function PublicCircularResume() {
         {/* ── OVERVIEW SECTION ── */}
         <div className="space-y-6">
           <section>
-            <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Verified Overview</h3>
+            <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Verified Overview</h3>
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm printable-card">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x divide-slate-100 dark:divide-slate-800">
                 
                 <div className="flex flex-col gap-1.5 md:px-4 md:first:pl-0">
                   <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">Lifetime Volume</p>
                   <div>
-                    <p className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{stats.totalKg.toLocaleString()} <span className="text-sm">kg</span></p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">{stats.totalKg.toLocaleString()} <span className="text-sm">kg</span></p>
                     <p className="text-[10px] font-medium text-slate-400 mt-1">Materials recovered</p>
                   </div>
                 </div>
@@ -387,7 +387,7 @@ export default function PublicCircularResume() {
                 <div className="flex flex-col gap-1.5 md:px-4">
                   <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">Transaction Val.</p>
                   <div>
-                    <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight leading-none">KSh {(stats.lifetimeEarnings/1000).toFixed(0)}K</p>
+                    <p className="text-lg font-bold text-slate-900 dark:text-white tracking-tight leading-none">KSh {(stats.lifetimeEarnings/1000).toFixed(0)}K</p>
                     <p className="text-[10px] font-medium text-slate-400 mt-1">Verified payouts</p>
                   </div>
                 </div>
@@ -395,7 +395,7 @@ export default function PublicCircularResume() {
                 <div className="flex flex-col gap-1.5 md:px-4">
                   <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">Completed Jobs</p>
                   <div>
-                    <p className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{stats.count.toLocaleString()}</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">{stats.count.toLocaleString()}</p>
                     <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-500 mt-1 flex items-center gap-1">
                       <TrendingUp className="w-3 h-3" /> Track record
                     </p>
@@ -405,7 +405,7 @@ export default function PublicCircularResume() {
                 <div className="flex flex-col gap-1.5 md:px-4 md:last:pr-0">
                   <p className="text-[9px] font-semibold text-slate-500 uppercase tracking-widest">Time on Platform</p>
                   <div>
-                    <p className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{timeOnPlatform}</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">{timeOnPlatform}</p>
                     <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-500 mt-1 flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" /> Activity
                     </p>
@@ -418,7 +418,7 @@ export default function PublicCircularResume() {
 
           {/* ── SKILLS & VERIFICATIONS ── */}
           <section>
-            <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Skills & Verifications</h3>
+            <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Skills & Verifications</h3>
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden printable-card divide-y divide-slate-100 dark:divide-slate-800">
               {badges.map((badge: any, i: number) => (
                 <div key={i} className="relative p-4 flex flex-col gap-2 overflow-hidden group">
@@ -438,7 +438,7 @@ export default function PublicCircularResume() {
                       }`}>
                         <badge.icon className="w-5 h-5 text-black dark:text-black" />
                       </div>
-                      <h4 className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight">{badge.title}</h4>
+                      <h4 className="text-[14px] font-bold text-slate-900 dark:text-white tracking-tight">{badge.title}</h4>
                     </div>
                     <span className={`text-[8px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shrink-0 ${
                       badge.color === 'emerald' ? 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400' :
@@ -457,18 +457,18 @@ export default function PublicCircularResume() {
 
           {/* ── IMPACT & HISTORY ── */}
           <section>
-            <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Impact & History</h3>
+            <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Impact & History</h3>
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden printable-card">
               
               <div className="p-5 space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Carbon Saved</p>
-                    <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">{(stats.totalCarbon * 1000).toFixed(0)} kg</p>
+                    <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{(stats.totalCarbon * 1000).toFixed(0)} kg</p>
                   </div>
                   <div>
                     <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Diverted Waste</p>
-                    <p className="text-lg font-black text-slate-900 dark:text-white">{stats.totalKg.toLocaleString()} kg</p>
+                    <p className="text-lg font-bold text-slate-900 dark:text-white">{stats.totalKg.toLocaleString()} kg</p>
                   </div>
                 </div>
 
@@ -494,7 +494,7 @@ export default function PublicCircularResume() {
               </div>
 
               <div className="flex items-center justify-between px-5 py-3 bg-slate-50 dark:bg-slate-800/50 border-y border-slate-100 dark:border-slate-800">
-                <h4 className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Latest Work History</h4>
+                <h4 className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Latest Work History</h4>
                 <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-md">Ledger</span>
               </div>
 
@@ -523,7 +523,7 @@ export default function PublicCircularResume() {
                           <div key={i} className="grid grid-cols-[1fr_1fr_0.7fr_0.8fr_0.6fr] gap-1 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                             <span className="text-[12px] font-bold text-slate-900 dark:text-white capitalize truncate">{b.waste_type || 'Mixed'}</span>
                             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 capitalize truncate">{buyerName}</span>
-                            <span className="text-[12px] font-black text-slate-900 dark:text-white">{Number(b.actual_weight_kg) || Number(b.weight_kg) || 0} kg</span>
+                            <span className="text-[12px] font-bold text-slate-900 dark:text-white">{Number(b.actual_weight_kg) || Number(b.weight_kg) || 0} kg</span>
                             <span className="text-[11px] font-medium text-slate-400">{dateStr}</span>
                             <span className="text-[9px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded-md text-center uppercase tracking-wider">Verified</span>
                           </div>
@@ -545,17 +545,17 @@ export default function PublicCircularResume() {
 
           {/* ── FINANCIAL ACTIVITY ── */}
           <section>
-            <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Financial Activity</h3>
+            <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Financial Activity</h3>
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-6 printable-card">
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Lifetime Verified</p>
-                  <p className="text-xl font-black text-slate-900 dark:text-white">KSh {(stats.lifetimeEarnings / 1000000).toFixed(2)}M</p>
+                  <p className="text-xl font-bold text-slate-900 dark:text-white">KSh {(stats.lifetimeEarnings / 1000000).toFixed(2)}M</p>
                 </div>
                 <div>
                   <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Avg. Monthly</p>
-                  <p className="text-xl font-black text-slate-900 dark:text-white">KSh {(stats.avgMonthly / 1000).toFixed(1)}K</p>
+                  <p className="text-xl font-bold text-slate-900 dark:text-white">KSh {(stats.avgMonthly / 1000).toFixed(1)}K</p>
                 </div>
               </div>
 
@@ -592,7 +592,7 @@ export default function PublicCircularResume() {
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-emerald-500" />
-              <span className="text-sm font-black text-slate-900 dark:text-white tracking-tighter">KLINFLOW</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white tracking-tighter">KLINFLOW</span>
             </div>
           </div>
           

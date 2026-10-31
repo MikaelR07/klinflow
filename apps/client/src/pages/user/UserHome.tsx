@@ -172,7 +172,7 @@ export default function UserHome() {
                 </div>
               </div>
               <div>
-                <h1 className="text-[17px] font-black text-white tracking-wide leading-none drop-shadow-sm">
+                <h1 className="text-[17px] font-bold text-white tracking-wide leading-none drop-shadow-sm">
                   Hello, {(profile?.fullName || profile?.name || "Resident").split(" ")[0]}!👋
                 </h1>
                 <div className="flex items-center gap-1.5 mt-1 text-[10px] text-white/90 font-semibold capitalize tracking-wider bg-black/10 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/20 w-fit">
@@ -216,32 +216,32 @@ export default function UserHome() {
             <div className="relative z-10 flex flex-col gap-1">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <p className="text-[10px] font-black text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1">
+                  <p className="text-[10px] font-semibold text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1">
                     <Wallet className="w-4 h-4" /> Wallet Balance
                   </p>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl font-bold text-white/90">Ksh</span>
-                    <h2 className="text-2xl font-black text-white tracking-tighter leading-none drop-shadow-md">
+                    <h2 className="text-2xl font-bold text-white tracking-tighter leading-none drop-shadow-md">
                       {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </h2>
                   </div>
                 </div>
-                <button onClick={handleWithdraw} className="bg-white text-emerald-700 mt-1 px-5 py-3 rounded-2xl text-sm font-black capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-emerald-50">
+                <button onClick={handleWithdraw} className="bg-white text-emerald-700 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-emerald-50">
                   Withdraw
                 </button>
               </div>
 
               <div className="flex items-center gap-1 pt-2 border-t border-white/20">
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                  <span className="text-base font-black text-white">{metrics.totalPickups}</span>
+                  <span className="text-base font-bold text-white">{metrics.totalPickups}</span>
                   <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
                 </div>
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                  <span className="text-base font-black text-white">{metrics.kgRecovered}</span>
+                  <span className="text-base font-bold text-white">{metrics.kgRecovered}</span>
                   <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
                 </div>
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 transition-colors">
-                  <span className="text-base font-black text-amber-300 drop-shadow-sm">{rewardPoints}</span>
+                  <span className="text-base font-bold text-amber-300 drop-shadow-sm">{rewardPoints}</span>
                   <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
                 </div>
               </div>
@@ -256,7 +256,7 @@ export default function UserHome() {
         <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-white dark:bg-slate-900 rounded-[12px] p-1.5 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           {/* ── APP SERVICES GRID ── */}
           <div className="space-y-2">
-            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
+            <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1">
               {[
                 { label: 'Book', icon: <Truck className="w-5 h-5" />, route: '/book-pickup', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
@@ -278,18 +278,65 @@ export default function UserHome() {
             </div>
           </div>
         </motion.div>
+
+        {/* ── KLINFLOW BANNERS ── */}
+        <motion.div variants={itemVariants} className="!mt-4"  >
+          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
+            {/* Banner 1 */}
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[21/9]">
+              <img src="/vectors/ecoBanner.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
+
+            {/* Banner 2 (Resident Only) */}
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[21/9] bg-slate-900">
+              <img src="/vectors/ecoBanner3.webp" alt="Promo 3" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
+          </div>
+        </motion.div>
         
+         {/* ── COMMUNITY TOOLS ── */}
+        <motion.div variants={itemVariants} className="!mt-3">
+          <div className="flex items-center justify-between px-1.5 mb-2">
+            <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest">Community Tools</h3>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 px-1.5">
+            {/* ── SWARMS ── */}
+            <button
+              onClick={() => navigate("/swarms")}
+              className="bg-white dark:bg-slate-900 rounded-xl h-28 shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
+            >
+              <img src="/vectors/swarms.webp" alt="Swarms" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute bottom-2 right-2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
+                Join
+              </div>
+            </button>
+
+            {/* ── MARKET PRICES ── */}
+            <button
+              onClick={() => navigate("/market-pulse")}
+              className="bg-white dark:bg-slate-900 rounded-xl h-28 shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
+            >
+              <img src="/vectors/prices.webp" alt="Market Prices" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute bottom-2 right-2 bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
+                Live
+              </div>
+            </button>
+          </div>
+        </motion.div>
 
         {/* ── CATALOG: E-COMMERCE SCROLL ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.2 }} className="space-y-2">
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.2 }} className="space-y-2 !mt-4">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
+            <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
             {/* <button onClick={() => navigate("/discovery")} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 capitalize tracking-widest hover:underline flex items-center">
               view details <ChevronDownCircle className="w-3 h-3 ml-0.5" />
             </button> */}
           </div>
           
-          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory pr-6">
+          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar pr-8 scroll-smooth">
             {/* Left spacer */}
             <div className="w-0.5 shrink-0" />
             {(() => {
@@ -335,10 +382,10 @@ export default function UserHome() {
               }
               
               return (
-                <div 
-                  key={item.id} 
+                <div
+                  key={item.id}
                   onClick={() => navigate(`/materials/${identifier}`)}
-                  className={`snap-start relative shrink-0 w-[110px] h-[105px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-2.5 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col overflow-hidden`}
+                  className={`snap-start relative shrink-0 w-[120px] h-[120px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-3 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col overflow-hidden`}
                   style={bgImage ? {
                     backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.3)), url(${bgImage})`,
                     backgroundSize: 'cover',
@@ -346,9 +393,9 @@ export default function UserHome() {
                   } : {}}
                 >
                   <div className="flex-1" />
-                  <h4 className={`text-[12px] font-black mb-1 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
-                  <div className={`rounded-lg px-1.5 py-1.5 relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
-                    <p className={`text-[9px] font-black text-center leading-none ${bgImage ? 'text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>{displayPrice}</p>
+                  <h4 className={`text-[13px] font-bold mb-1 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
+                  <div className={`rounded-lg px-2 py-1.5 relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
+                    <p className={`text-[10px] font-semibold text-center leading-none ${bgImage ? 'text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>{displayPrice}</p>
                   </div>
                 </div>
               );
@@ -356,90 +403,14 @@ export default function UserHome() {
           </div>
         </motion.div>
 
-        {/* ── KLINFLOW BANNERS ── */}
-        <motion.div variants={itemVariants} className="!mt-1">
-          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
-            {/* Banner 1 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] p-4 flex flex-col justify-center overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 min-h-[130px]">
-              <img src="/vectors/ecoBanner.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-              <div className="relative z-10 flex flex-col gap-1 w-[65%] sm:w-[65%]">
-                <h3 className="text-[16px] font-black text-amber-500 dark:text-white leading-tight mb-1">
-                  Endless Possibilities<br />for Everyone <ArrowRight className="inline w-3.5 h-3.5 ml-1" />
-                </h3>
-                <p className="text-[11px] font-medium text-emerald-100 dark:text-emerald-300/80 leading-tight">
-                  Whether you collect, buy, sell or create, we connect you to opportunities.
-                </p>
-              </div>
-            </div>
+        
 
-            {/* Banner 2 (Resident Only) */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 min-h-[130px] bg-slate-900">
-              <img src="/vectors/ecoBanner3.webp" alt="Promo 3" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ── COMMUNITY TOOLS ── */}
-        <motion.div variants={itemVariants} className="!mt-1 space-y-2 px-1.5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">Community Tools</h3>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-1">
-            {/* ── SWARMS ── */}
-            <button 
-              onClick={() => navigate("/swarms")}
-              className="w-full bg-slate-50 dark:bg-slate-900 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
-            >
-              <div className="w-10 h-10 shrink-0 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <Users className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
-                <div className="min-w-0">
-                  <h4 className="text-[12px] min-[390px]:text-[14px] font-black text-slate-800 dark:text-white leading-none mb-1">Join a Swarm</h4>
-                  <p className="text-[9.5px] min-[390px]:text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Pool pickups & earn together</p>
-                </div>
-                
-                <div className="flex items-center justify-between gap-1 w-full mt-auto">
-                  <div className="bg-emerald-50 dark:bg-emerald-900/40 px-1.5 py-0.5 rounded-[8px] flex items-center gap-1 min-w-0 shrink">
-                    <ArrowRight className="w-2.5 h-2.5 text-emerald-500 shrink-0" />
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 truncate">Join</span>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600 shrink-0" />
-                </div>
-              </div>
-            </button>
-
-            {/* ── MARKET PRICES ── */}
-            <button 
-              onClick={() => navigate("/market-pulse")}
-              className="w-full bg-amber-50 dark:bg-slate-900 rounded-xl p-3 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
-            >
-              <div className="w-10 h-10 shrink-0 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <BarChart3Icon className="w-6 h-6 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
-                <div className="min-w-0">
-                  <h4 className="text-[12px] min-[390px]:text-[14px] font-black text-slate-800 dark:text-white leading-none mb-1">Market Prices</h4>
-                  <p className="text-[9.5px] min-[390px]:text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">Live recyclable rates & trends</p>
-                </div>
-                
-                <div className="flex items-center justify-between gap-1 w-full mt-auto">
-                  <div className="bg-amber-50 dark:bg-amber-900/40 px-1.5 py-0.5 rounded-[8px] flex items-center gap-1 min-w-0 shrink">
-                    <TrendingUp className="w-2.5 h-2.5 text-amber-500 shrink-0" />
-                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 truncate">Live</span>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600 shrink-0" />
-                </div>
-              </div>
-            </button>
-          </div>
-        </motion.div>
+       
 
       </div>
 
       {/* ── FLOATING AI ASSISTANT ── */}
-      <motion.button
+      {/* <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => navigate("/hygenex")}
@@ -447,7 +418,7 @@ export default function UserHome() {
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500  opacity-20" />
         <BrainCircuit className="w-6 h-6 text-white group-hover:rotate-12 transition-transform" />
-      </motion.button>
+      </motion.button> */}
       
     </div>
   );

@@ -178,7 +178,7 @@ export default function AgentReviews() {
             <div className="flex flex-col items-center justify-center shrink-0 pr-5 border-r border-slate-100 dark:border-slate-800">
               <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-1">Rating</p>
               <div className="flex items-baseline gap-1">
-                <h2 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">{stats.average}</h2>
+                <h2 className="text-3xl font-bold tracking-tighter text-slate-900 dark:text-white">{stats.average}</h2>
                 <span className="text-xs font-bold text-slate-400">/5</span>
               </div>
               <div className="flex gap-0.5 mt-1.5">

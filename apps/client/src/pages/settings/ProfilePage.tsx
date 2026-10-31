@@ -80,7 +80,7 @@ export default function ProfilePage() {
                   wrapperClassName="w-full h-full"
                 />
               ) : (
-                <div className="text-4xl text-slate-300 dark:text-slate-700 font-black">
+                <div className="text-4xl text-slate-300 dark:text-slate-700 font-bold">
                   {(profile?.name || 'U').charAt(0).toUpperCase()}
                 </div>
               )}
@@ -130,7 +130,7 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between px-1">
               <h2 className="text-sm font-semibold text-slate-800 dark:text-white">map Location</h2>
               {formData.location?.latitude ? (
-                <span className="flex items-center gap-1.5 text-xs font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full capitalize tracking-widest">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full capitalize tracking-widest">
                   <Target className="w-3 h-3" /> Location Locked
                 </span>
               ) : null}

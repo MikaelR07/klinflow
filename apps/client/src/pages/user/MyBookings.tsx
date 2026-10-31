@@ -344,8 +344,8 @@ export default function MyBookings() {
                       </div>
                       <div className="flex flex-col py-0.5 flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-[15px] font-black text-slate-900 dark:text-white tracking-tight leading-tight capitalize line-clamp-1 max-w-[160px]">{waste?.label || wasteTypeVal}</span>
-                          <span className={`text-[8px] font-black tracking-widest px-1.5 py-0.5 rounded-md ${status.color} uppercase shrink-0`}>
+                          <span className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight capitalize line-clamp-1 max-w-[160px]">{waste?.label || wasteTypeVal}</span>
+                          <span className={`text-[8px] font-bold tracking-widest px-1.5 py-0.5 rounded-md ${status.color} uppercase shrink-0`}>
                             {status.label}
                           </span>
                         </div>
@@ -397,7 +397,7 @@ export default function MyBookings() {
                 <div className="w-16 h-16 bg-blue-50 dark:bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CalendarClock className="w-8 h-8 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white capitalize tracking-tighter">Reschedule</h3>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white capitalize tracking-tighter">Reschedule</h3>
                 <p className="text-xs font-medium text-slate-500">Pick a new pickup slot</p>
               </div>
 
@@ -418,7 +418,7 @@ export default function MyBookings() {
                       <button
                         key={slot.id}
                         onClick={() => setNewTime(slot.value)}
-                        className={`py-3 rounded-xl text-[10px] font-black capitalize transition-all ${newTime === slot.value
+                        className={`py-3 rounded-xl text-[10px] font-bold capitalize transition-all ${newTime === slot.value
                           ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
                           : 'bg-slate-50 dark:bg-slate-800 text-slate-400'
                           }`}
@@ -440,7 +440,7 @@ export default function MyBookings() {
                 <button
                   disabled={isSubmitting}
                   onClick={handleRescheduleSubmit}
-                  className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] capitalize tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all disabled:opacity-50"
+                  className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-bold text-[10px] capitalize tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all disabled:opacity-50"
                 >
                   {isSubmitting ? '...' : 'Confirm'}
                 </button>
@@ -535,7 +535,7 @@ export default function MyBookings() {
                           <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                           <div>
                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight Booked</p>
-                            <p className="text-[11px] font-black text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg ? `${b.actualWeightKg || b.weightKg} KG` : 'Est at Pickup'}</p>
+                            <p className="text-[11px] font-bold text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg ? `${b.actualWeightKg || b.weightKg} KG` : 'Est at Pickup'}</p>
                           </div>
                         </div>
                       </div>
@@ -547,14 +547,14 @@ export default function MyBookings() {
                         <div className="space-y-1">
                           <p className="text-[11px] font-bold text-emerald-100 capitalize tracking-widest">Payment Value</p>
                           {b.status === 'completed' ? (
-                            <p className="text-3xl font-black text-white tracking-tighter leading-none">
+                            <p className="text-3xl font-bold text-white tracking-tighter leading-none">
                               KSh {(b.totalPrice || 0).toLocaleString()}
                             </p>
                           ) : b.status === 'cancelled' ? (
-                            <p className="text-xl font-black text-emerald-200 capitalize tracking-[0.2em] italic leading-none opacity-50">Cancelled</p>
+                            <p className="text-xl font-bold text-emerald-200 capitalize tracking-[0.2em] italic leading-none opacity-50">Cancelled</p>
                           ) : (
                             <div className="flex flex-col gap-1">
-                              <p className="text-sm font-black text-white tracking-tighter flex items-center gap-2 leading-none">
+                              <p className="text-sm font-bold text-white tracking-tighter flex items-center gap-2 leading-none">
                                 <Zap className="w-4 h-4 fill-emerald-300" /> Awaiting Verification
                               </p>
                             </div>
@@ -564,7 +564,7 @@ export default function MyBookings() {
                           <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest mb-2">Est. Weight</p>
                           <div className="flex items-center gap-2 justify-end">
                             <Scale className="w-4 h-4 text-emerald-200" />
-                            <p className="text-lg font-black text-white capitalize leading-none">{b.actualWeightKg || b.weightKg || 0} KG</p>
+                            <p className="text-lg font-bold text-white capitalize leading-none">{b.actualWeightKg || b.weightKg || 0} KG</p>
                           </div>
                         </div>
                       </div>
@@ -600,13 +600,13 @@ export default function MyBookings() {
                     <div className="flex flex-row gap-2.5 pt-4">
                       <button
                         onClick={(e) => { e.stopPropagation(); handleReschedule(b); }}
-                        className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] capitalize tracking-[0.1em] shadow-xl shadow-blue-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                        className="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-bold text-[10px] capitalize tracking-[0.1em] shadow-xl shadow-blue-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
                         <CalendarClock className="w-4 h-4" /> Reschedule
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleCancel(b.id); setSelectedBooking(null); }}
-                        className="flex-1 py-4 bg-slate-500 dark:bg-slate-900 text-red-600 border border-red-50 dark:border-red-900/20 rounded-2xl font-black text-[10px] capitalize tracking-[0.1em] active:scale-95 transition-all flex items-center justify-center gap-2"
+                        className="flex-1 py-4 bg-slate-500 dark:bg-slate-900 text-red-600 border border-red-50 dark:border-red-900/20 rounded-2xl font-bold text-[10px] capitalize tracking-[0.1em] active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
                         <XCircle className="w-4 h-4" /> Cancel
                       </button>

@@ -385,7 +385,7 @@ export default function ImpactAnalytics() {
             <p className="text-[11px] font-medium text-emerald-100/80 mb-1">Total Waste Recycled</p>
             <div className="flex items-end gap-3 mb-1">
               <div className="flex items-baseline gap-1.5">
-                <h2 className="text-4xl font-black text-white tracking-tighter leading-none">{stats.totalWeight}</h2>
+                <h2 className="text-4xl font-bold text-white tracking-tighter leading-none">{stats.totalWeight}</h2>
                 <span className="text-sm font-bold text-emerald-400">KG</span>
               </div>
             </div>
@@ -428,18 +428,18 @@ export default function ImpactAnalytics() {
 
         {/* ── STATS STRIP (Horizontal Scroll) ── */}
         <div className="!mt-3">
-          <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1 mb-2">Your Stats at a Glance</p>
+          <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1 mb-2">Your Stats at a Glance</p>
           <div className="flex gap-2 overflow-x-auto no-scrollbar -mx-1.5 px-1.5 pb-1">
             {[
-              { label: 'Total Earned', value: `KSh ${stats.totalEarnings.toLocaleString()}`, icon: Wallet, bg: 'bg-emerald-100 dark:bg-emerald-900/30' },
-              { label: 'Rank', value: `#${stats.globalRank || '—'}`, icon: Trophy, bg: 'bg-blue-100 dark:bg-blue-900/30' },
-              { label: 'Total Pickups', value: `${stats.totalPickups}`, icon: Truck, bg: 'bg-purple-100 dark:bg-purple-900/30' },
-              { label: 'Total GFP', value: `${gfpPoints.toLocaleString()}`, icon: Star, bg: 'bg-amber-100 dark:bg-amber-900/30' },
+              { label: 'Total Earned', value: `KSh ${stats.totalEarnings.toLocaleString()}`, icon: Wallet, bg: 'bg-emerald-100' },
+              { label: 'Rank', value: `#${stats.globalRank || '—'}`, icon: Trophy, bg: 'bg-blue-100' },
+              { label: 'Total Pickups', value: `${stats.totalPickups}`, icon: Truck, bg: 'bg-purple-100' },
+              { label: 'Total GFP', value: `${gfpPoints.toLocaleString()}`, icon: Star, bg: 'bg-amber-100' },
             ].map((stat, i) => (
-              <div key={i} className={`shrink-0 w-[110px] flex flex-col items-center text-center justify-center ${stat.bg} rounded-xl p-3 border border-slate-900 dark:border-slate-500`}>
-                <stat.icon className="w-5 h-5 text-slate-900 dark:text-white mb-2" />
-                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-0.5">{stat.label}</p>
-                <p className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{stat.value}</p>
+              <div key={i} className={`shrink-0 w-[110px] flex flex-col items-center text-center justify-center ${stat.bg} rounded-xl p-3`}>
+                <stat.icon className="w-5 h-5 text-slate-900  mb-2" />
+                <p className="text-[9px] font-bold text-slate-600  uppercase tracking-widest mb-0.5">{stat.label}</p>
+                <p className="text-[14px] font-bold text-slate-900  tracking-tight leading-tight">{stat.value}</p>
               </div>
             ))}
           </div>
@@ -464,7 +464,7 @@ export default function ImpactAnalytics() {
                 <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Weekly</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-black text-slate-900 dark:text-white">
+                <span className="text-[11px] font-bold text-slate-900 dark:text-white">
                   {stats.currentWeekWeight}<span className="text-slate-400 font-semibold"> / {goals.weekly} KG</span>
                 </span>
                 <button
@@ -494,7 +494,7 @@ export default function ImpactAnalytics() {
                 <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Monthly</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-black text-slate-900 dark:text-white">
+                <span className="text-[11px] font-bold text-slate-900 dark:text-white">
                   {stats.currentMonthWeight}<span className="text-slate-400 font-semibold"> / {goals.monthly} KG</span>
                 </span>
                 <button
@@ -519,13 +519,13 @@ export default function ImpactAnalytics() {
 
         {/* ── WEEKLY TRENDS ── */}
         <div className="!mt-3">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 dark:from-[#12141c] dark:to-[#0a0c10] rounded-2xl overflow-hidden border border-slate-700/30 dark:border-slate-800/60 shadow-sm">
+          <div className="bg-gradient-to-br from-emerald-800 to-emerald-700 dark:from-[#12141c] dark:to-[#0a0c10] rounded-2xl overflow-hidden border border-slate-700/30 dark:border-slate-800/60 shadow-sm">
             {/* Summary header */}
             <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-white/5">
               <div>
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">This Week</p>
+                <p className="text-[9px] font-bold text-slate-100 uppercase tracking-widest mb-0.5">This Week</p>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-xl font-black text-white tracking-tight">{stats.currentWeekWeight} KG</span>
+                  <span className="text-xl font-bold text-white tracking-tight">{stats.currentWeekWeight} KG</span>
                   {stats.monthlyGrowth !== 0 && (
                     <span className={`text-[10px] font-bold ${stats.monthlyGrowth > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                       {stats.monthlyGrowth > 0 ? '▲' : '▼'} {Math.abs(stats.monthlyGrowth)}%
@@ -572,7 +572,7 @@ export default function ImpactAnalytics() {
                           }`}
                         />
                         {day.weight > 0 && (
-                          <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-black text-emerald-400">
+                          <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-emerald-400">
                             {day.weight}
                           </div>
                         )}
@@ -615,7 +615,7 @@ export default function ImpactAnalytics() {
                 <div className="w-14 h-14 bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl flex items-center justify-center mb-4 border border-emerald-100 dark:border-emerald-500/20 shadow-sm">
                   <Target className="w-7 h-7 text-emerald-600 dark:text-emerald-500" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white text-center mb-1.5 tracking-tight capitalize">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white text-center mb-1.5 tracking-tight capitalize">
                   {goalType} Target
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 text-center max-w-[260px] leading-relaxed">
@@ -632,7 +632,7 @@ export default function ImpactAnalytics() {
                       onClick={() => handleUpdateGoal(val)}
                       className={`relative py-4 rounded-2xl border flex flex-col items-center justify-center transition-all active:scale-95 overflow-hidden ${isCurrent ? 'bg-emerald-500 border-emerald-500 text-white shadow-md' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-emerald-500/50 hover:bg-emerald-50 dark:hover:bg-emerald-500/10'}`}
                     >
-                      <span className="text-xl font-black leading-none mb-1">{val}</span>
+                      <span className="text-xl font-bold leading-none mb-1">{val}</span>
                       <span className={`text-[10px] font-bold tracking-wider ${isCurrent ? 'text-emerald-100' : 'text-slate-400'}`}>KG</span>
                     </button>
                   );

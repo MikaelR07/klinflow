@@ -374,7 +374,7 @@ export default function RFQDetailsPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
 
           {rfq.imageUrls.length > 1 && (
-            <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+            <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest flex items-center gap-1.5">
               <span>
                 {activeImageIndex + 1} / {rfq.imageUrls.length}
               </span>
@@ -425,7 +425,7 @@ export default function RFQDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Client Name
                 </p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
                   {rfq.company}
                 </p>
               </div>
@@ -437,7 +437,7 @@ export default function RFQDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Required Weight
                 </p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
                   {rfq.quantity}
                 </p>
               </div>
@@ -449,7 +449,7 @@ export default function RFQDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Offered Price
                 </p>
-                <p className="text-xs font-black text-emerald-600 leading-none">
+                <p className="text-xs font-bold text-emerald-600 leading-none">
                   KSh {rfq.price}/kg
                 </p>
               </div>
@@ -461,7 +461,7 @@ export default function RFQDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Delivery Time
                 </p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
                   {rfq.delivery}
                 </p>
               </div>
@@ -473,7 +473,7 @@ export default function RFQDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Deadline
                 </p>
-                <span className="text-xs font-black text-rose-500 uppercase">
+                <span className="text-xs font-bold text-rose-500 uppercase">
                   {rfq.deadline === "Open"
                     ? "No Deadline"
                     : `${rfq.deadline} Left`}
@@ -487,7 +487,7 @@ export default function RFQDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Offers Submitted
                 </p>
-                <span className="text-xs font-black text-slate-900 dark:text-white">
+                <span className="text-xs font-bold text-slate-900 dark:text-white">
                   {rfq.offersSubmitted} proposal
                   {rfq.offersSubmitted !== 1 ? "s" : ""}
                 </span>
@@ -521,7 +521,7 @@ export default function RFQDetailsPage() {
             </p>
             <button
               onClick={() => navigate("/my-rfq-offers")}
-              className="mt-2 w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all"
+              className="mt-2 w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all"
             >
               View My Quotes
             </button>
@@ -532,7 +532,7 @@ export default function RFQDetailsPage() {
             className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5"
           >
             <div>
-              <h4 className="text-sm font-black text-slate-600 dark:text-white uppercase tracking-wider">
+              <h4 className="text-sm font-bold text-slate-600 dark:text-white uppercase tracking-wider">
                 Submit Bid Proposal
               </h4>
               <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
@@ -551,7 +551,7 @@ export default function RFQDetailsPage() {
 
             <div className="space-y-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                   Your Offer Rate (KSh/kg)
                 </label>
                 <div className="relative">
@@ -560,17 +560,17 @@ export default function RFQDetailsPage() {
                     value={bidPrice}
                     onChange={(e) => setBidPrice(e.target.value)}
                     placeholder="e.g. 28"
-                    className="w-full pl-4 pr-16 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full pl-4 pr-16 py-3 text-sm font-bold rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 uppercase">
                     KSh/kg
                   </span>
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                   Available Supply (kg)
                 </label>
                 <div className="relative">
@@ -579,10 +579,10 @@ export default function RFQDetailsPage() {
                     value={availableQty}
                     onChange={(e) => setAvailableQty(e.target.value)}
                     placeholder="e.g. 500"
-                    className="w-full pl-4 pr-12 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full pl-4 pr-12 py-3 text-sm font-bold rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 uppercase">
                     kg
                   </span>
                 </div>
@@ -590,33 +590,33 @@ export default function RFQDetailsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     Earliest Ship Date
                   </label>
                   <input
                     type="date"
                     value={shippingDate}
                     onChange={(e) => setShippingDate(e.target.value)}
-                    className="w-full px-4 py-3 text-[13px] font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full px-4 py-3 text-[13px] font-bold rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     Earliest Time
                   </label>
                   <input
                     type="time"
                     value={shippingTime}
                     onChange={(e) => setShippingTime(e.target.value)}
-                    className="w-full px-4 py-3 text-[13px] font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full px-4 py-3 text-[13px] font-bold rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
                     required
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                   Additional Notes
                 </label>
                 <textarea
@@ -629,7 +629,7 @@ export default function RFQDetailsPage() {
 
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     Attach Material Proof Images
                   </label>
                   <span className="text-[9px] font-bold text-slate-450 dark:text-slate-400 uppercase">
@@ -640,7 +640,7 @@ export default function RFQDetailsPage() {
                   {proofImages.length < 4 && (
                     <label className="aspect-square rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 transition-colors">
                       <Camera className="w-5 h-5 text-slate-400" />
-                      <span className="text-[8px] font-black text-slate-400 uppercase mt-1">
+                      <span className="text-[8px] font-bold text-slate-400 uppercase mt-1">
                         Upload
                       </span>
                       <input
@@ -679,7 +679,7 @@ export default function RFQDetailsPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-4 bg-primary hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em]  active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-primary hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em]  active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
               {submitting
                 ? "Submitting proposal..."

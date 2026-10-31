@@ -36,6 +36,18 @@ export default function DiscoveryHub() {
   const [showFilters, setShowFilters] = useState(false);
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [locationStatus, setLocationStatus] = useState<'requesting' | 'granted' | 'denied' | 'idle'>('idle');
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const bannerImages = ['/vectors/discover.webp', '/vectors/discover2.webp'];
+
+  // Auto-rotate carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % bannerImages.length);
+    }, 12000); // Change every 12 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const materials = ['all', 'recyclable', 'metal', 'ewaste', 'paper', 'glass', 'organic', 'general'];
 
@@ -101,7 +113,7 @@ export default function DiscoveryHub() {
   }, [partners, searchQuery]);
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-800 transition-colors">
+    <div className="bg-white dark:bg-slate-800 transition-colors">
       {/* ── FIXED HEADER ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50">
         <div className="w-full mx-auto">
@@ -170,7 +182,31 @@ export default function DiscoveryHub() {
         </div>
       </div>
 
-      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+9rem)] pb-6 px-0 space-y-6">
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+10rem)] pb-6 px-0 space-y-4">
+
+        {/* ── HERO BANNER CAROUSEL ── */}
+        <div className="px-1.5">
+          <div className="relative w-full h-40 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800/60 bg-white">
+            {bannerImages.map((image, index) => (
+              <img
+                key={image}
+                src={image}
+                alt={`Discover ${index + 1}`}
+                className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ease-in-out ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+              />
+            ))}
+            {/* Carousel dots */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+              {bannerImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${currentSlide === index ? 'bg-slate-900 w-6' : 'bg-slate-900/50'}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* ── EXPANDABLE FILTERS ── */}
         <AnimatePresence>
@@ -252,7 +288,7 @@ export default function DiscoveryHub() {
               return (
                 <div
                   key={partner.id}
-                  className="w-full bg-slate-100 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 overflow-hidden transition-all text-left block cursor-pointer"
+                  className="w-full bg-slate-50 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 overflow-hidden transition-all text-left block cursor-pointer"
                   onClick={() => navigate(`/company/${partner.id}`)}
                 >
                   <div className="p-2 flex gap-3 relative">
@@ -271,7 +307,7 @@ export default function DiscoveryHub() {
                       <div className="min-w-0 flex-1">
                         {/* Name & Badge */}
                         <div className="flex items-center gap-1 mb-1">
-                          <h4 className="text-[15px] font-bold text-[#0e1d2c] dark:text-white truncate">
+                          <h4 className="text-[15px] font-semibold text-[#0e1d2c] dark:text-white truncate">
                             {partner.name}
                           </h4>
                           {isOnlineNow && (
@@ -283,7 +319,7 @@ export default function DiscoveryHub() {
                         <div className="flex items-center gap-2 mb-2">
                           <div className="flex items-center gap-1">
                             <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                            <span className="text-[11px] font-black text-[#0e1d2c] dark:text-white">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
+                            <span className="text-[11px] font-bold text-[#0e1d2c] dark:text-white">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
                             {(partner.rating || 0) > 0 && <span className="text-[11px] font-medium text-slate-400">({partner.reviewCount || 0})</span>}
                           </div>
                           {partner.rating > 4.5 && (
@@ -370,7 +406,7 @@ export default function DiscoveryHub() {
             <div>
               <h4 className="text-xs font-semibold text-white dark:text-white capitalize tracking-widest mb-1">Choosing the right scale</h4>
               <p className="text-xs font-medium text-slate-200 leading-relaxed">
-                Standard agents use small vehicles for fast, small pickups. Bulk partners use trucks for estate-wide or industrial recycling.
+                some agents use small vehicles for fast, small pickups. Bulk collectors use trucks for Big pickups.
               </p>
             </div>
           </div>

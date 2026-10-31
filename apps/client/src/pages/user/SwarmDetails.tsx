@@ -157,7 +157,7 @@ export default function SwarmDetails() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
 
           {swarm.images && swarm.images.length > 1 && (
-            <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+            <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest flex items-center gap-1.5">
               <span>1 / {swarm.images.length}</span>
               <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
             </div>
@@ -197,7 +197,7 @@ export default function SwarmDetails() {
               <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Target Volume</p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{swarm.target_weight} KG</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">{swarm.target_weight} KG</p>
               </div>
             </div>
 
@@ -234,7 +234,7 @@ export default function SwarmDetails() {
             Swarm Progress
           </p>
 
-          <p className="text-xl font-black text-emerald-300 dark:text-emerald-400 leading-none">
+          <p className="text-xl font-bold text-emerald-300 dark:text-emerald-400 leading-none">
             {percentage}% Complete
           </p>
 
@@ -295,7 +295,7 @@ export default function SwarmDetails() {
                           <div className="flex items-center gap-2">
                             <p className="text-xs font-semibold text-slate-900 dark:text-white capitalize tracking-tight">{p.profiles?.name || 'Creator'}</p>
                             {p.user_id === swarm.creator_id && (
-                              <span className="text-[8px] font-black text-indigo-600 bg-indigo-50 dark:bg-indigo-500/20 dark:text-indigo-400 px-1.5 py-0.5 rounded uppercase tracking-wider">
+                              <span className="text-[8px] font-bold text-indigo-600 bg-indigo-50 dark:bg-indigo-500/20 dark:text-indigo-400 px-1.5 py-0.5 rounded uppercase tracking-wider">
                                 Creator
                               </span>
                             )}
@@ -306,7 +306,7 @@ export default function SwarmDetails() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-black text-indigo-600 dark:text-indigo-400">{p.pledged_weight} KG</p>
+                        <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{p.pledged_weight} KG</p>
                         {hasDetails && (
                           <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                         )}

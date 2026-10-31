@@ -361,13 +361,13 @@ export default function PostTradeCollectionStep({
                           {searchedAgent.profile_photo ? (
                             <img src={searchedAgent.profile_photo} alt={searchedAgent.full_name} className="w-full h-full object-cover" />
                           ) : (
-                            <span className="text-sm font-black text-slate-500 dark:text-slate-400">{searchedAgent.full_name?.charAt(0) || 'A'}</span>
+                            <span className="text-sm font-bold text-slate-500 dark:text-slate-400">{searchedAgent.full_name?.charAt(0) || 'A'}</span>
                           )}
                         </div>
                         <div className="flex-1 min-w-0 pr-6">
                           <div className="flex items-center gap-2 mb-0.5">
                             <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{searchedAgent.full_name}</h4>
-                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[9px] font-black uppercase tracking-widest rounded-md">
+                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-[9px] font-bold uppercase tracking-widest rounded-md">
                               {searchedAgent.agent_type === 'company_admin' ? 'Enterprise' : searchedAgent.agent_type === 'fleet_driver' ? 'Fleet Agent' : 'Independent'}
                             </span>
                           </div>

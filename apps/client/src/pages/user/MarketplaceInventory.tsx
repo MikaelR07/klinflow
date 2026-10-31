@@ -183,7 +183,7 @@ export default function MarketplaceInventory() {
                   onClick={() => setActiveTab(tab)}
                   className={`flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                     activeTab === tab
-                      ? "bg-primary dark:bg-primary shadow-sm text-white dark:text-white font-black"
+                      ? "bg-primary dark:bg-primary shadow-sm text-white dark:text-white font-bold"
                       : "text-slate-500 bg-slate-300 dark:bg-slate-900 hover:text-slate-600 dark:hover:text-slate-300"
                   }`}
                 >
@@ -264,7 +264,7 @@ export default function MarketplaceInventory() {
                     ? selectedListing.photoUrls
                     : [selectedListing?.photoUrl]
                   ).length > 1 && (
-                    <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+                    <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest flex items-center gap-1.5">
                       <span>
                         1 /{" "}
                         {
@@ -323,7 +323,7 @@ export default function MarketplaceInventory() {
                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                           Asking Rate
                         </p>
-                        <p className="text-xs font-black text-emerald-600 leading-none">
+                        <p className="text-xs font-bold text-emerald-600 leading-none">
                           KSh {selectedListing.pricePerKg}/kg
                         </p>
                       </div>
@@ -337,7 +337,7 @@ export default function MarketplaceInventory() {
                             ? "Inventory Load"
                             : "Total Load"}
                         </p>
-                        <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                        <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
                           {displayQuantity} KG
                         </p>
                       </div>
@@ -384,7 +384,7 @@ export default function MarketplaceInventory() {
                       ? "Settled Value"
                       : "Est. Total Value"}
                   </p>
-                  <p className="text-xl font-black text-white leading-none">
+                  <p className="text-xl font-bold text-white leading-none">
                     KSh {estValue.toLocaleString()}
                   </p>
                   <p className="text-[10px] text-emerald-300 font-bold capitalize mt-1.5">
@@ -395,7 +395,7 @@ export default function MarketplaceInventory() {
 
                 {/* Description */}
                 <div className="bg-white dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2">
-                  <h4 className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em]">
+                  <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em]">
                     Description
                   </h4>
                   <p className="text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
@@ -408,13 +408,13 @@ export default function MarketplaceInventory() {
                   {selectedListing.status === "active" ? (
                     <button
                       onClick={handleDelete}
-                      className="w-full py-3.5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-2xl font-black text-xs capitalize tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3"
+                      className="w-full py-3.5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-2xl font-bold text-xs capitalize tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3"
                     >
                       <Trash2 className="w-4 h-4" /> Delete Listing
                     </button>
                   ) : (
                     <div
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-center gap-3 text-xs font-black capitalize tracking-[0.2em] ${
+                      className={`p-4 rounded-2xl border-2 flex items-center justify-center gap-3 text-xs font-bold capitalize tracking-[0.2em] ${
                         selectedListing.status === "sold"
                           ? "bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-950/20 dark:border-emerald-900/30"
                           : selectedListing.status === "cancelled"
@@ -436,7 +436,7 @@ export default function MarketplaceInventory() {
                   )}
                   <button
                     onClick={() => setSelectedId(null)}
-                    className="w-full py-3.5 bg-slate-200 dark:bg-slate-900/50 text-slate-400 rounded-2xl font-black text-[10px] capitalize tracking-[0.2em] active:scale-95 transition-all"
+                    className="w-full py-3.5 bg-slate-200 dark:bg-slate-900/50 text-slate-400 rounded-2xl font-bold text-[10px] capitalize tracking-[0.2em] active:scale-95 transition-all"
                   >
                     Return to Inventory
                   </button>
@@ -496,7 +496,7 @@ export default function MarketplaceInventory() {
                             {/* Row 1: Material & Price */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5 min-w-0">
-                                <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
+                                <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
                                   {listing.material}
                                 </h3>
                                 <span
@@ -511,8 +511,8 @@ export default function MarketplaceInventory() {
                                 )}
                               </div>
                               <div className="text-right shrink-0 ml-2 mt-1">
-                                <p className="text-base font-black text-emerald-600 leading-none tracking-tighter">
-                                  KSh {listing.pricePerKg}<span className="text-[9px] text-emerald-600/70 font-black">/kg</span>
+                                <p className="text-base font-bold text-emerald-600 leading-none tracking-tighter">
+                                  KSh {listing.pricePerKg}<span className="text-[9px] text-emerald-600/70 font-bold">/kg</span>
                                 </p>
                               </div>
                             </div>
@@ -541,7 +541,7 @@ export default function MarketplaceInventory() {
                                     )
                                   : "ASAP"}
                               </p>
-                              <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
+                              <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
                                 <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">
                                   Qty:
                                 </span>

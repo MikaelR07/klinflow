@@ -63,12 +63,12 @@ export default function SettingsMenu() {
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600  transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex flex-col">
-            <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
             <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Profile & Settings</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shadow-sm shadow-primary/10">
-              <p className="text-[10px] font-black text-primary capitalize tracking-[0.2em]">{roleLabel}</p>
+              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">{roleLabel}</p>
             </div>
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function SettingsMenu() {
 
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3 ">
-          <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
+          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-4 ">
@@ -261,13 +261,13 @@ export default function SettingsMenu() {
             await logout();
             navigate('/login', { replace: true });
           }}
-          className=" mx-auto p-8 py-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
+          className=" mx-auto p-8 py-5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-bold text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
         >
           <LogOut className="w-5 h-5" /> Logout
         </button>
 
         <div className="text-center space-y-1 py-4">
-          <p className="text-[10px] font-black text-slate-300 dark:text-slate-700 capitalize tracking-[0.5em]">Klinflow Operating System</p>
+          <p className="text-[10px] font-bold text-slate-300 dark:text-slate-700 capitalize tracking-[0.5em]">Klinflow Operating System</p>
           <p className="text-[8px] font-bold text-slate-400 dark:text-slate-600 capitalize tracking-widest">V1.0.4 • Kenya Eco-System</p>
         </div>
       </main>

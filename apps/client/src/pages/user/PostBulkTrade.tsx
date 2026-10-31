@@ -256,11 +256,11 @@ export default function PostBulkTrade() {
           <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-800/50 mb-6 flex items-center justify-between">
             <div>
               <p className="text-[10px] font-bold text-indigo-400 capitalize tracking-widest mb-1">Community Bulk Drive</p>
-              <h3 className="text-sm font-black text-indigo-900 dark:text-indigo-100 capitalize">{swarm?.material} • {quantity} KG</h3>
+              <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-100 capitalize">{swarm?.material} • {quantity} KG</h3>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold text-indigo-400 capitalize tracking-widest mb-1">Contributors</p>
-              <p className="text-sm font-black text-indigo-900 dark:text-indigo-100">{participants.length}</p>
+              <p className="text-sm font-bold text-indigo-900 dark:text-indigo-100">{participants.length}</p>
             </div>
           </div>
         </AnimatePresence>

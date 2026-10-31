@@ -149,8 +149,8 @@ export default function MyRFQOffers() {
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 dark:from-emerald-900 dark:via-emerald-800 dark:to-teal-900"></div>
             <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
             <div className="relative z-10 p-4 h-full flex flex-col justify-center">
-              <h3 className="text-[20px] font-black text-white leading-tight">Track Your Proposals.</h3>
-              <h3 className="text-[20px] font-black text-amber-200 leading-tight">Secure More Deals.</h3>
+              <h3 className="text-[20px] font-bold text-white leading-tight">Track Your Proposals.</h3>
+              <h3 className="text-[20px] font-bold text-amber-200 leading-tight">Secure More Deals.</h3>
               <p className="text-[11px] font-semibold text-emerald-50/90 leading-tight max-w-[240px] mt-1.5">
                 Monitor the status of your submitted quotes and engage directly with buyers to finalize contracts.
               </p>
@@ -236,7 +236,7 @@ export default function MyRFQOffers() {
                       </div>
                       
                       <div className="flex flex-col py-0.5 flex-1">
-                        <h4 className="text-[15px] font-black text-slate-900 dark:text-white tracking-tight leading-tight line-clamp-1 max-w-[160px]">
+                        <h4 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight line-clamp-1 max-w-[160px]">
                           {(() => {
                             let raw = materialPrices?.find(m => m.id === quote.material || `${quote.category}_${m.id}` === quote.material)?.material_name;
                             if (!raw) raw = getSubcategoryLabel(quote.category, quote.material);
@@ -275,7 +275,7 @@ export default function MyRFQOffers() {
                       {/* Bottom Right: Quote Price */}
                       <div className="text-right mt-auto">
                         <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Your Quote</p>
-                        <p className="text-base font-black text-emerald-600 leading-none">
+                        <p className="text-base font-bold text-emerald-600 leading-none">
                           KSh {quote.quotedPrice}<span className="text-[9px] text-emerald-600/70">/kg</span>
                         </p>
                       </div>

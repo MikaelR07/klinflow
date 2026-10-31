@@ -272,7 +272,7 @@ export default function SellerHome() {
                 </div>
               </div>
               <div>
-                <h1 className="text-[17px] font-black text-white tracking-wide leading-none drop-shadow-sm">
+                <h1 className="text-[17px] font-bold text-white tracking-wide leading-none drop-shadow-sm">
                   Hello, {(profile?.fullName || profile?.name || 'Merchant').split(' ')[0]}!👋
                 </h1>
                 <div className="flex items-center gap-1.5 mt-1 text-[10px] text-white/90 font-semibold capitalize tracking-wider bg-black/10 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/20 w-fit">
@@ -311,19 +311,19 @@ export default function SellerHome() {
             <div className="relative z-10 flex flex-col gap-1">
               <div className="flex justify-between items-start mb-1">
                 <div>
-                  <p className="text-[10px] font-black text-emerald-100 uppercase tracking-widest mb-1 flex items-center gap-1">
+                  <p className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest mb-1 flex items-center gap-1">
                     <Wallet className="w-4 h-4" /> Wallet Balance
                   </p>
                   <div className="flex items-baseline gap-1">
                     <span className="text-xl font-bold text-white/90">Ksh</span>
-                    <h2 className="text-2xl font-black text-white tracking-tighter leading-none drop-shadow-md">
+                    <h2 className="text-2xl font-semibold text-white tracking-tighter leading-none drop-shadow-md">
                       {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </h2>
                   </div>
                 </div>
                 <button
                   onClick={() => navigate('/withdraw')}
-                  className="bg-white text-emerald-700 mt-1 px-5 py-3 rounded-2xl text-sm font-black capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-emerald-50"
+                  className="bg-white text-emerald-700 mt-1 px-5 py-3 rounded-2xl text-sm font-semibold capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-emerald-50"
                 >
                   Withdraw
                 </button>
@@ -331,15 +331,15 @@ export default function SellerHome() {
 
               <div className="flex items-center gap-1 pt-3 border-t border-white/20">
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                  <span className="text-base font-black text-white">{totalDeals}</span>
+                  <span className="text-base font-bold text-white">{totalDeals}</span>
                   <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3" /> Active Trades</span>
                 </div>
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                  <span className="text-base font-black text-white">{totalSoldKg}</span>
+                  <span className="text-base font-bold text-white">{totalSoldKg}</span>
                   <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Scale className="w-3 h-3" /> KG Sold</span>
                 </div>
                 <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20">
-                  <span className="text-base font-black text-amber-300 drop-shadow-sm">{gfpBalance.toLocaleString()}</span>
+                  <span className="text-base font-bold text-amber-300 drop-shadow-sm">{gfpBalance.toLocaleString()}</span>
                   <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
                 </div>
               </div>
@@ -352,7 +352,7 @@ export default function SellerHome() {
       <div className="max-w-xl mx-auto px-2.5 space-y-6 -mt-10 pb-5 relative z-20">
         <motion.div variants={itemVariants} className="bg-white dark:bg-slate-900 rounded-[12px] p-1.5  shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
           <div className="space-y-2">
-            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
+            <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             {/* ── HUSTLE ACTION CENTER (QUARTET CONTROLS) ── */}
             <div className="grid grid-cols-4 gap-1">
               {[
@@ -378,18 +378,89 @@ export default function SellerHome() {
                 </button>
               ))}
             </div>
-            
+
           </div>
         </motion.div>
 
-        {/* ── CATALOG: E-COMMERCE SCROLL ── */}
-        <motion.div variants={itemVariants} className="space-y-2 ">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
-            
+        {/* ── KLINFLOW BANNERS ── */}
+        <motion.div variants={itemVariants} className="!mt-4">
+          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
+            {/* Banner 1 */}
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[21/9]">
+              <img src="/vectors/ecoBanner.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
+
+            {/* Banner 2 */}
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[21/9] bg-slate-900">
+              <img src="/vectors/ecoBanner2.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
           </div>
-          
-          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory pr-6">
+        </motion.div>
+
+        {/* ── BUSINESS TOOLS ── */}
+        <motion.div variants={itemVariants} className="!mt-2">
+          <div className="flex items-center justify-between px-1.5 mb-2">
+            <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest">Business Tools</h3>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 px-1.5">
+            {/* ── CONTRACTS ── */}
+            <button
+              onClick={() => navigate("/group-rfqs")}
+              className="bg-white dark:bg-slate-800 rounded-2xl aspect-[4/3] shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
+            >
+              <img src="/vectors/contracts.webp" alt="Contracts" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
+                {activeContractsCount} active
+              </div>
+            </button>
+
+            {/* ── MARKET PRICES ── */}
+            <button
+              onClick={() => navigate("/market-pulse")}
+              className="bg-white dark:bg-slate-800 rounded-2xl aspect-[4/3] shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
+            >
+              <img src="/vectors/prices.webp" alt="Market Prices" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute bottom-2 right-2 bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
+                Live
+              </div>
+            </button>
+          </div>
+        </motion.div>
+
+        {/* ── SWARMS (Horizontal Card) ── */}
+        <motion.div variants={itemVariants} className="!mt-2 px-1.5">
+          <button
+            onClick={() => navigate("/swarms")}
+            className="w-full bg-gradient-to-br from-primary to-emerald-600 rounded-xl p-4 flex items-center gap-3 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-primary relative overflow-hidden group"
+          >
+            <div className="w-11 h-11 shrink-0 bg-white/20 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform">
+              <MapPinned className="w-6 h-6 text-white" />
+            </div>
+            <div className="text-left flex-1 min-w-0">
+              <h4 className="text-[15px] font-bold text-white leading-none mb-1">Swarms</h4>
+              <p className="text-[11px] font-semibold text-emerald-100 leading-tight">Join group collection networks nearby</p>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <div className="bg-white/20 px-2 py-1 rounded-lg flex items-center gap-1">
+                <ArrowRight className="w-3 h-3 text-white" />
+                <span className="text-[10px] font-bold text-white">{activeSwarmsCount} nearby</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-emerald-200" />
+            </div>
+          </button>
+        </motion.div>
+
+        {/* ── CATALOG: E-COMMERCE SCROLL ── */}
+        <motion.div variants={itemVariants} className="space-y-2 !mt-4">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest">What Collectors Buy!</h3>
+
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-4 custom-scrollbar pr-8 scroll-smooth">
             {/* Left spacer */}
             <div className="w-0.5 shrink-0" />
             {(() => {
@@ -407,16 +478,16 @@ export default function SellerHome() {
                 if (id.includes('mix') || name.includes('mix') || id.includes('recyclable')) return 7;
                 return 99;
               };
-              
+
               return [...items].sort((a, b) => getSortIndex(a) - getSortIndex(b));
             })().map((item: any, idx: number) => {
               const palette = COLOR_PALETTES[idx % COLOR_PALETTES.length];
               const isDB = categories.length > 0;
               const priceVal = isDB ? (item.price_per_unit || item.price_per_kg || 0) : null;
-              const displayPrice = isDB 
-                ? (priceVal ? `Upto ${priceVal}/kg` : 'VARIES') 
+              const displayPrice = isDB
+                ? (priceVal ? `Upto ${priceVal}/kg` : 'VARIES')
                 : (item.price.includes('VARIES') ? 'VARIES' : `Upto ${item.price}`);
-              
+
               const identifier = (item.slug || item.id || '').toLowerCase();
               const itemLabel = (item.label || item.name || '').toLowerCase();
               let bgImage = item.image_url;
@@ -433,12 +504,12 @@ export default function SellerHome() {
                 else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
                 else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
               }
-              
+
               return (
-                <div 
-                  key={item.id} 
+                <div
+                  key={item.id}
                   onClick={() => navigate(`/materials/${identifier}`)}
-                  className={`snap-start relative shrink-0 w-[110px] h-[105px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-2.5 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col overflow-hidden`}
+                  className={`snap-start relative shrink-0 w-[120px] h-[120px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-3 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col overflow-hidden`}
                   style={bgImage ? {
                     backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.3)), url(${bgImage})`,
                     backgroundSize: 'cover',
@@ -446,9 +517,9 @@ export default function SellerHome() {
                   } : {}}
                 >
                   <div className="flex-1" />
-                  <h4 className={`text-[12px] font-black mb-1 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
-                  <div className={`rounded-lg px-1.5 py-1.5 relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
-                    <p className={`text-[9px] font-black text-center leading-none ${bgImage ? 'text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>{displayPrice}</p>
+                  <h4 className={`text-[13px] font-bold mb-1 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
+                  <div className={`rounded-lg px-2 py-1.5 relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
+                    <p className={`text-[10px] font-semibold text-center leading-none ${bgImage ? 'text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>{displayPrice}</p>
                   </div>
                 </div>
               );
@@ -456,120 +527,10 @@ export default function SellerHome() {
           </div>
         </motion.div>
 
-        {/* ── KLINFLOW BANNERS ── */}
-        <motion.div variants={itemVariants} className="!mt-2">
-          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
-            {/* Left spacer */}
-            {/* <div className="w-0.5 shrink-0" /> */}
-            {/* Banner 1 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] p-4 flex flex-col justify-center overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 min-h-[130px]">
-              <img src="/vectors/ecoBanner.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-              <div className="relative z-10 flex flex-col gap-1 w-[65%] sm:w-[65%]">
-                <h3 className="text-[16px] font-black text-amber-500 dark:text-white leading-tight mb-1">
-                  Endless Possibilities<br />for Everyone <ArrowRight className="inline w-3.5 h-3.5 ml-1" />
-                </h3>
-                <p className="text-[11px] font-medium text-emerald-100 dark:text-emerald-300/80 leading-tight">
-                  Whether you collect, buy, sell or create, we connect you to opportunities.
-                </p>
-              </div>
-            </div>
-
-            {/* Banner 2 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 min-h-[130px] bg-slate-900">
-              <img src="/vectors/ecoBanner2.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover pointer-events-none" />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ── BUSINESS TOOLS ── */}
-        <motion.div variants={itemVariants} className="!mt-2 space-y-2 px-1.5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-[12px] font-black text-slate-600 dark:text-white capitalize tracking-widest">Business Tools</h3>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-1.5">
-            {/* ── CONTRACTS ── */}
-            <button 
-              onClick={() => navigate("/group-rfqs")}
-              className="w-full bg-indigo-100 dark:bg-slate-900 rounded-xl p-4 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
-            >
-              <div className="w-10 h-10 shrink-0 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <ScrollText className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
-              </div>
-              <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
-                <div className="min-w-0">
-                  <h4 className="text-sm max-[360px]:text-[12px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Contracts</h4>
-                  <p className="text-[11px] max-[360px]:text-[10px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View material requests</p>
-                </div>
-                
-                <div className="flex items-center justify-between gap-1 w-full mt-auto">
-                  <div className="bg-indigo-50 dark:bg-indigo-900/40 px-1.5 py-0.5 rounded-[8px] flex items-center gap-1 min-w-0 shrink">
-                    <ArrowRight className="w-2.5 h-2.5 text-indigo-500 shrink-0" />
-                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 truncate">{activeContractsCount} active</span>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600 shrink-0" />
-                </div>
-              </div>
-            </button>
-
-            {/* ── MARKET PRICES ── */}
-            <button 
-              onClick={() => navigate("/market-pulse")}
-              className="w-full bg-amber-50 dark:bg-slate-900 rounded-xl p-4 flex items-start gap-2.5 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-100 dark:border-slate-700 relative overflow-hidden group"
-            >
-              <div className="w-10 h-10 shrink-0 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform self-start">
-                <BarChart3Icon className="w-8 h-8 text-amber-600 dark:text-amber-400" />
-              </div>
-              <div className="text-left flex-1 min-w-0 flex flex-col w-full h-full justify-between">
-                <div className="min-w-0">
-                  <h4 className="text-sm max-[360px]:text-[12px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Market Prices</h4>
-                  <p className="text-[11px] max-[360px]:text-[9.5px] font-semibold text-slate-500 dark:text-slate-400 leading-tight mb-3">View live material prices</p>
-                </div>
-                
-                <div className="flex items-center justify-between gap-1 w-full mt-auto">
-                  <div className="bg-amber-50 dark:bg-amber-900/40 px-1.5 py-0.5 rounded-[8px] flex items-center gap-1 min-w-0 shrink">
-                    <TrendingUp className="w-2.5 h-2.5 text-amber-500 shrink-0" />
-                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 truncate">Live</span>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-600 shrink-0" />
-                </div>
-              </div>
-            </button>
-          </div>
-        </motion.div>
-
-        {/* ── SWARMS (Horizontal Card) ── */}
-        <motion.div variants={itemVariants} className="!mt-2 px-1.5">
-          <button 
-            onClick={() => navigate("/swarms")}
-            className="w-full bg-gradient-to-tl from-primary to-emerald-600 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-[20px] p-4 flex items-center justify-between cursor-pointer hover:shadow-md active:scale-[0.98] transition-all shadow-sm group relative overflow-hidden"
-          >
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 bg-white/10 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                <MapPinned className="w-6 h-6 text-emerald-100 dark:text-emerald-400" />
-              </div>
-              <div className="text-left min-w-0">
-                <h4 className="text-sm font-bold text-slate-50 dark:text-white tracking-tight leading-none mb-1">Swarms</h4>
-                <p className="text-[11px] font-semibold text-slate-200 dark:text-slate-400 leading-tight">Join group collection networks nearby</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 shrink-0 relative z-10">
-              <div className="bg-emerald-50 dark:bg-emerald-900/40 px-2 py-0.5 rounded-lg flex items-center gap-1">
-                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">{activeSwarmsCount} nearby</span>
-              </div>
-              <div className="w-8 h-8 rounded-full dark:bg-slate-700 flex items-center justify-center group-hover:bg-slate-200 dark:group-hover:bg-slate-600 transition-colors">
-                <ChevronRight className="w-4 h-4 text-white dark:text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-              </div>
-            </div>
-          </button>
-        </motion.div>
-
-
-
       </div>
 
       {/* Floating AI Voice Assistant */}
-      <motion.button
+      {/* <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => navigate("/hygenex")}
@@ -577,7 +538,7 @@ export default function SellerHome() {
       >
         <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
         <BrainCircuit className="w-6 h-6 text-white" />
-      </motion.button>
+      </motion.button> */}
     </div>
   );
 }

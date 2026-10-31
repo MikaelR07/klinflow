@@ -54,7 +54,7 @@ const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank:
           )}
         </div>
         {/* Rank badge */}
-        <div className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 ${config.badge} text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center shadow-md`}>
+        <div className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 ${config.badge} text-[10px] font-bold w-6 h-6 rounded-full flex items-center justify-center shadow-md`}>
           {config.badgeText}
         </div>
       </div>
@@ -65,7 +65,7 @@ const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank:
           {user?.name || '—'}
         </p>
         {user ? (
-          <p className={`${isFirst ? 'text-[13px]' : 'text-[11px]'} font-black ${rank === 1 ? 'text-amber-600 dark:text-amber-400' : rank === 3 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-300'} leading-none`}>
+          <p className={`${isFirst ? 'text-[13px]' : 'text-[11px]'} font-bold ${rank === 1 ? 'text-amber-600 dark:text-amber-400' : rank === 3 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-300'} leading-none`}>
             {metric}
           </p>
         ) : (
@@ -89,7 +89,7 @@ const RankListItem = memo(({ user, metric, metricLabel }: { user: any; metric: s
       }`}
   >
     {/* Rank */}
-    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-[11px] font-black ${user.isUser
+    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-[11px] font-bold ${user.isUser
       ? 'bg-emerald-100 dark:bg-emerald-800/40 text-emerald-600 dark:text-emerald-400'
       : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
     }`}>
@@ -120,7 +120,7 @@ const RankListItem = memo(({ user, metric, metricLabel }: { user: any; metric: s
 
     {/* Metric */}
     <div className="text-right shrink-0">
-      <p className={`text-[13px] font-black leading-none ${user.isUser ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
+      <p className={`text-[13px] font-bold leading-none ${user.isUser ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
         {metric}
       </p>
     </div>
@@ -216,7 +216,7 @@ function SellerLeaderboard() {
           <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mx-auto mb-3 border border-white/10">
             <Trophy className="w-7 h-7 text-amber-400" />
           </div>
-          <h2 className="text-xl font-black text-white tracking-tight mb-1">Profit Dominance</h2>
+          <h2 className="text-xl font-bold text-white tracking-tight mb-1">Profit Dominance</h2>
           <p className="text-[11px] font-medium text-white/60 leading-snug max-w-[260px] mx-auto">
             Top merchants unlock premium buyer access and zero-fee withdrawals.
           </p>
@@ -231,7 +231,7 @@ function SellerLeaderboard() {
               <TrendingUp className="w-8 h-8 text-indigo-400" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-slate-900 dark:text-white">No Masters Yet</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">No Masters Yet</h3>
               <p className="text-[12px] font-medium text-slate-500 mt-1 max-w-[240px] mx-auto leading-relaxed">
                 The market is wide open. Claim the <span className="text-indigo-500 font-bold">#1 spot</span>!
               </p>
@@ -258,7 +258,7 @@ function SellerLeaderboard() {
                 <Info className="w-4.5 h-4.5 text-indigo-500" />
               </div>
               <div>
-                <h4 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.15em] leading-none mb-1">Elite Merchant Status</h4>
+                <h4 className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-[0.15em] leading-none mb-1">Elite Merchant Status</h4>
                 <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                   Rankings are based on <span className="text-indigo-600 dark:text-indigo-400 font-bold">Net Revenue</span>. Higher ranks get prioritized for bulk marketplace contracts.
                 </p>
@@ -268,7 +268,7 @@ function SellerLeaderboard() {
             {/* Full List */}
             {topSellers.length > 3 && (
               <div className="flex flex-col gap-2">
-                <span className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-400 px-1 mb-1">All Rankings</span>
+                <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-400 px-1 mb-1">All Rankings</span>
                 {topSellers.slice(3, visibleCount).map((user) => (
                   <RankListItem key={user.id} user={user} metric={`KSh ${user.revenue.toLocaleString()}`} metricLabel="Revenue" />
                 ))}
@@ -422,7 +422,7 @@ export default function Leaderboard() {
             <ArrowLeft className="w-4.5 h-4.5 text-white" />
           </button>
           <div>
-            <h1 className="text-[15px] font-black text-white tracking-tight leading-none">Wall of Fame</h1>
+            <h1 className="text-[15px] font-bold text-white tracking-tight leading-none">Wall of Fame</h1>
             <p className="text-[9px] font-bold text-white/70 uppercase tracking-widest mt-0.5">Top Contributors</p>
           </div>
         </div>
@@ -437,7 +437,7 @@ export default function Leaderboard() {
                <Recycle className="w-8 h-8 text-primary/40" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-slate-900 dark:text-white">No Champions Yet</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">No Champions Yet</h3>
               <p className="text-[12px] font-medium text-slate-500 mt-1 max-w-[240px] mx-auto leading-relaxed">
                 The leaderboard is waiting for its first eco-hero. Claim the <span className="text-primary font-bold">#1 spot</span>!
               </p>
@@ -455,7 +455,7 @@ export default function Leaderboard() {
 
             {/* Podium Title */}
             <div className="text-center mt-2 mb-8 relative z-10">
-              <h2 className="text-[20px] font-black text-white tracking-tight drop-shadow-lg">Champions Eco Leaderboard</h2>
+              <h2 className="text-[20px] font-bold text-white tracking-tight drop-shadow-lg">Champions Eco Leaderboard</h2>
               <p className="text-[11px] font-semibold text-white/60 mt-0.5">Top recyclers making a real impact</p>
             </div>
 
@@ -472,7 +472,7 @@ export default function Leaderboard() {
                 <Info className="w-4 h-4 text-amber-500" />
               </div>
               <div>
-                <h4 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1">How to Rank Up</h4>
+                <h4 className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1">How to Rank Up</h4>
                 <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                   Every KG recycled pushes you higher. Top champions get recognition and win exclusive Klinflow perks!
                 </p>
@@ -482,7 +482,7 @@ export default function Leaderboard() {
             {/* Full List (rank 4+) */}
             {topUsers.length > 3 && (
               <div className="flex flex-col gap-2 pb-24">
-                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 px-1 mb-1">All Rankings</span>
+                <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1 mb-1">All Rankings</span>
                 {topUsers.slice(3, visibleCount).map((user) => (
                   <RankListItem key={user.id} user={user} metric={`${user.kg} KG`} metricLabel="Collected" />
                 ))}

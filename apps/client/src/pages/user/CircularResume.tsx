@@ -52,7 +52,7 @@ function ShareResumeModal({ isOpen, onClose, profile, stats, trustScore, level }
               />
             </div>
 
-            <h4 className="text-lg font-black text-slate-900 dark:text-white mb-0.5">{profile?.name}</h4>
+            <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-0.5">{profile?.name}</h4>
             <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-widest mb-3">
               <CheckCircle2 className="w-3.5 h-3.5" /> Klinflow Verified
             </div>
@@ -60,11 +60,11 @@ function ShareResumeModal({ isOpen, onClose, profile, stats, trustScore, level }
             <div className="w-full grid grid-cols-2 gap-2 mt-2 pt-4 border-t border-slate-200 dark:border-slate-700">
               <div>
                 <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Trust Score</p>
-                <p className="text-sm font-black text-slate-900 dark:text-white">{trustScore}</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-white">{trustScore}</p>
               </div>
               <div>
                 <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Volume</p>
-                <p className="text-sm font-black text-slate-900 dark:text-white">{stats.totalKg} kg</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-white">{stats.totalKg} kg</p>
               </div>
             </div>
           </div>
@@ -115,29 +115,29 @@ function OverviewTab({ profile, stats, level, trustScore, badges, timeOnPlatform
       
       {/* Verified Economic Activity */}
       <section>
-        <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Verified Economic Activity</h3>
+        <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Verified Economic Activity</h3>
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
           <div className="grid grid-cols-2 gap-y-6 gap-x-4">
             <div>
               <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Lifetime Volume</p>
-              <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{stats.totalKg.toLocaleString()} kg</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">{stats.totalKg.toLocaleString()} kg</p>
               <p className="text-[10px] font-medium text-slate-400 mt-0.5">Materials recovered</p>
             </div>
             <div>
               <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Transaction Value</p>
-              <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">KSh {stats.lifetimeEarnings.toLocaleString()}</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">KSh {stats.lifetimeEarnings.toLocaleString()}</p>
               <p className="text-[10px] font-medium text-slate-400 mt-0.5">Verified payouts</p>
             </div>
             <div>
               <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Completed Jobs</p>
-              <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{stats.count.toLocaleString()}</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">{stats.count.toLocaleString()}</p>
               <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-500 mt-0.5 flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" /> Track record
               </p>
             </div>
             <div>
               <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Time on Platform</p>
-              <p className="text-lg font-black text-slate-900 dark:text-white tracking-tight">{timeOnPlatform}</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">{timeOnPlatform}</p>
               <p className="text-[10px] font-medium text-emerald-600 dark:text-emerald-500 mt-0.5 flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3" /> Consistent activity
               </p>
@@ -148,14 +148,14 @@ function OverviewTab({ profile, stats, level, trustScore, badges, timeOnPlatform
 
       {/* Professional Progression */}
       <section>
-        <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Professional Progression</h3>
+        <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Professional Progression</h3>
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-5">
           {/* Current Tier + Progress */}
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
                 <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Current Tier</p>
-                <h4 className="text-base font-black text-slate-900 dark:text-white capitalize flex items-center gap-2">
+                <h4 className="text-base font-bold text-slate-900 dark:text-white capitalize flex items-center gap-2">
                   <span>{progression.current.icon}</span> {progression.current.name}
                 </h4>
               </div>
@@ -212,7 +212,7 @@ function OverviewTab({ profile, stats, level, trustScore, badges, timeOnPlatform
 
       {/* Skills & Verifications */}
       <section>
-        <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Skills & Verifications</h3>
+        <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Skills & Verifications</h3>
         <div className="grid gap-2">
           {badges.map((badge: any, i: number) => (
             <div key={i} className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col gap-2 overflow-hidden group hover:border-emerald-500/30 transition-colors">
@@ -233,7 +233,7 @@ function OverviewTab({ profile, stats, level, trustScore, badges, timeOnPlatform
                   }`}>
                     <badge.icon className="w-5 h-5 text-black dark:text-black" />
                   </div>
-                  <h4 className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight">{badge.title}</h4>
+                  <h4 className="text-[14px] font-bold text-slate-900 dark:text-white tracking-tight">{badge.title}</h4>
                 </div>
                 <span className={`text-[8px] font-bold uppercase tracking-wider px-2 py-1 rounded-full shrink-0 ${
                   badge.color === 'emerald' ? 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400' :
@@ -284,7 +284,7 @@ function ActivityTab({ bookings, stats }: any) {
       
       {/* Impact & Work History */}
       <section>
-        <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Impact & History</h3>
+        <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Impact & History</h3>
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
           
           {/* Impact Stats */}
@@ -292,11 +292,11 @@ function ActivityTab({ bookings, stats }: any) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Carbon Saved</p>
-                <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">{(stats.totalCarbon * 1000).toFixed(0)} kg</p>
+                <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">{(stats.totalCarbon * 1000).toFixed(0)} kg</p>
               </div>
               <div>
                 <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Diverted Waste</p>
-                <p className="text-lg font-black text-slate-900 dark:text-white">{stats.totalKg.toLocaleString()} kg</p>
+                <p className="text-lg font-bold text-slate-900 dark:text-white">{stats.totalKg.toLocaleString()} kg</p>
               </div>
             </div>
 
@@ -323,7 +323,7 @@ function ActivityTab({ bookings, stats }: any) {
 
           {/* Divider with Work History label */}
           <div className="flex items-center justify-between px-5 py-3 bg-slate-50 dark:bg-slate-800/50 border-y border-slate-100 dark:border-slate-800">
-            <h4 className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">Latest Work History</h4>
+            <h4 className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Latest Work History</h4>
             <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-md">Ledger</span>
           </div>
 
@@ -357,7 +357,7 @@ function ActivityTab({ bookings, stats }: any) {
                       <div key={i} className="grid grid-cols-[1fr_1fr_0.7fr_0.8fr_0.6fr] gap-1 px-4 py-3 items-center hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
                         <span className="text-[12px] font-bold text-slate-900 dark:text-white capitalize truncate">{b.wasteType || 'Mixed'}</span>
                         <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 capitalize truncate">{buyerName}</span>
-                        <span className="text-[12px] font-black text-slate-900 dark:text-white">{Number(b.actualWeightKg) || Number(b.weightKg) || 0} kg</span>
+                        <span className="text-[12px] font-bold text-slate-900 dark:text-white">{Number(b.actualWeightKg) || Number(b.weightKg) || 0} kg</span>
                         <span className="text-[11px] font-medium text-slate-400">{dateStr}</span>
                         <span className="text-[9px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 px-1.5 py-0.5 rounded-md text-center uppercase tracking-wider">Verified</span>
                       </div>
@@ -397,17 +397,17 @@ function FinancialTab({ data }: any) {
       </div>
 
       <section>
-        <h3 className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Financial Activity</h3>
+        <h3 className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-3 px-1">Financial Activity</h3>
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-6">
           
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Lifetime Verified</p>
-              <p className="text-xl font-black text-slate-900 dark:text-white">KSh {(data.lifetimeEarnings / 1000000).toFixed(2)}M</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-white">KSh {(data.lifetimeEarnings / 1000000).toFixed(2)}M</p>
             </div>
             <div>
               <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-1">Avg. Monthly</p>
-              <p className="text-xl font-black text-slate-900 dark:text-white">KSh {(data.avgMonthly / 1000).toFixed(1)}K</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-white">KSh {(data.avgMonthly / 1000).toFixed(1)}K</p>
             </div>
           </div>
 
@@ -672,7 +672,7 @@ export default function CircularResume() {
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <div>
-                <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight uppercase">Circular Resume</h1>
+                <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight uppercase">Circular Resume</h1>
                 <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">Professional Identity</p>
               </div>
             </div>
@@ -726,8 +726,8 @@ export default function CircularResume() {
               
               <div className="pt-1">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{profile?.name}</h2>
-                  <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[9px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-widest border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">{profile?.name}</h2>
+                  <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border border-slate-200 dark:border-slate-700 whitespace-nowrap">
                     {progression.current.icon} {level}
                   </span>
                 </div>
@@ -761,7 +761,7 @@ export default function CircularResume() {
               <div className="flex flex-col md:items-end justify-center flex-1">
                 <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1 md:text-right">Klinflow Trust Score</p>
                 <div className="flex items-baseline gap-1 md:justify-end">
-                  <span className="text-2xl font-black text-emerald-600 dark:text-white leading-none">{trustScore}</span>
+                  <span className="text-2xl font-bold text-emerald-600 dark:text-white leading-none">{trustScore}</span>
                   <span className="text-[12px] font-bold text-slate-400">/ 1000</span>
                 </div>
               </div>
@@ -786,7 +786,7 @@ export default function CircularResume() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-[11px] font-black text-slate-700 dark:text-white">{Math.round((trustScore / 1000) * 100)}%</span>
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-white">{Math.round((trustScore / 1000) * 100)}%</span>
                 </div>
               </div>
             </div>

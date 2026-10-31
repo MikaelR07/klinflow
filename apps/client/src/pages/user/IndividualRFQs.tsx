@@ -346,8 +346,8 @@ export default function IndividualRFQs() {
             <img src="/vectors/individual-rfq-real.webp" alt="Individual Contracts" className="absolute inset-0 w-full h-full object-cover object-right" />
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-950 via-emerald-900/60 to-transparent dark:from-slate-950/95 dark:via-emerald-950/80"></div>
             <div className="relative z-10 p-4 h-full flex flex-col justify-center">
-              <h3 className="text-[22px] font-black text-emerald-400 leading-tight">Direct Contracts.</h3>
-              <h3 className="text-[22px] font-black text-white leading-tight">Maximum Profit.</h3>
+              <h3 className="text-[22px] font-bold text-emerald-400 leading-tight">Direct Contracts.</h3>
+              <h3 className="text-[22px] font-bold text-white leading-tight">Maximum Profit.</h3>
               <p className="text-[11px] font-semibold text-emerald-50/90 leading-tight max-w-[240px] mt-1.5">
                 Browse and bid on specific requests from verified buyers to maximize your earnings with zero intermediaries.
               </p>
@@ -441,14 +441,14 @@ export default function IndividualRFQs() {
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[1px]">
                           <div className="flex flex-col items-center">
                             <CircleCheck className="w-6 h-6 text-emerald-400 mb-0.5" strokeWidth={2.5} />
-                            <span className="text-[9px] font-black text-white uppercase tracking-wider">Bid Sent</span>
+                            <span className="text-[9px] font-bold text-white uppercase tracking-wider">Bid Sent</span>
                           </div>
                         </div>
                       )}
                     </div>
                     <div className="flex flex-col h-20 py-0.5">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <h4 className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
+                        <h4 className="text-[14px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
                         <span className="px-1.5 py-0.5 rounded bg-slate-200/80 dark:bg-slate-700 text-[8px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">{rfq.category}</span>
                       </div>
                       <p className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-1 flex items-center gap-1">
@@ -477,7 +477,7 @@ export default function IndividualRFQs() {
                       )}
                     </div>
                     <div className="text-right mt-1">
-                      <p className="text-base font-black text-emerald-500 leading-none">
+                      <p className="text-base font-bold text-emerald-500 leading-none">
                         KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
                       </p>
 

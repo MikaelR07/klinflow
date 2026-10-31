@@ -102,7 +102,7 @@ export default function FulfillmentTrackingPage() {
           <ArrowLeft className="w-5 h-5 text-slate-700 dark:text-slate-300" />
         </button>
         <div>
-          <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Tracking</h1>
+          <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Tracking</h1>
           <p className="text-xs font-bold text-emerald-500 capitalize tracking-widest">
             {(() => {
               const rfq = (order as any).rfq;
@@ -138,7 +138,7 @@ export default function FulfillmentTrackingPage() {
                 className="bg-white/20 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer border border-white/30"
               >
                 {isCodeRevealed ? (
-                  <span className="text-4xl font-black tracking-[0.3em] font-mono">{order.verification_code}</span>
+                  <span className="text-4xl font-bold tracking-[0.3em] font-mono">{order.verification_code}</span>
                 ) : (
                   <span className="text-lg font-bold">Tap to reveal code</span>
                 )}
@@ -153,7 +153,7 @@ export default function FulfillmentTrackingPage() {
             <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
               <Navigation className="w-4 h-4" /> Live Progress
             </h3>
-            <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${isCompleted ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' :
+            <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest ${isCompleted ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-500/10' :
               currentStepIndex >= 0 ? 'text-blue-600 bg-blue-50 dark:bg-blue-500/10' :
                 'text-slate-400 bg-slate-50 dark:bg-slate-800'
               }`}>
@@ -215,12 +215,12 @@ export default function FulfillmentTrackingPage() {
 
         {/* Order Details */}
         <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-5">
-          <h3 className="text-[11px] uppercase tracking-wider font-black text-slate-400">Logistics Details</h3>
+          <h3 className="text-[11px] uppercase tracking-wider font-bold text-slate-400">Logistics Details</h3>
 
           <div className="flex items-start justify-between pb-4 border-b border-slate-100 dark:border-slate-800/60">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Accepted By</p>
-              <p className="text-sm font-black text-slate-900 dark:text-white capitalize">
+              <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">
                 {(order as any).buyer?.company_name || (order as any).buyer?.name || 'Company Name'}
               </p>
             </div>
@@ -236,7 +236,7 @@ export default function FulfillmentTrackingPage() {
             </div>
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Pickup Address</p>
-              <p className="text-xs font-black text-slate-900 dark:text-white mt-1 capitalize">{order.pickup_address || 'TBD'}</p>
+              <p className="text-xs font-bold text-slate-900 dark:text-white mt-1 capitalize">{order.pickup_address || 'TBD'}</p>
             </div>
           </div>
 
@@ -247,7 +247,7 @@ export default function FulfillmentTrackingPage() {
               </div>
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Schedule</p>
-                <p className="text-xs font-black text-slate-900 dark:text-white mt-1">{format(new Date(order.scheduled_date), 'PPP')}</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white mt-1">{format(new Date(order.scheduled_date), 'PPP')}</p>
               </div>
             </div>
           )}
@@ -256,7 +256,7 @@ export default function FulfillmentTrackingPage() {
             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3">Assigned Fleet Agent</p>
             <div className="bg-slate-50 dark:bg-slate-900/30 rounded-xl p-4 border border-slate-100 dark:border-slate-800/50 flex items-center justify-between">
               <div>
-                <p className="text-sm font-black text-slate-900 dark:text-white">{(order as any).agent?.name || 'Pending Assignment'}</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-white">{(order as any).agent?.name || 'Pending Assignment'}</p>
                 <p className="text-xs font-semibold text-slate-500 mt-0.5">{(order as any).agent?.phone || 'Awaiting contact'}</p>
               </div>
 

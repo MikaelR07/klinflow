@@ -259,63 +259,20 @@ export default function GroupCollectionRFQs() {
           {/* Banner 1: My Proposals */}
           <div className="relative w-[92%] shrink-0 h-[160px] rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60 snap-start">
             <img src="/vectors/community-banner-real.webp" alt="More Impact. More Rewards." className="absolute inset-0 w-full h-full object-cover object-right" />
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-950 via-emerald-900/60 to-transparent dark:from-slate-950/95 dark:via-emerald-950/80"></div>
-            <div className="relative z-10 p-4 h-full flex flex-col justify-center">
-              <h3 className="text-[22px] font-black text-amber-500 leading-tight">More Impact</h3>
-              <h3 className="text-[22px] font-black text-emerald-400 leading-tight">More Rewards.</h3>
-              <p className="text-[11px] font-semibold text-slate-200/90 leading-tight max-w-[240px] mt-1.5">
-                Access contracts from trusted buyers and earn premium rates by Joining the Community Network.
-              </p>
-            </div>
+            
           </div>
 
           {/* Banner 2: Group Contracts */}
           <div className="relative w-[92%] shrink-0 h-[160px] rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60 snap-start">
             <img src="/vectors/klin-contract-real.webp" alt="Group Contracts" className="absolute inset-0 w-full h-full object-cover object-right" />
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-900/60 to-transparent" />
-            <div className="relative z-10 p-4 h-full flex flex-col justify-center">
-              <h3 className="text-[22px] font-black text-amber-400 leading-tight">Pool Resources.</h3>
-              <h3 className="text-[22px] font-black text-white leading-tight">Fulfill Together.</h3>
-              <p className="text-[11px] font-semibold text-blue-100 leading-tight max-w-[240px] mt-1.5">
-                Join forces with other sellers to fulfill large volume orders from major buyers and earn premium rates collaboratively.
-              </p>
-            </div>
+            
           </div>
           
           {/* Spacer for right edge */}
           <div className="w-1 shrink-0" />
         </div>
 
-        {/* ── STATE TABS ── */}
-        <div className="flex justify-center px-4 pb-3 mt-2">
-          <div className="flex w-full bg-slate-100 dark:bg-slate-800/80 p-1 rounded-2xl shadow-inner border border-slate-200/60 dark:border-slate-700/50 gap-0.5">
-            {TABS.map(tab => {
-              const count = (tabCounts as any)[tab];
-              return (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 font-bold capitalise tracking-wider transition-all ${
-                    activeTab === tab
-                    ? 'bg-blue-600 text-white shadow-md border border-blue-500'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-                  }`}
-                >
-                  <span>{tab}</span>
-                  {count > 0 && (
-                    <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${
-                      activeTab === tab
-                      ? 'bg-blue-700 text-white'
-                      : 'bg-slate-200/70 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
-                    }`}>
-                      {count}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        
 
         {/* ── CATEGORY FILTERS ── */}
         <div className="flex px-4 pb-2 gap-2 overflow-x-auto no-scrollbar">
@@ -368,6 +325,37 @@ export default function GroupCollectionRFQs() {
             );
           })}
         </div> 
+
+        {/* ── STATE TABS ── */}
+        <div className="flex justify-center px-4 pb-3 mt-2">
+          <div className="flex w-full bg-slate-100 dark:bg-slate-800/80 p-1 rounded-2xl shadow-inner border border-slate-200/60 dark:border-slate-700/50 gap-0.5">
+            {TABS.map(tab => {
+              const count = (tabCounts as any)[tab];
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`flex-1 py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 font-bold capitalise tracking-wider transition-all ${
+                    activeTab === tab
+                    ? 'bg-blue-600 text-white shadow-md border border-blue-500'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                  }`}
+                >
+                  <span>{tab}</span>
+                  {count > 0 && (
+                    <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${
+                      activeTab === tab
+                      ? 'bg-blue-700 text-white'
+                      : 'bg-slate-200/70 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                    }`}>
+                      {count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
         {/* Loading */}
         {loading && (
@@ -435,13 +423,13 @@ export default function GroupCollectionRFQs() {
                             <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[1px]">
                               <div className="flex flex-col items-center">
                                 <CircleCheck className="w-6 h-6 text-emerald-400 mb-0.5" strokeWidth={2.5} />
-                                <span className="text-[8px] font-black text-white uppercase tracking-wider text-center leading-tight">Pledge<br/>Sent</span>
+                                <span className="text-[8px] font-bold text-white uppercase tracking-wider text-center leading-tight">Pledge<br/>Sent</span>
                               </div>
                             </div>
                           )}
                         </div>
                         <div className="flex flex-col h-24 py-0.5">
-                          <h4 className="text-[16px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
+                          <h4 className="text-[16px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
                           <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">{rfq.category}</p>
                           <p className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-0.5 flex items-center gap-1">
                             <Users className="w-3 h-3" /> {rfq.offersSubmitted} seller{rfq.offersSubmitted !== 1 ? 's' : ''} joined
@@ -479,7 +467,7 @@ export default function GroupCollectionRFQs() {
                           )}
                         </div>
                         <div className="text-right mt-1">
-                          <p className="text-base font-black text-emerald-500 leading-none">
+                          <p className="text-base font-bold text-emerald-500 leading-none">
                             KSh {rfq.price} <span className="text-[10px] text-slate-400 font-semibold">/kg</span>
                           </p>
                         </div>
@@ -490,7 +478,7 @@ export default function GroupCollectionRFQs() {
                     <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-2.5">
                       <div className="flex items-center justify-between mb-1.5">
                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Fulfillment Progress</span>
-                        <span className="text-[10px] font-black text-blue-600 dark:text-blue-400">{fulfillmentPercentage}%</span>
+                        <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">{fulfillmentPercentage}%</span>
                       </div>
                       <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div

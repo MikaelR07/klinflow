@@ -210,7 +210,7 @@ export default function CreateSwarm() {
                   } : {}}
                 >
                   {!bgImage && <div className={`absolute inset-0 ${isSelected ? 'bg-indigo-50/50 dark:bg-indigo-900/10' : 'bg-slate-100 dark:bg-slate-800'}`} />}
-                  <span className={`relative z-10 text-sm font-black capitalize tracking-widest text-center leading-none flex items-center gap-2 ${bgImage ? 'text-white' : (isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white')
+                  <span className={`relative z-10 text-sm font-bold capitalize tracking-widest text-center leading-none flex items-center gap-2 ${bgImage ? 'text-white' : (isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white')
                     }`}>
                     <span className="text-xl">{cat.icon || '📦'}</span> {cat.label}
                   </span>
@@ -240,7 +240,7 @@ export default function CreateSwarm() {
           {isMixed && (
             <div className="mt-4 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-xl p-3 animate-in fade-in slide-in-from-top-2 duration-300">
               <p className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                🌍 This swarm will accept <span className="font-black">all types of recyclables</span>. Each participant will specify what material they are bringing when they join.
+                🌍 This swarm will accept <span className="font-bold">all types of recyclables</span>. Each participant will specify what material they are bringing when they join.
               </p>
             </div>
           )}

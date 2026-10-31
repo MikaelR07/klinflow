@@ -69,7 +69,7 @@ export default function SupportPage() {
           </button>
           <div className="flex flex-col items-center">
             <h1 className="text-[16px] font-bold tracking-tight leading-tight">Help & Support</h1>
-            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-500">24/7 Assistance</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-500">24/7 Assistance</span>
           </div>
           <div className="w-10 h-10 flex items-center justify-center">
             <HelpCircle className="w-5 h-5 text-slate-400" />
@@ -86,7 +86,7 @@ export default function SupportPage() {
 
         {/* ── HEADER INTRO ── */}
         <motion.div variants={fadeUp} className="text-center px-4">
-          <h2 className="text-2xl md:text-3xl font-black tracking-tighter mb-2">How can we help?</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tighter mb-2">How can we help?</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
             Get in touch with our dedicated support team. We generally reply within a few minutes.
           </p>
@@ -154,7 +154,7 @@ export default function SupportPage() {
               ? 'border-emerald-500 ring-4 ring-emerald-500/10 dark:ring-emerald-500/20 shadow-sm' 
               : 'border-slate-200 dark:border-slate-800'
             }`}>
-              <div className="absolute top-2.5 left-4 text-[9px] font-black uppercase tracking-widest text-slate-400">
+              <div className="absolute top-2.5 left-4 text-[9px] font-bold uppercase tracking-widest text-slate-400">
                 Subject
               </div>
               <input 
@@ -175,7 +175,7 @@ export default function SupportPage() {
               ? 'border-emerald-500 ring-4 ring-emerald-500/10 dark:ring-emerald-500/20 shadow-sm' 
               : 'border-slate-200 dark:border-slate-800'
             }`}>
-              <div className="absolute top-3 left-4 text-[9px] font-black uppercase tracking-widest text-slate-400">
+              <div className="absolute top-3 left-4 text-[9px] font-bold uppercase tracking-widest text-slate-400">
                 How can we help?
               </div>
               <textarea 

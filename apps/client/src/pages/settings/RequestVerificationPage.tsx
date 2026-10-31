@@ -61,7 +61,7 @@ export default function RequestVerificationPage() {
             <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight uppercase">Verification Status</h1>
+            <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight uppercase">Verification Status</h1>
           </div>
         </div>
         
@@ -95,7 +95,7 @@ export default function RequestVerificationPage() {
                 <CheckCircle2 className="w-12 h-12 text-white" />
               </motion.div>
               
-              <h2 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-100 to-amber-400 dark:from-amber-300 dark:to-white tracking-tight mb-2">
+              <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-100 to-amber-400 dark:from-amber-300 dark:to-white tracking-tight mb-2">
                 Identity Confirmed
               </h2>
               
@@ -120,7 +120,7 @@ export default function RequestVerificationPage() {
 
               <button 
                 onClick={() => navigate('/circular-resume')} 
-                className="w-full px-6 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-sm active:scale-95 transition-all shadow-lg hover:bg-slate-800 dark:hover:bg-slate-100 flex items-center justify-center gap-2"
+                className="w-full px-6 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm active:scale-95 transition-all shadow-lg hover:bg-slate-800 dark:hover:bg-slate-100 flex items-center justify-center gap-2"
               >
                 View Circular Resume <ArrowLeft className="w-4 h-4 rotate-180" />
               </button>
@@ -139,7 +139,7 @@ export default function RequestVerificationPage() {
             <button onClick={() => navigate(-1)} className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight uppercase">Verification</h1>
+            <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight uppercase">Verification</h1>
           </div>
         </div>
         <main className="flex-1 px-4 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] pb-24 max-w-xl mx-auto w-full flex items-center justify-center">
@@ -147,7 +147,7 @@ export default function RequestVerificationPage() {
             <div className="w-20 h-20 bg-blue-50 dark:bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
               <Clock className="w-10 h-10 text-blue-500" />
             </div>
-            <h2 className="text-xl font-black text-slate-900 dark:text-white">Request Submitted</h2>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Request Submitted</h2>
             <p className="text-sm text-slate-500 max-w-xs mx-auto">Our team will review your information and verify your identity within 24-48 hours. You'll receive a notification once approved.</p>
             <button onClick={() => navigate('/circular-resume')} className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm active:scale-95 transition-all">
               Back to Resume
@@ -167,7 +167,7 @@ export default function RequestVerificationPage() {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-base font-black text-slate-900 dark:text-white tracking-tight uppercase">Get Verified</h1>
+            <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight uppercase">Get Verified</h1>
             <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">Identity Verification</p>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function RequestVerificationPage() {
         <div className="bg-slate-200 dark:bg-slate-800/50 rounded-2xl p-3 space-y-3">
           {/* Requirements */}
           <div className="bg-white dark:bg-slate-900 rounded-xl p-5">
-            <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">What We Need</h3>
+            <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4">What We Need</h3>
             <div className="space-y-3">
               {[
                 { icon: FileText, label: 'National ID or Passport Number', required: true },
@@ -214,7 +214,7 @@ export default function RequestVerificationPage() {
 
           {/* Form */}
           <div className="bg-white dark:bg-slate-900 rounded-xl p-5 space-y-4">
-            <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2">Your Information</h3>
+            <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Your Information</h3>
             
             <div>
               <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest mb-1.5 block">National ID / Business Reg. *</label>

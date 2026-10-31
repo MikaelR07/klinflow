@@ -69,7 +69,7 @@ export default function WeightVerificationModal() {
                   </div>
                   <div>
                     <p className="text-xs font-bold text-slate-400 capitalize tracking-widest leading-none">Measured Weight</p>
-                    <p className="text-lg font-black dark:text-white mt-1">{activeVerificationBooking.actualWeightKg || activeVerificationBooking.weightKg || 0} KG</p>
+                    <p className="text-lg font-bold dark:text-white mt-1">{activeVerificationBooking.actualWeightKg || activeVerificationBooking.weightKg || 0} KG</p>
                   </div>
                 </div>
               </div>
@@ -91,7 +91,7 @@ export default function WeightVerificationModal() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] ml-1">Comments (Optional)</label>
+                <label className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] ml-1">Comments (Optional)</label>
                 <textarea
                   placeholder="Tell us more about the service..."
                   value={comment}

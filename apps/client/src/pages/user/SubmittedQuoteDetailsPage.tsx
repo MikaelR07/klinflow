@@ -290,7 +290,7 @@ export default function SubmittedQuoteDetailsPage() {
 
           {quote.imageUrls && quote.imageUrls.length > 1 && (
             <>
-              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest flex items-center gap-1.5">
                 <span>
                   {activeImageIndex + 1} / {quote.imageUrls.length}
                 </span>
@@ -347,7 +347,7 @@ export default function SubmittedQuoteDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Your Quoted Price
                 </p>
-                <p className="text-xs font-black text-emerald-600 leading-none">
+                <p className="text-xs font-bold text-emerald-600 leading-none">
                   KSh {quote.quotedPrice}/kg
                 </p>
               </div>
@@ -359,7 +359,7 @@ export default function SubmittedQuoteDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Client Target
                 </p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
                   KSh {quote.clientTargetPrice}/kg
                 </p>
               </div>
@@ -371,7 +371,7 @@ export default function SubmittedQuoteDetailsPage() {
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">
                   Requested Weight
                 </p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">
+                <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
                   {quote.quantity}
                 </p>
               </div>
@@ -432,7 +432,7 @@ export default function SubmittedQuoteDetailsPage() {
         {/* ── ACTION BUTTONS ── */}
         <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
           <div className="mb-2">
-            <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               Actions
             </h4>
             <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
@@ -455,7 +455,7 @@ export default function SubmittedQuoteDetailsPage() {
                   toast.error("Delivery schedule is still being generated.");
                 }
               }}
-              className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
               {quote.status === "completed"
                 ? "View Completed Progress"
@@ -464,7 +464,7 @@ export default function SubmittedQuoteDetailsPage() {
           )}
 
           {quote.status === "declined" && (
-            <button className="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all">
+            <button className="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all">
               Find Similar RFQs
             </button>
           )}
@@ -473,13 +473,13 @@ export default function SubmittedQuoteDetailsPage() {
             <div className="flex flex-row gap-3">
                <button
                 onClick={handleDelete}
-                className="flex-[0.6] py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                className="flex-[0.6] py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-bold text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
               >
                 <Trash2 className="w-4 h-4" /> Delete
               </button>
               <button
                 onClick={openEditModal}
-                className="flex-1 py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-bold text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
               >
                 <Pencil className="w-4 h-4" /> Edit Quote
               </button>
@@ -499,7 +499,7 @@ export default function SubmittedQuoteDetailsPage() {
           <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-t-3xl p-6 pb-[calc(env(safe-area-inset-bottom,0px)+1.5rem)] shadow-2xl space-y-5">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                   Edit Quote
                 </h3>
                 <p className="text-[10px] text-slate-400 font-bold mt-0.5 uppercase tracking-wider">
@@ -558,7 +558,7 @@ export default function SubmittedQuoteDetailsPage() {
             <button
               onClick={handleSaveEdit}
               disabled={saving}
-              className="w-full py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-lg shadow-primary/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Save className="w-4 h-4" />{" "}
               {saving ? "Saving..." : "Save Changes"}

@@ -153,7 +153,7 @@ export default function PostTradeMaterialStep({
                   }`}>
                   {cat.icon || '📦'}
                 </div>
-                <span className={`absolute bottom-2 right-2 px-2 py-1 rounded-md text-[9px] font-black capitalize tracking-widest text-right leading-none italic drop-shadow-sm ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10 text-white' : `bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border ${isSelected ? 'border-emerald-500/50 text-emerald-600 dark:text-emerald-400' : 'border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'}`}`}>
+                <span className={`absolute bottom-2 right-2 px-2 py-1 rounded-md text-[9px] font-bold capitalize tracking-widest text-right leading-none italic drop-shadow-sm ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10 text-white' : `bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border ${isSelected ? 'border-emerald-500/50 text-emerald-600 dark:text-emerald-400' : 'border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'}`}`}>
                   {cat.label}
                 </span>
               </button>

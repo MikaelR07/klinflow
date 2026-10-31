@@ -72,7 +72,7 @@ export function SharedMap({ center, height = 'h-[350px]', boundsItems = [], chil
              <div className="w-12 h-12 rounded-full border-4 border-slate-100 dark:border-slate-700" />
              <div className="absolute inset-0 w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
            </div>
-           <p className="text-xs font-black text-slate-600 dark:text-slate-300 tracking-widest uppercase">Loading Map...</p>
+           <p className="text-xs font-bold text-slate-600 dark:text-slate-300 tracking-widest uppercase">Loading Map...</p>
         </div>
       </div>
 

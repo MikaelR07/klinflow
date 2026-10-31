@@ -73,7 +73,7 @@ export default function WithdrawalPage() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden min-h-screen">
       
       {/* ── TOP SECTION: PRIMARY WITH ROUNDED BOTTOM ── */}
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2.5rem] shadow-lg shadow-emerald-900/30 relative z-20 overflow-hidden">
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2.5rem]  relative z-20 overflow-hidden">
         
         {/* Fixed Header */}
         <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
@@ -92,7 +92,7 @@ export default function WithdrawalPage() {
               <p className="text-[11px] font-bold text-white/70 uppercase tracking-widest mb-1.5">Total Balance</p>
               <div className="flex items-baseline justify-center gap-1 text-white">
                 <span className="text-xl font-bold">KSh</span>
-                <span className="text-3xl font-black leading-none">
+                <span className="text-3xl font-bold leading-none">
                   {cashBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
               </div>
@@ -137,7 +137,7 @@ export default function WithdrawalPage() {
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
 
             {/* AMOUNT AND DETAILS CARD */}
-            <div className="bg-slate-200 dark:bg-slate-900 rounded-[1rem] p-5 shadow-sm border border-slate-100 dark:border-slate-800">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-[1rem] p-5 shadow-sm border border-slate-100 dark:border-slate-800">
               <h3 className="text-[14px] font-bold text-slate-700 dark:text-white capitalize tracking-wider mb-4 text-center">Withdrawal Details</h3>
               
               <div className="space-y-4">
@@ -145,7 +145,7 @@ export default function WithdrawalPage() {
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">Amount to Withdraw</label>
                   <div className="relative flex items-center">
-                    <span className="absolute left-4 font-black text-emerald-600 dark:text-emerald-400 text-lg">KSh</span>
+                    <span className="absolute left-4 font-bold text-emerald-600 dark:text-emerald-400 text-base">KSh</span>
                     <input
                       type="number"
                       inputMode="numeric"
@@ -154,7 +154,7 @@ export default function WithdrawalPage() {
                         const val = e.target.value;
                         setAmount(val === '' ? '' : Number(val));
                       }}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-14 pr-4 text-xl font-black text-emerald-700 dark:text-emerald-400 outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-300"
+                      className="w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-14 pr-4 text-xl font-bold text-emerald-700 dark:text-emerald-400 outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-300"
                       placeholder="0.00"
                     />
                   </div>
@@ -179,7 +179,7 @@ export default function WithdrawalPage() {
                       type="text"
                       value={details}
                       onChange={(e) => setDetails(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-11 pr-4 text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-400"
+                      className="w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-11 pr-4 text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-400"
                       placeholder={method.id === 'bank' ? 'Enter Account No' : '07XXXXXXXX'}
                     />
                   </div>

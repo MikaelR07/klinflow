@@ -294,7 +294,7 @@ export default function GroupCollectionRFQDetails() {
 
           {rfq.imageUrls.length > 1 && (
             <>
-              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest">
+              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest">
                 {activeImageIndex + 1} / {rfq.imageUrls.length}
               </div>
               <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
@@ -388,14 +388,14 @@ export default function GroupCollectionRFQDetails() {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-[9px] font-bold text-blue-200 uppercase tracking-widest mb-1">Fulfillment Progress</p>
-                <h2 className="text-2xl font-black text-white tracking-tight">{percentage}%</h2>
+                <h2 className="text-2xl font-bold text-white tracking-tight">{percentage}%</h2>
               </div>
               <div className="relative w-[96px] h-[96px] flex items-center justify-center shrink-0">
                 <svg className="w-full h-full transform -rotate-90">
                   <circle cx="48" cy="48" r="40" className="stroke-white/20" strokeWidth="5" fill="none" />
                   <circle cx="48" cy="48" r="40" className="stroke-blue-300" strokeWidth="5" fill="none" strokeDasharray="251" strokeDashoffset={251 - (251 * percentage) / 100} strokeLinecap="round" />
                 </svg>
-                <span className="absolute text-lg font-black text-white">{contributors.length}</span>
+                <span className="absolute text-lg font-bold text-white">{contributors.length}</span>
                 <span className="absolute text-[9px] font-bold text-blue-200 mt-10">sellers</span>
               </div>
             </div>
@@ -476,7 +476,7 @@ export default function GroupCollectionRFQDetails() {
             </p>
             <button
               onClick={() => navigate('/my-trades')}
-              className="mt-2 w-full py-4 bg-emerald-700 hover:bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all"
+              className="mt-2 w-full py-4 bg-emerald-700 hover:bg-emerald-600 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all"
             >
               View Trade History
             </button>
@@ -492,7 +492,7 @@ export default function GroupCollectionRFQDetails() {
             </p>
             <button
               onClick={() => navigate('/my-rfq-offers')}
-              className="mt-2 w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all"
+              className="mt-2 w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] active:scale-[0.98] transition-all"
             >
               View My Pledges
             </button>
@@ -509,7 +509,7 @@ export default function GroupCollectionRFQDetails() {
             className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-5"
           >
             <div>
-              <h4 className="text-sm font-black text-slate-600 dark:text-white uppercase tracking-wider">Pledge Your Supply</h4>
+              <h4 className="text-sm font-bold text-slate-600 dark:text-white uppercase tracking-wider">Pledge Your Supply</h4>
               <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
                 Commit stock to help fulfill this group contract. {remaining.toLocaleString()}kg still needed.
               </p>
@@ -526,7 +526,7 @@ export default function GroupCollectionRFQDetails() {
 
             <div className="space-y-4">
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Your Supply (KG)</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Your Supply (KG)</label>
                 <div className="relative">
                   <input
                     type="number"
@@ -535,10 +535,10 @@ export default function GroupCollectionRFQDetails() {
                     placeholder={`e.g. ${Math.min(100, remaining)}`}
                     max={remaining}
                     min={1}
-                    className="w-full pl-4 pr-16 py-3 text-sm font-black rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                    className="w-full pl-4 pr-16 py-3 text-sm font-bold rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                     required
                   />
-                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-slate-400 uppercase">kg</span>
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 uppercase">kg</span>
                 </div>
                 {pledgeWeight && Number(pledgeWeight) > 0 && (
                   <p className="text-[10px] font-bold text-emerald-600 ml-1">
@@ -548,7 +548,7 @@ export default function GroupCollectionRFQDetails() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Note to the buyer(Optional)</label>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Note to the buyer(Optional)</label>
                 <textarea
                   value={sellerNotes}
                   onChange={(e) => setSellerNotes(e.target.value)}
@@ -559,14 +559,14 @@ export default function GroupCollectionRFQDetails() {
 
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Proof Images</label>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Proof Images</label>
                   <span className="text-[9px] font-bold text-slate-400 uppercase">{proofImages.length} / 4</span>
                 </div>
                 <div className="grid grid-cols-4 gap-2.5">
                   {proofImages.length < 4 && (
                     <label className="aspect-square rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500/50 transition-colors">
                       <Camera className="w-5 h-5 text-slate-400" />
-                      <span className="text-[8px] font-black text-slate-400 uppercase mt-1">Upload</span>
+                      <span className="text-[8px] font-bold text-slate-400 uppercase mt-1">Upload</span>
                       <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" multiple />
                     </label>
                   )}
@@ -589,7 +589,7 @@ export default function GroupCollectionRFQDetails() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] active:scale-[0.98] disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
               {submitting ? 'Submitting...' : 'Commit Supply Pledge'}
             </button>

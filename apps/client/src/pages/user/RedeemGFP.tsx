@@ -9,7 +9,8 @@ import {
   ArrowLeft, Gift, Phone, AlertCircle,
   Wallet, Loader2,
   X, CheckCircle2, Copy, Clock,
-  ChevronRight, Leaf, Zap, Flame
+  ChevronRight, Leaf, Zap, Flame,
+  Star
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { walletService, REWARDS_CATALOG, RewardItem, RedemptionResult } from '@klinflow/core';
@@ -134,7 +135,7 @@ export default function RedeemGFP() {
   };
 
   return (
-    <div className="-mx-1 px-1 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white pb-10 relative overflow-x-hidden min-h-screen">
+    <div className="-mx-1 px-1 bg-white dark:bg-slate-900 text-slate-900 dark:text-white pb-2 relative overflow-x-hidden ">
       {/* PREMIUM AMBER HERO BACKGROUND */}
       <div className="absolute top-0 left-0 right-0 h-[340px] z-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 dark:from-amber-600 dark:via-amber-700 dark:to-orange-700" />
@@ -167,73 +168,55 @@ export default function RedeemGFP() {
 
       <div className="relative z-10 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] px-1.5 max-w-lg mx-auto space-y-4">
 
-        {/* HERO CARD — Clean Image */}
-        <div className="relative overflow-hidden rounded-2xl shadow-xl">
-          <div className="bg-emerald-900">
-            <img 
-              src="/vectors/redeem-gfp.webp" 
-              alt="Redeem GFP" 
-              className="w-full h-auto"
-            />
-          </div>
-        </div>
+        {/* POINTS HERO CARD - Reference style */}
+        <div className="bg-gradient-to-br from-orange-600 via-amber-600 to-yellow-700 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+          {/* Decorative circles */}
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-yellow-300/20 rounded-full blur-2xl" />
 
-        {/* STATS CARD */}
-        <div className="bg-white dark:bg-slate-800/90 rounded-xl px-4 py-2.5 shadow-md border border-slate-100 dark:border-slate-700/80">
-          <div className="flex items-center">
-            {/* Available GFP */}
-            <div className="flex-1 flex items-center justify-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-500/15 flex items-center justify-center shrink-0">
-                <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div>
-                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Available GFP</p>
-                <span className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-tight">
-                  {isLoadingWallet ? (
-                    <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
-                  ) : gfpBalance.toLocaleString()}
-                </span>
-              </div>
+          {/* Background gift icon */}
+          <Gift className="absolute -top-4 -right-8 w-44 h-44 text-white/5 rotate-12" />
+
+          <div className="relative z-10">
+            {/* Stacked Redeem Reward text */}
+            <div className="mb-4">
+              <p className="text-4xl font-bold text-white leading-none tracking-tight">Earn & Redeem</p>
+              <p className="text-4xl font-bold text-white leading-none tracking-tight">Points</p>
             </div>
 
-            {/* Expiring Soon */}
+            {/* YOU HAVE X points */}
+            <p className="text-[11px] font-semibold text-white/80 uppercase tracking-wider mb-1">YOU HAVE</p>
+            <p className="text-2xl font-semibold text-white leading-none tracking-tight mb-2 flex items-center gap-2">
+              {isLoadingWallet ? (
+                <Loader2 className="w-6 h-6 animate-spin text-white" />
+              ) : (
+                <>
+                  <Star className="w-7 h-7 text-yellow-200" />
+                  {gfpBalance.toLocaleString()}
+                </>
+              )} points
+            </p>
+
+            {/* Expiring notice */}
             {isExpiringSoon && (
-              <>
-                <div className="w-px h-8 bg-gradient-to-b from-transparent via-slate-200 dark:via-slate-600 to-transparent mx-2" />
-                <div className="flex-1 flex items-center justify-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-500/15 flex items-center justify-center shrink-0">
-                    <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                  </div>
-                  <div>
-                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Status</p>
-                    <span className="text-[11px] font-black text-amber-600 dark:text-amber-400 leading-tight">
-                      Expiring Soon
-                    </span>
-                  </div>
-                </div>
-              </>
+              <p className="text-[10px] font-medium text-white/70">
+                {gfpBalance} points will expire soon
+              </p>
             )}
           </div>
         </div>
 
-        {/* REWARDS CATALOG */}
-        <div className="bg-white dark:bg-slate-800/90 rounded-2xl shadow-md mt-4 border border-slate-100 dark:border-slate-700/80 p-4">
-          
-          <div className="flex items-center gap-2.5 mb-4">
-            <div className="w-1 h-5 rounded-full bg-gradient-to-b from-amber-400 to-orange-500" />
-            <h3 className="text-[13px] font-extrabold text-slate-900 dark:text-white tracking-tight">Rewards Store</h3>
-          </div>
 
-          {/* Category Tabs */}
-          <div className="flex items-center gap-2 mb-4 p-1 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-700/50">
+        {/* Category Tabs */}
+          <div className="flex gap-2 p-1 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-800">
             {(['all', 'airtime', 'voucher'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-1.5 text-[11px] font-bold capitalize rounded-lg transition-all ${
-                  activeTab === tab 
-                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm border border-slate-200/50 dark:border-slate-600' 
-                    : 'text-slate-400 dark:text-slate-500 hover:text-slate-600'
+                className={`flex-1 py-2.5 text-[12px] font-bold capitalize rounded-xl transition-all ${
+                  activeTab === tab
+                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
                 }`}
               >
                 {tab === 'all' ? 'All Rewards' : tab}
@@ -241,48 +224,56 @@ export default function RedeemGFP() {
             ))}
           </div>
 
-          {/* Grid - Switched to 1 column for horizontal cards */}
+          {/* REWARDS LIST - Horizontal Cards */}
           <div className="grid grid-cols-1 gap-3">
             {filteredRewards.map((reward: RewardItem) => {
               const isAffordable = gfpBalance >= reward.min_gfp;
               const Icon = reward.icon === 'phone' ? Phone : Gift;
-              
+
               return (
                 <button
                   key={reward.id}
                   onClick={() => handleCardClick(reward)}
                   disabled={isLoadingWallet || !isAffordable}
                   className={`relative flex items-stretch text-left rounded-2xl border transition-all duration-200 overflow-hidden min-h-[100px]
-                    ${isAffordable 
-                      ? 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 shadow-sm active:scale-95 hover:shadow-md' 
+                    ${isAffordable
+                      ? 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 shadow-sm active:scale-95 hover:shadow-md'
                       : 'bg-white/50 dark:bg-slate-900/50 border-slate-100 dark:border-slate-800 opacity-60 grayscale-[30%]'
                     }`}
                 >
                   {/* Left Image Block */}
                   <div className="w-[52%] shrink-0 relative overflow-hidden bg-slate-100 dark:bg-slate-800">
-                    <img 
-                      src={`/vectors/${reward.id === 'saf' ? 'safaricom' : reward.id === 'air' ? 'airtel' : reward.id === 'khe' ? 'khetias' : 'naivas'}.webp`} 
+                    <img
+                      src={`/vectors/${reward.id === 'saf' ? 'safaricom' : reward.id === 'air' ? 'airtel' : reward.id === 'khe' ? 'khetias' : 'naivas'}.webp`}
                       alt={reward.title}
                       className={`absolute inset-0 w-full h-full object-cover ${reward.id === 'nai' ? 'object-left' : 'object-center'}`}
                     />
                   </div>
-                  
+
                   {/* Right Content */}
                   <div className="flex-1 p-3 flex flex-col justify-center items-end text-right">
                     <div className="mb-1.5">
-                      <h3 className="text-[13px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+                      <h3 className="text-[13px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
                         {reward.title}
                       </h3>
                       <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
                         {reward.value_label}
                       </p>
                     </div>
-                    
+
                     <div className="mt-2">
                       {isAffordable ? (
-                        <div className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-md border border-emerald-100 dark:border-emerald-800/50">
-                          <Leaf className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                          <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400">{reward.min_gfp} GFP</span>
+                        <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-md border ${
+                          isAffordable
+                            ? 'bg-gradient-to-r from-orange-100 to-amber-100 dark:from-orange-500/20 dark:to-amber-500/20 border-orange-200 dark:border-orange-800/50'
+                            : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700'
+                        }`}>
+                          <Flame className="w-3 h-3 text-orange-600 dark:text-orange-400" />
+                          <span className={`text-[10px] font-extrabold ${
+                            isAffordable ? 'text-orange-600 dark:text-orange-400' : 'text-slate-400'
+                          }`}>
+                            {reward.min_gfp} GFP
+                          </span>
                         </div>
                       ) : (
                         <div className="text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
@@ -295,7 +286,6 @@ export default function RedeemGFP() {
               );
             })}
           </div>
-        </div>
 
       </div>
 
@@ -306,7 +296,7 @@ export default function RedeemGFP() {
         <div className="fixed inset-0 z-[100] flex items-end justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => viewState !== 'processing' && handleDone()} />
 
-          <div className="relative w-full max-w-lg bg-slate-200 dark:bg-slate-900 rounded-t-[32px] p-4 pb-[calc(env(safe-area-inset-bottom,0px)+6.5rem)] z-10 shadow-2xl animate-in slide-in-from-bottom-8 duration-300">
+          <div className="relative w-full max-w-lg bg-slate-50 dark:bg-slate-900 rounded-t-[32px] p-4 pb-[calc(env(safe-area-inset-bottom,0px)+6.5rem)] z-10 shadow-2xl animate-in slide-in-from-bottom-8 duration-300">
             <div className="w-12 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 mx-auto mb-6" />
 
             {viewState !== 'processing' && (
@@ -332,7 +322,7 @@ export default function RedeemGFP() {
                 </div>
 
                 {/* ── CUSTOM AMOUNT INPUT & COST BREAKDOWN ── */}
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 mb-5 relative overflow-hidden">
+                <div className="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800 mb-5 relative overflow-hidden">
                   <div className="p-4">
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">

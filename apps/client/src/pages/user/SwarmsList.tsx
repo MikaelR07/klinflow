@@ -137,7 +137,7 @@ export default function SwarmsList() {
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 ${activeTab === tab
-                    ? 'bg-indigo-600 shadow-sm text-white font-black'
+                    ? 'bg-indigo-600 shadow-sm text-white font-bold'
                     : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                 >
@@ -160,23 +160,12 @@ export default function SwarmsList() {
         {/* ── HERO SECTION ── */}
         {activeTab === 'Active' && (
           <div className="flex flex-col px-1.5 mb-4">
-            <div className="relative w-full h-[170px] rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60 bg-slate-900">
-              <img 
-                src="/vectors/klin-swarms-real.webp" 
-                alt="Swarms Background" 
-                className="absolute inset-0 w-full h-full object-cover object-center"
+            <div className="relative w-full rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60 bg-slate-900">
+              <img
+                src="/vectors/klin-swarms-real.webp"
+                alt="Swarms Background"
+                className="w-full h-auto"
               />
-              <div className="relative z-20 p-4 h-full flex flex-col justify-center gap-1">
-                <div>
-                  <h2 className="text-xl font-black text-white leading-tight mb-1.5 tracking-tight">
-                    Find Your Swarm.<br/>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Maximize Earnings.</span>
-                  </h2>
-                  <p className="text-[11px] text-slate-200 font-medium leading-relaxed max-w-[260px]">
-                    Team up with others in your area, pool your collections, and fulfill large volume requests together.
-                  </p>
-                </div>
-              </div>
             </div>
 
             <div className="relative z-20 -mt-6 mx-4 bg-slate-50 dark:bg-primary rounded-xl p-3  flex flex-col gap-2 border border-emerald-500/30">
@@ -187,7 +176,7 @@ export default function SwarmsList() {
                     const marketRate = materialPrices.find(m => m.material_name === s.material)?.price_per_kg || 0;
                     return acc + ((s.current_weight || 0) * marketRate);
                   }, 0);
-                  
+
                   const formatNumber = (val: number) => {
                     if (!val) return '0';
                     if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M';
@@ -202,7 +191,7 @@ export default function SwarmsList() {
                           <Weight className="w-5 h-5 text-emerald-600" />
                         </div>
                         <div className="flex flex-col text-left">
-                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{formatNumber(totalPooledKg)}</p>
+                          <p className="text-xs font-bold text-slate-800 dark:text-white leading-none mb-0.5">{formatNumber(totalPooledKg)}</p>
                           <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">Pooled Kg</p>
                         </div>
                       </div>
@@ -211,7 +200,7 @@ export default function SwarmsList() {
                           <DollarSign className="w-5 h-5 text-amber-600" />
                         </div>
                         <div className="flex flex-col text-left">
-                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">
+                          <p className="text-xs font-bold text-slate-800 dark:text-white leading-none mb-0.5">
                             {formatNumber(totalPotentialPayout)}
                           </p>
                           <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">Paid Out</p>
@@ -222,7 +211,7 @@ export default function SwarmsList() {
                           <Users className="w-5 h-5 text-blue-600" />
                         </div>
                         <div className="flex flex-col text-left">
-                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-0.5">{swarms.filter(s => s.status === 'active' && new Date(s.closes_at) > new Date()).length}</p>
+                          <p className="text-xs font-bold text-slate-800 dark:text-white leading-none mb-0.5">{swarms.filter(s => s.status === 'active' && new Date(s.closes_at) > new Date()).length}</p>
                           <p className="text-[10px] text-slate-600 dark:text-white font-bold capitalize tracking-wider leading-none">Active</p>
                         </div>
                       </div>
@@ -286,7 +275,7 @@ export default function SwarmsList() {
                       )}
                     </div>
                     <div className="flex flex-col h-20 py-0.5">
-                      <h4 className="text-[16px] font-black text-slate-900 dark:text-white tracking-tight leading-tight">{swarm.material}</h4>
+                      <h4 className="text-[16px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">{swarm.material}</h4>
                       <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">
                         {materialPrices.find(m => m.material_name === swarm.material)?.category || swarm.material}
                       </p>
@@ -320,7 +309,7 @@ export default function SwarmsList() {
                       )}
                     </div>
                     <div className="text-right mt-1">
-                      <p className="text-base font-black text-emerald-500 leading-none">
+                      <p className="text-base font-bold text-emerald-500 leading-none">
                         {isMixed ? 'Varies' : `KSh ${rewardPool.toLocaleString()}`}
                       </p>
                       <span className="text-[10px] text-slate-400 font-semibold">Reward</span>

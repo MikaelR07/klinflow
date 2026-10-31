@@ -98,7 +98,7 @@ export default function Welcome() {
 
             {/* Bottom Text Section */}
             <div className="w-full bg-white dark:bg-slate-900 px-6 pt-4 pb-[130px] rounded-t-xl relative z-10 -mt-8">
-              <h1 className="text-[28px] font-black text-slate-900 dark:text-white leading-[1.15] mb-2 tracking-tight">
+              <h1 className="text-[28px] font-bold text-slate-900 dark:text-white leading-[1.15] mb-2 tracking-tight">
                 {slide.title}
               </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-[400px] leading-relaxed">
@@ -114,7 +114,7 @@ export default function Welcome() {
         <div className="space-y-3 pointer-events-auto">
           <button
             onClick={nextSlide}
-            className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black text-base shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+            className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-base shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
           >
             {currentSlide === 2 ? 'Get Started' : 'Next'} <ArrowRight className="w-5 h-5" />
           </button>

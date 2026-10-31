@@ -154,7 +154,7 @@ export default function CompanyProfile() {
               <div className="flex-1 pt-1">
                 <div className="flex flex-col gap-1.5 mb-2">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <h2 className="text-[1.15rem] text-white font-black tracking-tight leading-none drop-shadow-sm">{company?.company_name || company?.name || 'Klinflow Partner'}</h2>
+                    <h2 className="text-[1.15rem] text-white font-bold tracking-tight leading-none drop-shadow-sm">{company?.company_name || company?.name || 'Klinflow Partner'}</h2>
                     <ShieldCheck className="w-4 h-4 text-white/90 drop-shadow-sm" />
                   </div>
                   <div className="flex items-center gap-1 flex-wrap mt-0.5">
@@ -183,17 +183,17 @@ export default function CompanyProfile() {
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 flex items-center justify-between shadow-lg">
               <div className="flex flex-col items-center justify-center flex-1 border-r border-white/50 last:border-0">
                 <Package className="w-4 h-4 text-white/80 mb-1.5" />
-                <p className="text-[13px] font-black text-white leading-none mb-1">{Number(company?.total_pickups || 1)}</p>
+                <p className="text-[13px] font-bold text-white leading-none mb-1">{Number(company?.total_pickups || 1)}</p>
                 <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Pickups</p>
               </div>
               <div className="flex flex-col items-center justify-center flex-1 border-r border-white/50 last:border-0">
                 <MessageSquare className="w-4 h-4 text-white/80 mb-1.5" />
-                <p className="text-[13px] font-black text-white leading-none mb-1">{reviewCount}</p>
+                <p className="text-[13px] font-bold text-white leading-none mb-1">{reviewCount}</p>
                 <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Reviews</p>
               </div>
               <div className="flex flex-col items-center justify-center flex-1 last:border-0">
                 <Zap className="w-4 h-4 text-white/80 mb-1.5" />
-                <p className="text-[13px] font-black text-white leading-none mb-1">KSh {logisticsFee}</p>
+                <p className="text-[13px] font-bold text-white leading-none mb-1">KSh {logisticsFee}</p>
                 <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Base Fee</p>
               </div>
             </div>
@@ -234,7 +234,7 @@ export default function CompanyProfile() {
                         backgroundPosition: 'center'
                       } : {}}
                     >
-                      <span className="text-[10px] font-black text-white capitalize tracking-widest text-center leading-tight italic z-10 relative">
+                      <span className="text-[10px] font-bold text-white capitalize tracking-widest text-center leading-tight italic z-10 relative">
                         {m.replace(/_/g, ' ')}
                       </span>
                     </div>
@@ -272,7 +272,7 @@ export default function CompanyProfile() {
                     </p>
                   </div>
                   <div className="text-right shrink-0 flex flex-col items-end">
-                    <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 leading-none mb-2">KSh {logisticsFee}</p>
+                    <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400 leading-none mb-2">KSh {logisticsFee}</p>
                     <span className="px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold rounded-md">No booking fee</span>
                   </div>
                 </div>

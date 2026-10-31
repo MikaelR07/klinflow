@@ -130,7 +130,7 @@ export default function RedemptionHistory() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
                         <h4 className="text-sm font-bold text-slate-900 dark:text-white">{typeConf.label} Redemption</h4>
-                        <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">
+                        <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">
                           -{item.amount.toLocaleString()} GFP
                         </span>
                       </div>

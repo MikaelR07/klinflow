@@ -246,11 +246,11 @@ export default function RequestGroupPickup() {
           <div className="bg-emerald-700 dark:bg-emerald-900/20 p-4 rounded-xl border border-emerald-100 dark:border-emerald-800/50 mb-4 flex items-center justify-between mx-3">
             <div>
               <p className="text-[10px] font-bold text-slate-200 dark:text-emerald-400 capitalize tracking-widest mb-1">Community pickup</p>
-              <h3 className="text-sm font-black text-slate-200 dark:text-emerald-100 capitalize">{swarm?.material} • {quantity} KG</h3>
+              <h3 className="text-sm font-bold text-slate-200 dark:text-emerald-100 capitalize">{swarm?.material} • {quantity} KG</h3>
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold text-slate-200 dark:text-emerald-400 capitalize tracking-widest mb-1">Contributors</p>
-              <p className="text-sm font-black text-slate-200 dark:text-emerald-100">{participants.length}</p>
+              <p className="text-sm font-bold text-slate-200 dark:text-emerald-100">{participants.length}</p>
             </div>
           </div>
         )}
@@ -268,7 +268,7 @@ export default function RequestGroupPickup() {
                     {sortedParticipants.map((p, idx) => (
                       <div key={idx} className="flex items-center justify-between p-2 rounded-xl bg-slate-50 dark:bg-slate-800/50">
                         <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 capitalize">{p.profiles?.name || 'Resident'}</span>
-                        <span className="text-[10px] font-black text-emerald-600">{p.pledged_weight} KG</span>
+                        <span className="text-[10px] font-bold text-emerald-600">{p.pledged_weight} KG</span>
                       </div>
                     ))}
                   </div>
@@ -391,7 +391,7 @@ export default function RequestGroupPickup() {
                   <div className="bg-emerald-600 dark:bg-primary rounded-xl p-4 mt-6 relative overflow-hidden shadow-sm">
                     <div className="relative z-10 space-y-3">
                       <div className="flex justify-between items-center pb-2 border-b border-white/20">
-                        <span className="text-[10px] font-black text-white capitalize tracking-widest">Total Value</span>
+                        <span className="text-[10px] font-bold text-white capitalize tracking-widest">Total Value</span>
                         <span className="text-xs font-bold text-white/90">
                           {isMixed ? 'Multi-Material Rates' : `KSh ${(getCategoryPrice(swarm?.material) || 0).toLocaleString()} /kg`}
                         </span>
@@ -410,7 +410,7 @@ export default function RequestGroupPickup() {
                                 <span className="text-[10px] text-slate-50 capitalize">{p.pledged_weight}kg {p.material || swarm?.material} @ {rate}/kg</span>
                               </div>
                               <div className="text-right">
-                                <span className="text-[11px] font-black block">KSh {Math.round(userTotal).toLocaleString()}</span>
+                                <span className="text-[11px] font-bold block">KSh {Math.round(userTotal).toLocaleString()}</span>
                                 <span className="text-[9px] text-white font-semibold">+{userGfp} GFP</span>
                               </div>
                             </div>
@@ -428,12 +428,12 @@ export default function RequestGroupPickup() {
 
                       <div className="flex justify-between items-end pt-1">
                         <div>
-                          <p className="text-[10px] font-black text-white capitalize tracking-widest mb-1">GRAND TOTAL</p>
-                          <h3 className="text-2xl font-black text-white tracking-tighter">KSh {Math.round(estimatedRevenue).toLocaleString()}</h3>
+                          <p className="text-[10px] font-bold text-white capitalize tracking-widest mb-1">GRAND TOTAL</p>
+                          <h3 className="text-2xl font-bold text-white tracking-tighter">KSh {Math.round(estimatedRevenue).toLocaleString()}</h3>
                         </div>
                         <div className="text-right">
-                          <p className="text-[10px] font-black text-white capitalize tracking-widest mb-1">TOTAL GFP</p>
-                          <h3 className="text-lg font-black text-white/90 tracking-tighter">{estimatedGFP}</h3>
+                          <p className="text-[10px] font-bold text-white capitalize tracking-widest mb-1">TOTAL GFP</p>
+                          <h3 className="text-lg font-bold text-white/90 tracking-tighter">{estimatedGFP}</h3>
                         </div>
                       </div>
                     </div>
