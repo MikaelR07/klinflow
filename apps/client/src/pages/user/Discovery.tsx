@@ -134,77 +134,81 @@ export default function DiscoveryHub() {
                   <p className="text-[10px] font-bold text-amber-500 tracking-[0.15em]">Getting your location…</p>
                 )}
                 {(locationStatus === 'denied' || locationStatus === 'idle') && (
-                  <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">Select from verified collectors near you</p>
+                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">Select from verified collectors near you</p>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 mt-2">
-            <div className="flex gap-2">
-              <div className="relative flex-1 group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-primary transition-colors" />
-                <input
-                  type="text"
-                  placeholder="Search partners..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-200 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-primary/20 rounded-2xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
-                />
-              </div>
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all shrink-0 ${showFilters || activeScale !== 'all'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500'
-                  }`}
-              >
-                <SlidersHorizontal className="w-4 h-4" />
-              </button>
+          <div className="flex gap-2 mt-2">
+            <div className="relative flex-1 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-primary transition-colors" />
+              <input
+                type="text"
+                placeholder="Search partners..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-slate-200 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-primary/20 rounded-2xl py-3 pl-11 pr-4 text-xs font-semibold dark:text-white outline-none transition-all"
+              />
             </div>
-
-            {/* Material Filter Tabs */}
-            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-              {materials.map(m => (
-                <button
-                  key={m}
-                  onClick={() => setActiveMaterial(m)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize tracking-widest whitespace-nowrap transition-all border ${activeMaterial === m
-                    ? 'bg-primary border-primary text-white'
-                    : 'bg-slate-400 dark:bg-slate-400 text-slate-100 border-slate-100 dark:border-slate-800'
-                    }`}
-                >
-                  {m === 'all' ? 'All' : ((MATERIAL_LABELS as any)[m] || m)}
-                </button>
-              ))}
-            </div>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all shrink-0 ${showFilters || activeScale !== 'all'
+                ? 'bg-slate-900 text-white shadow-md'
+                : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500'
+                }`}
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+10rem)] pb-6 px-0 space-y-4">
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+7rem)] pb-6 px-0 space-y-4">
 
-        {/* ── HERO BANNER CAROUSEL ── */}
+        {/* ── BANNER CAROUSEL ── */}
         <div className="px-1.5">
-          <div className="relative w-full h-40 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800/60 bg-white">
-            {bannerImages.map((image, index) => (
+          <div className="relative w-full h-52 overflow-hidden rounded-2xl">
+            {bannerImages.map((img, index) => (
               <img
-                key={image}
-                src={image}
-                alt={`Discover ${index + 1}`}
-                className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ease-in-out ${currentSlide === index ? 'opacity-100' : 'opacity-0'}`}
+                key={img}
+                src={img}
+                alt={`Banner ${index + 1}`}
+                className={`absolute inset-0 w-full h-full object-cover object-left transition-opacity duration-700 ease-in-out ${
+                  index === currentSlide ? 'opacity-100' : 'opacity-0'
+                }`}
               />
             ))}
-            {/* Carousel dots */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+            {/* Carousel Dots */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">
               {bannerImages.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-2 h-2 rounded-full transition-all ${currentSlide === index ? 'bg-slate-900 w-6' : 'bg-slate-900/50'}`}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentSlide ? 'bg-slate-900 w-6' : 'bg-slate-900/50'
+                  }`}
                 />
               ))}
             </div>
+          </div>
+        </div>
+
+        {/* Material Filter Tabs */}
+        <div className="px-4">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+            {materials.map(m => (
+              <button
+                key={m}
+                onClick={() => setActiveMaterial(m)}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize tracking-widest whitespace-nowrap transition-all border ${activeMaterial === m
+                  ? 'bg-slate-900 border-slate-900 text-white'
+                  : 'bg-slate-200 dark:bg-slate-400 text-slate-600 border-slate-100 dark:border-slate-800'
+                  }`}
+              >
+                {m === 'all' ? 'All' : ((MATERIAL_LABELS as any)[m] || m)}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -335,25 +339,27 @@ export default function DiscoveryHub() {
                           )}
                         </div>
 
+                       
+
                         {/* Pickups + Location */}
-                        <div className="flex items-center gap-2 mb-3">
+                        <div className="flex items-center gap-2 ">
                           <div className="flex items-center gap-1.5">
                             <Package className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-[10px] font-medium text-slate-500">{Number(partner.totalPickups || 0)} Pickups</span>
+                            <span className="text-[10px] font-medium text-slate-600">{Number(partner.totalPickups || 0)} Pickups</span>
                           </div>
                           <div className="flex items-center gap-1.5">
                             <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-[10px] font-medium text-slate-500 truncate max-w-[100px]">{partner.estate || 'Nairobi'}</span>
+                            <span className="text-[10px] font-medium text-slate-600 truncate max-w-[100px]">{partner.estate || 'Nairobi'}</span>
                           </div>
                         </div>
 
-                        {/* Materials */}
-                        <div className="flex flex-wrap gap-1 mt-1">
+                         {/* Materials */}
+                        <div className="flex flex-wrap gap-1 mt-2">
                           {acceptedMaterials
                             .filter((m: any) => !!(MATERIAL_LABELS as any)[m])
                             .slice(0, 3)
                             .map((m: any) => (
-                              <span key={m} className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[10px] font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
+                              <span key={m} className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800 rounded-full text-[10px] font-semibold text-slate-500 dark:text-slate-300 border border-slate-100 dark:border-slate-700">
                                 {(MATERIAL_LABELS as any)[m]}
                               </span>
                             ))}
@@ -363,6 +369,8 @@ export default function DiscoveryHub() {
                             </span>
                           )}
                         </div>
+
+                        
                       </div>
 
                       <div className="shrink-0 flex flex-col items-end justify-between pl-2 pb-1">

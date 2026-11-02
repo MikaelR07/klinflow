@@ -10,7 +10,7 @@ const ImpactHub = lazy(() => import('../../../pages/user/ImpactHub'));
 const WithdrawalPage = lazy(() => import('../../../pages/user/WithdrawalPage'));
 const CompanyProfile = lazy(() => import('../../../pages/user/CompanyProfile'));
 const AgentReviews = lazy(() => import('../../../pages/user/AgentReviews'));
-const ImpactAnalytics = lazy(() => import('../../../pages/user/ImpactAnalytics'));
+const ImpactAnalytics = lazy(() => import('../../../pages/user/ImpactHub'));
 const ResidentWallet = lazy(() => import('../../../pages/user/ResidentWallet'));
 const RedeemGFP = lazy(() => import('../../../pages/user/RedeemGFP'));
 const TransferGFP = lazy(() => import('../../../pages/user/TransferGFP'));

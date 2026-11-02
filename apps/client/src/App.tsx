@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { Home, CalendarPlus, Package, Brain, Gauge, MoreHorizontal, Plus, ShieldCheck, Handshake, CircleFadingPlus } from 'lucide-react';
+import { Home, CalendarPlus, Package, Brain, Gauge, MoreHorizontal, Plus, ShieldCheck, Handshake, CircleFadingPlus, Trophy } from 'lucide-react';
 
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useThemeStore } from '@klinflow/core/stores/themeStore';
@@ -54,7 +54,7 @@ function MobileLayout() {
   const residentNav = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/book-pickup', icon: CalendarPlus, label: 'Book' },
-    { path: '/my-bookings', icon: Package, label: 'Bookings' },
+    { path: '/leaderboard', icon: Trophy, label: 'Leaderboard' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 

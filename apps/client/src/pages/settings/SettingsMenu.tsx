@@ -7,10 +7,11 @@ import {
   User, Bell, ShieldCheck, HelpCircle, LogOut, ChevronRight, Phone, MessageCircle,
   Brain, Zap, ArrowUpRight, ArrowDownLeft, Package,
   TrendingUp, Globe, BarChart3, Briefcase, Award, History, Building2,
-  Users, Star, CreditCard, ChevronDown, CheckCircle2, X, Plus, Info, Trophy,
+  Users, Star, CreditCard, ChevronDown, CheckCircle2, X, Plus, Info,
   IdCard,
   ChartBar,
   BarChart2,
+  Trophy,
   Copy,
   Settings
 } from 'lucide-react';
@@ -57,7 +58,7 @@ export default function SettingsMenu() {
   }, [bookings, receivedOrders, isSeller, profile, rewardPoints]);
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors pb-5">
+    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors pb-5">
 
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600  transition-all duration-300">
@@ -115,8 +116,8 @@ export default function SettingsMenu() {
           </div>
 
           {/* Quick Stats Grid */}
-          <div className={`grid ${isSeller ? 'grid-cols-2' : 'grid-cols-3'} gap-3 mt-4 pt-6 border-t border-slate-100 dark:border-slate-800`}>
-            {isSeller ? (
+          {isSeller && (
+            <div className="grid grid-cols-2 gap-3 mt-4 pt-6 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => navigate('/circular-resume')}
                 className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white  transition-all border border-transparent active:scale-95 group"
@@ -125,29 +126,6 @@ export default function SettingsMenu() {
                 <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
                 <p className="text-xs font-bold text-white capitalize leading-none">Klin Resumé</p>
               </button>
-            ) : (
-              <button
-                onClick={() => navigate('/Analytics')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white  transition-all border border-transparent active:scale-95 group"
-              >
-                <BarChart2 className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-emerald-200 capitalize tracking-widest mb-1 leading-none">Dashboard</p>
-                <p className="text-xs font-bold text-white capitalize leading-none">Analytics</p>
-              </button>
-            )}
-
-            {!isSeller && (
-              <button
-                onClick={() => navigate('/leaderboard')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white  transition-all border border-transparent active:scale-95 group"
-              >
-                <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
-                <p className="text-xs font-bold text-white capitalize leading-none">Leaderboard</p>
-              </button>
-            )}
-
-            {isSeller ? (
               <button
                 onClick={() => navigate('/leaderboard')}
                 className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white hover:bg-amber-700 transition-all border border-transparent active:scale-95 group"
@@ -156,17 +134,8 @@ export default function SettingsMenu() {
                 <p className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
                 <p className="text-xs font-bold text-white capitalize leading-none">Leaderboard</p>
               </button>
-            ) : (
-              <button
-                onClick={() => navigate('/impact-hub')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white hover:bg-blue-700 transition-all border border-transparent active:scale-95 group"
-              >
-                <Globe className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-blue-200 capitalize tracking-widest mb-1 leading-none">Impact</p>
-                <p className="text-xs font-bold text-white capitalize leading-none">Green Hub</p>
-              </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
 
@@ -174,7 +143,7 @@ export default function SettingsMenu() {
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3 ">
           <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-4 ">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
@@ -201,7 +170,7 @@ export default function SettingsMenu() {
             {/* ── NOTIFICATIONS ── */}
             <button
               onClick={() => navigate('/settings/notifications')}
-              className="w-full bg-white dark:bg-slate-900 rounded-2xl p-4 flex items-center gap-4  active:scale-[0.98] transition-transform relative overflow-hidden group"
+              className="w-full bg-slate-50 dark:bg-slate-900 rounded-2xl p-4 flex items-center gap-4  active:scale-[0.98] transition-transform relative overflow-hidden group"
             >
               <div className="w-11 h-11 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform relative z-10">
                 <Bell className="w-5 h-5 text-slate-600 dark:text-white" />
@@ -216,7 +185,7 @@ export default function SettingsMenu() {
         </div>
 
         {/* ── VERIFICATION + SETTINGS LINKS ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+        <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
           <div className="divide-y divide-slate-50 dark:divide-slate-800">
             {/* Seller-Only: Verification Row */}
             {isSeller && (

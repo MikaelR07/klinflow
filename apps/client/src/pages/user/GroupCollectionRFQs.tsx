@@ -258,13 +258,13 @@ export default function GroupCollectionRFQs() {
           <div className="w-0.5 shrink-0" />
           {/* Banner 1: My Proposals */}
           <div className="relative w-[92%] shrink-0 h-[160px] rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60 snap-start">
-            <img src="/vectors/community-banner-real.webp" alt="More Impact. More Rewards." className="absolute inset-0 w-full h-full object-cover object-right" />
+            <img src="/vectors/community-ban.webp" alt="More Impact. More Rewards." className="absolute inset-0 w-full h-full object-cover object-right" />
             
           </div>
 
           {/* Banner 2: Group Contracts */}
           <div className="relative w-[92%] shrink-0 h-[160px] rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800/60 snap-start">
-            <img src="/vectors/klin-contract-real.webp" alt="Group Contracts" className="absolute inset-0 w-full h-full object-cover object-right" />
+            <img src="/vectors/community-banner-real.webp" alt="Group Contracts" className="absolute inset-0 w-full h-full object-cover object-right" />
             
           </div>
           

@@ -142,29 +142,25 @@ export default function LocationSelector({
     }, 1500);
   }, [onChange]);
 
-  const handleDetect = () => {
+  const handleDetect = async () => {
     setIsCapturing(true);
-    if (!navigator.geolocation) {
-      toast.error('GSP Error', { description: 'Browser does not support geolocation.' });
-      return;
+    try {
+      const { useLocationStore } = await import('@klinflow/core/stores/locationStore');
+      const store = useLocationStore.getState();
+      if (store.status === 'idle') store.startTracking();
+      
+      const loc = await store.getCurrentLocation();
+      const { latitude, longitude, accuracy: acc } = loc;
+      setAccuracy(acc || null);
+      setShowMap(true);
+      setFlyToPos([latitude, longitude]);
+      updateLocation(latitude, longitude, acc || null);
+      toast.success('Position Locked', { description: `Accuracy: ${Math.round(acc || 0)}m` });
+    } catch (err) {
+      toast.error('Signal Loss', { description: 'Could not lock GPS. Please use manual selection.' });
+      setIsCapturing(false);
+      setShowMap(false);
     }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude, accuracy: acc } = pos.coords;
-        setAccuracy(acc);
-        setShowMap(true);
-        setFlyToPos([latitude, longitude]);
-        updateLocation(latitude, longitude, acc);
-        toast.success('Position Locked', { description: `Accuracy: ${Math.round(acc)}m` });
-      },
-      (err) => {
-        toast.error('Signal Loss', { description: 'Could not lock GPS. Please use manual selection.' });
-        setIsCapturing(false);
-        setShowMap(false);
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
   };
 
   return (
@@ -222,15 +218,15 @@ export default function LocationSelector({
         </div>
       ) : (
         <div className={hideHeaderText ? "w-full animate-in fade-in slide-in-from-top-4 duration-500" : "space-y-4 animate-in fade-in slide-in-from-top-4 duration-500"}>
-          <div className={hideHeaderText ? "h-56 w-full relative z-0" : "h-48 w-full rounded-[2.5rem] overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl relative z-0"}>
+          <div className="h-64 w-full relative z-0">
             <MapContainer center={initialPos as any} zoom={15} style={{ height: '100%', width: '100%' }} zoomControl={false} {...({} as any)}>
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <RecenterMap centerPos={flyToPos} />
               <MapEvents onMove={updateLocation} />
             </MapContainer>
-            
+
             <FixedCenterPin />
-            
+
             <div className="absolute top-4 left-4 right-4 z-[1000] flex justify-center pointer-events-none">
               <div className="glass px-4 py-2 rounded-full border border-white/20 shadow-lg flex items-center gap-3 pointer-events-auto">
                 <div className="flex flex-col">
@@ -241,7 +237,7 @@ export default function LocationSelector({
                   </span>
                 </div>
                 <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
-                <button 
+                <button
                   type="button"
                   onClick={() => { setShowMap(false); onChange({ ...value, latitude: null, longitude: null }); }}
                   className="p-1.5 hover:bg-rose-500/10 hover:text-rose-500 rounded-full transition-all"

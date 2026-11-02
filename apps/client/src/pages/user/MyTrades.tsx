@@ -222,9 +222,9 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors">
       {!selectedOfferId && !expandedId && !reschedulingTrade && (
-        <div className="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] px-4 border-b border-slate-200 dark:border-slate-800 z-50 transition-colors">
+        <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] px-4 border-b border-slate-200 dark:border-slate-800 z-50 transition-colors">
           <div className="max-w-lg mx-auto space-y-1.5">
             <div className="flex items-center gap-3.5">
               <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
@@ -262,7 +262,7 @@ export default function MyTrades() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex-1 py-2 px-1 rounded-xl text-[11px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shrink-0 ${activeTab === tab.id
                       ? "bg-primary text-white border-transparent"
-                      : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                      : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                       }`}
                   >
                     <span>{tab.label}</span>
@@ -291,10 +291,10 @@ export default function MyTrades() {
               </div>
             ) : (
               pendingOffers.map((offer) => (
-                <motion.div key={offer.id} onClick={() => setSelectedOfferId(offer.id)} className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
+                <motion.div key={offer.id} onClick={() => setSelectedOfferId(offer.id)} className="bg-slate-50 dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500" />
                   <div className="flex gap-3 pl-4 pr-3.5 py-3">
-                    <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
+                    <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
                       {offer.photo ? <OptimizedImage src={getThumbnailUrl(offer.photo, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />}
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">

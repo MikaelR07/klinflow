@@ -149,3 +149,90 @@
   -webkit-backface-visibility: hidden;
 }
 
+/* ── NOTIFICATION TOAST POPUP CARDS (SOLID GREEN THEME) ─────────── */
+[data-sonner-toaster] {
+  --success-bg: #047857;
+  --success-border: #065f46;
+  --success-text: #ffffff;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="success"],
+[data-sonner-toaster] [data-sonner-toast][data-type="info"],
+[data-sonner-toaster] [data-sonner-toast]:not([data-type="error"]):not([data-type="warning"]) {
+  background: #0a9237 !important;
+  background-color: #0a9237 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 28px -4px rgba(4, 120, 87, 0.4), 0 8px 12px -6px rgba(0, 0, 0, 0.25) !important;
+  border-radius: 1.125rem !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] [data-title],
+[data-sonner-toaster] [data-sonner-toast][data-type="info"] [data-title],
+[data-sonner-toaster] [data-sonner-toast]:not([data-type="error"]):not([data-type="warning"]) [data-title] {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] [data-description],
+[data-sonner-toaster] [data-sonner-toast][data-type="info"] [data-description],
+[data-sonner-toaster] [data-sonner-toast]:not([data-type="error"]):not([data-type="warning"]) [data-description] {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] [data-icon],
+[data-sonner-toaster] [data-sonner-toast][data-type="info"] [data-icon],
+[data-sonner-toaster] [data-sonner-toast]:not([data-type="error"]):not([data-type="warning"]) [data-icon] {
+  color: #ffffff !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-type="success"] [data-icon] svg,
+[data-sonner-toaster] [data-sonner-toast][data-type="info"] [data-icon] svg,
+[data-sonner-toaster] [data-sonner-toast]:not([data-type="error"]):not([data-type="warning"]) [data-icon] svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-close-button] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  background: rgba(33, 230, 2, 0.8) !important;
+  background-color: rgba(33, 230, 2, 0.8) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+  color: #ffffff !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+  z-index: 50 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-close-button]:hover {
+  background: rgba(0, 0, 0, 0.65) !important;
+  border-color: #ffffff !important;
+  transform: var(--toast-close-button-transform) scale(1.1) !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-close-button] svg {
+  display: block !important;
+  width: 12px !important;
+  height: 12px !important;
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+  stroke-width: 2.5px !important;
+  overflow: visible !important;
+}
+
+[data-sonner-toaster] [data-sonner-toast] [data-close-button] svg line {
+  stroke: #ffffff !important;
+  stroke-width: 2.5px !important;
+  stroke-linecap: round !important;
+}
+
+

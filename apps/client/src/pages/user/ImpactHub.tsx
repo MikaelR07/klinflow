@@ -166,89 +166,76 @@ export default function ImpactHub() {
   return (
     <div className="flex flex-col bg-white dark:bg-slate-950  transition-colors">
       {/* ── GRADIENT TOP BACKGROUND ── */}
-      <div className="absolute top-0 left-0 right-0 h-[380px] z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-purple-500 to-indigo-500 dark:from-purple-600 dark:via-purple-700 dark:to-indigo-700" />
+      <div className="absolute top-0 left-0 right-0 h-[320px] z-0 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 dark:from-emerald-600 dark:via-emerald-700 dark:to-emerald-800" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/5" />
         {/* Decorative circles */}
         <div className="absolute top-10 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-10 left-0 w-40 h-40 bg-indigo-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none" />
-        {/* Bottom curve */}
-        <div className="absolute -bottom-1 left-0 right-0 h-12 bg-white dark:bg-slate-950 rounded-t-[2.5rem]" />
+        <div className="absolute bottom-10 left-0 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none" />
       </div>
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-purple-400 to-indigo-500 dark:from-purple-600 dark:to-indigo-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 max-w-lg mx-auto">
         <div className="flex items-center justify-between">
           <button onClick={() => navigate(-1)} className="w-9 h-9 shrink-0 rounded-full bg-white/15 border border-white/10 flex items-center justify-center active:scale-95 transition-all">
             <ArrowLeft className="w-4 h-4 text-white" />
           </button>
-          <h1 className="text-[14px] font-bold text-white tracking-tight">GreenFlow Hub</h1>
+          <h1 className="text-[14px] font-bold text-white tracking-tight">Badges</h1>
           <button onClick={() => setShowBadgeModal(true)} className="w-9 h-9 shrink-0 rounded-full bg-white/15 border border-white/10 flex items-center justify-center active:scale-95 transition-all">
             <Award className="w-4 h-4 text-white" />
           </button>
         </div>
       </div>
 
-      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] relative max-w-lg mx-auto w-full pb-12 z-10">
+      {/* ── HERO CONTENT ON GRADIENT ── */}
+      <div className="relative  z-10 pt-[calc(env(safe-area-inset-top,1rem)+5rem)] pb-10 px-4 w-full">
+        <div className="flex flex-col items-center text-center">
+          <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-4xl shadow-lg border border-white/20 mb-3">
+            {metrics.icon}
+          </div>
+          <p className="text-[10px] font-bold text-white/70 uppercase tracking-[0.15em] mb-1">Current Rank</p>
+          <h2 className="text-2xl font-bold tracking-tight leading-none text-white drop-shadow-md mb-4">{metrics.tier}</h2>
 
-        {/* ── MAIN STATS CARD ── */}
-        <div className="px-1.5 pt-4 pb-8">
-          <div className="bg-slate-200 dark:bg-slate-800 backdrop-blur-md border border-white/20 dark:border-white/5 p-6 rounded-[2rem] shadow-xl shadow-indigo-900/10">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 flex items-center justify-center text-4xl shadow-sm">
-                {metrics.icon}
-              </div>
-              <div className="flex-1">
-                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] mb-1">Current Rank</p>
-                <h2 className="text-2xl font-bold tracking-tight leading-none text-slate-900 dark:text-white drop-shadow-sm">{metrics.tier}</h2>
-              </div>
-              <div className="text-right">
-                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-[0.2em] mb-1">Impact Score</p>
-                <p className="text-xl font-bold text-slate-900 dark:text-white drop-shadow-sm">{profile?.rewardPoints || 0} <span className="text-xs text-emerald-500">GFP</span></p>
-              </div>
+          {/* Progress on gradient */}
+          <div className="w-full space-y-1">
+            <div className="flex justify-between items-end">
+              <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest">Next: {metrics.nextTier}</span>
+              <span className="text-[11px] font-bold text-white">{Math.round(metrics.progress)}%</span>
             </div>
-
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between items-end">
-                <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest">Next: {metrics.nextTier}</span>
-                <span className="text-[11px] font-bold text-slate-900 dark:text-white">{Math.round(metrics.progress)}%</span>
-              </div>
-              <div className="h-2.5 w-full bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden p-[2px]">
-                <div
-                  className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.3)] transition-all duration-1000 ease-out"
-                  style={{ width: `${metrics.progress}%` }}
-                />
-              </div>
-              <p className="text-[10px] font-medium text-slate-600 dark:text-slate-400 text-center mt-2 leading-relaxed">
-                Your recycling efforts have recovered <strong className="text-emerald-600 dark:text-emerald-400">{kgRecovered}kg</strong> of waste from landfills.
-              </p>
-            </div>
-
-            {/* Streak Info */}
-            <div className="bg-white dark:bg-slate-900 rounded-xl p-3 flex items-center justify-between border border-slate-100 dark:border-slate-700 shadow-sm mt-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center">
-                  <Flame className="w-5 h-5 text-orange-500" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Current Streak</p>
-                  <p className="text-[15px] font-bold text-slate-900 dark:text-white leading-none">
-                    {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'No active streak'}
-                  </p>
-                </div>
-              </div>
-              {streak > 0 && (
-                <div className="px-3 py-1 bg-orange-100 dark:bg-orange-500/20 rounded-lg">
-                  <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 uppercase tracking-widest">On Fire!</span>
-                </div>
-              )}
+            <div className="h-2 w-full bg-white/20 rounded-full overflow-hidden p-[2px]">
+              <div
+                className="h-full bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.3)] transition-all duration-1000 ease-out"
+                style={{ width: `${metrics.progress}%` }}
+              />
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="flex-1 relative max-w-lg mx-auto w-full pb-12 z-10 px-4">
+  
+        {/* ── STREAK INFO ── */}
+        <div className="bg-gradient-to-br from-amber-500 to-amber-600 dark:bg-slate-800 rounded-xl p-4 flex items-center justify-between border border-amber-500 dark:border-amber-500 shadow-sm mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center">
+              <Flame className="w-5 h-5 text-orange-500" />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-amber-100 uppercase tracking-widest leading-none mb-1">Current Streak</p>
+              <p className="text-[14px] font-bold text-slate-600 dark:text-white leading-none">
+                {streak > 0 ? `${streak} Week${streak > 1 ? 's' : ''}` : 'No active streak'}
+              </p>
+            </div>
+          </div>
+          {streak > 0 && (
+            <div className="px-3 py-1 bg-orange-100 dark:bg-orange-500/20 rounded-lg">
+              <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 uppercase tracking-widest">On Fire!</span>
+            </div>
+          )}
+        </div>
 
         {/* ── BADGES ── */}
-        <div className="px-1.5 mb-8">
-          <div className="bg-slate-200 dark:bg-slate-800/80 rounded-[2rem] p-5 shadow-sm">
+        <div className="mb-8">
             <div className="flex items-center justify-between mb-5 px-1">
               <h3 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight">
                 Achievements
@@ -271,8 +258,8 @@ export default function ImpactHub() {
                     onClick={() => setShowBadgeModal(true)}
                     className={`shrink-0 w-[88px] flex flex-col items-center p-3 rounded-2xl cursor-pointer transition-all active:scale-95 ${
                       badge.unlocked
-                        ? 'bg-white dark:bg-slate-900 shadow-sm border border-transparent'
-                        : 'bg-white/50 dark:bg-slate-900/50 opacity-60 border border-transparent'
+                        ? 'bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-700'
+                        : 'bg-white/50 dark:bg-slate-900/50 opacity-60 border border-slate-200 dark:border-slate-700'
                     }`}
                   >
                     <div className={`text-[28px] mb-1.5 ${!badge.unlocked ? 'grayscale' : ''}`}>
@@ -301,8 +288,8 @@ export default function ImpactHub() {
                     onClick={() => setShowBadgeModal(true)}
                     className={`shrink-0 w-[88px] flex flex-col items-center p-3 rounded-2xl cursor-pointer transition-all active:scale-95 ${
                       badge.unlocked
-                        ? 'bg-white dark:bg-slate-900 shadow-sm border border-transparent'
-                        : 'bg-white/50 dark:bg-slate-900/50 opacity-60 border border-transparent'
+                        ? 'bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-700'
+                        : 'bg-white/50 dark:bg-slate-900/50 opacity-60 border border-slate-200 dark:border-slate-700'
                     }`}
                   >
                     <div className={`text-[28px] mb-1.5 ${!badge.unlocked ? 'grayscale' : ''}`}>
@@ -322,7 +309,7 @@ export default function ImpactHub() {
             </div>
 
             {/* Progress bar */}
-            <div className="mt-5 bg-slate-300/50 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+            <div className="mt-5 bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full transition-all duration-700"
                 style={{ width: `${(unlockedCount / badges.length) * 100}%` }}
@@ -331,23 +318,18 @@ export default function ImpactHub() {
             <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 text-center mt-2">
               <span className="text-emerald-600 dark:text-emerald-400 font-bold">{unlockedCount}</span> of {badges.length} unlocked
             </p>
-          </div>
         </div>
-
-        
 
         {/* ── CTA ── */}
-        <div className="px-4">
-          <button
-            onClick={() => navigate('/book-pickup')}
-            className="w-full py-4 bg-primary dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-[13px] active:scale-[0.98] transition-all shadow-lg shadow-slate-900/10"
-          >
-            Book a Pickup to Level Up
-          </button>
-          <p className="text-[10px] font-medium text-slate-400 text-center mt-3 leading-relaxed">
-            Every KG recycled earns you <strong className="text-emerald-500">GFP points</strong> and pushes you closer to the next tier.
-          </p>
-        </div>
+        <button
+          onClick={() => navigate('/book-pickup')}
+          className="w-full py-4 bg-primary dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-[13px] active:scale-[0.98] transition-all shadow-lg shadow-slate-900/10"
+        >
+          Book a Pickup to Level Up
+        </button>
+        <p className="text-[10px] font-medium text-slate-400 text-center mt-3 leading-relaxed">
+          Every KG recycled earns you <strong className="text-emerald-500">GFP points</strong> and pushes you closer to the next tier.
+        </p>
 
       </div>
 

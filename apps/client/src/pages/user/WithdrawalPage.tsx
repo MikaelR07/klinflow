@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ArrowLeft, Wallet, Smartphone, Building2,
   ChevronRight, CheckCircle2, ShieldCheck,
@@ -32,6 +33,15 @@ export default function WithdrawalPage() {
   const [amount, setAmount] = useState<number | ''>('');
   const [details, setDetails] = useState(profile?.phone || '');
   const [loading, setLoading] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [txRef, setTxRef] = useState('');
+  const [txTimestamp, setTxTimestamp] = useState('');
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (userId) {
@@ -60,6 +70,11 @@ export default function WithdrawalPage() {
     setLoading(true);
     try {
       await withdrawRewards(Number(amount), method.name, details);
+      const generatedRef = `KF-WD-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+      const now = new Date();
+      const formattedTime = now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) + ' • ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      setTxRef(generatedRef);
+      setTxTimestamp(formattedTime);
       setStep(2);
       toast.success('Withdrawal Request Sent!');
     } catch (err: any) {
@@ -72,78 +87,77 @@ export default function WithdrawalPage() {
   return (
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden min-h-screen">
       
-      {/* ── TOP SECTION: PRIMARY WITH ROUNDED BOTTOM ── */}
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2.5rem]  relative z-20 overflow-hidden">
-        
-        {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center active:scale-95 transition-all border border-white/20">
+      {/* ── FIXED TOP NAV ── */}
+      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-600 via-emerald-700 to-emerald-800 dark:bg-emerald-800/95 backdrop-blur-md `}>
+        <div className="max-w-lg mx-auto px-5 flex items-center justify-between relative">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center active:scale-95 transition-all border border-white/20 shadow-sm z-10"
+            aria-label="Go back"
+          >
             <ArrowLeft className="w-5 h-5 text-white" />
           </button>
-          <div className="text-center">
-            <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Withdraw Funds</h1>
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <h1 className="text-[17px] font-semibold tracking-wide text-white leading-tight">Withdraw Funds</h1>
           </div>
           <div className="w-10 h-10"></div>
         </div>
+      </div>
 
-        {step === 1 && (
-          <div className="animate-in fade-in duration-300">
-            <div className="text-center px-4 mb-4">
-              <p className="text-[11px] font-bold text-white/70 uppercase tracking-widest mb-1.5">Total Balance</p>
-              <div className="flex items-baseline justify-center gap-1 text-white">
-                <span className="text-xl font-bold">KSh</span>
-                <span className="text-3xl font-bold leading-none">
-                  {cashBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </span>
-              </div>
-              <div className="flex justify-center mt-3">
-                <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold text-white uppercase tracking-widest bg-white/20 px-3 py-1.5 rounded-full border border-white/10">
-                  <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
-                </div>
-              </div>
-            </div>
-
-            {/* Withdrawal Method Buttons */}
-            <div className="flex items-center justify-center gap-3 px-4 mt-2">
-              {METHODS.map(m => {
-                const isSelected = method.id === m.id;
-                const selectedBg = m.id === 'mpesa' ? 'bg-green-600' : 'bg-red-600';
-                return (
-                  <button
-                    key={m.id}
-                    onClick={() => setMethod(m)}
-                    className={`flex-1 py-3 rounded-xl flex items-center justify-center gap-2 text-left transition-all active:scale-95 border-[1.5px] ${isSelected 
-                      ? `${selectedBg} border-white shadow-md scale-[1.02]` 
-                      : 'bg-white/20 border-white/30 opacity-90 hover:opacity-100'}`}
-                  >
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${isSelected ? 'bg-white/20' : 'bg-white/10'}`}>
-                      <m.icon className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[11px] font-bold text-white leading-tight truncate">{m.name}</p>
-                      <p className="text-[9px] font-medium text-white/90 leading-tight line-clamp-1">{m.description}</p>
-                    </div>
-                  </button>
-                )
-              })}
+      {/* ── TOP SECTION: PRIMARY WITH ROUNDED BOTTOM ── */}
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+7rem)] pb-6 rounded-b-[1.5rem] relative z-20 overflow-hidden">
+        <div className="text-center px-4 mb-4">
+          <p className="text-[11px] font-bold text-white/70 uppercase tracking-widest mb-1.5">Total Balance</p>
+          <div className="flex items-baseline justify-center gap-1 text-white">
+            <span className="text-xl font-bold">KSh</span>
+            <span className="text-3xl font-bold leading-none">
+              {cashBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+          <div className="flex justify-center mt-3">
+            <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold text-white uppercase tracking-widest bg-white/20 px-3 py-1.5 rounded-full border border-white/10">
+              <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
             </div>
           </div>
-        )}
+        </div>
+
+        {/* Withdrawal Method Buttons */}
+        <div className="flex items-center justify-center gap-3 px-4 mt-2">
+          {METHODS.map(m => {
+            const isSelected = method.id === m.id;
+            const selectedBg = m.id === 'mpesa' ? 'bg-green-600' : 'bg-red-600';
+            return (
+              <button
+                key={m.id}
+                onClick={() => setMethod(m)}
+                className={`flex-1 py-3 rounded-xl flex items-center justify-center gap-2 text-left transition-all active:scale-95 border-[1.5px] ${isSelected 
+                  ? `${selectedBg} border-white shadow-md scale-[1.02]` 
+                  : 'bg-white/20 border-white/30 opacity-90 hover:opacity-100'}`}
+              >
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${isSelected ? 'bg-white/20' : 'bg-white/10'}`}>
+                  <m.icon className="w-3.5 h-3.5 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-bold text-white leading-tight truncate">{m.name}</p>
+                  <p className="text-[9px] font-medium text-white/90 leading-tight line-clamp-1">{m.description}</p>
+                </div>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       <div className="px-1.5 mt-2 space-y-6 relative z-10 max-w-lg mx-auto">
-
-        {step === 1 && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+        <div className="space-y-6">
 
             {/* AMOUNT AND DETAILS CARD */}
             <div className="bg-slate-50 dark:bg-slate-900 rounded-[1rem] p-5 shadow-sm border border-slate-100 dark:border-slate-800">
-              <h3 className="text-[14px] font-bold text-slate-700 dark:text-white capitalize tracking-wider mb-4 text-center">Withdrawal Details</h3>
+              {/* <h3 className="text-[14px] font-bold text-slate-700 dark:text-white capitalize tracking-wider mb-4 text-center">Withdrawal Details</h3> */}
               
               <div className="space-y-4">
                 {/* AMOUNT INPUT */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">Amount to Withdraw</label>
+                  <label className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">Amount to Withdraw</label>
                   <div className="relative flex items-center">
                     <span className="absolute left-4 font-bold text-emerald-600 dark:text-emerald-400 text-base">KSh</span>
                     <input
@@ -168,7 +182,7 @@ export default function WithdrawalPage() {
 
                 {/* DETAILS INPUT */}
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">
+                  <label className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">
                     {method.id === 'bank' ? 'Account Number' : 'Phone Number'}
                   </label>
                   <div className="relative flex items-center">
@@ -224,50 +238,96 @@ export default function WithdrawalPage() {
               </ul>
             </div>
           </div>
-        )}
+        </div>
 
-        {/* STEP 2: SUCCESS */}
-        {step === 2 && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-200">
-            <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 w-full max-w-[360px] rounded-[2rem] p-6 text-center text-white relative overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-emerald-400/20">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-900/40 rounded-full blur-2xl pointer-events-none" />
-              
-              <div className="relative z-10">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
-                  <CheckCircle2 className="w-8 h-8 text-emerald-500" />
-                </div>
-                
-                <h1 className="text-xl font-bold text-white tracking-wide mb-1 leading-tight">Withdrawal<br/>Initiated!</h1>
-                <p className="text-xs text-emerald-100 font-medium mb-6">Funds are on the way.</p>
-                
-                <div className="bg-black/20 rounded-2xl p-4 backdrop-blur-sm border border-white/10 mb-6 space-y-2.5">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-emerald-200">Amount Sent</span>
-                    <span className="font-bold">KSh {Number(amount).toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-emerald-200">Destination</span>
-                    <span className="font-bold">{method?.name}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-emerald-200">Ref No.</span>
-                    <span className="font-bold tracking-widest uppercase">KF-WD-{Math.random().toString(36).substring(2, 6).toUpperCase()}</span>
-                  </div>
-                </div>
-                
-                <button 
-                  onClick={() => navigate(-1)}
-                  className="w-full bg-white text-emerald-700 hover:text-emerald-800 py-3.5 rounded-xl font-bold text-sm shadow-lg active:scale-95 transition-all"
-                >
-                  Return to Wallet
-                </button>
+        {/* STEP 2: SUCCESS MODAL */}
+      {step === 2 && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-[370px] bg-white dark:bg-slate-900 rounded-[2rem] p-6 text-center relative overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 animate-in zoom-in-95 duration-300">
+            {/* Subtle top ambient glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-24 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+
+            <div className="relative z-10">
+              {/* Success Icon */}
+              <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border-4 border-emerald-100 dark:border-emerald-800/50 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-emerald-500/10">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
               </div>
+
+              {/* Status Pill */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200/60 dark:border-emerald-700/40 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-widest mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Funds Dispatched
+              </div>
+
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Withdrawal Initiated!</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Funds are on the way to your account.</p>
+
+              {/* Amount Hero Box */}
+              <div className="my-5 py-2 px-2 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-center">
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Amount Withdrawn</span>
+                <div className="flex items-baseline justify-center gap-1 mt-1 text-slate-900 dark:text-white">
+                  <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">KSh</span>
+                  <span className="text-2xl font-extrabold tracking-tight leading-none">
+                    {Number(amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </span>
+                </div>
+              </div>
+
+              {/* Receipt Details Box */}
+              <div className="rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 p-4 space-y-2.5 text-left mb-5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Destination</span>
+                  <span className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <span className={`w-2 h-2 rounded-full ${method.id === 'mpesa' ? 'bg-green-500' : 'bg-red-500'}`} />
+                    {method?.name}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Account / Phone</span>
+                  <span className="font-bold text-slate-900 dark:text-white tracking-wide">{details}</span>
+                </div>
+
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Transfer Fee</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400 text-[11px] px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-full">
+                    Free (KSh 0.00)
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Date & Time</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 text-[11px]">{txTimestamp || 'Just now'}</span>
+                </div>
+
+                <div className="h-px bg-slate-200/60 dark:bg-slate-800 my-1" />
+
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Reference No.</span>
+                  <span className="font-mono text-[11px] font-bold text-slate-900 dark:text-white tracking-widest uppercase">
+                    {txRef || 'KF-WD-PENDING'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Security Badge */}
+              <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>Secured by Klinflow Wallet</span>
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={() => navigate(-1)}
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-emerald-600/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                Return to Wallet
+              </button>
             </div>
           </div>
-        )}
+        </div>,
+        document.body
+      )}
 
-      </div>
     </div>
   );
 }

@@ -15,11 +15,14 @@ import {
   ArrowDownSquare,
   ArrowUpSquare,
   ArrowUpCircle,
-  ArrowDownCircle
+  ArrowDownCircle,
+  Bell, Headset,
+  BanknoteArrowUp
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
+import { useNotificationStore } from '@klinflow/core/stores/notificationStore';
 import { walletService } from '@klinflow/core';
 import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
@@ -34,6 +37,22 @@ export default function ResidentWallet() {
   const [walletStats, setWalletStats] = useState<any>(null);
   const [walletTxns, setWalletTxns] = useState<any[]>([]);
   const [agentNames, setAgentNames] = useState<Record<string, string>>({});
+  const getUnreadCount = useNotificationStore(s => s.getUnreadCount);
+  const fetchNotifications = useNotificationStore(s => s.fetchNotifications);
+  const unreadCount = getUnreadCount();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchNotifications(userId, 'client');
+    }
+  }, [userId, fetchNotifications]);
 
   // Fetch real wallet balance and bookings
   useEffect(() => {
@@ -146,120 +165,142 @@ export default function ResidentWallet() {
 
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-slate-50 dark:bg-slate-800 relative overflow-x-hidden min-h-screen">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 relative overflow-x-hidden min-h-screen font-sans pb-6">
 
-      {/* ── Fixed Header — neutral bg ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#F8F9FF]/90 dark:bg-slate-800/90 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-3 px-4 max-w-lg mx-auto flex items-center justify-between">
-        <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center active:scale-95 transition-all">
-          <ArrowLeft className="w-5 h-5 text-slate-700 dark:text-white" />
-        </button>
-        <div className="text-center">
-          <h1 className="text-[17px] font-bold tracking-wide text-slate-900 dark:text-white leading-tight">Wallet</h1>
+      {/* ── FIXED TOP NAV ── */}
+      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-800 to-emerald-900`}>
+        <div className="max-w-lg mx-auto px-4 flex items-center justify-between relative">
+          {/* Left: Back Arrow */}
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group z-10"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="w-5 h-5 text-white group-hover:-translate-x-0.5 transition-transform" />
+          </button>
+
+          {/* Center: My Wallet */}
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <h1 className="text-[17px] font-bold text-white tracking-tight leading-none">
+              My Wallet
+            </h1>
+          </div>
+
+          {/* Right: Notifications & Support */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 z-10">
+            <button
+              onClick={() => navigate("/notifications")}
+              className="relative w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group"
+            >
+              <Bell className="w-5 h-5 text-white group-hover:animate-swing" />
+              {Number(unreadCount) > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-emerald-800 shadow-md animate-in zoom-in">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => navigate("/settings/support")}
+              className="relative w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group"
+            >
+              <Headset className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+            </button>
+          </div>
         </div>
-        <div className="w-10 h-10"></div>
       </div>
 
-      {/* ── Content area ── */}
-      <div className="pt-[calc(env(safe-area-inset-top,1.5rem)+7rem)] px-1.5 max-w-lg mx-auto pb-4 space-y-4">
+      {/* ── TOP SECTION WITH BACKGROUND COLOR ── */}
+      <div className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white relative overflow-hidden rounded-b-[1.25rem]  pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)]">
+        {/* Decorative background orbs */}
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-56 h-56 bg-teal-300/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
 
-        {/* ── Hero Balance Card ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: 'easeOut' }}
-          className="bg-gradient-to-br from-emerald-700 to-emerald-800 rounded-2xl p-5  relative overflow-hidden"
-        >
-          {/* Subtle pattern overlay */}
-          <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+        <div className="relative z-10 max-w-lg mx-auto px-4">
 
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-white/15 rounded-lg flex items-center justify-center">
-                  <Wallet className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-[11px] font-bold text-white/70 uppercase tracking-widest">Available Balance</span>
-              </div>
-              <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-1.5 hover:bg-white/10 rounded-xl transition-colors active:scale-95">
-                {balanceVisible ? <Eye className="w-4.5 h-4.5 text-white/60" /> : <EyeOff className="w-4.5 h-4.5 text-white/60" />}
-              </button>
+          {/* Wallet Icon + Label */}
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-8 h-8 bg-white/15 rounded-lg flex items-center justify-center">
+              <Wallet className="w-4 h-4 text-white" />
             </div>
+            <span className="text-[11px] font-bold text-white/70 uppercase tracking-widest">Available Balance</span>
+          </div>
 
-            <div className="flex items-baseline gap-1.5 mb-4">
-              <span className="text-lg font-bold text-white/80">KSh</span>
-              <span className={`text-2xl font-bold text-white leading-none transition-all duration-300 ${!balanceVisible ? 'blur-md select-none' : ''}`}>
-                {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </span>
-            </div>
+          {/* Balance */}
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="text-lg font-bold text-white/80">KSh</span>
+            <span className={`text-2xl font-bold text-white leading-none transition-all duration-300 ${!balanceVisible ? 'blur-md select-none' : ''}`}>
+              {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+            <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-1.5 hover:bg-white/10 rounded-xl transition-colors active:scale-95">
+              {balanceVisible ? <Eye className="w-4.5 h-4.5 text-white/60" /> : <EyeOff className="w-4.5 h-4.5 text-white/60" />}
+            </button>
+          </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/50 capitalize tracking-widest">
-                <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
-              </div>
-              <div className="flex items-center gap-1 text-[10px] font-bold text-emerald-200/60">
-                <Sparkles className="w-3 h-3" />
-                <span>{gfpBalance.toLocaleString()} GFP</span>
-              </div>
+          {/* Secure Klinflow Wallet */}
+          <div className="flex justify-center mb-5">
+            <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/80 capitalize tracking-widest bg-white/10 px-3.5 py-1 rounded-full border border-white/15 shadow-sm">
+              <ShieldCheck className="w-3.5 h-3.5" /> Secure Klinflow Wallet
             </div>
           </div>
-        </motion.div>
 
-        {/* ── Quick Actions & Recent Transactions ── */}
+          {/* ── Quick Actions inside Top Section ── */}
+          <div className="grid grid-cols-4 gap-2 pt-4 border-t border-white/15">
+            <button
+              onClick={() => navigate('/withdraw')}
+              className="bg-white/15 backdrop-blur-sm border border-white/15 rounded-xl p-2.5 flex flex-col items-center gap-1.5 active:scale-[0.97] transition-all group hover:bg-white/25 shadow-sm"
+            >
+              <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                <BanknoteArrowUp className="w-4.5 h-4.5 text-white" />
+              </div>
+              <p className="text-[9px] font-bold text-white text-center leading-tight">Withdraw</p>
+            </button>
+
+            <button
+              onClick={() => navigate('/redeem-gfp')}
+              className="bg-white/15 backdrop-blur-sm border border-white/15 rounded-xl p-2.5 flex flex-col items-center gap-1.5 active:scale-[0.97] transition-all group hover:bg-white/25 shadow-sm"
+            >
+              <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Gift className="w-4.5 h-4.5 text-white" />
+              </div>
+              <p className="text-[9px] font-bold text-white text-center leading-tight">Redeem GFP</p>
+            </button>
+
+            <button
+              onClick={() => navigate('/transfer-gfp')}
+              className="bg-white/15 backdrop-blur-sm border border-white/15 rounded-xl p-2.5 flex flex-col items-center gap-1.5 active:scale-[0.97] transition-all group hover:bg-white/25 shadow-sm"
+            >
+              <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                <ArrowRightLeft className="w-4.5 h-4.5 text-white" />
+              </div>
+              <p className="text-[9px] font-bold text-white text-center leading-tight">Transfer GFP</p>
+            </button>
+
+            <button
+              onClick={() => navigate('/book-pickup')}
+              className="bg-white/15 backdrop-blur-sm border border-white/15 rounded-xl p-2.5 flex flex-col items-center gap-1.5 active:scale-[0.97] transition-all group hover:bg-white/25 shadow-sm"
+            >
+              <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Banknote className="w-4.5 h-4.5 text-white" />
+              </div>
+              <p className="text-[9px] font-bold text-white text-center leading-tight">Earn More</p>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Content area below top section ── */}
+      <div className="px-3 sm:px-4 py-4 max-w-lg mx-auto space-y-4">
+
+        {/* ── Recent Transactions ── */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
           className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden shadow-sm"
         >
-          {/* Quick Actions */}
-          <div className="p-4">
-            <h3 className="text-xs font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest mb-1">Quick Actions</h3>
-            <div className="grid grid-cols-4 gap-2">
-              <button
-                onClick={() => navigate('/withdraw')}
-                className="bg-slate-100 dark:bg-slate-800 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
-              >
-                <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Landmark className="w-5 h-5 text-slate-900 dark:text-white" />
-                </div>
-                <p className="text-[10px] font-bold text-slate-700 dark:text-slate-400 text-center leading-tight">Withdraw</p>
-              </button>
-
-              <button
-                onClick={() => navigate('/redeem-gfp')}
-                className="bg-slate-100 dark:bg-slate-800 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
-              >
-                <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Gift className="w-5 h-5 text-slate-900 dark:text-white" />
-                </div>
-                <p className="text-[10px] font-bold text-slate-700 dark:text-slate-400 text-center leading-tight">Redeem GFP</p>
-              </button>
-
-              <button
-                onClick={() => navigate('/transfer-gfp')}
-                className="bg-slate-100 dark:bg-slate-800 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
-              >
-                <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <ArrowRightLeft className="w-5 h-5 text-slate-900 dark:text-white" />
-                </div>
-                <p className="text-[10px] font-bold text-slate-700 dark:text-slate-400 text-center leading-tight">Transfer GFP</p>
-              </button>
-
-              <button
-                onClick={() => navigate('/book-pickup')}
-                className="bg-slate-100 dark:bg-slate-800 rounded-xl p-2.5 flex flex-col items-center gap-2 active:scale-[0.97] transition-all group"
-              >
-                <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Banknote className="w-5 h-5 text-slate-900 dark:text-white" />
-                </div>
-                <p className="text-[10px] font-bold text-slate-700 dark:text-slate-400 text-center leading-tight">Earn More</p>
-              </button>
-            </div>
-          </div>
-
-          
-
-          {/* Recent Transactions */}
           <div className="p-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xs font-bold text-slate-600 dark:text-white">

@@ -164,11 +164,11 @@ export default function SwarmsList() {
               <img
                 src="/vectors/klin-swarms-real.webp"
                 alt="Swarms Background"
-                className="w-full h-auto"
+                className="w-full h-auto scale-105"
               />
             </div>
 
-            <div className="relative z-20 -mt-6 mx-4 bg-slate-50 dark:bg-primary rounded-xl p-3  flex flex-col gap-2 border border-emerald-500/30">
+            <div className="relative z-20 -mt-3 mx-4 bg-slate-50 dark:bg-primary rounded-xl p-3  flex flex-col gap-2 border border-emerald-500/30">
               <div className="grid grid-cols-3 gap-2 mt-1">
                 {(() => {
                   const totalPooledKg = swarms.reduce((acc: number, s: any) => acc + (s.current_weight || 0), 0);

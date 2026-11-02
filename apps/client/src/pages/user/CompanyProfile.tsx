@@ -105,7 +105,7 @@ export default function CompanyProfile() {
     : (company?.rating > 0 ? company.rating.toFixed(1) : '0.0');
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-800 transition-colors min-h-screen">
+    <div className="bg-white dark:bg-slate-800 transition-colors min-h-screen">
       {/* ── FIXED HEADER ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto  bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-100 dark:border-slate-900">
         <div className="flex items-center justify-between">
@@ -114,8 +114,8 @@ export default function CompanyProfile() {
               <ArrowLeft className="w-5 h-5 dark:text-white" />
             </button>
             <div>
-              <h1 className="text-sm font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">Collector Profile</h1>
-              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.25em]">View Partner Details</p>
+              <h1 className="text-sm font-bold text-slate-800 dark:text-white tracking-tight capitalize leading-none mb-1">View Collector Profile</h1>
+              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.25em]">Add to collection details</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -129,7 +129,7 @@ export default function CompanyProfile() {
 
       <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-5 px-1.5 space-y-4 max-w-lg mx-auto">
         {/* Hero */}
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-emerald-700 via-emerald-700 to-emerald-600 p-4 text-white shadow-lg shadow-indigo-900/30">
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-emerald-800 to-emerald-700 p-4 text-white">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-300/20 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
           
@@ -180,7 +180,7 @@ export default function CompanyProfile() {
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 flex items-center justify-between shadow-lg">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-2.5 flex items-center justify-between shadow-lg">
               <div className="flex flex-col items-center justify-center flex-1 border-r border-white/50 last:border-0">
                 <Package className="w-4 h-4 text-white/80 mb-1.5" />
                 <p className="text-[13px] font-bold text-white leading-none mb-1">{Number(company?.total_pickups || 1)}</p>
@@ -202,7 +202,7 @@ export default function CompanyProfile() {
 
 
         {/* ── SERVICES & PRICING WRAPPER ── */}
-        <div className="bg-slate-200 dark:bg-slate-800 p-3 rounded-2xl space-y-1 mt-4">
+        <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-2xl space-y-1 mt-4">
           {/* Accepted Materials */}
           {materials.length > 0 && (
             <div className="space-y-3">
@@ -258,7 +258,6 @@ export default function CompanyProfile() {
 
           {/* Pricing Card */}
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-slate-600 dark:text-white px-1">Pricing</h3>
             <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border-none shadow-sm flex gap-4">
               <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
                 <Truck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -266,13 +265,13 @@ export default function CompanyProfile() {
               <div className="flex-1">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1">Base Logistics Fee</h4>
+                    <h4 className="text-sm font-semibold text-slate-600 dark:text-white mb-1">Base Logistics Fee</h4>
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug pr-4">
-                      Final price depends on material type and weight, confirmed after pickup.
+                      Some collectors may add extra fees based on distance or material type.
                     </p>
                   </div>
                   <div className="text-right shrink-0 flex flex-col items-end">
-                    <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400 leading-none mb-2">KSh {logisticsFee}</p>
+                    <p className="text-base font-bold text-emerald-600 dark:text-emerald-400 leading-none mb-2">KSh {logisticsFee}</p>
                     <span className="px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold rounded-md">No booking fee</span>
                   </div>
                 </div>
@@ -293,7 +292,7 @@ export default function CompanyProfile() {
             </button>
           </div>
           
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
             {reviews.length === 0 ? (
               <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">No reviews yet.</p>
             ) : (
@@ -327,7 +326,7 @@ export default function CompanyProfile() {
                             <Star key={i} className={`w-3 h-3 ${i <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-200 dark:text-slate-700'}`} />
                           ))}
                         </div>
-                        <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed italic">
+                        <p className="text-[12px] text-slate-600 dark:text-slate-300 leading-relaxed italic">
                           {review.agent_rating_comment ? `"${review.agent_rating_comment}"` : 'No written feedback provided.'}
                         </p>
                       </div>

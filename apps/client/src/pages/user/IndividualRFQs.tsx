@@ -344,14 +344,7 @@ export default function IndividualRFQs() {
         <div className="px-1.5 mb-4 mt-2">
           <div className="relative w-full h-[160px] rounded-2xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800/60">
             <img src="/vectors/individual-rfq-real.webp" alt="Individual Contracts" className="absolute inset-0 w-full h-full object-cover object-right" />
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-950 via-emerald-900/60 to-transparent dark:from-slate-950/95 dark:via-emerald-950/80"></div>
-            <div className="relative z-10 p-4 h-full flex flex-col justify-center">
-              <h3 className="text-[22px] font-bold text-emerald-400 leading-tight">Direct Contracts.</h3>
-              <h3 className="text-[22px] font-bold text-white leading-tight">Maximum Profit.</h3>
-              <p className="text-[11px] font-semibold text-emerald-50/90 leading-tight max-w-[240px] mt-1.5">
-                Browse and bid on specific requests from verified buyers to maximize your earnings with zero intermediaries.
-              </p>
-            </div>
+            
           </div>
         </div>
         

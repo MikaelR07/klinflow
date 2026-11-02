@@ -406,29 +406,30 @@ export default function Leaderboard() {
     <div className="flex flex-col bg-slate-50 dark:bg-slate-900  transition-colors">
       {/* ── GRADIENT TOP BACKGROUND ── */}
       <div className="absolute top-0 left-0 right-0 h-[420px] z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-purple-500 to-indigo-500 dark:from-purple-600 dark:via-purple-700 dark:to-indigo-700" />
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 dark:from-emerald-600 dark:via-emerald-700 dark:to-emerald-800" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/5" />
         {/* Decorative circles */}
         <div className="absolute top-10 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-10 left-0 w-40 h-40 bg-indigo-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none" />
+        <div className="absolute bottom-10 left-0 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none" />
         {/* Bottom curve */}
         <div className="absolute -bottom-1 left-0 right-0 h-12 bg-slate-50 dark:bg-slate-900 rounded-t-[2.5rem]" />
       </div>
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-purple-400 to-indigo-500 dark:from-purple-600 dark:to-indigo-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4 max-w-lg mx-auto">
-        <div className="flex items-center gap-3">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4 max-w-lg mx-auto">
+        <div className="flex items-center justify-between">
           <button onClick={() => navigate(-1)} className="w-9 h-9 shrink-0 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all border border-white/10">
             <ArrowLeft className="w-4.5 h-4.5 text-white" />
           </button>
-          <div>
+          <div className="absolute left-1/2 -translate-x-1/2">
             <h1 className="text-[15px] font-bold text-white tracking-tight leading-none">Wall of Fame</h1>
             <p className="text-[9px] font-bold text-white/70 uppercase tracking-widest mt-0.5">Top Contributors</p>
           </div>
+          <div className="w-9 h-9" />
         </div>
       </div>
 
-      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] relative max-w-lg mx-auto w-full px-3 z-10">
+      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+6.2rem)] relative max-w-lg mx-auto w-full px-3 z-10">
         {/* Hero */}
 
         {isEmpty ? (
@@ -455,8 +456,8 @@ export default function Leaderboard() {
 
             {/* Podium Title */}
             <div className="text-center mt-2 mb-8 relative z-10">
-              <h2 className="text-[20px] font-bold text-white tracking-tight drop-shadow-lg">Champions Eco Leaderboard</h2>
-              <p className="text-[11px] font-semibold text-white/60 mt-0.5">Top recyclers making a real impact</p>
+              <h2 className="text-[20px] font-bold text-white tracking-tight drop-shadow-lg">Champions  Leaderboard</h2>
+              <p className="text-[12px] font-semibold text-white/80 mt-0.5">Top recyclers making a real impact</p>
             </div>
 
             {/* Podium */}
@@ -471,11 +472,18 @@ export default function Leaderboard() {
               <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
                 <Info className="w-4 h-4 text-amber-500" />
               </div>
-              <div>
+              <div className="flex-1">
                 <h4 className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1">How to Rank Up</h4>
-                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
+                <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                   Every KG recycled pushes you higher. Top champions get recognition and win exclusive Klinflow perks!
                 </p>
+                <button
+                  onClick={() => navigate('/impact-hub')}
+                  className="mt-3 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  View Your Badges
+                </button>
               </div>
             </div>
 

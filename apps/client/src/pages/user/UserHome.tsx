@@ -12,7 +12,8 @@ import {
   BarChart,
   RecycleIcon,
   ChevronDownCircle,
-  Headset
+  Headset,
+  CalendarPlus
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookingStore } from "@klinflow/core/stores/bookingStore";
@@ -151,123 +152,113 @@ export default function UserHome() {
       {/* ── PUSH ENROLLMENT MODAL ── */}
       <PushNotificationModal isOpen={showPushPrompt} onClose={() => setShowPushPrompt(false)} />
 
-      {/* ── TOP SECTION ── */}
-      <div className="bg-gradient-to-b from-primary from-60% via-primary/80 to-[#f8fafc] dark:from-slate-800 dark:via-slate-800 dark:to-slate-800 relative z-10 pt-[calc(env(safe-area-inset-top,1.5rem)+4rem)] pb-16 overflow-hidden">
-      
-        {/* Decorative background orbs */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none z-10" />
-        <div className="absolute top-[100px] left-0 w-48 h-48 bg-teal-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none z-10" />
-
-        {/* ── TOP NAV (FIXED) ── */}
-        <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 ${isScrolled ? 'bg-gradient-to-br from-primary to-emerald-600 backdrop-blur-md shadow-md border-b border-white/10' : 'bg-transparent '}`}>
-          <div className="max-w-xl mx-auto px-5 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-md p-[2px] shadow-sm border border-white/20">
-                <div className="w-full h-full rounded-full bg-emerald-700 flex items-center justify-center overflow-hidden">
-                  {profile?.avatarUrl ? (
-                    <img src={getThumbnailUrl(profile.avatarUrl, { width: 100 })} className="w-full h-full object-cover" alt="Profile" />
-                  ) : (
-                    <span className="text-xl">👤</span>
-                  )}
-                </div>
-              </div>
-              <div>
-                <h1 className="text-[17px] font-bold text-white tracking-wide leading-none drop-shadow-sm">
-                  Hello, {(profile?.fullName || profile?.name || "Resident").split(" ")[0]}!👋
-                </h1>
-                <div className="flex items-center gap-1.5 mt-1 text-[10px] text-white/90 font-semibold capitalize tracking-wider bg-black/10 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-white/20 w-fit">
-                  <MapPin className={`w-3 h-3 ${status === 'tracking' ? 'animate-pulse text-emerald-400' : ''}`} />
-                  {status === 'tracking' ? (liveAddress || "Live GPS") : (status === 'stale' && liveAddress ? ("⏳ " + liveAddress) : (profile?.location?.estate || profile?.estate || "Location not set"))}
-                </div>
+      {/* ── TOP NAV (FIXED) ── */}
+      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 ${isScrolled ? 'bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-md border-b border-slate-200 dark:border-slate-700' : 'bg-[#f8fafc] dark:bg-slate-800'}`}>
+        <div className="max-w-xl mx-auto px-5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-full bg-white/20 backdrop-blur-md p-[2px] shadow-sm border border-white/20">
+              <div className="w-full h-full rounded-full bg-emerald-700 flex items-center justify-center overflow-hidden">
+                {profile?.avatarUrl ? (
+                  <img src={getThumbnailUrl(profile.avatarUrl, { width: 100 })} className="w-full h-full object-cover" alt="Profile" />
+                ) : (
+                  <span className="text-xl">👤</span>
+                )}
               </div>
             </div>
-            
-            <div className="flex items-center gap-2">
-             
-
-              {/* Notifications */}
-              <button
-                onClick={() => navigate("/notifications")}
-                className="relative w-11 h-11 shrink-0 rounded-2xl bg-black/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm hover:bg-black/20 transition-all active:scale-95 group"
-              >
-                <Bell className="w-5 h-5 text-white group-hover:animate-swing" />
-                {Number(unreadCount) > 0 && (
-                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-emerald-600 shadow-md animate-in zoom-in">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
-
-               {/* Support Icon */}
-              <button
-                onClick={() => navigate("/settings/support")}
-                className="relative w-11 h-11 shrink-0 rounded-2xl bg-black/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm hover:bg-black/20 transition-all active:scale-95 group"
-              >
-                <Headset className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
-              </button>
+            <div>
+              <h1 className="text-[17px] font-bold text-slate-700 dark:text-white tracking-wide leading-none">
+                Hello, {(profile?.fullName || profile?.name || "Resident").split(" ")[0]}!👋
+              </h1>
+              <div className="flex items-center gap-1.5 mt-1 text-[10px] text-slate-600 dark:text-slate-300 font-semibold capitalize tracking-wider bg-slate-100 dark:bg-slate-700/50 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-slate-200 dark:border-slate-600 w-fit">
+                <MapPin className={`w-3 h-3 ${status === 'tracking' ? 'animate-pulse text-emerald-400' : ''}`} />
+                {status === 'tracking' ? (liveAddress || "Live GPS") : (status === 'stale' && liveAddress ? ("⏳ " + liveAddress) : (profile?.location?.estate || profile?.estate || "Location not set"))}
+              </div>
             </div>
           </div>
-        </div>
+          
+          <div className="flex items-center gap-2">
+           
 
-        {/* ── ECO-REWARDS HERO CARD ── */}
-        <div className="relative z-10 px-2 max-w-xl mx-auto mt-6">
-          <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative group overflow-hidden rounded-[24px] bg-white/10  border border-emerald-600  p-5">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-700 to-emerald-800 pointer-events-none" />
-            <div className="relative z-10 flex flex-col gap-1">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <p className="text-[10px] font-semibold text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1">
-                    <Wallet className="w-4 h-4" /> Wallet Balance
-                  </p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold text-white/90">Ksh</span>
-                    <h2 className="text-2xl font-bold text-white tracking-tighter leading-none drop-shadow-md">
-                      {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </h2>
-                  </div>
-                </div>
-                <button onClick={handleWithdraw} className="bg-white text-emerald-700 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-emerald-50">
-                  Withdraw
-                </button>
-              </div>
+            {/* Notifications */}
+            <button
+              onClick={() => navigate("/notifications")}
+              className="relative w-11 h-11 shrink-0 rounded-full bg-white dark:bg-slate-700/50 backdrop-blur-sm border border-slate-200 dark:border-slate-600 flex items-center justify-center shadow-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-all active:scale-95 group"
+            >
+              <Bell className="w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:animate-swing" />
+              {Number(unreadCount) > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-white dark:ring-slate-800 shadow-md animate-in zoom-in">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
 
-              <div className="flex items-center gap-1 pt-2 border-t border-white/20">
-                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                  <span className="text-base font-bold text-white">{metrics.totalPickups}</span>
-                  <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
-                </div>
-                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                  <span className="text-base font-bold text-white">{metrics.kgRecovered}</span>
-                  <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
-                </div>
-                <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 transition-colors">
-                  <span className="text-base font-bold text-amber-300 drop-shadow-sm">{rewardPoints}</span>
-                  <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+             {/* Support Icon */}
+            <button
+              onClick={() => navigate("/settings/support")}
+              className="relative w-11 h-11 shrink-0 rounded-full bg-white dark:bg-slate-700/50 backdrop-blur-sm border border-slate-200 dark:border-slate-600 flex items-center justify-center shadow-sm hover:bg-slate-200 dark:hover:bg-slate-600 transition-all active:scale-95 group"
+            >
+              <Headset className="w-5 h-5 text-slate-700 dark:text-slate-300 group-hover:scale-110 transition-transform" />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto px-2.5 space-y-6 -mt-10 pb-5 relative z-20">
+      {/* ── Page Content ── */}
+      <div className="max-w-xl mx-auto px-2.5 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-5 space-y-6">
 
-        {/* ── ACTION HUB (QUICK LINKS + CTA) ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="bg-white dark:bg-slate-900 rounded-[12px] p-1.5 shadow-sm border border-slate-200/50 dark:border-slate-800/60 space-y-3">
-          {/* ── APP SERVICES GRID ── */}
+        {/* ── ECO-REWARDS HERO CARD ── */}
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative group overflow-hidden rounded-[24px] bg-white/10 border border-emerald-600 p-5">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-700 to-emerald-800 pointer-events-none" />
+          <div className="relative z-10 flex flex-col gap-1">
+            <div className="flex justify-between items-start mb-2">
+              <div>
+                <p className="text-[10px] font-semibold text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1">
+                  <Wallet className="w-4 h-4" /> Wallet Balance
+                </p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-xl font-bold text-white/90">Ksh</span>
+                  <h2 className="text-2xl font-bold text-white tracking-tighter leading-none drop-shadow-md">
+                    {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </h2>
+                </div>
+              </div>
+              <button onClick={handleWithdraw} className="bg-lime-400 text-emerald-900 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-lime-300">
+                Withdraw
+              </button>
+            </div>
+
+            <div className="flex items-center gap-1 pt-2 border-t border-white/20">
+              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
+                <span className="text-base font-bold text-white">{metrics.totalPickups}</span>
+                <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
+              </div>
+              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
+                <span className="text-base font-bold text-white">{metrics.kgRecovered}</span>
+                <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
+              </div>
+              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 transition-colors">
+                <span className="text-base font-bold text-amber-300 drop-shadow-sm">{rewardPoints}</span>
+                <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ── QUICK ACTIONS ── */}
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }}>
           <div className="space-y-2">
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1">
               {[
-                { label: 'Book', icon: <Truck className="w-5 h-5" />, route: '/book-pickup', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Book', icon: <CalendarPlus className="w-5 h-5" />, route: '/book-pickup', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Wallet', icon: <Wallet className="w-5 h-5" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Bookings', icon: <RecycleIcon className="w-5 h-5" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Bookings', icon: <Package className="w-5 h-5" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Discover', icon: <Search className="w-5 h-5" />, route: '/discovery', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
-                <button 
-                  key={service.label} 
+                <button
+                  key={service.label}
                   onClick={() => navigate(service.route)}
-                  className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                  className="bg-slate-50 dark:bg-slate-900 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
                 >
                   <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
                     {service.icon}
@@ -293,6 +284,8 @@ export default function UserHome() {
               <img src="/vectors/ecoBanner3.webp" alt="Promo 3" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
+
+            
           </div>
         </motion.div>
         
@@ -306,23 +299,40 @@ export default function UserHome() {
             {/* ── SWARMS ── */}
             <button
               onClick={() => navigate("/swarms")}
-              className="bg-white dark:bg-slate-900 rounded-xl h-28 shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
+              className="bg-gradient-to-br from-emerald-600 to-emerald-700 dark:from-emerald-600 dark:to-emerald-700 rounded-xl h-28 shadow-sm hover:shadow-md transition-all border border-emerald-500 dark:border-emerald-800 relative overflow-hidden group p-3 flex flex-col justify-end"
             >
-              <img src="/vectors/swarms.webp" alt="Swarms" className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute bottom-2 right-2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
+              <div className="absolute top-3 right-2 bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                 Join
+              </div>
+              <div className="flex flex-col items-start gap-2">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm shrink-0">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-left">
+                  <h4 className="text-[13px] font-bold text-white leading-tight">Join a Swarm</h4>
+                  <p className="text-[10px] font-medium text-white/80 mt-0.5">Pool pickups & earn together</p>
+                </div>
               </div>
             </button>
 
             {/* ── MARKET PRICES ── */}
             <button
               onClick={() => navigate("/market-pulse")}
-              className="bg-white dark:bg-slate-900 rounded-xl h-28 shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
+              className="bg-gradient-to-br from-amber-600 to-amber-700  dark:from-amber-700 dark:to-amber-800 rounded-xl h-28 shadow-sm hover:shadow-md transition-all border border-amber-600 dark:border-amber-600 relative overflow-hidden group p-3 flex flex-col justify-end"
             >
-              <img src="/vectors/prices.webp" alt="Market Prices" className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute bottom-2 right-2 bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
+              <div className="absolute top-3 right-2 bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                 Live
               </div>
+              <div className="flex flex-col items-start gap-2">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm shrink-0">
+                  <BarChart3 className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-left">
+                  <h4 className="text-[13px] font-bold text-white leading-tight">Market Prices</h4>
+                  <p className="text-[10px] font-medium text-white/80 mt-0.5">Live recyclable rates</p>
+                </div>
+              </div>
+              
             </button>
           </div>
         </motion.div>
