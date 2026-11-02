@@ -265,7 +265,7 @@ export default function ResidentWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Gift className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[12px] font-bold text-white text-center leading-tight">Redeem GFP</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Redeem</p>
             </button>
 
             <button
@@ -275,7 +275,7 @@ export default function ResidentWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <ArrowRightLeft className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[12px] font-bold text-white text-center leading-tight">Transfer GFP</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Transfer</p>
             </button>
 
             <button
@@ -292,100 +292,93 @@ export default function ResidentWallet() {
       </div>
 
       {/* ── Content area below top section ── */}
-      <div className="px-3 sm:px-4 py-4 max-w-lg mx-auto space-y-4">
+      <div className="px-4 sm:px-4 py-4 max-w-lg mx-auto space-y-4">
 
         {/* ── Recent Transactions ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden shadow-sm"
-        >
-          <div className="p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-bold text-slate-600 dark:text-white">
-                Recent Transactions
-              </h3>
-              <button
-                onClick={() => navigate('/transactions-history')}
-                className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
-              >
-                View History
-              </button>
-            </div>
-
-            <div className="space-y-1">
-              <AnimatePresence mode="popLayout">
-                {transactions.length > 0 ? (
-                  transactions.slice(0, 4).map((txn, i) => (
-                    <motion.div
-                      key={txn.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.25, delay: i * 0.04 }}
-                      className="px-4 py-3 flex items-center justify-between bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${txn.type === 'earned'
-                          ? 'bg-emerald-50 dark:bg-emerald-900/30'
-                          : 'bg-red-50 dark:bg-red-900/30'
-                          }`}>
-                          {txn.type === 'earned'
-                            ? <ArrowDownCircle className="w-5 h-5 text-emerald-500" />
-                            : <ArrowUpCircle className="w-5 h-5 text-red-500" />
-                          }
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight mb-0.5">
-                            {txn.buyerName}
-                          </p>
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate">
-                              {txn.materialSummary}
-                            </p>
-                            <span className="text-slate-300 dark:text-slate-600">·</span>
-                            <p className="text-[10px] font-medium text-slate-400">
-                              {txn.date.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })} • {txn.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right shrink-0 ml-3">
-                        <p className={`text-sm font-bold ${txn.type === 'earned'
-                          ? 'text-emerald-600 dark:text-emerald-400'
-                          : txn.type === 'withdrawal'
-                            ? 'text-red-500 dark:text-red-400'
-                            : 'text-slate-900 dark:text-white'
-                          }`}>
-                          {txn.type === 'earned' ? '+' : '-'} KES {Math.abs(Number(txn.amount)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </p>
-                        <p className="text-[9px] font-semibold text-slate-400 mt-0.5 capitalize">
-                          {txn.type === 'earned' ? 'Received' : txn.type === 'withdrawal' ? 'Completed' : 'Credited'}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <div className="py-8 text-center bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800">
-                    <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                      <Wallet className="w-5 h-5 text-slate-400 dark:text-slate-500" />
-                    </div>
-                    <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">No transactions yet</p>
-                    <p className="text-[10px] font-semibold text-slate-400/70 dark:text-slate-500 mb-4">
-                      Complete your first pickup to start earning
-                    </p>
-                    <button
-                      onClick={() => navigate('/book-pickup')}
-                      className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
-                    >
-                      Book a Pickup
-                    </button>
-                  </div>
-                )}
-              </AnimatePresence>
-            </div>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-sm font-bold text-slate-600 dark:text-white capitalize tracking-wider">
+              Recent Transactions
+            </h3>
+            <button
+              onClick={() => navigate('/transactions-history')}
+              className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide hover:underline cursor-pointer"
+            >
+              View History
+            </button>
           </div>
-        </motion.div>
+
+          <div className="space-y-2">
+            <AnimatePresence mode="popLayout">
+              {transactions.length > 0 ? (
+                transactions.slice(0, 4).map((txn, i) => (
+                  <motion.div
+                    key={txn.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.25, delay: i * 0.04 }}
+                    className="px-4 py-3 flex items-center justify-between bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/60 rounded-2xl shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${txn.type === 'earned'
+                        ? 'bg-emerald-50 dark:bg-emerald-900/30'
+                        : 'bg-red-50 dark:bg-red-900/30'
+                        }`}>
+                        {txn.type === 'earned'
+                          ? <ArrowDownCircle className="w-5 h-5 text-emerald-500" />
+                          : <ArrowUpCircle className="w-5 h-5 text-red-500" />
+                        }
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight mb-0.5">
+                          {txn.buyerName}
+                        </p>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate">
+                            {txn.materialSummary}
+                          </p>
+                          <span className="text-slate-300 dark:text-slate-600">·</span>
+                          <p className="text-[10px] font-medium text-slate-400">
+                            {txn.date.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })} • {txn.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0 ml-3">
+                      <p className={`text-sm font-bold ${txn.type === 'earned'
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : txn.type === 'withdrawal'
+                          ? 'text-red-500 dark:text-red-400'
+                          : 'text-slate-900 dark:text-white'
+                        }`}>
+                        {txn.type === 'earned' ? '+' : '-'} KES {Math.abs(Number(txn.amount)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </p>
+                      <p className="text-[9px] font-semibold text-slate-400 mt-0.5 capitalize">
+                        {txn.type === 'earned' ? 'Received' : txn.type === 'withdrawal' ? 'Completed' : 'Credited'}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="py-8 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                  <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <Wallet className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+                  </div>
+                  <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">No transactions yet</p>
+                  <p className="text-[10px] font-semibold text-slate-400/70 dark:text-slate-500 mb-4">
+                    Complete your first pickup to start earning
+                  </p>
+                  <button
+                    onClick={() => navigate('/book-pickup')}
+                    className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest active:scale-95 transition-all shadow-sm"
+                  >
+                    Book a Pickup
+                  </button>
+                </div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
 
       {/* ── SECURITY FOOTER ── */}
       <motion.div

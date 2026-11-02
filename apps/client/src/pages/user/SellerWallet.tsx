@@ -237,26 +237,30 @@ export default function SellerWallet() {
       </div>
 
       {/* ── Content area below top section ── */}
-      <div className="px-3 sm:px-4 py-4 max-w-lg mx-auto space-y-4">
+      <div className="px-4 sm:px-4 py-4 max-w-lg mx-auto space-y-4">
 
-      {/* ── RECENT TRANSACTIONS ── */}
-      <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-[12px] font-bold text-slate-600 dark:text-white capitalize tracking-widest">Recent Transactions</h3>
-          <button
-            onClick={() => navigate('/transactions-history')}
-            className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide"
-          >
-            View History
-          </button>
-        </div>
+        {/* ── RECENT TRANSACTIONS ── */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-sm font-bold text-slate-600 dark:text-white capitalize tracking-wider">
+              Recent Transactions
+            </h3>
+            <button
+              onClick={() => navigate('/transactions-history')}
+              className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide hover:underline cursor-pointer"
+            >
+              View History
+            </button>
+          </div>
 
-          <div className="space-y-0.5">
+          <div className="space-y-2">
             {isLoadingStats ? (
-              <div className="py-6 text-center text-xs text-slate-500 font-medium">Loading transactions...</div>
+              <div className="py-6 text-center text-xs text-slate-500 font-medium bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                Loading transactions...
+              </div>
             ) : recentTrades.length === 0 ? (
-              <div className="py-8 text-center bg-slate-50 dark:bg-slate-800/30 rounded-xl border border-slate-100 dark:border-slate-800">
-                <div className="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <div className="py-8 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3">
                   <Package className="w-5 h-5 text-slate-400 dark:text-slate-500" />
                 </div>
                 <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">No transactions yet</p>
@@ -271,10 +275,10 @@ export default function SellerWallet() {
                 </button>
               </div>
             ) : (
-              recentTrades.slice(0, 4).map((item, i) => (
+              recentTrades.slice(0, 4).map((item) => (
                 <div
                   key={item.id}
-                  className="px-4 py-3 flex items-center justify-between bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-700/50 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                  className="px-4 py-3 flex items-center justify-between bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/60 rounded-2xl shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-center gap-3 min-w-0 flex-1">
                     <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-emerald-50 dark:bg-emerald-900/30">
@@ -313,6 +317,13 @@ export default function SellerWallet() {
           </div>
         </div>
 
+        {/* ── SECURITY FOOTER ── */}
+        <div className="flex items-center justify-center gap-2 py-3">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500/40" />
+          <p className="text-[9px] font-bold text-slate-400/50 dark:text-slate-500/50 uppercase tracking-[0.2em]">
+            Secured by Klinflow Escrow
+          </p>
+        </div>
       </div>
     </div>
   );
