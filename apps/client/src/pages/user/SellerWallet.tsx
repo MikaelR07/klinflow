@@ -107,7 +107,7 @@ export default function SellerWallet() {
   };
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 min-h-screen font-sans pb-6">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 font-sans pb-6">
 
       {/* ── FIXED TOP NAV ── */}
       <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-800 to-emerald-900 `}>

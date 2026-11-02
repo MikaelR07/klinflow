@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, HelpCircle, Wallet, Phone, Contact,
   CheckCircle2, Leaf, User, Tag, Clock, Users,
-  ChevronRight, Send, Lock, ArrowLeftRight, Loader2, X, AlertCircle, Search
+  ChevronRight, Send, Lock, ArrowLeftRight, Loader2, X, AlertCircle, Search,
+  ShieldCheck, Star
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { walletService, WalletRecipientSearchResult, TransferResult, WALLET_CONFIG } from '@klinflow/core';
@@ -94,107 +96,107 @@ export default function TransferGFP() {
   };
 
   return (
-    <div className="-mx-1 px-1 bg-white dark:bg-slate-900 text-slate-900 dark:text-white pb-5 relative overflow-x-hidden">
-      
-      {/* PREMIUM TOP BACKGROUND */}
-      <div className="absolute top-0 left-0 right-0 h-[340px] z-0 overflow-hidden">
-        {/* Primary gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary dark:from-emerald-700 dark:via-emerald-800 dark:to-teal-900" />
-        {/* Mesh overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-white/5" />
-        {/* Bottom curve */}
-        <div className="absolute -bottom-1 left-0 right-0 h-12 bg-slate-50 dark:bg-slate-900 rounded-t-[2.5rem]" />
-      </div>
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-800 text-slate-900 dark:text-white pb-8 relative overflow-x-hidden min-h-screen">
 
-      {/* FIXED HEADER */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-primary to-primary dark:from-emerald-700 dark:to-emerald-800 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-start justify-between">
-        <button onClick={() => navigate(-1)} className="p-2 -ml-2 active:scale-95 transition-all relative z-10">
-          <ArrowLeft className="w-5 h-5 text-white" />
-        </button>
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-primary  backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 transition-all duration-300">
+        <div className="max-w-lg mx-auto px-4 flex items-center justify-between relative">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center active:scale-95 transition-all border border-white/20 shadow-sm z-10"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="w-5 h-5 text-white" />
+          </button>
 
-        <div className="absolute left-0 right-0 bottom-2 flex flex-col items-center pointer-events-none text-center px-12">
-          <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Transfer GFP</h1>
-          <p className="text-[9px] text-white/70 font-medium tracking-wider capitalize mt-0.5">Share your tokens with loved ones</p>
-        </div>
-
-        <button 
-          onClick={() => navigate('/wallet-history')}
-          className="relative z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 transition-colors backdrop-blur-sm mt-0.5 border border-white/10"
-        >
-          <Clock className="w-3.5 h-3.5 text-white" />
-          <span className="text-xs font-bold text-white">History</span>
-        </button>
-      </div>
-
-      {/* MAIN CONTENT */}
-      <div className="relative z-10 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] px-1.5 max-w-lg mx-auto space-y-4">
-
-        {/* HERO CARD — Clean Image */}
-        <div className="relative overflow-hidden rounded-2xl shadow-xl">
-          <div className="bg-emerald-900">
-            <img 
-              src="/vectors/money.webp" 
-              alt="Transfer GFP" 
-              className="w-full h-auto"
-            />
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Transfer GFP</h1>
+            <p className="text-[9px] text-white/75 font-medium tracking-wider capitalize mt-0.5">Share tokens with friends & family</p>
           </div>
-        </div>
 
-        {/* STATS CARD */}
-        <div className="bg-slate-50 dark:bg-slate-800/90 rounded-xl px-4 py-2.5 shadow-md border border-slate-100 dark:border-slate-700/80">
-          <div className="flex items-center">
-            {/* Available Balance */}
-            <div className="flex-1 flex items-center justify-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-500/15 flex items-center justify-center shrink-0">
-                <Wallet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+          <button 
+            onClick={() => navigate('/wallet-history')}
+            className="z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 transition-colors backdrop-blur-sm border border-white/20 shadow-sm"
+          >
+            <Clock className="w-3.5 h-3.5 text-white" />
+            <span className="text-xs font-bold text-white">History</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── TOP SECTION: BACKGROUND COLOR WITH BANNER CARD ── */}
+      <div className="bg-primary  text-white rounded-b-[1.75rem] relative overflow-hidden pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 px-4 shadow-md">
+        {/* Subtle decorative background shapes */}
+        <div className="absolute -top-20 -right-20 w-56 h-56 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-teal-300/15 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="max-w-lg mx-auto">
+          {/* BANNER CARD */}
+          <div className="bg-primary dark:bg-white/5 backdrop-blur-md rounded-2xl p-5 border border-white/10 shadow-xl relative overflow-hidden">
+            {/* Background watermark icon */}
+            <Send className="absolute -top-4 -right-4 w-36 h-36 text-white/[0.09] rotate-12 pointer-events-none" />
+
+            <div className="relative z-10">
+              {/* Top Left Pill Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-bold tracking-wide uppercase mb-3.5 shadow-sm border border-white/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/90 animate-pulse" />
+                <span>Your points. Your power</span>
               </div>
-              <div>
-                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.1em]">Available GFP</p>
-                <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400 leading-tight">
+
+              <div className="mb-3">
+                <p className="text-3xl font-extrabold text-white leading-none tracking-tight">Transfer Your</p>
+                <p className="text-3xl font-extrabold text-Primary leading-none tracking-tight mt-1">Green Fuel Points</p>
+              </div>
+
+              <p className="text-[10px] font-bold text-white/75 uppercase tracking-widest mb-1">YOU HAVE</p>
+              <div className="flex items-center gap-2">
+                <Star className="w-6 h-6 text-yellow-300 fill-yellow-300" />
+                <span className="text-2xl font-black text-white leading-none tracking-tight">
                   {walletBalance.toLocaleString()}
                 </span>
+                <span className="text-sm font-bold text-white/90">points</span>
               </div>
             </div>
-
           </div>
         </div>
+      </div>
 
-        {/* 3-STEP WIZARD FORM */}
-        <div className="bg-slate-50 dark:bg-slate-800/95 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700/60 p-5 mt-4 min-h-[340px] flex flex-col relative overflow-hidden">
+      {/* ── DETAIL SECTION: DIRECTLY ON THE PAGE ── */}
+      <div className="max-w-lg mx-auto px-4 pt-6 space-y-6 relative z-10">
 
-          {/* POLISHED STEP INDICATOR */}
-          <div className="flex items-center justify-between mb-6 relative px-2">
-            {/* Background track */}
-            <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-0.5 bg-slate-100 dark:bg-slate-700 z-0" />
-            {/* Active track */}
-            <div
-              className="absolute left-6 top-1/2 -translate-y-1/2 h-0.5 bg-emerald-500 z-0 transition-all duration-500 ease-out"
-              style={{ right: step === 1 ? '66%' : step === 2 ? '33%' : '6px' }}
-            />
+        {/* POLISHED STEP INDICATOR */}
+        <div className="flex items-center justify-between mb-6 relative px-4">
+          {/* Background track */}
+          <div className="absolute left-8 right-8 top-1/2 -translate-y-1/2 h-0.5 bg-slate-200 dark:bg-slate-800 z-0" />
+          {/* Active track */}
+          <div
+            className="absolute left-8 top-1/2 -translate-y-1/2 h-0.5 bg-emerald-500 z-0 transition-all duration-500 ease-out"
+            style={{ right: step === 1 ? '66%' : step === 2 ? '33%' : '8px' }}
+          />
 
-            {[
-              { num: 1, label: 'Recipient' },
-              { num: 2, label: 'Amount' },
-              { num: 3, label: 'Confirm' }
-            ].map((s) => (
-              <div key={s.num} className="relative z-10 flex flex-col items-center gap-1.5">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-all duration-300 ${
-                  step >= s.num
-                    ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20'
-                    : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'
-                }`}>
-                  {step > s.num ? <CheckCircle2 className="w-3.5 h-3.5" /> : s.num}
-                </div>
-                <span className={`text-[9px] font-bold uppercase tracking-wider absolute -bottom-5 whitespace-nowrap transition-colors duration-300 ${
-                  step >= s.num ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'
-                }`}>
-                  {s.label}
-                </span>
+          {[
+            { num: 1, label: 'Recipient' },
+            { num: 2, label: 'Amount' },
+            { num: 3, label: 'Confirm' }
+          ].map((s) => (
+            <div key={s.num} className="relative z-10 flex flex-col items-center gap-1.5">
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold transition-all duration-300 ${
+                step >= s.num
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700'
+              }`}>
+                {step > s.num ? <CheckCircle2 className="w-4 h-4" /> : s.num}
               </div>
-            ))}
-          </div>
+              <span className={`text-[10px] font-bold uppercase tracking-wider absolute -bottom-5 whitespace-nowrap transition-colors duration-300 ${
+                step >= s.num ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'
+              }`}>
+                {s.label}
+              </span>
+            </div>
+          ))}
+        </div>
 
-          <div className="flex-1 mt-4">
+        <div className="pt-2">
             {/* STEP 1: RECIPIENT */}
             {step === 1 && (
               <div className="animate-in fade-in slide-in-from-right-4 duration-300">
@@ -208,7 +210,7 @@ export default function TransferGFP() {
                     <div className="mb-4">
                       <div className="relative group">
                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                          <Contact className="w-4.5 h-4.5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+                          <Contact className="w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
                         </div>
                         <input
                           type="text"
@@ -220,7 +222,7 @@ export default function TransferGFP() {
                           }}
                           onKeyDown={(e) => { if (e.key === 'Enter') searchUser(); }}
                           placeholder="e.g. KPT123456"
-                          className="w-full bg-white dark:bg-slate-900/50 border-2 border-slate-100 dark:border-slate-700/50 rounded-xl py-3 pl-11 pr-4 text-[14px] font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-sm"
+                          className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-12 pr-4 text-[14px] font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-sm"
                         />
                       </div>
                     </div>
@@ -228,7 +230,7 @@ export default function TransferGFP() {
                     <button
                       onClick={searchUser}
                       disabled={isSearching || searchQuery.length < 5}
-                      className="w-full mb-6 h-12 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white rounded-xl text-sm font-bold tracking-wide disabled:opacity-50 disabled:from-slate-400 disabled:to-slate-500 dark:disabled:from-slate-700 dark:disabled:to-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 active:scale-[0.98]"
+                      className="w-full mb-6 h-12 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold tracking-wide disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 active:scale-[0.98] cursor-pointer"
                     >
                       {isSearching ? <Loader2 className="w-4.5 h-4.5 animate-spin" /> : (
                         <>
@@ -239,11 +241,9 @@ export default function TransferGFP() {
                     </button>
 
                     {!searchQuery && !searchAttempted && (
-                      <div className="bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/30 rounded-xl p-3 flex items-start gap-2.5 animate-in fade-in duration-300">
-                        <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-800/50 flex items-center justify-center shrink-0 mt-0.5">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        </div>
-                        <p className="text-[11px] font-medium text-emerald-800 dark:text-emerald-300/90 leading-tight">
+                      <div className="flex items-start gap-2 pt-2 text-slate-500 dark:text-slate-400 animate-in fade-in duration-300">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                        <p className="text-[11px] leading-relaxed">
                           Ensure the recipient has a <strong>verified Klinflow account</strong> before transferring GFP.
                         </p>
                       </div>
@@ -252,36 +252,37 @@ export default function TransferGFP() {
                     {searchAttempted && !isSearching && (
                       <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                         {searchedRecipient ? (
-                          <div className="group bg-white dark:bg-slate-800 rounded-2xl p-4 border-2 border-emerald-500/20 shadow-sm hover:border-emerald-500 hover:shadow-md transition-all cursor-pointer" onClick={() => selectRecipient(searchedRecipient)}>
-                            <div className="flex items-center gap-4">
-                              <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center shrink-0 overflow-hidden ring-2 ring-emerald-50 dark:ring-emerald-900 text-emerald-600 dark:text-emerald-400 font-bold text-lg">
-                                {searchedRecipient.avatar ? (
-                                  <img src={searchedRecipient.avatar} alt="avatar" className="w-full h-full object-cover" />
-                                ) : (
-                                  searchedRecipient.full_name.charAt(0)
-                                )}
+                          <div
+                            className="py-3 px-2 rounded-xl border-y border-dashed border-emerald-500/30 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-all cursor-pointer flex items-center gap-3.5"
+                            onClick={() => selectRecipient(searchedRecipient)}
+                          >
+                            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg font-bold shrink-0 overflow-hidden">
+                              {searchedRecipient.avatar ? (
+                                <img src={searchedRecipient.avatar} alt="avatar" className="w-full h-full object-cover" />
+                              ) : (
+                                searchedRecipient.full_name.charAt(0)
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="text-[15px] font-bold text-slate-900 dark:text-white truncate leading-none">{searchedRecipient.full_name}</h4>
+                                <span className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold uppercase tracking-wider rounded-full shrink-0">
+                                  {searchedRecipient.account_type.replace('_', ' ')}
+                                </span>
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <h4 className="text-[15px] font-bold text-slate-900 dark:text-white truncate leading-none">{searchedRecipient.full_name}</h4>
-                                  <span className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold uppercase tracking-wider rounded-full shrink-0">
-                                    {searchedRecipient.account_type.replace('_', ' ')}
-                                  </span>
-                                </div>
-                                <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 tracking-wide leading-none">{maskPhone(searchedRecipient.phone)}</p>
-                              </div>
-                              <div className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/30 transition-colors">
-                                <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-emerald-500" />
-                              </div>
+                              <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 tracking-wide leading-none">{maskPhone(searchedRecipient.phone)}</p>
+                            </div>
+                            <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+                              <ChevronRight className="w-4.5 h-4.5" />
                             </div>
                           </div>
                         ) : (
-                          <div className="bg-rose-50/50 dark:bg-rose-900/10 rounded-2xl p-5 border border-rose-100 dark:border-rose-900/30 text-center">
-                            <div className="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-900/30 mx-auto flex items-center justify-center mb-3">
-                              <AlertCircle className="w-6 h-6 text-rose-500" />
+                          <div className="py-4 text-center">
+                            <div className="w-10 h-10 rounded-full bg-rose-50 dark:bg-rose-900/20 mx-auto flex items-center justify-center mb-2">
+                              <AlertCircle className="w-5 h-5 text-rose-500" />
                             </div>
-                            <p className="text-[14px] font-bold text-rose-600 dark:text-rose-400">User Not Found</p>
-                            <p className="text-[12px] font-medium text-rose-500/80 mt-1">Please check the ID and try again.</p>
+                            <p className="text-[13px] font-bold text-rose-600 dark:text-rose-400">User Not Found</p>
+                            <p className="text-[11px] font-medium text-slate-400 mt-0.5">Please check the ID and try again.</p>
                           </div>
                         )}
                       </div>
@@ -289,23 +290,25 @@ export default function TransferGFP() {
                   </>
                 ) : (
                   <div className="animate-in fade-in zoom-in-95 duration-300">
-                    <div className="bg-slate-50/80 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/50 relative">
-                      <button
-                        onClick={() => {
-                          setRecipient(null);
-                          setSearchedRecipient(null);
-                          setSearchAttempted(false);
-                        }}
-                        className="absolute top-3 right-3 p-2 rounded-full bg-white dark:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 shadow-sm transition-colors border border-slate-100 dark:border-slate-700"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Sending to</p>
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg font-bold overflow-hidden ring-2 ring-white dark:ring-slate-800 shadow-sm">
+                    <div className="pt-2 pb-4 border-b border-dashed border-slate-200 dark:border-slate-700">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sending to</span>
+                        <button
+                          onClick={() => {
+                            setRecipient(null);
+                            setSearchedRecipient(null);
+                            setSearchAttempted(false);
+                          }}
+                          className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 active:opacity-60 transition-opacity cursor-pointer"
+                        >
+                          <X className="w-3.5 h-3.5" /> Change
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg font-bold overflow-hidden shadow-sm shrink-0">
                           {recipient.avatar ? <img src={recipient.avatar} alt="avatar" className="w-full h-full object-cover" /> : recipient.full_name.charAt(0)}
                         </div>
-                        <div className="flex-1 min-w-0 pr-8">
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <h4 className="text-[16px] font-bold text-slate-900 dark:text-white leading-tight truncate">{recipient.full_name}</h4>
                             <span className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold uppercase tracking-wider rounded-full shrink-0">
@@ -319,7 +322,7 @@ export default function TransferGFP() {
 
                     <button
                       onClick={handleNextStep1}
-                      className="w-full mt-6 py-4 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25"
+                      className="w-full mt-6 py-4 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 cursor-pointer"
                     >
                       Continue <ChevronRight className="w-4.5 h-4.5" />
                     </button>
@@ -357,7 +360,7 @@ export default function TransferGFP() {
                           if (val === '' || Number(val) >= 0) setAmount(val);
                         }}
                         placeholder="0.00"
-                        className="w-full bg-white dark:bg-slate-900/50 border-2 border-slate-100 dark:border-slate-700/50 rounded-xl py-3 pl-4 pr-12 text-lg font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600 shadow-sm"
+                        className="w-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-4 pr-14 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-sm"
                         autoFocus
                       />
                     </div>
@@ -372,9 +375,9 @@ export default function TransferGFP() {
                         <button
                           key={label}
                           onClick={() => setAmount(val.toString())}
-                          className={`px-4 py-2 rounded-full text-xs font-bold transition-all active:scale-95 border-2 ${isSelected
-                            ? 'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                            : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-slate-200'
+                          className={`px-4 py-2 rounded-full text-xs font-bold transition-all active:scale-95 border ${isSelected
+                            ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                            : 'bg-slate-50 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-slate-300'
                             }`}
                         >
                           {label}
@@ -387,7 +390,7 @@ export default function TransferGFP() {
                 <button 
                   onClick={handleNextStep2} 
                   disabled={transferAmount < WALLET_CONFIG.MIN_TRANSFER_POINTS || transferAmount > walletBalance} 
-                  className="w-full mt-auto py-4 rounded-xl font-bold text-white bg-slate-900 dark:bg-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 active:scale-[0.98] disabled:opacity-40 transition-all flex items-center justify-center gap-2 shadow-lg"
+                  className="w-full mt-auto py-4 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] disabled:opacity-40 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 cursor-pointer"
                 >
                   Review Transfer <ChevronRight className="w-4.5 h-4.5" />
                 </button>
@@ -404,37 +407,41 @@ export default function TransferGFP() {
                   <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Confirm Details</h3>
                 </div>
 
-                {/* Receipt Card */}
-                <div className="bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl p-5 mb-6 border border-slate-100 dark:border-slate-700/50 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
-                  
-                  <div className="flex items-center gap-3 mb-5 pb-5 border-b border-dashed border-slate-200 dark:border-slate-700">
-                    <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex items-center justify-center shrink-0 shadow-sm">
-                      {recipient?.avatar ? <img src={recipient.avatar} alt="avatar" className="w-full h-full object-cover" /> : <span className="font-bold text-slate-500">{recipient?.full_name.charAt(0)}</span>}
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Sending To</p>
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{recipient?.full_name}</h4>
-                    </div>
+                {/* Recipient */}
+                <div className="flex items-center gap-3 mb-5 pb-5 border-b border-dashed border-slate-200 dark:border-slate-700">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/50 overflow-hidden flex items-center justify-center shrink-0 shadow-sm text-emerald-600 dark:text-emerald-400 font-bold">
+                    {recipient?.avatar ? <img src={recipient.avatar} alt="avatar" className="w-full h-full object-cover" /> : recipient?.full_name.charAt(0)}
                   </div>
-
-                  <div className="space-y-3.5">
-                     <div className="flex justify-between items-center text-[13px]">
-                        <span className="text-slate-500 font-medium">Transfer Amount</span>
-                        <span className="font-bold text-slate-900 dark:text-white">{transferAmount.toLocaleString()} GFP</span>
-                     </div>
-                     <div className="flex justify-between items-center text-[13px]">
-                        <span className="text-slate-500 font-medium">Network Fee</span>
-                        <span className="font-bold text-emerald-500 uppercase tracking-wider text-[10px] px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 rounded">Free</span>
-                     </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Sending To</p>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{recipient?.full_name}</h4>
                   </div>
+                </div>
 
-                  <div className="pt-4 mt-4 border-t border-dashed border-slate-200 dark:border-slate-700 flex justify-between items-end">
-                     <div>
-                       <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total Deducted</span>
-                       <span className="text-2xl font-bold text-slate-900 dark:text-white leading-none">{transferAmount.toLocaleString()}</span>
-                       <span className="text-xs font-bold text-slate-400 ml-1">GFP</span>
-                     </div>
+                {/* Transfer details — flat, no card */}
+                <div className="space-y-3.5 mb-5">
+                  <div className="flex justify-between items-center text-[13px]">
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Transfer Amount</span>
+                    <span className="font-bold text-slate-900 dark:text-white">{transferAmount.toLocaleString()} GFP</span>
+                  </div>
+                  <div className="flex justify-between items-center text-[13px]">
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Network Fee</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400 text-[11px] px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-full">Free</span>
+                  </div>
+                  <div className="border-t border-dashed border-slate-200 dark:border-slate-700 pt-3.5 flex justify-between items-center text-[13px]">
+                    <span className="text-slate-500 dark:text-slate-400 font-medium">Balance After</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">{(walletBalance - transferAmount).toLocaleString()} GFP</span>
+                  </div>
+                </div>
+
+                {/* Total Deducted */}
+                <div className="border-t-2 border-slate-200/80 dark:border-slate-700 pt-3.5 flex justify-between items-end mb-6">
+                  <div>
+                    <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total Deducted</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl font-extrabold text-slate-900 dark:text-white leading-none">{transferAmount.toLocaleString()}</span>
+                      <span className="text-xs font-bold text-slate-400">GFP</span>
+                    </div>
                   </div>
                 </div>
 
@@ -446,7 +453,7 @@ export default function TransferGFP() {
                   <button
                     onClick={executeTransfer}
                     disabled={isProcessing}
-                    className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-500/25 active:scale-[0.98] flex justify-center items-center gap-2"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-600/25 active:scale-[0.98] flex justify-center items-center gap-2 cursor-pointer"
                   >
                     {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                       <>Send Now <Send className="w-4 h-4 ml-1" /></>
@@ -456,7 +463,7 @@ export default function TransferGFP() {
               </div>
             )}
           </div>
-        </div>
+
         {/* SECURE INDICATOR */}
         <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest pt-2 pb-6">
           <Lock className="w-3 h-3" />
@@ -465,45 +472,76 @@ export default function TransferGFP() {
 
       </div>
 
-      {/* SUCCESS MODAL OVERLAY */}
-      {transferResult?.success && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-gradient-to-b from-emerald-600 to-emerald-800 w-full max-w-[320px] rounded-[2rem] p-6 text-center text-white relative overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 border border-emerald-400/20">
-             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-             <div className="absolute bottom-0 left-0 w-32 h-32 bg-emerald-900/40 rounded-full blur-2xl pointer-events-none" />
-             
-             <div className="relative z-10">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
-                   <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+      {/* SUCCESS MODAL OVERLAY — portaled to body */}
+      {transferResult?.success && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="w-full max-w-[370px] bg-white dark:bg-slate-900 rounded-[2rem] p-6 text-center relative overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 animate-in zoom-in-95 duration-300">
+            {/* Subtle top ambient glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-24 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+
+            <div className="relative z-10">
+              {/* Success Icon */}
+              <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border-4 border-emerald-100 dark:border-emerald-800/50 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-emerald-500/10">
+                <CheckCircle2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+              </div>
+
+              {/* Status Pill */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200/60 dark:border-emerald-700/40 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-widest mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Transfer Complete
+              </div>
+
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Transfer Successful!</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">Points sent securely.</p>
+
+              {/* Amount Hero Box */}
+              <div className="my-5 py-4 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-center">
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Amount Sent</span>
+                <div className="flex items-baseline justify-center gap-1 mt-1 text-slate-900 dark:text-white">
+                  <span className="text-3xl font-extrabold tracking-tight leading-none">
+                    {transferResult.amount?.toLocaleString()}
+                  </span>
+                  <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">GFP</span>
                 </div>
-                
-                <h1 className="text-2xl font-bold tracking-tight mb-1 leading-tight">Transfer<br/>Successful!</h1>
-                <p className="text-xs text-emerald-100 font-medium mb-6">Points sent securely.</p>
-                
-                <div className="bg-black/20 rounded-2xl p-4 backdrop-blur-sm border border-white/10 mb-6 space-y-2.5">
-                   <div className="flex justify-between items-center text-xs">
-                      <span className="text-emerald-200">Amount Sent</span>
-                      <span className="font-bold">{transferResult.amount?.toLocaleString()} GFP</span>
-                   </div>
-                   <div className="flex justify-between items-center text-xs">
-                      <span className="text-emerald-200">Recipient</span>
-                      <span className="font-bold">{recipient?.full_name}</span>
-                   </div>
-                   <div className="flex justify-between items-center text-xs">
-                      <span className="text-emerald-200">Ref No.</span>
-                      <span className="font-bold tracking-widest uppercase">{transferResult.reference_number}</span>
-                   </div>
+              </div>
+
+              {/* Receipt Details */}
+              <div className="rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 p-4 space-y-2.5 text-left mb-5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Recipient</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{recipient?.full_name}</span>
                 </div>
-                
-                <button 
-                  onClick={() => navigate('/resident-wallet')}
-                  className="w-full bg-white text-emerald-700 hover:text-emerald-800 py-3.5 rounded-xl font-bold text-sm shadow-lg active:scale-95 transition-all"
-                >
-                   Return to Wallet
-                </button>
-             </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Transfer Fee</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400 text-[11px] px-2 py-0.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-full">
+                    Free (0 GFP)
+                  </span>
+                </div>
+                <div className="h-px bg-slate-200/60 dark:bg-slate-800 my-1" />
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">Reference No.</span>
+                  <span className="font-mono text-[11px] font-bold text-slate-900 dark:text-white tracking-widest uppercase">
+                    {transferResult.reference_number}
+                  </span>
+                </div>
+              </div>
+
+              {/* Security Badge */}
+              <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>Secured by Klinflow Wallet</span>
+              </div>
+
+              {/* Action Button */}
+              <button
+                onClick={() => navigate('/resident-wallet')}
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-emerald-600/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                Return to Wallet
+              </button>
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

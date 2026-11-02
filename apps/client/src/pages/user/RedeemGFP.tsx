@@ -4,6 +4,7 @@
  * Supports dynamic KES amount input based on Providers
  */
 import { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Gift, Phone, AlertCircle,
@@ -135,94 +136,106 @@ export default function RedeemGFP() {
   };
 
   return (
-    <div className="-mx-1 px-1 bg-white dark:bg-slate-900 text-slate-900 dark:text-white pb-2 relative overflow-x-hidden ">
-      {/* PREMIUM AMBER HERO BACKGROUND */}
-      <div className="absolute top-0 left-0 right-0 h-[340px] z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 dark:from-amber-600 dark:via-amber-700 dark:to-orange-700" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-white/5" />
-        <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-white/8" />
-        <div className="absolute top-24 -left-20 w-40 h-40 rounded-full bg-orange-400/15" />
-        <div className="absolute -bottom-10 right-8 w-32 h-32 rounded-full bg-amber-300/10" />
-        <div className="absolute -bottom-1 left-0 right-0 h-12 bg-slate-50 dark:bg-slate-900 rounded-t-[2.5rem]" />
-      </div>
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-800 text-slate-900 dark:text-white pb-8 relative overflow-x-hidden min-h-screen">
 
-      {/* FIXED HEADER */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-600 dark:to-amber-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.6rem)] pb-3 px-4 max-w-lg mx-auto flex items-start justify-between">
-        <button onClick={() => navigate(-1)} className="p-2 -ml-2 active:scale-95 transition-all relative z-10">
-          <ArrowLeft className="w-5 h-5 text-white" />
-        </button>
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-amber-500 via-amber-600 to-orange-600 dark:from-amber-600 dark:to-amber-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 transition-all duration-300">
+        <div className="max-w-lg mx-auto px-4 flex items-center justify-between relative">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center active:scale-95 transition-all border border-white/20 shadow-sm z-10 cursor-pointer"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="w-5 h-5 text-white" />
+          </button>
 
-        <div className="absolute left-0 right-0 bottom-2 flex flex-col items-center pointer-events-none text-center px-12">
-          <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Redeem GFP</h1>
-          <p className="text-[9px] text-white/70 font-medium tracking-wider capitalize mt-0.5">Turn green fuel points into rewards</p>
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Redeem GFP</h1>
+            <p className="text-[9px] text-white/75 font-medium tracking-wider capitalize mt-0.5">Turn green fuel points into rewards</p>
+          </div>
+
+          <button 
+            onClick={() => navigate('/redemption-history')}
+            className="z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 transition-colors backdrop-blur-sm border border-white/20 shadow-sm cursor-pointer"
+          >
+            <Clock className="w-3.5 h-3.5 text-white" />
+            <span className="text-xs font-bold text-white">History</span>
+          </button>
         </div>
-
-        <button 
-          onClick={() => navigate('/redemption-history')}
-          className="relative z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 transition-colors backdrop-blur-sm mt-0.5 border border-white/10"
-        >
-          <Clock className="w-3.5 h-3.5 text-white" />
-          <span className="text-xs font-bold text-white">History</span>
-        </button>
       </div>
 
-      <div className="relative z-10 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] px-1.5 max-w-lg mx-auto space-y-4">
+      {/* ── TOP SECTION: BACKGROUND COLOR WITH BANNER CARD ── */}
+      <div className="bg-gradient-to-br from-amber-500 via-amber-600 to-orange-600 dark:from-amber-600 dark:via-amber-700 dark:to-orange-700 text-white rounded-b-[1.75rem] relative overflow-hidden pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 px-4 shadow-md">
+        {/* Subtle decorative background shapes */}
+        <div className="absolute -top-20 -right-20 w-56 h-56 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-orange-400/20 rounded-full blur-2xl pointer-events-none" />
 
-        {/* POINTS HERO CARD - Reference style */}
-        <div className="bg-gradient-to-br from-orange-600 via-amber-600 to-yellow-700 rounded-2xl p-5 shadow-lg relative overflow-hidden">
-          {/* Decorative circles */}
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
-          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-yellow-300/20 rounded-full blur-2xl" />
+        <div className="max-w-lg mx-auto">
+          {/* BANNER CARD */}
+          <div className="bg-gradient-to-br from-orange-600 via-amber-600 to-yellow-700 rounded-2xl p-5 shadow-xl border border-white/20 relative overflow-hidden">
+            {/* Decorative circles */}
+            <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-yellow-300/20 rounded-full blur-2xl pointer-events-none" />
 
-          {/* Background gift icon */}
-          <Gift className="absolute -top-4 -right-8 w-44 h-44 text-white/5 rotate-12" />
+            {/* Background gift icon */}
+            <Gift className="absolute -top-4 -right-8 w-44 h-44 text-white/10 rotate-12 pointer-events-none" />
 
-          <div className="relative z-10">
-            {/* Stacked Redeem Reward text */}
-            <div className="mb-4">
-              <p className="text-4xl font-bold text-white leading-none tracking-tight">Earn & Redeem</p>
-              <p className="text-4xl font-bold text-white leading-none tracking-tight">Points</p>
+            <div className="relative z-10">
+              {/* Top Left Pill Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-700/70 backdrop-blur-sm text-white text-[10px] font-bold tracking-wide uppercase mb-3.5 shadow-sm border border-white/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-white/90 animate-pulse" />
+                <span>Infinite points. Unlimited rewards</span>
+              </div>
+
+              <div className="mb-4">
+                <p className="text-3xl font-extrabold text-white leading-none tracking-tight">Turn your Points</p>
+                <p className="text-3xl font-extrabold text-white leading-none tracking-tight mt-1">into rewards</p>
+              </div>
+
+              <p className="text-[10px] font-bold text-white/75 uppercase tracking-widest mb-1">YOU HAVE</p>
+              <div className="flex items-center gap-2 mb-1">
+                {isLoadingWallet ? (
+                  <Loader2 className="w-6 h-6 animate-spin text-white" />
+                ) : (
+                  <>
+                    <Star className="w-6 h-6 text-yellow-300 fill-yellow-300" />
+                    <span className="text-2xl font-black text-white leading-none tracking-tight">
+                      {gfpBalance.toLocaleString()}
+                    </span>
+                    <span className="text-sm font-bold text-white/90">points</span>
+                  </>
+                )}
+              </div>
+
+              {isExpiringSoon && (
+                <p className="text-[10px] font-medium text-white/75 mt-1">
+                  {gfpBalance} points will expire soon
+                </p>
+              )}
             </div>
-
-            {/* YOU HAVE X points */}
-            <p className="text-[11px] font-semibold text-white/80 uppercase tracking-wider mb-1">YOU HAVE</p>
-            <p className="text-2xl font-semibold text-white leading-none tracking-tight mb-2 flex items-center gap-2">
-              {isLoadingWallet ? (
-                <Loader2 className="w-6 h-6 animate-spin text-white" />
-              ) : (
-                <>
-                  <Star className="w-7 h-7 text-yellow-200" />
-                  {gfpBalance.toLocaleString()}
-                </>
-              )} points
-            </p>
-
-            {/* Expiring notice */}
-            {isExpiringSoon && (
-              <p className="text-[10px] font-medium text-white/70">
-                {gfpBalance} points will expire soon
-              </p>
-            )}
           </div>
         </div>
+      </div>
 
+      {/* ── DETAIL SECTION: DIRECTLY ON THE PAGE ── */}
+      <div className="max-w-lg mx-auto px-4 pt-6 space-y-4 relative z-10">
 
         {/* Category Tabs */}
-          <div className="flex gap-2 p-1 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-orange-100 dark:border-slate-800">
-            {(['all', 'airtime', 'voucher'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`flex-1 py-2.5 text-[12px] font-bold capitalize rounded-xl transition-all ${
-                  activeTab === tab
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-                }`}
-              >
-                {tab === 'all' ? 'All Rewards' : tab}
-              </button>
-            ))}
-          </div>
+        <div className="flex gap-2 p-1 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+          {(['all', 'airtime', 'voucher'] as const).map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`flex-1 py-2.5 text-[12px] font-bold capitalize rounded-xl transition-all cursor-pointer ${
+                activeTab === tab
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+              }`}
+            >
+              {tab === 'all' ? 'All Rewards' : tab}
+            </button>
+          ))}
+        </div>
 
           {/* REWARDS LIST - Horizontal Cards */}
           <div className="grid grid-cols-1 gap-3">
@@ -292,8 +305,8 @@ export default function RedeemGFP() {
       {/* ═══════════════════════════════════════ */}
       {/* REDEMPTION BOTTOM SHEET MODAL */}
       {/* ═══════════════════════════════════════ */}
-      {showModal && selectedReward && (
-        <div className="fixed inset-0 z-[100] flex items-end justify-center">
+      {showModal && selectedReward && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[110] flex items-end justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => viewState !== 'processing' && handleDone()} />
 
           <div className="relative w-full max-w-lg bg-slate-50 dark:bg-slate-900 rounded-t-[32px] p-4 pb-[calc(env(safe-area-inset-bottom,0px)+6.5rem)] z-10 shadow-2xl animate-in slide-in-from-bottom-8 duration-300">
@@ -498,7 +511,8 @@ export default function RedeemGFP() {
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -85,7 +85,7 @@ export default function WithdrawalPage() {
   };
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden min-h-screen">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-800 relative overflow-x-hidden">
       
       {/* ── FIXED TOP NAV ── */}
       <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-600 via-emerald-700 to-emerald-800 dark:bg-emerald-800/95 backdrop-blur-md `}>

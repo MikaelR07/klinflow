@@ -355,7 +355,7 @@ export default function SellerHome() {
                 <button
                   key={service.label}
                   onClick={() => navigate(service.route)}
-                  className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                  className="bg-slate-50 dark:bg-slate-900 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
                 >
                   <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
                     {service.badge && service.badge > 0 ? (
