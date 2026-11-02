@@ -6,7 +6,7 @@ import {
   Clock, CheckCircle2, Truck, XCircle, Zap, HandCoins, Store, Info, ChevronDown, ChevronUp, Tag, Coins, Scale, MapPin, ArrowLeft, Trash2, Check, X, MessageSquareQuote, Package, User, ChevronRight, Search, Filter, Home
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useBookingStore } from "@klinflow/core/stores/bookingStore";
 import { useMarketplaceStore } from "@klinflow/core/stores/marketplaceStore";
 import { useAuthStore } from "@klinflow/core/stores/authStore";
@@ -223,75 +223,73 @@ export default function MyTrades() {
 
   return (
     <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors">
-      {!selectedOfferId && !expandedId && !reschedulingTrade && (
-        <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] px-4 border-b border-slate-200 dark:border-slate-800 z-50 transition-colors">
-          <div className="max-w-lg mx-auto space-y-1.5">
-            <div className="flex items-center gap-3.5">
-              <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
-                <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
-              </button>
-              <div>
-                <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Trades & Offers</h1>
-                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                  View your Market offers and trade activities
-                </p>
-              </div>
-            </div>
-
-            {/* SEARCH & FILTER BAR */}
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search materials, locations, or names..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:font-medium placeholder:text-slate-400"
-                />
-              </div>
-              
-            </div>
-
-            <div className="flex overflow-x-auto no-scrollbar gap-1 pb-2">
-              {TABS.map((tab) => {
-                const count = tab.id === "Bids" ? pendingOffers.length : tab.id === "Active" ? activeBookings.length : tab.id === "Counters" ? counterBookings.length : historyBookings.length;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex-1 py-2 px-1 rounded-xl text-[11px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shrink-0 ${activeTab === tab.id
-                      ? "bg-primary text-white border-transparent"
-                      : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                      }`}
-                  >
-                    <span>{tab.label}</span>
-                    <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${activeTab === tab.id
-                      ? "bg-white/25 text-white"
-                      : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400"
-                      }`}>
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
+      {/* FIXED TOP HEADER */}
+      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] px-4 border-b border-slate-200 dark:border-slate-800 z-30 transition-colors">
+        <div className="max-w-lg mx-auto space-y-1.5">
+          <div className="flex items-center gap-3.5">
+            <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+              <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
+            </button>
+            <div>
+              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Trades & Offers</h1>
+              <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+                View your Market offers and trade activities
+              </p>
             </div>
           </div>
-        </div>
-      )}
 
-      <div className={`flex-1 space-y-0 pb-24 ${!selectedOfferId && !expandedId && !reschedulingTrade ? "pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}>
-        
+          {/* SEARCH & FILTER BAR */}
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search materials, locations, or names..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:font-medium placeholder:text-slate-400"
+              />
+            </div>
+          </div>
+
+          <div className="flex overflow-x-auto no-scrollbar gap-1 pb-2">
+            {TABS.map((tab) => {
+              const count = tab.id === "Bids" ? pendingOffers.length : tab.id === "Active" ? activeBookings.length : tab.id === "Counters" ? counterBookings.length : historyBookings.length;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 py-2 px-1 rounded-xl text-[12px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shrink-0 ${activeTab === tab.id
+                    ? "bg-primary text-white border-transparent"
+                    : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                    }`}
+                >
+                  <span>{tab.label}</span>
+                  <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${activeTab === tab.id
+                    ? "bg-white/25 text-white"
+                    : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400"
+                    }`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1 space-y-0 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)] relative max-w-lg mx-auto w-full">
+
         {/* BIDS VIEW */}
         {activeTab === "Bids" && !selectedOfferId && (
-          <motion.div key="bids-list" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-            {pendingOffers.length === 0 ? (
-              <div className="pt-10">
-                <EmptyState icon={MessageSquareQuote} title="No active bids yet" subtitle="You have no pending offers from buyers." />
-              </div>
-            ) : (
-              pendingOffers.map((offer) => (
-                <motion.div key={offer.id} onClick={() => setSelectedOfferId(offer.id)} className="bg-slate-50 dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
+          <div>
+              {pendingOffers.length === 0 ? (
+                <div className="pt-10">
+                  <EmptyState icon={MessageSquareQuote} title="No active bids yet" subtitle="You have no pending offers from buyers." />
+                </div>
+              ) : (
+                pendingOffers.map((offer) => (
+                  <div key={offer.id} onClick={() => setSelectedOfferId(offer.id)} className="bg-slate-50 dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500" />
                   <div className="flex gap-3 pl-4 pr-3.5 py-3">
                     <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
@@ -320,34 +318,34 @@ export default function MyTrades() {
                     </div>
                     <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
                   </div>
-                </motion.div>
+                </div>
               ))
             )}
-          </motion.div>
+          </div>
         )}
 
         {/* OFFER DETAIL VIEW */}
-        <AnimatePresence mode="wait">
-          {selectedOfferId && selectedOffer && (
-            <motion.div key="offer-focus" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed top-0 left-0 right-0 bottom-[64px] z-[50] bg-slate-50 dark:bg-slate-800 flex flex-col">
-              <div className="fixed top-0 left-0 right-0 z-[51] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-                <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+        {selectedOfferId && selectedOffer && (
+          <div className="fixed inset-0 z-50 bg-white dark:bg-slate-800 flex flex-col">
+              <div className="fixed top-0 left-0 right-0 z-[51] max-w-lg mx-auto bg-white dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+                <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between">
                   <button onClick={() => setSelectedOfferId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
                     <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
                   </button>
-                  <div>
+                  <div className="absolute left-1/2 -translate-x-1/2">
                     <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Offer Details</h1>
                     <p className="text-[10px] font-bold text-emerald-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Incoming Bid</p>
                   </div>
+                  <div className="w-10 h-10" />
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] pb-14">
+              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)] pb-14">
                 <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
                   {selectedOffer.photo ? <OptimizedImage src={getThumbnailUrl(selectedOffer.photo, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400"><Package className="w-12 h-12 mb-2 opacity-50" /><span className="text-[10px] font-bold tracking-widest uppercase">No photo provided</span></div>}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
                 </div>
                 <div className="space-y-4">
-                  <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
+                  <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
                     <div className="flex items-start justify-between">
                       <div>
                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material Type</p>
@@ -371,37 +369,51 @@ export default function MyTrades() {
                       <div className="flex items-start gap-3"><MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Pickup Location</p><span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block truncate max-w-[120px]">{selectedOffer.listing?.location || "Nairobi Hub"}</span></div></div>
                       <div className="flex items-start gap-3"><Clock className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Time Sent</p><span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{selectedOffer.createdAt ? new Date(selectedOffer.createdAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}</span></div></div>
                     </div>
+
+                    <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                    {/* Expected Value & Bid Comparison Section */}
+                    <div className="bg-green-600 dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 space-y-4">
+                      {/* Expected Value */}
+                      <div className="flex flex-col justify-center text-center">
+                        <p className="text-[10px] font-bold text-slate-50 dark:text-slate-200 capitalize tracking-widest mb-1">Expected Value</p>
+                        <p className="text-xl font-bold text-white dark:text-white leading-none">KSh {(parseFloat(selectedOffer.listing?.pricePerKg || '0') * parseFloat(selectedOffer.listing?.quantity || '0')).toLocaleString()}</p>
+                        <p className="text-[10px] text-slate-200 dark:text-slate-300 font-bold capitalize mt-1.5">{selectedOffer.listing?.pricePerKg} × {selectedOffer.listing?.quantity}kg Total Stock</p>
+                      </div>
+
+                      <hr className="border-slate-100 dark:border-slate-700" />
+
+                      {/* Bid Comparison */}
+                      <div>
+                        <h4 className="text-xs font-semibold text-slate-50 capitalize tracking-widest mb-3">Bid Comparison</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-100">Your Asking Price</span><span className="text-xs font-semibold text-slate-100 dark:text-white">KSh {selectedOffer.listing?.pricePerKg || "N/A"}/kg</span></div>
+                          <div className="h-px bg-slate-100 dark:bg-slate-700" />
+                          <div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-100">Buyer's Bid</span><span className="text-xs font-semibold text-emerald-200">KSh {selectedOffer.offeredPrice}/kg</span></div>
+                          <div className="h-px bg-slate-100 dark:bg-slate-700" />
+                          <div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-100">Difference</span>{(() => { const diff = (selectedOffer.offeredPrice || 0) - parseFloat(selectedOffer.listing?.pricePerKg || '0'); return (<span className={`text-xs font-semibold ${diff >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{diff >= 0 ? "+" : ""}{diff.toFixed(2)}/kg</span>); })()}</div>
+                          <div className="h-px bg-slate-100 dark:bg-slate-700" />
+                          <div className="flex items-center justify-between pt-1"><div className="flex flex-col"><span className="text-xs font-bold text-slate-100 dark:text-white capitalize tracking-widest">Your Pay</span><span className="text-[10px] font-semibold text-slate-200">KSh {selectedOffer.offeredPrice} × {selectedOffer.quantity}kg</span></div><span className="text-sm font-bold text-emerald-200">KSh {(selectedOffer.offeredPrice * selectedOffer.quantity).toLocaleString()}</span></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-3">
+                      <button onClick={() => setConfirmAction({ type: 'declineOffer', id: selectedOffer.id, title: 'Decline Offer', message: 'Are you sure you want to decline this bid?' })} className="flex-1 py-4 bg-red-600 text-white border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all">Decline</button>
+                      <button onClick={() => handleAccept(selectedOffer)} className="flex-[2] py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-xs capitalize tracking-[0.2em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"><Check className="w-4 h-4" /> Accept Offer</button>
+                    </div>
                   </div>
-                </div>
-                <div className="bg-emerald-600 dark:bg-emerald-700 p-2 rounded-xl border border-emerald-500/20 flex flex-col justify-center text-center">
-                  <p className="text-[10px] font-bold text-white dark:text-slate-200 capitalize tracking-widest mb-1">Expected Value</p>
-                  <p className="text-xl font-bold text-white dark:text-white leading-none">KSh {(parseFloat(selectedOffer.listing?.pricePerKg || '0') * parseFloat(selectedOffer.listing?.quantity || '0')).toLocaleString()}</p>
-                  <p className="text-[10px] text-emerald-200 dark:text-emerald-100 font-bold capitalize mt-1.5">{selectedOffer.listing?.pricePerKg} × {selectedOffer.listing?.quantity}kg Total Stock</p>
-                </div>
-                <div className="bg-green-600 dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800">
-                  <h4 className="text-xs font-semibold text-slate-50 capitalize tracking-widest mb-3">Bid Comparison</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-100">Your Asking Price</span><span className="text-xs font-semibold text-slate-100 dark:text-white">KSh {selectedOffer.listing?.pricePerKg || "N/A"}/kg</span></div>
-                    <div className="h-px bg-slate-100 dark:bg-slate-700" />
-                    <div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-100">Buyer's Bid</span><span className="text-xs font-semibold text-emerald-200">KSh {selectedOffer.offeredPrice}/kg</span></div>
-                    <div className="h-px bg-slate-100 dark:bg-slate-700" />
-                    <div className="flex items-center justify-between"><span className="text-xs font-semibold text-slate-100">Difference</span>{(() => { const diff = (selectedOffer.offeredPrice || 0) - parseFloat(selectedOffer.listing?.pricePerKg || '0'); return (<span className={`text-xs font-semibold ${diff >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{diff >= 0 ? "+" : ""}{diff.toFixed(2)}/kg</span>); })()}</div>
-                    <div className="h-px bg-slate-100 dark:bg-slate-700" />
-                    <div className="flex items-center justify-between pt-1"><div className="flex flex-col"><span className="text-xs font-bold text-slate-100 dark:text-white capitalize tracking-widest">Your Pay</span><span className="text-[10px] font-semibold text-slate-200">KSh {selectedOffer.offeredPrice} × {selectedOffer.quantity}kg</span></div><span className="text-sm font-bold text-emerald-200">KSh {(selectedOffer.offeredPrice * selectedOffer.quantity).toLocaleString()}</span></div>
-                  </div>
-                </div>
-                <div className="flex gap-3 pt-2">
-                  <button onClick={() => setConfirmAction({ type: 'declineOffer', id: selectedOffer.id, title: 'Decline Offer', message: 'Are you sure you want to decline this bid?' })} className="flex-1 py-4 bg-red-600 text-white border border-rose-100 dark:border-rose-900/30 rounded-2xl font-semibold text-xs capitalize tracking-widest active:scale-[0.97] transition-all">Decline</button>
-                  <button onClick={() => handleAccept(selectedOffer)} className="flex-[2] py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-xs capitalize tracking-[0.2em] active:scale-[0.97] transition-all flex items-center justify-center gap-2"><Check className="w-4 h-4" /> Accept Offer</button>
                 </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          </div>
+        )}
 
         {/* ACTIVE, COUNTERS, HISTORY VIEW */}
-        {activeTab !== "Bids" && !selectedOfferId && (
-          <motion.div key="trades-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-0 pb-32">
+        {activeTab !== "Bids" && (
+          <div className="space-y-0 pb-32">
             {filteredBookings.length === 0 ? (
               <div className="pt-10">
                 <EmptyState icon={Store} title={`No ${activeTab.toLowerCase()} trades`} subtitle={activeTab === "History" ? "No history in your ledger yet." : activeTab === "Active" ? "You have no active recyclable postings." : "No counters pending."} />
@@ -416,7 +428,7 @@ export default function MyTrades() {
 
                   if (activeTab === "Counters") {
                     return (
-                      <div key={b.id} className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-800 relative overflow-hidden">
+                      <div key={b.id} className="bg-slate-50 dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-800 relative overflow-hidden">
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500" />
                         <button onClick={() => setExpandedCounterId(isCounterOpen ? null : b.id)} className="w-full p-4 pl-5 flex items-center gap-4 text-left active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors">
                           <div className="relative">
@@ -474,7 +486,7 @@ export default function MyTrades() {
                   // ACTIVE & HISTORY
                   const accentColor = b.status === 'completed' ? 'bg-emerald-500' : b.status === 'cancelled' || b.status === 'rejected' ? 'bg-rose-500' : b.status === 'confirmed' ? 'bg-emerald-500' : b.status === 'in-progress' ? 'bg-blue-500' : 'bg-amber-500';
                   return (
-                    <motion.div key={b.id} onClick={() => { if (!b.isOffer) setExpandedId(b.id); }} className="bg-white dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-800 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
+                    <div key={b.id} onClick={() => { if (!b.isOffer) setExpandedId(b.id); }} className="bg-slate-50 dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-800 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
                       <div className={`absolute left-0 top-0 bottom-0 w-1 ${accentColor}`} />
                       <div className="flex gap-3 relative z-10 pl-4 pr-3.5 py-3">
                         <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-center justify-center text-2xl shrink-0 border border-slate-200 dark:border-slate-700">
@@ -510,18 +522,17 @@ export default function MyTrades() {
                         </div>
                         <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
                       </div>
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
             )}
-          </motion.div>
+          </div>
         )}
 
         {/* ACTIVE TRADE FULL SCREEN VIEW */}
-        <AnimatePresence>
-          {expandedId && !reschedulingTrade && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed top-0 left-0 right-0 bottom-0 z-[60] bg-slate-50 dark:bg-slate-800 flex flex-col">
+        {expandedId && !reschedulingTrade && (
+          <div className="fixed inset-0 z-50 bg-white dark:bg-slate-800 flex flex-col">
               {(() => {
                 const b = bookings.find((bk) => bk.id === expandedId);
                 if (!b) return null;
@@ -532,24 +543,23 @@ export default function MyTrades() {
                 return (
                   <>
                     <div className="fixed top-0 left-0 right-0 z-[61] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-                      <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
-                        <div className="flex items-center gap-3.5">
-                          <button onClick={() => setExpandedId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
-                            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
-                          </button>
-                          <div>
-                            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Trade Summary</h1>
-                            <p className="text-[10px] font-bold text-emerald-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active Trade</p>
-                          </div>
+                      <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between">
+                        <button onClick={() => setExpandedId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+                          <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
+                        </button>
+                        <div className="absolute left-1/2 -translate-x-1/2">
+                          <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Trade Summary</h1>
+                          <p className="text-[10px] font-bold text-emerald-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active Trade</p>
                         </div>
+                        <div className="w-10 h-10" />
                       </div>
                     </div>
-                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-3 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] pb-[calc(env(safe-area-inset-bottom,0px)+5rem)]">
+                    <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-3 pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)] pb-[calc(env(safe-area-inset-bottom,0px)+5rem)]">
                       <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
                         {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 800 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-800 text-slate-400"><div className="text-5xl mb-3">{waste?.icon || "📦"}</div><p className="text-[10px] font-bold tracking-widest uppercase">No photo attached</p></div>}
                         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
                       </div>
-                      <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
+                      <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
                         <div className="flex items-start justify-between">
                           <div>
                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
@@ -572,38 +582,48 @@ export default function MyTrades() {
                           <div className="flex items-start gap-3"><Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Quantity</p><p className="text-xs font-bold text-slate-900 dark:text-white capitalize">{b.actualWeightKg || b.weightKg || 0} KG</p></div></div>
                           <div className="flex items-start gap-3"><MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" /><div><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Location</p><span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block truncate max-w-[120px]">{b.estate || "Pickup point"}</span></div></div>
                         </div>
-                      </div>
-                      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-2 shadow-sm">
-                        <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest">Material Description</p>
-                        <p className={`text-sm ${b.notes && !b.notes.startsWith("KlinMarket trade") ? "text-slate-800 dark:text-slate-200 leading-relaxed font-medium" : "text-slate-400 dark:text-slate-500 italic"}`}>{b.notes && !b.notes.startsWith("KlinMarket trade") ? b.notes : "No description provided."}</p>
-                      </div>
-                      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-3">
-                        <div className="flex items-center justify-between"><span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Scheduled</span><span className="text-xs font-bold text-slate-900 dark:text-white">{b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}</span></div>
-                        {b.time && <div className="flex items-center justify-between"><span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Time</span><span className="text-xs font-bold text-slate-900 dark:text-white">{b.time}</span></div>}
-                        {b.estate && <div className="flex items-center justify-between"><span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Location</span><span className="text-xs font-bold text-slate-900 dark:text-white capitalize">{b.estate}</span></div>}
-                      </div>
 
-                      {!["completed", "cancelled"].includes(b.status) && (
-                        <div className="grid grid-cols-2 gap-3 pt-2">
-                          <button onClick={() => setConfirmAction({ type: 'cancelTrade', id: b.id, title: 'Cancel Trade', message: 'Are you sure you want to cancel this trade?' })} className="flex items-center justify-center gap-2 py-3.5 bg-rose-50 text-rose-600 border border-rose-200 dark:bg-rose-500/10 dark:border-rose-900/30 rounded-2xl font-bold text-[10px] capitalize tracking-widest active:scale-95 transition-all shadow-sm">
-                            <Trash2 className="w-3.5 h-3.5" /> Cancel Trade
-                          </button>
-                          <button onClick={() => setReschedulingTrade(b)} className="flex items-center justify-center gap-2 py-3.5 bg-blue-50 text-blue-600 border border-blue-200 dark:bg-blue-500/10 dark:border-blue-900/30 rounded-2xl font-bold text-[10px] capitalize tracking-widest active:scale-95 transition-all shadow-sm">
-                            <Clock className="w-3.5 h-3.5" /> Reschedule
-                          </button>
+                        <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                        {/* Material Description Section */}
+                        <div>
+                          <p className="text-[9px] font-bold text-slate-400 capitalize tracking-widest mb-2">Material Description</p>
+                          <p className={`text-sm ${b.notes && !b.notes.startsWith("KlinMarket trade") ? "text-slate-800 dark:text-slate-200 leading-relaxed font-medium" : "text-slate-400 dark:text-slate-500 italic"}`}>{b.notes && !b.notes.startsWith("KlinMarket trade") ? b.notes : "No description provided."}</p>
                         </div>
-                      )}
 
-                      <button onClick={() => setExpandedId(null)} className="w-full py-4 bg-slate-900 dark:bg-slate-700 text-slate-100 border border-slate-800 dark:border-slate-600 rounded-2xl font-bold text-[10px] capitalize tracking-[0.2em] active:scale-95 transition-all shadow-sm">
-                        Back to Trades
-                      </button>
+                        <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                        {/* Scheduled & Location Section */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between"><span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Scheduled</span><span className="text-xs font-bold text-slate-900 dark:text-white">{b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}</span></div>
+                          {b.time && <div className="flex items-center justify-between"><span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Time</span><span className="text-xs font-bold text-slate-900 dark:text-white">{b.time}</span></div>}
+                          {b.estate && <div className="flex items-center justify-between"><span className="text-[10px] font-bold text-slate-400 capitalize tracking-widest">Location</span><span className="text-xs font-bold text-slate-900 dark:text-white capitalize">{b.estate}</span></div>}
+                        </div>
+
+                        <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                        {/* Action Buttons */}
+                        {!["completed", "cancelled"].includes(b.status) && (
+                          <div className="grid grid-cols-2 gap-3">
+                            <button onClick={() => setConfirmAction({ type: 'cancelTrade', id: b.id, title: 'Cancel Trade', message: 'Are you sure you want to cancel this trade?' })} className="flex items-center justify-center gap-2 py-3.5 bg-rose-50 text-rose-600 border border-rose-200 dark:bg-rose-500/10 dark:border-rose-900/30 rounded-2xl font-bold text-[10px] capitalize tracking-widest active:scale-95 transition-all shadow-sm">
+                              <Trash2 className="w-3.5 h-3.5" /> Cancel Trade
+                            </button>
+                            <button onClick={() => setReschedulingTrade(b)} className="flex items-center justify-center gap-2 py-3.5 bg-blue-50 text-blue-600 border border-blue-200 dark:bg-blue-500/10 dark:border-blue-900/30 rounded-2xl font-bold text-[10px] capitalize tracking-widest active:scale-95 transition-all shadow-sm">
+                              <Clock className="w-3.5 h-3.5" /> Reschedule
+                            </button>
+                          </div>
+                        )}
+
+                        <button onClick={() => setExpandedId(null)} className="w-full py-4 bg-slate-900 dark:bg-slate-700 text-slate-100 border border-slate-800 dark:border-slate-600 rounded-2xl font-bold text-[10px] capitalize tracking-[0.2em] active:scale-95 transition-all shadow-sm">
+                          Back to Trades
+                        </button>
+                      </div>
                     </div>
                   </>
                 );
               })()}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
 
         {/* CONFIRMATION MODAL */}
         <AnimatePresence>

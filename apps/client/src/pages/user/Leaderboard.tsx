@@ -14,22 +14,22 @@ const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank:
   const rankConfig: Record<number, { ring: string; bg: string; badge: string; badgeText: string; size: string }> = {
     1: {
       ring: 'ring-amber-400 ring-[3px]',
-      bg: 'bg-gradient-to-b from-amber-50 to-amber-100 dark:from-amber-900/30 dark:to-amber-900/10',
+      bg: 'bg-gradient-to-b from-amber-400 to-amber-600',
       badge: 'bg-amber-400 text-amber-950',
       badgeText: '🏆',
       size: 'w-[72px] h-[72px]',
     },
     2: {
-      ring: 'ring-slate-300 dark:ring-slate-600 ring-2',
-      bg: 'bg-slate-50 dark:bg-slate-800/60',
-      badge: 'bg-slate-400 text-white',
+      ring: 'ring-purple-400 dark:ring-purple-600 ring-2',
+      bg: 'bg-gradient-to-b from-purple-400 to-purple-600',
+      badge: 'bg-purple-400 text-white',
       badgeText: '🥈',
       size: 'w-14 h-14',
     },
     3: {
-      ring: 'ring-emerald-400 dark:ring-emerald-600 ring-2',
-      bg: 'bg-emerald-50/50 dark:bg-emerald-900/10',
-      badge: 'bg-emerald-500 text-white',
+      ring: 'ring-blue-400 dark:ring-blue-600 ring-2',
+      bg: 'bg-gradient-to-b from-blue-400 to-blue-600',
+      badge: 'bg-blue-400 text-white',
       badgeText: '🥉',
       size: 'w-14 h-14',
     },
@@ -38,7 +38,7 @@ const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank:
   const config = rankConfig[rank] || rankConfig[3];
 
   return (
-    <div className={`flex flex-col items-center flex-1 ${isFirst ? '-mt-4' : 'mt-2'}`}>
+    <div className={`flex flex-col items-center flex-1 ${isFirst ? '-mt-8' : 'mt-4'}`}>
       {/* Avatar */}
       <div className="relative mb-2">
         <div className={`relative ${config.size} rounded-full ${config.ring} overflow-hidden ${user ? config.bg : 'bg-slate-100 dark:bg-slate-800 ring-2 ring-dashed ring-slate-200 dark:ring-slate-700'} flex items-center justify-center shadow-sm`}>
@@ -60,19 +60,19 @@ const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank:
       </div>
 
       {/* Info */}
-      <div className={`w-full ${config.bg} border border-slate-100 dark:border-slate-700/40 rounded-xl ${isFirst ? 'p-3 pt-4' : 'p-2.5 pt-3'} text-center mt-1`}>
-        <p className={`${isFirst ? 'text-[12px]' : 'text-[11px]'} font-bold text-slate-900 dark:text-white truncate leading-none mb-1`}>
+      <div className={`w-full ${config.bg} border border-white/20 rounded-xl ${isFirst ? 'p-3 pt-4' : 'p-2.5 pt-3'} text-center mt-1`}>
+        <p className={`${isFirst ? 'text-[12px]' : 'text-[11px]'} font-bold text-white truncate leading-none mb-1`}>
           {user?.name || '—'}
         </p>
         {user ? (
-          <p className={`${isFirst ? 'text-[13px]' : 'text-[11px]'} font-bold ${rank === 1 ? 'text-amber-600 dark:text-amber-400' : rank === 3 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-300'} leading-none`}>
+          <p className={`${isFirst ? 'text-[13px]' : 'text-[11px]'} font-bold text-white leading-none`}>
             {metric}
           </p>
         ) : (
-          <p className="text-[10px] font-bold text-slate-300 dark:text-slate-600">Open</p>
+          <p className="text-[10px] font-bold text-white/80">Open</p>
         )}
         {user && (
-          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">{metricLabel}</p>
+          <p className="text-[8px] font-bold text-white/80 uppercase tracking-widest mt-1">{metricLabel}</p>
         )}
       </div>
     </div>
@@ -196,11 +196,11 @@ function SellerLeaderboard() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden">
 
       {/* ── TOP SECTION: PREMIUM FINTECH GRADIENT ── */}
-      <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-700 pt-[calc(env(safe-area-inset-top,1.5rem)+5rem)] pb-8 rounded-b-[2.5rem] shadow-lg shadow-indigo-900/30 relative z-20 overflow-hidden">
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5rem)] pb-8 rounded-b-[2.5rem]  relative z-20 overflow-hidden">
 
         {/* Decorative background orbs */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.07] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-400/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-400/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
         {/* Fixed Header — transparent, minimal */}
         <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
@@ -227,18 +227,18 @@ function SellerLeaderboard() {
 
         {isEmpty ? (
           <div className="px-6 mt-12 flex flex-col items-center text-center gap-5">
-            <div className="w-20 h-20 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center">
-              <TrendingUp className="w-8 h-8 text-indigo-400" />
+            <div className="w-20 h-20 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
+              <TrendingUp className="w-8 h-8 text-emerald-400" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">No Masters Yet</h3>
               <p className="text-[12px] font-medium text-slate-500 mt-1 max-w-[240px] mx-auto leading-relaxed">
-                The market is wide open. Claim the <span className="text-indigo-500 font-bold">#1 spot</span>!
+                The market is wide open. Claim the <span className="text-emerald-500 font-bold">#1 spot</span>!
               </p>
             </div>
             <button
               onClick={() => navigate('/post-trade')}
-              className="px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[13px] rounded-xl active:scale-95 transition-all shadow-lg shadow-indigo-500/20"
+              className="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[13px] rounded-xl active:scale-95 transition-all shadow-lg shadow-emerald-500/20"
             >
               Post First Trade
             </button>
@@ -246,7 +246,7 @@ function SellerLeaderboard() {
         ) : (
           <>
             {/* Podium */}
-            <div className="flex items-end justify-center gap-2.5 px-2 mt-8 mb-4">
+            <div className="flex items-end justify-center gap-2.5 px-2 mt-12 mb-4">
               <PodiumCard user={topSellers[1] || null} rank={2} metric={`KSh ${(topSellers[1]?.revenue || 0).toLocaleString()}`} metricLabel="Revenue" />
               <PodiumCard user={topSellers[0] || null} rank={1} metric={`KSh ${(topSellers[0]?.revenue || 0).toLocaleString()}`} metricLabel="Revenue" />
               <PodiumCard user={topSellers[2] || null} rank={3} metric={`KSh ${(topSellers[2]?.revenue || 0).toLocaleString()}`} metricLabel="Revenue" />
@@ -254,13 +254,13 @@ function SellerLeaderboard() {
 
             {/* Info */}
             <div className="bg-slate-200 dark:bg-slate-900 rounded-2xl p-4 flex items-start gap-3 border border-slate-200/60 dark:border-slate-800 shadow-sm">
-              <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0">
-                <Info className="w-4.5 h-4.5 text-indigo-500" />
+              <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                <Info className="w-4.5 h-4.5 text-emerald-500" />
               </div>
               <div>
                 <h4 className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-[0.15em] leading-none mb-1">Elite Merchant Status</h4>
                 <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Rankings are based on <span className="text-indigo-600 dark:text-indigo-400 font-bold">Net Revenue</span>. Higher ranks get prioritized for bulk marketplace contracts.
+                  Rankings are based on <span className="text-emerald-600 dark:text-emerald-400 font-bold">Net Revenue</span>. Higher ranks get prioritized for bulk marketplace contracts.
                 </p>
               </div>
             </div>

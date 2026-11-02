@@ -121,7 +121,7 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
         <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)]  px-4 border-b border-slate-200 dark:border-slate-600/60  z-50 transition-colors">
@@ -181,7 +181,7 @@ export default function MarketplaceInventory() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                  className={`flex-1 py-1.5 text-[12px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                     activeTab === tab
                       ? "bg-primary dark:bg-primary shadow-sm text-white dark:text-white font-bold"
                       : "text-slate-500 bg-slate-300 dark:bg-slate-900 hover:text-slate-600 dark:hover:text-slate-300"
@@ -205,11 +205,11 @@ export default function MarketplaceInventory() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-800 flex flex-col"
+              className="fixed inset-0 z-[9999] bg-white dark:bg-slate-800 flex flex-col"
             >
               {/* ── FIXED TOP NAV ── */}
               <div className="fixed top-0 left-0 right-0 z-[10000] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-                <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+                <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center gap-3.5">
                   <button
                     onClick={() => setSelectedId(null)}
                     className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0"
@@ -228,7 +228,7 @@ export default function MarketplaceInventory() {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)] pb-10">
+              <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)] pb-10">
                 {/* ── IMAGE CAROUSEL ── */}
                 <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
                   <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar h-full w-full">
@@ -281,7 +281,7 @@ export default function MarketplaceInventory() {
                 </div>
 
                 {/* ── SPECIFICATIONS CARD ── */}
-                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
+                <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">
@@ -375,71 +375,77 @@ export default function MarketplaceInventory() {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Expected Value Card */}
-                <div className="bg-emerald-600 dark:bg-emerald-800 p-5 rounded-2xl border border-emerald-500/20  flex flex-col justify-center text-center">
-                  <p className="text-[10px] font-bold text-slate-200  capitalize tracking-widest mb-1">
-                    {selectedListing.status === "sold"
-                      ? "Settled Value"
-                      : "Est. Total Value"}
-                  </p>
-                  <p className="text-xl font-bold text-white leading-none">
-                    KSh {estValue.toLocaleString()}
-                  </p>
-                  <p className="text-[10px] text-emerald-300 font-bold capitalize mt-1.5">
-                    {selectedListing.pricePerKg} × {displayQuantity}kg Total
-                    Stock
-                  </p>
-                </div>
+                  <hr className="border-slate-100 dark:border-slate-800/60" />
 
-                {/* Description */}
-                <div className="bg-white dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-2">
-                  <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em]">
-                    Description
-                  </h4>
-                  <p className="text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
-                    {(selectedListing as any).description ||
-                      "No description provided"}
-                  </p>
-                </div>
-                {/* Management Controls */}
-                <div className="space-y-2">
-                  {selectedListing.status === "active" ? (
+                  {/* Expected Value Section */}
+                  <div className="bg-emerald-600 dark:bg-emerald-800 p-4 rounded-xl border border-emerald-500/20 flex flex-col justify-center text-center">
+                    <p className="text-[10px] font-bold text-slate-200 capitalize tracking-widest mb-1">
+                      {selectedListing.status === "sold"
+                        ? "Settled Value"
+                        : "Est. Total Value"}
+                    </p>
+                    <p className="text-xl font-bold text-white leading-none">
+                      KSh {estValue.toLocaleString()}
+                    </p>
+                    <p className="text-[10px] text-emerald-300 font-bold capitalize mt-1.5">
+                      {selectedListing.pricePerKg} × {displayQuantity}kg Total Stock
+                    </p>
+                  </div>
+
+                  <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                  {/* Description Section */}
+                  <div>
+                    <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-2">
+                      Description
+                    </h4>
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
+                      {(selectedListing as any).description ||
+                        "No description provided"}
+                    </p>
+                  </div>
+
+                  <hr className="border-slate-100 dark:border-slate-800/60" />
+
+                  {/* Action Buttons */}
+                  <div className="grid grid-cols-3 gap-3">
+                    {selectedListing.status === "active" ? (
+                      <button
+                        onClick={handleDelete}
+                        className="col-span-1 py-3.5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-2xl font-bold text-xs capitalize tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-2"
+                      >
+                        <Trash2 className="w-4 h-4" /> Delete
+                      </button>
+                    ) : (
+                      <div
+                        className={`col-span-1 p-3 rounded-2xl border-2 flex items-center justify-center gap-2 text-[10px] font-bold capitalize tracking-[0.2em] ${
+                          selectedListing.status === "sold"
+                            ? "bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-950/20 dark:border-emerald-900/30"
+                            : selectedListing.status === "cancelled"
+                              ? "bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-950/20 dark:border-rose-900/30"
+                              : "bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-950/20 dark:border-amber-900/30"
+                        }`}
+                      >
+                        {selectedListing.status === "sold" && (
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                        )}
+                        {selectedListing.status === "cancelled" && (
+                          <Ban className="w-3.5 h-3.5" />
+                        )}
+                        {selectedListing.status === "expired" && (
+                          <Clock className="w-3.5 h-3.5" />
+                        )}
+                        <span className="truncate">{selectedListing.status}</span>
+                      </div>
+                    )}
                     <button
-                      onClick={handleDelete}
-                      className="w-full py-3.5 bg-rose-50 dark:bg-rose-950/20 text-rose-600 border-2 border-rose-100 dark:border-rose-900/30 rounded-2xl font-bold text-xs capitalize tracking-[0.2em] active:scale-95 transition-all flex items-center justify-center gap-3"
+                      onClick={() => setSelectedId(null)}
+                      className="col-span-2 py-3.5 bg-slate-600 dark:bg-slate-900/50 text-slate-100 rounded-2xl font-bold text-[12px] capitalize tracking-[0.2em] active:scale-95 transition-all"
                     >
-                      <Trash2 className="w-4 h-4" /> Delete Listing
+                      Return to Inventory
                     </button>
-                  ) : (
-                    <div
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-center gap-3 text-xs font-bold capitalize tracking-[0.2em] ${
-                        selectedListing.status === "sold"
-                          ? "bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-950/20 dark:border-emerald-900/30"
-                          : selectedListing.status === "cancelled"
-                            ? "bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-950/20 dark:border-rose-900/30"
-                            : "bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-950/20 dark:border-amber-900/30"
-                      }`}
-                    >
-                      {selectedListing.status === "sold" && (
-                        <CheckCircle2 className="w-4 h-4" />
-                      )}
-                      {selectedListing.status === "cancelled" && (
-                        <Ban className="w-4 h-4" />
-                      )}
-                      {selectedListing.status === "expired" && (
-                        <Clock className="w-4 h-4" />
-                      )}
-                      <span>Status: {selectedListing.status}</span>
-                    </div>
-                  )}
-                  <button
-                    onClick={() => setSelectedId(null)}
-                    className="w-full py-3.5 bg-slate-200 dark:bg-slate-900/50 text-slate-400 rounded-2xl font-bold text-[10px] capitalize tracking-[0.2em] active:scale-95 transition-all"
-                  >
-                    Return to Inventory
-                  </button>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -476,7 +482,7 @@ export default function MarketplaceInventory() {
                     return (
                       <div
                         onClick={() => setSelectedId(listing.id)}
-                        className="bg-white dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
+                        className="bg-slate-50 dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
                       >
                         <div className="flex gap-3">
                           <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">

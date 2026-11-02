@@ -307,7 +307,7 @@ export default function GroupCollectionRFQs() {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
                   selectedCategory === cat.id
                   ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 <cat.Icon className={`w-4 h-4 ${selectedCategory === cat.id ? 'text-white' : 'text-slate-600 dark:text-slate-500'}`} />
@@ -328,7 +328,7 @@ export default function GroupCollectionRFQs() {
 
         {/* ── STATE TABS ── */}
         <div className="flex justify-center px-4 pb-3 mt-2">
-          <div className="flex w-full bg-slate-100 dark:bg-slate-800/80 p-1 rounded-2xl shadow-inner border border-slate-200/60 dark:border-slate-700/50 gap-0.5">
+          <div className="flex w-full bg-slate-50 dark:bg-slate-800/80 p-1 rounded-2xl shadow-inner border border-slate-200/60 dark:border-slate-700/50 gap-0.5">
             {TABS.map(tab => {
               const count = (tabCounts as any)[tab];
               return (
@@ -392,9 +392,9 @@ export default function GroupCollectionRFQs() {
               <div className="flex items-center gap-1.5">
                 <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Group Contracts</h3>
-                <span className="text-[8px] font-bold text-blue-600 dark:text-blue-400 ml-0.5 bg-blue-50 dark:bg-blue-900/30 px-1 py-0.5 rounded">Live</span>
+                <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 ml-0.5 bg-blue-50 dark:bg-blue-900/30 px-1 py-0.5 rounded">Live</span>
               </div>
-              <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400">{filteredRFQs.length} Available</span>
+              <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400">{filteredRFQs.length} Available</span>
             </div>
 
             <div className="space-y-1">
@@ -407,7 +407,7 @@ export default function GroupCollectionRFQs() {
                   <div 
                     key={rfq.id} 
                     onClick={() => navigate(`/group-rfqs/${rfq.id}`)}
-                    className={`bg-white dark:bg-slate-900 -mx-1.5 p-4 px-4 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/80 ${rfq.hasMyPledge ? 'opacity-80 grayscale-[0.2]' : ''}`}
+                    className={`bg-slate-50 dark:bg-slate-900 -mx-1.5 p-4 px-4 border-y border-slate-100 dark:border-slate-800 shadow-sm transition-colors group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/80 ${rfq.hasMyPledge ? 'opacity-80 grayscale-[0.2]' : ''}`}
                   >
                     <div className="flex justify-between items-start mb-3">
                       {/* Left: Material Image and Title */}
@@ -430,12 +430,12 @@ export default function GroupCollectionRFQs() {
                         </div>
                         <div className="flex flex-col h-24 py-0.5">
                           <h4 className="text-[16px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">{rfq.material}</h4>
-                          <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-0.5">{rfq.category}</p>
-                          <p className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 mt-0.5 flex items-center gap-1">
-                            <Users className="w-3 h-3" /> {rfq.offersSubmitted} seller{rfq.offersSubmitted !== 1 ? 's' : ''} joined
+                         
+                          <p className="text-[12px] font-semibold text-blue-600 dark:text-blue-400 mt-3 flex items-center gap-1">
+                            <Users className="w-4 h-4" /> {rfq.offersSubmitted}  joined
                           </p>
                           <div className="flex items-center gap-1.5 mt-auto">
-                            <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
                               {rfq.avatar ? (
                                 <img src={getThumbnailUrl(rfq.avatar, { width: 50 })} className="w-full h-full object-cover" alt={rfq.company} />
                               ) : (
@@ -475,7 +475,7 @@ export default function GroupCollectionRFQs() {
                     </div>
 
                     {/* Row 3: Fulfillment Progress */}
-                    <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-2.5">
+                    {/* <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-2.5">
                       <div className="flex items-center justify-between mb-1.5">
                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Fulfillment Progress</span>
                         <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">{fulfillmentPercentage}%</span>
@@ -490,7 +490,7 @@ export default function GroupCollectionRFQs() {
                         <span className="text-[10px] font-semibold text-slate-400">{rfq.totalPledgedWeight}kg pledged</span>
                         <span className="text-[10px] font-bold text-slate-500">{rfq.requestedWeight}kg needed</span>
                       </div>
-                    </div>
+                    </div> */}
 
                     {/* Row 4: Key Details */}
                     <div className="flex items-center gap-6 border-t border-slate-200 dark:border-slate-800 pt-2 mt-2">

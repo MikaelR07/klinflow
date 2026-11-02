@@ -165,7 +165,7 @@ export default function SellerWallet() {
             <p className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.2em] mb-2">Available Balance</p>
             <div className="flex items-center justify-center gap-2">
               <span className="text-lg font-medium opacity-70 text-white">KSh</span>
-              <span className={`text-2xl font-bold leading-none tracking-tight transition-all duration-300 text-white ${!balanceVisible ? 'blur-lg select-none' : ''}`}>
+              <span className={`text-3xl font-bold leading-none tracking-tight transition-all duration-300 text-white ${!balanceVisible ? 'blur-lg select-none' : ''}`}>
                 {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
               <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-2 hover:bg-white/10 rounded-full transition-colors active:scale-90">
@@ -176,7 +176,7 @@ export default function SellerWallet() {
 
           {/* Secure Klin Wallet */}
           <div className="flex justify-center mb-5">
-            <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/80 capitalize tracking-widest bg-white/10 px-3.5 py-1 rounded-full border border-white/15 shadow-sm">
+            <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/80 uppercase tracking-widest bg-white/10 px-3.5 py-1 rounded-full border border-white/15 shadow-sm">
               <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function SellerWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <BanknoteArrowUp className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[9px] font-bold text-white text-center leading-tight">Withdraw</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Withdraw</p>
             </button>
 
             {/* Redeem Points */}
@@ -208,7 +208,7 @@ export default function SellerWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Gift className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[9px] font-bold text-white text-center leading-tight">Redeem</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Redeem</p>
             </button>
 
             {/* Transfer Points */}
@@ -219,7 +219,7 @@ export default function SellerWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <ArrowLeftRight className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[9px] font-bold text-white text-center leading-tight">Transfer</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Transfer</p>
             </button>
 
             {/* Earn More */}
@@ -230,7 +230,7 @@ export default function SellerWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Banknote className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[9px] font-bold text-white text-center leading-tight">Earn More</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Earn More</p>
             </button>
           </div>
         </div>

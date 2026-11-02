@@ -162,7 +162,7 @@ export default function TransferGFP() {
       </div>
 
       {/* ── DETAIL SECTION: DIRECTLY ON THE PAGE ── */}
-      <div className="max-w-lg mx-auto px-4 pt-6 space-y-6 relative z-10">
+      <div className="max-w-lg mx-auto px-6 pt-6 space-y-6 relative z-10">
 
         {/* POLISHED STEP INDICATOR */}
         <div className="flex items-center justify-between mb-6 relative px-4">

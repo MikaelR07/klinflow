@@ -329,7 +329,7 @@ export default function UserHome() {
                 </div>
                 <div className="text-left">
                   <h4 className="text-[13px] font-bold text-white leading-tight">Market Prices</h4>
-                  <p className="text-[10px] font-medium text-white/80 mt-0.5">Live recyclable rates</p>
+                  <p className="text-[10px] font-medium text-white/80 mt-0.5">View Live recyclables rates</p>
                 </div>
               </div>
               

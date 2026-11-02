@@ -5,7 +5,6 @@
  */
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   ArrowLeft,
   ChevronRight,
@@ -388,10 +387,6 @@ const GRADES = [
   },
 ];
 
-/* ── ANIMATIONS ── */
-const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.06 } } };
-const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.35 } } };
-
 /* ══════════════════════════════════════════════════════════════════════════
  * COMPONENT
  * ══════════════════════════════════════════════════════════════════════════ */
@@ -464,20 +459,19 @@ export default function MaterialDetail() {
       {/* ═══════════ FIXED TOP NAV ═══════════ */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-[#0f1117]/90 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
-            <button
-              onClick={() => navigate(-1)}
-              className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
-            >
-              <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
-            </button>
-            <div className="flex flex-col">
-              <span className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Material Details</span>
-              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-               Know more about what buyers want
-              </p>
-            </div>
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
+          >
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
+          </button>
+          <div className="absolute left-1/2 -translate-x-1/2 flex flex-col">
+            <span className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Material Details</span>
+            <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+             Know what buyers want
+            </p>
           </div>
+          <div className="w-10 h-10" />
         </div>
       </div>
 
@@ -486,16 +480,16 @@ export default function MaterialDetail() {
 
       {/* ═══════════ HERO SECTION ═══════════ */}
       <div className="max-w-7xl mx-auto px-1.5 pt-4 md:pt-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 max-w-5xl mx-auto">
-          
-          {/* Image Card (Restored Style) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+
+          {/* Image Card */}
           <div className="relative h-[220px] md:h-full w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm min-h-[220px]">
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${mat.heroImage})` }}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
-            
+
             {/* Category tag overlaid on image */}
             <div className="absolute top-3 left-3">
               <div className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-white backdrop-blur-md shadow-sm flex items-center gap-1.5 border border-white/20 dark:border-slate-700/50">
@@ -504,57 +498,58 @@ export default function MaterialDetail() {
             </div>
           </div>
 
-          {/* Unified Material Info Card */}
-          <div className="flex flex-col justify-center">
-            <div className="bg-gradient-to-tr from-primary to-emerald-600 dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm h-full flex flex-col overflow-hidden">
-              
-              {/* Header Section */}
-              <div className="p-4 md:p-6 pb-0 md:pb-0">
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <h1 className="text-[18px] md:text-2xl font-bold text-white leading-tight tracking-tight">
-                    {title}
-                  </h1>
-                  <div className={`px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border shrink-0 flex items-center gap-1 ${
-                    displayDemand === 'Critical' || displayDemand === 'High'
-                    ? 'text-emerald-100 bg-emerald-900/40 border-emerald-500/30 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
-                    : displayDemand === 'Calculating...'
-                    ? 'text-slate-100 bg-slate-900/40 border-slate-500/30 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700'
-                    : 'text-amber-100 bg-amber-900/40 border-amber-500/30 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20'
-                  }`}>
-                    {displayDemand !== 'Calculating...' && <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>}
-                    {displayDemand} {displayDemand !== 'Calculating...' ? 'Market Demand' : ''}
-                  </div>
+          {/* Material Name, Subtitle & Demand Badge */}
+          <div className="flex flex-col justify-center space-y-3 px-3">
+            <div className="flex items-start justify-between gap-3">
+              <h1 className="text-[18px] md:text-2xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
+                {title}
+              </h1>
+              <div className={`px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border shrink-0 flex items-center gap-1 ${
+                displayDemand === 'Critical' || displayDemand === 'High'
+                ? 'text-emerald-600 bg-emerald-50 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+                : displayDemand === 'Calculating...'
+                ? 'text-slate-600 bg-slate-50 border-slate-200 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700'
+                : 'text-amber-600 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20'
+              }`}>
+                {displayDemand !== 'Calculating...' && <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>}
+                {displayDemand} {displayDemand !== 'Calculating...' ? 'Market Demand' : ''}
+              </div>
+            </div>
+            <p className="text-[12px] md:text-[13px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed">
+              {mat.subtitle}
+            </p>
+          </div>
+
+          {/* Market Snapshot Card */}
+          <div className="bg-gradient-to-tr from-primary to-emerald-600 dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-4">
+            <div className="flex items-center gap-4">
+              {/* Left: Price + Price Movement */}
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/80">Average Price</p>
                 </div>
-                <p className="text-[12px] md:text-[13px] font-medium text-emerald-100 leading-relaxed">
-                  {mat.subtitle}
+                <p className="text-[18px] md:text-[24px] font-bold text-white leading-none mb-1">
+                  {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'} per kg
                 </p>
+                <div className="flex items-center gap-1.5">
+                  {isTrendUp ? <TrendingUp className="w-3 h-3 text-emerald-200" /> : isTrendDown ? <TrendingDown className="w-3 h-3 text-rose-200" /> : <Activity className="w-3 h-3 text-white/60" />}
+                  <p className={`text-[11px] font-medium ${isTrendUp ? 'text-emerald-200' : isTrendDown ? 'text-rose-200' : 'text-white/60'}`}>
+                    {isTrendUp ? 'Going Up' : isTrendDown ? 'Going Down' : 'Stable'} {displayTrend}
+                  </p>
+                </div>
               </div>
 
-              {/* Market Snapshot in Top Card */}
-              <div className="mt-auto p-4 md:p-6 pt-2 md:pt-2">
-                <div className="bg-white/10 dark:bg-slate-800/40 rounded-2xl p-2 mb-3 shadow-inner border border-white/5 dark:border-white/5">
-                  <div className="grid grid-cols-3 gap-2">
-                    {/* Metric 1 */}
-                    <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
-                      <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100/70 mb-1">Average Price</p>
-                      <p className="text-[13px] md:text-[15px] font-bold text-white leading-none mb-1 truncate">
-                        {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'}
-                      </p>
-                    </div>
-                    {/* Metric 2 */}
-                    <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
-                      <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100/70 mb-1">Market Demand</p>
-                      <p className="text-[13px] md:text-[15px] font-bold text-white leading-none mb-1 truncate">{displayDemand}</p>
-                    </div>
-                    {/* Metric 3 */}
-                    <div className="bg-emerald-900/40 dark:bg-[#12141c] rounded-xl p-3 shadow-sm flex flex-col justify-center border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
-                      <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100/70 mb-1">Price Movement</p>
-                      <p className={`text-[13px] md:text-[15px] font-bold ${isTrendUp ? 'text-emerald-300' : isTrendDown ? 'text-rose-300' : 'text-emerald-100'} leading-none mb-1 truncate`}>
-                        {isTrendUp ? 'Going Up ▲' : isTrendDown ? 'Going Down ▼' : 'Stable -'}
-                      </p>
-                    </div>
-                  </div>
+              {/* Vertical Divider */}
+              <div className="w-px h-12 bg-white/20" />
+
+              {/* Right: Market Demand */}
+              <div className="flex flex-col items-center justify-center">
+                <div className="flex items-center gap-2 mb-1">
+                  
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/80">Market Demand</p>
                 </div>
+                <p className="text-[16px] md:text-[18px] font-bold text-white leading-none">{displayDemand}</p>
               </div>
             </div>
           </div>
@@ -563,7 +558,7 @@ export default function MaterialDetail() {
       </div>
 
       {/* ═══════════ BODY CONTENT ═══════════ */}
-      <motion.div variants={stagger} initial="hidden" animate="show" className="max-w-7xl mx-auto px-1.5 pt-6 md:pt-10 space-y-12">
+      <div className="max-w-7xl mx-auto px-1.5 pt-6 md:pt-10 space-y-12">
         
         {/* Main Grid Layout for Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
@@ -572,7 +567,7 @@ export default function MaterialDetail() {
           <div className="lg:col-span-7 space-y-4">
             
             {/* ── WHY IT'S WORTH COLLECTING ── */}
-            <motion.div variants={fadeUp} className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-5 md:p-6 mb-8 border border-slate-200 dark:border-slate-700/50">
+            <div className="mb-8 px-5">
               <h2 className="text-base font-bold text-slate-900 dark:text-white tracking-tight mb-3">
                 Why it's worth collecting
               </h2>
@@ -591,9 +586,9 @@ export default function MaterialDetail() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
             {/* ── MATERIAL QUALITY (Horizontal) ── */}
-            <motion.div variants={fadeUp} className='pl-3'>
+            <div className='pl-3'>
               <h2 className="text-sm md:text-base font-bold text-slate-900 dark:text-white tracking-tight mb-2">
                 What are the grades?
               </h2>
@@ -619,7 +614,7 @@ export default function MaterialDetail() {
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
 
           </div>
 
@@ -627,7 +622,7 @@ export default function MaterialDetail() {
           <div className="lg:col-span-5 space-y-8">
             
             {/* ── PREPARE YOUR MATERIAL ── */}
-            <motion.div variants={fadeUp} className="pl-3">
+            <div className="pl-3">
               <h2 className="text-sm md:text-base font-bold text-slate-900 dark:text-white tracking-tight mb-4">
                 How to prepare your material
               </h2>
@@ -671,10 +666,10 @@ export default function MaterialDetail() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* ── COLLECTOR TIP ── */}
-            <motion.div variants={fadeUp}>
+            <div>
               <div className="bg-slate-50 dark:bg-[#12141c] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6">
                 <h3 className="text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-widest mb-3 flex items-center gap-2">
                   <span className="text-amber-500 text-base">💡</span> Collector tip
@@ -683,11 +678,11 @@ export default function MaterialDetail() {
                   {mat.proTip}
                 </p>
               </div>
-            </motion.div>
+            </div>
 
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* ═══════════ STICKY BOTTOM CTA ═══════════ */}
       <div className="fixed bottom-[calc(64px+env(safe-area-inset-bottom,0px))] lg:bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#0a0c10]/95 backdrop-blur-xl border-t border-slate-200/60 dark:border-slate-800/80 pb-[env(safe-area-inset-bottom,0px)]">

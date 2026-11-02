@@ -22,7 +22,7 @@ function ReviewCard({ review }: { review: any }) {
   const timeString = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1.25rem] shadow-sm overflow-hidden p-4">
+    <div className="bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1.25rem] shadow-sm overflow-hidden p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-base shrink-0 overflow-hidden">
@@ -32,21 +32,21 @@ function ReviewCard({ review }: { review: any }) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <div className={`w-4 h-4 rounded-md flex items-center justify-center ${isPositive ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
-                {isPositive ? <Check className="w-2.5 h-2.5" /> : <AlertCircle className="w-2.5 h-2.5" />}
+              <div className={`w-5 h-5 rounded-md flex items-center justify-center ${isPositive ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
+                {isPositive ? <Check className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
               </div>
-              <h4 className="text-xs font-bold text-slate-800 dark:text-white tracking-tight">{reviewerName}</h4>
+              <h4 className="text-sm font-bold text-slate-800 dark:text-white tracking-tight">{reviewerName}</h4>
             </div>
             <div className="flex items-center gap-2 mt-1">
               <div className="flex gap-0.5">
                 {[1, 2, 3, 4, 5].map(s => (
-                  <Star key={s} className={`w-2.5 h-2.5 ${s <= rating ? 'fill-primary text-primary' : 'text-slate-200 dark:text-slate-700'}`} />
+                  <Star key={s} className={`w-4 h-4 ${s <= rating ? 'fill-primary text-primary' : 'text-slate-200 dark:text-slate-700'}`} />
                 ))}
               </div>
-              <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400 capitalize tracking-widest">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 capitalize tracking-widest">
                 <span>• {dateString}</span>
                 <span className="flex items-center gap-1">
-                  <Clock className="w-2.5 h-2.5" />
+                  <Clock className="w-3 h-3" />
                   {timeString}
                 </span>
               </div>
@@ -57,11 +57,11 @@ function ReviewCard({ review }: { review: any }) {
 
       <div className="pl-4 border-l-2 border-primary/20 bg-slate-50/50 dark:bg-white/5 p-3 rounded-r-xl">
         {review.agent_rating_comment ? (
-          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium leading-relaxed italic">
+          <p className="text-[12px] text-slate-600 dark:text-slate-300 font-medium leading-relaxed italic">
             "{review.agent_rating_comment}"
           </p>
         ) : (
-          <p className="text-[11px] text-slate-400 font-medium italic opacity-60">No written comment provided.</p>
+          <p className="text-[12px] text-slate-400 font-medium italic opacity-60">No written comment provided.</p>
         )}
       </div>
     </div>
@@ -155,7 +155,7 @@ export default function AgentReviews() {
   })();
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-800 transition-colors min-h-screen">
+    <div className="bg-white dark:bg-slate-800 transition-colors min-h-screen">
       {/* Fixed Top Nav */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-100 dark:border-slate-900">
         <div className="flex items-center gap-4">
@@ -163,8 +163,8 @@ export default function AgentReviews() {
             <ArrowLeft className="w-5 h-5 dark:text-white" />
           </button>
           <div>
-            <h1 className="text-sm font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">All Reviews</h1>
-            <p className="text-[10px] font-bold text-primary capitalize tracking-[0.25em]">Customer Feedback</p>
+            <h1 className="text-[16px] font-bold text-slate-800 dark:text-white tracking-tight leading-none mb-1">All Reviews</h1>
+            <p className="text-[12px] font-bold text-primary capitalize tracking-[0.25em]">Customer Feedback</p>
           </div>
         </div>
       </div>
@@ -172,35 +172,35 @@ export default function AgentReviews() {
       <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+3.5rem)] pb-10 px-1.5 space-y-4 max-w-lg mx-auto">
 
         {/* Rating & Breakdown */}
-        <div className="bg-white dark:bg-slate-900 rounded-[1rem] p-4 border border-slate-100 dark:border-slate-800">
+        <div className="bg-gradient-to-br from-amber-600 to-amber-700 dark:bg-slate-900 rounded-[1rem] p-4 border border-slate-100 dark:border-slate-800">
           <div className="flex gap-5">
             {/* Left: Rating Summary */}
             <div className="flex flex-col items-center justify-center shrink-0 pr-5 border-r border-slate-100 dark:border-slate-800">
-              <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] mb-1">Rating</p>
+              <p className="text-[12px] font-bold text-white capitalize tracking-[0.2em] mb-1">Rating</p>
               <div className="flex items-baseline gap-1">
-                <h2 className="text-3xl font-bold tracking-tighter text-slate-900 dark:text-white">{stats.average}</h2>
-                <span className="text-xs font-bold text-slate-400">/5</span>
+                <h2 className="text-3xl font-bold tracking-tighter text-amber-400 dark:text-white">{stats.average}</h2>
+                <span className="text-[16px] font-bold text-white">/5</span>
               </div>
               <div className="flex gap-0.5 mt-1.5">
                 {[1, 2, 3, 4, 5].map(s => (
-                  <Star key={s} className={`w-3 h-3 ${s <= Math.round(Number(stats.average)) ? 'fill-primary text-primary' : 'text-slate-300 dark:text-slate-600'}`} />
+                  <Star key={s} className={`w-4 h-4 ${s <= Math.round(Number(stats.average)) ? 'fill-amber-300 text-amber-300' : 'text-slate-100 dark:text-slate-600'}`} />
                 ))}
               </div>
-              <p className="text-[10px] text-slate-400 mt-1.5 font-medium">{stats.total} reviews</p>
+              <p className="text-[12px] text-white mt-1.5 font-medium">{stats.total} reviews</p>
             </div>
 
             {/* Right: Breakdown Bars */}
             <div className="flex-1 space-y-2 justify-center flex flex-col">
               {stats.breakdown.map((item) => (
                 <div key={item.stars} className="flex items-center gap-3">
-                  <span className="text-[9px] font-bold text-slate-400 w-3">{item.stars}★</span>
-                  <div className="flex-1 h-1.5 bg-slate-400 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <span className="text-[12px] font-bold text-slate-100 w-3">{item.stars}★</span>
+                  <div className="flex-1 h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-primary rounded-full transition-all duration-1000"
                       style={{ width: `${item.percentage}%` }}
                     />
                   </div>
-                  <span className="text-[9px] font-bold text-slate-500 w-6 text-right">{Math.round(item.percentage)}%</span>
+                  <span className="text-[12px] font-bold text-slate-100 w-6 text-right">{Math.round(item.percentage)}%</span>
                 </div>
               ))}
             </div>
@@ -210,17 +210,17 @@ export default function AgentReviews() {
         {/* Reviews List */}
         <div className="space-y-1">
           <div className="flex items-center justify-between px-1">
-            <h3 className="text-xs font-bold text-slate-400 capitalize tracking-[0.2em]">All Feedback</h3>
+            <h3 className="text-sm font-bold text-slate-400 capitalize tracking-[0.2em]">All Feedback</h3>
             <div className="px-2 py-1 bg-primary/10 rounded-lg">
-              <span className="text-[10px] font-bold text-primary capitalize">{stats.total} reviews</span>
+              <span className="text-[12px] font-bold text-primary capitalize">{stats.total} reviews</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 gap-1">
             {loading ? (
-              <p className="text-center text-xs text-slate-500 py-10">Loading reviews...</p>
+              <p className="text-center text-sm text-slate-500 py-10">Loading reviews...</p>
             ) : reviews.length === 0 ? (
-              <p className="text-center text-xs text-slate-500 py-10">No reviews yet for this agent.</p>
+              <p className="text-center text-sm text-slate-500 py-10">No reviews yet for this agent.</p>
             ) : (
               reviews.map((review) => (
                 <ReviewCard key={review.id} review={review} />

@@ -241,7 +241,7 @@ export default function ResidentWallet() {
 
           {/* Secure Klinflow Wallet */}
           <div className="flex justify-center mb-5">
-            <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/80 capitalize tracking-widest bg-white/10 px-3.5 py-1 rounded-full border border-white/15 shadow-sm">
+            <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/80 uppercase tracking-widest bg-white/10 px-3.5 py-1 rounded-full border border-white/15 shadow-sm">
               <ShieldCheck className="w-3.5 h-3.5" /> Secure Klinflow Wallet
             </div>
           </div>
@@ -255,7 +255,7 @@ export default function ResidentWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <BanknoteArrowUp className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[9px] font-bold text-white text-center leading-tight">Withdraw</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Withdraw</p>
             </button>
 
             <button
@@ -265,7 +265,7 @@ export default function ResidentWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Gift className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[9px] font-bold text-white text-center leading-tight">Redeem GFP</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Redeem GFP</p>
             </button>
 
             <button
@@ -275,7 +275,7 @@ export default function ResidentWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <ArrowRightLeft className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[9px] font-bold text-white text-center leading-tight">Transfer GFP</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Transfer GFP</p>
             </button>
 
             <button
@@ -285,7 +285,7 @@ export default function ResidentWallet() {
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Banknote className="w-4.5 h-4.5 text-white" />
               </div>
-              <p className="text-[9px] font-bold text-white text-center leading-tight">Earn More</p>
+              <p className="text-[12px] font-bold text-white text-center leading-tight">Earn More</p>
             </button>
           </div>
         </div>

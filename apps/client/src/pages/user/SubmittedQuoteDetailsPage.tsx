@@ -236,10 +236,10 @@ export default function SubmittedQuoteDetailsPage() {
   };
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-8 transition-colors">
+    <div className="flex flex-col max-w-lg mx-auto bg-slate-white dark:bg-slate-800 pb-8 transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center gap-3.5">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0"
@@ -258,7 +258,7 @@ export default function SubmittedQuoteDetailsPage() {
         </div>
       </div>
 
-      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
+      <div className="space-y-4 px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+5.5rem)]">
         {/* ── IMAGE CAROUSEL ── */}
         <div className="relative h-[270px] w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-900">
           {quote.imageUrls && quote.imageUrls.length > 0 ? (
@@ -310,7 +310,7 @@ export default function SubmittedQuoteDetailsPage() {
         </div>
 
         {/* ── SPECIFICATIONS CARD ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
+        <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">
@@ -427,65 +427,56 @@ export default function SubmittedQuoteDetailsPage() {
               </div>
             </>
           )}
-        </div>
 
-        {/* ── ACTION BUTTONS ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
-          <div className="mb-2">
-            <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-              Actions
-            </h4>
-            <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
-              Manage your quote submission
-            </p>
-          </div>
-
-          {["accepted", "completed"].includes(quote.status) && (
-            <button
-              onClick={async () => {
-                const { data } = await supabase
-                  .from("fulfillment_orders")
-                  .select("id")
-                  .eq("proposal_id", quoteId)
-                  .maybeSingle();
-
-                if (data?.id) {
-                  navigate(`/fulfillment/${data.id}`);
-                } else {
-                  toast.error("Delivery schedule is still being generated.");
-                }
-              }}
-              className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-            >
-              {quote.status === "completed"
-                ? "View Completed Progress"
-                : "View Delivery Schedule"}
-            </button>
-          )}
-
-          {quote.status === "declined" && (
-            <button className="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all">
-              Find Similar RFQs
-            </button>
-          )}
-
-          {quote.status === "pending" && (
-            <div className="flex flex-row gap-3">
-               <button
-                onClick={handleDelete}
-                className="flex-[0.6] py-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-bold text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" /> Delete
-              </button>
+          {/* ── ACTION BUTTONS ── */}
+          <hr className="border-slate-100 dark:border-slate-800/60" />
+          <div className="pt-0.5">
+            {["accepted", "completed"].includes(quote.status) && (
               <button
-                onClick={openEditModal}
-                className="flex-1 py-4 bg-primary hover:bg-primary/95 text-white rounded-2xl font-bold text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                onClick={async () => {
+                  const { data } = await supabase
+                    .from("fulfillment_orders")
+                    .select("id")
+                    .eq("proposal_id", quoteId)
+                    .maybeSingle();
+
+                  if (data?.id) {
+                    navigate(`/fulfillment/${data.id}`);
+                  } else {
+                    toast.error("Delivery schedule is still being generated.");
+                  }
+                }}
+                className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
               >
-                <Pencil className="w-4 h-4" /> Edit Quote
+                {quote.status === "completed"
+                  ? "View Completed Progress"
+                  : "View Delivery Schedule"}
               </button>
-             
-            </div>
-          )}
+            )}
+
+            {quote.status === "declined" && (
+              <button className="w-full py-3.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl font-bold text-xs uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all">
+                Find Similar RFQs
+              </button>
+            )}
+
+            {quote.status === "pending" && (
+              <div className="flex flex-row gap-3">
+                <button
+                  onClick={handleDelete}
+                  className="flex-[0.6] py-3.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" /> Delete
+                </button>
+                <button
+                  onClick={openEditModal}
+                  className="flex-1 py-3.5 bg-primary hover:bg-primary/95 text-white rounded-xl font-bold text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  <Pencil className="w-4 h-4" /> Edit Quote
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

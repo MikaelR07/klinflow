@@ -229,21 +229,21 @@ export default function MyBookings() {
   };
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
         <div className="w-full mx-auto space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all shrink-0">
-                <ArrowLeft className="w-4 h-4 dark:text-white" />
-              </button>
+            <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all shrink-0">
+              <ArrowLeft className="w-4 h-4 dark:text-white" />
+            </button>
 
-              <div className="text-left">
-                <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
-                <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup Details and history</p>
-              </div>
+            <div className="absolute left-1/2 -translate-x-1/2">
+              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
+              <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup Details and history</p>
             </div>
+
+            <div className="w-10 h-10" />
 
             {(activeTab === 'Cancelled' || activeTab === 'Completed') && filteredBookings.length > 0 ? (
               <button
@@ -286,7 +286,7 @@ export default function MyBookings() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-2 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${activeTab === tab
+                  className={`flex-1 py-2 text-[12px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${activeTab === tab
                     ? 'bg-primary dark:bg-primary text-white dark:text-white'
                     : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
                     }`}
@@ -327,7 +327,7 @@ export default function MyBookings() {
               return (
                 <div
                   key={b.id}
-                  className="bg-white dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
+                  className="bg-slate-50 dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
                 >
                   {/* Clickable Header */}
                   <div
@@ -465,21 +465,22 @@ export default function MyBookings() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-0 z-[1000] bg-slate-50 dark:bg-slate-800 flex flex-col"
+              className="fixed inset-0 z-[1000] bg-white dark:bg-slate-800 flex flex-col"
             >
 
               {/* ── FIXED TOP NAV ── */}
-              <div className="fixed top-0 left-0 right-0 z-[1001] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-                <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
+              <div className="fixed top-0 left-0 right-0 z-[1001] max-w-lg mx-auto bg-white dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
+                <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
                   <button onClick={() => setSelectedBooking(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
                     <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
                   </button>
-                  <div>
+                  <div className="absolute left-1/2 -translate-x-1/2">
                     <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Booking Details</h1>
                     <p className="text-[10px] font-bold text-primary capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Pickup Request
                     </p>
                   </div>
+                  <div className="w-10 h-10" />
                 </div>
               </div>
 
@@ -504,7 +505,7 @@ export default function MyBookings() {
                 <div className="space-y-4">
 
                   {/* ── SPECIFICATIONS & PAYMENT CARD ── */}
-                  <div className="bg-slate-200 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800/40 overflow-hidden flex flex-col shadow-sm">
+                  <div className="bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800/40 overflow-hidden flex flex-col shadow-sm">
                     {/* Top Section: Specifications */}
                     <div className="p-4 space-y-4">
                       <div className="flex items-start justify-between">
@@ -539,6 +540,21 @@ export default function MyBookings() {
                           </div>
                         </div>
                       </div>
+
+                      {/* Collection Note */}
+                      {(b.notes || b.wasteType) && (
+                        <>
+                          <hr className="border-slate-100 dark:border-slate-800/60" />
+                          <div className="space-y-1.5">
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none flex items-center gap-1.5">
+                              <Info className="w-3.5 h-3.5 text-primary" /> Collection Note
+                            </p>
+                            <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
+                              "{String(b.notes || `Please collect ${waste?.label || wasteTypeVal} from ${b.estate || 'location'}. Standard verification applies.`)}"
+                            </p>
+                          </div>
+                        </>
+                      )}
                     </div>
 
                     {/* Bottom Section: Payment Value */}
@@ -570,7 +586,7 @@ export default function MyBookings() {
                       </div>
                       <div className="h-px bg-white/10 relative z-10" />
                       <div className="space-y-2 relative z-10">
-                        <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest">Scheduled Slot</p>
+                        <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-widest">Scheduled Time</p>
                         <div className="flex items-center gap-3">
                           <Clock className="w-4 h-4 text-emerald-200" />
                           <p className="text-base font-bold text-white capitalize tracking-tight">{String((b as any).timeSlot || 'ASAP Request')}</p>
@@ -582,17 +598,6 @@ export default function MyBookings() {
                   {b.status === 'completed' && (b.weaver_id || b.asset_id) && (
                     <div className="p-6 bg-slate-50 dark:bg-slate-800 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm">
                       <AssetJourney currentStatus={b.weaver_id ? 'matched' : 'completed'} />
-                    </div>
-                  )}
-
-                  {(b.notes || b.wasteType) && (
-                    <div className="bg-slate-200 dark:bg-slate-900 p-6 rounded-[1rem] border border-slate-100 dark:border-slate-800 shadow-sm">
-                      <h4 className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mb-3 flex items-center gap-2">
-                        <Info className="w-4 h-4 text-primary" /> Collection Note
-                      </h4>
-                      <p className="text-xs font-medium text-slate-600 dark:text-slate-300 leading-relaxed italic">
-                        "{String(b.notes || `Please collect ${waste?.label || wasteTypeVal} from ${b.estate || 'location'}. Standard verification applies.`)}"
-                      </p>
                     </div>
                   )}
 

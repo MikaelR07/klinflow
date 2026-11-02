@@ -174,7 +174,7 @@ export default function DiscoveryHub() {
                 key={img}
                 src={img}
                 alt={`Banner ${index + 1}`}
-                className={`absolute inset-0 w-full h-full object-cover object-left transition-opacity duration-700 ease-in-out ${
+                className={`absolute inset-0 w-full h-full object-cover ${index === 0 ? 'object-left' : ''} transition-opacity duration-700 ease-in-out ${
                   index === currentSlide ? 'opacity-100' : 'opacity-0'
                 }`}
               />
@@ -319,8 +319,21 @@ export default function DiscoveryHub() {
                           )}
                         </div>
 
+                        
+                        {/* Pickups + Location */}
+                        <div className="flex items-center gap-2 ">
+                          <div className="flex items-center gap-1.5">
+                            <Package className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-[10px] font-medium text-slate-600">{Number(partner.totalPickups || 0)} Pickups</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-[10px] font-medium text-slate-600 truncate max-w-[100px]">{partner.estate || 'Nairobi'}</span>
+                          </div>
+                        </div>
+
                         {/* Rating & Distance */}
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-2 mt-2">
                           <div className="flex items-center gap-1">
                             <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                             <span className="text-[11px] font-bold text-[#0e1d2c] dark:text-white">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
@@ -337,20 +350,6 @@ export default function DiscoveryHub() {
                               {formatDistance(partner.distance_km)}
                             </span>
                           )}
-                        </div>
-
-                       
-
-                        {/* Pickups + Location */}
-                        <div className="flex items-center gap-2 ">
-                          <div className="flex items-center gap-1.5">
-                            <Package className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-[10px] font-medium text-slate-600">{Number(partner.totalPickups || 0)} Pickups</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-[10px] font-medium text-slate-600 truncate max-w-[100px]">{partner.estate || 'Nairobi'}</span>
-                          </div>
                         </div>
 
                          {/* Materials */}

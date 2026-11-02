@@ -120,7 +120,7 @@ export default function SwarmDetails() {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-[34px] z-[50] bg-slate-50 dark:bg-slate-800 flex flex-col max-w-lg mx-auto">
+    <div className="fixed top-0 left-0 right-0 bottom-[34px] z-[50] bg-white dark:bg-slate-800 flex flex-col max-w-lg mx-auto">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-[1001] max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
@@ -165,7 +165,7 @@ export default function SwarmDetails() {
         </div>
 
         {/* ── SPECIFICATIONS CARD ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
+        <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Target Material</p>
@@ -227,7 +227,19 @@ export default function SwarmDetails() {
               </div>
             )}
           </div>
+
+          {/* Description */}
+          {swarm.description && (
+            <>
+              <hr className="border-slate-100 dark:border-slate-800/60" />
+              <div className="space-y-1.5">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Description</p>
+                <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{swarm.description}</p>
+              </div>
+            </>
+          )}
         </div>
+
         {/* Progress Card (Professional Neutral Style) */}
         <div className="bg-gradient-to-r from-emerald-600 to-emerald-900  p-2 rounded-xl border border-slate-700/40 flex flex-col justify-center text-center shadow-sm">
           <p className="text-[10px] font-bold text-white dark:text-slate-500 uppercase tracking-[0.2em] mb-1">
@@ -255,20 +267,10 @@ export default function SwarmDetails() {
           </div>
         </div>
 
-
-
-        {/* Description Card */}
-        {swarm.description && (
-          <div className="bg-slate-200 dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-            <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-100 capitalize tracking-widest mb-3">Description</h4>
-            <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed">{swarm.description}</p>
-          </div>
-        )}
-
         {/* Participants Card */}
-        <div className="bg-slate-200 dark:bg-slate-900/60 p-0 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
+        <div className="bg-slate-50 dark:bg-slate-900/60 p-0 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden">
           <div className="px-5 py-2">
-            <h4 className="text-xs font-semibold text-slate-400 capitalize tracking-widest">Participants ({participants.length})</h4>
+            <h4 className="text-xs font-semibold text-slate-600 capitalize tracking-widest">Participants ({participants.length})</h4>
           </div>
           {participants.length === 0 ? (
             <div className="px-5 pb-5 text-center">
@@ -438,7 +440,7 @@ export default function SwarmDetails() {
       {/* Image Zoom Modal */}
       {selectedImage && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 p-4 animate-in fade-in duration-200" onClick={() => setSelectedImage(null)}>
-          <button onClick={() => setSelectedImage(null)} className="absolute top-6 right-6 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-colors">
+          <button onClick={() => setSelectedImage(null)} className="absolute top-6 right-6 w-10 h-10 bg-white  rounded-full flex items-center justify-center text-slate-400 backdrop-blur-md transition-colors">
             <X className="w-5 h-5" />
           </button>
           <img src={selectedImage} alt="Zoomed Proof" className="max-w-full max-h-[85vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />

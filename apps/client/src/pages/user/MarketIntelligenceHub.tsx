@@ -109,17 +109,16 @@ export default function MarketIntelligenceHub() {
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90  border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
-            <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
-              <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
-            </button>
-            <div>
-              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Market Intelligence</h1>
-              <p className="text-[10px] font-bold text-slate-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                 View Live market prices
-              </p>
-            </div>
+          <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
+          </button>
+          <div className="absolute left-1/2 -translate-x-1/2">
+            <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Market Intelligence</h1>
+            <p className="text-[10px] font-bold text-slate-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+               View Live market prices
+            </p>
           </div>
+          <div className="w-10 h-10" />
         </div>
 
         {/* Tab Switcher */}
@@ -287,7 +286,7 @@ export default function MarketIntelligenceHub() {
       <main className={`flex-1 pb-5 max-w-lg mx-auto w-full px-1.5 space-y-0.5 transition-all duration-300 ${activeTab === 'trends'
         ? 'pt-[calc(env(safe-area-inset-top,1rem)+6.5rem)]'
         : 'pt-[calc(env(safe-area-inset-top,1rem)+9.25rem)]'
-        }`}>
+      }`}>
         <AnimatePresence mode="wait">
           {activeTab === 'prices' && (
             <MarketIntelPricesTab marketData={marketData} filteredTrends={filteredTrends} />

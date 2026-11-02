@@ -252,7 +252,7 @@ export default function GroupCollectionRFQDetails() {
   }
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto bg-slate-50 dark:bg-slate-800 pb-8 transition-colors">
+    <div className="flex flex-col max-w-lg mx-auto bg-white dark:bg-slate-800 pb-8 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-900">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
@@ -309,7 +309,7 @@ export default function GroupCollectionRFQDetails() {
         
 
         {/* ── SPECIFICATIONS CARD ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
+        <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4 shadow-sm">
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
@@ -372,15 +372,18 @@ export default function GroupCollectionRFQDetails() {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ── NOTES ── */}
-        {rfq.notes && (
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-3">
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Description / Specifications</p>
-            <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{rfq.notes}</p>
-          </div>
-        )}
+          {/* Description / Specifications */}
+          {rfq.notes && (
+            <>
+              <hr className="border-slate-100 dark:border-slate-800/60" />
+              <div className="space-y-2">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">Description / Specifications</p>
+                <p className="text-xs font-medium text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">{rfq.notes}</p>
+              </div>
+            </>
+          )}
+        </div>
         {/* ── FULFILLMENT PROGRESS HERO ── */}
         <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-4 text-white relative overflow-hidden">
 
@@ -416,7 +419,7 @@ export default function GroupCollectionRFQDetails() {
         </div>
 
         {/* ── CONTRIBUTORS LIST ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800/40 shadow-sm overflow-hidden">
+        <div className="bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800/40 shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
             <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-widest">
               Contributors ({contributors.length})
