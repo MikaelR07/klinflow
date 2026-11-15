@@ -16,7 +16,7 @@ import {
   ArrowUpSquare,
   ArrowUpCircle,
   ArrowDownCircle,
-  Bell, Headset,
+  Headset,
   BanknoteArrowUp
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -186,20 +186,8 @@ export default function ResidentWallet() {
             </h1>
           </div>
 
-          {/* Right: Notifications & Support */}
+          {/* Right: Support */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 z-10">
-            <button
-              onClick={() => navigate("/notifications")}
-              className="relative w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group"
-            >
-              <Bell className="w-5 h-5 text-white group-hover:animate-swing" />
-              {Number(unreadCount) > 0 && (
-                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center ring-2 ring-emerald-800 shadow-md animate-in zoom-in">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-
             <button
               onClick={() => navigate("/settings/support")}
               className="relative w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group"

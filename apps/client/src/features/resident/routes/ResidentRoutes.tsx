@@ -18,11 +18,15 @@ const TransferHistory = lazy(() => import('../../../pages/user/TransferHistory')
 const RedemptionHistory = lazy(() => import('../../../pages/user/RedemptionHistory'));
 const NotificationsFeed = lazy(() => import('../../../pages/user/NotificationsFeed'));
 const TransactionsHistory = lazy(() => import('../../../pages/user/TransactionsHistory'));
+const CommunityCollectionsPage = lazy(() => import('../../../pages/user/CommunityCollectionsPage'));
+const CommunityCollectionDetailPage = lazy(() => import('../../../pages/user/CommunityCollectionDetailPage'));
 
 export function getResidentRoutes() {
   return (
     <>
       <Route path="/" element={<UserHome />} />
+      <Route path="/community-collections" element={<CommunityCollectionsPage />} />
+      <Route path="/community-collections/:id" element={<CommunityCollectionDetailPage />} />
       <Route path="/withdraw" element={<WithdrawalPage />} />
       <Route path="/resident-wallet" element={<ResidentWallet />} />
       <Route path="/redeem-gfp" element={<RedeemGFP />} />

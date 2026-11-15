@@ -286,7 +286,7 @@ export default function MyBookings() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-2 text-[12px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${activeTab === tab
+                  className={`flex-1 py-2 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${activeTab === tab
                     ? 'bg-primary dark:bg-primary text-white dark:text-white'
                     : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
                     }`}
@@ -300,7 +300,7 @@ export default function MyBookings() {
         </div>
       </div>
 
-      <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+6.5rem)] px-0 relative max-w-lg mx-auto w-full space-y-4">
+      <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+7rem)] px-0 relative max-w-lg mx-auto w-full space-y-4">
 
         {filteredBookings.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center px-4">
@@ -327,7 +327,7 @@ export default function MyBookings() {
               return (
                 <div
                   key={b.id}
-                  className="bg-slate-50 dark:bg-slate-800 rounded-none relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
+                  className="bg-slate-50 dark:bg-slate-900 rounded-xl relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
                 >
                   {/* Clickable Header */}
                   <div

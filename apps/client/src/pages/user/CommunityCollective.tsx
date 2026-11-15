@@ -6,26 +6,68 @@ import {
   Coins
 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuthStore, useCollectiveStore } from '@klinflow/core';
+import { useAuthStore } from '@klinflow/core';
+import { supabase } from '@klinflow/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CommunityCollective() {
   const navigate = useNavigate();
   const profile = useAuthStore(s => s.profile);
-  const estateName = profile?.location?.estate || profile?.estate || 'Nairobi';
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-  const {
-    swarms, estateStats,
-    fetchSwarms, fetchEstateStats,
-    setupSubscriptions, cleanupSubscriptions
-  } = useCollectiveStore();
+  const [estateStats, setEstateStats] = useState<{
+    fulfilledGroupRFQs: number;
+    fulfilledIndividualRFQs: number;
+    totalEarned: number;
+    activeSellers: number;
+  }>({
+    fulfilledGroupRFQs: 0,
+    fulfilledIndividualRFQs: 0,
+    totalEarned: 0,
+    activeSellers: 0,
+  });
 
   useEffect(() => {
-    fetchSwarms(estateName, profile?.role);
-    fetchEstateStats(estateName);
-    setupSubscriptions(estateName, profile?.role);
-    return () => cleanupSubscriptions();
-  }, [estateName, profile?.id]);
+    if (profile?.role === 'user') {
+      navigate('/community-collections', { replace: true });
+      return;
+    }
+
+    async function loadStats() {
+      try {
+        const { count: activeSellers } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true })
+          .eq('role', 'seller');
+
+        const { data: rfqsData } = await supabase
+          .from('rfqs')
+          .select('is_group_collection, target_price, requested_weight')
+          .in('status', ['fulfilled', 'completed']);
+
+        let fulfilledGroupRFQs = 0;
+        let fulfilledIndividualRFQs = 0;
+        let totalEarned = 0;
+
+        if (rfqsData) {
+          rfqsData.forEach((r: any) => {
+            if (r.is_group_collection) fulfilledGroupRFQs++;
+            else fulfilledIndividualRFQs++;
+            totalEarned += (r.target_price || 0) * (r.requested_weight || 0);
+          });
+        }
+
+        setEstateStats({
+          activeSellers: activeSellers || 0,
+          fulfilledGroupRFQs,
+          fulfilledIndividualRFQs,
+          totalEarned,
+        });
+      } catch (err) {
+        console.error('Failed to load estate stats', err);
+      }
+    }
+    loadStats();
+  }, []);
 
   return (
     <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors pb-5">
@@ -129,9 +171,9 @@ export default function CommunityCollective() {
                   <Users className="w-4 h-4 text-black" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <p className="text-base font-bold text-white leading-none mb-0.5">{swarms.filter(s => s.status === 'active' && new Date(s.closes_at) > new Date()).length}</p>
+                  <p className="text-base font-bold text-white leading-none mb-0.5">{estateStats?.activeSellers || 0}</p>
                   <p className="text-[9px] text-white/90 font-bold uppercase tracking-wider leading-none">
-                    Active
+                    Recyclers
                   </p>
                 </div>
               </div>
@@ -282,20 +324,20 @@ export default function CommunityCollective() {
             <div className="flex-1 w-full max-w-lg overflow-y-auto no-scrollbar">
               <div className="p-5 space-y-8 pb-24">
                 
-                {/* Swarm Groups */}
+                {/* Community Collective */}
                 <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800/60 shadow-sm overflow-hidden">
                   <div className="w-full aspect-[16/9] bg-emerald-50 dark:bg-emerald-900/20 relative flex items-center justify-center border-b border-emerald-100 dark:border-emerald-800/40 overflow-hidden">
-                    <img src="/vectors/klin-swarms-real.webp" alt="Swarms Illustration" className="w-full h-full object-cover" />
+                    <img src="/vectors/community-banner-real.webp" alt="Community Collective" className="w-full h-full object-cover" />
                   </div>
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-3">
                       <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
                         <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       </div>
-                      <h3 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">Swarm Groups</h3>
+                      <h3 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">Community Collective</h3>
                     </div>
                     <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-                      Swarms allow residents and sellers in the same location to pool their materials together. Once the swarm reaches its weight goal, an agent comes to pick it up, and everyone gets paid based on their individual contribution. It's a great way to save time and fuel on transport costs and earn more together!
+                      Community Collective brings neighbors and local recyclers together. By coordinating collection efforts in your area, we optimize pickup routes, reduce transit emissions, and ensure everyone gets transparent, fair payouts for their recyclables.
                     </p>
                   </div>
                 </div>

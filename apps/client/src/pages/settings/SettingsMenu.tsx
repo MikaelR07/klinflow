@@ -11,7 +11,6 @@ import {
   IdCard,
   ChartBar,
   BarChart2,
-  Trophy,
   Copy,
   Settings
 } from 'lucide-react';
@@ -78,10 +77,14 @@ export default function SettingsMenu() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
 
         {/* ── PROFILE BENTO CARD ── */}
-        <div className="bg-gradient-to-t from-slate-600 to-slate-800    rounded-2xl p-4  dark:shadow-none border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+        <div className={`rounded-2xl p-4 border relative overflow-hidden transition-all ${
+          isSeller 
+            ? 'bg-gradient-to-br from-emerald-800 via-emerald-700 to-lime-600 border-emerald-700/40 text-white shadow-sm' 
+            : 'bg-gradient-to-t from-slate-600 to-slate-800 border-slate-100 dark:border-slate-800 text-white'
+        }`}>
 
           <div className="flex items-center gap-4 relative z-10">
-            <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-1 border-white dark:border-slate-900  overflow-hidden flex items-center justify-center text-3xl">
+            <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border border-white/20 dark:border-slate-700 overflow-hidden flex items-center justify-center text-3xl shrink-0">
               {profile?.avatarUrl && !imgError ? (
                 <img
                   src={getThumbnailUrl(profile.avatarUrl, { width: 300 })}
@@ -94,18 +97,18 @@ export default function SettingsMenu() {
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-1.5">
-                <h2 className="text-lg font-bold text-slate-200 dark:text-white leading-tight">{profile?.name}</h2>
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                <h2 className="text-lg font-bold text-white leading-tight">{profile?.name}</h2>
+                <CheckCircle2 className={`w-4 h-4 ${isSeller ? 'text-lime-400' : 'text-emerald-500'} shrink-0`} />
               </div>
               <div className="flex flex-col gap-1 items-start">
-                <p className="text-[11px] font-bold text-emerald-500 capitalize tracking-widest">{profile?.phone}</p>
+                <p className={`text-[11px] font-bold ${isSeller ? 'text-lime-300' : 'text-emerald-500'} capitalize tracking-widest`}>{profile?.phone}</p>
                 {profile?.klinflowId && (
                   <button 
                     onClick={() => {
                       navigator.clipboard.writeText(profile.klinflowId!);
                       toast.success('Klinflow ID copied');
                     }}
-                    className="flex items-center gap-1.5 bg-slate-800/60 hover:bg-slate-700/60 transition-colors px-2 py-1 rounded-md border border-slate-600/50 active:scale-95"
+                    className="flex items-center gap-1.5 bg-black/25 hover:bg-black/40 transition-colors px-2 py-1 rounded-md border border-white/10 active:scale-95"
                   >
                     <span className="text-[10px] font-mono font-bold text-slate-200 tracking-wider">KLIN_ID: {profile.klinflowId}</span>
                     <Copy className="w-3 h-3 text-slate-400" />
@@ -114,28 +117,6 @@ export default function SettingsMenu() {
               </div>
             </div>
           </div>
-
-          {/* Quick Stats Grid */}
-          {isSeller && (
-            <div className="grid grid-cols-2 gap-3 mt-4 pt-6 border-t border-slate-100 dark:border-slate-800">
-              <button
-                onClick={() => navigate('/circular-resume')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white  transition-all border border-transparent active:scale-95 group"
-              >
-                <IdCard className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-indigo-200 capitalize tracking-widest mb-1 leading-none">Identity</p>
-                <p className="text-xs font-bold text-white capitalize leading-none">Klin Resumé</p>
-              </button>
-              <button
-                onClick={() => navigate('/leaderboard')}
-                className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-600 text-white hover:bg-amber-700 transition-all border border-transparent active:scale-95 group"
-              >
-                <Trophy className="w-5 h-5 text-white mb-1.5 group-hover:scale-110 transition-transform" />
-                <p className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mb-1 leading-none">Ranking</p>
-                <p className="text-xs font-bold text-white capitalize leading-none">Leaderboard</p>
-              </button>
-            </div>
-          )}
         </div>
 
 
@@ -187,6 +168,23 @@ export default function SettingsMenu() {
         {/* ── VERIFICATION + SETTINGS LINKS ── */}
         <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
           <div className="divide-y divide-slate-50 dark:divide-slate-800">
+            {/* Seller-Only: Klin Resumé Row */}
+            {isSeller && (
+              <button
+                onClick={() => navigate('/circular-resume')}
+                className="w-full flex items-center gap-4 p-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group"
+              >
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                  <IdCard className="w-5 h-5" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">Klin Resumé</p>
+                  <p className="text-[10px] text-slate-400 capitalize tracking-widest mt-0.5">Circular Identity & Credentials</p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-300" />
+              </button>
+            )}
+
             {/* Seller-Only: Verification Row */}
             {isSeller && (
               <button

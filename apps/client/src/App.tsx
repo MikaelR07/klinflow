@@ -62,6 +62,7 @@ function MobileLayout() {
     { path: '/', icon: Home, label: 'Home' },
     { path: '/post-trade', icon: CircleFadingPlus, label: 'Sell' },
     { path: '/my-trades', icon: Handshake, label: 'Trades' },
+    { path: '/leaderboard', icon: Trophy, label: 'Leaderboard' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 

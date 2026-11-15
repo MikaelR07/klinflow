@@ -8,7 +8,21 @@ import { OptimizedImage } from '@klinflow/ui';
 
 // ── PODIUM SLOT (Shared by both Resident & Seller) ─────────────────────────
 
-const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank: number; metric: string; metricLabel: string }) => {
+const PodiumCard = memo(({ 
+  user, 
+  rank, 
+  metric, 
+  metricLabel,
+  secondaryMetric,
+  secondaryMetricLabel,
+}: { 
+  user: any; 
+  rank: number; 
+  metric: string; 
+  metricLabel: string;
+  secondaryMetric?: string;
+  secondaryMetricLabel?: string;
+}) => {
   const isFirst = rank === 1;
 
   const rankConfig: Record<number, { ring: string; bg: string; badge: string; badgeText: string; size: string }> = {
@@ -16,22 +30,22 @@ const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank:
       ring: 'ring-amber-400 ring-[3px]',
       bg: 'bg-gradient-to-b from-amber-400 to-amber-600',
       badge: 'bg-amber-400 text-amber-950',
-      badgeText: '🏆',
-      size: 'w-[72px] h-[72px]',
+      badgeText: '🏆1',
+      size: 'w-[78px] h-[78px]',
     },
     2: {
       ring: 'ring-purple-400 dark:ring-purple-600 ring-2',
       bg: 'bg-gradient-to-b from-purple-400 to-purple-600',
       badge: 'bg-purple-400 text-white',
-      badgeText: '🥈',
-      size: 'w-14 h-14',
+      badgeText: '2',
+      size: 'w-20 h-20',
     },
     3: {
       ring: 'ring-blue-400 dark:ring-blue-600 ring-2',
       bg: 'bg-gradient-to-b from-blue-400 to-blue-600',
       badge: 'bg-blue-400 text-white',
-      badgeText: '🥉',
-      size: 'w-14 h-14',
+      badgeText: '3',
+      size: 'w-20 h-20',
     },
   };
 
@@ -60,19 +74,30 @@ const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank:
       </div>
 
       {/* Info */}
-      <div className={`w-full ${config.bg} border border-white/20 rounded-xl ${isFirst ? 'p-3 pt-4' : 'p-2.5 pt-3'} text-center mt-1`}>
-        <p className={`${isFirst ? 'text-[12px]' : 'text-[11px]'} font-bold text-white truncate leading-none mb-1`}>
+      <div className={`w-full ${config.bg} border border-white/20 rounded-xl ${isFirst ? 'p-3 pt-3.5' : 'p-2.5 pt-3'} text-center mt-1`}>
+        <p className={`${isFirst ? 'text-[12px]' : 'text-[11px]'} font-bold text-white truncate leading-none mb-1.5`}>
           {user?.name || '—'}
         </p>
         {user ? (
-          <p className={`${isFirst ? 'text-[13px]' : 'text-[11px]'} font-bold text-white leading-none`}>
-            {metric}
-          </p>
+          <div className="flex flex-col items-center">
+            <p className={`${isFirst ? 'text-[13px]' : 'text-[11px]'} font-extrabold text-white leading-none`}>
+              {metric}
+            </p>
+            <p className="text-[8px] font-bold text-white/80 uppercase tracking-widest mt-0.5">{metricLabel}</p>
+
+            {secondaryMetric && (
+              <div className="w-full mt-1.5 pt-1.5 border-t border-white/20 flex flex-col items-center">
+                <p className={`${isFirst ? 'text-[12px]' : 'text-[10.5px]'} font-black text-lime-200 drop-shadow-sm leading-none`}>
+                  {secondaryMetric}
+                </p>
+                {secondaryMetricLabel && (
+                  <p className="text-[7.5px] font-bold text-white/75 uppercase tracking-wider mt-0.5">{secondaryMetricLabel}</p>
+                )}
+              </div>
+            )}
+          </div>
         ) : (
           <p className="text-[10px] font-bold text-white/80">Open</p>
-        )}
-        {user && (
-          <p className="text-[8px] font-bold text-white/80 uppercase tracking-widest mt-1">{metricLabel}</p>
         )}
       </div>
     </div>
@@ -81,9 +106,19 @@ const PodiumCard = memo(({ user, rank, metric, metricLabel }: { user: any; rank:
 
 // ── LIST ITEM (Shared) ─────────────────────────
 
-const RankListItem = memo(({ user, metric, metricLabel }: { user: any; metric: string; metricLabel: string }) => (
+const RankListItem = memo(({ 
+  user, 
+  metric, 
+  metricLabel,
+  secondaryMetric,
+}: { 
+  user: any; 
+  metric: string; 
+  metricLabel: string;
+  secondaryMetric?: string;
+}) => (
   <div
-    className={`px-4 py-3.5 rounded-xl border flex items-center gap-3.5 transition-all ${user.isUser
+    className={`px-4 py-3 rounded-xl border flex items-center gap-3.5 transition-all ${user.isUser
       ? 'bg-emerald-50/50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800/40'
       : 'bg-white dark:bg-slate-800/60 border-slate-100 dark:border-slate-700/40'
       }`}
@@ -123,6 +158,11 @@ const RankListItem = memo(({ user, metric, metricLabel }: { user: any; metric: s
       <p className={`text-[13px] font-bold leading-none ${user.isUser ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white'}`}>
         {metric}
       </p>
+      {secondaryMetric && (
+        <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mt-1 leading-none">
+          {secondaryMetric}
+        </p>
+      )}
     </div>
   </div>
 ));
@@ -142,33 +182,70 @@ function SellerLeaderboard() {
     const fetchLeaderboard = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('user_wallets')
-          .select(`
-            user_id,
-            cash_balance,
-            profiles!inner (
-              name,
-              role,
-              avatar_url
-            )
-          `)
-          .eq('profiles.role', 'seller')
-          .order('cash_balance', { ascending: false })
-          .limit(50);
+        const [walletsRes, bookingsRes, ordersRes] = await Promise.all([
+          supabase
+            .from('user_wallets')
+            .select(`
+              user_id,
+              cash_balance,
+              lifetime_cash_earned,
+              profiles!inner (
+                name,
+                role,
+                avatar_url
+              )
+            `)
+            .eq('profiles.role', 'seller')
+            .limit(50),
+          supabase
+            .from('bookings')
+            .select('user_id, actual_weight_kg, weight_kg, total_price')
+            .eq('status', 'completed'),
+          supabase
+            .from('marketplace_orders')
+            .select('seller_id, quantity, total_price')
+            .eq('status', 'completed'),
+        ]);
 
-        if (error) throw error;
+        if (walletsRes.error) throw walletsRes.error;
 
-        const formatted = (data || []).map((w, i) => {
+        const weightMap = new Map<string, number>();
+        const orderVolumeMap = new Map<string, number>();
+
+        (bookingsRes.data || []).forEach((b: any) => {
+          const w = Number(b.actual_weight_kg) || Number(b.weight_kg) || 0;
+          weightMap.set(b.user_id, (weightMap.get(b.user_id) || 0) + w);
+          const p = Number(b.total_price) || 0;
+          orderVolumeMap.set(b.user_id, (orderVolumeMap.get(b.user_id) || 0) + p);
+        });
+
+        (ordersRes.data || []).forEach((o: any) => {
+          const w = Number(o.quantity) || 0;
+          weightMap.set(o.seller_id, (weightMap.get(o.seller_id) || 0) + w);
+          const p = Number(o.total_price) || 0;
+          orderVolumeMap.set(o.seller_id, (orderVolumeMap.get(o.seller_id) || 0) + p);
+        });
+
+        const formatted = (walletsRes.data || []).map((w: any) => {
           const p = Array.isArray(w.profiles) ? w.profiles[0] : w.profiles;
+          const sellerWeight = weightMap.get(w.user_id) || 0;
+          const sellerRevenue = Number(w.lifetime_cash_earned) || Number(w.cash_balance) || (orderVolumeMap.get(w.user_id) || 0);
+
           return {
             id: w.user_id,
             name: w.user_id === profileId ? 'You' : (p?.name || 'Anonymous'),
-            revenue: w.cash_balance || 0,
-            rank: i + 1,
+            revenue: sellerRevenue,
+            weight: sellerWeight,
+            rank: 1,
             isUser: w.user_id === profileId,
             avatar_url: p?.avatar_url || null,
           };
+        });
+
+        // Sort by revenue, then by weight
+        formatted.sort((a, b) => (b.revenue - a.revenue) || (b.weight - a.weight));
+        formatted.forEach((s, idx) => {
+          s.rank = idx + 1;
         });
 
         setTopSellers(formatted);
@@ -193,7 +270,7 @@ function SellerLeaderboard() {
   const isEmpty = topSellers.length === 0;
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-950 relative overflow-x-hidden">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-slate-50 dark:bg-slate-950 relative overflow-x-hidden">
 
       {/* ── TOP SECTION: PREMIUM FINTECH GRADIENT ── */}
       <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5rem)] pb-8 rounded-b-[2.5rem]  relative z-20 overflow-hidden">
@@ -214,11 +291,11 @@ function SellerLeaderboard() {
         {/* Hero Content */}
         <div className="relative z-10 text-center px-5">
           <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mx-auto mb-3 border border-white/10">
-            <Trophy className="w-7 h-7 text-amber-400" />
+            <Trophy className="w-9 h-9 text-amber-400" />
           </div>
-          <h2 className="text-xl font-bold text-white tracking-tight mb-1">Profit Dominance</h2>
+          <h2 className="text-xl font-bold text-lime-400 tracking-tight mb-1">Profit Dominance</h2>
           <p className="text-[11px] font-medium text-white/60 leading-snug max-w-[260px] mx-auto">
-            Top merchants unlock premium buyer access and zero-fee withdrawals.
+            Top Sellers get premium access to premium buyers and connections for their efforts.
           </p>
         </div>
       </div>
@@ -247,9 +324,30 @@ function SellerLeaderboard() {
           <>
             {/* Podium */}
             <div className="flex items-end justify-center gap-2.5 px-2 mt-12 mb-4">
-              <PodiumCard user={topSellers[1] || null} rank={2} metric={`KSh ${(topSellers[1]?.revenue || 0).toLocaleString()}`} metricLabel="Revenue" />
-              <PodiumCard user={topSellers[0] || null} rank={1} metric={`KSh ${(topSellers[0]?.revenue || 0).toLocaleString()}`} metricLabel="Revenue" />
-              <PodiumCard user={topSellers[2] || null} rank={3} metric={`KSh ${(topSellers[2]?.revenue || 0).toLocaleString()}`} metricLabel="Revenue" />
+              <PodiumCard 
+                user={topSellers[1] || null} 
+                rank={2} 
+                metric={`${(topSellers[1]?.weight || 0).toLocaleString()} KG`} 
+                metricLabel="Weight Sold"
+                secondaryMetric={`KSh ${(topSellers[1]?.revenue || 0).toLocaleString()}`}
+                secondaryMetricLabel="Total Earned"
+              />
+              <PodiumCard 
+                user={topSellers[0] || null} 
+                rank={1} 
+                metric={`${(topSellers[0]?.weight || 0).toLocaleString()} KG`} 
+                metricLabel="Weight Sold"
+                secondaryMetric={`KSh ${(topSellers[0]?.revenue || 0).toLocaleString()}`}
+                secondaryMetricLabel="Total Earned"
+              />
+              <PodiumCard 
+                user={topSellers[2] || null} 
+                rank={3} 
+                metric={`${(topSellers[2]?.weight || 0).toLocaleString()} KG`} 
+                metricLabel="Weight Sold"
+                secondaryMetric={`KSh ${(topSellers[2]?.revenue || 0).toLocaleString()}`}
+                secondaryMetricLabel="Total Earned"
+              />
             </div>
 
             {/* Info */}
@@ -260,7 +358,7 @@ function SellerLeaderboard() {
               <div>
                 <h4 className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-[0.15em] leading-none mb-1">Elite Merchant Status</h4>
                 <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Rankings are based on <span className="text-emerald-600 dark:text-emerald-400 font-bold">Net Revenue</span>. Higher ranks get prioritized for bulk marketplace contracts.
+                  Rankings are based on <span className="text-emerald-600 dark:text-emerald-400 font-bold">Volume & Net Revenue</span>. Higher ranks get prioritized for bulk marketplace contracts.
                 </p>
               </div>
             </div>
@@ -270,7 +368,13 @@ function SellerLeaderboard() {
               <div className="flex flex-col gap-2">
                 <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-400 px-1 mb-1">All Rankings</span>
                 {topSellers.slice(3, visibleCount).map((user) => (
-                  <RankListItem key={user.id} user={user} metric={`KSh ${user.revenue.toLocaleString()}`} metricLabel="Revenue" />
+                  <RankListItem 
+                    key={user.id} 
+                    user={user} 
+                    metric={`${(user.weight || 0).toLocaleString()} KG`} 
+                    metricLabel="Weight Sold"
+                    secondaryMetric={`KSh ${(user.revenue || 0).toLocaleString()}`}
+                  />
                 ))}
 
                 {topSellers.length > visibleCount && (

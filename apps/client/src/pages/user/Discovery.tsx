@@ -38,7 +38,7 @@ export default function DiscoveryHub() {
   const [locationStatus, setLocationStatus] = useState<'requesting' | 'granted' | 'denied' | 'idle'>('idle');
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const bannerImages = ['/vectors/discover.webp', '/vectors/discover2.webp'];
+  const bannerImages = ['/vectors/discover2.webp', '/vectors/discover.webp'];
 
   // Auto-rotate carousel
   useEffect(() => {
@@ -122,7 +122,7 @@ export default function DiscoveryHub() {
               <ArrowLeft className="w-4 h-4 dark:text-white" />
             </button>
             <div className="flex-1">
-              <h1 className="text-lg font-bold dark:text-white tracking-tight leading-none mb-0.5">Explore Nearby Collectors</h1>
+              <h1 className="text-lg font-bold text-emerald-600 dark:text-white tracking-tight leading-none mb-0.5">Explore Nearby Collectors</h1>
               <div className="flex items-center gap-1.5">
                 {locationStatus === 'granted' && (
                   <>
@@ -134,7 +134,7 @@ export default function DiscoveryHub() {
                   <p className="text-[10px] font-bold text-amber-500 tracking-[0.15em]">Getting your location…</p>
                 )}
                 {(locationStatus === 'denied' || locationStatus === 'idle') && (
-                  <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em]">Select from verified collectors near you</p>
+                  <p className="text-[10px] font-bold text-emerald-500 capitalize tracking-[0.2em]">Select from verified collectors near you</p>
                 )}
               </div>
             </div>
@@ -161,20 +161,36 @@ export default function DiscoveryHub() {
               <SlidersHorizontal className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Material Filter Tabs in TopNav */}
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pt-2.5 pb-1">
+            {materials.map(m => (
+              <button
+                key={m}
+                onClick={() => setActiveMaterial(m)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-all border ${activeMaterial === m
+                  ? 'bg-slate-900 dark:bg-slate-100 border-slate-900 dark:border-slate-100 text-white dark:text-slate-900 shadow-xs'
+                  : 'bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-slate-700/80'
+                  }`}
+              >
+                {m === 'all' ? 'All' : ((MATERIAL_LABELS as any)[m] || m)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+7rem)] pb-6 px-0 space-y-4">
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+9.25rem)] pb-6 px-0 space-y-4">
 
         {/* ── BANNER CAROUSEL ── */}
         <div className="px-1.5">
-          <div className="relative w-full h-52 overflow-hidden rounded-2xl">
+          <div className="relative w-full h-48 overflow-hidden rounded-2xl">
             {bannerImages.map((img, index) => (
               <img
                 key={img}
                 src={img}
                 alt={`Banner ${index + 1}`}
-                className={`absolute inset-0 w-full h-full object-cover ${index === 0 ? 'object-left' : ''} transition-opacity duration-700 ease-in-out ${
+                className={`absolute inset-0 w-full h-full object-cover ${img === '/vectors/discover.webp' ? 'object-left' : ''} transition-opacity duration-700 ease-in-out ${
                   index === currentSlide ? 'opacity-100' : 'opacity-0'
                 }`}
               />
@@ -191,24 +207,6 @@ export default function DiscoveryHub() {
                 />
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Material Filter Tabs */}
-        <div className="px-4">
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-            {materials.map(m => (
-              <button
-                key={m}
-                onClick={() => setActiveMaterial(m)}
-                className={`px-4 py-2 rounded-xl text-xs font-semibold capitalize tracking-widest whitespace-nowrap transition-all border ${activeMaterial === m
-                  ? 'bg-slate-900 border-slate-900 text-white'
-                  : 'bg-slate-200 dark:bg-slate-400 text-slate-600 border-slate-100 dark:border-slate-800'
-                  }`}
-              >
-                {m === 'all' ? 'All' : ((MATERIAL_LABELS as any)[m] || m)}
-              </button>
-            ))}
           </div>
         </div>
 
@@ -311,7 +309,7 @@ export default function DiscoveryHub() {
                       <div className="min-w-0 flex-1">
                         {/* Name & Badge */}
                         <div className="flex items-center gap-1 mb-1">
-                          <h4 className="text-[15px] font-semibold text-[#0e1d2c] dark:text-white truncate">
+                          <h4 className="text-[14px] font-semibold text-emerald-600 dark:text-white truncate">
                             {partner.name}
                           </h4>
                           {isOnlineNow && (
@@ -319,21 +317,9 @@ export default function DiscoveryHub() {
                           )}
                         </div>
 
-                        
-                        {/* Pickups + Location */}
-                        <div className="flex items-center gap-2 ">
-                          <div className="flex items-center gap-1.5">
-                            <Package className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-[10px] font-medium text-slate-600">{Number(partner.totalPickups || 0)} Pickups</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-[10px] font-medium text-slate-600 truncate max-w-[100px]">{partner.estate || 'Nairobi'}</span>
-                          </div>
-                        </div>
 
-                        {/* Rating & Distance */}
-                        <div className="flex items-center gap-2 mt-2">
+                          {/* Rating & Distance */}
+                        <div className="flex items-center gap-2 mb-1.5">
                           <div className="flex items-center gap-1">
                             <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                             <span className="text-[11px] font-bold text-[#0e1d2c] dark:text-white">{(partner.rating || 0) > 0 ? (partner.rating || 0).toFixed(1) : 'New'}</span>
@@ -351,6 +337,20 @@ export default function DiscoveryHub() {
                             </span>
                           )}
                         </div>
+                        
+                        {/* Pickups + Location */}
+                        <div className="flex items-center gap-2 ">
+                          <div className="flex items-center gap-1.5">
+                            <Package className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-[10px] font-medium text-slate-600">{Number(partner.totalPickups || 0)} Pickups</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-[10px] font-medium text-slate-600 truncate max-w-[100px]">{partner.estate || 'Nairobi'}</span>
+                          </div>
+                        </div>
+
+                        
 
                          {/* Materials */}
                         <div className="flex flex-wrap gap-1 mt-2">

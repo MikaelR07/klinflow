@@ -250,15 +250,15 @@ export default function UserHome() {
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1">
               {[
-                { label: 'Book', icon: <CalendarPlus className="w-5 h-5" />, route: '/book-pickup', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Wallet', icon: <Wallet className="w-5 h-5" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Bookings', icon: <Package className="w-5 h-5" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Discover', icon: <Search className="w-5 h-5" />, route: '/discovery', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Book', icon: <CalendarPlus className="w-5.5 h-5.5" />, route: '/book-pickup', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Bookings', icon: <Package className="w-5.5 h-5.5" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Discover', icon: <Search className="w-5.5 h-5.5" />, route: '/discovery', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
                 <button
                   key={service.label}
                   onClick={() => navigate(service.route)}
-                  className="bg-slate-50 dark:bg-slate-900 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                  className="bg-slate-50 dark:bg-slate-900 border border-slate-50 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm  group"
                 >
                   <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
                     {service.icon}
@@ -271,17 +271,17 @@ export default function UserHome() {
         </motion.div>
 
         {/* ── KLINFLOW BANNERS ── */}
-        <motion.div variants={itemVariants} className="!mt-4"  >
+        <motion.div variants={itemVariants} className="!mt-2"  >
           <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
             {/* Banner 1 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[21/9]">
-              <img src="/vectors/ecoBanner.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[3/1]">
+              <img src="/vectors/ecoBanner3.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
 
             {/* Banner 2 (Resident Only) */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[21/9] bg-slate-900">
-              <img src="/vectors/ecoBanner3.webp" alt="Promo 3" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[3/1] bg-slate-900">
+              <img src="/vectors/eco.webp" alt="Promo 3" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
 
@@ -290,29 +290,19 @@ export default function UserHome() {
         </motion.div>
         
          {/* ── COMMUNITY TOOLS ── */}
-        <motion.div variants={itemVariants} className="!mt-3">
+        <motion.div variants={itemVariants} className="!mt-2">
           <div className="flex items-center justify-between px-1.5 mb-2">
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest">Community Tools</h3>
           </div>
 
           <div className="grid grid-cols-2 gap-2 px-1.5">
-            {/* ── SWARMS ── */}
+            {/* ── COMMUNITY COLLECTIONS ── */}
             <button
-              onClick={() => navigate("/swarms")}
-              className="bg-gradient-to-br from-emerald-600 to-emerald-700 dark:from-emerald-600 dark:to-emerald-700 rounded-xl h-28 shadow-sm hover:shadow-md transition-all border border-emerald-500 dark:border-emerald-800 relative overflow-hidden group p-3 flex flex-col justify-end"
+              onClick={() => navigate("/community-collections")}
+              className="bg-white dark:bg-slate-800 rounded-xl h-28 shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
             >
-              <div className="absolute top-3 right-2 bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                Join
-              </div>
-              <div className="flex flex-col items-start gap-2">
-                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm shrink-0">
-                  <Users className="w-6 h-6 text-white" />
-                </div>
-                <div className="text-left">
-                  <h4 className="text-[13px] font-bold text-white leading-tight">Join a Swarm</h4>
-                  <p className="text-[10px] font-medium text-white/80 mt-0.5">Pool pickups & earn together</p>
-                </div>
-              </div>
+              <img src="/vectors/community-collection2.webp" alt="Community Collections" className="absolute inset-0 w-full h-full object-cover object-left" />
+              
             </button>
 
             {/* ── MARKET PRICES ── */}

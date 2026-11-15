@@ -47,7 +47,6 @@ import {
   BarChart3Icon,
   Headset,
   ChevronDownCircle,
-  MapPinned,
   ScrollText
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -125,7 +124,6 @@ export default function SellerHome() {
   const [stats, setStats] = useState<SellerWalletStats | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeContractsCount, setActiveContractsCount] = useState(0);
-  const [activeSwarmsCount, setActiveSwarmsCount] = useState(0);
   const { status, liveAddress, startTracking } = useLocationStore();
 
   useEffect(() => {
@@ -165,15 +163,6 @@ export default function SellerHome() {
           setActiveContractsCount(count);
         }
       });
-      // Fetch active swarms count
-      if (profile.estate) {
-        supabase.from('swarms').select('id, status, closes_at').eq('estate', profile.estate).then(({ data }) => {
-          if (data) {
-            const count = data.filter((s: any) => s.status === 'active' && new Date(s.closes_at).getTime() > new Date().getTime()).length;
-            setActiveSwarmsCount(count);
-          }
-        });
-      }
       // Realtime subscription handled globally by App.tsx
     }
 
@@ -347,15 +336,15 @@ export default function SellerHome() {
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1">
               {[
-                { label: 'Sell', icon: <CircleFadingPlus className="w-5 h-5" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Listings', icon: <Package className="w-5 h-5" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Trades', icon: <Handshake className="w-5 h-5" />, route: '/my-trades', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
-                { label: 'Wallet', icon: <Wallet className="w-5 h-5" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Sell', icon: <CircleFadingPlus className="w-5.5 h-5.5" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Listings', icon: <Package className="w-5.5 h-5.5" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Trades', icon: <Handshake className="w-5.5 h-5.5" />, route: '/my-trades', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
+                { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
                 <button
                   key={service.label}
                   onClick={() => navigate(service.route)}
-                  className="bg-slate-50 dark:bg-slate-900 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group"
+                  className="bg-slate-50 dark:bg-slate-900 border border-slate-50 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm group"
                 >
                   <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
                     {service.badge && service.badge > 0 ? (
@@ -373,55 +362,33 @@ export default function SellerHome() {
         </motion.div>
 
         {/* ── KLINFLOW BANNERS ── */}
-        <motion.div variants={itemVariants} className="!mt-4">
+        <motion.div variants={itemVariants} className="!mt-2">
           <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
             {/* Banner 1 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[21/9]">
-              <img src="/vectors/ecoBanner.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-blue-900/50 dark:border-blue-900/50 aspect-[3/1]">
+              <img src="/vectors/ecoBanner2.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
 
             {/* Banner 2 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[21/9] bg-slate-900">
-              <img src="/vectors/ecoBanner2.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[3/1] bg-slate-900">
+              <img src="/vectors/ecoBanner.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
           </div>
         </motion.div>
-         {/* ── SWARMS (Horizontal Card) ── */}
-        <motion.div variants={itemVariants} className="!mt-2 ">
-          <button
-            onClick={() => navigate("/swarms")}
-            className="w-full bg-gradient-to-br from-primary to-emerald-600 rounded-xl p-5 flex items-center gap-3 cursor-pointer shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-primary relative overflow-hidden group"
-          >
-            <div className="w-11 h-11 shrink-0 bg-white/20 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform">
-              <MapPinned className="w-6 h-6 text-white" />
-            </div>
-            <div className="text-left flex-1 min-w-0">
-              <h4 className="text-[15px] font-bold text-white leading-none mb-1">Swarms</h4>
-              <p className="text-[11px] font-semibold text-emerald-100 leading-tight">Join group collection networks nearby</p>
-            </div>
-            <div className="flex items-center gap-1.5 shrink-0">
-              <div className="bg-white/20 px-2 py-1 rounded-lg flex items-center gap-1">
-                <ArrowRight className="w-3 h-3 text-white" />
-                <span className="text-[10px] font-bold text-white">{activeSwarmsCount} nearby</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-emerald-200" />
-            </div>
-          </button>
-        </motion.div>
 
         {/* ── BUSINESS TOOLS ── */}
-        <div className="!mt-4">
+        <div className="!mt-2">
           <div className="flex items-center justify-between px-1.5 mb-2">
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest">Business Tools</h3>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 px-1.5">
             {/* ── CONTRACTS ── */}
             <button
               onClick={() => navigate("/group-rfqs")}
-              className="bg-white dark:bg-slate-800 rounded-2xl aspect-[4/3] shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
+              className="bg-white dark:bg-slate-800 rounded-xl h-28 shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
             >
               <img src="/vectors/contracts.webp" alt="Contracts" className="absolute inset-0 w-full h-full object-cover object-left scale-110" />
               <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
@@ -432,9 +399,9 @@ export default function SellerHome() {
             {/* ── MARKET PRICES ── */}
             <button
               onClick={() => navigate("/market-pulse")}
-              className="bg-white dark:bg-slate-800 rounded-2xl aspect-[4/3] shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
+              className="bg-white dark:bg-slate-800 rounded-xl h-28 shadow-sm hover:shadow-md active:scale-[0.98] transition-all border border-slate-200 dark:border-slate-700 relative overflow-hidden group"
             >
-              <img src="/vectors/prices.webp" alt="Market Prices" className="absolute inset-0 w-full h-full object-cover object-left" />
+              <img src="/vectors/prices.webp" alt="Market Prices" className="absolute inset-0 w-full h-full object-cover object-left scale-110" />
               <div className="absolute bottom-2 right-2 bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
                 Live
               </div>
