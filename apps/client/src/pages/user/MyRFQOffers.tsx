@@ -124,7 +124,7 @@ export default function MyRFQOffers() {
               placeholder="Search by material, category or buyer..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-8 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 rounded-xl text-xs font-medium text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm"
+              className="w-full pl-9 pr-8 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 rounded-xl text-xs font-medium text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors shadow-sm"
             />
             {searchQuery && (
               <button
@@ -137,11 +137,37 @@ export default function MyRFQOffers() {
           </div>
         </div>
 
+        {/* Status Filters */}
+        <div className="flex px-4 pb-2 gap-1.5 overflow-x-auto no-scrollbar">
+          {(['pending', 'accepted', 'completed', 'declined'] as const).map((statusOption) => {
+            const count = quotes.filter(q => q.status === statusOption).length;
+
+            return (
+              <button
+                key={statusOption}
+                onClick={() => setFilter(statusOption)}
+                className={`flex-1 py-1.5 px-2 rounded-xl text-xs flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shadow-xs shrink-0 ${filter === statusOption
+                  ? 'bg-emerald-600 text-white border-transparent'
+                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
+                  }`}
+              >
+                <span>{statusOption}</span>
+                <span className={`px-1.5 py-0.5 rounded-md text-[9px] leading-none ${filter === statusOption
+                  ? 'bg-emerald-700 text-white'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  }`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         <ContractsTabBar />
       </div>
 
       {/* ── CONTENT AREA ── */}
-      <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 pt-[calc(env(safe-area-inset-top,1rem)+9rem)]">
+      <main className="flex-1 pb-10 max-w-lg mx-auto w-full px-0 pt-[calc(env(safe-area-inset-top,1rem)+12rem)]">
 
         {/* ── HERO BANNER ── */}
         <div className="px-1.5 mb-4 mt-2">
@@ -156,32 +182,6 @@ export default function MyRFQOffers() {
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Status Filters */}
-        <div className="flex px-1.5 pb-4 gap-1.5 overflow-x-auto no-scrollbar">
-          {(['pending', 'accepted', 'completed', 'declined'] as const).map((statusOption) => {
-            const count = quotes.filter(q => q.status === statusOption).length;
-
-            return (
-              <button
-                key={statusOption}
-                onClick={() => setFilter(statusOption)}
-                className={`flex-1 py-2 px-1 rounded-xl text-[11px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shadow-sm shrink-0 ${filter === statusOption
-                  ? 'bg-emerald-600 text-white border-transparent '
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
-                  }`}
-              >
-                <span>{statusOption}</span>
-                <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${filter === statusOption
-                  ? 'bg-emerald-700 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
-                  }`}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
         </div>
 
         <AnimatePresence>

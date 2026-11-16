@@ -168,7 +168,7 @@ export default function ResidentWallet() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 relative overflow-x-hidden min-h-screen font-sans pb-6">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-800 to-emerald-900`}>
+      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-lime-600`}>
         <div className="max-w-lg mx-auto px-4 flex items-center justify-between relative">
           {/* Left: Back Arrow */}
           <button
@@ -190,7 +190,7 @@ export default function ResidentWallet() {
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 z-10">
             <button
               onClick={() => navigate("/settings/support")}
-              className="relative w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group"
+              className="relative w-10 h-10 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group"
             >
               <Headset className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
             </button>
@@ -199,38 +199,31 @@ export default function ResidentWallet() {
       </div>
 
       {/* ── TOP SECTION WITH BACKGROUND COLOR ── */}
-      <div className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white relative overflow-hidden rounded-b-[1.25rem]  pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)]">
+      <div className="bg-gradient-to-br from-emerald-700 via-emerald-600 to-lime-600 text-white relative overflow-hidden rounded-b-[1.25rem] pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)] shadow-sm">
         {/* Decorative background orbs */}
-        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-56 h-56 bg-teal-300/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
-        {/* Subtle pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.12] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-56 h-56 bg-lime-300/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
         <div className="relative z-10 max-w-lg mx-auto px-4">
 
-          {/* Wallet Icon + Label */}
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <div className="w-8 h-8 bg-white/15 rounded-lg flex items-center justify-center">
-              <Wallet className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-[11px] font-bold text-white/70 uppercase tracking-widest">Available Balance</span>
-          </div>
-
           {/* Balance */}
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-lg font-bold text-white/80">KSh</span>
-            <span className={`text-2xl font-bold text-white leading-none transition-all duration-300 ${!balanceVisible ? 'blur-md select-none' : ''}`}>
-              {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </span>
-            <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-1.5 hover:bg-white/10 rounded-xl transition-colors active:scale-95">
-              {balanceVisible ? <Eye className="w-4.5 h-4.5 text-white/60" /> : <EyeOff className="w-4.5 h-4.5 text-white/60" />}
-            </button>
+          <div className="mb-3 text-center">
+            <p className="text-[10px] font-semibold text-white/80 uppercase tracking-[0.2em] mb-2">Available Balance</p>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-lg font-medium opacity-90 text-white">KSh</span>
+              <span className={`text-3xl font-bold leading-none tracking-tight transition-all duration-300 text-white ${!balanceVisible ? 'blur-lg select-none' : ''}`}>
+                {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
+              <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-2 hover:bg-white/15 rounded-full transition-colors active:scale-90">
+                {balanceVisible ? <Eye className="w-4.5 h-4.5 text-white/80" /> : <EyeOff className="w-4.5 h-4.5 text-white/80" />}
+              </button>
+            </div>
           </div>
 
-          {/* Secure Klinflow Wallet */}
+          {/* Secure Klin Wallet */}
           <div className="flex justify-center mb-5">
             <div className="flex items-center gap-1.5 text-[9px] font-bold text-white/80 uppercase tracking-widest bg-white/10 px-3.5 py-1 rounded-full border border-white/15 shadow-sm">
-              <ShieldCheck className="w-3.5 h-3.5" /> Secure Klinflow Wallet
+              <ShieldCheck className="w-3.5 h-3.5" /> Secure Klin Wallet
             </div>
           </div>
 

@@ -139,27 +139,28 @@ export default function TransactionsHistory() {
   };
 
   return (
-    <div className=" bg-slate-50 dark:bg-slate-950 transition-colors pb-12">
+    <div className=" bg-slate-50 dark:bg-slate-800 transition-colors pb-12">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-4 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 shadow-2xs">
-        <div className="max-w-lg mx-auto flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate(-1)}
-              className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors active:scale-95"
-            >
-              <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
-            </button>
-            <div>
-              <h1 className="font-bold text-base text-slate-900 dark:text-white leading-tight">
-                Transaction History
-              </h1>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
-                Hub payouts & wallet ledger
-              </p>
-            </div>
+        <div className="max-w-lg mx-auto flex items-center justify-between gap-3 relative">
+          <button
+            onClick={() => navigate(-1)}
+            className="p-2 -ml-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors active:scale-95 z-10"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+          </button>
+
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none max-w-[210px] sm:max-w-xs">
+            <h1 className="font-bold text-base text-slate-900 dark:text-white leading-tight truncate">
+              Transaction History
+            </h1>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate">
+              View Payments & Withdrawals
+            </p>
           </div>
-          <div className="text-right">
+
+          <div className="text-right z-10">
             <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-500/20">
               {filteredTransactions.length} Total
             </span>
@@ -169,7 +170,7 @@ export default function TransactionsHistory() {
 
       <main className="max-w-lg mx-auto px-1.5 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] space-y-3">
         {/* ── STATS HEADER & FILTERS CARD ── */}
-        <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 dark:from-slate-900 dark:to-slate-900 border border-indigo-800/30 dark:border-slate-800 text-white rounded-2xl p-4 shadow-sm space-y-2">
+        <div className="bg-gradient-to-br from-emerald-600 to-emerald-700  border border-indigo-800/30  text-white rounded-2xl p-4 shadow-sm space-y-2">
 
 
           {/* Search & Filter Controls */}
@@ -181,7 +182,7 @@ export default function TransactionsHistory() {
                 placeholder="Search by Hub name or material..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full bg-white/30 dark:bg-slate-950/50 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder:text-white/40 transition-all"
+                className="w-full bg-white/30  border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder:text-white/40 transition-all"
               />
             </div>
 
@@ -192,8 +193,8 @@ export default function TransactionsHistory() {
                   onClick={() => setFilterType(type)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold capitalize transition-all shrink-0 border ${
                     filterType === type
-                      ? 'bg-white text-indigo-600 dark:bg-emerald-500 dark:text-slate-950 border-white dark:border-emerald-500 shadow-sm'
-                      : 'bg-black/10 dark:bg-slate-900 border-white/10 text-white/80 hover:bg-black/20'
+                      ? 'bg-white text-indigo-600  border-white  shadow-sm'
+                      : 'bg-black/10  border-white/10 text-white/80 hover:bg-black/20'
                   }`}
                 >
                   {type}

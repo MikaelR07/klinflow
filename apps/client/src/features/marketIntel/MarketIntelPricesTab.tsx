@@ -21,7 +21,7 @@ export default function MarketIntelPricesTab({ marketData, filteredTrends }: Mar
       className="space-y-0.5"
     >
       {/* ── MACRO MARKET INDICATOR (TradingView Style) ── */}
-      <div className="bg-gradient-to-br from-amber-700 via-amber-800 to-amber-950 rounded-xl p-5 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800 rounded-xl p-5 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-40 h-40 bg-orange-500/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
         

@@ -109,7 +109,7 @@ export default function SellerWallet() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 font-sans pb-6">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-800 to-emerald-900 `}>
+      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-lime-600 `}>
         <div className="max-w-lg mx-auto px-4 flex items-center justify-between relative">
           {/* Left: Back Arrow */}
           <button
@@ -140,23 +140,23 @@ export default function SellerWallet() {
       </div>
 
       {/* ── TOP SECTION WITH BACKGROUND COLOR ── */}
-      <div className="bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900 text-white relative overflow-hidden rounded-b-[1.25rem]  pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)]">
+      <div className="bg-gradient-to-br from-emerald-700 via-emerald-600 to-lime-600 text-white relative overflow-hidden rounded-b-[1.25rem] pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)] shadow-sm">
         {/* Decorative background orbs */}
-        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-56 h-56 bg-teal-300/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.12] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-56 h-56 bg-lime-300/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
         <div className="relative z-10 max-w-lg mx-auto px-4">
 
           {/* Balance */}
           <div className="mb-3 text-center">
-            <p className="text-[10px] font-semibold text-white/60 uppercase tracking-[0.2em] mb-2">Available Balance</p>
+            <p className="text-[10px] font-semibold text-white/80 uppercase tracking-[0.2em] mb-2">Available Balance</p>
             <div className="flex items-center justify-center gap-2">
-              <span className="text-lg font-medium opacity-70 text-white">KSh</span>
+              <span className="text-lg font-medium opacity-90 text-white">KSh</span>
               <span className={`text-3xl font-bold leading-none tracking-tight transition-all duration-300 text-white ${!balanceVisible ? 'blur-lg select-none' : ''}`}>
                 {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
-              <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-2 hover:bg-white/10 rounded-full transition-colors active:scale-90">
-                {balanceVisible ? <Eye className="w-4.5 h-4.5 text-white/60" /> : <EyeOff className="w-4.5 h-4.5 text-white/60" />}
+              <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-2 hover:bg-white/15 rounded-full transition-colors active:scale-90">
+                {balanceVisible ? <Eye className="w-4.5 h-4.5 text-white/80" /> : <EyeOff className="w-4.5 h-4.5 text-white/80" />}
               </button>
             </div>
           </div>

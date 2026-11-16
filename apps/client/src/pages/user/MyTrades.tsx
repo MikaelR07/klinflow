@@ -226,16 +226,17 @@ export default function MyTrades() {
       {/* FIXED TOP HEADER */}
       <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] px-4 border-b border-slate-200 dark:border-slate-800 z-30 transition-colors">
         <div className="max-w-lg mx-auto space-y-1.5">
-          <div className="flex items-center gap-3.5">
-            <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
+          <div className="relative flex items-center justify-between min-h-[40px]">
+            <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group z-10">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
             </button>
-            <div>
-              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">Trades & Offers</h1>
-              <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                View your Market offers and trade activities
+            <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none max-w-[240px] sm:max-w-xs">
+              <h1 className="text-lg font-bold text-lime-600 dark:text-white capitalize tracking-tighter leading-tight truncate">Trades & Offers</h1>
+              <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest flex items-center justify-center gap-1.5 mt-0.5 truncate">
+                View your Market offers 
               </p>
             </div>
+            <div className="w-10 h-10 shrink-0" aria-hidden="true" />
           </div>
 
           {/* SEARCH & FILTER BAR */}

@@ -13,7 +13,8 @@ import {
   RecycleIcon,
   ChevronDownCircle,
   Headset,
-  CalendarPlus
+  CalendarPlus,
+  Trophy
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookingStore } from "@klinflow/core/stores/bookingStore";
@@ -253,7 +254,7 @@ export default function UserHome() {
                 { label: 'Book', icon: <CalendarPlus className="w-5.5 h-5.5" />, route: '/book-pickup', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Bookings', icon: <Package className="w-5.5 h-5.5" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Discover', icon: <Search className="w-5.5 h-5.5" />, route: '/discovery', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Leaderboard', icon: <Trophy className="w-5.5 h-5.5" />, route: '/leaderboard', color: 'bg-yellow-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
                 <button
                   key={service.label}
@@ -263,7 +264,7 @@ export default function UserHome() {
                   <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
                     {service.icon}
                   </div>
-                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{service.label}</span>
+                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider truncate max-w-full px-0.5">{service.label}</span>
                 </button>
               ))}
             </div>

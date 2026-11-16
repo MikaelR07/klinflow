@@ -454,10 +454,10 @@ export default function MaterialDetail() {
   const isSeller = role === 'seller';
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0a0c10] pb-10">
+    <div className="min-h-screen bg-white dark:bg-slate-800 pb-10">
 
       {/* ═══════════ FIXED TOP NAV ═══════════ */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-[#0f1117]/90 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 transition-all duration-300">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 flex items-center justify-between">
           <button
             onClick={() => navigate(-1)}
@@ -619,7 +619,7 @@ export default function MaterialDetail() {
           </div>
 
           {/* RIGHT COLUMN (5 cols) */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-6">
             
             {/* ── PREPARE YOUR MATERIAL ── */}
             <div className="pl-3">
@@ -659,7 +659,7 @@ export default function MaterialDetail() {
                       {mat.dontList.map((item, i) => (
                         <li key={i} className="flex items-start gap-3 w-full">
                           <X className="w-4 h-4 text-rose-600 dark:text-rose-500 shrink-0 mt-0.5" />
-                          <span className="text-[13px] font-medium text-slate-800 dark:text-slate-400 leading-snug whitespace-normal">{item}</span>
+                          <span className="text-[13px] font-medium text-slate-800 dark:text-slate-100 leading-snug whitespace-normal">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -669,7 +669,7 @@ export default function MaterialDetail() {
             </div>
 
             {/* ── COLLECTOR TIP ── */}
-            <div>
+            <div className='!mt-1'>
               <div className="bg-slate-50 dark:bg-[#12141c] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6">
                 <h3 className="text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-widest mb-3 flex items-center gap-2">
                   <span className="text-amber-500 text-base">💡</span> Collector tip
@@ -685,7 +685,7 @@ export default function MaterialDetail() {
       </div>
 
       {/* ═══════════ STICKY BOTTOM CTA ═══════════ */}
-      <div className="fixed bottom-[calc(64px+env(safe-area-inset-bottom,0px))] lg:bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#0a0c10]/95 backdrop-blur-xl border-t border-slate-200/60 dark:border-slate-800/80 pb-[env(safe-area-inset-bottom,0px)]">
+      <div className="fixed bottom-[calc(64px+env(safe-area-inset-bottom,0px))] lg:bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-800 backdrop-blur-xl border-t border-slate-200/60 dark:border-slate-800/80 pb-[env(safe-area-inset-bottom,0px)]">
         <div className="max-w-7xl mx-auto px-1.5 py-3 md:py-4 flex items-center justify-between gap-2">
           
           {/* Material Thumbnail + Info */}

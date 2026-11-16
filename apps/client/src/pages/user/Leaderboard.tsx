@@ -55,7 +55,7 @@ const PodiumCard = memo(({
     <div className={`flex flex-col items-center flex-1 ${isFirst ? '-mt-8' : 'mt-4'}`}>
       {/* Avatar */}
       <div className="relative mb-2">
-        <div className={`relative ${config.size} rounded-full ${config.ring} overflow-hidden ${user ? config.bg : 'bg-slate-100 dark:bg-slate-800 ring-2 ring-dashed ring-slate-200 dark:ring-slate-700'} flex items-center justify-center shadow-sm`}>
+        <div className={`relative ${config.size} rounded-full ${config.ring} overflow-hidden ${user ? config.bg : 'bg-slate-100 dark:bg-slate-900 ring-2 ring-dashed ring-slate-200 dark:ring-slate-700'} flex items-center justify-center shadow-sm`}>
           {user?.avatar_url ? (
             <OptimizedImage
               src={getThumbnailUrl(user.avatar_url, { width: isFirst ? 200 : 150 })}
@@ -270,7 +270,7 @@ function SellerLeaderboard() {
   const isEmpty = topSellers.length === 0;
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-slate-50 dark:bg-slate-950 relative overflow-x-hidden">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-slate-50 dark:bg-slate-800 relative overflow-x-hidden">
 
       {/* ── TOP SECTION: PREMIUM FINTECH GRADIENT ── */}
       <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5rem)] pb-8 rounded-b-[2.5rem]  relative z-20 overflow-hidden">

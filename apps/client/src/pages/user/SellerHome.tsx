@@ -363,7 +363,7 @@ export default function SellerHome() {
 
         {/* ── KLINFLOW BANNERS ── */}
         <motion.div variants={itemVariants} className="!mt-2">
-          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
+          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-4">
             {/* Banner 1 */}
             <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-blue-900/50 dark:border-blue-900/50 aspect-[3/1]">
               <img src="/vectors/ecoBanner2.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
