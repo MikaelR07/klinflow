@@ -184,13 +184,13 @@ export default function DiscoveryHub() {
 
         {/* ── BANNER CAROUSEL ── */}
         <div className="px-1.5">
-          <div className="relative w-full h-48 overflow-hidden rounded-2xl">
+          <div className="relative w-full aspect-[2.5/1] max-h-48 overflow-hidden rounded-2xl">
             {bannerImages.map((img, index) => (
               <img
                 key={img}
                 src={img}
                 alt={`Banner ${index + 1}`}
-                className={`absolute inset-0 w-full h-full object-cover ${img === '/vectors/discover.webp' ? 'object-left' : ''} transition-opacity duration-700 ease-in-out ${
+                className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ease-in-out ${
                   index === currentSlide ? 'opacity-100' : 'opacity-0'
                 }`}
               />

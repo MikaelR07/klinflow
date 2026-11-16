@@ -54,7 +54,8 @@ function MobileLayout() {
   const residentNav = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/book-pickup', icon: CalendarPlus, label: 'Book' },
-    { path: '/discovery', icon: Compass, label: 'Discover' },
+    { path: '/my-bookings', icon: Package, label: 'Bookings' },
+    { path: '/leaderboard', icon: Trophy, label: 'Leaderboard' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 

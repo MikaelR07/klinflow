@@ -14,7 +14,8 @@ import {
   ChevronDownCircle,
   Headset,
   CalendarPlus,
-  Trophy
+  Trophy,
+  Compass
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useBookingStore } from "@klinflow/core/stores/bookingStore";
@@ -120,13 +121,7 @@ export default function UserHome() {
   }, [profile?.id, profile?.rewardPoints]);
 
   const handleWithdraw = () => {
-    if (walletBalance < 100) {
-      toast.warning(`You need KSh ${100 - walletBalance} more to withdraw.`, {
-        description: "Klinflow requires a minimum of KSh 100 for settlement processing.",
-      });
-      return;
-    }
-    navigate("/withdraw");
+    navigate("/resident-wallet");
   };
 
   const metrics = useMemo(() => {
@@ -212,8 +207,8 @@ export default function UserHome() {
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-700 to-emerald-800 pointer-events-none" />
           <div className="relative z-10 flex flex-col gap-1">
             <div className="flex justify-between items-start mb-2">
-              <div>
-                <p className="text-[10px] font-semibold text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1">
+              <div onClick={() => navigate("/resident-wallet")} className="cursor-pointer group/bal">
+                <p className="text-[10px] font-semibold text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1 group-hover/bal:text-white transition-colors">
                   <Wallet className="w-4 h-4" /> Wallet Balance
                 </p>
                 <div className="flex items-baseline gap-1">
@@ -223,7 +218,7 @@ export default function UserHome() {
                   </h2>
                 </div>
               </div>
-              <button onClick={handleWithdraw} className="bg-lime-400 text-emerald-900 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-lime-300">
+              <button onClick={() => navigate("/resident-wallet")} className="bg-lime-400 text-emerald-900 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-lime-300">
                 Withdraw
               </button>
             </div>
@@ -245,30 +240,31 @@ export default function UserHome() {
           </div>
         </motion.div>
 
-        {/* ── QUICK ACTIONS ── */}
+        {/* ── DISCOVER HORIZONTAL CARD ── */}
         <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }}>
-          <div className="space-y-2">
-            <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
-            <div className="grid grid-cols-4 gap-1">
-              {[
-                { label: 'Book', icon: <CalendarPlus className="w-5.5 h-5.5" />, route: '/book-pickup', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5" />, route: '/resident-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Bookings', icon: <Package className="w-5.5 h-5.5" />, route: '/my-bookings', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Leaderboard', icon: <Trophy className="w-5.5 h-5.5" />, route: '/leaderboard', color: 'bg-yellow-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-              ].map((service) => (
-                <button
-                  key={service.label}
-                  onClick={() => navigate(service.route)}
-                  className="bg-slate-50 dark:bg-slate-900 border border-slate-50 dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm  group"
-                >
-                  <div className={`relative w-9 h-9 rounded-xl flex items-center justify-center ${service.color} group-hover:scale-110 transition-transform`}>
-                    {service.icon}
-                  </div>
-                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider truncate max-w-full px-0.5">{service.label}</span>
-                </button>
-              ))}
+          <button
+            onClick={() => navigate("/discovery")}
+            className="w-full text-left bg-gradient-to-r from-lime-400 via-lime-400 to-lime-500 border border-lime-300/80 dark:border-lime-400/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all active:scale-[0.99] group relative overflow-hidden"
+          >
+            <div className="flex items-center justify-between gap-3 relative z-10">
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 shrink-0 rounded-2xl bg-white/90 dark:bg-white/95 shadow-xs border border-white/80 flex items-center justify-center text-emerald-900 group-hover:scale-105 transition-transform">
+                  <Compass className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-emerald-950 tracking-tight leading-snug">
+                    Discover Recycling Hubs
+                  </h3>
+                  <p className="text-[11px] font-semibold text-emerald-900/80 mt-0.5 line-clamp-1">
+                    Locate verified collection centers & drop points
+                  </p>
+                </div>
+              </div>
+              <div className="w-8 h-8 shrink-0 rounded-full bg-emerald-950/10 flex items-center justify-center text-emerald-950 group-hover:bg-emerald-950/20 transition-all">
+                <ChevronRight className="w-4 h-4" />
+              </div>
             </div>
-          </div>
+          </button>
         </motion.div>
 
         {/* ── KLINFLOW BANNERS ── */}
