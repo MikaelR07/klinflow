@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { Home, CalendarPlus, Package, Brain, Gauge, MoreHorizontal, Plus, ShieldCheck, Handshake, CircleFadingPlus, Trophy, Compass } from 'lucide-react';
+import { Home, CalendarPlus, Package, Brain, Gauge, MoreHorizontal, Plus, ShieldCheck, Handshake, CircleFadingPlus, Compass } from 'lucide-react';
 
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useThemeStore } from '@klinflow/core/stores/themeStore';
@@ -55,15 +55,13 @@ function MobileLayout() {
     { path: '/', icon: Home, label: 'Home' },
     { path: '/book-pickup', icon: CalendarPlus, label: 'Book' },
     { path: '/my-bookings', icon: Package, label: 'Bookings' },
-    { path: '/leaderboard', icon: Trophy, label: 'Leaderboard' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 
   const sellerNav = [
     { path: '/', icon: Home, label: 'Home' },
     { path: '/post-trade', icon: CircleFadingPlus, label: 'Sell' },
-    { path: '/my-trades', icon: Handshake, label: 'Trades' },
-    { path: '/leaderboard', icon: Trophy, label: 'Leaderboard' },
+    { path: '/my-trades', icon: Handshake, label: 'Orders' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];
 

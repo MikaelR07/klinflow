@@ -34,7 +34,7 @@ export default function Welcome() {
   };
 
   return (
-    <div className="flex flex-col bg-white dark:bg-slate-900 h-[100dvh] fixed inset-0 w-full max-w-lg mx-auto relative overflow-hidden font-sans">
+    <div className="flex flex-col bg-white dark:bg-slate-800 h-[100dvh] fixed inset-0 w-full max-w-lg mx-auto relative overflow-hidden font-sans">
       
       {/* ── HEADER (Klinflow Logo & Pagination) ── */}
       <div className="absolute top-0 left-0 right-0 z-50 px-6 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-4">
@@ -97,7 +97,7 @@ export default function Welcome() {
             </div>
 
             {/* Bottom Text Section */}
-            <div className="w-full bg-white dark:bg-slate-900 px-6 pt-4 pb-[130px] rounded-t-xl relative z-10 -mt-8">
+            <div className="w-full bg-white dark:bg-slate-800 px-6 pt-4 pb-[130px] rounded-t-xl relative z-10 -mt-8">
               <h1 className="text-[28px] font-bold text-slate-900 dark:text-white leading-[1.15] mb-2 tracking-tight">
                 {slide.title}
               </h1>
@@ -114,7 +114,7 @@ export default function Welcome() {
         <div className="space-y-3 pointer-events-auto">
           <button
             onClick={nextSlide}
-            className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-base shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+            className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-base  flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
           >
             {currentSlide === 2 ? 'Get Started' : 'Next'} <ArrowRight className="w-5 h-5" />
           </button>

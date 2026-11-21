@@ -109,29 +109,41 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col bg-gradient-to-br from-emerald-500 to-primary min-h-[100dvh] relative font-sans">
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto relative font-sans overflow-hidden">
 
-      {/* ── Header Section ── */}
-      <div className="px-8 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] pb-32">
-        <h1 className="text-[38px] font-bold text-amber-400 tracking-tight leading-tight">
-          Welcome back!
-        </h1>
-        <p className="text-white/90 text-[15px] font-medium mt-2">
-          Ready to make an impact today?
-        </p>
+      {/* ── Background Image ── */}
+      <div className="absolute inset-0 z-0">
+        <img src="/welcome/login.webp" alt="Klinflow Login" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/5 to-black/20" />
       </div>
 
-      {/* ── Login Card Area ── */}
-      <div className="flex-1 w-full bg-slate-50 rounded-t-[40px] px-8 pt-10 pb-8 shadow-[0_-8px_30px_rgba(0,0,0,0.1)] flex flex-col relative">
-        <div className="w-full max-w-md mx-auto flex-1 flex flex-col">
-          
-          <div className="mb-8 text-center">
-            <p className="text-slate-500 text-[14px] font-medium mt-1">
-            Sign in to your account to continue
-            </p>
-          </div>
+      {/* ── Top Navigation / Back Button ── */}
+      <div className="relative z-20 px-6 pt-[calc(env(safe-area-inset-top,1rem)+1rem)]">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-black/20 flex items-center justify-center hover:bg-white/30 text-white transition-all active:scale-95 shadow-sm"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+      </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+      {/* ── Login Card ── */}
+      <div className="relative z-10 flex-1 flex flex-col justify-end">
+        <div className="w-full bg-slate-50 dark:bg-slate-800 backdrop-blur-md rounded-t-[36px] px-8 pt-8 pb-8 shadow-[0_-8px_30px_rgba(0,0,0,0.2)] flex flex-col">
+          <div className="w-full max-w-md mx-auto flex-1 flex flex-col">
+
+            <div className="mb-6 text-center">
+              <h1 className="text-[28px] font-bold text-emerald-600 dark:text-white tracking-tight leading-tight">
+                Welcome back!
+              </h1>
+              <p className="text-slate-500 dark:text-slate-400 text-[14px] font-medium mt-1">
+                Login and make an impact Today?
+              </p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-4">
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
@@ -141,7 +153,7 @@ export default function Login() {
                 placeholder="07XX XXX XXX / 01XX..."
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                className="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-[15px]"
+                className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-[15px]"
                 required
               />
             </div>
@@ -156,7 +168,7 @@ export default function Login() {
                 minLength={8}
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                className="w-full pl-12 pr-12 py-4 bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-[15px]"
+                className="w-full pl-12 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-[15px]"
                 required
               />
               <button
@@ -191,26 +203,21 @@ export default function Login() {
             </button>
           </form>
 
-          {/* Footer Actions */}
-          <div className="mt-6 relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-slate-50 px-2 text-slate-400 font-medium tracking-wide">Or</span>
-            </div>
-          </div>
-          
-          <button
-            type="button"
-            onClick={() => navigate('/register')}
-            className="w-full py-4 mt-4 bg-white border border-slate-200 hover:border-emerald-500 text-slate-600 hover:text-emerald-600 rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 active:scale-[0.98] shadow-sm shadow-slate-200/50"
-          >
-            Create Account
-          </button>
+          {/* Footer Link */}
+          <p className="text-center text-[13px] font-medium text-slate-500 dark:text-slate-400 mt-6 mb-2">
+            Don't have an account?{' '}
+            <button
+              type="button"
+              onClick={() => navigate('/register')}
+              className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline transition-colors"
+            >
+              Create Account
+            </button>
+          </p>
 
         </div>
       </div>
+    </div>
 
       {/* ── RECOVERY OVERLAY: PHONE STEP ── */}
       {recoveryStep === 'phone' && (

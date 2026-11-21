@@ -49,7 +49,7 @@ const PodiumCard = memo(({
     },
   };
 
-  const config = rankConfig[rank] || rankConfig[3];
+  const config = rankConfig[rank] || rankConfig[3]!;
 
   return (
     <div className={`flex flex-col items-center flex-1 ${isFirst ? '-mt-8' : 'mt-4'}`}>
@@ -272,12 +272,12 @@ function SellerLeaderboard() {
   return (
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-slate-50 dark:bg-slate-800 relative overflow-x-hidden">
 
-      {/* ── TOP SECTION: PREMIUM FINTECH GRADIENT ── */}
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5rem)] pb-8 rounded-b-[2.5rem]  relative z-20 overflow-hidden">
+      {/* ── TOP SECTION: PREMIUM FINTECH GRADIENT WITH PODIUMS ── */}
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+4.5rem)] pb-10 rounded-b-[2.5rem] relative z-20 overflow-hidden shadow-lg">
 
         {/* Decorative background orbs */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.07] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-400/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-400/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
         {/* Fixed Header — transparent, minimal */}
         <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
@@ -289,18 +289,48 @@ function SellerLeaderboard() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-5">
-          <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mx-auto mb-3 border border-white/10">
-            <Trophy className="w-9 h-9 text-amber-400" />
+        <div className="relative z-10 text-center px-5 mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center mx-auto mb-2 border border-white/15 shadow-sm">
+            <Trophy className="w-6 h-6 text-amber-300 drop-shadow-sm" />
           </div>
           <h2 className="text-xl font-bold text-lime-400 tracking-tight mb-1">Profit Dominance</h2>
-          <p className="text-[11px] font-medium text-white/60 leading-snug max-w-[260px] mx-auto">
-            Top Sellers get premium access to premium buyers and connections for their efforts.
+          <p className="text-[11px] font-medium text-white/70 leading-snug max-w-[280px] mx-auto">
+            Top Sellers get premium access to verified buyers and institutional waste contracts.
           </p>
         </div>
+
+        {/* Podiums in Top Section */}
+        {!isEmpty && (
+          <div className="relative z-10 flex items-end justify-center gap-2 px-3 pt-4">
+            <PodiumCard 
+              user={topSellers[1] || null} 
+              rank={2} 
+              metric={`${(topSellers[1]?.weight || 0).toLocaleString()} KG`} 
+              metricLabel="Weight Sold"
+              secondaryMetric={`KSh ${(topSellers[1]?.revenue || 0).toLocaleString()}`}
+              secondaryMetricLabel="Total Earned"
+            />
+            <PodiumCard 
+              user={topSellers[0] || null} 
+              rank={1} 
+              metric={`${(topSellers[0]?.weight || 0).toLocaleString()} KG`} 
+              metricLabel="Weight Sold"
+              secondaryMetric={`KSh ${(topSellers[0]?.revenue || 0).toLocaleString()}`}
+              secondaryMetricLabel="Total Earned"
+            />
+            <PodiumCard 
+              user={topSellers[2] || null} 
+              rank={3} 
+              metric={`${(topSellers[2]?.weight || 0).toLocaleString()} KG`} 
+              metricLabel="Weight Sold"
+              secondaryMetric={`KSh ${(topSellers[2]?.revenue || 0).toLocaleString()}`}
+              secondaryMetricLabel="Total Earned"
+            />
+          </div>
+        )}
       </div>
 
-      <div className="px-3 mt-2 space-y-4 relative z-10 max-w-lg mx-auto pb-24">
+      <div className="px-3 mt-4 space-y-4 relative z-10 max-w-lg mx-auto pb-24">
 
         {isEmpty ? (
           <div className="px-6 mt-12 flex flex-col items-center text-center gap-5">
@@ -322,34 +352,6 @@ function SellerLeaderboard() {
           </div>
         ) : (
           <>
-            {/* Podium */}
-            <div className="flex items-end justify-center gap-2.5 px-2 mt-12 mb-4">
-              <PodiumCard 
-                user={topSellers[1] || null} 
-                rank={2} 
-                metric={`${(topSellers[1]?.weight || 0).toLocaleString()} KG`} 
-                metricLabel="Weight Sold"
-                secondaryMetric={`KSh ${(topSellers[1]?.revenue || 0).toLocaleString()}`}
-                secondaryMetricLabel="Total Earned"
-              />
-              <PodiumCard 
-                user={topSellers[0] || null} 
-                rank={1} 
-                metric={`${(topSellers[0]?.weight || 0).toLocaleString()} KG`} 
-                metricLabel="Weight Sold"
-                secondaryMetric={`KSh ${(topSellers[0]?.revenue || 0).toLocaleString()}`}
-                secondaryMetricLabel="Total Earned"
-              />
-              <PodiumCard 
-                user={topSellers[2] || null} 
-                rank={3} 
-                metric={`${(topSellers[2]?.weight || 0).toLocaleString()} KG`} 
-                metricLabel="Weight Sold"
-                secondaryMetric={`KSh ${(topSellers[2]?.revenue || 0).toLocaleString()}`}
-                secondaryMetricLabel="Total Earned"
-              />
-            </div>
-
             {/* Info */}
             <div className="bg-slate-200 dark:bg-slate-900 rounded-2xl p-4 flex items-start gap-3 border border-slate-200/60 dark:border-slate-800 shadow-sm">
               <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
@@ -507,83 +509,79 @@ export default function Leaderboard() {
   const isEmpty = topUsers.length === 0;
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-900  transition-colors">
-      {/* ── GRADIENT TOP BACKGROUND ── */}
-      <div className="absolute top-0 left-0 right-0 h-[420px] z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 dark:from-emerald-600 dark:via-emerald-700 dark:to-emerald-800" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-white/5" />
-        {/* Decorative circles */}
-        <div className="absolute top-10 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-10 left-0 w-40 h-40 bg-emerald-300/15 rounded-full blur-3xl -translate-x-1/4 pointer-events-none" />
-        {/* Bottom curve */}
-        <div className="absolute -bottom-1 left-0 right-0 h-12 bg-slate-50 dark:bg-slate-900 rounded-t-[2.5rem]" />
-      </div>
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-slate-50 dark:bg-slate-800 relative overflow-x-hidden">
+      {/* ── TOP SECTION: PREMIUM FINTECH GRADIENT WITH PODIUMS ── */}
+      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+4.5rem)] pb-10 rounded-b-[2.5rem] relative z-20 overflow-hidden shadow-lg">
 
-      {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 px-4 max-w-lg mx-auto">
-        <div className="flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className="w-9 h-9 shrink-0 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center active:scale-95 transition-all border border-white/10">
-            <ArrowLeft className="w-4.5 h-4.5 text-white" />
+        {/* Decorative background orbs */}
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.08] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-400/15 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+
+        {/* Fixed Header — transparent, minimal */}
+        <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 px-5 max-w-lg mx-auto flex items-center justify-between">
+          <button onClick={() => navigate(-1)} className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-all border border-white/15">
+            <ArrowLeft className="w-4.5 h-4.5 text-white/90" />
           </button>
-          <div className="absolute left-1/2 -translate-x-1/2">
-            <h1 className="text-[15px] font-bold text-white tracking-tight leading-none">Wall of Fame</h1>
-            <p className="text-[9px] font-bold text-white/70 uppercase tracking-widest mt-0.5">Top Contributors</p>
-          </div>
+          <p className="text-[13px] font-semibold tracking-wide text-white/80">Wall of Fame</p>
           <div className="w-9 h-9" />
         </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 text-center px-5 mb-4">
+          <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center mx-auto mb-2 border border-white/15 shadow-sm">
+            <Trophy className="w-6 h-6 text-amber-300 drop-shadow-sm" />
+          </div>
+          <h2 className="text-xl font-bold text-lime-400 tracking-tight mb-1">Champions Leaderboard</h2>
+          <p className="text-[11px] font-medium text-white/70 leading-snug max-w-[280px] mx-auto">
+            Top recyclers making a real environmental impact and leading the community.
+          </p>
+        </div>
+
+        {/* Podiums in Top Section */}
+        {!isEmpty && (
+          <div className="relative z-10 flex items-end justify-center gap-2 px-3 pt-4">
+            <PodiumCard user={topUsers[1] || null} rank={2} metric={`${(topUsers[1]?.kg || 0)} KG`} metricLabel="Collected" />
+            <PodiumCard user={topUsers[0] || null} rank={1} metric={`${(topUsers[0]?.kg || 0)} KG`} metricLabel="Collected" />
+            <PodiumCard user={topUsers[2] || null} rank={3} metric={`${(topUsers[2]?.kg || 0)} KG`} metricLabel="Collected" />
+          </div>
+        )}
       </div>
 
-      <div className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+6.2rem)] relative max-w-lg mx-auto w-full px-3 z-10">
-        {/* Hero */}
+      <div className="px-3 mt-4 space-y-4 relative z-10 max-w-lg mx-auto pb-24">
 
         {isEmpty ? (
-          <div className="px-6 mt-16 flex flex-col items-center text-center gap-5">
-            <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
-               <Recycle className="w-8 h-8 text-primary/40" />
+          <div className="px-6 mt-12 flex flex-col items-center text-center gap-5">
+            <div className="w-20 h-20 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
+              <Recycle className="w-8 h-8 text-emerald-400" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white">No Champions Yet</h3>
               <p className="text-[12px] font-medium text-slate-500 mt-1 max-w-[240px] mx-auto leading-relaxed">
-                The leaderboard is waiting for its first eco-hero. Claim the <span className="text-primary font-bold">#1 spot</span>!
+                The leaderboard is waiting for its first eco-hero. Claim the <span className="text-emerald-500 font-bold">#1 spot</span>!
               </p>
             </div>
             <button
               onClick={() => navigate('/book-pickup')}
-              className="px-6 py-3.5 bg-primary hover:bg-primary/90 text-white font-bold text-[13px] rounded-xl active:scale-95 transition-all shadow-lg shadow-primary/20"
+              className="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[13px] rounded-xl active:scale-95 transition-all shadow-lg shadow-emerald-500/20"
             >
               Claim the Spot 🏆
             </button>
           </div>
         ) : (
           <>
-           
-
-            {/* Podium Title */}
-            <div className="text-center mt-2 mb-8 relative z-10">
-              <h2 className="text-[20px] font-bold text-white tracking-tight drop-shadow-lg">Champions  Leaderboard</h2>
-              <p className="text-[12px] font-semibold text-white/80 mt-0.5">Top recyclers making a real impact</p>
-            </div>
-
-            {/* Podium */}
-            <div className="flex items-end justify-center gap-2.5 px-2 mb-6 relative z-10">
-              <PodiumCard user={topUsers[1] || null} rank={2} metric={`${(topUsers[1]?.kg || 0)} KG`} metricLabel="Collected" />
-              <PodiumCard user={topUsers[0] || null} rank={1} metric={`${(topUsers[0]?.kg || 0)} KG`} metricLabel="Collected" />
-              <PodiumCard user={topUsers[2] || null} rank={3} metric={`${(topUsers[2]?.kg || 0)} KG`} metricLabel="Collected" />
-            </div>
-
             {/* Info */}
-            <div className="bg-slate-100 dark:bg-slate-800/40 rounded-xl p-3.5 flex items-start gap-3 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center shrink-0">
-                <Info className="w-4 h-4 text-amber-500" />
+            <div className="bg-slate-200 dark:bg-slate-900 rounded-2xl p-4 flex items-start gap-3 border border-slate-200/60 dark:border-slate-800 shadow-sm">
+              <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
+                <Info className="w-4.5 h-4.5 text-emerald-500" />
               </div>
               <div className="flex-1">
-                <h4 className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1">How to Rank Up</h4>
-                <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Every KG recycled pushes you higher. Top champions get recognition and win exclusive Klinflow perks!
+                <h4 className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-[0.15em] leading-none mb-1">How to Rank Up</h4>
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Every KG recycled pushes you higher. Top champions get recognition and win exclusive Klinflow green perks!
                 </p>
                 <button
                   onClick={() => navigate('/impact-hub')}
-                  className="mt-3 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
+                  className="mt-2.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   View Your Badges
@@ -593,8 +591,8 @@ export default function Leaderboard() {
 
             {/* Full List (rank 4+) */}
             {topUsers.length > 3 && (
-              <div className="flex flex-col gap-2 pb-24">
-                <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 px-1 mb-1">All Rankings</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-400 px-1 mb-1">All Rankings</span>
                 {topUsers.slice(3, visibleCount).map((user) => (
                   <RankListItem key={user.id} user={user} metric={`${user.kg} KG`} metricLabel="Collected" />
                 ))}
@@ -602,7 +600,7 @@ export default function Leaderboard() {
                 {topUsers.length > visibleCount && (
                   <button
                     onClick={() => setVisibleCount(prev => prev + 20)}
-                    className="mt-3 py-3.5 w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/40 rounded-xl text-[11px] font-bold text-slate-500 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
+                    className="mt-2 py-3.5 w-full bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700/40 rounded-xl text-[11px] font-bold text-slate-500 active:scale-[0.98] transition-all flex items-center justify-center gap-1.5"
                   >
                     <ChevronUp className="w-3.5 h-3.5 rotate-180" /> Load More
                   </button>

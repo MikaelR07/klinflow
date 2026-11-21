@@ -1,8 +1,8 @@
 /**
  * Seller Home — Revenue dashboard, quick actions, trust score, leaderboard
  */
-import { useEffect, useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   BarChart3,
   Bell,
@@ -119,12 +119,36 @@ export default function SellerHome() {
 
   const [isWithdrawing, setIsWithdrawing] = useState(false);
   const [showPushPrompt, setShowPushPrompt] = useState(false);
-  const [cashBalance, setCashBalance] = useState(0);
-  const [gfpBalance, setGfpBalance] = useState(0);
+  const [cashBalance, setCashBalance] = useState(() => Number(walletBalance || 0));
+  const [gfpBalance, setGfpBalance] = useState(() => Number(rewardPoints || 0));
+
+  useEffect(() => {
+    if (walletBalance !== undefined && walletBalance !== null) {
+      setCashBalance(Number(walletBalance));
+    }
+  }, [walletBalance]);
+
+  useEffect(() => {
+    if (rewardPoints !== undefined && rewardPoints !== null) {
+      setGfpBalance(Number(rewardPoints));
+    }
+  }, [rewardPoints]);
   const [stats, setStats] = useState<SellerWalletStats | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeContractsCount, setActiveContractsCount] = useState(0);
+  const [bannerIndex, setBannerIndex] = useState(0);
   const { status, liveAddress, startTracking } = useLocationStore();
+
+  const sellerBanners = useMemo(() => [
+    { src: '/vectors/ecoBanner2.webp', alt: 'Promo', bg: 'bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 border-blue-900/50 dark:border-blue-900/50' },
+    { src: '/vectors/ecoBanner.webp', alt: 'Promo 2', bg: 'bg-slate-900 border-slate-200/50 dark:border-slate-700/50' },
+  ], []);
+
+  useEffect(() => {
+    if (sellerBanners.length <= 1) return;
+    const timer = setInterval(() => setBannerIndex(i => (i + 1) % sellerBanners.length), 4000);
+    return () => clearInterval(timer);
+  }, [sellerBanners.length]);
 
   useEffect(() => {
     startTracking();
@@ -290,8 +314,7 @@ export default function SellerHome() {
       <div className="max-w-xl mx-auto px-2.5 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-5 space-y-6">
 
         {/* ── ECO-REWARDS HERO CARD (MERCHANT REVENUE) ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="show" className="relative group overflow-hidden rounded-[24px] bg-white/10 border border-emerald-700 p-5">
-          <div className="absolute inset-0 bg-gradient-to-b from-emerald-700 to-emerald-800 pointer-events-none" />
+        <div className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-emerald-700 to-emerald-800 border border-emerald-600/50 p-5 shadow-sm">
           <div className="relative z-10 flex flex-col gap-1">
             <div className="flex justify-between items-start mb-1">
               <div>
@@ -328,7 +351,7 @@ export default function SellerHome() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* ── QUICK ACTIONS ── */}
         <motion.div variants={itemVariants}>
@@ -338,7 +361,7 @@ export default function SellerHome() {
               {[
                 { label: 'Sell', icon: <CircleFadingPlus className="w-5.5 h-5.5" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
                 { label: 'Listings', icon: <Package className="w-5.5 h-5.5" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Trades', icon: <Handshake className="w-5.5 h-5.5" />, route: '/my-trades', color: 'bg-indigo-50 dark:bg-slate-800 text-slate-900 dark:text-white', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
+                { label: 'Orders', icon: <Handshake className="w-5.5 h-5.5" />, route: '/my-trades', color: 'bg-purple-50 dark:bg-slate-800 text-slate-900 dark:text-white', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
                 { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
               ].map((service) => (
                 <button
@@ -354,7 +377,7 @@ export default function SellerHome() {
                     ) : null}
                     {service.icon}
                   </div>
-                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{service.label}</span>
+                  <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 capitalize tracking-wider">{service.label}</span>
                 </button>
               ))}
             </div>
@@ -363,23 +386,59 @@ export default function SellerHome() {
 
         {/* ── KLINFLOW BANNERS ── */}
         <motion.div variants={itemVariants} className="!mt-2">
-          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-4">
-            {/* Banner 1 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-blue-900/50 dark:border-blue-900/50 aspect-[3/1]">
-              <img src="/vectors/ecoBanner2.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-            </div>
+          <div className="relative rounded-[16px] overflow-hidden aspect-[3/1]">
+            {sellerBanners.map((b, i) => (
+              <div
+                key={i}
+                className={`absolute inset-0 ${b.bg} border transition-opacity duration-700 ease-in-out ${i === bannerIndex ? 'opacity-100 z-[1]' : 'opacity-0 z-0'}`}
+              >
+                <img src={b.src} alt={b.alt} className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+              </div>
+            ))}
 
-            {/* Banner 2 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[3/1] bg-slate-900">
-              <img src="/vectors/ecoBanner.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            {/* Dots */}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+              {sellerBanners.map((_, i) => (
+                <button key={i} onClick={() => setBannerIndex(i)} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === bannerIndex ? 'bg-white w-4' : 'bg-white/50'}`} />
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ── SELLER LEADERBOARD CARD ── */}
+        <motion.div variants={itemVariants} className="!mt-3">
+          <div
+            onClick={() => navigate('/leaderboard')}
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#085078] to-[#003973] border border-[#003973]  p-4 flex items-center justify-between cursor-pointer hover:brightness-105 transition-all shadow-sm active:scale-[0.99]"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                <Trophy className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[12px] font-bold text-white leading-tight">
+                    Merchant Leaderboard
+                  </span>
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-white/20 text-white tracking-wider uppercase">
+                    Rankings
+                  </span>
+                </div>
+                <p className="text-[11px] text-amber-50 font-medium mt-0.5">
+                  View top sellers & weekly performance standings
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-0.5 text-white/80 group-hover:text-white transition-colors shrink-0">
+              <span className="text-[11px] font-semibold hidden sm:inline">View</span>
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </div>
         </motion.div>
 
         {/* ── BUSINESS TOOLS ── */}
-        <div className="!mt-2">
+        <div className="!mt-4">
           <div className="flex items-center justify-between px-1.5 mb-2">
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest">Business Tools</h3>
           </div>
@@ -409,7 +468,8 @@ export default function SellerHome() {
           </div>
         </div>
 
-       
+        
+
 
         {/* ── CATALOG: E-COMMERCE SCROLL ── */}
         <motion.div variants={itemVariants} className="space-y-2 !mt-4">

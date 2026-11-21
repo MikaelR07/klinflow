@@ -203,8 +203,7 @@ export default function UserHome() {
       <div className="max-w-xl mx-auto px-2.5 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-5 space-y-6">
 
         {/* ── ECO-REWARDS HERO CARD ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" className="relative group overflow-hidden rounded-[24px] bg-white/10 border border-emerald-600 p-5">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-700 to-emerald-800 pointer-events-none" />
+        <div className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-emerald-700 to-emerald-800 border border-emerald-600/50 p-5 shadow-sm">
           <div className="relative z-10 flex flex-col gap-1">
             <div className="flex justify-between items-start mb-2">
               <div onClick={() => navigate("/resident-wallet")} className="cursor-pointer group/bal">
@@ -238,13 +237,15 @@ export default function UserHome() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
+
+        
 
         {/* ── DISCOVER HORIZONTAL CARD ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }}>
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="!mt-4">
           <button
             onClick={() => navigate("/discovery")}
-            className="w-full text-left bg-gradient-to-r from-lime-400 via-lime-400 to-lime-500 border border-lime-300/80 dark:border-lime-400/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all active:scale-[0.99] group relative overflow-hidden"
+            className="w-full text-left bg-gradient-to-r from-lime-500 via-lime-500 to-lime-400 border border-lime-300/80 dark:border-lime-400/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all active:scale-[0.99] group relative overflow-hidden"
           >
             <div className="flex items-center justify-between gap-3 relative z-10">
               <div className="flex items-center gap-3.5">
@@ -267,24 +268,25 @@ export default function UserHome() {
           </button>
         </motion.div>
 
+
         {/* ── KLINFLOW BANNERS ── */}
-        <motion.div variants={itemVariants} className="!mt-2"  >
-          <div className="flex gap-2 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
+        <motion.div variants={itemVariants} className="!mt-3">
+          <div className="flex gap-2.5 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
             {/* Banner 1 */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[3/1]">
+            <div className="shrink-0 w-[98%] sm:w-[96%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[3/1]">
               <img src="/vectors/ecoBanner3.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
 
-            {/* Banner 2 (Resident Only) */}
-            <div className="shrink-0 w-[96%] sm:w-[85%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[3/1] bg-slate-900">
-              <img src="/vectors/eco.webp" alt="Promo 3" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+            {/* Banner 2 */}
+            <div className="shrink-0 w-[98%] sm:w-[96%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[3/1] bg-slate-900">
+              <img src="/vectors/eco.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
-
-            
           </div>
         </motion.div>
+
+        
         
          {/* ── COMMUNITY TOOLS ── */}
         <motion.div variants={itemVariants} className="!mt-2">
@@ -321,6 +323,37 @@ export default function UserHome() {
               </div>
               
             </button>
+          </div>
+        </motion.div>
+
+        {/* ── RESIDENT LEADERBOARD CARD ── */}
+        <motion.div variants={itemVariants} className="!mt-2 px-1.5">
+          <div
+            onClick={() => navigate('/leaderboard')}
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#085078] to-[#003973] border border-[#003973]  p-3 flex items-center justify-between cursor-pointer hover:brightness-105 transition-all shadow-sm active:scale-[0.99]"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                <Trophy className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[12px] font-bold text-white leading-tight">
+                    Wall of Fame
+                  </span>
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-white/20 text-white tracking-wider uppercase">
+                    Top Recyclers
+                  </span>
+                </div>
+                <p className="text-[11px] text-amber-50 font-medium mt-0.5">
+                  See leading green champions & community rankings
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-0.5 text-white/80 group-hover:text-white transition-colors shrink-0">
+              <span className="text-[11px] font-semibold hidden sm:inline">View</span>
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </div>
           </div>
         </motion.div>
 
