@@ -178,7 +178,7 @@ export default function PayoutHistory() {
                       </div>
                     </div>
                     <div className="text-right shrink-0 flex flex-col items-end gap-1">
-                      <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${req.status === 'approved' ? 'text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400' : req.status === 'rejected' ? 'text-rose-600 bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-400' : 'text-amber-600 bg-amber-50 border-amber-100 dark:bg-amber-500/10 dark:border-amber-500/20 dark:text-amber-400'}`}>
+                      <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${req.status === 'approved' ? 'text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400' : req.status === 'rejected' ? 'text-rose-600 bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-400' : 'text-amber-600 bg-amber-50 border-amber-100 dark:bg-amber-500/10 dark:border-amber-500/20 dark:text-amber-400'}`}>
                         {req.status}
                       </span>
                       <p className="text-[10px] font-medium text-slate-400 mt-0.5">
@@ -223,7 +223,7 @@ export default function PayoutHistory() {
                         <p className={`text-[12px] font-medium leading-none ${isFailed ? 'text-slate-500 line-through' : 'text-slate-900 dark:text-white'}`}>
                           {displayTitle}
                         </p>
-                        {isFailed && <span className="text-[9px] font-black uppercase text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-1.5 py-0.5 rounded">Failed</span>}
+                        {isFailed && <span className="text-[9px] font-bold uppercase text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-1.5 py-0.5 rounded">Failed</span>}
                       </div>
                       
                       {displaySubtitle ? (
@@ -262,7 +262,7 @@ export default function PayoutHistory() {
               <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
                 <History className="w-6 h-6 text-slate-400" />
               </div>
-              <h3 className="text-base font-black text-slate-900 dark:text-white">No transactions found</h3>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">No transactions found</h3>
               <p className="text-xs font-medium text-slate-500 mt-1 max-w-[220px]">
                 {searchTerm ? 'No transactions match your search.' : isFleetDriver ? 'You haven\'t made any fund requests yet.' : 'You haven\'t made any wallet transactions yet.'}
               </p>

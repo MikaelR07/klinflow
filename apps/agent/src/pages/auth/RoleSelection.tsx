@@ -8,7 +8,7 @@ const roles = [
     subtitle: 'Your Business, Your Rules',
     description: 'Perfect for entrepreneurs with their own transport. Accept jobs, manage your own schedule, and earn directly for every kilogram you deliver to the market.',
     icon: UserCheck,
-    cardClasses: 'bg-gradient-to-br from-primary to-emerald-700',
+    cardClasses: 'bg-gradient-to-br from-indigo-600 to-indigo-900',
     iconBg: 'rgba(255,255,255,0.15)',
     benefits: [
       { icon: Clock, text: 'Send contracts' },
@@ -98,7 +98,7 @@ export default function RoleSelection() {
       <div className="px-6 pb-8 pt-2 space-y-3">
         <button
           onClick={() => navigate('/register')}
-          className="w-full py-[16px] bg-[#064e3b] text-white rounded-2xl font-bold text-[15px] shadow-lg shadow-emerald-900/20 transition-all flex items-center justify-center gap-2 active:scale-[0.98] hover:bg-[#022c22]"
+          className="w-full py-[16px] bg-indigo-600 text-white rounded-2xl font-bold text-[15px] shadow-lg shadow-indigo-900/20 transition-all flex items-center justify-center gap-2 active:scale-[0.98] hover:bg-indigo-700"
         >
           Start Registration <ArrowRight className="w-[18px] h-[18px]" />
         </button>
@@ -106,7 +106,7 @@ export default function RoleSelection() {
           <span className="text-sm font-medium text-slate-400">Already have an account?</span>
           <button
             onClick={() => navigate('/login')}
-            className="text-sm font-bold text-[#064e3b] hover:text-emerald-700 transition-colors"
+            className="text-sm font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
           >
             Log In
           </button>

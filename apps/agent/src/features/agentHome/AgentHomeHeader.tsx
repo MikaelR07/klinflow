@@ -30,7 +30,7 @@ export default function AgentHomeHeader({
   } else if (status === 'stale') {
     displayLocation = liveAddress ? `⏳ ${liveAddress}` : 'Location Stale';
   } else if (status === 'denied' || status === 'error') {
-    displayLocation = `Base: ${profile?.location?.estate || profile?.estate || 'Offline'}`;
+    displayLocation = `Base: ${profile?.hubAddress || profile?.location?.estate || profile?.estate || 'Offline'}`;
   }
 
   return (
@@ -50,12 +50,12 @@ export default function AgentHomeHeader({
               </div>
             </div>
             <div className="min-w-0">
-              <h1 className="text-[17px] font-black tracking-tight text-slate-900 dark:text-white leading-none truncate">
+              <h1 className="text-[17px] font-bold tracking-tight text-slate-900 dark:text-white leading-none truncate">
                 Hello, {profile?.name?.split(' ')[0]}! 👋
               </h1>
-              {/* Location pill - greenish card style */}
-              <div className="flex items-center gap-1 mt-1.5 text-[10px] text-emerald-700 dark:text-emerald-300 font-semibold capitalize tracking-wider bg-emerald-50 dark:bg-emerald-950/30 px-2.5 py-[3px] rounded-full border border-emerald-200 dark:border-emerald-800/50 w-fit">
-                <MapPin className={`w-3 h-3 shrink-0 ${status === 'tracking' ? 'text-emerald-500 animate-pulse' : 'text-slate-400'}`} />
+              {/* Location pill */}
+              <div className="flex items-center gap-1.5 mt-1 text-[10px] text-slate-600 dark:text-slate-300 font-semibold capitalize tracking-wider bg-slate-100 dark:bg-slate-700/50 backdrop-blur-sm px-2.5 py-0.5 rounded-full border border-slate-200 dark:border-slate-600 w-fit">
+                <MapPin className={`w-3 h-3 shrink-0 ${status === 'tracking' ? 'animate-pulse text-emerald-400' : 'text-slate-400'}`} />
                 <span className="truncate max-w-[90px]">{displayLocation}</span>
               </div>
             </div>
@@ -74,7 +74,7 @@ export default function AgentHomeHeader({
                   : 'bg-slate-50 border-slate-200 dark:bg-slate-800 dark:border-slate-700'
               }`}
             >
-              <span className={`text-[12px] font-black tracking-wider capitalize transition-colors duration-300 ${
+              <span className={`text-[12px] font-bold tracking-wider capitalize transition-colors duration-300 ${
                 profile?.isOnline
                   ? 'text-emerald-700 dark:text-emerald-400'
                   : 'text-slate-500 dark:text-slate-400'
@@ -99,7 +99,7 @@ export default function AgentHomeHeader({
             {/* Notification Bell */}
             <button
               onClick={() => navigate('/notifications')}
-              className="relative w-[38px] h-[38px] rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all active:scale-95 group"
+              className="relative w-[38px] h-[38px] rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all active:scale-95 group"
             >
               <Bell className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover:text-emerald-500 transition-colors" />
               {unreadCount > 0 && (

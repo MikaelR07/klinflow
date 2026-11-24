@@ -496,7 +496,7 @@ export default function AgentConfigurationPage() {
                 <p className="text-[9px] text-slate-400 font-semibold capitalize tracking-widest">Your standard pickup charge</p>
               </div>
             </div>
-            <span className="text-[8px] font-black text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md uppercase tracking-widest border border-amber-500/20">Coming Soon</span>
+            <span className="text-[8px] font-bold text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md uppercase tracking-widest border border-amber-500/20">Coming Soon</span>
           </div>
 
           <div className="space-y-1">

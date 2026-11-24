@@ -297,7 +297,7 @@ export default function PostTradeCollectionStep({
           )}
 
           {/* Unified Search & Booking Actions Card */}
-          <div className="bg-slate-200 dark:bg-slate-800/60 p-5 rounded-[1.5rem] border border-slate-300/50 dark:border-slate-700/50 shadow-sm mt-3.5 space-y-6">
+          <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 mt-3.5 space-y-6">
             
             {/* Preferred Agent Search */}
             <div className="relative overflow-hidden">

@@ -149,20 +149,21 @@ export default function JobDetailsPage() {
   const photos = photoUrl ? [photoUrl] : [];
 
   return (
-    <div className="bg-white dark:bg-slate-800 min-h-screen pb-6">
+    <div className="bg-slate-50 dark:bg-slate-800 min-h-screen pb-6">
       <div className="max-w-lg mx-auto">
         {/* ── FIXED TOP NAV ── */}
-        <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-          <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
-            <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+        <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-slate-50/95 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+          <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between relative">
+            <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0 z-10">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
             </button>
-            <div>
+            <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
               <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Mission Details</h1>
-              <p className="text-[10px] font-bold text-indigo-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" /> Pickup Request
+              <p className="text-[10px] font-bold text-indigo-500 capitalize tracking-widest flex items-center justify-center gap-1.5 mt-0.5">
+                 Pickup Request
               </p>
             </div>
+            <div className="w-10 h-10 shrink-0" />
           </div>
         </div>
 
@@ -185,8 +186,8 @@ export default function JobDetailsPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
           </div>
 
-          {/* ── MATERIAL SPECIFICATIONS CARD ── */}
-          <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
+          {/* ── MATERIAL SPECIFICATIONS & DETAILS DIRECTLY ON PAGE ── */}
+          <div className="space-y-4 px-4">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material-Type</p>
@@ -207,7 +208,7 @@ export default function JobDetailsPage() {
               </div>
             </div>
 
-            <hr className="border-slate-100 dark:border-slate-800/60" />
+            <hr className="border-slate-200 dark:border-slate-700/60" />
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-start gap-3">
@@ -232,21 +233,21 @@ export default function JobDetailsPage() {
                     <DollarSign className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Amount Paid</p>
-                      <p className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {(job.pay || (job as any).total_price || (job as any).fee || 0).toLocaleString()}</p>
+                      <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">KSh {(job.pay || (job as any).total_price || (job as any).fee || 0).toLocaleString()}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Verified Weight</p>
-                      <span className="text-xs font-black text-slate-900 dark:text-white">{job.actual_weight_kg || 0} KG</span>
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">{job.actual_weight_kg || 0} KG</span>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 col-span-2">
                     <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Payment Settled</p>
-                      <span className="text-xs font-black text-slate-900 dark:text-white">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">
                         {(job as any).completed_at
                           ? new Date((job as any).completed_at).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                           : job.date || 'N/A'}
@@ -260,7 +261,7 @@ export default function JobDetailsPage() {
                     <Zap className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Value</p>
-                      <p className="text-xs font-black text-slate-900 dark:text-white">
+                      <p className="text-xs font-bold text-slate-900 dark:text-white">
                         {job.is_market_trade 
                           ? `KSh ${Math.floor((job.weight_kg || job.actual_weight_kg || 0) * getPriceForMaterial(job.material || ''))}` 
                           : 'Pending Verification'}
@@ -271,7 +272,7 @@ export default function JobDetailsPage() {
                     <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Load</p>
-                      <span className="text-xs font-black text-slate-900 dark:text-white">{job.weight_kg || job.actual_weight_kg || 0} KG</span>
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">{job.weight_kg || job.actual_weight_kg || 0} KG</span>
                     </div>
                   </div>
                 </>
@@ -290,7 +291,7 @@ export default function JobDetailsPage() {
                 <div className="text-right">
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Type</p>
                   <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
-                    {job.is_group_pickup ? 'Community Swarm' : (job.is_market_trade || (job as any).booking_type === 'marketplace_pickup' || (job as any).listing_id) ? 'Seller Trade' : 'Resident Pickup'}
+                    {job.is_group_pickup ? 'Group Pickup' : (job.is_market_trade || (job as any).booking_type === 'marketplace_pickup' || (job as any).listing_id) ? 'Seller Trade' : 'Resident Pickup'}
                   </span>
                 </div>
               </div>
@@ -298,7 +299,7 @@ export default function JobDetailsPage() {
 
             {job.notes && (
               <>
-                <hr className="border-slate-100 dark:border-slate-800/60" />
+                <hr className="border-slate-200 dark:border-slate-700/60" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                     <Info className="w-3.5 h-3.5" /> Description
@@ -315,13 +316,13 @@ export default function JobDetailsPage() {
               <>
                 <button
                   onClick={() => { rejectJob(job.id); navigate(-1); }}
-                  className="flex-[1] py-4 bg-red-500 text-white rounded-2xl font-black text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
+                  className="flex-[1] py-4 bg-red-500 text-white rounded-2xl font-bold text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
                 >
                   <XCircle className="w-4 h-4" /> Dismiss
                 </button>
                 <button
                   onClick={handleAccept}
-                  className="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs capitalize tracking-widest  active:scale-95 transition-all flex items-center justify-center gap-2"
+                  className="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-widest  active:scale-95 transition-all flex items-center justify-center gap-2"
                 >
                   <Truck className="w-4 h-4" /> Accept Mission
                 </button>
@@ -332,7 +333,7 @@ export default function JobDetailsPage() {
                 <div className="flex flex-col gap-3 w-full">
                   <button
                     onClick={() => navigate(`/jobs/navigate/${job.id}`)}
-                    className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-md shadow-blue-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-md shadow-blue-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                   >
                     <Navigation className="w-4 h-4" /> Navigate to Client
                   </button>
@@ -341,7 +342,7 @@ export default function JobDetailsPage() {
                       setIsOnTheWay(true);
                       toast.success("On your way!", { description: "Tap 'I've Arrived' when you reach the location." });
                     }}
-                    className="w-full py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border-2 border-blue-100 dark:border-blue-900/30 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all"
+                    className="w-full py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border-2 border-blue-100 dark:border-blue-900/30 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all"
                   >
                     <FastForward className="w-4 h-4" /> I Know The Way
                   </button>
@@ -349,40 +350,20 @@ export default function JobDetailsPage() {
               ) : !hasArrived ? (
                 /* ── STEP 2: Agent is on the way, confirm arrival ── */
                 <div className="flex flex-col gap-3 w-full">
-                  <div className="w-full py-3 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border border-blue-200 dark:border-blue-500/20">
+                  <div className="w-full py-3 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border border-blue-200 dark:border-blue-500/20">
                     <Navigation className="w-4 h-4 animate-pulse" /> En Route to Client
                   </div>
                   <button
                     onClick={async () => {
-                      const isGroup = job.is_group_pickup && (job as any).swarm_id;
-                      const agentName = profile?.name || 'Agent';
-
-                      if (isGroup) {
-                        try {
-                          const { data: participants } = await supabase
-                            .from('swarm_participants')
-                            .select('user_id')
-                            .eq('swarm_id', (job as any).swarm_id)
-                            .neq('status', 'withdrawn');
-                          const participantIds = participants?.map((p: any) => p.user_id).filter(Boolean) || [];
-                          const allTargets = [...new Set([...participantIds, job.user_id || (job as any).userId])].filter(Boolean);
-                          /* addNotification removed for v3 migration */
-                        } catch (err) {
-                          /* addNotification removed for v3 migration */
-                        }
-                      } else {
-                        /* addNotification removed for v3 migration */
-                      }
-
                       setHasArrived(true);
                       setJobArrived(job.id);
                       toast.success("Welcome to Mission Site!", {
-                        description: isGroup
-                          ? "Please coordinate with the community to weigh each participant's materials."
+                        description: job.is_group_pickup
+                          ? "Please coordinate with the group to weigh each participant's materials."
                           : "Please weigh the recyclables to complete pickup."
                       });
                     }}
-                    className="w-full py-4 bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-md shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                    className="w-full py-4 bg-emerald-500 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-md shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                   >
                     <MapPin className="w-4 h-4" /> I've Arrived
                   </button>
@@ -390,7 +371,7 @@ export default function JobDetailsPage() {
               ) : (
                 /* ── STEP 3: Arrived — Record Collection ── */
                 <div className="flex flex-col gap-3 w-full">
-                  <div className="w-full py-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border border-emerald-200 dark:border-emerald-500/20">
+                  <div className="w-full py-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 border border-emerald-200 dark:border-emerald-500/20">
                     <CheckCircle className="w-4 h-4" /> You've Arrived — Ready to Collect
                   </div>
                   <button
@@ -409,13 +390,13 @@ export default function JobDetailsPage() {
                 </div>
               )
             ) : activeTab === 'completed' ? (
-              <div className="w-full py-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl font-black text-xs capitalize tracking-widest flex items-center justify-center gap-2 border border-emerald-200 dark:border-emerald-500/20">
+              <div className="w-full py-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl font-bold text-xs capitalize tracking-widest flex items-center justify-center gap-2 border border-emerald-200 dark:border-emerald-500/20">
                 <CheckCircle className="w-4 h-4" /> Mission Completed
               </div>
             ) : (
               <button
                 onClick={() => { restoreJob(job.id); navigate(-1); }}
-                className="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <RefreshCw className="w-4 h-4" /> Restore Mission
               </button>
@@ -478,24 +459,6 @@ export default function JobDetailsPage() {
                 await useAuthStore.getState().fetchProfile();
                 await useAgentStore.getState().fetchActiveJobs();
                 await useAgentStore.getState().fetchEarnings();
-
-                if (job.is_group_pickup && (job as any).swarm_id) {
-                  try {
-                    const { data: participants } = await supabase
-                      .from('swarm_participants')
-                      .select('user_id')
-                      .eq('swarm_id', (job as any).swarm_id)
-                      .neq('status', 'withdrawn');
-                    const participantIds = participants?.map((p: any) => p.user_id).filter(Boolean) || [];
-                    const bookingOwner = (job as any).userId || job.user_id;
-                    const otherParticipants = participantIds.filter((uid: string) => uid !== bookingOwner);
-                    if (otherParticipants.length > 0) {
-                      /* addNotification removed for v3 migration */
-                    }
-                  } catch (err) {
-                    console.error('[JobDetails] Failed to notify group participants on completion:', err);
-                  }
-                }
 
                 toast.success("Verification Complete!", { description: "Moving to next mission." });
                 navigate('/jobs');

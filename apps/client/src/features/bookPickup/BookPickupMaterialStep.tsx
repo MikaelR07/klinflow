@@ -69,7 +69,7 @@ export default function BookPickupMaterialStep({
                     placeholder="Search waste categories (e.g. plastic, metal)..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-slate-100 dark:bg-slate-900 p-4 pl-11 pr-10 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all shadow-sm"
+                    className="w-full bg-slate-50 dark:bg-slate-800/70 p-4 pl-11 pr-10 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all"
                   />
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">
                     <Search className="w-4 h-4" />
@@ -84,7 +84,7 @@ export default function BookPickupMaterialStep({
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2.5">
                   {categories.filter(cat =>
                     (cat.label || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                     (cat.slug || '').toLowerCase().includes(searchQuery.toLowerCase())
@@ -117,6 +117,9 @@ export default function BookPickupMaterialStep({
                       else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
                       else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
                     }
+                    const imgPath = bgImage || '/material-categories/recyclables.webp';
+                    const priceVal = usePriceStore.getState().getCategoryPrice(cat.id) || (cat as any).price_per_unit || (cat as any).price_per_kg || 0;
+                    const displayPrice = priceVal ? `Upto ${priceVal}/kg` : 'Tap to select';
 
                     return (
                       <button
@@ -131,23 +134,26 @@ export default function BookPickupMaterialStep({
                             slug: cat.slug || cat.id
                           });
                         }}
-                        className="relative h-24 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-800 flex flex-col items-center justify-center gap-1.5 active:scale-95 transition-all shadow-sm group hover:border-primary/50 overflow-hidden"
-                        style={bgImage ? {
-                          backgroundImage: `url(${bgImage})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center'
-                        } : {}}
+                        className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 overflow-hidden text-left active:scale-95 transition-all hover:border-emerald-500/40"
                       >
-                        {/* Overlay gradient at the bottom */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none" />
-
-                        {!bgImage && <div className="absolute top-0 right-0 w-12 h-12 bg-primary/5 rounded-bl-3xl -mr-4 -mt-4 group-hover:bg-primary/10 transition-colors" />}
-                        <div className={`absolute top-2 left-2 z-10 w-8 h-8 ${bgImage ? 'bg-white/20 backdrop-blur-md border border-white/20 text-white' : 'bg-slate-50 dark:bg-slate-800/50'} rounded-xl flex items-center justify-center text-lg group-hover:scale-110 transition-transform shadow-sm`}>
-                          {cat.icon || '📦'}
+                        <div className="h-24 w-full bg-slate-200/60 dark:bg-slate-800 overflow-hidden">
+                          <img
+                            src={imgPath}
+                            alt={cat.label}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
                         </div>
-                        <span className={`absolute bottom-2 right-2 z-10 max-w-[calc(100%-1rem)] truncate px-2 py-1 rounded-md text-[10px] font-bold capitalize tracking-wider text-right leading-none drop-shadow-sm ${bgImage ? 'bg-black/50 backdrop-blur-md border border-white/15 text-white' : 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'}`}>
-                          {cat.label}
-                        </span>
+                        <div className="p-3">
+                          <p className="text-xs font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                            {cat.label}
+                          </p>
+                          <p className="text-[10.5px] font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5 truncate">
+                            {displayPrice}
+                          </p>
+                        </div>
                       </button>
                     );
                   })}
@@ -166,119 +172,135 @@ export default function BookPickupMaterialStep({
             )}
           </div>
         ) : (
-          <div className="bg-white dark:bg-slate-800/50 p-4 rounded-[28px] border border-primary/20 relative shadow-sm flex items-center gap-4">
-            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-xl text-white">{wasteType.icon}</div>
-            <div className="flex-1">
-              <h3 className="text-xs font-semibold dark:text-white leading-none">{wasteType.label}</h3>
-              <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mt-1">Ready for pickup</p>
+          <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-5">
+            {/* Selected Material Header */}
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-xl text-white shrink-0">
+                {wasteType.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-xs font-bold text-slate-900 dark:text-white leading-none truncate">{wasteType.label}</h3>
+                <p className="text-[11px] font-semibold text-slate-400 capitalize tracking-wider mt-1">Ready for pickup</p>
+              </div>
+              <button
+                onClick={() => { setWasteType(null); setSelectedSubItem(null); setSearchQuery(''); }}
+                className="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 rounded-lg text-xs font-semibold text-primary capitalize tracking-wider active:scale-95 transition-transform"
+              >
+                Change
+              </button>
             </div>
-            <button onClick={() => { setWasteType(null); setSelectedSubItem(null); setSearchQuery(''); }} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-semibold text-primary capitalize tracking-widest">Change</button>
+
+            {/* Estimated Quantity */}
+            <div className="border-t border-slate-200/70 dark:border-slate-700/60 pt-4 space-y-3">
+              <h2 className="text-xs font-semibold capitalize tracking-widest text-slate-500 dark:text-slate-400">Estimated Quantity</h2>
+              <div className="flex flex-col gap-4">
+                <input
+                  type="range"
+                  min="5"
+                  max="100"
+                  value={quantity || 5}
+                  onChange={(e) => setQuantity(parseInt(e.target.value))}
+                  className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary"
+                />
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setQuantity(Math.max(5, quantity - 1))}
+                    className="w-10 h-10 rounded-[14px] bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-xl font-semibold dark:text-white active:scale-95 transition-transform shrink-0"
+                  >
+                    -
+                  </button>
+                  <div className="flex-1 text-center relative group">
+                    <input
+                      type="number"
+                      min="5"
+                      value={quantity || ''}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        setQuantity(isNaN(val) ? '' : Math.max(5, val));
+                      }}
+                      onBlur={() => {
+                        if (!quantity || quantity < 5) setQuantity(5);
+                      }}
+                      className="w-full bg-transparent text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter text-center outline-none appearance-none"
+                      style={{ MozAppearance: 'textfield' }}
+                    />
+                    <p className="text-xs font-semibold capitalize tracking-widest text-primary mt-0.5">KG</p>
+                  </div>
+                  <button
+                    onClick={() => setQuantity((quantity || 0) + 1)}
+                    className="w-10 h-10 rounded-[14px] bg-primary flex items-center justify-center text-xl font-semibold text-white shadow-sm active:scale-95 transition-transform shrink-0"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Recyclables Proof (Optional) */}
+            <div className="border-t border-slate-200/70 dark:border-slate-700/60 pt-4 space-y-3">
+              <h2 className="text-xs font-semibold capitalize tracking-widest text-slate-500 dark:text-slate-400">Recyclables Proof (Optional)</h2>
+              <div className="relative group">
+                {photo ? (
+                  <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-primary">
+                    <OptimizedImage
+                      src={photoPreviewUrl as string}
+                      className="w-full h-full object-cover"
+                      wrapperClassName="w-full h-full"
+                    />
+                    <button
+                      onClick={() => setPhoto(null)}
+                      className="absolute top-3 right-3 p-2.5 bg-red-500 text-white rounded-xl shadow-md active:scale-95 transition-all"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex gap-3">
+                    <label className="flex-1 flex flex-col items-center justify-center aspect-[1.5/1] bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl cursor-pointer hover:border-primary/50 transition-all">
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-1.5">
+                        <Camera className="w-5 h-5 text-primary" />
+                      </div>
+                      <p className="text-[10px] font-bold text-slate-900 dark:text-white capitalize tracking-widest italic">Take Photo</p>
+                      <input
+                        id="photo-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        capture="environment"
+                        onChange={(e) => setPhoto(e.target.files ? e.target.files[0] : null)}
+                      />
+                    </label>
+
+                    <label className="flex-1 flex flex-col items-center justify-center aspect-[1.5/1] bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl cursor-pointer hover:border-primary/50 transition-all">
+                      <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center mb-1.5">
+                        <Smartphone className="w-5 h-5 text-indigo-600" />
+                      </div>
+                      <p className="text-[10px] font-bold text-slate-900 dark:text-white capitalize tracking-widest italic">From Gallery</p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => setPhoto(e.target.files ? e.target.files[0] : null)}
+                      />
+                    </label>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Special Instructions */}
+            <div className="border-t border-slate-200/70 dark:border-slate-700/60 pt-4 space-y-2">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 capitalize tracking-widest">Special Instructions</p>
+              <textarea
+                placeholder="e.g. 'Leave at the back gate'..."
+                value={customDescription}
+                onChange={(e) => setCustomDescription(e.target.value)}
+                className="w-full bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-700 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all min-h-[80px] resize-none"
+              />
+            </div>
           </div>
         )}
       </div>
-
-      {wasteType && (
-        <div className="space-y-3">
-          <h2 className="text-xs font-semibold capitalize tracking-widest text-slate-400 ml-2">Estimated Quantity</h2>
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm flex flex-col gap-4">
-            <input
-              type="range"
-              min="5"
-              max="100"
-              value={quantity || 5}
-              onChange={(e) => setQuantity(parseInt(e.target.value))}
-              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-primary"
-            />
-            <div className="flex items-center gap-4">
-              <button onClick={() => setQuantity(Math.max(5, quantity - 1))} className="w-10 h-10 rounded-[14px] bg-slate-50 dark:bg-slate-800/50 flex items-center justify-center text-xl font-semibold dark:text-white active:scale-95 transition-transform shrink-0">-</button>
-              <div className="flex-1 text-center relative group">
-                <input
-                  type="number"
-                  min="5"
-                  value={quantity || ''}
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value);
-                    setQuantity(isNaN(val) ? '' : Math.max(5, val));
-                  }}
-                  onBlur={() => {
-                    if (!quantity || quantity < 5) setQuantity(5);
-                  }}
-                  className="w-full bg-transparent text-3xl font-semibold text-slate-900 dark:text-white tracking-tighter text-center outline-none appearance-none"
-                  style={{ MozAppearance: 'textfield' }}
-                />
-                <p className="text-xs font-semibold capitalize tracking-widest text-primary mt-0.5">KG</p>
-              </div>
-              <button onClick={() => setQuantity((quantity || 0) + 1)} className="w-10 h-10 rounded-[14px] bg-primary flex items-center justify-center text-xl font-semibold text-white shadow-md active:scale-95 transition-transform shrink-0">+</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {wasteType && (
-        <div className="space-y-4 pt-2 animate-slide-up">
-          <h2 className="text-xs font-semibold capitalize tracking-widest text-slate-400 ml-2">Recyclables Proof (Optional)</h2>
-
-          {/* Photo Capture */}
-          <div className="relative group">
-            {photo ? (
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden border-2 border-primary shadow-xl">
-                <OptimizedImage
-                  src={photoPreviewUrl as string}
-                  className="w-full h-full object-cover"
-                  wrapperClassName="w-full h-full"
-                />
-                <button
-                  onClick={() => setPhoto(null)}
-                  className="absolute top-4 right-4 p-3 bg-red-500 text-white rounded-xl shadow-lg active:scale-95 transition-all"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex gap-3">
-                <label className="flex-1 flex flex-col items-center justify-center aspect-[1.5/1] bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl cursor-pointer hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-1.5">
-                    <Camera className="w-5 h-5 text-primary" />
-                  </div>
-                  <p className="text-[10px] font-bold text-slate-900 dark:text-white capitalize tracking-widest italic">Take Photo</p>
-                  <input
-                    id="photo-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    capture="environment"
-                    onChange={(e) => setPhoto(e.target.files ? e.target.files[0] : null)}
-                  />
-                </label>
-
-                <label className="flex-1 flex flex-col items-center justify-center aspect-[1.5/1] bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl cursor-pointer hover:border-primary/50 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center mb-1.5">
-                    <Smartphone className="w-5 h-5 text-indigo-600" />
-                  </div>
-                  <p className="text-[10px] font-bold text-slate-900 dark:text-white capitalize tracking-widest italic">From Gallery</p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => setPhoto(e.target.files ? e.target.files[0] : null)}
-                  />
-                </label>
-              </div>
-            )}
-          </div>
-
-          {/* Item Description (Always Visible for Mission Context) */}
-          <div className="space-y-2">
-            <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest ml-1">Special Instructions</p>
-            <textarea
-              placeholder="e.g. 'Leave at the back gate'..."
-              value={customDescription}
-              onChange={(e) => setCustomDescription(e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all shadow-sm min-h-[80px] resize-none"
-            />
-          </div>
-        </div>
-      )}
     </motion.div>
   );
 }

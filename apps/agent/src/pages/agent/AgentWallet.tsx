@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, ArrowDownToLine, ArrowUpFromLine, History, Send,
+  ArrowLeft, History, Send,
   TrendingUp, CheckCircle2, Loader2, CreditCard, ChevronRight,
   Target, Wallet, Zap,
   BanknoteArrowDown,
   BanknoteArrowUp,
   ArrowDownCircle,
-  ArrowUpCircle
+  ArrowUpCircle,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  ArrowUpRight,
+  ArrowDownRight,
+  Package
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -27,12 +33,13 @@ export default function AgentWallet() {
   const earnings = useAgentStore(s => s.earnings);
   const fetchEarnings = useAgentStore(s => s.fetchEarnings);
 
+  const [balanceVisible, setBalanceVisible] = useState(true);
   const [activeFlow, setActiveFlow] = useState<'none' | 'deposit' | 'withdraw' | 'transfer'>('none');
   const [flowStep, setFlowStep] = useState(1);
   const [amount, setAmount] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isChartReady, setIsChartReady] = useState(false);
-  const [txTab, setTxTab] = useState<'all' | 'topup' | 'withdrawal' | 'payout' | 'transfer'>('all');
+  const [txTab, setTxTab] = useState<'all' | 'topup' | 'withdrawal' | 'payout' | 'payment' | 'transfer'>('all');
   const [transactions, setTransactions] = useState<any[]>([]);
   const [isLoadingTx, setIsLoadingTx] = useState(true);
 
@@ -41,14 +48,33 @@ export default function AgentWallet() {
     fetchProfile();
     fetchEarnings();
     if (profile?.id) {
-      walletService.getWalletTransactions(profile.id, 10).then(data => {
-        setTransactions(data);
+      walletService.getWalletTransactions(profile.id, 25).then(data => {
+        setTransactions(data || []);
         setIsLoadingTx(false);
       });
     }
     const timer = setTimeout(() => setIsChartReady(true), 300);
     return () => clearTimeout(timer);
   }, [fetchProfile, fetchEarnings, profile?.id]);
+
+  const formatTxDate = (dateStr?: string) => {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    const dateFormatted = d.toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' });
+    const timeFormatted = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    return `${dateFormatted} • ${timeFormatted}`;
+  };
+
+  const filteredTransactions = transactions.filter(tx => {
+    if (txTab === 'all') return true;
+    if (txTab === 'topup') return tx.transaction_type === 'topup';
+    if (txTab === 'withdrawal') return tx.transaction_type === 'withdrawal';
+    if (txTab === 'payout') return tx.transaction_type === 'payout' || tx.transaction_type === 'escrow_release';
+    if (txTab === 'payment') return tx.transaction_type === 'payment';
+    if (txTab === 'transfer') return tx.transaction_type === 'transfer';
+    return true;
+  });
 
   const handleProcessFlow = async () => {
     const val = parseFloat(amount);
@@ -133,7 +159,7 @@ export default function AgentWallet() {
                 </div>
               </div>
             ) : (
-              <h3 className="text-lg font-black text-slate-900 dark:text-white">{title}</h3>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">{title}</h3>
             )}
             <button onClick={resetFlow} className="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center active:scale-90 transition-transform text-slate-500 font-bold">✕</button>
           </div>
@@ -212,13 +238,13 @@ export default function AgentWallet() {
               <div className="space-y-2">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 px-2 block">Enter Amount (KSh)</label>
                 <div className="relative">
-                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 font-black text-sm">KSh</div>
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm">KSh</div>
                   <input
                     type="number"
                     autoFocus
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full h-16 pl-16 pr-5 bg-slate-50 dark:bg-slate-900 rounded-[1.25rem] border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-2xl font-black text-slate-900 dark:text-white outline-none"
+                    className="w-full h-16 pl-16 pr-5 bg-slate-50 dark:bg-slate-900 rounded-[1.25rem] border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-2xl font-bold text-slate-900 dark:text-white outline-none"
                     placeholder="0.00"
                   />
                 </div>
@@ -238,7 +264,7 @@ export default function AgentWallet() {
                   if (parseFloat(amount) > 0) setFlowStep(2);
                 }}
                 disabled={!amount || parseFloat(amount) <= 0}
-                className="w-full h-16 bg-blue-600 text-white rounded-[1.25rem] font-black text-sm uppercase tracking-widest shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 mt-4"
+                className="w-full h-16 bg-blue-600 text-white rounded-[1.25rem] font-bold text-sm uppercase tracking-widest shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:active:scale-100 mt-4"
               >
                 Continue
               </button>
@@ -269,7 +295,7 @@ export default function AgentWallet() {
                 <div className="h-px w-full bg-slate-200 dark:bg-slate-700" />
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-slate-900 dark:text-white">Total</span>
-                  <span className="text-lg font-black text-blue-600">KSh {parseFloat(amount).toLocaleString()}</span>
+                  <span className="text-lg font-bold text-blue-600">KSh {parseFloat(amount).toLocaleString()}</span>
                 </div>
               </div>
 
@@ -314,7 +340,7 @@ export default function AgentWallet() {
                 <CheckCircle2 className="w-10 h-10 text-emerald-600" />
               </div>
               <div>
-                <h3 className="text-2xl font-black dark:text-white mb-1">Success!</h3>
+                <h3 className="text-2xl font-bold dark:text-white mb-1">Success!</h3>
                 <p className="text-sm text-slate-500 font-medium">Your transaction was processed successfully.</p>
               </div>
               <button 
@@ -331,186 +357,261 @@ export default function AgentWallet() {
   };
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-800  relative overflow-x-hidden ">
-      {/* ── TOP SECTION: EMERALD GRADIENT WITH ROUNDED BOTTOM ── */}
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-6 rounded-b-[2rem] shadow-sm relative z-20">
-        
-        {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-tr from-emerald-600/90 to-emerald-800/90 dark:from-emerald-600/90 dark:to-emerald-800/90 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-3 px-4 flex items-center gap-3 shadow-sm max-w-lg mx-auto">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 flex items-center justify-center active:scale-95 transition-all shrink-0">
-            <ArrowLeft className="w-5 h-5 text-white" />
-          </button>
-          <div>
-            <h1 className="text-[16px] font-bold tracking-wide text-white leading-tight">Agent Wallet</h1>
-          </div>
-        </div>
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 font-sans pb-6">
 
-        {/* Centered Total Balance */}
-        <div className="text-center px-4 mt-4 mb-6">
-          <p className="text-emerald-100 text-[11px] font-bold tracking-widest uppercase mb-1">Total Balance</p>
-          <div className="flex items-baseline justify-center gap-1">
-            <span className="text-2xl font-bold text-emerald-200">KSh</span>
-            <h2 className="text-2xl font-black text-white tracking-tight">
-              {(walletBalance + (payoutBalance || 0)).toLocaleString()}
-            </h2>
-          </div>
-        </div>
-
-        {/* Scrollable Cards */}
-        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 px-4 snap-x">
-          {/* Card 1: Trading Balance */}
-          <div className="min-w-[280px] bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 snap-center ">
-            <p className="text-emerald-100 text-xs font-medium tracking-wide mb-1">Trading Balance</p>
-            <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-xl font-bold text-emerald-200">KSh</span>
-              <h2 className="text-xl font-black text-white tracking-tight">{walletBalance.toLocaleString()}</h2>
-            </div>
-            <div className="bg-white/10 px-3 py-1.5 rounded-full inline-flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
-              <span className="text-[10px] text-white font-bold capitalize tracking-wider">Available for sourcing</span>
-            </div>
-          </div>
-
-          {/* Card 2: Payout Balance */}
-          <div className="min-w-[280px] bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/20 snap-center">
-            <p className="text-emerald-100 text-xs font-medium tracking-wide mb-1">Payout Balance</p>
-            <div className="flex items-baseline gap-1 mb-4">
-              <span className="text-xl font-bold text-emerald-200">KSh</span>
-              <h2 className="text-xl font-black text-white tracking-tight">{(payoutBalance || 0).toLocaleString()}</h2>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="bg-white/10 px-3 py-1.5 rounded-full inline-flex items-center gap-1">
-                <ArrowUpCircle className="w-3 h-3 text-emerald-200" />
-                <span className="text-[10px] text-white font-bold capitalize tracking-wider">Ready to withdraw</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center justify-between mt-4 px-4 gap-2">
-          <button onClick={() => setActiveFlow('deposit')} className="flex-1 py-3 bg-white/15 backdrop-blur-sm text-white border border-white/10 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold hover:bg-white/25">
-            <ArrowDownCircle className="w-4 h-4" />
-            <span className="text-[10px] tracking-wide uppercase">Deposit</span>
-          </button>
-          
-          <button onClick={() => setActiveFlow('transfer')} className="flex-1 py-3 bg-white/15 backdrop-blur-sm text-white border border-white/10 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold hover:bg-white/25">
-            <Send className="w-4 h-4" />
-            <span className="text-[10px] tracking-wide uppercase">Transfer</span>
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-lime-600 shadow-sm">
+        <div className="max-w-lg mx-auto px-4 flex items-center justify-between relative">
+          {/* Left: Back Arrow */}
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group z-10"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="w-5 h-5 text-white group-hover:-translate-x-0.5 transition-transform" />
           </button>
 
-          <button onClick={() => setActiveFlow('withdraw')} className="flex-1 py-3 bg-white/15 backdrop-blur-sm text-white border border-white/10 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 font-bold hover:bg-white/25">
-            <ArrowUpCircle className="w-4 h-4" />
-            <span className="text-[10px] tracking-wide uppercase">Withdraw</span>
-          </button>
+          {/* Center: Agent Wallet */}
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <h1 className="text-[17px] font-bold text-white tracking-tight leading-none">
+              Agent Wallet
+            </h1>
+          </div>
+
+          {/* Right: Statements History */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 z-10">
+            <button
+              onClick={() => navigate("/payout-history")}
+              className="relative w-10 h-10 shrink-0 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-sm transition-all active:scale-95 group"
+              title="Payout History"
+            >
+              <History className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* ── MAIN CONTENT ── */}
-      <div className="px-1.5 mt-6 space-y-6 relative z-10">
-        {/* Recent Transactions */}
-        <div className="bg-slate-50 dark:bg-slate-900 rounded-[1rem] p-5 shadow-sm border border-slate-100 dark:border-slate-800">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-slate-700 dark:text-white">Recent Transactions</h3>
-            <button onClick={() => navigate('/payout-history')} className="text-xs font-semibold text-emerald-600">View Statements</button>
+      {/* ── TOP SECTION WITH LIME GRADIENT ── */}
+      <div className="bg-gradient-to-br from-emerald-700 via-emerald-600 to-lime-600 text-white relative overflow-hidden rounded-b-[1.25rem] pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+6.5rem)] shadow-sm">
+        {/* Decorative background orbs */}
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.12] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-56 h-56 bg-lime-300/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+
+        <div className="relative z-10 max-w-lg mx-auto px-4">
+          {/* Total Balance */}
+          <div className="mb-3 text-center">
+            <p className="text-[10px] font-semibold text-white/80 uppercase tracking-[0.2em] mb-2">Total Wallet Balance</p>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-lg font-medium opacity-90 text-white">KSh</span>
+              <span className={`text-2xl font-bold leading-none tracking-tight transition-all duration-300 text-white ${!balanceVisible ? 'blur-lg select-none' : ''}`}>
+                {(walletBalance + (payoutBalance || 0)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
+              <button onClick={() => setBalanceVisible(!balanceVisible)} className="p-2 hover:bg-white/15 rounded-full transition-colors active:scale-90">
+                {balanceVisible ? <Eye className="w-4.5 h-4.5 text-white/80" /> : <EyeOff className="w-4.5 h-4.5 text-white/80" />}
+              </button>
+            </div>
           </div>
 
-          {/* Tabs */}
-          <div className="flex items-center gap-1 mb-5 bg-slate-200 dark:bg-slate-800 p-1 rounded-xl overflow-x-auto no-scrollbar">
+         
+
+          {/* Balance Breakdown Cards (Trading Balance & Payout Balance) - Scrollable */}
+          <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 px-4 -mx-4 snap-x mb-4">
+            {/* Trading Balance */}
+            <div className="w-[195px] shrink-0 bg-white/15 backdrop-blur-sm rounded-2xl p-3.5 border border-white/20 snap-center shadow-sm">
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-white/80 text-[10px] font-bold uppercase tracking-wider">Trading Balance</p>
+                <span className="w-2 h-2 rounded-full bg-lime-300 animate-pulse" />
+              </div>
+              <div className="flex items-baseline gap-1 my-0.5">
+                <span className="text-xs font-bold text-white/90">KSh</span>
+                <h3 className={`text-base font-bold text-white truncate ${!balanceVisible ? 'blur-sm select-none' : ''}`}>
+                  {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </h3>
+              </div>
+              <div className="bg-white/10 px-2 py-0.5 rounded-full inline-flex items-center gap-1 mt-0.5">
+                <span className="text-[9px] text-white/90 font-medium capitalize truncate">Available for sourcing</span>
+              </div>
+            </div>
+
+            {/* Payout Balance */}
+            <div className="w-[195px] shrink-0 bg-white/15 backdrop-blur-sm rounded-2xl p-3.5 border border-white/20 snap-center shadow-sm">
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-white/80 text-[10px] font-bold uppercase tracking-wider">Payout Balance</p>
+                <ArrowUpCircle className="w-3.5 h-3.5 text-lime-300" />
+              </div>
+              <div className="flex items-baseline gap-1 my-0.5">
+                <span className="text-xs font-bold text-white/90">KSh</span>
+                <h3 className={`text-base font-bold text-white truncate ${!balanceVisible ? 'blur-sm select-none' : ''}`}>
+                  {(payoutBalance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </h3>
+              </div>
+              <div className="bg-white/10 px-2 py-0.5 rounded-full inline-flex items-center gap-1 mt-0.5">
+                <span className="text-[9px] text-white/90 font-medium capitalize truncate">Ready to withdraw</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Quick Actions inside Top Section (Smaller with Icon Before Text) ── */}
+          <div className="flex items-center gap-2 pt-3 border-t border-white/15">
+            {/* Deposit */}
+            <button
+              onClick={() => setActiveFlow('deposit')}
+              className="flex-1 py-3 px-2.5 bg-white/15 backdrop-blur-sm border border-white/15 rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all hover:bg-white/25 shadow-sm"
+            >
+              <BanknoteArrowDown className="w-4 h-4 text-white shrink-0" />
+              <span className="text-[11px] font-bold text-white tracking-wide">Deposit</span>
+            </button>
+
+            {/* Transfer */}
+            <button
+              onClick={() => setActiveFlow('transfer')}
+              className="flex-1 py-3 px-2.5 bg-white/15 backdrop-blur-sm border border-white/15 rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all hover:bg-white/25 shadow-sm"
+            >
+              <Send className="w-4 h-4 text-white shrink-0" />
+              <span className="text-[11px] font-bold text-white tracking-wide">Transfer</span>
+            </button>
+
+            {/* Withdraw */}
+            <button
+              onClick={() => setActiveFlow('withdraw')}
+              className="flex-1 py-3 px-2.5 bg-white/15 backdrop-blur-sm border border-white/15 rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all hover:bg-white/25 shadow-sm"
+            >
+              <BanknoteArrowUp className="w-4 h-4 text-white shrink-0" />
+              <span className="text-[11px] font-bold text-white tracking-wide">Withdraw</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── MAIN CONTENT (RECENT TRANSACTIONS) ── */}
+      <div className="px-4 sm:px-4 py-4 max-w-lg mx-auto space-y-4">
+        {/* ── RECENT TRANSACTIONS ── */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h3 className="text-sm font-bold text-slate-600 dark:text-white capitalize tracking-wider">
+              Recent Transactions
+            </h3>
+            <button
+              onClick={() => navigate('/payout-history')}
+              className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 tracking-wide hover:underline cursor-pointer"
+            >
+              View History
+            </button>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
             {[
               { id: 'all', label: 'All' },
               { id: 'topup', label: 'Deposits' },
               { id: 'payout', label: 'Earnings' },
-              { id: 'payment', label: 'Payouts' },
+              { id: 'payment', label: 'Purchases' },
+              { id: 'withdrawal', label: 'Withdrawals' },
               { id: 'transfer', label: 'Transfers' }
             ].map(tab => (
-              <button 
+              <button
                 key={tab.id}
                 onClick={() => setTxTab(tab.id as any)}
-                className={`flex-1 min-w-[70px] py-2 text-[11px] font-bold rounded-lg transition-all ${txTab === tab.id ? 'bg-white dark:bg-slate-700 text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                className={`px-3 py-1.5 text-[11px] font-bold rounded-xl transition-all shrink-0 active:scale-95 ${
+                  txTab === tab.id
+                    ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/20'
+                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200/70 dark:border-slate-800 hover:bg-slate-50'
+                }`}
               >
                 {tab.label}
               </button>
             ))}
           </div>
 
-          <div className="space-y-0.5 min-h-[200px]">
+          <div className="space-y-2">
             {isLoadingTx ? (
-              // Loading Skeleton
-              Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-2xl bg-slate-100/50 dark:bg-slate-800/50 animate-pulse">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700" />
-                    <div className="space-y-2">
-                      <div className="h-3.5 w-24 bg-slate-200 dark:bg-slate-700 rounded-md" />
-                      <div className="h-2.5 w-16 bg-slate-200 dark:bg-slate-700 rounded-md" />
-                    </div>
-                  </div>
-                  <div className="h-4 w-16 bg-slate-200 dark:bg-slate-700 rounded-md" />
+              <div className="py-6 text-center text-xs text-slate-500 font-medium bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                Loading transactions...
+              </div>
+            ) : filteredTransactions.length === 0 ? (
+              <div className="py-8 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+                <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Package className="w-5 h-5 text-slate-400 dark:text-slate-500" />
                 </div>
-              ))
-            ) : transactions.length === 0 ? (
-              // Empty State
-              <div className="flex flex-col items-center justify-center py-8 text-center">
-                <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-3">
-                  <History className="w-5 h-5 text-slate-400" />
-                </div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white">No Transactions</h4>
-                <p className="text-xs text-slate-500 mt-1 max-w-[200px]">You haven't made any wallet transactions yet.</p>
+                <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">No transactions yet</p>
+                <p className="text-[10px] font-semibold text-slate-400/70 dark:text-slate-500">
+                  Transactions will appear here as you buy stock, earn and withdraw
+                </p>
               </div>
             ) : (
-              // Real Transactions
-              transactions.filter(tx => txTab === 'all' || tx.transaction_type === txTab).slice(0, 4).map((tx) => {
+              filteredTransactions.slice(0, 4).map((tx) => {
                 const isDeposit = ['topup', 'payout', 'escrow_release', 'refund'].includes(tx.transaction_type);
                 const isPayment = tx.transaction_type === 'payment';
                 const isFailed = tx.status === 'failed';
                 const titleMap: Record<string, string> = {
                   'topup': 'Wallet Deposit',
                   'withdrawal': 'Wallet Withdrawal',
-                  'payout': 'sales Earnings',
-                  'transfer': 'Internal Transfer'
+                  'payout': 'Sales Earnings',
+                  'transfer': 'Internal Transfer',
+                  'payment': 'Stock Purchase'
                 };
-                // For payment transactions, show the seller/resident name
-                const displayTitle = isPayment
-                  ? (tx.counterparty_name || 'Recipient')
+                const displayTitle = isPayment && tx.counterparty_name
+                  ? tx.counterparty_name
                   : (titleMap[tx.transaction_type] || tx.transaction_type);
-                const maskedPhone = tx.counterparty_phone 
+                const displaySubtitle = isPayment && tx.counterparty_phone
                   ? tx.counterparty_phone.substring(0, 5) + '******'
-                  : '';
-                const displaySubtitle = isPayment
-                  ? maskedPhone
-                  : '';
+                  : tx.description || (isDeposit ? 'Credit to wallet' : 'Debit from wallet');
 
                 return (
-                  <div key={tx.id} className="flex items-center justify-between p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] transition-all hover:shadow-md">
-                    <div className="flex items-center gap-3.5">
-                      <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${isFailed ? 'bg-slate-100 text-slate-400 dark:bg-slate-800' : isDeposit ? 'bg-white dark:bg-slate-700 text-primary' : 'bg-slate-100 dark:bg-slate-800 text-red-500'}`}>
-                        {isDeposit ? <BanknoteArrowDown className="w-5 h-5" /> : <BanknoteArrowUp className="w-5 h-5" />}
-                      </div>
-                      <div className="flex flex-col justify-center">
-                        <div className="flex items-center gap-2">
-                          <p className={`text-[12px] font-medium leading-none ${isFailed ? 'text-slate-500 line-through' : 'text-slate-900 dark:text-white'}`}>
-                            {displayTitle}
-                          </p>
-                          {isFailed && <span className="text-[9px] font-black uppercase text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-1.5 py-0.5 rounded">Failed</span>}
-                        </div>
-                        {displaySubtitle ? (
-                          <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">{displaySubtitle}</p>
+                  <div
+                    key={tx.id}
+                    className="px-4 py-3 flex items-center justify-between bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700/60 rounded-2xl  transition-shadow"
+                  >
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
+                        isFailed 
+                          ? 'bg-rose-50 dark:bg-rose-900/30 text-rose-500' 
+                          : isDeposit 
+                          ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-500' 
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}>
+                        {isDeposit ? (
+                          <BanknoteArrowUp className="w-5 h-5 text-emerald-500" />
                         ) : (
-                          !isPayment && (
-                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">
-                              {new Date(tx.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                            </p>
-                          )
+                          <ArrowUpRight className="w-5 h-5 text-slate-500" />
                         )}
                       </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <p className={`text-xs font-bold leading-tight mb-0.5 truncate ${isFailed ? 'text-slate-500 line-through' : 'text-slate-900 dark:text-white'}`}>
+                            {displayTitle}
+                          </p>
+                          {isFailed && (
+                            <span className="text-[9px] font-bold uppercase text-rose-500 bg-rose-50 dark:bg-rose-500/10 px-1.5 py-0.5 rounded">Failed</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {displaySubtitle && (
+                            <>
+                              <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate">
+                                {displaySubtitle}
+                              </p>
+                              <span className="text-slate-300 dark:text-slate-600">·</span>
+                            </>
+                          )}
+                          <p className="text-[10px] font-medium text-slate-400">
+                            {formatTxDate(tx.created_at)}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className={`text-sm font-medium tracking-tight ${isFailed ? 'text-slate-400' : isDeposit ? 'text-emerald-600 dark:text-emerald-400' : isPayment ? 'text-red-500 dark:text-red-400' : 'text-slate-900 dark:text-white'}`}>
-                        {isDeposit ? '+' : '-'}KSh {Math.abs(tx.amount).toLocaleString()}
+                    <div className="text-right shrink-0 ml-3">
+                      <p className={`text-sm font-bold ${
+                        isFailed 
+                          ? 'text-slate-400' 
+                          : isDeposit 
+                          ? 'text-emerald-600 dark:text-emerald-400' 
+                          : 'text-slate-900 dark:text-white'
+                      }`}>
+                        {isDeposit ? '+' : '-'}KSh {Number(Math.abs(tx.amount)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
-                      <p className="text-[10px] font-medium text-slate-400 mt-0.5">
-                        {new Date(tx.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                      <p className="text-[9px] font-semibold text-slate-400 mt-0.5 capitalize">
+                        {tx.status || 'Completed'}
                       </p>
                     </div>
                   </div>
@@ -518,6 +619,14 @@ export default function AgentWallet() {
               })
             )}
           </div>
+        </div>
+
+        {/* ── SECURITY FOOTER ── */}
+        <div className="flex items-center justify-center gap-2 py-3">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500/40" />
+          <p className="text-[9px] font-bold text-slate-400/50 dark:text-slate-500/50 uppercase tracking-[0.2em]">
+            Secured by Klinflow Escrow
+          </p>
         </div>
       </div>
 

@@ -96,7 +96,7 @@ export default function OnboardingRequestDetail() {
                 </p>
               </div>
             </div>
-            <span className={`${badge.bg} ${badge.text} text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1`}>
+            <span className={`${badge.bg} ${badge.text} text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1`}>
               <Clock className="w-3 h-3" /> {badge.label}
             </span>
           </div>
@@ -168,7 +168,7 @@ export default function OnboardingRequestDetail() {
                 <div key={i} className="bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl p-3 flex flex-col items-center gap-2 shrink-0 w-[90px] active:scale-95 transition-all cursor-pointer">
                   <div className="w-10 h-12 rounded-lg bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center relative">
                     <File className="w-6 h-6 text-rose-400" />
-                    <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full">PDF</span>
+                    <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[7px] font-bold px-1.5 py-0.5 rounded-full">PDF</span>
                   </div>
                   <div className="text-center w-full">
                     <p className="text-[10px] font-bold text-slate-700 dark:text-white truncate">{doc.name}</p>
@@ -232,13 +232,13 @@ export default function OnboardingRequestDetail() {
               <div className="flex gap-3">
                 <button 
                   onClick={() => handleAction('reject')}
-                  className="flex-1 py-4 bg-rose-500 dark:bg-rose-500/10 text-white rounded-2xl font-black text-sm tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+                  className="flex-1 py-4 bg-rose-500 dark:bg-rose-500/10 text-white rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
                 >
                   <X className="w-5 h-5" /> Reject
                 </button>
                 <button 
                   onClick={() => handleAction('approve')}
-                  className="flex-[1.4] py-4 bg-emerald-500 text-white rounded-2xl font-black text-sm tracking-widest uppercase flex items-center justify-center gap-2  active:scale-[0.98] transition-all"
+                  className="flex-[1.4] py-4 bg-emerald-500 text-white rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2  active:scale-[0.98] transition-all"
                 >
                   <Check className="w-5 h-5" /> Approve
                 </button>

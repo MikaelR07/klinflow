@@ -180,7 +180,7 @@ export default function NotificationsFeed() {
               <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-400" />
             </button>
             <div>
-              <h1 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Notifications</h1>
+              <h1 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">Notifications</h1>
               {unreadCount > 0 && (
                 <p className="text-[10px] font-bold text-emerald-500 tracking-widest uppercase -mt-0.5">
                   {unreadCount} unread
@@ -231,7 +231,7 @@ export default function NotificationsFeed() {
                 <tab.icon className="w-3.5 h-3.5" />
                 {tab.label}
                 {count > 0 && (
-                  <span className={`min-w-[18px] h-[18px] rounded-full text-[9px] font-black flex items-center justify-center ${
+                  <span className={`min-w-[18px] h-[18px] rounded-full text-[9px] font-bold flex items-center justify-center ${
                     isActive ? 'bg-white/20 text-white' : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-500'
                   }`}>
                     {count}
@@ -277,7 +277,7 @@ export default function NotificationsFeed() {
             <div key={group} className="mb-6">
               {/* Group label */}
               <div className="flex items-center gap-2 mb-3 px-2 mt-2">
-                <h3 className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{group}</h3>
+                <h3 className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{group}</h3>
                 <div className="flex-1 h-px bg-slate-200 dark:bg-slate-800" />
                 <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 tabular-nums">
                   {items.length}
@@ -377,7 +377,7 @@ export default function NotificationsFeed() {
                 <CircleCheckBig className="w-4 h-4 text-white" />
               </div>
             </div>
-            <h3 className="text-lg font-black text-slate-900 dark:text-white mb-2 tracking-tight">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 tracking-tight">
               {activeTab !== 'all' ? `No ${activeTab} alerts` : 'All Caught Up!'}
             </h3>
             <p className="text-[13px] text-slate-500 dark:text-slate-400 font-medium max-w-[240px] leading-relaxed">

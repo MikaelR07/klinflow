@@ -129,7 +129,7 @@ export default function MyRecommendations() {
                   key={tab}
                   onClick={() => setActiveTab(tab as any)}
                   className={`flex-1 py-1.5 text-[10px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1 relative ${activeTab === tab
-                    ? 'bg-indigo-600 shadow-sm text-white font-black'
+                    ? 'bg-indigo-600 shadow-sm text-white font-bold'
                     : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                     }`}
                 >
@@ -190,7 +190,7 @@ export default function MyRecommendations() {
                       <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
                         <MapPin className="w-2.5 h-2.5 text-green-500" /> {listing.location || 'Unknown Location'}
                       </p>
-                      <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {rec.recommended_price_per_kg}/kg</span>
+                      <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 tracking-tighter shrink-0 ml-2">KSh {rec.recommended_price_per_kg}/kg</span>
                     </div>
 
                     {/* Row 3: Timestamp & Quantity */}
@@ -198,7 +198,7 @@ export default function MyRecommendations() {
                       <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
                         <Clock className="w-2.5 h-2.5 text-slate-400" /> {rec.created_at ? new Date(rec.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recent'}
                       </p>
-                      <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
+                      <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
                         <span className="text-[9px] text-slate-400 not-italic font-bold mr-1 opacity-70">Weight:</span>
                         <Scale className="w-2.5 h-2.5" /> {rec.recommended_quantity} KG
                       </p>
@@ -304,11 +304,11 @@ export default function MyRecommendations() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                      <p className="text-[10px] font-semibold text-slate-500 mb-1">Recommended Price</p>
-                     <p className="text-base font-black text-slate-800 dark:text-white">KSh {selectedRec.recommended_price_per_kg}<span className="text-[10px] text-slate-400 font-bold">/kg</span></p>
+                     <p className="text-base font-bold text-slate-800 dark:text-white">KSh {selectedRec.recommended_price_per_kg}<span className="text-[10px] text-slate-400 font-bold">/kg</span></p>
                   </div>
                   <div>
                      <p className="text-[10px] font-semibold text-slate-500 mb-1">Total Weight</p>
-                     <p className="text-base font-black text-slate-800 dark:text-white">{selectedRec.recommended_quantity} <span className="text-[10px] text-slate-400 font-bold">KG</span></p>
+                     <p className="text-base font-bold text-slate-800 dark:text-white">{selectedRec.recommended_quantity} <span className="text-[10px] text-slate-400 font-bold">KG</span></p>
                   </div>
                 </div>
 
@@ -316,7 +316,7 @@ export default function MyRecommendations() {
 
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-bold text-slate-500">Total Value</p>
-                  <p className="text-lg font-black text-emerald-600 dark:text-emerald-400">
+                  <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
                     KSh {(selectedRec.recommended_price_per_kg * selectedRec.recommended_quantity).toLocaleString()}
                   </p>
                 </div>
@@ -343,7 +343,7 @@ export default function MyRecommendations() {
                   <button
                     onClick={handleCancel}
                     disabled={isCancelling}
-                    className="w-full py-4 bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 rounded-xl font-black text-xs capitalize tracking-[0.2em] shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2 border border-rose-200 dark:border-rose-500/30 disabled:opacity-50"
+                    className="w-full py-4 bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 rounded-xl font-bold text-xs capitalize tracking-[0.2em] shadow-sm active:scale-95 transition-all flex items-center justify-center gap-2 border border-rose-200 dark:border-rose-500/30 disabled:opacity-50"
                   >
                     {isCancelling ? 'Cancelling...' : 'Cancel Recommendation'}
                   </button>
@@ -351,7 +351,7 @@ export default function MyRecommendations() {
                 
                 <button
                   onClick={() => setSelectedRecId(null)}
-                  className="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 rounded-xl font-black text-xs capitalize tracking-[0.2em] active:scale-95 transition-all shadow-sm"
+                  className="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 rounded-xl font-bold text-xs capitalize tracking-[0.2em] active:scale-95 transition-all shadow-sm"
                 >
                   Close
                 </button>

@@ -105,7 +105,7 @@ export default function MarketIntelligenceHub() {
   });
 
   return (
-    <div className="flex flex-col bg-[#F8F9FF] dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-900 min-h-screen transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90  border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between">

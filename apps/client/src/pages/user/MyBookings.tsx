@@ -2,7 +2,7 @@
  * My Bookings Page — list of user's bookings with status badges
  */
 import { useState, useEffect } from 'react';
-import { Package, Clock, CheckCircle2, Truck, Star, XCircle, CalendarClock, Zap, ChevronDown, ArrowLeft, Info, MapPin, Scale } from 'lucide-react';
+import { Package, Clock, CheckCircle2, Truck, Star, XCircle, CalendarClock, Zap, ChevronDown, ChevronRight, ArrowLeft, Info, MapPin, Scale } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBookingStore } from '@klinflow/core/stores/bookingStore';
@@ -16,12 +16,15 @@ import { DisputeModal } from '@klinflow/ui';
 import { useDisputeStore } from '@klinflow/core/stores/disputeStore';
 
 const statusConfig = {
-  'completed': { label: 'completed', color: 'bg-green-100 text-green-700', icon: CheckCircle2 },
-  'in-progress': { label: 'in-progress', color: 'bg-blue-100 text-blue-700', icon: Truck },
-  'pending': { label: 'pending', color: 'bg-orange-100 text-orange-700', icon: Clock },
-  'confirmed': { label: 'confirmed', color: 'bg-blue-100 text-blue-700', icon: Clock },
-  'scheduled': { label: 'scheduled', color: 'bg-orange-100 text-orange-700', icon: Clock },
-  'cancelled': { label: 'cancelled', color: 'bg-red-100 text-red-700', icon: XCircle },
+  'completed': { label: 'Completed', color: 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40', icon: CheckCircle2 },
+  'in-progress': { label: 'In Progress', color: 'bg-sky-100/90 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40', icon: Truck },
+  'assigned': { label: 'Assigned', color: 'bg-sky-100/90 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40', icon: Truck },
+  'arrived': { label: 'Arrived', color: 'bg-indigo-100/90 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40', icon: MapPin },
+  'picked_up': { label: 'Picked Up', color: 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40', icon: Package },
+  'pending': { label: 'Pending', color: 'bg-amber-100/90 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40', icon: Clock },
+  'confirmed': { label: 'Confirmed', color: 'bg-sky-100/90 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40', icon: Clock },
+  'scheduled': { label: 'Scheduled', color: 'bg-amber-100/90 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40', icon: Clock },
+  'cancelled': { label: 'Cancelled', color: 'bg-rose-100/90 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200/60 dark:border-rose-800/40', icon: XCircle },
 };
 
 function BookingAmountDisplay({ b }: { b: any }) {
@@ -91,9 +94,9 @@ const to24h = (time12: string) => {
 };
 
 const BookingCounter = ({ count, active }: { count: number, active: boolean }) => (
-  <span className={`ml-1.5 px-1.5 py-0.5 text-xs font-semibold rounded-full transition-all ${active
-    ? 'bg-primary text-white scale-110 shadow-sm shadow-primary/30'
-    : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+  <span className={`ml-1.5 px-1.5 py-0.5 text-[10px] font-bold rounded-full transition-all ${active
+    ? 'bg-white/20 dark:bg-slate-900/15 text-current'
+    : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
     }`}>
     {count}
   </span>
@@ -229,36 +232,34 @@ export default function MyBookings() {
   };
 
   return (
-    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-900 min-h-screen transition-colors">
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-900/50 ">
-        <div className="w-full mx-auto space-y-4">
-          <div className="flex items-center justify-between">
-            <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl active:scale-90 transition-all shrink-0">
-              <ArrowLeft className="w-4 h-4 dark:text-white" />
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-2.5 px-3 border-b border-slate-200/80 dark:border-slate-800">
+        <div className="w-full mx-auto space-y-3">
+          <div className="flex items-center justify-between relative">
+            <button onClick={() => navigate(-1)} className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200/80 dark:border-slate-700 active:scale-90 transition-all shrink-0">
+              <ArrowLeft className="w-4 h-4 text-slate-800 dark:text-white" />
             </button>
 
-            <div className="absolute left-1/2 -translate-x-1/2">
-              <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">My Bookings</h1>
-              <p className="text-[10px] font-bold text-slate-500 capitalize tracking-[0.2em] mt-1">Pickup Details and history</p>
+            <div className="absolute left-1/2 -translate-x-1/2 text-center">
+              <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none">My Bookings</h1>
+              <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Pickups & history</p>
             </div>
-
-            <div className="w-10 h-10" />
 
             {(activeTab === 'Cancelled' || activeTab === 'Completed') && filteredBookings.length > 0 ? (
               <button
                 onClick={() => handleClearHistory(activeTab.toLowerCase())}
-                className="text-[12px] font-bold text-white px-6 py-1.5 bg-red-500 rounded-lg shrink-0 transition-colors"
+                className="text-[11px] font-bold text-rose-600 dark:text-rose-400 px-3 py-1.5 bg-rose-50 dark:bg-rose-950/50 border border-rose-200/60 dark:border-rose-800/40 rounded-xl shrink-0 active:scale-95 transition-all"
               >
                 Clear
               </button>
             ) : (
-              <div className="w-10 shrink-0" />
+              <div className="w-9 shrink-0" />
             )}
           </div>
 
           {/* Tabs */}
-          <div className="flex bg-slate-100/85 dark:bg-slate-800/85 p-1 rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+          <div className="flex bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700/60 gap-1">
             {TABS.map(tab => {
               const tabCount = bookings.filter((b: any) => {
                 const rawDate = b.updatedAt || b.updated_at || b.createdAt || b.created_at || b.date;
@@ -286,9 +287,9 @@ export default function MyBookings() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-2 text-[11px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center ${activeTab === tab
-                    ? 'bg-primary dark:bg-primary text-white dark:text-white'
-                    : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
+                  className={`flex-1 py-2 text-[11px] font-bold rounded-lg transition-all flex items-center justify-center ${activeTab === tab
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs'
+                    : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                     }`}
                 >
                   {tab}
@@ -300,76 +301,100 @@ export default function MyBookings() {
         </div>
       </div>
 
-      <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+7rem)] px-0 relative max-w-lg mx-auto w-full space-y-4">
+      <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+7rem)] px-1.5 relative max-w-lg mx-auto w-full space-y-3">
 
         {filteredBookings.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center px-4">
-            <Package className="w-12 h-12 text-slate-300 dark:text-slate-600 mb-4" />
+          <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700/60 py-14 px-6 text-center mt-2">
+            <div className="w-14 h-14 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3.5 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+              <Package className="w-6 h-6 text-slate-400" />
+            </div>
             <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">{`No ${activeTab.toLowerCase()} bookings`}</p>
-            <p className="text-xs font-medium text-slate-400">
-              {activeTab === 'Upcoming' ? "Book your first pickup to get started!" :
-                activeTab === 'Completed' ? "No completed bookings made yet." :
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto leading-relaxed">
+              {activeTab === 'Upcoming' ? "Book your first pickup to schedule a verified collector." :
+                activeTab === 'Completed' ? "Your completed pickups will appear here." :
                   "Your cancelled history will appear here."}
             </p>
+            {activeTab === 'Upcoming' && (
+              <button
+                onClick={() => navigate('/book-pickup')}
+                className="mt-4 px-5 py-2.5 bg-emerald-950 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold active:scale-95 transition-all shadow-xs"
+              >
+                Book a Pickup
+              </button>
+            )}
           </div>
         ) : (
-          <div className="space-y-1">
-
+          <div className="space-y-2">
             {filteredBookings.map((b: any) => {
               const wasteTypeVal = b.wasteType;
               const waste = categories.find((w: any) => w.slug === wasteTypeVal) ||
                 categories.find((w: any) => w.id === wasteTypeVal);
               const status = (statusConfig as any)[b.status] || statusConfig.pending;
-              const displayDate = b.status === 'completed'
-                ? new Date((b as any).createdAt).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })
-                : b.date;
+              const StatusIcon = status.icon;
+              const bookedDateObj = new Date(b.createdAt || b.created_at || b.updatedAt || Date.now());
+              const bookedTimeStr = bookedDateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              const bookedDateStr = bookedDateObj.toLocaleDateString([], { day: 'numeric', month: 'short' });
+              const trackingCode = b.trackingId || b.tracking_id || b.id.slice(0, 8).toUpperCase();
 
               return (
                 <div
                   key={b.id}
-                  className="bg-slate-50 dark:bg-slate-900 rounded-xl relative overflow-hidden cursor-pointer select-none group border-b border-slate-100 dark:border-slate-700/50 shadow-sm"
+                  onClick={() => setSelectedBooking(b)}
+                  className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-2 group"
                 >
-                  {/* Clickable Header */}
-                  <div
-                    className="pl-5 pr-4 py-3 flex justify-between items-start active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors"
-                    onClick={() => setSelectedBooking(b)}
-                  >
-                    <div className="flex gap-3 items-start flex-1">
-                      <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-3xl">
+                  {/* Top Row: Thumbnail, Title + ID, Status Pill */}
+                  <div className="flex items-start justify-between gap-2.5">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="w-14 h-14 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-2xl shadow-2xs">
                         {b.photoUrl ? (
                           <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
                           waste?.icon || '📦'
                         )}
                       </div>
-                      <div className="flex flex-col py-0.5 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight capitalize line-clamp-1 max-w-[160px]">{waste?.label || wasteTypeVal}</span>
-                          <span className={`text-[8px] font-bold tracking-widest px-1.5 py-0.5 rounded-md ${status.color} uppercase shrink-0`}>
-                            {status.label}
-                          </span>
-                        </div>
-                        <div className="flex flex-col gap-1 mt-2">
-                          <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 truncate max-w-[150px]">
-                            <MapPin className="w-3.5 h-3.5 text-green-500 shrink-0" /> {b.estate}
-                          </p>
-                          <p className="text-[11px] font-semibold text-slate-400 capitalize tracking-wide truncate max-w-[150px]">
-                            Pickup ID: <span className="text-primary font-mono text-[9px]">{b.trackingId || b.tracking_id || b.id.slice(0, 8).toUpperCase()}</span>
-                          </p>
-                        </div>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-[14px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight capitalize truncate group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                          {waste?.label || wasteTypeVal}
+                        </h3>
+                        <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-0.5">
+                          ID: <span className="font-mono font-semibold text-slate-600 dark:text-slate-300">#{trackingCode}</span>
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right flex flex-col items-end justify-between self-stretch shrink-0 pb-0.5">
-                      <p className="text-[9px] font-bold text-slate-400 text-right leading-tight">
-                        Booked: {new Date(b.createdAt || b.created_at || b.updatedAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        <br/>
-                        <span className="font-semibold text-slate-300 dark:text-slate-500">{new Date(b.createdAt || b.created_at || b.updatedAt || Date.now()).toLocaleDateString([], { day: 'numeric', month: 'short' })}</span>
-                      </p>
-                      <ChevronDown className="w-4 h-4 text-slate-300 -rotate-90 my-1.5" />
-                      <p className="text-[9px] font-bold text-slate-500 flex items-center gap-1 mt-auto">
-                        <Clock className="w-2.5 h-2.5 text-blue-500 shrink-0" /> {b.timeSlot || b.time_slot || 'ASAP'}
-                      </p>
-                    </div>
+
+                    <span className={`shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${status.color}`}>
+                      <StatusIcon className="w-3 h-3 shrink-0" />
+                      {status.label}
+                    </span>
+                  </div>
+
+                  {/* Middle Meta Row: Location, Time Slot, Weight */}
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                    <span className="flex items-center gap-1 truncate max-w-[180px]">
+                      <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <span className="truncate">{b.estate || 'Nairobi'}</span>
+                    </span>
+                    <span className="flex items-center gap-1 shrink-0">
+                      <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                      {b.timeSlot || b.time_slot || 'ASAP'}
+                    </span>
+                    {(b.weightKg || b.actualWeightKg) > 0 && (
+                      <span className="flex items-center gap-1 shrink-0">
+                        <Scale className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        {b.actualWeightKg || b.weightKg} kg
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Footer Row */}
+                  <div className="pt-2.5 border-t border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between gap-2">
+                    <span className="text-[10.5px] font-medium text-slate-400 dark:text-slate-500">
+                      Booked {bookedDateStr} · {bookedTimeStr}
+                    </span>
+
+                    <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                      View Details <ChevronRight className="w-3.5 h-3.5" />
+                    </span>
                   </div>
                 </div>
               );
@@ -611,7 +636,7 @@ export default function MyBookings() {
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); handleCancel(b.id); setSelectedBooking(null); }}
-                        className="flex-1 py-4 bg-slate-500 dark:bg-slate-900 text-red-600 border border-red-50 dark:border-red-900/20 rounded-2xl font-bold text-[10px] capitalize tracking-[0.1em] active:scale-95 transition-all flex items-center justify-center gap-2"
+                        className="flex-1 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold text-[10px] capitalize tracking-[0.1em] shadow-lg shadow-red-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                       >
                         <XCircle className="w-4 h-4" /> Cancel
                       </button>
@@ -639,7 +664,7 @@ export default function MyBookings() {
 
                   <button
                     onClick={() => setSelectedBooking(null)}
-                    className="w-full py-4 bg-slate-400 text-white rounded-xl font-bold text-[14px] capitalize active:opacity-50"
+                    className="w-full py-4 bg-slate-800 hover:bg-slate-900 dark:bg-slate-900 dark:hover:bg-slate-950 text-white rounded-xl font-bold text-[14px] capitalize active:scale-98 transition-all"
                   >
                     Close Detail
                   </button>

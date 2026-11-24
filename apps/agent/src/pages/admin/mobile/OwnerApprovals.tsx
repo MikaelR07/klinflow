@@ -162,10 +162,10 @@ export default function OwnerApprovals() {
         >
           <div className="flex items-center gap-2.5">
             <Icon className={`w-4 h-4 ${iconColor}`} />
-            <span className="text-[11px] font-black text-slate-700 dark:text-slate-200 uppercase tracking-widest">{title}</span>
+            <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200 uppercase tracking-widest">{title}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className={`text-[11px] font-black ${iconColor} min-w-[20px] h-5 rounded-full ${iconBg} flex items-center justify-center px-1.5`}>
+            <span className={`text-[11px] font-bold ${iconColor} min-w-[20px] h-5 rounded-full ${iconBg} flex items-center justify-center px-1.5`}>
               {items.length}
             </span>
             {isCollapsed ? (
@@ -319,7 +319,7 @@ export default function OwnerApprovals() {
                   onClick={() => navigate(`/approvals/deposit/${item.id}`, { state: { request: item } })}
                   className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 >
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-black shrink-0 ${getInitialsColor(item.agent_name)}`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${getInitialsColor(item.agent_name)}`}>
                     {getInitials(item.agent_name)}
                   </div>
                   <div className="flex-1 min-w-0 text-left">
@@ -363,7 +363,7 @@ export default function OwnerApprovals() {
                   onClick={() => navigate(`/approvals/override/${item.id}`, { state: { request: item } })}
                   className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                 >
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-black shrink-0 ${getInitialsColor(item.agent_name)}`}>
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${getInitialsColor(item.agent_name)}`}>
                     {getInitials(item.agent_name)}
                   </div>
                   <div className="flex-1 min-w-0 text-left">

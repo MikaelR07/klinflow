@@ -33,6 +33,7 @@ export default function CreateRFQPage() {
   const { categories, materialPrices, fetchCategories, fetchMaterialPrices } = useServiceStore();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [baseLocationName, setBaseLocationName] = useState<string>('');
   const [stepError, setStepError] = useState('');
   const isFleetDriver = profile?.agentAccountType === 'fleet_driver';
 
@@ -48,7 +49,7 @@ export default function CreateRFQPage() {
     category: '',
     materialName: '',
     weight: '',
-    pickupArea: profile?.location?.estate || profile?.estate || '',
+    pickupArea: '',
     price: '',
     deliveryMethod: 'flexible',
     deadlineDate: '',
@@ -62,6 +63,31 @@ export default function CreateRFQPage() {
     fetchCategories();
     fetchMaterialPrices();
   }, [fetchAgentConfig, fetchCategories, fetchMaterialPrices]);
+
+  // Resolve base location from agentConfig into a readable name
+  useEffect(() => {
+    const baseLoc = (agentConfig?.base_location as any);
+    if (baseLoc?.latitude && baseLoc?.longitude) {
+      // Reverse geocode the base_location coordinates
+      fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${baseLoc.latitude}&lon=${baseLoc.longitude}`,
+        { headers: { 'User-Agent': 'Klinflow-PWA/1.0' } }
+      )
+        .then(res => res.json())
+        .then(data => {
+          if (data?.address) {
+            const addr = data.address;
+            const name = addr.neighbourhood || addr.suburb || addr.quarter || addr.road || data.display_name?.split(',')[0] || '';
+            if (name) {
+              setBaseLocationName(name);
+              // Only auto-fill if the user hasn't manually typed something
+              setFormData(prev => prev.pickupArea ? prev : { ...prev, pickupArea: name });
+            }
+          }
+        })
+        .catch(() => {});
+    }
+  }, [agentConfig]);
 
   const activeCategories = useMemo(() => {
     const rawMaterials = agentConfig?.accepted_materials;
@@ -261,13 +287,13 @@ export default function CreateRFQPage() {
           </button>
 
           <div className="text-center flex-1">
-            <h1 className="text-[15px] font-black text-slate-900 dark:text-white tracking-tight uppercase">Broadcast RFQ</h1>
+            <h1 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight uppercase">Broadcast RFQ</h1>
             <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-0.5">
               {stepTitles[step - 1]}
             </p>
           </div>
 
-          <div className="w-10 h-10 flex items-center justify-center text-[10px] font-black text-slate-400 tracking-wider">
+          <div className="w-10 h-10 flex items-center justify-center text-[10px] font-bold text-slate-400 tracking-wider">
             {step}/3
           </div>
         </div>
@@ -438,7 +464,7 @@ export default function CreateRFQPage() {
               <div className="bg-slate-50/80 dark:bg-slate-800/80 p-3.5 rounded-xl border border-slate-150 dark:border-slate-700/50 shadow-sm space-y-2.5">
                 <div className="flex items-center gap-2 text-slate-400">
                   <Scale className="w-3.5 h-3.5 text-amber-500" />
-                  <h2 className="text-[10px] font-black uppercase tracking-widest">Weight</h2>
+                  <h2 className="text-[10px] font-bold uppercase tracking-widest">Weight</h2>
                 </div>
                 <div className="relative flex items-baseline">
                   <input
@@ -449,7 +475,7 @@ export default function CreateRFQPage() {
                       setFormData({ ...formData, weight: e.target.value });
                       setStepError('');
                     }}
-                    className="w-full bg-transparent text-xl font-black text-slate-950 dark:text-white focus:outline-none border-b border-transparent focus:border-amber-500/25 pb-0.5"
+                    className="w-full bg-transparent text-xl font-bold text-slate-950 dark:text-white focus:outline-none border-b border-transparent focus:border-amber-500/25 pb-0.5"
                   />
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">kg</span>
                 </div>
@@ -459,7 +485,7 @@ export default function CreateRFQPage() {
               <div className="bg-slate-50/80 dark:bg-slate-800/80 p-3.5 rounded-xl border border-slate-150 dark:border-slate-700/50 shadow-sm space-y-2.5">
                 <div className="flex items-center gap-2 text-slate-400">
                   <DollarSign className="w-3.5 h-3.5 text-emerald-500" />
-                  <h2 className="text-[10px] font-black uppercase tracking-widest">Buying Price</h2>
+                  <h2 className="text-[10px] font-bold uppercase tracking-widest">Buying Price</h2>
                 </div>
                 <div className="relative flex items-baseline">
                   <span className="text-[10px] font-bold text-slate-400 mr-0.5">KSh</span>
@@ -471,7 +497,7 @@ export default function CreateRFQPage() {
                       setFormData({ ...formData, price: e.target.value });
                       setStepError('');
                     }}
-                    className="w-full bg-transparent text-xl font-black text-slate-950 dark:text-white focus:outline-none border-b border-transparent focus:border-amber-500/25 pb-0.5"
+                    className="w-full bg-transparent text-xl font-bold text-slate-950 dark:text-white focus:outline-none border-b border-transparent focus:border-amber-500/25 pb-0.5"
                   />
                   <span className="text-[10px] font-bold text-slate-450 uppercase tracking-wider ml-1">/kg</span>
                 </div>
@@ -494,14 +520,15 @@ export default function CreateRFQPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      const defaultLoc = profile?.location?.estate || profile?.estate || 'My Profile Location';
+                      const defaultLoc = baseLocationName || 'My Base Location';
                       setFormData({ ...formData, pickupArea: defaultLoc });
                       setStepError('');
                     }}
-                    className="w-full flex items-center gap-2 h-12 bg-blue-500/5 hover:bg-blue-500/10 border border-blue-500/20 rounded-xl px-4 text-xs font-bold text-blue-600 dark:text-blue-400 transition-colors text-left"
+                    disabled={!baseLocationName}
+                    className={`w-full flex items-center gap-2 h-12 border rounded-xl px-4 text-xs font-bold transition-colors text-left ${baseLocationName ? 'bg-blue-500/5 hover:bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 cursor-not-allowed'}`}
                   >
                     <MapPin className="w-4 h-4" />
-                    <span>Use Profile Location ({profile?.location?.estate || profile?.estate || 'N/A'})</span>
+                    <span>{baseLocationName ? `Use Base: ${baseLocationName}` : 'No base location set — configure in Service Profile'}</span>
                   </button>
                 </div>
 
@@ -671,7 +698,7 @@ export default function CreateRFQPage() {
                     {images.map((img, idx) => (
                       <div key={idx} className="aspect-[4/3] w-full shrink-0 relative bg-slate-950 rounded-2xl overflow-hidden shadow-sm snap-start">
                         <OptimizedImage src={img.url} className="w-full h-full object-cover opacity-90" wrapperClassName="w-full h-full" alt={`Preview ${idx + 1}`} />
-                        <div className="absolute top-3 left-3 px-2.5 py-1 bg-black/50 backdrop-blur-md rounded-lg text-[9px] font-black text-white capitalize tracking-widest border border-white/10">
+                        <div className="absolute top-3 left-3 px-2.5 py-1 bg-black/50 backdrop-blur-md rounded-lg text-[9px] font-bold text-white capitalize tracking-widest border border-white/10">
                           Sample Image {idx + 1} of {images.length}
                         </div>
                       </div>
@@ -680,7 +707,7 @@ export default function CreateRFQPage() {
                 ) : (
                   <div className="aspect-[4/3] bg-slate-50/50 dark:bg-slate-800/50 rounded-2xl flex flex-col items-center justify-center text-slate-400 border border-slate-150 dark:border-slate-750 shadow-sm">
                     <ImageIcon className="w-8 h-8 mb-1.5 opacity-30" />
-                    <span className="text-[9px] font-black uppercase tracking-widest opacity-50">No sample photo provided</span>
+                    <span className="text-[9px] font-bold uppercase tracking-widest opacity-50">No sample photo provided</span>
                   </div>
                 )}
 
@@ -688,16 +715,16 @@ export default function CreateRFQPage() {
                   {/* Title & Price Header */}
                   <div className="flex justify-between items-start">
                     <div>
-                      <span className="bg-amber-500/10 text-amber-500 border border-amber-500/10 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest">
+                      <span className="bg-amber-500/10 text-amber-500 border border-amber-500/10 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest">
                         RFQ Sourcing
                       </span>
-                      <h3 className="text-base font-black text-slate-900 dark:text-white mt-2 leading-none capitalize">{formData.materialName}</h3>
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white mt-2 leading-none capitalize">{formData.materialName}</h3>
                       <p className="text-[10px] text-slate-400 font-semibold capitalize tracking-wider mt-1.5 flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5 text-slate-400" /> {formData.pickupArea}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-black text-emerald-600">KSh {formData.price}</p>
+                      <p className="text-lg font-bold text-emerald-600">KSh {formData.price}</p>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">Buying price / kg</p>
                     </div>
                   </div>
@@ -706,11 +733,11 @@ export default function CreateRFQPage() {
                   <div className="bg-white dark:bg-slate-900 border border-slate-150 dark:border-slate-700/50 p-4 rounded-xl grid grid-cols-2 gap-3 text-xs shadow-sm">
                     <div>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Volume Wanted</p>
-                      <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{formData.weight} KG</p>
+                      <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{formData.weight} KG</p>
                     </div>
                     <div className="text-right">
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Estimated Budget</p>
-                      <p className="text-sm font-black text-emerald-600 leading-none">
+                      <p className="text-sm font-bold text-emerald-600 leading-none">
                         KSh {(parseFloat(formData.weight) * parseFloat(formData.price)).toLocaleString()}
                       </p>
                     </div>
@@ -733,7 +760,7 @@ export default function CreateRFQPage() {
                       <div className="h-px bg-slate-100 dark:bg-slate-700 my-1" />
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300">Total Est. Budget</span>
-                        <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {(parseFloat(formData.weight || '0') * parseFloat(formData.price || '0')).toLocaleString()}</span>
+                        <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">KSh {(parseFloat(formData.weight || '0') * parseFloat(formData.price || '0')).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -745,8 +772,8 @@ export default function CreateRFQPage() {
                         <Clock className="w-4 h-4" />
                       </div>
                       <div>
-                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">Deadline Date & Time</p>
-                        <p className="text-[11px] font-black text-slate-800 dark:text-white mt-1 leading-none">{formData.deadlineDate} @ {formData.deadlineTime}</p>
+                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none">Deadline Date & Time</p>
+                        <p className="text-[11px] font-bold text-slate-800 dark:text-white mt-1 leading-none">{formData.deadlineDate} @ {formData.deadlineTime}</p>
                       </div>
                     </div>
                   </div>

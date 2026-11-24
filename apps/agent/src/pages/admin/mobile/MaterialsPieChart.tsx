@@ -53,7 +53,7 @@ export function MaterialsPieChart() {
         <div className="w-[200px] h-[200px] flex-shrink-0 relative">
           {/* Center Text */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <p className="text-xl font-black text-white leading-none">{total >= 1000 ? `${(total/1000).toFixed(1)}k` : total}</p>
+            <p className="text-xl font-bold text-white leading-none">{total >= 1000 ? `${(total/1000).toFixed(1)}k` : total}</p>
             <p className="text-[10px] text-emerald-100 mt-0.5 font-medium">Total kg</p>
           </div>
           <ResponsiveContainer width="100%" height="100%">

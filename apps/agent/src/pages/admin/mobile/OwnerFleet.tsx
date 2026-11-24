@@ -239,7 +239,7 @@ export default function OwnerFleet() {
                     </div>
                     <div className="text-right mt-auto">
                       <p className="text-[9px] text-slate-400 font-medium">Collected </p>
-                      <p className="text-sm font-black text-emerald-600 dark:text-emerald-400 leading-none">{(agent.collected_kg || 0).toLocaleString()} kg</p>
+                      <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 leading-none">{(agent.collected_kg || 0).toLocaleString()} kg</p>
                     </div>
                   </div>
                   
@@ -250,7 +250,7 @@ export default function OwnerFleet() {
           ) : (
             <div className="text-center py-16 bg-slate-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
               <Users className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-base font-black text-slate-900 dark:text-white mb-1">No agents found</h3>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">No agents found</h3>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Adjust your search or filters.</p>
             </div>
           )}

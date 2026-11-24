@@ -85,10 +85,10 @@ export default function WithdrawalPage() {
   };
 
   return (
-    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#F8F9FF] dark:bg-slate-800 relative overflow-x-hidden">
+    <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 min-h-screen relative overflow-x-hidden transition-colors">
       
       {/* ── FIXED TOP NAV ── */}
-      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-600 via-emerald-700 to-emerald-800 dark:bg-emerald-800/95 backdrop-blur-md `}>
+      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 transition-all duration-300 bg-gradient-to-br from-[#1178ab] to-[#085078] backdrop-blur-md `}>
         <div className="max-w-lg mx-auto px-5 flex items-center justify-between relative">
           <button
             onClick={() => navigate(-1)}
@@ -105,7 +105,7 @@ export default function WithdrawalPage() {
       </div>
 
       {/* ── TOP SECTION: PRIMARY WITH ROUNDED BOTTOM ── */}
-      <div className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 pt-[calc(env(safe-area-inset-top,1.5rem)+7rem)] pb-6 rounded-b-[1.5rem] relative z-20 overflow-hidden">
+      <div className="bg-gradient-to-br from-[#1178ab] to-[#085078] pt-[calc(env(safe-area-inset-top,1.5rem)+7rem)] pb-6 rounded-b-[1.5rem] relative z-20 overflow-hidden">
         <div className="text-center px-4 mb-4">
           <p className="text-[11px] font-bold text-white/70 uppercase tracking-widest mb-1.5">Total Balance</p>
           <div className="flex items-baseline justify-center gap-1 text-white">
@@ -147,98 +147,117 @@ export default function WithdrawalPage() {
         </div>
       </div>
 
-      <div className="px-1.5 mt-2 space-y-6 relative z-10 max-w-lg mx-auto">
-        <div className="space-y-6">
-
-            {/* AMOUNT AND DETAILS CARD */}
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-[1rem] p-5 shadow-sm border border-slate-100 dark:border-slate-800">
-              {/* <h3 className="text-[14px] font-bold text-slate-700 dark:text-white capitalize tracking-wider mb-4 text-center">Withdrawal Details</h3> */}
-              
-              <div className="space-y-4">
-                {/* AMOUNT INPUT */}
-                <div className="space-y-1.5">
-                  <label className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">Amount to Withdraw</label>
-                  <div className="relative flex items-center">
-                    <span className="absolute left-4 font-bold text-emerald-600 dark:text-emerald-400 text-base">KSh</span>
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      value={amount}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setAmount(val === '' ? '' : Number(val));
-                      }}
-                      className="w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-14 pr-4 text-xl font-bold text-emerald-700 dark:text-emerald-400 outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-300"
-                      placeholder="0.00"
-                    />
-                  </div>
-                  <div className="flex justify-between px-1 mt-1.5 text-[10px] font-bold">
-                    <p className="text-slate-400 capitalize tracking-widest">Fee: <span className="text-emerald-500">Free</span></p>
-                    <button onClick={() => setAmount(cashBalance)} className="text-emerald-600 dark:text-emerald-400 capitalize tracking-widest hover:underline active:opacity-50">Withdraw All</button>
-                  </div>
-                </div>
-
-                <div className="h-px bg-slate-100 dark:bg-slate-800 -mx-5 my-4" />
-
-                {/* DETAILS INPUT */}
-                <div className="space-y-1.5">
-                  <label className="text-[12px] font-semibold text-slate-600 dark:text-slate-400 capitalize tracking-widest ml-1">
-                    {method.id === 'bank' ? 'Account Number' : 'Phone Number'}
-                  </label>
-                  <div className="relative flex items-center">
-                    <span className="absolute left-4 text-slate-400">
-                      <PhoneIcon className="w-4 h-4" />
-                    </span>
-                    <input
-                      type="text"
-                      value={details}
-                      onChange={(e) => setDetails(e.target.value)}
-                      className="w-full bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl py-3.5 pl-11 pr-4 text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-colors placeholder:text-slate-400"
-                      placeholder={method.id === 'bank' ? 'Enter Account No' : '07XXXXXXXX'}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={handleConfirm}
-                disabled={loading || amount === '' || Number(amount) < 100 || Number(amount) > cashBalance}
-                className="w-full mt-6 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-sm shadow-md shadow-emerald-600/20 active:scale-[0.98] transition-all disabled:opacity-50 disabled:bg-slate-400 dark:disabled:bg-slate-700 flex items-center justify-center gap-2 capitalize tracking-widest"
-              >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Confirm & Withdraw</>}
-              </button>
-
-              <div className="text-center mt-4">
-                <p className="text-[10px] font-medium text-slate-400 leading-relaxed">
-                  By clicking confirm, you authorize Klinflow to process this settlement to the provided account.
-                </p>
-              </div>
+      <div className="px-3 mt-4 pb-10 space-y-4 relative z-10 max-w-lg mx-auto">
+        {/* AMOUNT AND DETAILS CARD */}
+        <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/60 space-y-4">
+          {/* AMOUNT INPUT */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between px-0.5">
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Amount to Withdraw</label>
+              <span className="text-[11px] font-semibold text-slate-400">Min. KSh 100</span>
             </div>
 
-            {/* HOW IT WORKS */}
-            <div className="bg-slate-200 dark:bg-slate-900 rounded-[1rem] p-5 border border-slate-100 dark:border-slate-800 shadow-sm">
-              <h4 className="text-[12px] font-bold text-slate-700 dark:text-white uppercase tracking-wider mb-3">How Withdrawals Work</h4>
-              <ul className="space-y-3">
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">1</span>
-                  </div>
-                  <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                    Choose your preferred network (<strong className="text-slate-700 dark:text-slate-300">M-Pesa</strong> or <strong className="text-slate-700 dark:text-slate-300">Airtel Money</strong>) and enter the amount you wish to withdraw.
-                  </p>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">2</span>
-                  </div>
-                  <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                    Confirm your registered phone number. Your funds are instantly dispatched to your mobile wallet once approved.
-                  </p>
-                </li>
-              </ul>
+            <div className="relative flex items-center">
+              <span className="absolute left-4 font-bold text-emerald-700 dark:text-emerald-400 text-base">KSh</span>
+              <input
+                type="number"
+                inputMode="numeric"
+                value={amount}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setAmount(val === '' ? '' : Number(val));
+                }}
+                className="w-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 rounded-xl py-3.5 pl-14 pr-4 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-600 transition-colors placeholder:text-slate-300 tabular-nums"
+                placeholder="0"
+              />
+            </div>
+
+            {/* Quick-Amount Chips */}
+            <div className="flex items-center gap-2 pt-0.5">
+              {[100, 500, 1000].map(preset => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => setAmount(preset)}
+                  className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold border transition-all active:scale-95 ${
+                    Number(amount) === preset
+                      ? 'bg-emerald-950 text-white border-emerald-950'
+                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-slate-700'
+                  }`}
+                >
+                  KSh {preset.toLocaleString()}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setAmount(cashBalance)}
+                className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold border transition-all active:scale-95 ${
+                  cashBalance > 0 && Number(amount) === cashBalance
+                    ? 'bg-emerald-950 text-white border-emerald-950'
+                    : 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 border-slate-200/80 dark:border-slate-700'
+                }`}
+              >
+                Max
+              </button>
             </div>
           </div>
+
+          <div className="h-px bg-slate-200/70 dark:bg-slate-700/60" />
+
+          {/* DETAILS INPUT */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 px-0.5 block">
+              {method.id === 'bank' ? 'Account Number' : `${method.name} Phone Number`}
+            </label>
+            <div className="relative flex items-center">
+              <span className="absolute left-3.5 text-slate-400">
+                <PhoneIcon className="w-4 h-4" />
+              </span>
+              <input
+                type="text"
+                value={details}
+                onChange={(e) => setDetails(e.target.value)}
+                className="w-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 rounded-xl py-3 pl-10 pr-4 text-sm font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-600 transition-colors placeholder:text-slate-400"
+                placeholder={method.id === 'bank' ? 'Enter Account No' : '07XXXXXXXX'}
+              />
+            </div>
+          </div>
+
+          {/* LIVE SETTLEMENT SUMMARY */}
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Destination</span>
+              <span className="font-bold text-slate-800 dark:text-white truncate max-w-[180px]">
+                {method.name} {details ? `· ${details}` : ''}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Transfer Fee</span>
+              <span className="font-bold text-emerald-600 dark:text-emerald-400">Free (KSh 0)</span>
+            </div>
+            <div className="h-px bg-slate-100 dark:bg-slate-800" />
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-slate-700 dark:text-slate-300">You&apos;ll Receive</span>
+              <span className="text-sm font-extrabold text-slate-900 dark:text-white tabular-nums">
+                KSh {Number(amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={handleConfirm}
+            disabled={loading || amount === '' || Number(amount) < 100 || Number(amount) > cashBalance}
+            className="w-full py-3.5 bg-emerald-950 hover:bg-emerald-900 text-white rounded-xl font-bold text-sm shadow-sm active:scale-[0.98] transition-all disabled:opacity-40 flex items-center justify-center gap-2"
+          >
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm & Withdraw'}
+          </button>
+
+          <p className="text-[11px] text-center text-slate-400 dark:text-slate-500 font-medium flex items-center justify-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            Instant dispatch upon approval · Secured by Klinflow
+          </p>
         </div>
+      </div>
 
         {/* STEP 2: SUCCESS MODAL */}
       {step === 2 && typeof document !== 'undefined' && createPortal(

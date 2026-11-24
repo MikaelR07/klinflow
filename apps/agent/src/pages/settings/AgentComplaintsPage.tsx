@@ -184,7 +184,7 @@ export default function AgentComplaintsPage() {
                   {/* Top Status & Priority Bar */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border ${getStatusColor(complaint.status)}`}>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${getStatusColor(complaint.status)}`}>
                         {complaint.status}
                       </span>
                       <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
@@ -253,7 +253,7 @@ export default function AgentComplaintsPage() {
                         {complaint.resolution_note && (
                           <div className="bg-gradient-to-br from-emerald-50 to-teal-50/50 dark:from-emerald-950/40 dark:to-teal-950/20 rounded-xl p-3.5 border border-emerald-200/80 dark:border-emerald-800/50">
                             <div className="flex items-center justify-between mb-1">
-                              <span className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
+                              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                                 Hub Response
                               </span>
@@ -292,7 +292,7 @@ export default function AgentComplaintsPage() {
             >
               <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900 z-10">
                 <div>
-                  <h2 className="text-lg font-black text-slate-900 dark:text-white">Submit Complaint</h2>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Submit Complaint</h2>
                   <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Secure Hub Communication</p>
                 </div>
                 <button 

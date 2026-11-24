@@ -203,73 +203,74 @@ export default function UserHome() {
       <div className="max-w-xl mx-auto px-2.5 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-5 space-y-6">
 
         {/* ── ECO-REWARDS HERO CARD ── */}
-        <div className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-emerald-700 to-emerald-800 border border-emerald-600/50 p-5 shadow-sm">
+        <div className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-lime-400 to-lime-500 border border-lime-400/80 p-4">
           <div className="relative z-10 flex flex-col gap-1">
             <div className="flex justify-between items-start mb-2">
               <div onClick={() => navigate("/resident-wallet")} className="cursor-pointer group/bal">
-                <p className="text-[10px] font-semibold text-white/80 uppercase tracking-widest mb-1 flex items-center gap-1 group-hover/bal:text-white transition-colors">
-                  <Wallet className="w-4 h-4" /> Wallet Balance
+                <p className="text-[10px] font-bold text-emerald-950/80 uppercase tracking-widest mb-1 flex items-center gap-1 group-hover/bal:text-emerald-950 transition-colors">
+                  <Wallet className="w-4 h-4 text-emerald-950" /> Wallet Balance
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-white/90">Ksh</span>
-                  <h2 className="text-2xl font-bold text-white tracking-tighter leading-none drop-shadow-md">
+                  <span className="text-xl font-bold text-emerald-950/80">Ksh</span>
+                  <h2 className="text-2xl font-bold text-emerald-950 tracking-tighter leading-none">
                     {Number(walletBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </h2>
                 </div>
               </div>
-              <button onClick={() => navigate("/resident-wallet")} className="bg-lime-400 text-emerald-900 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-lime-300">
+              <button onClick={() => navigate("/resident-wallet")} className="bg-emerald-950 text-white hover:bg-emerald-900 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95 ">
                 Withdraw
               </button>
             </div>
 
-            <div className="flex items-center gap-1 pt-2 border-t border-white/20">
-              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                <span className="text-base font-bold text-white">{metrics.totalPickups}</span>
-                <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
+            <div className="flex items-center gap-1 pt-2 border-t border-emerald-950/15">
+              <div className="flex-1 bg-black/5 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-black/5">
+                <span className="text-base font-bold text-emerald-950">{metrics.totalPickups}</span>
+                <span className="text-[9px] font-bold text-emerald-950 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Truck className="w-3 h-3" /> Pickups</span>
               </div>
-              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                <span className="text-base font-bold text-white">{metrics.kgRecovered}</span>
-                <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
+              <div className="flex-1 bg-black/5 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-black/5">
+                <span className="text-base font-bold text-emerald-950">{metrics.kgRecovered}</span>
+                <span className="text-[9px] font-bold text-emerald-950 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Recycle className="w-3 h-3" /> KG Recycled</span>
               </div>
-              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20 transition-colors">
-                <span className="text-base font-bold text-amber-300 drop-shadow-sm">{rewardPoints}</span>
-                <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
+              <div className="flex-1 bg-black/5 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-black/5">
+                <span className="text-base font-bold text-emerald-950">{rewardPoints}</span>
+                <span className="text-[9px] font-bold text-emerald-950 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
               </div>
             </div>
           </div>
         </div>
 
-        
+    
+       
+
 
         {/* ── DISCOVER HORIZONTAL CARD ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="!mt-4">
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="!mt-4" >
           <button
             onClick={() => navigate("/discovery")}
-            className="w-full text-left bg-gradient-to-r from-lime-500 via-lime-500 to-lime-400 border border-lime-300/80 dark:border-lime-400/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all active:scale-[0.99] group relative overflow-hidden"
+            className="w-full text-left bg-gradient-to-r from-emerald-700 to-emerald-600 border border-emerald-500/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all active:scale-[0.99] group relative overflow-hidden"
           >
             <div className="flex items-center justify-between gap-3 relative z-10">
               <div className="flex items-center gap-3.5">
-                <div className="w-11 h-11 shrink-0 rounded-2xl bg-white/90 dark:bg-white/95 shadow-xs border border-white/80 flex items-center justify-center text-emerald-900 group-hover:scale-105 transition-transform">
+                <div className="w-11 h-11 shrink-0 rounded-2xl bg-white/15 backdrop-blur-sm shadow-xs border border-white/20 flex items-center justify-center text-white group-hover:scale-105 transition-transform">
                   <Compass className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-emerald-950 tracking-tight leading-snug">
+                  <h3 className="text-sm font-bold text-white tracking-tight leading-snug">
                     Discover Recycling Hubs
                   </h3>
-                  <p className="text-[11px] font-semibold text-emerald-900/80 mt-0.5 line-clamp-1">
+                  <p className="text-[11px] font-medium text-emerald-100 mt-0.5 line-clamp-1">
                     Locate verified collection centers & drop points
                   </p>
                 </div>
               </div>
-              <div className="w-8 h-8 shrink-0 rounded-full bg-emerald-950/10 flex items-center justify-center text-emerald-950 group-hover:bg-emerald-950/20 transition-all">
+              <div className="w-8 h-8 shrink-0 rounded-full bg-white/15 flex items-center justify-center text-white group-hover:bg-white/25 transition-all">
                 <ChevronRight className="w-4 h-4" />
               </div>
             </div>
           </button>
         </motion.div>
 
-
-        {/* ── KLINFLOW BANNERS ── */}
+         {/* ── KLINFLOW BANNERS ── */}
         <motion.div variants={itemVariants} className="!mt-3">
           <div className="flex gap-2.5 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
             {/* Banner 1 */}
@@ -289,7 +290,7 @@ export default function UserHome() {
         
         
          {/* ── COMMUNITY TOOLS ── */}
-        <motion.div variants={itemVariants} className="!mt-2">
+        <motion.div variants={itemVariants} className="!mt-4">
           <div className="flex items-center justify-between px-1.5 mb-2">
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest">Community Tools</h3>
           </div>
@@ -307,7 +308,7 @@ export default function UserHome() {
             {/* ── MARKET PRICES ── */}
             <button
               onClick={() => navigate("/market-pulse")}
-              className="bg-gradient-to-br from-amber-600 to-amber-700  dark:from-amber-700 dark:to-amber-800 rounded-xl h-28 shadow-sm hover:shadow-md transition-all border border-amber-600 dark:border-amber-600 relative overflow-hidden group p-3 flex flex-col justify-end"
+              className="bg-gradient-to-br from-[#085078] to-[#003973] rounded-xl h-28 shadow-sm hover:shadow-md transition-all border border-[#003973] relative overflow-hidden group p-3 flex flex-col justify-end"
             >
               <div className="absolute top-3 right-2 bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                 Live
@@ -327,10 +328,10 @@ export default function UserHome() {
         </motion.div>
 
         {/* ── RESIDENT LEADERBOARD CARD ── */}
-        <motion.div variants={itemVariants} className="!mt-2 px-1.5">
+        <motion.div variants={itemVariants} className="!mt-4 px-1.5">
           <div
             onClick={() => navigate('/leaderboard')}
-            className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#085078] to-[#003973] border border-[#003973]  p-3 flex items-center justify-between cursor-pointer hover:brightness-105 transition-all shadow-sm active:scale-[0.99]"
+            className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-amber-600 to-amber-700 dark:from-amber-700 dark:to-amber-800 border border-amber-600 dark:border-amber-600 p-4 flex items-center justify-between cursor-pointer hover:brightness-105 transition-all shadow-sm active:scale-[0.99]"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-105 transition-transform">
@@ -345,7 +346,7 @@ export default function UserHome() {
                     Top Recyclers
                   </span>
                 </div>
-                <p className="text-[11px] text-amber-50 font-medium mt-0.5">
+                <p className="text-[11px] text-amber-100 font-medium mt-0.5">
                   See leading green champions & community rankings
                 </p>
               </div>
@@ -386,8 +387,7 @@ export default function UserHome() {
               };
               
               return [...items].sort((a, b) => getSortIndex(a) - getSortIndex(b));
-            })().map((item: any, idx: number) => {
-              const palette = COLOR_PALETTES[idx % COLOR_PALETTES.length];
+            })().map((item: any) => {
               const isDB = categories.length > 0;
               const priceVal = isDB ? (item.price_per_unit || item.price_per_kg || 0) : null;
               const displayPrice = isDB 
@@ -410,22 +410,32 @@ export default function UserHome() {
                 else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
                 else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
               }
+              const imgPath = bgImage || '/material-categories/recyclables.webp';
+              const label = item.label || item.name;
               
               return (
                 <div
                   key={item.id}
                   onClick={() => navigate(`/materials/${identifier}`)}
-                  className={`snap-start relative shrink-0 w-[120px] h-[120px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-3 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col overflow-hidden`}
-                  style={bgImage ? {
-                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.3)), url(${bgImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  } : {}}
+                  className="snap-start shrink-0 w-28 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 overflow-hidden cursor-pointer active:scale-95 transition-transform"
                 >
-                  <div className="flex-1" />
-                  <h4 className={`text-[13px] font-bold mb-1 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
-                  <div className={`rounded-lg px-2 py-1.5 relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
-                    <p className={`text-[10px] font-semibold text-center leading-none ${bgImage ? 'text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>{displayPrice}</p>
+                  <div className="h-16 w-full bg-slate-200/60 dark:bg-slate-800 overflow-hidden">
+                    <img
+                      src={imgPath}
+                      alt={label}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <div className="p-2.5">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                      {label}
+                    </p>
+                    <p className="text-[10.5px] font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5 truncate">
+                      {displayPrice}
+                    </p>
                   </div>
                 </div>
               );

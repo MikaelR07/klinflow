@@ -249,7 +249,7 @@ export default function NavigateGroupPickupPage() {
           <Marker position={agentPos} icon={agentIcon}>
             <Popup className="font-sans">
               <div className="text-center px-1 py-0.5">
-                <p className="font-black text-slate-800 text-[13px]">⚡ You (Agent)</p>
+                <p className="font-bold text-slate-800 text-[13px]">⚡ You (Agent)</p>
                 <p className="text-[10px] font-medium text-slate-500 mt-0.5">{profile?.name || 'Agent'}</p>
               </div>
             </Popup>
@@ -301,7 +301,7 @@ export default function NavigateGroupPickupPage() {
           className="w-full flex flex-col items-center pb-4 group shrink-0"
         >
           <div className="w-16 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-2 group-hover:bg-blue-500 transition-colors" />
-          <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] group-hover:text-blue-500 transition-colors">
+          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] group-hover:text-blue-500 transition-colors">
             {isExpanded ? 'Slide Down to Map' : 'Slide Up for List'}
           </div>
         </button>
@@ -310,7 +310,7 @@ export default function NavigateGroupPickupPage() {
           {!hasArrived ? (
             <div className="space-y-4">
               <div className="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 mb-4 shadow-sm text-center">
-                <h3 className="text-lg font-black text-slate-900 dark:text-white mb-1">Group Collection Route</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Group Collection Route</h3>
                 <p className="text-xs text-slate-500">Navigating to {orders.length} sellers</p>
               </div>
               <button

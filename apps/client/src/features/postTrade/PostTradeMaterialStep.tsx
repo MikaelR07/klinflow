@@ -84,7 +84,7 @@ export default function PostTradeMaterialStep({
             placeholder="Search waste categories (e.g. plastic, metal)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-100 dark:bg-slate-900/70 p-4 pl-11 pr-10 rounded-2xl border border-slate-100 dark:border-slate-800 text-xs font-semibold dark:text-white outline-none focus:border-emerald-500/50 focus:ring-2 ring-emerald-500/20 transition-all shadow-sm"
+            className="w-full bg-slate-50 dark:bg-slate-800/70 p-4 pl-11 pr-10 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 text-xs font-semibold dark:text-white outline-none focus:border-emerald-500/50 focus:ring-2 ring-emerald-500/20 transition-all"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
             <Search className="w-4 h-4" />
@@ -100,7 +100,7 @@ export default function PostTradeMaterialStep({
         </div>
 
         <h3 className="text-base font-semibold text-slate-900 dark:text-white tracking-tight">Select Material Type</h3>
-        <div className="grid grid-cols-2 gap-1">
+        <div className="grid grid-cols-2 gap-2.5">
           {categories.filter((cat: any) =>
             (cat.label || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
             (cat.slug || '').toLowerCase().includes(searchQuery.toLowerCase())
@@ -122,6 +122,9 @@ export default function PostTradeMaterialStep({
               else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
               else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
             }
+            const imgPath = bgImage || '/material-categories/recyclables.webp';
+            const priceVal = getPriceForMaterial(cat.id) || cat.price_per_unit || cat.price_per_kg || 0;
+            const displayPrice = priceVal ? `Upto ${priceVal}/kg` : 'Tap to select';
 
             return (
               <button
@@ -136,26 +139,30 @@ export default function PostTradeMaterialStep({
                     slug: cat.slug || cat.id
                   });
                 }}
-                className={`relative h-24 rounded-xl flex flex-col items-center justify-center gap-1 active:scale-95 transition-all group overflow-hidden border-2 ${isSelected
-                  ? 'border-emerald-500 ring-2 ring-emerald-500/20'
-                  : 'border-slate-100 dark:border-slate-800 hover:border-emerald-500/40'
-                  }`}
-                style={bgImage ? {
-                  backgroundImage: `url(${bgImage})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                } : {}}
+                className={`bg-slate-50 dark:bg-slate-800/70 rounded-2xl border overflow-hidden text-left active:scale-95 transition-all ${
+                  isSelected
+                    ? 'border-emerald-600 ring-2 ring-emerald-500/20'
+                    : 'border-slate-200/70 dark:border-slate-700/60 hover:border-emerald-500/40'
+                }`}
               >
-                {!bgImage && <div className={`absolute inset-0 ${isSelected ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : 'bg-slate-100 dark:bg-slate-800'}`} />}
-                {!bgImage && <div className="absolute top-0 right-0 w-12 h-12 bg-emerald-500/5 rounded-bl-3xl -mr-4 -mt-4 group-hover:bg-emerald-500/10 transition-colors z-0" />}
-
-                <div className={`absolute z-10 top-2 left-2 w-7 h-7 rounded-lg flex items-center justify-center text-sm group-hover:scale-110 transition-transform ${bgImage ? 'bg-white/20 backdrop-blur-md' : (isSelected ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600' : 'bg-slate-50 dark:bg-slate-800/50')
-                  }`}>
-                  {cat.icon || '📦'}
+                <div className="h-24 w-full bg-slate-200/60 dark:bg-slate-800 overflow-hidden">
+                  <img
+                    src={imgPath}
+                    alt={cat.label}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
                 </div>
-                <span className={`absolute bottom-2 right-2 px-2 py-1 rounded-md text-[9px] font-bold capitalize tracking-widest text-right leading-none italic drop-shadow-sm ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10 text-white' : `bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border ${isSelected ? 'border-emerald-500/50 text-emerald-600 dark:text-emerald-400' : 'border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white'}`}`}>
-                  {cat.label}
-                </span>
+                <div className="p-3">
+                  <p className="text-xs font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                    {cat.label}
+                  </p>
+                  <p className="text-[10.5px] font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5 truncate">
+                    {displayPrice}
+                  </p>
+                </div>
               </button>
             );
           })}
@@ -170,99 +177,98 @@ export default function PostTradeMaterialStep({
           )}
       </div>
 
-      {wasteType && (
-        <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-4">
-          <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1 mb-2">
-              2. Specific Material Type
-            </p>
-            <select
-              value={selectedSubcategory}
-              onChange={(e) => {
-                setSelectedSubcategory(e.target.value);
-                const subItem = materialPrices.find(m => m.material_name === e.target.value);
-                if (subItem) {
-                  setSelectedSubItem({
-                    id: `sub-${subItem.id}`,
-                    label: subItem.material_name,
-                    price_per_unit: subItem.price_per_kg,
-                    unit: 'kg',
-                    slug: subItem.material_name.toLowerCase().replace(/\s+/g, '-')
-                  });
-                }
-              }}
-              className="w-full p-3 rounded-xl bg-white dark:bg-slate-900/60 border 
-                         border-slate-200 dark:border-slate-700 text-sm font-semibold 
-                         text-slate-900 dark:text-white outline-none focus:border-emerald-500 
-                         transition-all appearance-none"
-            >
-              <option value="" disabled>Select specific material...</option>
-              {materialPrices
-                .filter(m => m.category === wasteType.label || m.category === wasteType.slug || m.category === wasteType.id)
-                .map(m => (
-                  <option key={m.id} value={m.material_name}>{m.material_name}</option>
-                ))}
-            </select>
-          </div>
-
-          <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-1 mb-2 mt-2">
-              Material Grade / Quality
-            </p>
-            <select
-              value={grade}
-              onChange={(e) => setGrade(e.target.value)}
-              className="w-full p-3 rounded-xl bg-white dark:bg-slate-900/60 border 
-                         border-slate-200 dark:border-slate-700 text-sm font-semibold 
-                         text-slate-900 dark:text-white outline-none focus:border-emerald-500 
-                         transition-all appearance-none"
-            >
-              <option value="Premium">Premium</option>
-              <option value="Standard">Standard</option>
-              <option value="Mixed">Mixed</option>
-              <option value="Low Grade">Low Grade</option>
-            </select>
-          </div>
-
-          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 
-                          dark:from-indigo-900/20 dark:to-purple-900/20 
-                          border border-indigo-100 dark:border-indigo-800/50 
-                          rounded-2xl p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-indigo-600" />
-              <p className="text-[10px] font-bold text-indigo-800 dark:text-indigo-300 
-                            uppercase tracking-widest">
-                Not sure? Let AI identify it
-              </p>
+      {/* ── UNIFIED MATERIAL DETAILS, AI SCAN & WEIGHT CARD ── */}
+      <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-5 mb-6">
+        {wasteType && (
+          <>
+            {/* Specific Material Type */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-800 dark:text-white tracking-tight block">
+                Specific Material Type
+              </label>
+              <select
+                value={selectedSubcategory}
+                onChange={(e) => {
+                  setSelectedSubcategory(e.target.value);
+                  const subItem = materialPrices.find(m => m.material_name === e.target.value);
+                  if (subItem) {
+                    setSelectedSubItem({
+                      id: `sub-${subItem.id}`,
+                      label: subItem.material_name,
+                      price_per_unit: subItem.price_per_kg,
+                      unit: 'kg',
+                      slug: subItem.material_name.toLowerCase().replace(/\s+/g, '-')
+                    });
+                  }
+                }}
+                className="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none"
+              >
+                <option value="" disabled>Select specific material...</option>
+                {materialPrices
+                  .filter(m => m.category === wasteType.label || m.category === wasteType.slug || m.category === wasteType.id)
+                  .map(m => (
+                    <option key={m.id} value={m.material_name}>{m.material_name}</option>
+                  ))}
+              </select>
             </div>
-            <p className="text-[11px] text-indigo-700/70 dark:text-indigo-300/70 leading-relaxed">
-              Take a photo of your material and our AI will identify the exact type for you.
-            </p>
-            <label className={`flex items-center justify-center gap-2 py-3 
-                              ${isIdentifying ? 'bg-indigo-400' : 'bg-indigo-600 active:scale-95'} 
-                              text-white rounded-xl font-bold text-xs 
-                              uppercase tracking-widest cursor-pointer transition-all`}>
-              {isIdentifying ? (
-                <span className="animate-pulse">Identifying...</span>
-              ) : (
-                <>
-                  <Camera className="w-4 h-4" />
-                  <span>Scan Material</span>
-                  <input type="file" accept="image/*" capture="environment" 
-                         onChange={handleAIScan} className="hidden" />
-                </>
-              )}
-            </label>
-          </div>
-        </motion.div>
-      )}
 
-      <div className="space-y-3 pb-8">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">Est. Weight (KG)</h3>
-          <div className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-semibold">{quantity} KG</div>
-        </div>
-        <div className="bg-emerald-800  border-2 border-slate-100 dark:border-slate-800 p-4 rounded-[1.25rem] space-y-2">
+            {/* Material Grade / Quality */}
+            <div className="border-t border-slate-200/70 dark:border-slate-700/60 pt-4 space-y-2">
+              <label className="text-xs font-bold text-slate-800 dark:text-white tracking-tight block">
+                Material Grade / Quality
+              </label>
+              <select
+                value={grade}
+                onChange={(e) => setGrade(e.target.value)}
+                className="w-full p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 text-xs font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none"
+              >
+                <option value="Premium">Premium</option>
+                <option value="Standard">Standard</option>
+                <option value="Mixed">Mixed</option>
+                <option value="Low Grade">Low Grade</option>
+              </select>
+            </div>
+
+            {/* AI Material Scanner */}
+            <div className="border-t border-slate-200/70 dark:border-slate-700/60 pt-4">
+              <div className="bg-white dark:bg-slate-900 border border-indigo-200/70 dark:border-indigo-800/50 rounded-xl p-3.5 flex items-center justify-between gap-3">
+                <div className="flex items-start gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                      Not sure? Let AI identify it
+                    </p>
+                    <p className="text-[10.5px] text-slate-500 dark:text-slate-400 leading-snug mt-0.5">
+                      Snap a photo to auto-detect material type.
+                    </p>
+                  </div>
+                </div>
+                <label className={`shrink-0 flex items-center gap-1.5 px-3 py-2 ${isIdentifying ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700 active:scale-95'} text-white rounded-xl font-bold text-[11px] cursor-pointer transition-all`}>
+                  {isIdentifying ? (
+                    <span className="animate-pulse">Scanning...</span>
+                  ) : (
+                    <>
+                      <Camera className="w-3.5 h-3.5" />
+                      <span>Scan</span>
+                      <input type="file" accept="image/*" capture="environment" onChange={handleAIScan} className="hidden" />
+                    </>
+                  )}
+                </label>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Est. Weight (KG) */}
+        <div className={`${wasteType ? 'border-t border-slate-200/70 dark:border-slate-700/60 pt-4' : ''} space-y-3`}>
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-bold text-slate-800 dark:text-white tracking-tight">Est. Weight (KG)</h3>
+            <span className="px-2.5 py-0.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40 rounded-full text-[11px] font-bold">
+              {quantity || 0} KG
+            </span>
+          </div>
           <input
             type="range"
             min="1"
@@ -270,15 +276,15 @@ export default function PostTradeMaterialStep({
             step="0.5"
             value={quantity || 1}
             onChange={(e) => setQuantity(parseFloat(e.target.value))}
-            className="w-full h-1 bg-slate-200 dark:bg-slate-900/70 rounded-lg appearance-none cursor-pointer accent-green-600"
+            className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-600"
           />
-          <div className="relative group">
+          <div className="relative">
             <input
               type="number"
               value={quantity || ''}
               onChange={(e) => setQuantity(e.target.value)}
               placeholder="12.5"
-              className="w-full bg-emerald-700 text-white p-3 rounded-xl text-base font-semibold dark:text-white outline-none focus:border-emerald-500 transition-all text-center"
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 p-3 rounded-xl text-base font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all text-center tabular-nums"
             />
           </div>
         </div>

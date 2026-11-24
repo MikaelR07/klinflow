@@ -171,7 +171,7 @@ export default function MyRFQs() {
           <div className="relative w-full rounded-[1.25rem] overflow-hidden border border-amber-600 bg-gradient-to-br from-amber-600 via-amber-700 to-amber-700 shadow-sm">
             <div className="relative z-20 p-5 flex flex-col gap-4">
               <div>
-                <h2 className="text-[17px] font-black text-white tracking-tight leading-none mb-1.5">Material Requests</h2>
+                <h2 className="text-[17px] font-bold text-white tracking-tight leading-none mb-1.5">Material Requests</h2>
                 <p className="text-[11px] font-semibold text-amber-100">Manage your material requests and track incoming offers.</p>
               </div>
               
@@ -179,7 +179,7 @@ export default function MyRFQs() {
                 <div className="flex-1 bg-white/10 border border-white/20 rounded-xl p-3 backdrop-blur-md flex items-center justify-between">
                   <div>
                     <p className="text-[9px] font-bold text-amber-200 uppercase tracking-widest mb-0.5">Total Requests</p>
-                    <h3 className="text-2xl font-black text-white leading-none">{rfqs.length}</h3>
+                    <h3 className="text-2xl font-bold text-white leading-none">{rfqs.length}</h3>
                   </div>
                   <div className="w-8 h-8 rounded-lg bg-amber-500/30 border border-amber-500/40 flex items-center justify-center">
                     <FileText className="w-4 h-4 text-white" />
@@ -188,7 +188,7 @@ export default function MyRFQs() {
                 <div className="flex-1 bg-white/10 border border-white/20 rounded-xl p-3 backdrop-blur-md flex items-center justify-between">
                   <div>
                     <p className="text-[9px] font-bold text-amber-200 uppercase tracking-widest mb-0.5">Active Bids</p>
-                    <h3 className="text-2xl font-black text-white leading-none">
+                    <h3 className="text-2xl font-bold text-white leading-none">
                       {rfqs.reduce((acc, curr) => acc + (curr.bidsCount || 0), 0)}
                     </h3>
                   </div>
@@ -332,7 +332,7 @@ export default function MyRFQs() {
                       {/* Row 1: Material & Budget */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
+                          <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
                             {materialPrices?.find(m => m.id === rfq.material)?.material_name || getSubcategoryLabel(rfq.category, rfq.material) || rfq.material}
                           </h3>
                           <div className={`inline-flex items-center gap-0.5 px-1 py-0.5 rounded ${statusConfig.bg} ${statusConfig.color} border ${statusConfig.border} shrink-0`}>
@@ -341,7 +341,7 @@ export default function MyRFQs() {
                           </div>
                         </div>
                         <div className="text-right shrink-0 ml-2 mt-1">
-                          <p className="text-base font-black text-emerald-600 leading-none tracking-tighter">KSh {rfq.targetPrice}<span className="text-[9px] text-emerald-600/70 font-black">/kg</span></p>
+                          <p className="text-base font-bold text-emerald-600 leading-none tracking-tighter">KSh {rfq.targetPrice}<span className="text-[9px] text-emerald-600/70 font-bold">/kg</span></p>
                         </div>
                       </div>
 
@@ -351,7 +351,7 @@ export default function MyRFQs() {
                           <MapPin className="w-3 h-3 text-emerald-600" /> {rfq.location.split(',')[0]}
                         </p>
                         {rfq.bidsCount > 0 && (
-                          <span className="px-1 py-0.5 bg-amber-500/10 text-amber-600 text-[8px] font-black uppercase tracking-widest rounded shrink-0">
+                          <span className="px-1 py-0.5 bg-amber-500/10 text-amber-600 text-[8px] font-bold uppercase tracking-widest rounded shrink-0">
                             {rfq.bidsCount} BID{rfq.bidsCount !== 1 ? 'S' : ''}
                           </span>
                         )}
@@ -362,7 +362,7 @@ export default function MyRFQs() {
                         <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
                           <Clock className="w-2.5 h-2.5 text-slate-900" /> {rfq.createdAt ? new Date(rfq.createdAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'N/A'}
                         </p>
-                        <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
+                        <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
                           <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span>
                           <Scale className="w-2.5 h-2.5" /> {rfq.quantity}
                         </p>

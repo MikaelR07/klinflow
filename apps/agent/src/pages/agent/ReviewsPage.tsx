@@ -123,9 +123,9 @@ export default function ReviewsPage() {
         <div className="flex gap-5 sm:gap-8 relative z-10">
           {/* Left: Rating Summary */}
           <div className="flex flex-col items-center justify-center shrink-0 border-r border-amber-400/30 pr-5 sm:pr-8">
-            <p className="text-[12px] font-black text-amber-100 uppercase tracking-[0.2em] mb-1">Rating</p>
+            <p className="text-[12px] font-bold text-amber-100 uppercase tracking-[0.2em] mb-1">Rating</p>
             <div className="flex items-baseline gap-1">
-              <h2 className="text-3xl font-black tracking-tighter text-white">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
+              <h2 className="text-3xl font-bold tracking-tighter text-white">{stats.total === 0 ? '0.0' : (stats.average || Number(profile?.rating || 0).toFixed(1))}</h2>
               <span className="text-base font-bold text-amber-200/80">/5</span>
             </div>
             <div className="flex gap-0.5 mt-1.5">
@@ -140,21 +140,21 @@ export default function ReviewsPage() {
           <div className="flex-1 space-y-2 justify-center flex flex-col">
             {stats.breakdown.length > 0 ? stats.breakdown.map((item) => (
               <div key={item.stars} className="flex items-center gap-2">
-                <span className="text-[11px] font-black text-amber-100 w-3">{item.stars}★</span>
+                <span className="text-[11px] font-bold text-amber-100 w-3">{item.stars}★</span>
                 <div className="flex-1 h-2 bg-amber-700/30 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-white rounded-full transition-all duration-1000"
                     style={{ width: `${item.percentage}%` }}
                   />
                 </div>
-                <span className="text-[11px] font-black text-white w-8 text-right">{Math.round(item.percentage)}%</span>
+                <span className="text-[11px] font-bold text-white w-8 text-right">{Math.round(item.percentage)}%</span>
               </div>
             )) : (
               [5, 4, 3, 2, 1].map(s => (
                 <div key={s} className="flex items-center gap-2">
-                  <span className="text-[10px] font-black text-amber-100 w-3">{s}★</span>
+                  <span className="text-[10px] font-bold text-amber-100 w-3">{s}★</span>
                   <div className="flex-1 h-1.5 bg-amber-200/30 rounded-full" />
-                  <span className="text-[10px] font-black text-amber-100 w-6 text-right">0%</span>
+                  <span className="text-[10px] font-bold text-amber-100 w-6 text-right">0%</span>
                 </div>
               ))
             )}

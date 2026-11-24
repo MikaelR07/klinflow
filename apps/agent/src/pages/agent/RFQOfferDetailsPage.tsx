@@ -221,7 +221,7 @@ export default function RFQOfferDetailsPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
 
           {offer.images && offer.images.length > 1 && (
-            <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+            <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest flex items-center gap-1.5">
               <span>{activeImageIndex + 1} / {offer.images.length}</span>
               <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
             </div>
@@ -245,7 +245,7 @@ export default function RFQOfferDetailsPage() {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Submitted Offer</p>
-              <h2 className="text-[17px] font-black text-slate-900 dark:text-white capitalize leading-tight">
+              <h2 className="text-[17px] font-bold text-slate-900 dark:text-white capitalize leading-tight">
                 {materialPrices?.find(m => m.id === rfq.materialId)?.material_name || getSubcategoryLabel(rfq.categoryId, rfq.materialId) || rfq.materialId}
               </h2>
             </div>
@@ -262,7 +262,7 @@ export default function RFQOfferDetailsPage() {
             <div>
               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 leading-none">Seller Name</p>
               <div className="flex items-center gap-1.5">
-                <h3 className="text-sm font-black text-slate-900 dark:text-white capitalize leading-none">{offer.sellerName}</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize leading-none">{offer.sellerName}</h3>
                 <span className="text-[10px] font-bold text-amber-500 flex items-center gap-0.5 mt-px">★ {offer.sellerRating}</span>
               </div>
               <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 mt-2">
@@ -288,7 +288,7 @@ export default function RFQOfferDetailsPage() {
               <Coins className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offered Price</p>
-                <p className={`text-xs font-black ${offer.price <= rfq.targetPrice ? 'text-emerald-600' : 'text-rose-500'} leading-none`}>KSh {offer.price}/{rfq.unit}</p>
+                <p className={`text-xs font-bold ${offer.price <= rfq.targetPrice ? 'text-emerald-600' : 'text-rose-500'} leading-none`}>KSh {offer.price}/{rfq.unit}</p>
               </div>
             </div>
 
@@ -296,7 +296,7 @@ export default function RFQOfferDetailsPage() {
               <Scale className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Target Budget</p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">KSh {rfq.targetPrice}/{rfq.unit}</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">KSh {rfq.targetPrice}/{rfq.unit}</p>
               </div>
             </div>
 
@@ -304,7 +304,7 @@ export default function RFQOfferDetailsPage() {
               <Package className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offered Weight</p>
-                <p className={`text-xs font-black ${offer.quantity >= rfq.quantity ? 'text-emerald-600' : 'text-amber-600'} leading-none`}>{offer.quantity} {rfq.unit}</p>
+                <p className={`text-xs font-bold ${offer.quantity >= rfq.quantity ? 'text-emerald-600' : 'text-amber-600'} leading-none`}>{offer.quantity} {rfq.unit}</p>
               </div>
             </div>
 
@@ -312,7 +312,7 @@ export default function RFQOfferDetailsPage() {
               <Clock className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Requested Qty</p>
-                <span className="text-[11px] font-black text-slate-700 dark:text-slate-300">{rfq.quantity} {rfq.unit}</span>
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">{rfq.quantity} {rfq.unit}</span>
               </div>
             </div>
           </div>
@@ -333,7 +333,7 @@ export default function RFQOfferDetailsPage() {
         {/* ── ACTION BUTTONS ── */}
         <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 shadow-sm space-y-4">
           <div className="mb-2">
-            <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">Actions</h4>
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Actions</h4>
             <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">Review and manage this offer</p>
           </div>
 
@@ -343,7 +343,7 @@ export default function RFQOfferDetailsPage() {
               <p className="text-xs text-blue-800/70 dark:text-blue-200/70 font-medium leading-relaxed">
                 This pledge has been automatically added to the pool. Once the goal is reached, you can generate contracts for the entire pool.
               </p>
-              <button onClick={() => navigate(-1)} className="mt-3 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-[11px] uppercase tracking-widest transition-all">
+              <button onClick={() => navigate(-1)} className="mt-3 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all">
                 Return to Pool
               </button>
             </div>
@@ -352,14 +352,14 @@ export default function RFQOfferDetailsPage() {
               {isAccepted && (
                 <button
                   onClick={() => navigate('/pickups')}
-                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                 >
                   <ShieldCheck className="w-5 h-5" /> View Active Pickups
                 </button>
               )}
 
               {isDeclined && (
-                <button onClick={() => navigate(-1)} className="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all">
+                <button onClick={() => navigate(-1)} className="w-full py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-sm active:scale-[0.98] transition-all">
                   Go Back
                 </button>
               )}
@@ -368,13 +368,13 @@ export default function RFQOfferDetailsPage() {
                 <div className="flex flex-row gap-3">
                   <button
                     onClick={handleDeclineBid}
-                    className="flex-[0.6] py-4 bg-red-600  text-white  rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                    className="flex-[0.6] py-4 bg-red-600  text-white  rounded-2xl font-bold text-[11px] uppercase tracking-[0.1em] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                   >
                     <XCircle className="w-5 h-5" /> Decline
                   </button>
                   <button
                     onClick={handleAcceptBid}
-                    className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.1em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                    className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-[11px] uppercase tracking-[0.1em] shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                   >
                     <CheckCircle2 className="w-5 h-5" /> Accept
                   </button>

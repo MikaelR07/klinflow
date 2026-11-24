@@ -274,9 +274,9 @@ export default function MyRoutes() {
             <div className="flex flex-col items-center gap-1">
               <button
                 onClick={async () => {
-                  toast.loading("AI Swarm Optimizer Active...", { id: 'opt' });
+                  toast.loading("Optimizing Route...", { id: 'opt' });
                   await calculateRoute(true);
-                  toast.success("Route Optimized for Swarms!", { id: 'opt' });
+                  toast.success("Route Optimized!", { id: 'opt' });
                 }}
                 className={`w-12 h-12 bg-white dark:bg-slate-900/80 rounded-2xl shadow-xl flex items-center justify-center active:scale-90 transition-all border  dark:border-slate-900 dark:border-emerald-500/20 group relative`}
               >

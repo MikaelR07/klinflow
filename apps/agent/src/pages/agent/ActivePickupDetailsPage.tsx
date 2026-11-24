@@ -145,16 +145,17 @@ export default function ActivePickupDetailsPage() {
     <div className="flex flex-col max-w-lg mx-auto bg-white dark:bg-slate-800 pb-16 transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
-        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between relative">
+          <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0 z-10">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-amber-500 transition-colors" />
           </button>
-          <div>
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
             <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Pickup Details</h1>
-            <p className="text-[10px] font-bold text-amber-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+            <p className="text-[10px] font-bold text-amber-500 capitalize tracking-widest flex items-center justify-center gap-1.5 mt-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 " />Active RFQ Pickup
             </p>
           </div>
+          <div className="w-10 h-10 shrink-0" />
         </div>
       </div>
 
@@ -180,7 +181,7 @@ export default function ActivePickupDetailsPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
 
             {images.length > 1 && (
-              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest flex items-center gap-1.5">
                 <span>{activeImageIndex + 1} / {images.length}</span>
                 <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
               </div>
@@ -208,13 +209,13 @@ export default function ActivePickupDetailsPage() {
               {order.proposal?.seller?.avatar_url ? (
                 <img src={order.proposal.seller.avatar_url} alt={sellerName} className="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-100 dark:border-emerald-900/50" />
               ) : (
-                <div className="w-14 h-14 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-2xl border border-emerald-100 dark:border-emerald-800/50">
+                <div className="w-14 h-14 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-2xl border border-emerald-100 dark:border-emerald-800/50">
                   {sellerName.charAt(0)}
                 </div>
               )}
               <div>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Pickup From</p>
-                <h3 className="text-base font-black text-slate-900 dark:text-white leading-none tracking-tight">{sellerName}</h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white leading-none tracking-tight">{sellerName}</h3>
               </div>
             </div>
             {order.proposal?.seller?.phone && (
@@ -233,7 +234,7 @@ export default function ActivePickupDetailsPage() {
               <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <Info className="w-4 h-4" /> Mission Details
               </h3>
-              <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${statusConfig.color}`}>
+              <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest ${statusConfig.color}`}>
                 {statusConfig.label}
               </span>
             </div>
@@ -243,7 +244,7 @@ export default function ActivePickupDetailsPage() {
                 <PackageCheck className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
-                  <p className="text-sm font-black text-slate-900 dark:text-white capitalize leading-tight">{materialName}</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white capitalize leading-tight">{materialName}</p>
                 </div>
               </div>
               
@@ -251,7 +252,7 @@ export default function ActivePickupDetailsPage() {
                 <Activity className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Volume</p>
-                  <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{order.proposal?.offered_weight}kg</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white leading-none">{order.proposal?.offered_weight}kg</p>
                 </div>
               </div>
 
@@ -267,7 +268,7 @@ export default function ActivePickupDetailsPage() {
                 <Clock className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Agreed Rate</p>
-                  <p className="text-sm font-black text-emerald-600 dark:text-emerald-400 leading-none">KSh {order.proposal?.offered_price} / kg</p>
+                  <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 leading-none">KSh {order.proposal?.offered_price} / kg</p>
                 </div>
               </div>
             </div>
@@ -284,12 +285,12 @@ export default function ActivePickupDetailsPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-[9px] font-bold text-emerald-600/70 uppercase tracking-widest mb-0.5">Verified Weight</p>
-                <h2 className="text-[15px] font-black text-emerald-700 dark:text-emerald-400 capitalize leading-tight">{verification.verified_weight}kg</h2>
+                <h2 className="text-[15px] font-bold text-emerald-700 dark:text-emerald-400 capitalize leading-tight">{verification.verified_weight}kg</h2>
               </div>
               
               <div>
                 <p className="text-[9px] font-bold text-emerald-600/70 uppercase tracking-widest mb-0.5">Quality Grade</p>
-                <p className="text-[15px] font-black text-emerald-700 dark:text-emerald-400 leading-none capitalize">{verification.quality_grade}</p>
+                <p className="text-[15px] font-bold text-emerald-700 dark:text-emerald-400 leading-none capitalize">{verification.quality_grade}</p>
               </div>
             </div>
           </div>
@@ -313,7 +314,7 @@ export default function ActivePickupDetailsPage() {
                     }
                   }}
                   disabled={isUpdating}
-                  className="w-full py-4 rounded-2xl bg-blue-600 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50"
+                  className="w-full py-4 rounded-2xl bg-blue-600 text-white font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-blue-500/20 disabled:opacity-50"
                 >
                   <Navigation className="w-4 h-4" /> Navigate to Seller
                 </button>
@@ -329,7 +330,7 @@ export default function ActivePickupDetailsPage() {
                     }
                   }}
                   disabled={isUpdating}
-                  className="w-full py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border-2 border-blue-100 dark:border-blue-900/30 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
+                  className="w-full py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 border-2 border-blue-100 dark:border-blue-900/30 rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50"
                 >
                   <FastForward className="w-4 h-4" /> I Know The Way
                 </button>
@@ -349,7 +350,7 @@ export default function ActivePickupDetailsPage() {
                   }
                 }}
                 disabled={isUpdating}
-                className="w-full py-4 rounded-2xl bg-emerald-500 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
+                className="w-full py-4 rounded-2xl bg-emerald-500 text-white font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-emerald-500/20 disabled:opacity-50"
               >
                 <MapPin className="w-4 h-4" /> I've Arrived
               </button>
@@ -358,7 +359,7 @@ export default function ActivePickupDetailsPage() {
             {order.status === 'arrived' && (
               <button
                 onClick={() => setIsVerificationOpen(true)}
-                className="w-full py-4 rounded-2xl bg-amber-500 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-amber-500/20"
+                className="w-full py-4 rounded-2xl bg-amber-500 text-white font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-amber-500/20"
               >
                 <ShieldCheck className="w-4 h-4" /> Verify Material
               </button>
@@ -367,13 +368,13 @@ export default function ActivePickupDetailsPage() {
             {!['agent_assigned', 'pending_coordination', 'pickup_scheduled', 'agent_on_the_way', 'arrived'].includes(order.status) && !['completed', 'delivered', 'pickup_completed', 'in_transit'].includes(order.status) && (
               <div className="flex gap-2">
                 {order.proposal?.seller?.phone && (
-                  <a href={`tel:${order.proposal.seller.phone}`} className="flex-[0.5] py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all border border-slate-200 dark:border-slate-700 shadow-sm">
+                  <a href={`tel:${order.proposal.seller.phone}`} className="flex-[0.5] py-4 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all border border-slate-200 dark:border-slate-700 shadow-sm">
                     <Phone className="w-4 h-4" /> Call
                   </a>
                 )}
                 <button
                   onClick={() => setIsVerificationOpen(true)}
-                  className="flex-1 py-4 rounded-2xl bg-emerald-500 text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-emerald-500/20"
+                  className="flex-1 py-4 rounded-2xl bg-emerald-500 text-white font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md shadow-emerald-500/20"
                 >
                   <ShieldCheck className="w-4 h-4" /> View Verification
                 </button>

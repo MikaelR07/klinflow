@@ -49,7 +49,7 @@ export default function OwnerDisputeDetail() {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Dispute Details</h1>
+          <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Dispute Details</h1>
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">ID: {dispute.dispute_id}</p>
         </div>
       </div>
@@ -65,7 +65,7 @@ export default function OwnerDisputeDetail() {
               </div>
               <div>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Issue Type</p>
-                <p className="text-sm font-black text-slate-900 dark:text-white capitalize">{dispute.dispute_type.replace(/_/g, ' ')}</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">{dispute.dispute_type.replace(/_/g, ' ')}</p>
               </div>
             </div>
             <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded ${dispute.status === 'resolved' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400'}`}>
@@ -76,7 +76,7 @@ export default function OwnerDisputeDetail() {
           <div className="space-y-3 pt-2">
             <div className="flex justify-between items-center">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Agent</span>
-              <span className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <User className="w-3.5 h-3.5 text-slate-400" />
                 {dispute.agent_name || 'Unknown'}
               </span>
@@ -85,20 +85,20 @@ export default function OwnerDisputeDetail() {
             {dispute.amount && (
               <div className="flex justify-between items-center">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Amount in Dispute</span>
-                <span className="text-sm font-black text-rose-500">KES {Number(dispute.amount).toLocaleString()}</span>
+                <span className="text-sm font-bold text-rose-500">KES {Number(dispute.amount).toLocaleString()}</span>
               </div>
             )}
 
             <div className="flex justify-between items-center">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Date Reported</span>
-              <span className="text-sm font-black text-slate-900 dark:text-white">{new Date(dispute.created_at).toLocaleString()}</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white">{new Date(dispute.created_at).toLocaleString()}</span>
             </div>
           </div>
         </div>
 
         {/* ── DESCRIPTION ── */}
         <div className="space-y-3">
-          <h3 className="text-[11px] font-black text-slate-400 capitalize tracking-widest px-2">Description / Reason</h3>
+          <h3 className="text-[11px] font-bold text-slate-400 capitalize tracking-widest px-2">Description / Reason</h3>
           <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
             <p className="text-sm font-medium text-slate-700 dark:text-slate-300 leading-relaxed">
               {dispute.description || 'No description provided.'}
@@ -108,7 +108,7 @@ export default function OwnerDisputeDetail() {
 
         {/* ── EVIDENCE ── */}
         <div className="space-y-3">
-          <h3 className="text-[11px] font-black text-slate-400 capitalize tracking-widest px-2">Evidence</h3>
+          <h3 className="text-[11px] font-bold text-slate-400 capitalize tracking-widest px-2">Evidence</h3>
           {dispute.evidence_urls && dispute.evidence_urls.length > 0 ? (
             <div className="grid grid-cols-2 gap-3">
               {dispute.evidence_urls.map((url: string, i: number) => (
@@ -131,7 +131,7 @@ export default function OwnerDisputeDetail() {
         {/* ── RESOLUTION FORM (ONLY IF OPEN) ── */}
         {dispute.status !== 'resolved' && (
           <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-            <h3 className="text-[11px] font-black text-slate-400 capitalize tracking-widest px-2">Resolve Dispute</h3>
+            <h3 className="text-[11px] font-bold text-slate-400 capitalize tracking-widest px-2">Resolve Dispute</h3>
             
             <div className="space-y-3">
               <div>
@@ -141,7 +141,7 @@ export default function OwnerDisputeDetail() {
                   placeholder="e.g. 5000"
                   value={refundAmount}
                   onChange={(e) => setRefundAmount(e.target.value)}
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-sm font-black focus:ring-2 focus:ring-emerald-500 outline-none"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none"
                 />
               </div>
 
@@ -167,13 +167,13 @@ export default function OwnerDisputeDetail() {
           <div className="flex gap-3">
             <button 
               onClick={() => handleResolve('rejected')}
-              className="flex-1 py-4 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-black text-sm tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+              className="flex-1 py-4 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
             >
               <X className="w-5 h-5" /> Reject
             </button>
             <button 
               onClick={() => handleResolve('resolved')}
-              className="flex-1 py-4 bg-emerald-500 text-white rounded-2xl font-black text-sm tracking-widest uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all"
+              className="flex-1 py-4 bg-emerald-500 text-white rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all"
             >
               <Check className="w-5 h-5" /> Resolve
             </button>

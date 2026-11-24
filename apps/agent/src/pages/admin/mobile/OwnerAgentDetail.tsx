@@ -67,7 +67,7 @@ export default function OwnerAgentDetail() {
           </div>
           
           <div className="flex items-center gap-1.5 justify-center mb-1">
-            <h1 className="text-xl font-black text-white">{agent.name}</h1>
+            <h1 className="text-xl font-bold text-white">{agent.name}</h1>
             <CheckCircle2 className="w-5 h-5 text-green-300 fill-green-300/20" />
           </div>
           <p className="text-[10px] font-bold text-emerald-100 tracking-[0.2em] uppercase mb-4">ID: {agent.klinflow_id || 'AGT-XXXX'}</p>

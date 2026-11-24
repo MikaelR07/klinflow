@@ -76,7 +76,7 @@ export default function DepositRequestDetail() {
               </div>
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-white">Deposit Request</p>
-                <p className="text-2xl font-black mt-0.5">
+                <p className="text-2xl font-bold mt-0.5">
                   <span className="text-sm font-bold opacity-80 mr-1">KES</span>
                   {Number(req.amount || 0).toLocaleString()}
                 </p>
@@ -85,7 +85,7 @@ export default function DepositRequestDetail() {
                 </p>
               </div>
             </div>
-            <span className={`${badge.bg} ${badge.text} text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1`}>
+            <span className={`${badge.bg} ${badge.text} text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1`}>
               <Clock className="w-3 h-3" /> {badge.label}
             </span>
           </div>
@@ -138,7 +138,7 @@ export default function DepositRequestDetail() {
                   </div>
                   <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Amount</span>
                 </div>
-                <span className="text-sm font-black text-emerald-600">KES {Number(req.amount || 0).toLocaleString()}</span>
+                <span className="text-sm font-bold text-emerald-600">KES {Number(req.amount || 0).toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between px-4 py-3.5">
                 <div className="flex items-center gap-3">
@@ -217,13 +217,13 @@ export default function DepositRequestDetail() {
               <div className="flex gap-3">
                 <button 
                   onClick={() => handleAction('reject')}
-                  className="flex-1 py-4 bg-rose-500 dark:bg-rose-500/10 text-white rounded-2xl font-black text-sm tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+                  className="flex-1 py-4 bg-rose-500 dark:bg-rose-500/10 text-white rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
                 >
                   <X className="w-5 h-5" /> Reject
                 </button>
                 <button 
                   onClick={() => handleAction('approve')}
-                  className="flex-[1.4] py-4 bg-emerald-500 text-white rounded-2xl font-black text-sm tracking-widest uppercase flex items-center justify-center gap-2  active:scale-[0.98] transition-all"
+                  className="flex-[1.4] py-4 bg-emerald-500 text-white rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2  active:scale-[0.98] transition-all"
                 >
                   <Check className="w-5 h-5" /> Approve
                 </button>

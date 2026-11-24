@@ -58,7 +58,7 @@ export default function AdminLayout() {
                 <div className="flex items-center gap-1 mt-1">
                   <MapPin className="w-3 h-3 text-slate-400" />
                   <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest truncate max-w-[150px]">
-                    {(typeof profile?.location === 'string' ? profile.location : profile?.location?.estate) || 'Nairobi, Kenya'}
+                    {profile?.hubAddress || (typeof profile?.location === 'string' ? profile.location : profile?.location?.estate) || 'Nairobi, Kenya'}
                   </p>
                 </div>
               </div>

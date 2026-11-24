@@ -354,12 +354,12 @@ export default function BookPickup() {
   const center = [customLocation.latitude || -1.2635, customLocation.longitude || 36.8048];
 
   return (
-    <div className="space-y-6 pb-12 overflow-x-hidden min-h-screen">
+    <div className="bg-white dark:bg-slate-900 -mx-1 px-1 space-y-6 pb-12 overflow-x-hidden min-h-screen transition-colors">
 
       {/* ── HEADER (FIXED TOP NAV) ── */}
-      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-5 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-900/70">
+      <div className="fixed top-0 left-0 right-0 z-[100] max-w-lg mx-auto pt-[calc(env(safe-area-inset-top,1rem)+0.5rem)] pb-3 px-5 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center justify-between">
-          <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="p-2.5 bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-100 dark:border-slate-800 active:scale-95 transition-all">
+          <button onClick={() => step > 1 ? setStep(step - 1) : navigate('/')} className="p-2.5 bg-slate-50 dark:bg-slate-800 shadow-xs rounded-xl border border-slate-200/80 dark:border-slate-700 active:scale-95 transition-all">
             <ArrowLeft className="w-5 h-5 dark:text-white" />
           </button>
           <div className="flex flex-col items-end">

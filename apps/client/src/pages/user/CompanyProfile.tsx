@@ -6,13 +6,45 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft, Star, MapPin, Truck, ShieldCheck, Package,
-  Zap, ChevronRight, Clock, Share, MoreVertical, CheckCircle2,
-  CircleCheck, MessageSquare
+  Zap, ChevronRight, MessageSquare, MoreVertical
 } from 'lucide-react';
 import { supabase } from '@klinflow/supabase';
 import { MATERIAL_LABELS } from '@klinflow/core/data/wasteDefinitions';
 import { getThumbnailUrl } from '@klinflow/core/utils/imageUtils';
 import { toast } from 'sonner';
+
+const MATERIAL_IMAGE_MAP: Record<string, string> = {
+  plastic: '/material-categories/plastic.webp',
+  paper: '/material-categories/boxes.webp',
+  cardboard: '/material-categories/boxes.webp',
+  carton: '/material-categories/boxes.webp',
+  metal: '/material-categories/metal.webp',
+  ewaste: '/material-categories/E-waste.webp',
+  'e-waste': '/material-categories/E-waste.webp',
+  electronic: '/material-categories/E-waste.webp',
+  organic: '/material-categories/organic-waste.webp',
+  food: '/material-categories/organic-waste.webp',
+  glass: '/material-categories/glasses.webp',
+  glasses: '/material-categories/glasses.webp',
+  textile: '/material-categories/textile.webp',
+  clothes: '/material-categories/textile.webp',
+  general: '/material-categories/general-waste.webp',
+  trash: '/material-categories/general-waste.webp',
+  bulky: '/material-categories/bulky-sofas.webp',
+  appliance: '/material-categories/bulky-item.webp',
+  sofa: '/material-categories/bulky-sofas.webp',
+  furniture: '/material-categories/bulky-sofas.webp',
+  recyclable: '/material-categories/recyclables.webp',
+  recyclables: '/material-categories/recyclables.webp',
+};
+
+function getMaterialImage(m: string): string {
+  const lower = m.toLowerCase();
+  for (const [key, path] of Object.entries(MATERIAL_IMAGE_MAP)) {
+    if (lower.includes(key)) return path;
+  }
+  return '/material-categories/recyclables.webp';
+}
 
 export default function CompanyProfile() {
   const navigate = useNavigate();
@@ -21,7 +53,6 @@ export default function CompanyProfile() {
   const [company, setCompany] = useState<any>(null);
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showAllMaterials, setShowAllMaterials] = useState(false);
 
   useEffect(() => {
     if (!agentId) { navigate('/'); return; }
@@ -85,8 +116,8 @@ export default function CompanyProfile() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-800">
-        <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-slate-900">
+        <div className="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-600 rounded-full animate-spin" />
       </div>
     );
   }
@@ -97,6 +128,17 @@ export default function CompanyProfile() {
     : (company?.service_profile?.categories?.filter((c: any) => c.enabled).map((c: any) => c.name) || []);
   const logisticsFee = config.base_logistics_fee ?? company?.service_profile?.base_logistics_fee ?? 0;
   const isFleetAdmin = company?.agent_account_type === 'company_admin' || company?.role === 'admin' || company?.role === 'company_admin';
+  const customRates = config.custom_rates || {};
+  const serviceProfileCategories = company?.service_profile?.categories || [];
+
+  function getMaterialRate(m: string): string | null {
+    const normKey = m.toLowerCase();
+    if (customRates[normKey]) return `KSh ${customRates[normKey]}/kg`;
+    if (customRates[m]) return `KSh ${customRates[m]}/kg`;
+    const cat = serviceProfileCategories.find((c: any) => c.name?.toLowerCase() === normKey || normKey.includes(c.name?.toLowerCase()));
+    if (cat?.base_rate) return `KSh ${cat.base_rate}/kg`;
+    return null;
+  }
 
   // Compute dynamic rating and review count from fetched reviews
   const reviewCount = reviews.length;
@@ -105,254 +147,247 @@ export default function CompanyProfile() {
     : (company?.rating > 0 ? company.rating.toFixed(1) : '0.0');
 
   return (
-    <div className="bg-white dark:bg-slate-800 transition-colors min-h-screen">
+    <div className="bg-white dark:bg-slate-900 transition-colors ">
       {/* ── FIXED HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto  bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-100 dark:border-slate-900">
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-2.5 px-3 border-b border-slate-200/80 dark:border-slate-800">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate(-1)} className="p-2.5 bg-white dark:bg-slate-800 rounded-xl active:scale-90 transition-all border border-slate-200 dark:border-slate-700">
-              <ArrowLeft className="w-5 h-5 dark:text-white" />
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all border border-slate-200/80 dark:border-slate-700"
+            >
+              <ArrowLeft className="w-4 h-4 text-slate-800 dark:text-white" />
             </button>
             <div>
-              <h1 className="text-sm font-bold text-slate-800 dark:text-white tracking-tight capitalize leading-none mb-1">View Collector Profile</h1>
-              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.25em]">Add to collection details</p>
+              <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight capitalize leading-none mb-0.5">
+                Collector Profile
+              </h1>
+              <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                Verified Recycling Partner
+              </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            
-            <button className="p-2.5 bg-white dark:bg-slate-800 rounded-xl active:scale-90 transition-all border border-slate-200 dark:border-slate-700">
-              <MoreVertical className="w-5 h-5 dark:text-white" />
-            </button>
-          </div>
+          <button className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all border border-slate-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-300">
+            <MoreVertical className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
-      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-5 px-1.5 space-y-4 max-w-lg mx-auto">
-        {/* Hero */}
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-emerald-800 to-emerald-700 p-4 text-white">
+      <div className="w-full pt-[calc(env(safe-area-inset-top,1rem)+3.75rem)] pb-12 px-1.5 space-y-5 max-w-lg mx-auto">
+        {/* ── HERO CARD ── */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-800 to-emerald-700 p-4 text-white shadow-xs">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-300/20 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
           
           <div className="relative z-10">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="relative w-[90px] h-[90px] shrink-0">
-                <div className="w-full h-full rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-4xl overflow-hidden shadow-inner border-[2px] border-white/20">
+            <div className="flex items-start gap-4 mb-5">
+              <div className="relative w-[84px] h-[84px] shrink-0">
+                <div className="w-full h-full rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-4xl overflow-hidden shadow-inner border-[2px] border-white/20">
                   {company?.avatarUrl || company?.avatar_url ? (
                     <img src={getThumbnailUrl(company.avatarUrl || company.avatar_url, { width: 250 })} className="w-full h-full object-cover" alt="" />
                   ) : (
                     isFleetAdmin ? '🏢' : '🚛'
                   )}
                 </div>
-                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 backdrop-blur-md px-3 py-1 rounded-full border flex items-center gap-1.5 z-10 shadow-sm ${company?.is_online ? 'bg-primary border-primary/50' : 'bg-amber-500/90 border-amber-300/50'}`}>
+                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 backdrop-blur-md px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 z-10 shadow-sm ${company?.is_online ? 'bg-emerald-500 border-emerald-400/50' : 'bg-amber-500/90 border-amber-300/50'}`}>
                   <div className={`w-1.5 h-1.5 rounded-full bg-white ${company?.is_online ? 'animate-pulse shadow-[0_0_5px_white]' : ''}`} />
-                  <span className="text-[9px] font-bold text-white capitalize tracking-widest pr-0.5">
+                  <span className="text-[9px] font-bold text-white capitalize tracking-widest">
                     {company?.is_online ? 'Online' : 'Offline'}
                   </span>
                 </div>
               </div>
 
-              <div className="flex-1 pt-1">
-                <div className="flex flex-col gap-1.5 mb-2">
+              <div className="flex-1 pt-0.5 min-w-0">
+                <div className="flex flex-col gap-1 mb-2">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <h2 className="text-[1.15rem] text-white font-bold tracking-tight leading-none drop-shadow-sm">{company?.company_name || company?.name || 'Klinflow Partner'}</h2>
-                    <ShieldCheck className="w-4 h-4 text-white/90 drop-shadow-sm" />
+                    <h2 className="text-[1.15rem] text-white font-bold tracking-tight leading-tight drop-shadow-sm truncate">
+                      {company?.company_name || company?.name || 'Klinflow Partner'}
+                    </h2>
+                    <ShieldCheck className="w-4 h-4 text-white/90 drop-shadow-sm shrink-0" />
                   </div>
-                  <div className="flex items-center gap-1 flex-wrap mt-0.5">
+                  <div className="flex items-center gap-1.5 flex-wrap mt-0.5">
                     <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2 py-0.5 rounded-full border border-white/10 w-fit">
                       <MapPin className="w-3 h-3 text-white" />
-                      <span className="text-[9px] font-bold text-white">{company?.location?.estate || 'Starehe, Nairobi'}</span>
+                      <span className="text-[9.5px] font-bold text-white">{company?.location?.estate || 'Starehe, Nairobi'}</span>
                     </div>
                     <span className="text-white/40 text-[10px]">•</span>
                     <p className="text-[10px] font-medium text-white/90">
-                      {isFleetAdmin ? 'Verified Fleet' : 'Independent Agent'}
+                      {isFleetAdmin ? 'Verified Fleet' : 'Independent Collector'}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1 bg-white/10 px-2 py-1 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded-lg backdrop-blur-sm border border-white/10">
                     <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300 drop-shadow-sm" />
                     <span className="text-[11px] font-bold text-white">
                       {computedRating}
                     </span>
+                    <span className="text-[9.5px] text-white/70">({reviewCount})</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-2.5 flex items-center justify-between shadow-lg">
-              <div className="flex flex-col items-center justify-center flex-1 border-r border-white/50 last:border-0">
-                <Package className="w-4 h-4 text-white/80 mb-1.5" />
-                <p className="text-[13px] font-bold text-white leading-none mb-1">{Number(company?.total_pickups || 1)}</p>
-                <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Pickups</p>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-2.5 flex items-center justify-between shadow-xs">
+              <div className="flex flex-col items-center justify-center flex-1 border-r border-white/30 last:border-0">
+                <Package className="w-4 h-4 text-white/90 mb-1" />
+                <p className="text-[13px] font-bold text-white leading-none mb-0.5">{Number(company?.total_pickups || 1)}</p>
+                <p className="text-[9px] text-white/70 font-bold uppercase tracking-wider">Pickups</p>
               </div>
-              <div className="flex flex-col items-center justify-center flex-1 border-r border-white/50 last:border-0">
-                <MessageSquare className="w-4 h-4 text-white/80 mb-1.5" />
-                <p className="text-[13px] font-bold text-white leading-none mb-1">{reviewCount}</p>
-                <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Reviews</p>
+              <div className="flex flex-col items-center justify-center flex-1 border-r border-white/30 last:border-0">
+                <MessageSquare className="w-4 h-4 text-white/90 mb-1" />
+                <p className="text-[13px] font-bold text-white leading-none mb-0.5">{reviewCount}</p>
+                <p className="text-[9px] text-white/70 font-bold uppercase tracking-wider">Reviews</p>
               </div>
               <div className="flex flex-col items-center justify-center flex-1 last:border-0">
-                <Zap className="w-4 h-4 text-white/80 mb-1.5" />
-                <p className="text-[13px] font-bold text-white leading-none mb-1">KSh {logisticsFee}</p>
-                <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Base Fee</p>
+                <Zap className="w-4 h-4 text-white/90 mb-1" />
+                <p className="text-[13px] font-bold text-white leading-none mb-0.5">KSh {logisticsFee}</p>
+                <p className="text-[9px] text-white/70 font-bold uppercase tracking-wider">Base Fee</p>
               </div>
             </div>
           </div>
         </div>
 
+        {/* ── ACCEPTED MATERIALS (SCROLLABLE) ── */}
+        {materials.length > 0 && (
+          <section className="space-y-2.5">
+            <div className="flex items-center justify-between px-0.5">
+              <h3 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight">
+                Accepted Materials
+              </h3>
+              <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+                {materials.length} categories
+              </span>
+            </div>
 
-        {/* ── SERVICES & PRICING WRAPPER ── */}
-        <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-2xl space-y-1 mt-4">
-          {/* Accepted Materials */}
-          {materials.length > 0 && (
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-slate-600 dark:text-white px-1">Accepted Materials</h3>
-              <div className="flex overflow-x-auto gap-3 pb-1 no-scrollbar px-1">
-                {(showAllMaterials ? materials : materials.slice(0, 3)).map((m: string) => {
-                    let bgImage = '';
-                    const identifier = m.toLowerCase();
-                    const catLabel = m.toLowerCase();
-                    if (identifier.includes('textile') || identifier.includes('clothes') || catLabel.includes('textile') || catLabel.includes('clothes')) bgImage = '/material-categories/textile.webp';
-                    else if (identifier.includes('paper') || identifier.includes('cardboard') || identifier.includes('carton')) bgImage = '/material-categories/boxes.webp';
-                    else if (identifier.includes('plastic')) bgImage = '/material-categories/plastic.webp';
-                    else if (identifier.includes('ewaste') || identifier.includes('e-waste') || identifier.includes('electronic')) bgImage = '/material-categories/E-waste.webp';
-                    else if (identifier.includes('metal')) bgImage = '/material-categories/metal.webp';
-                    else if (identifier.includes('organic') || identifier.includes('food')) bgImage = '/material-categories/organic-waste.webp';
-                    else if (identifier.includes('general') || identifier.includes('trash')) bgImage = '/material-categories/general-waste.webp';
-                    else if (identifier.includes('glass')) bgImage = '/material-categories/glasses.webp';
-                    else if (identifier.includes('appliance')) bgImage = '/material-categories/bulky-item.webp';
-                    else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
-                    else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
+            <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 snap-x">
+              {materials.map((m: string) => {
+                const imgPath = getMaterialImage(m);
+                const rate = getMaterialRate(m);
+                const label = (MATERIAL_LABELS as any)[m] || m.replace(/_/g, ' ');
 
-                    return (
-                    <div 
-                      key={m} 
-                      className="shrink-0 w-[85px] h-[85px] bg-slate-100 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center p-2 shadow-md relative overflow-hidden"
-                      style={bgImage ? {
-                        backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.8)), url(${bgImage})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center'
-                      } : {}}
-                    >
-                      <span className="text-[10px] font-bold text-white capitalize tracking-widest text-center leading-tight italic z-10 relative">
-                        {m.replace(/_/g, ' ')}
-                      </span>
-                    </div>
-                  )})}
-                {!showAllMaterials && materials.length > 3 && (
-                  <button 
-                    onClick={() => setShowAllMaterials(true)}
-                    className="shrink-0 w-[85px] h-[85px] bg-slate-300 dark:bg-slate-900 rounded-[1.25rem] border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center p-2 shadow-sm active:scale-95 transition-transform"
+                return (
+                  <div
+                    key={m}
+                    className="shrink-0 w-28 snap-start bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 overflow-hidden"
                   >
-                    <div className="w-10 h-10 bg-emerald-50 dark:bg-emerald-500/10 rounded-full flex items-center justify-center mb-2">
-                      <span className="text-base font-bold text-emerald-600 dark:text-emerald-400">+{materials.length - 3}</span>
+                    <div className="h-16 w-full bg-slate-200/60 dark:bg-slate-800 overflow-hidden">
+                      <img
+                        src={imgPath}
+                        alt={label}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
+                      />
                     </div>
-                    <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 text-center leading-tight">
-                      More
-                    </span>
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Pricing Card */}
-          <div className="space-y-1">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border-none shadow-sm flex gap-4">
-              <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
-                <Truck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h4 className="text-sm font-semibold text-slate-600 dark:text-white mb-1">Base Logistics Fee</h4>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug pr-4">
-                      Some collectors may add extra fees based on distance or material type.
-                    </p>
+                    <div className="p-2.5">
+                      <p className="text-xs font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                        {label}
+                      </p>
+                      {rate && (
+                        <p className="text-[10.5px] font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5 truncate">
+                          {rate}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-right shrink-0 flex flex-col items-end">
-                    <p className="text-base font-bold text-emerald-600 dark:text-emerald-400 leading-none mb-2">KSh {logisticsFee}</p>
-                    <span className="px-2 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[9px] font-bold rounded-md">No booking fee</span>
-                  </div>
-                </div>
-              </div>
+                );
+              })}
             </div>
-          </div>
-        </div>
+          </section>
+        )}
 
-        {/* What customers say */}
-        <div className="space-y-4 pt-4 !mt-1">
-          <div className="flex items-center justify-between px-1">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">What customers say</h3>
-            <button 
+        {/* ── CUSTOMER REVIEWS ── */}
+        <section className="space-y-2">
+          <div className="flex items-center justify-between px-0.5">
+            <div className="flex items-center gap-1.5">
+              <h3 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight">
+                What customers say
+              </h3>
+              {reviewCount > 0 && (
+                <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
+                  ({reviewCount})
+                </span>
+              )}
+            </div>
+            <button
               onClick={() => navigate(`/company/${agentId}/reviews`)}
-              className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center active:scale-95 transition-transform"
+              className="text-xs font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-0.5 active:scale-95 transition-transform"
             >
-              See all reviews <ChevronRight className="w-3 h-3 ml-0.5" />
+              See all <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
-          
-          <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm space-y-4">
-            {reviews.length === 0 ? (
-              <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-4">No reviews yet.</p>
-            ) : (
-              reviews.slice(0, 2).map((review, index) => {
+
+          {reviews.length === 0 ? (
+            <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 p-6 text-center">
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                No reviews yet.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-1.5">
+              {reviews.slice(0, 2).map((review, index) => {
                 const profile = Array.isArray(review.profiles) ? review.profiles[0] : review.profiles;
-                const reviewerName = profile?.full_name || profile?.first_name || 'Anonymous User';
+                const reviewerName = profile?.name || profile?.full_name || 'Verified User';
                 const initial = reviewerName.charAt(0).toUpperCase();
                 const rating = review.agent_rating || 5;
                 const dateObj = new Date(review.updated_at);
                 const dateString = isNaN(dateObj.getTime()) ? '' : dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                const isPositive = rating >= 4;
 
                 return (
-                  <div key={review.id || index}>
-                    {index > 0 && <div className="h-px bg-slate-100 dark:bg-slate-800 w-full mb-4" />}
-                    <div className="flex gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-bold text-lg ${isPositive ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400' : 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400'}`}>
-                        {profile?.avatar_url ? (
-                          <img src={getThumbnailUrl(profile.avatar_url, { width: 100 })} alt={reviewerName} className="w-full h-full rounded-full object-cover" />
-                        ) : (
-                          initial
-                        )}
+                  <div
+                    key={review.id || index}
+                    className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 p-4 space-y-2.5"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-700 text-slate-800 dark:text-white flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden border border-slate-200/80 dark:border-slate-600">
+                          {profile?.avatar_url ? (
+                            <img src={getThumbnailUrl(profile.avatar_url, { width: 80 })} alt={reviewerName} className="w-full h-full object-cover" />
+                          ) : (
+                            initial
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">{reviewerName}</h4>
+                          <p className="text-[10.5px] text-slate-400 dark:text-slate-500 font-medium">{dateString}</p>
+                        </div>
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <h4 className="text-xs font-bold text-slate-900 dark:text-white">{reviewerName}</h4>
-                          <span className="text-[10px] text-slate-400">{dateString}</span>
-                        </div>
-                        <div className="flex items-center gap-0.5 mb-2">
-                          {[1, 2, 3, 4, 5].map(i => (
-                            <Star key={i} className={`w-3 h-3 ${i <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-200 dark:text-slate-700'}`} />
-                          ))}
-                        </div>
-                        <p className="text-[12px] text-slate-600 dark:text-slate-300 leading-relaxed italic">
-                          {review.agent_rating_comment ? `"${review.agent_rating_comment}"` : 'No written feedback provided.'}
-                        </p>
+
+                      <div className="flex items-center gap-0.5 shrink-0">
+                        {[1, 2, 3, 4, 5].map(i => (
+                          <Star key={i} className={`w-3.5 h-3.5 ${i <= rating ? 'fill-amber-400 text-amber-400' : 'text-slate-200 dark:text-slate-700'}`} />
+                        ))}
                       </div>
                     </div>
+
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                      {review.agent_rating_comment ? `"${review.agent_rating_comment}"` : 'Completed pickup smoothly.'}
+                    </p>
                   </div>
                 );
-              })
-            )}
-          </div>
-        </div>
-        {/* Book Action Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-[1.25rem] p-4 border border-slate-100 dark:border-slate-800 shadow-sm mt-8">
+              })}
+            </div>
+          )}
+        </section>
+
+        {/* ── BOOKING CTA ── */}
+        <section className="pt-1 space-y-2.5">
           <motion.button
-            whileTap={{ scale: 0.97 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => navigate(`/book-pickup?agentId=${agentId}&companyName=${encodeURIComponent(company?.company_name || company?.name || '')}`)}
-            className="w-full py-3.5 bg-[#138a53] text-white rounded-[0.85rem] font-bold text-sm flex items-center justify-center gap-2 shadow-sm"
+            className="w-full py-4 bg-emerald-950 hover:bg-emerald-900 text-white rounded-2xl font-bold text-sm flex items-center justify-center gap-2 shadow-sm transition-colors"
           >
             <Truck className="w-4 h-4" />
             Book This Agent
           </motion.button>
-          
-          <div className="flex items-center justify-center gap-1.5 mt-3">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <p className="text-[10px] text-slate-500 font-medium">You're booking with a verified partner. Your data is safe with us.</p>
-          </div>
-        </div>
+          <p className="text-[11px] text-center text-slate-400 dark:text-slate-500 font-medium flex items-center justify-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            You're booking with a verified Klinflow partner
+          </p>
+        </section>
 
       </div>
     </div>

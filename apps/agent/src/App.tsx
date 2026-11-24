@@ -27,8 +27,6 @@ const MyRoutes = lazy(() => import('./pages/agent/MyRoutes'));
 const ReviewsPage = lazy(() => import('./pages/agent/ReviewsPage'));
 const NavigateJobPage = lazy(() => import('./pages/agent/NavigateJobPage'));
 const AgentWarehouse = lazy(() => import('./pages/agent/AgentWarehouse'));
-const AgentTradeHub = lazy(() => import('./pages/agent/AgentTradeHub'));
-const AgentSellStock = lazy(() => import('./pages/agent/AgentSellStock'));
 const Sourcing = lazy(() => import('./pages/agent/Sourcing'));
 const MyTrades = lazy(() => import('./pages/agent/MyTrades'));
 const MyBids = lazy(() => import('./pages/agent/MyBids'));
@@ -247,8 +245,6 @@ export default function App() {
             <Route path="/jobs" element={<AvailableJobs />} />
             <Route path="/routes" element={<MyRoutes />} />
             <Route path="/warehouse" element={<AgentWarehouse />} />
-            <Route path="/warehouse/trade" element={<AgentTradeHub />} />
-            <Route path="/warehouse/sell" element={<AgentSellStock />} />
             <Route path="/sourcing" element={<Sourcing />} />
             <Route path="/bids" element={<MyBids />} />
             <Route path="/market-pulse" element={<MarketPulse />} />

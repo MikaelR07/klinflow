@@ -91,16 +91,17 @@ export default function TradeDetailsPage() {
       <div className="max-w-lg mx-auto">
         {/* ── FIXED TOP NAV ── */}
         <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-          <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
-            <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+          <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3.5 px-4 flex items-center justify-between relative">
+            <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0 z-10">
               <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
             </button>
-            <div>
+            <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
               <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Trade Details</h1>
-              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
+              <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center justify-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /> Marketplace Trade
               </p>
             </div>
+            <div className="w-10 h-10 shrink-0" />
           </div>
         </div>
 
@@ -132,7 +133,7 @@ export default function TradeDetailsPage() {
                 </h2>
               </div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 border border-emerald-200 dark:border-emerald-500/20">
-                <span className="text-[9px] font-black uppercase tracking-wider leading-none mt-px">{trade.status?.replace('_', ' ')}</span>
+                <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-px">{trade.status?.replace('_', ' ')}</span>
               </div>
             </div>
 
@@ -143,7 +144,7 @@ export default function TradeDetailsPage() {
                 <Wallet className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Contract Settlement</p>
-                  <p className="text-xs font-black text-slate-900 dark:text-white">KSh {(trade.total_price || 0).toLocaleString()}</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white">KSh {(trade.total_price || 0).toLocaleString()}</p>
                 </div>
               </div>
 
@@ -151,7 +152,7 @@ export default function TradeDetailsPage() {
                 <Scale className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Locked Volume</p>
-                  <span className="text-xs font-black text-slate-900 dark:text-white">{trade.actual_weight_kg || trade.listing?.quantity || 0} KG</span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white">{trade.actual_weight_kg || trade.listing?.quantity || 0} KG</span>
                 </div>
               </div>
 
@@ -175,7 +176,7 @@ export default function TradeDetailsPage() {
                  <TrendingUp className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                  <div>
                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Unit Price</p>
-                   <span className="text-xs font-black text-slate-900 dark:text-white">KES {Math.round((trade.total_price || 0) / (trade.actual_weight_kg || trade.listing?.quantity || 1))} /KG</span>
+                   <span className="text-xs font-bold text-slate-900 dark:text-white">KES {Math.round((trade.total_price || 0) / (trade.actual_weight_kg || trade.listing?.quantity || 1))} /KG</span>
                  </div>
               </div>
             </div>
@@ -199,11 +200,11 @@ export default function TradeDetailsPage() {
                 className="w-full py-4 bg-emerald-600 text-white rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all group"
              >
                 <Navigation className="w-5 h-5 group-hover:animate-pulse" />
-                <span className="font-black text-xs capitalize tracking-[0.2em]">Start Collection</span>
+                <span className="font-bold text-xs capitalize tracking-[0.2em]">Start Collection</span>
              </button>
              <button 
                 onClick={() => navigate(-1)}
-                className="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 rounded-2xl font-black text-xs capitalize tracking-[0.2em] active:scale-95 transition-all"
+                className="w-full py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 rounded-2xl font-bold text-xs capitalize tracking-[0.2em] active:scale-95 transition-all"
              >
                 Return to List
              </button>

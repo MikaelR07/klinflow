@@ -130,16 +130,16 @@ export default function PayoutsBarchart() {
       <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10">
         <div className="text-center border-r border-white/10">
           <p className="text-[10px] font-bold text-blue-200 mb-0.5">Highest</p>
-          <p className="text-[13px] font-black text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{maxPayout.toLocaleString()}</p>
+          <p className="text-[13px] font-bold text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{maxPayout.toLocaleString()}</p>
         </div>
         <div className="text-center border-r border-white/10">
           <p className="text-[10px] font-bold text-blue-200 mb-0.5">Lowest</p>
-          <p className="text-[13px] font-black text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{minPayout.toLocaleString()}</p>
+          <p className="text-[13px] font-bold text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{minPayout.toLocaleString()}</p>
           
         </div>
         <div className="text-center">
           <p className="text-[10px] font-bold text-blue-200 mb-0.5">Average</p>
-          <p className="text-[13px] font-black text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{avgPayout.toLocaleString()}</p>
+          <p className="text-[13px] font-bold text-white"><span className="text-[9px] text-blue-200 mr-0.5">KES</span>{avgPayout.toLocaleString()}</p>
         </div>
       </div>
     </div>

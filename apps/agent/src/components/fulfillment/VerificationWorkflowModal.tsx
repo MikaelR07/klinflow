@@ -193,7 +193,7 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
           {/* Header */}
           <div className="flex items-center justify-between p-6 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
-              <h2 className="text-lg font-black text-slate-900 dark:text-white">Verify Material</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">Verify Material</h2>
               <p className="text-xs font-bold text-slate-500 tracking-widest uppercase mt-1">
                 Step {step} of 2
               </p>
@@ -213,10 +213,10 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
                 <div className="bg-gradient-to-r from-emerald-600 to-teal-500 dark:from-emerald-500/20 dark:to-teal-500/10 rounded-2xl p-5 shadow-lg shadow-emerald-500/20 border border-emerald-400/20">
                   <div className="flex items-center gap-3 mb-2">
                     <Scale className="w-6 h-6 text-white dark:text-emerald-400" />
-                    <h3 className="text-lg font-black text-white dark:text-emerald-300">Measure & Verify</h3>
+                    <h3 className="text-lg font-bold text-white dark:text-emerald-300">Measure & Verify</h3>
                   </div>
                   <p className="text-sm text-emerald-50 dark:text-emerald-400/80 leading-relaxed font-medium">
-                    Verify the actual weight collected. The original proposed weight was <strong className="text-white dark:text-emerald-300 font-black px-1.5 py-0.5 bg-black/20 rounded-md">{proposal?.offered_weight || 0}kg</strong>.
+                    Verify the actual weight collected. The original proposed weight was <strong className="text-white dark:text-emerald-300 font-bold px-1.5 py-0.5 bg-black/20 rounded-md">{proposal?.offered_weight || 0}kg</strong>.
                   </p>
                 </div>
 
@@ -225,11 +225,11 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
                     <div>
                       <div className="flex gap-6">
                         <div>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Category</p>
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Category</p>
                           <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">{selectedCategory || '—'}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Material</p>
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Material</p>
                           <p className="text-sm font-bold text-slate-900 dark:text-white capitalize">{selectedSubcategory || '—'}</p>
                         </div>
                       </div>
@@ -244,7 +244,7 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
                 ) : (
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">Category</label>
+                      <label className="block text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Category</label>
                       <div className="relative">
                         <select
                           value={selectedCategory}
@@ -265,7 +265,7 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">Material</label>
+                      <label className="block text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Material</label>
                       <div className="relative">
                         <select
                           value={selectedSubcategory}
@@ -289,18 +289,18 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
                 {agentRate > 0 && (
                   <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl p-3 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-between">
                     <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Your Config Rate</span>
-                    <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">KSh {agentRate} / kg</span>
+                    <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">KSh {agentRate} / kg</span>
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">Verified Weight</label>
+                  <label className="block text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Verified Weight</label>
                   <div className="relative">
                     <input
                       type="number"
                       value={weight}
                       onChange={(e) => setWeight(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-lg font-black text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all text-center"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-lg font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500 transition-all text-center"
                       placeholder="0.0"
                     />
                     <div className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">kg</div>
@@ -308,7 +308,7 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">Quality Grade</label>
+                  <label className="block text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Quality Grade</label>
                   <div className="relative">
                     <select
                       value={grade}
@@ -327,7 +327,7 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
 
                 {/* Inline Photos (Optional) */}
                 <div className="pt-2">
-                  <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">Evidence Photos (Optional)</label>
+                  <label className="block text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">Evidence Photos (Optional)</label>
                   <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
                     <label className="shrink-0 w-20 h-20 bg-slate-50 dark:bg-slate-900/50 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl flex flex-col items-center justify-center gap-1 text-slate-500 hover:border-blue-500 hover:text-blue-500 transition-colors cursor-pointer active:scale-95">
                       <Camera className="w-5 h-5" />
@@ -355,31 +355,31 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
                 <div className="bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-500/20 dark:to-indigo-500/10 rounded-2xl p-5 shadow-lg shadow-blue-500/20 border border-blue-400/20">
                   <div className="flex items-center gap-3 mb-2">
                     <Banknote className="w-6 h-6 text-white dark:text-blue-400" />
-                    <h3 className="text-lg font-black text-white dark:text-blue-300">Payout & Authorization</h3>
+                    <h3 className="text-lg font-bold text-white dark:text-blue-300">Payout & Authorization</h3>
                   </div>
                   <p className="text-sm text-blue-50 dark:text-blue-400/80 leading-relaxed font-medium">
-                    Ask the seller to enter their 6-digit PIN to authorize the handover and receive <strong className="text-white dark:text-blue-300 font-black px-1.5 py-0.5 bg-black/20 rounded-md">KSh {((parseFloat(weight) || 0) * (parseFloat(proposal?.offered_price) || 0)).toLocaleString()}</strong>.
+                    Ask the seller to enter their 6-digit PIN to authorize the handover and receive <strong className="text-white dark:text-blue-300 font-bold px-1.5 py-0.5 bg-black/20 rounded-md">KSh {((parseFloat(weight) || 0) * (parseFloat(proposal?.offered_price) || 0)).toLocaleString()}</strong>.
                   </p>
                 </div>
 
                 <div className="bg-slate-50 dark:bg-slate-900/30 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-4">
                   <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Material</span>
-                    <span className="text-sm font-black text-slate-900 dark:text-white capitalize">{selectedSubcategory || '—'}</span>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Material</span>
+                    <span className="text-sm font-bold text-slate-900 dark:text-white capitalize">{selectedSubcategory || '—'}</span>
                   </div>
                   <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Verified Weight</span>
-                    <span className="text-sm font-black text-slate-900 dark:text-white">{weight || 0} kg</span>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Verified Weight</span>
+                    <span className="text-sm font-bold text-slate-900 dark:text-white">{weight || 0} kg</span>
                   </div>
                   <div className="flex justify-between items-center pt-2">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center">
                         <Calculator className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       </div>
-                      <span className="text-xs font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">Seller Payout</span>
+                      <span className="text-xs font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">Seller Payout</span>
                     </div>
                     <div className="flex flex-col items-end">
-                      <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
+                      <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                         KSh {((parseFloat(weight) || 0) * (parseFloat(proposal?.offered_price) || 0)).toLocaleString()}
                       </span>
                       <span className="text-[10px] font-bold text-slate-400 mt-0.5">
@@ -390,14 +390,14 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
                 </div>
 
                 <div className="flex flex-col items-center justify-center py-4">
-                  <label className="block text-[10px] font-black text-slate-500 mb-4 uppercase tracking-widest">Seller PIN Code</label>
+                  <label className="block text-[10px] font-bold text-slate-500 mb-4 uppercase tracking-widest">Seller PIN Code</label>
                   <input
                     type="text"
                     maxLength={6}
                     placeholder="• • • • • •"
                     value={code}
                     onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
-                    className="w-full max-w-[280px] text-center bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl px-4 py-4 text-3xl font-black tracking-[0.5em] text-slate-900 dark:text-white outline-none focus:border-blue-500 transition-all placeholder:tracking-normal placeholder:text-slate-300 dark:placeholder:text-slate-700"
+                    className="w-full max-w-[280px] text-center bg-slate-50 dark:bg-slate-900/50 border-2 border-slate-200 dark:border-slate-800 rounded-2xl px-4 py-4 text-3xl font-bold tracking-[0.5em] text-slate-900 dark:text-white outline-none focus:border-blue-500 transition-all placeholder:tracking-normal placeholder:text-slate-300 dark:placeholder:text-slate-700"
                   />
                 </div>
               </motion.div>
@@ -418,7 +418,7 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
             {step === 1 ? (
               <button
                 onClick={handleNext}
-                className="flex-1 py-4 rounded-2xl font-black text-white bg-emerald-500 hover:bg-emerald-600 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-[0_8px_16px_rgba(16,185,129,0.2)]"
+                className="flex-1 py-4 rounded-2xl font-bold text-white bg-emerald-500 hover:bg-emerald-600 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-[0_8px_16px_rgba(16,185,129,0.2)]"
               >
                 Continue <ChevronRight className="w-5 h-5" />
               </button>
@@ -426,7 +426,7 @@ export default function VerificationWorkflowModal({ isOpen, onClose, order }: Pr
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting || code.length !== 6}
-                className="flex-1 py-4 rounded-2xl font-black text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-[0_8px_16px_rgba(37,99,235,0.2)]"
+                className="flex-1 py-4 rounded-2xl font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-[0_8px_16px_rgba(37,99,235,0.2)]"
               >
                 {isSubmitting ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

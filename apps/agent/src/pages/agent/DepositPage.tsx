@@ -231,7 +231,7 @@ export default function DepositPage() {
           <p className="text-[11px] font-bold text-emerald-100/70 uppercase tracking-widest mb-1.5">Available Balance</p>
           <div className="flex items-baseline justify-center gap-1 text-white">
             <span className="text-xl font-bold">KSh</span>
-            <span className="text-3xl font-black leading-none">
+            <span className="text-3xl font-bold leading-none">
               {(profile?.walletBalance || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
@@ -315,7 +315,7 @@ export default function DepositPage() {
                             </div>
                           </div>
                           <div className="text-right shrink-0 flex flex-col items-end gap-1">
-                            <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${req.status === 'approved' ? 'text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400' : req.status === 'rejected' ? 'text-rose-600 bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-400' : 'text-amber-600 bg-amber-50 border-amber-100 dark:bg-amber-500/10 dark:border-amber-500/20 dark:text-amber-400'}`}>
+                            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${req.status === 'approved' ? 'text-emerald-600 bg-emerald-50 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20 dark:text-emerald-400' : req.status === 'rejected' ? 'text-rose-600 bg-rose-50 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20 dark:text-rose-400' : 'text-amber-600 bg-amber-50 border-amber-100 dark:bg-amber-500/10 dark:border-amber-500/20 dark:text-amber-400'}`}>
                               {req.status}
                             </span>
                             <p className="text-[10px] font-medium text-slate-400 mt-0.5">

@@ -222,53 +222,51 @@ export default function MyTrades() {
   };
 
   return (
-    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-800 min-h-screen transition-colors">
       {/* FIXED TOP HEADER */}
-      <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] px-4 border-b border-slate-200 dark:border-slate-800 z-30 transition-colors">
-        <div className="max-w-lg mx-auto space-y-1.5">
+      <div className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-2.5 px-3 border-b border-slate-200/80 dark:border-slate-800 z-30 transition-colors">
+        <div className="max-w-lg mx-auto space-y-2.5">
           <div className="relative flex items-center justify-between min-h-[40px]">
-            <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group z-10">
-              <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
+            <button onClick={() => navigate(-1)} className="p-2.5 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center active:scale-90 transition-all z-10">
+              <ArrowLeft className="w-4 h-4 text-slate-800 dark:text-white" />
             </button>
             <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none max-w-[240px] sm:max-w-xs">
-              <h1 className="text-lg font-bold text-lime-600 dark:text-white capitalize tracking-tighter leading-tight truncate">Trades & Offers</h1>
-              <p className="text-[10px] font-bold text-slate-600 dark:text-slate-400 capitalize tracking-widest flex items-center justify-center gap-1.5 mt-0.5 truncate">
-                View your Market offers 
+              <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none truncate">Trades &amp; Offers</h1>
+              <p className="text-[10.5px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                Manage your market orders
               </p>
             </div>
-            <div className="w-10 h-10 shrink-0" aria-hidden="true" />
+            <div className="w-9 shrink-0" aria-hidden="true" />
           </div>
 
           {/* SEARCH & FILTER BAR */}
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search materials, locations, or names..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:font-medium placeholder:text-slate-400"
-              />
-            </div>
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search materials, locations, or names..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-emerald-500/40 transition-all placeholder:font-medium placeholder:text-slate-400"
+            />
           </div>
 
-          <div className="flex overflow-x-auto no-scrollbar gap-1 pb-2">
+          <div className="flex overflow-x-auto no-scrollbar gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
             {TABS.map((tab) => {
               const count = tab.id === "Bids" ? pendingOffers.length : tab.id === "Active" ? activeBookings.length : tab.id === "Counters" ? counterBookings.length : historyBookings.length;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 py-2 px-1 rounded-xl text-[12px] flex items-center justify-center gap-1.5 font-bold capitalize tracking-wider transition-all border shrink-0 ${activeTab === tab.id
-                    ? "bg-primary text-white border-transparent"
-                    : "bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+                  className={`flex-1 py-2 px-1.5 rounded-lg text-[11px] flex items-center justify-center gap-1 font-bold transition-all shrink-0 ${activeTab === tab.id
+                    ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs"
+                    : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                     }`}
                 >
                   <span>{tab.label}</span>
-                  <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${activeTab === tab.id
-                    ? "bg-white/25 text-white"
-                    : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400"
+                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none ${activeTab === tab.id
+                    ? "bg-white/20 dark:bg-slate-900/15 text-current"
+                    : "bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
                     }`}>
                     {count}
                   </span>
@@ -279,49 +277,81 @@ export default function MyTrades() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-0 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)] relative max-w-lg mx-auto w-full">
+      <div className="flex-1 pb-24 pt-[calc(env(safe-area-inset-top,1rem)+9.25rem)] px-1.5 relative max-w-lg mx-auto w-full">
 
         {/* BIDS VIEW */}
         {activeTab === "Bids" && !selectedOfferId && (
-          <div>
+          <div className="space-y-2 pt-1">
               {pendingOffers.length === 0 ? (
-                <div className="pt-10">
-                  <EmptyState icon={MessageSquareQuote} title="No active bids yet" subtitle="You have no pending offers from buyers." />
+                <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700/60 py-14 px-6 text-center mt-2">
+                  <div className="w-14 h-14 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3.5 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                    <MessageSquareQuote className="w-6 h-6 text-slate-400" />
+                  </div>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">No active bids yet</p>
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto leading-relaxed">
+                    Pending offers from verified buyers will appear here.
+                  </p>
                 </div>
               ) : (
                 pendingOffers.map((offer) => (
-                  <div key={offer.id} onClick={() => setSelectedOfferId(offer.id)} className="bg-slate-50 dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500" />
-                  <div className="flex gap-3 pl-4 pr-3.5 py-3">
-                    <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-50 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
-                      {offer.photo ? <OptimizedImage src={getThumbnailUrl(offer.photo, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />}
-                    </div>
-                    <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{offer.material}</h3>
-                          <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 flex items-center gap-0.5 shrink-0">BID</span>
-                          {(offer.listing?.pickupMode === 'dropoff' || offer.listing?.pickup_mode === 'dropoff') && (
-                            <span className="px-1 py-0.5 rounded text-[8px] font-semibold bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 flex items-center gap-0.5 shrink-0"><Home className="w-2.5 h-2.5" />DROP-OFF</span>
-                          )}
+                  <div
+                    key={offer.id}
+                    onClick={() => setSelectedOfferId(offer.id)}
+                    className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-1.5 group"
+                  >
+                    {/* Top Row */}
+                    <div className="flex items-start justify-between gap-2.5">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <div className="w-16 h-16 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                          {offer.photo ? <OptimizedImage src={getThumbnailUrl(offer.photo, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-5 h-5 text-slate-400" />}
                         </div>
-                        <div className="text-right shrink-0 ml-2 mt-1">
-                          <p className="text-base font-bold text-emerald-600 leading-none tracking-tighter">KSh {offer.offeredPrice}<span className="text-[9px] text-emerald-600/70 font-bold">/kg</span></p>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{offer.material}</h3>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100/90 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40 shrink-0">Bid</span>
+                          </div>
+                          <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 truncate">
+                            <User className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                            <span className="truncate">{offer.buyerName || "Buyer"}</span>
+                          </p>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between mt-0.5">
-                        <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]"><User className="w-3 h-3 text-emerald-600" /> {offer.buyerName || "Buyer"}</p>
-                      </div>
-                      <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
-                        <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0"><Clock className="w-2.5 h-2.5 text-slate-900" /> {offer.createdAt ? new Date(offer.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}</p>
-                        <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {offer.quantity} KG</p>
+                      <div className="text-right shrink-0">
+                        <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400 leading-none tabular-nums">
+                          KSh {offer.offeredPrice}<span className="text-[10px] font-semibold text-slate-400">/kg</span>
+                        </p>
                       </div>
                     </div>
-                    <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
+
+                    {/* Middle Row */}
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                      <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
+                        <Scale className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                        {offer.quantity} KG
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        {offer.createdAt ? new Date(offer.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}
+                      </span>
+                      {(offer.listing?.pickupMode === 'dropoff' || offer.listing?.pickup_mode === 'dropoff') && (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-violet-100/80 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-bold">
+                          <Home className="w-2.5 h-2.5" /> Drop-off
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Footer Row */}
+                    <div className="pt-2.5 border-t border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between gap-2">
+                      <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                        Total Offer: <span className="font-bold text-slate-800 dark:text-white tabular-nums">KSh {((offer.offeredPrice || 0) * (offer.quantity || 0)).toLocaleString()}</span>
+                      </span>
+                      <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                        Review Bid <ChevronRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))
-            )}
+                ))
+              )}
           </div>
         )}
 
@@ -414,13 +444,19 @@ export default function MyTrades() {
 
         {/* ACTIVE, COUNTERS, HISTORY VIEW */}
         {activeTab !== "Bids" && (
-          <div className="space-y-0 pb-32">
+          <div className="pb-32 pt-1">
             {filteredBookings.length === 0 ? (
-              <div className="pt-10">
-                <EmptyState icon={Store} title={`No ${activeTab.toLowerCase()} trades`} subtitle={activeTab === "History" ? "No history in your ledger yet." : activeTab === "Active" ? "You have no active recyclable postings." : "No counters pending."} />
+              <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700/60 py-14 px-6 text-center mt-2">
+                <div className="w-14 h-14 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3.5 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                  <Store className="w-6 h-6 text-slate-400" />
+                </div>
+                <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">{`No ${activeTab.toLowerCase()} trades`}</p>
+                <p className="text-xs font-medium text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto leading-relaxed">
+                  {activeTab === "History" ? "Completed and cancelled trades will appear here." : activeTab === "Active" ? "You have no active recyclable orders right now." : "No counter offers pending."}
+                </p>
               </div>
             ) : (
-              <div className="space-y-0">
+              <div className="space-y-2.5">
                 {allFilteredItems.map((b: any) => {
                   const materialVal = b.wasteType;
                   const waste = WASTE_TYPES?.find?.((w: any) => w.slug === materialVal || w.id === materialVal);
@@ -429,51 +465,47 @@ export default function MyTrades() {
 
                   if (activeTab === "Counters") {
                     return (
-                      <div key={b.id} className="bg-slate-50 dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-800 relative overflow-hidden">
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500" />
-                        <button onClick={() => setExpandedCounterId(isCounterOpen ? null : b.id)} className="w-full p-4 pl-5 flex items-center gap-4 text-left active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors">
+                      <div key={b.id} className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 overflow-hidden">
+                        <button onClick={() => setExpandedCounterId(isCounterOpen ? null : b.id)} className="w-full p-3.5 flex items-center gap-3 text-left transition-colors">
                           <div className="relative">
-                            <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-center justify-center text-xl shrink-0 border border-slate-200 dark:border-slate-700">
-                              {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 100 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />}
-                            </div>
-                            <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white dark:border-slate-900 flex items-center justify-center ${status.color.split(' ')[0]} ${status.color.split(' ')[1]}`}>
-                              <status.icon className="w-3 h-3" />
+                            <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                              {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 100 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-5 h-5 text-slate-400" />}
                             </div>
                           </div>
-                          <div className="flex-1 min-w-0 py-0.5">
-                            <div className="flex items-center justify-between mb-0.5">
-                              <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100/90 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40 shrink-0">
                                 Counter Offer
                               </span>
                             </div>
-                            <div className="flex items-end justify-between">
-                              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate mb-0.5">{b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
-                              <div className="flex flex-col items-end">
-                                <span className="text-[10px] font-bold text-slate-400 line-through">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate">{b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                <span className="text-[10px] font-semibold text-slate-400 line-through">
                                   KSh {(b.totalPrice || b.amount || 0).toLocaleString()}
                                 </span>
-                                <span className="text-xs font-bold text-amber-600 dark:text-amber-400 leading-none mt-0.5">
+                                <span className="text-xs font-extrabold text-amber-600 dark:text-amber-400 leading-none">
                                   KSh {(b.counterOfferAmount || 0).toLocaleString()}
                                 </span>
                               </div>
                             </div>
                           </div>
-                          <ChevronDown className={`w-4 h-4 text-slate-300 transition-transform duration-300 ${isCounterOpen ? "rotate-180" : ""}`} />
+                          <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 shrink-0 ${isCounterOpen ? "rotate-180" : ""}`} />
                         </button>
                         <AnimatePresence>
                           {isCounterOpen && (
                             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                              <div className="px-4 pb-4 pt-1 border-t border-slate-50 dark:border-slate-800/50 mt-1">
-                                <div className="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-3 border border-amber-100 dark:border-amber-800/30">
+                              <div className="px-3.5 pb-3.5 pt-1">
+                                <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-3 border border-amber-200/60 dark:border-amber-800/40">
                                   <div className="flex items-center gap-2 mb-2"><Zap className="w-4 h-4 text-amber-500" /><p className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest">Agent proposes new terms:</p></div>
                                   <div className="grid grid-cols-2 gap-2 mb-3">
-                                    <div className="bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-100 dark:border-amber-800/30"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight</p><p className="text-xs font-bold text-slate-800 dark:text-white">{b.actualWeightKg} kg</p></div>
-                                    <div className="bg-white dark:bg-slate-800 p-2 rounded-lg border border-amber-100 dark:border-amber-800/30"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Value</p><p className="text-xs font-bold text-emerald-600">KSh {b.counterOfferAmount}</p></div>
+                                    <div className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-amber-200/50 dark:border-amber-800/30"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight</p><p className="text-xs font-bold text-slate-800 dark:text-white">{b.actualWeightKg} kg</p></div>
+                                    <div className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-amber-200/50 dark:border-amber-800/30"><p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Value</p><p className="text-xs font-bold text-emerald-600">KSh {b.counterOfferAmount}</p></div>
                                   </div>
                                   <div className="flex gap-2">
-                                    <button onClick={() => setConfirmAction({ type: 'rejectCounter', id: b.id, title: 'Reject Counter', message: 'Are you sure you want to reject the new terms?' })} className="flex-1 py-2 bg-white dark:bg-slate-800 text-rose-600 font-bold text-[10px] uppercase tracking-widest rounded-lg border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors">Reject</button>
-                                    <button onClick={() => handleAcceptCounterOffer(b)} className="flex-1 py-2 bg-emerald-600 text-white font-bold text-[10px] uppercase tracking-widest rounded-lg shadow-sm hover:bg-emerald-700 transition-colors">Accept</button>
+                                    <button onClick={() => setConfirmAction({ type: 'rejectCounter', id: b.id, title: 'Reject Counter', message: 'Are you sure you want to reject the new terms?' })} className="flex-1 py-2.5 bg-white dark:bg-slate-900 text-rose-600 font-bold text-[10px] uppercase tracking-widest rounded-lg border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-colors">Reject</button>
+                                    <button onClick={() => handleAcceptCounterOffer(b)} className="flex-1 py-2.5 bg-emerald-950 hover:bg-emerald-900 text-white font-bold text-[10px] uppercase tracking-widest rounded-lg shadow-xs transition-colors">Accept</button>
                                   </div>
                                 </div>
                               </div>
@@ -485,43 +517,67 @@ export default function MyTrades() {
                   }
 
                   // ACTIVE & HISTORY
-                  const accentColor = b.status === 'completed' ? 'bg-emerald-500' : b.status === 'cancelled' || b.status === 'rejected' ? 'bg-rose-500' : b.status === 'confirmed' ? 'bg-emerald-500' : b.status === 'in-progress' ? 'bg-blue-500' : 'bg-amber-500';
+                  const totalPay = b.totalPrice || b.amount || 0;
                   return (
-                    <div key={b.id} onClick={() => { if (!b.isOffer) setExpandedId(b.id); }} className="bg-slate-50 dark:bg-slate-900/60 shadow-sm border-b border-slate-100 dark:border-slate-800 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden">
-                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${accentColor}`} />
-                      <div className="flex gap-3 relative z-10 pl-4 pr-3.5 py-3">
-                        <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex items-center justify-center text-2xl shrink-0 border border-slate-200 dark:border-slate-700">
-                          {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />}
-                        </div>
-                        <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-1.5 min-w-0">
-                              <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || formatMaterial(materialVal)}</h3>
-                            </div>
-                            <div className="text-right shrink-0 ml-2 mt-1">
-                              <p className={`text-base font-bold leading-none tracking-tighter ${b.status === 'cancelled' ? 'text-slate-400 line-through' : 'text-emerald-600 dark:text-emerald-400'}`}>KSh {(b.totalPrice || b.amount || 0).toLocaleString()}</p>
-                            </div>
+                    <div
+                      key={b.id}
+                      onClick={() => { if (!b.isOffer) setExpandedId(b.id); }}
+                      className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-3 group"
+                    >
+                      {/* Top Row */}
+                      <div className="flex items-start justify-between gap-2.5">
+                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                          <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                            {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-5 h-5 text-slate-400" />}
                           </div>
-                          <div className="flex items-center justify-between mt-0.5">
-                            {b.bookingType === 'dropoff' ? (
-                              <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 shrink-0">
-                                <Home className="w-2.5 h-2.5" />
-                                <span className="mt-px">DROP-OFF</span>
-                              </div>
-                            ) : (
-                              <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-widest ${status.color} shrink-0`}>
-                                <status.icon className="w-2.5 h-2.5" />
-                                <span className="mt-px">{status.label}</span>
-                              </div>
-                            )}
-                            <span className="text-[11px] font-bold text-slate-400 truncate max-w-[100px]"><MapPin className="w-3 h-3 inline mr-0.5" /> {b.estate || "Pickup"}</span>
-                          </div>
-                          <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
-                            <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0"><Clock className="w-2.5 h-2.5 text-slate-400" /> {b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
-                            <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0"><span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Qty:</span><Scale className="w-2.5 h-2.5" /> {b.actualWeightKg || b.weightKg || 0} KG</p>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                              {waste?.label || formatMaterial(materialVal)}
+                            </h3>
+                            <p className={`text-sm font-extrabold leading-none mt-1 tabular-nums ${b.status === 'cancelled' || b.status === 'rejected' ? 'text-slate-400 line-through' : 'text-emerald-700 dark:text-emerald-400'}`}>
+                              KSh {totalPay.toLocaleString()}
+                            </p>
                           </div>
                         </div>
-                        <div className="flex items-center justify-center text-slate-300"><ChevronRight className="w-4 h-4" /></div>
+
+                        {b.bookingType === 'dropoff' ? (
+                          <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-100/90 text-violet-800 dark:bg-violet-950/60 dark:text-violet-300 border border-violet-200/60 dark:border-violet-800/40">
+                            <Home className="w-3 h-3" /> Drop-off
+                          </span>
+                        ) : (
+                          <span className={`shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold capitalize ${status.color}`}>
+                            <status.icon className="w-3 h-3 shrink-0" />
+                            <span>{status.label}</span>
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Middle Row */}
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                        <span className="flex items-center gap-1 truncate max-w-[160px]">
+                          <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                          <span className="truncate">{b.estate || "Pickup"}</span>
+                        </span>
+                        <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300 shrink-0">
+                          <Scale className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          {b.actualWeightKg || b.weightKg || 0} KG
+                        </span>
+                        <span className="flex items-center gap-1 shrink-0">
+                          <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          {b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      </div>
+
+                      {/* Footer Row */}
+                      <div className="pt-2.5 border-t border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between gap-2">
+                        <span className="text-[10.5px] font-medium text-slate-400 dark:text-slate-500">
+                          ID: <span className="font-mono font-semibold text-slate-600 dark:text-slate-300">#{(b.id || '').slice(0, 8).toUpperCase()}</span>
+                        </span>
+                        {!b.isOffer && (
+                          <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                            View Details <ChevronRight className="w-3.5 h-3.5" />
+                          </span>
+                        )}
                       </div>
                     </div>
                   );

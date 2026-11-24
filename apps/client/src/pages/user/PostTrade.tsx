@@ -273,9 +273,9 @@ export default function PostTrade() {
   };
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-900 -mx-1 px-1 min-h-screen transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200 dark:border-slate-900/70 max-w-lg mx-auto">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 border-b border-slate-200/80 dark:border-slate-800 max-w-lg mx-auto">
         <div className="flex items-center justify-between max-w-lg mx-auto">
           <button onClick={() => step > 1 ? setStep(step - 1) : navigate(-1)} className="w-11 h-11 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />

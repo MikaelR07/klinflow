@@ -314,236 +314,210 @@ export default function AvailableJobs() {
   }, [isFleetDriver, activeTab]);
 
   return (
-    <div className="flex flex-col bg-slate-50 dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-900 transition-colors min-h-screen">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-0 px-4 border-b border-slate-200 dark:border-slate-800 shadow-sm max-w-lg mx-auto">
-        <div className="flex items-center gap-3 max-w-lg mx-auto pb-2">
-          <button onClick={() => navigate(-1)} className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group">
-            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
-          </button>
-
-          <div className="flex-1">
-            <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-none">Pickup Requests</h1>
-            <p className="text-[10px] font-bold text-slate-500 capitalize tracking-widest mt-1">view available jobs in the area</p>
-          </div>
-
-          <div className="shrink-0 flex items-center justify-center">
-            <RefreshCw className={`w-4 h-4 text-slate-300 hover:text-indigo-500 cursor-pointer transition-colors ${isLoadingJobs ? 'animate-spin' : ''}`} onClick={() => fetchAvailableJobs()} />
-          </div>
-        </div>
-
-        {/* Compact Search Bar & Filter Toggle */}
-        <div className=" flex items-center gap-2">
-          <div className="relative group flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search missions or locations..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all shadow-sm"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-              >
-                <X className="w-3 h-3 text-slate-400" />
-              </button>
-            )}
-          </div>
-          
-          <button
-            onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className={`p-3 rounded-xl border flex items-center justify-center gap-1.5 transition-all shrink-0 ${isFilterOpen || filterMaterial !== 'All' || filterTime !== 'All'
-              ? 'bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500/30 text-indigo-600 dark:text-indigo-400'
-              : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-750'
-              }`}
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            {(filterMaterial !== 'All' || filterTime !== 'All') && (
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-            )}
-          </button>
-        </div>
-
-        {/* Dropdown Filters Expandable Panel */}
-        <AnimatePresence>
-          {isFilterOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden mb-3 bg-slate-50/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl"
-            >
-              <div className="p-3 grid grid-cols-2 gap-2">
-                <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Material</label>
-                  <div className="relative">
-                    <select
-                      value={filterMaterial}
-                      onChange={(e) => setFilterMaterial(e.target.value)}
-                      className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-indigo-500"
-                    >
-                      <option value="All">All Materials</option>
-                      {categories.map(c => (
-                        <option key={c.id || c.slug} value={c.label || c.slug}>{c.label}</option>
-                      ))}
-                    </select>
-                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <label className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Timing</label>
-                  <div className="relative">
-                    <select
-                      value={filterTime}
-                      onChange={(e) => setFilterTime(e.target.value)}
-                      className="w-full py-1.5 pl-2 pr-6 text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-750 dark:text-slate-200 appearance-none focus:outline-none focus:border-indigo-500"
-                    >
-                      <option value="All">All Times</option>
-                      <option value="asap">ASAP (Urgent)</option>
-                      <option value="scheduled">Scheduled</option>
-                    </select>
-                    <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400 pointer-events-none" />
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Tabs - Pill style */}
-        <div className="mt-1 flex bg-slate-100 dark:bg-slate-900/80 p-1.5 rounded-2xl">
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`relative flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-xl transition-all flex items-center justify-center gap-1 ${activeTab === tab.id
-                ? 'bg-indigo-600 shadow-sm text-white font-black'
-                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
-                }`}
-            >
-              <span className="truncate">{tab.label}</span>
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2.5 px-3 border-b border-slate-200/80 dark:border-slate-800 max-w-lg mx-auto">
+        <div className="space-y-2.5">
+          <div className="relative flex items-center justify-between min-h-[40px]">
+            <button onClick={() => navigate(-1)} className="p-2.5 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center active:scale-90 transition-all z-10">
+              <ArrowLeft className="w-4 h-4 text-slate-800 dark:text-white" />
             </button>
-          ))}
-        </div>
-      </div>
 
-      <div className="flex-1 space-y-px pb-12 relative max-w-lg mx-auto w-full pt-[calc(env(safe-area-inset-top,1rem)+8.5rem)]">
-
-        {/* Requested Hero Card */}
-        {activeTab === 'available' && (
-          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 rounded-2xl border border-emerald-500/20 relative overflow-hidden">
-            {/* Background glows */}
-            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-emerald-500/30 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-teal-500/20 rounded-full blur-2xl pointer-events-none" />
-            
-            <div className="relative z-10 mb-4 flex items-center justify-between">
-              <div className="min-w-0">
-                <h2 className="text-lg font-black text-white tracking-tight leading-tight">Resident Requests</h2>
-                <p className="text-[10px] font-medium text-emerald-100 mt-0.5 capitalize tracking-widest">Explore requests from residents in your area</p>
-              </div>
-              <div className="ml-3 shrink-0 bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-2.5 flex flex-col items-center justify-center">
-                <span className="text-lg font-black text-white leading-none">{requestedTab === 'available' ? availableJobs.length : rejectedJobs.length}</span>
-                <span className="text-[8px] font-bold text-emerald-100 uppercase tracking-widest mt-1 leading-none">{requestedTab === 'available' ? 'Received' : 'Rejected'}</span>
-              </div>
+            <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+              <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight leading-none">Pickup Requests</h1>
+              <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Available jobs in your area</p>
             </div>
 
-            <div className="relative z-10 p-1 bg-black/20 backdrop-blur-md rounded-[14px] border border-white/10">
-              <div className="flex gap-1 overflow-x-auto no-scrollbar">
-                {(['available', 'rejected'] as const).map((type) => {
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => setRequestedTab(type)}
-                      className={`flex-1 py-2.5 px-3.5 rounded-[10px] text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all shrink-0 ${
-                        requestedTab === type
-                        ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                        : 'text-emerald-200/60 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <span>{type === 'available' ? 'Available' : 'Rejected'}</span>
-                      {type === 'rejected' && rejectedJobs.length > 0 && (
-                        <span className={`px-1.5 py-0.5 rounded-md text-[8px] leading-none ${requestedTab === type
-                          ? 'bg-white/20 text-white'
-                          : 'bg-white/10 text-emerald-200/60'
-                          }`}>
-                          {rejectedJobs.length}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <button
+              onClick={() => fetchAvailableJobs()}
+              className="p-2.5 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center active:scale-90 transition-all text-slate-600 dark:text-slate-300"
+              aria-label="Refresh jobs"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoadingJobs ? 'animate-spin text-emerald-600' : ''}`} />
+            </button>
           </div>
-        )}
 
-        {/* Pickups Hero Filter Card */}
-        {(activeTab === 'active' || activeTab === 'completed') && (
-          <div className="mx-1.5 mt-1 mb-2 p-5 bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 rounded-2xl border border-emerald-500/20 relative overflow-hidden">
-            {/* Background glows */}
-            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-emerald-500/30 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-24 h-24 bg-teal-500/20 rounded-full blur-2xl pointer-events-none" />
-            
-            <div className="relative z-10 mb-4 flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-black text-white tracking-tight leading-tight">
-                  {activeTab === 'active' ? 'Active Pickups' : 'Completed Pickups'}
-                </h2>
-                <p className="text-[10px] font-medium text-emerald-100 mt-0.5 capitalize tracking-widest">Browse pickups by the source of the material</p>
-              </div>
-              {activeTab === 'completed' && currentJobs.length > 0 ? (
-                <button 
-                  onClick={async () => {
-                    await clearJobHistory();
-                    fetchEarnings();
-                    toast.success('Completed history cleared');
-                  }}
-                  className="px-3 h-10 rounded-2xl bg-white/15 text-white hover:bg-white/25 flex items-center justify-center gap-1.5 border border-white/20 shrink-0 transition-colors text-[10px] font-black uppercase tracking-wider"
+          {/* Compact Search Bar & Filter Toggle */}
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search missions or locations..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-9 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder:text-slate-400 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-emerald-500/40 transition-all"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                 >
-                  <XCircle className="w-4 h-4" /> Clear
+                  <X className="w-3 h-3 text-slate-400" />
                 </button>
-              ) : (
-                <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 shrink-0">
-                  <Truck className="w-5 h-5 text-emerald-200" />
-                </div>
               )}
             </div>
 
-            <div className="relative z-10 p-1 bg-black/20 backdrop-blur-md rounded-[14px] border border-white/10">
-              <div className="flex gap-1 overflow-x-auto no-scrollbar">
-                {(['All', 'Resident', 'Market trades', 'RFQ'] as const).map((type) => {
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => setSelectedBookingType(type)}
-                      className={`py-2.5 px-3.5 rounded-[10px] text-[10px] flex items-center justify-center gap-1.5 font-bold uppercase tracking-wider transition-all shrink-0 ${
-                        selectedBookingType === type
-                        ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
-                        : 'text-emerald-200'
-                      }`}
-                    >
-                      <span>{type}</span>
-                    </button>
-                  );
-                })}
-              </div>
+            <button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all shrink-0 relative ${isFilterOpen || filterMaterial !== 'All' || filterTime !== 'All'
+                ? 'bg-emerald-950 border-emerald-950 text-white'
+                : 'bg-slate-100 dark:bg-slate-800 border-slate-200/80 dark:border-slate-700/60 text-slate-600 dark:text-slate-300'
+                }`}
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              {(filterMaterial !== 'All' || filterTime !== 'All') && (
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              )}
+            </button>
+          </div>
+
+          {/* Dropdown Filters Expandable Panel */}
+          <AnimatePresence>
+            {isFilterOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 rounded-xl"
+              >
+                <div className="p-3 grid grid-cols-2 gap-2.5">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Material</label>
+                    <div className="relative">
+                      <select
+                        value={filterMaterial}
+                        onChange={(e) => setFilterMaterial(e.target.value)}
+                        className="w-full py-2 pl-2.5 pr-6 text-xs font-semibold rounded-lg border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 appearance-none focus:outline-none focus:border-emerald-500"
+                      >
+                        <option value="All">All Materials</option>
+                        {categories.map(c => (
+                          <option key={c.id || c.slug} value={c.label || c.slug}>{c.label}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Timing</label>
+                    <div className="relative">
+                      <select
+                        value={filterTime}
+                        onChange={(e) => setFilterTime(e.target.value)}
+                        className="w-full py-2 pl-2.5 pr-6 text-xs font-semibold rounded-lg border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 appearance-none focus:outline-none focus:border-emerald-500"
+                      >
+                        <option value="All">All Times</option>
+                        <option value="asap">ASAP (Urgent)</option>
+                        <option value="scheduled">Scheduled</option>
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Tabs - Segmented Pill style */}
+          <div className="flex bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700/60 gap-1">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 py-2 text-[11px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 ${activeTab === tab.id
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                  }`}
+              >
+                <span className="truncate">{tab.label}</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none ${activeTab === tab.id
+                  ? 'bg-white/20 dark:bg-slate-900/15 text-current'
+                  : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                  }`}>
+                  {tab.count}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1 pb-24 relative max-w-lg mx-auto w-full pt-[calc(env(safe-area-inset-top,1rem)+10rem)]">
+
+        {/* Slim Sub-Filter Strip */}
+        {activeTab === 'available' && (
+          <div className="px-3 pb-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              {(['available', 'rejected'] as const).map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setRequestedTab(type)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-1.5 ${
+                    requestedTab === type
+                      ? 'bg-emerald-950 border-emerald-950 text-white'
+                      : 'bg-slate-50 dark:bg-slate-800 border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                  }`}
+                >
+                  <span>{type === 'available' ? 'Available' : 'Rejected'}</span>
+                  <span className={`text-[10px] font-bold ${requestedTab === type ? 'text-emerald-300' : 'text-slate-400'}`}>
+                    {type === 'available' ? availableJobs.length : rejectedJobs.length}
+                  </span>
+                </button>
+              ))}
             </div>
+            <span className="text-[11px] font-semibold text-slate-400">
+              {filteredJobs.length} {filteredJobs.length === 1 ? 'job' : 'jobs'}
+            </span>
+          </div>
+        )}
+
+        {(activeTab === 'active' || activeTab === 'completed') && (
+          <div className="px-3 pb-3 flex items-center justify-between gap-2">
+            <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+              {(['All', 'Resident', 'Market trades', 'RFQ'] as const).map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setSelectedBookingType(type)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
+                    selectedBookingType === type
+                      ? 'bg-emerald-950 border-emerald-950 text-white'
+                      : 'bg-slate-50 dark:bg-slate-800 border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+            {activeTab === 'completed' && currentJobs.length > 0 && (
+              <button
+                onClick={async () => {
+                  await clearJobHistory();
+                  fetchEarnings();
+                  toast.success('Completed history cleared');
+                }}
+                className="px-2.5 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200/60 dark:border-rose-800/40 text-[11px] font-bold shrink-0 active:scale-95 transition-all"
+              >
+                Clear
+              </button>
+            )}
           </div>
         )}
 
         {isLoadingJobs ? (
-          <div className="space-y-4 p-4">
-            {[1, 2, 3].map(i => <div key={i} className="h-24 bg-slate-100 dark:bg-slate-800 animate-pulse rounded-2xl" />)}
+          <div className="space-y-2.5 px-3">
+            {[1, 2, 3].map(i => <div key={i} className="h-28 bg-slate-50 dark:bg-slate-800/70 border border-slate-200/60 dark:border-slate-700/50 animate-pulse rounded-2xl" />)}
           </div>
         ) : filteredJobs.length === 0 ? (
-          <EmptyState
-            title={`No ${activeTab} missions`}
-            subtitle="New jobs will appear here as they are posted in your area."
-          />
+          <div className="mx-3 mt-1 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700/60 py-14 px-6 text-center">
+            <div className="w-14 h-14 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3.5 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+              <Package className="w-6 h-6 text-slate-400" />
+            </div>
+            <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">{`No ${activeTab} jobs`}</p>
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto leading-relaxed">
+              New pickup requests will appear here as they are posted in your area.
+            </p>
+          </div>
         ) : (
           <AnimatePresence mode="wait">
             {expandedId ? (
@@ -567,17 +541,18 @@ export default function AvailableJobs() {
                   return (
                     <div className="max-w-lg mx-auto">
                       {/* ── FIXED TOP NAV ── */}
-                      <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-900 transition-all duration-300">
-                        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center gap-3.5">
-                          <button onClick={() => setExpandedId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0">
+                      <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-slate-50/95 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+                        <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between relative">
+                          <button onClick={() => setExpandedId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0 z-10">
                             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
                           </button>
-                          <div>
+                          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
                             <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Mission Details</h1>
-                            <p className="text-[10px] font-bold text-indigo-500 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" /> Pickup Request
+                            <p className="text-[10px] font-bold text-indigo-500 capitalize tracking-widest flex items-center justify-center gap-1.5 mt-0.5">
+                              Pickup Request
                             </p>
                           </div>
+                          <div className="w-10 h-10 shrink-0" />
                         </div>
                       </div>
 
@@ -601,7 +576,7 @@ export default function AvailableJobs() {
 
                           {photos.length > 1 && (
                             <>
-                              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+                              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest flex items-center gap-1.5">
                                 <span>Photos ({photos.length})</span>
                                 <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
                               </div>
@@ -614,8 +589,8 @@ export default function AvailableJobs() {
                           )}
                         </div>
 
-                        {/* ── MATERIAL SPECIFICATIONS CARD ── */}
-                        <div className="bg-slate-200 dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-800/40 space-y-4">
+                        {/* ── MATERIAL SPECIFICATIONS & DETAILS DIRECTLY ON PAGE ── */}
+                        <div className="space-y-4 px-4">
                           <div className="flex items-start justify-between">
                             <div>
                               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material-Type</p>
@@ -636,7 +611,7 @@ export default function AvailableJobs() {
                             </div>
                           </div>
 
-                          <hr className="border-slate-100 dark:border-slate-800/60" />
+                          <hr className="border-slate-200 dark:border-slate-700/60" />
 
                           <div className="grid grid-cols-2 gap-4">
                             <div className="flex items-start gap-3">
@@ -661,21 +636,21 @@ export default function AvailableJobs() {
                                   <DollarSign className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                                   <div>
                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Amount Paid</p>
-                                    <p className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {(job.total_price || job.fee || job.pay || 0).toLocaleString()}</p>
+                                    <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">KSh {(job.total_price || job.fee || job.pay || 0).toLocaleString()}</p>
                                   </div>
                                 </div>
                                 <div className="flex items-start gap-3">
                                   <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                                   <div>
                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Verified Weight</p>
-                                    <span className="text-xs font-black text-slate-900 dark:text-white">{job.actual_weight_kg || 0} KG</span>
+                                    <span className="text-xs font-bold text-slate-900 dark:text-white">{job.actual_weight_kg || 0} KG</span>
                                   </div>
                                 </div>
                                 <div className="flex items-start gap-3 col-span-2">
                                   <Clock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                                   <div>
                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Payment Settled</p>
-                                    <span className="text-xs font-black text-slate-900 dark:text-white">
+                                    <span className="text-xs font-bold text-slate-900 dark:text-white">
                                       {job.completed_at
                                         ? new Date(job.completed_at).toLocaleString([], { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                                         : job.date || 'N/A'}
@@ -689,7 +664,7 @@ export default function AvailableJobs() {
                                   <Zap className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                                   <div>
                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Value</p>
-                                    <p className="text-xs font-black text-slate-900 dark:text-white">
+                                    <p className="text-xs font-bold text-slate-900 dark:text-white">
                                       {job.is_market_trade 
                                         ? `KSh ${Math.floor((job.weight_kg || job.actual_weight_kg || 0) * getPriceForMaterial(job.material || ''))}` 
                                         : 'Pending Verification'}
@@ -700,7 +675,7 @@ export default function AvailableJobs() {
                                   <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
                                   <div>
                                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Load</p>
-                                    <span className="text-xs font-black text-slate-900 dark:text-white">{job.weight_kg || job.actual_weight_kg || 0} KG</span>
+                                    <span className="text-xs font-bold text-slate-900 dark:text-white">{job.weight_kg || job.actual_weight_kg || 0} KG</span>
                                   </div>
                                 </div>
                               </>
@@ -727,7 +702,7 @@ export default function AvailableJobs() {
 
                           {job.notes && (
                             <>
-                              <hr className="border-slate-100 dark:border-slate-800/60" />
+                              <hr className="border-slate-200 dark:border-slate-700/60" />
                               <div>
                                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                                   <Info className="w-3.5 h-3.5" /> Description
@@ -744,13 +719,13 @@ export default function AvailableJobs() {
                             <>
                               <button
                                 onClick={() => { rejectJob(job.id); setExpandedId(null); }}
-                                className="flex-[1] py-4 bg-red-500 text-white rounded-2xl font-black text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
+                                className="flex-[1] py-4 bg-red-500 text-white rounded-2xl font-bold text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
                               >
                                 <XCircle className="w-4 h-4" /> Dismiss
                               </button>
                               <button
                                 onClick={() => { handleAccept(job); setExpandedId(null); }}
-                                className="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs capitalize tracking-widest  active:scale-95 transition-all flex items-center justify-center gap-2"
+                                className="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs capitalize tracking-widest  active:scale-95 transition-all flex items-center justify-center gap-2"
                               >
                                 <Truck className="w-4 h-4" /> Accept Mission
                               </button>
@@ -758,18 +733,18 @@ export default function AvailableJobs() {
                           ) : activeTab === 'active' ? (
                             <button
                               onClick={() => navigate(`/jobs/navigate/${job.id}`)}
-                              className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs capitalize tracking-widest shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                              className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-bold text-xs capitalize tracking-widest shadow-xl shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center gap-2"
                             >
                               <Navigation className="w-4 h-4" /> Start Navigation
                             </button>
                           ) : activeTab === 'completed' ? (
-                            <div className="w-full py-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl font-black text-xs capitalize tracking-widest flex items-center justify-center gap-2 border border-emerald-200 dark:border-emerald-500/20">
+                            <div className="w-full py-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-2xl font-bold text-xs capitalize tracking-widest flex items-center justify-center gap-2 border border-emerald-200 dark:border-emerald-500/20">
                               <CheckCircle className="w-4 h-4" /> Mission Completed
                             </div>
                           ) : (
                             <button
                               onClick={() => { restoreJob(job.id); setExpandedId(null); }}
-                              className="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
+                              className="w-full py-4 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-xs capitalize tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2"
                             >
                               <RefreshCw className="w-4 h-4" /> Restore Mission
                             </button>
@@ -787,7 +762,7 @@ export default function AvailableJobs() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="space-y-2 mx-1.5"
+                className="space-y-1.5 px-1.5"
               >
                 {filteredJobs.map((job) => {
                   const waste = categories.find((w) => w.slug === job.material) ||
@@ -797,101 +772,101 @@ export default function AvailableJobs() {
                   // Determine Origin Badge and Navigation Route
                   let badgeIcon = <Home className="w-3 h-3" />;
                   let badgeText = 'Resident';
-                  let badgeColor = 'bg-sky-100 text-sky-800 dark:bg-sky-500/20 dark:text-sky-300 border-sky-300 dark:border-sky-500/40';
+                  let badgeColor = 'bg-sky-100/90 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border-sky-200/60 dark:border-sky-800/40';
                   let navRoute = `/jobs/${job.id}`;
 
                   if (job.booking_type === 'rfq' && job.is_group_pickup) {
                     badgeIcon = <Users className="w-3 h-3" />;
                     badgeText = 'Group RFQ';
-                    badgeColor = 'bg-blue-200 text-blue-900 dark:bg-blue-500/30 dark:text-blue-300 border-blue-400 dark:border-blue-500/50';
+                    badgeColor = 'bg-indigo-100/90 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 border-indigo-200/60 dark:border-indigo-800/40';
                     navRoute = `/pickups/${job.id}`;
                   } else if (job.booking_type === 'rfq') {
                     badgeIcon = <FileText className="w-3 h-3" />;
                     badgeText = 'RFQ';
-                    badgeColor = 'bg-violet-200 text-violet-900 dark:bg-violet-500/30 dark:text-violet-300 border-violet-400 dark:border-violet-500/50';
+                    badgeColor = 'bg-violet-100/90 text-violet-800 dark:bg-violet-950/60 dark:text-violet-300 border-violet-200/60 dark:border-violet-800/40';
                     navRoute = `/pickups/${job.id}`;
                   } else if (job.booking_type === 'marketplace_pickup' || job.is_market_trade) {
                     badgeIcon = <Store className="w-3 h-3" />;
                     badgeText = 'Trade';
-                    badgeColor = 'bg-emerald-200 text-emerald-900 dark:bg-emerald-500/30 dark:text-emerald-300 border-emerald-400 dark:border-emerald-500/50';
+                    badgeColor = 'bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border-emerald-200/60 dark:border-emerald-800/40';
                     navRoute = `/trades/${job.id}`;
                   } else if (job.is_group_pickup) {
                     badgeIcon = <Users className="w-3 h-3" />;
-                    badgeText = 'Swarm';
-                    badgeColor = 'bg-indigo-200 text-indigo-900 dark:bg-indigo-500/30 dark:text-indigo-300 border-indigo-400 dark:border-indigo-500/50';
+                    badgeText = 'Group';
+                    badgeColor = 'bg-indigo-100/90 text-indigo-800 dark:bg-indigo-950/60 dark:text-indigo-300 border-indigo-200/60 dark:border-indigo-800/40';
                     navRoute = `/jobs/${job.id}`;
                   }
+
+                  const isUrgent = job.time?.toUpperCase() === 'ASAP' && activeTab === 'available';
+                  const timeLabel = activeTab === 'completed' ? 'Completed' : activeTab === 'rejected' ? 'Rejected' : formatJobTime(job);
+                  const displayValue = activeTab === 'completed'
+                    ? `KSh ${(job.total_price || job.fee || job.pay || 0).toLocaleString()}`
+                    : job.is_market_trade
+                      ? `KSh ${Math.floor((job.weight_kg || job.actual_weight_kg || 0) * getPriceForMaterial(job.material || '')).toLocaleString()}`
+                      : 'Pending Verification';
 
                   return (
                     <div
                       key={job.id}
-                      className="bg-white dark:bg-slate-900/60 shadow-sm border border-slate-200 dark:border-slate-800 rounded-2xl active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer relative overflow-hidden"
+                      onClick={() => navigate(navRoute)}
+                      className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-1.5 group"
                     >
-                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${
-                        job.booking_type === 'rfq' ? 'bg-violet-500' :
-                        job.booking_type === 'marketplace_pickup' || job.is_market_trade ? 'bg-emerald-500' :
-                        job.is_group_pickup ? 'bg-indigo-500' :
-                        'bg-blue-500'
-                      }`} />
-                      <div
-                        onClick={() => navigate(navRoute)}
-                        className="flex gap-3 pl-4 pr-3.5 py-3"
-                      >
-                          <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
+                      {/* Top Row: Thumbnail, Material + Customer + Location/Weight, Origin Pill + Time */}
+                      <div className="flex items-start justify-between gap-2.5">
+                        <div className="flex items-start gap-3 min-w-0 flex-1">
+                          <div className="w-16 h-16 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200/80 dark:border-slate-700 shadow-2xs">
                             {photoUrl ? (
                               <OptimizedImage src={getThumbnailUrl(photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" alt={waste?.label || job.material} />
                             ) : (
-                              <Package className="w-8 h-8 text-slate-400" />
+                              <Package className="w-5 h-5 text-slate-400" />
                             )}
                           </div>
-                          <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
-                            {/* Row 1: Material & Origin Badge */}
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-1.5 min-w-0">
-                                <h3 className="text-[15px] font-black text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">{waste?.label || job.material}</h3>
-                              </div>
-                              <span className={`px-2 py-1 rounded-lg text-[10px] font-black border flex items-center gap-1.5 shrink-0 ml-2 uppercase tracking-wider ${badgeColor}`}>
-                                {badgeIcon} {badgeText}
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                              {waste?.label || job.material}
+                            </h3>
+                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1 truncate">
+                              <User className="w-3 h-3 text-slate-400 shrink-0" />
+                              <span className="truncate">{job.customerName || job.customer || 'Resident'}</span>
+                            </p>
+                            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium pt-0.5">
+                              <span className="flex items-center gap-1 truncate max-w-[150px]">
+                                <MapPin className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                <span className="truncate">{job.location || 'Nairobi'}</span>
                               </span>
-                            </div>
-
-                            {/* Row 2: Location & Status */}
-                            <div className="flex items-center justify-between mt-0.5">
-                              <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                                <MapPin className="w-3 h-3 text-emerald-600" /> {job.location || 'Nairobi'}
-                              </p>
-                              <span className={`text-[9px] font-black tracking-widest px-1.5 py-0.5 rounded-md uppercase shrink-0 ${
-                                activeTab === 'completed' ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20' :
-                                activeTab === 'active' ? 'bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20' :
-                                activeTab === 'rejected' ? 'bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-500/20' :
-                                job.time?.toUpperCase() === 'ASAP' ? 'bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-500/20' : 'bg-slate-100 dark:bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20'
-                              }`}>
-                                {activeTab === 'completed' ? 'completed' : activeTab === 'rejected' ? 'rejected' : formatJobTime(job)}
-                              </span>
-                            </div>
-
-                            {/* Row 3: Timestamp/User & Quantity/Value */}
-                            <div className="flex items-center justify-between pt-1 border-t border-slate-50 dark:border-slate-800/50 mt-1">
-                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
-                                {job.booking_type === 'marketplace_pickup' || job.booking_type === 'rfq' ? (
-                                  <><Zap className="w-2.5 h-2.5 text-amber-500" /> {job.weight_kg} KG Locked</>
-                                ) : (
-                                  <><User className="w-2.5 h-2.5 text-slate-400" /> {job.customerName || job.customer || 'Resident'}</>
-                                )}
-                              </p>
-                              <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
-                                <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">Value:</span>
-                                {activeTab === 'completed' 
-                                  ? `KSh ${(job.total_price || job.fee || job.pay || 0).toLocaleString()}`
-                                  : job.is_market_trade
-                                    ? `KSh ${Math.floor((job.weight_kg || job.actual_weight_kg || 0) * getPriceForMaterial(job.material || ''))}`
-                                    : 'Pending Verification'}
-                              </p>
+                              {(job.weight_kg || job.actual_weight_kg) > 0 && (
+                                <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300 shrink-0">
+                                  <Scale className="w-3 h-3 text-slate-400 shrink-0" />
+                                  {job.actual_weight_kg || job.weight_kg} KG
+                                </span>
+                              )}
                             </div>
                           </div>
-                          <div className="flex items-center justify-center text-slate-300">
-                            <ChevronRight className="w-4 h-4" />
-                          </div>
+                        </div>
+
+                        <div className="flex flex-col items-end gap-1.5 shrink-0 mt-2">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border flex items-center gap-1 ${badgeColor}`}>
+                            {badgeIcon} {badgeText}
+                          </span>
+                          <span className={`flex items-center gap-1 text-[11px] font-medium ${isUrgent ? 'text-rose-600 dark:text-rose-400 font-bold' : 'text-slate-500 dark:text-slate-400'}`}>
+                            <Clock className="w-3 h-3 shrink-0" />
+                            {timeLabel}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Footer Row */}
+                      <div className="pt-2.5 border-t border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between gap-2">
+                        <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                          Value:{' '}
+                          <span className={`font-bold ${displayValue.startsWith('KSh') ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-300'}`}>
+                            {displayValue}
+                          </span>
+                        </span>
+
+                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                          View Job <ChevronRight className="w-3.5 h-3.5" />
+                        </span>
                       </div>
                     </div>
                   );

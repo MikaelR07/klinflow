@@ -218,7 +218,7 @@ export default function NavigateJobPage() {
           <Marker position={agentPos} icon={agentIcon}>
             <Popup className="font-sans">
               <div className="text-center px-1 py-0.5">
-                <p className="font-black text-slate-800 text-[13px]">⚡ You (Agent)</p>
+                <p className="font-bold text-slate-800 text-[13px]">⚡ You (Agent)</p>
                 <p className="text-[10px] font-medium text-slate-500 mt-0.5">{profile?.name || 'Agent'}</p>
               </div>
             </Popup>
@@ -226,7 +226,7 @@ export default function NavigateJobPage() {
           <Marker position={clientPos} icon={clientIcon}>
             <Popup className="font-sans">
               <div className="text-center px-1 py-0.5">
-                <p className="font-black text-slate-800 text-[13px]">👤 {activeJob.customerName || activeJob.customer || 'Client'}</p>
+                <p className="font-bold text-slate-800 text-[13px]">👤 {activeJob.customerName || activeJob.customer || 'Client'}</p>
                 <p className="text-[10px] font-medium text-slate-500 mt-0.5">{activeJob.location}</p>
                 {activeJob.phone && <p className="text-[10px] font-bold text-blue-600 mt-0.5">{activeJob.phone}</p>}
               </div>
@@ -277,7 +277,7 @@ export default function NavigateJobPage() {
             
             {/* Client Row */}
             <div className="flex items-center gap-4 p-2">
-              <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-sm shrink-0">
+              <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm shrink-0">
                 {(activeJob.customerName || activeJob.customer || 'C')[0].toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
@@ -370,8 +370,8 @@ export default function NavigateJobPage() {
                 Pickup Window
               </h4>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-xs font-black text-slate-600 dark:text-slate-300">{activeJob.time}</span>
-                <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-[8px] font-black rounded-full uppercase tracking-wider flex items-center gap-1">
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{activeJob.time}</span>
+                <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-[8px] font-bold rounded-full uppercase tracking-wider flex items-center gap-1">
                   <div className="w-1 h-1 bg-primary rounded-full animate-pulse" /> Active
                 </span>
               </div>
@@ -386,34 +386,9 @@ export default function NavigateJobPage() {
               <div className="space-y-4">
                 <button 
                   onClick={async () => {
-                    const isGroup = activeJob.is_group_pickup && activeJob.swarm_id;
-                    const agentName = profile?.name || 'Agent';
-                    
-                    if (isGroup) {
-                      // Notify ALL swarm participants
-                      try {
-                        const { data: participants } = await supabase
-                          .from('swarm_participants')
-                          .select('user_id')
-                          .eq('swarm_id', activeJob.swarm_id!)
-                          .neq('status', 'withdrawn');
-                        
-                        const participantIds = participants?.map((p: any) => p.user_id).filter(Boolean) || [];
-                        const allTargets = [...new Set([...participantIds, activeJob.user_id || activeJob.userId])].filter(Boolean);
-                        
-                        /* addNotification removed for v3 migration */
-                      } catch (err) {
-                        console.error('[NavigateJob] Failed to notify group participants:', err);
-                        // Fallback: notify just the booking owner
-                        /* addNotification removed for v3 migration */
-                      }
-                    } else {
-                      /* addNotification removed for v3 migration */
-                    }
-                    
                     setHasArrived(true);
                     setJobArrived(activeJob.id);
-                    toast.success("Welcome to Mission Site!", { description: isGroup ? "Please coordinate with the community to weigh each participant's materials." : "Please weigh the recyclables to complete pickup." });
+                    toast.success("Welcome to Mission Site!", { description: activeJob.is_group_pickup ? "Please coordinate with the group to weigh each participant's materials." : "Please weigh the recyclables to complete pickup." });
                   }}
                   className="w-full py-5 bg-primary text-white font-semibold text-sm rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-all group tracking-widest"
                 >
@@ -505,28 +480,6 @@ export default function NavigateJobPage() {
               await useAuthStore.getState().fetchProfile();
               await useAgentStore.getState().fetchActiveJobs();
               await useAgentStore.getState().fetchEarnings();
-              
-              // For group pickups, notify ALL swarm participants about completion & payout
-              if (activeJob.is_group_pickup && activeJob.swarm_id) {
-                try {
-                  const { data: participants } = await supabase
-                    .from('swarm_participants')
-                    .select('user_id')
-                    .eq('swarm_id', activeJob.swarm_id)
-                    .neq('status', 'withdrawn');
-                  
-                  const participantIds = participants?.map((p: any) => p.user_id).filter(Boolean) || [];
-                  // Exclude booking owner since the RPC already notified them
-                  const bookingOwner = activeJob.userId || activeJob.user_id;
-                  const otherParticipants = participantIds.filter((uid: string) => uid !== bookingOwner);
-                  
-                  if (otherParticipants.length > 0) {
-                    /* addNotification removed for v3 migration */
-                  }
-                } catch (err) {
-                  console.error('[NavigateJob] Failed to notify group participants on completion:', err);
-                }
-              }
               
               toast.success("Verification Complete!", { description: "Moving to next mission." });
               navigate('/jobs');

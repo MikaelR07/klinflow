@@ -331,7 +331,7 @@ export default function AgentHomeMap({
             <div className="w-12 h-12 rounded-full border-4 border-slate-100 dark:border-slate-700" />
             <div className="absolute inset-0 w-12 h-12 rounded-full border-4 border-emerald-500 border-t-transparent animate-spin" />
           </div>
-          <p className="text-xs font-black text-slate-600 dark:text-slate-300 tracking-widest uppercase">
+          <p className="text-xs font-bold text-slate-600 dark:text-slate-300 tracking-widest uppercase">
             {permissionState === 'denied' ? 'Location access denied' : 'Acquiring GPS...'}
           </p>
         </div>

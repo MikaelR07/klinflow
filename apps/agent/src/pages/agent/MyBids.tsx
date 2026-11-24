@@ -141,7 +141,7 @@ export default function MyBids() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`relative flex-1 py-1.5 text-[11px] font-bold capitalize tracking-widest rounded-xl transition-all flex items-center justify-center gap-1.5 ${
                   isActive
-                    ? 'bg-indigo-600 shadow-sm text-white font-black'
+                    ? 'bg-indigo-600 shadow-sm text-white font-bold'
                     : 'text-slate-600 hover:text-slate-600 dark:hover:text-slate-300'
                 }`}
               >
@@ -159,7 +159,7 @@ export default function MyBids() {
         <div className="relative w-full rounded-[1.25rem] overflow-hidden border border-indigo-600 bg-gradient-to-br from-indigo-600 via-indigo-700 to-indigo-800 shadow-sm mb-5">
           <div className="relative z-20 p-5 flex flex-col gap-4">
             <div>
-              <h2 className="text-[17px] font-black text-white tracking-tight leading-none mb-1.5">Negotiation Performance</h2>
+              <h2 className="text-[17px] font-bold text-white tracking-tight leading-none mb-1.5">Negotiation Performance</h2>
               <p className="text-[11px] font-semibold text-slate-400">Track your success rate and manage active market offers.</p>
             </div>
             
@@ -167,7 +167,7 @@ export default function MyBids() {
               <div className="flex-1 bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-md flex items-center justify-between">
                 <div>
                   <p className="text-[9px] font-bold text-indigo-300 uppercase tracking-widest mb-0.5">Success Rate</p>
-                  <h3 className="text-xl font-black text-white leading-none">
+                  <h3 className="text-xl font-bold text-white leading-none">
                     {bids.length > 0 ? Math.round((bids.filter(b => b.status === 'accepted').length / bids.length) * 100) : 0}%
                   </h3>
                 </div>
@@ -178,7 +178,7 @@ export default function MyBids() {
               <div className="flex-1 bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-md flex items-center justify-between">
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Bids</p>
-                  <h3 className="text-xl font-black text-white leading-none">{bids.length}</h3>
+                  <h3 className="text-xl font-bold text-white leading-none">{bids.length}</h3>
                 </div>
                 <div className="w-8 h-8 rounded-lg bg-slate-500/20 border border-slate-500/30 flex items-center justify-center">
                   <Receipt className="w-4 h-4 text-slate-300" />
@@ -279,7 +279,7 @@ export default function MyBids() {
             <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center shadow-sm mb-4">
               <Receipt className="w-8 h-8 text-slate-300 dark:text-slate-600" />
             </div>
-            <h3 className="text-[15px] font-black text-slate-700 dark:text-slate-300 mb-1">No {activeTab} bids</h3>
+            <h3 className="text-[15px] font-bold text-slate-700 dark:text-slate-300 mb-1">No {activeTab} bids</h3>
             <p className="text-xs font-semibold text-slate-500 leading-relaxed">
               {activeTab === 'pending' 
                 ? "You haven't placed any active bids yet. Head to the marketplace to find materials."
@@ -288,7 +288,7 @@ export default function MyBids() {
             {activeTab === 'pending' && (
               <button 
                 onClick={() => navigate('/sourcing')}
-                className="mt-6 px-6 py-2.5 bg-indigo-600 text-white text-[11px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-500/30 active:scale-95 transition-transform"
+                className="mt-6 px-6 py-2.5 bg-indigo-600 text-white text-[11px] font-bold uppercase tracking-widest rounded-xl shadow-lg shadow-indigo-500/30 active:scale-95 transition-transform"
               >
                 Go to Marketplace
               </button>
@@ -326,7 +326,7 @@ export default function MyBids() {
                   <div className="flex-1 min-w-0 py-0.5 flex">
                     {/* Middle section: Material Info */}
                     <div className="flex-1 min-w-0 flex flex-col">
-                      <h3 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight capitalize truncate mb-1.5">
+                      <h3 className="text-[15px] font-bold text-slate-900 dark:text-white leading-tight capitalize truncate mb-1.5">
                         {bid.listing.material}
                       </h3>
                       
@@ -342,7 +342,7 @@ export default function MyBids() {
 
                       <div className="flex items-baseline gap-1 mt-auto">
                         <span className="text-[10px] font-bold text-slate-500">KSh</span>
-                        <span className="text-[15px] font-black text-indigo-600 dark:text-indigo-400 leading-none">{bid.offerPrice}</span>
+                        <span className="text-[15px] font-bold text-indigo-600 dark:text-indigo-400 leading-none">{bid.offerPrice}</span>
                         <span className="text-[10px] font-bold text-slate-500">/kg</span>
                       </div>
                     </div>
@@ -352,7 +352,7 @@ export default function MyBids() {
                       <div className="text-right">
                         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Weight</p>
                         <div className="flex items-baseline gap-1 justify-end">
-                          <span className="text-[14px] font-black text-slate-700 dark:text-slate-300 leading-none">{bid.offerQuantity}</span>
+                          <span className="text-[14px] font-bold text-slate-700 dark:text-slate-300 leading-none">{bid.offerQuantity}</span>
                           <span className="text-[10px] font-bold text-slate-500">kg</span>
                         </div>
                       </div>
@@ -373,7 +373,7 @@ export default function MyBids() {
                 {activeTab === 'accepted' && (
                   <button 
                     onClick={() => navigate('/jobs', { state: { tab: 'active', filter: 'Market trades' } })}
-                    className="mt-3 w-full py-2.5 bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
+                    className="mt-3 w-full py-2.5 bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 active:scale-95 transition-transform"
                   >
                     Go to Pickup <ChevronRight className="w-3.5 h-3.5" />
                   </button>

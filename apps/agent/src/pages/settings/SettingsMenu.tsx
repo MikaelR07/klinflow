@@ -44,12 +44,12 @@ export default function SettingsMenu() {
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-600 transition-all duration-300">
         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between">
           <div className="flex flex-col">
-            <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Account</h1>
             <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Profile & Settings</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="px-3 py-1 bg-primary/10 rounded-full border border-primary/20 shadow-sm shadow-primary/10">
-              <p className="text-[10px] font-black text-primary capitalize tracking-[0.2em]">{agentTypeLabel}</p>
+              <p className="text-[10px] font-bold text-primary capitalize tracking-[0.2em]">{agentTypeLabel}</p>
             </div>
           </div>
         </div>
@@ -58,10 +58,10 @@ export default function SettingsMenu() {
       <main className="flex-1 pt-[calc(env(safe-area-inset-top,1rem)+3.25rem)] pb-6 max-w-lg mx-auto w-full space-y-6 px-1.5">
 
         {/* ── PROFILE BENTO CARD ── */}
-        <div className="bg-gradient-to-tr from-amber-600 to-amber-700 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#064e3b] via-emerald-800 to-emerald-600 rounded-2xl p-4 border border-emerald-500/30 shadow-lg relative overflow-hidden">
 
           <div className="flex items-center gap-4 relative z-10">
-            <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-1 border-white dark:border-slate-900 overflow-hidden flex items-center justify-center text-3xl">
+            <div className="w-20 h-20 rounded-full bg-slate-50 dark:bg-slate-800 border-2 border-emerald-300/60 overflow-hidden flex items-center justify-center text-3xl shrink-0">
               {(profile?.avatarUrl || profile?.avatar) && !imgError ? (
                 <img
                   src={getThumbnailUrl((profile.avatarUrl || profile.avatar)!, { width: 300 })}
@@ -74,21 +74,21 @@ export default function SettingsMenu() {
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-1.5">
-                <h2 className="text-lg font-bold text-slate-200 dark:text-white leading-tight">{profile?.name || 'Klinflow Agent'}</h2>
+                <h2 className="text-lg font-bold text-white leading-tight">{profile?.name || 'Klinflow Agent'}</h2>
                 
               </div>
               <div className="flex flex-col gap-1 items-start">
-                <p className="text-[11px] font-bold text-amber-100 capitalize tracking-widest">{profile?.phone}</p>
+                <p className="text-[11px] font-bold text-emerald-100 capitalize tracking-widest">{profile?.phone}</p>
                 {profile?.klinflowId && (
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(profile.klinflowId!);
                       toast.success('Klinflow ID copied');
                     }}
-                    className="flex items-center gap-1.5 bg-slate-800/60 px-2 py-1 rounded-md border border-slate-600/50 active:scale-95"
+                    className="flex items-center gap-1.5 bg-black/25 px-2 py-1 rounded-md border border-white/15 active:scale-95"
                   >
-                    <span className="text-[10px] font-mono font-bold text-slate-200 tracking-wider">KLIN_ID: {profile.klinflowId}</span>
-                    <Copy className="w-3 h-3 text-slate-400" />
+                    <span className="text-[10px] font-mono font-bold text-emerald-50 tracking-wider">KLIN_ID: {profile.klinflowId}</span>
+                    <Copy className="w-3 h-3 text-emerald-200" />
                   </button>
                 )}
               </div>
@@ -100,7 +100,7 @@ export default function SettingsMenu() {
         {/* ── AGENT STATUS (Fleet Only) ── */}
         {isFleetDriver && (
           <div className="space-y-3">
-            <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Agent Status</p>
+            <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] px-2">Agent Status</p>
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -135,7 +135,7 @@ export default function SettingsMenu() {
 
         {/* ── CONFIGURATION & SETUP ── */}
         <div className="space-y-3">
-          <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Getting Started</p>
+          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] px-2">Getting Started</p>
           <button
             onClick={() => navigate(isCompanyOwner ? '/admin/services' : '/settings/configuration')}
             className="w-full bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-4 flex flex-col items-start gap-4 shadow-lg shadow-blue-500/10 active:scale-[0.98] transition-transform border border-blue-400/30 relative overflow-hidden group"
@@ -147,7 +147,7 @@ export default function SettingsMenu() {
                 <Settings className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1 text-left">
-                <h3 className="text-lg font-black text-white leading-tight mb-1">Configuration</h3>
+                <h3 className="text-lg font-bold text-white leading-tight mb-1">Configuration</h3>
                 <p className="text-[11px] font-semibold text-blue-100/90 leading-snug">
                   Set up pricing, materials, and service areas to start receiving pickups.
                 </p>
@@ -161,7 +161,7 @@ export default function SettingsMenu() {
 
         {/* ── INTELLIGENCE & APPEARANCE ── */}
         <div className="space-y-3">
-          <p className="text-[10px] font-black text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
+          <p className="text-[10px] font-bold text-slate-400 capitalize tracking-[0.2em] px-2">Intelligence & Design</p>
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
             <div className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -251,7 +251,7 @@ export default function SettingsMenu() {
             toast.success('Logged Out');
             navigate('/login', { replace: true });
           }}
-          className="mx-auto p-8 py-5 bg-rose-100 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-black text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
+          className="mx-auto p-8 py-5 bg-rose-100 dark:bg-rose-500/10 text-rose-600 rounded-2xl font-bold text-[11px] capitalize tracking-[0.3em] flex items-center justify-center gap-3 active:scale-95 transition-all border border-rose-100 dark:border-rose-900/20"
         >
           <LogOut className="w-5 h-5" /> Logout
         </button>

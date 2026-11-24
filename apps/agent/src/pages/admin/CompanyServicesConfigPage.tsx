@@ -385,7 +385,7 @@ export default function CompanyServicesConfigPage() {
                     <h3 className="text-xs font-bold dark:text-white tracking-widest">Base Fee</h3>
                   </div>
                 </div>
-                <span className="text-[8px] font-black text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded uppercase tracking-widest border border-amber-500/20">Soon</span>
+                <span className="text-[8px] font-bold text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded uppercase tracking-widest border border-amber-500/20">Soon</span>
               </div>
               <div className="space-y-1">
                 <label className="font-medium text-[9px] text-slate-400 uppercase tracking-widest">Amount (KSh)</label>

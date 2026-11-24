@@ -18,72 +18,40 @@ export default function MarketIntelPricesTab({ marketData, filteredTrends }: Mar
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
-      className="space-y-0.5"
+      className="space-y-2"
     >
-      {/* ── MACRO MARKET INDICATOR (TradingView Style) ── */}
-      <div className="bg-gradient-to-br from-amber-600 via-amber-700 to-amber-800 rounded-xl p-5 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-40 h-40 bg-orange-500/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
-        
-        <div className="relative z-10 flex flex-col gap-3">
-          <div className="flex items-center justify-between border-b border-amber-500/15 pb-2.5">
-            <h3 className="text-[10px] font-bold capitalize tracking-[0.2em] text-white">Market Overview</h3>
-            <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase text-white">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" /> Live
+      {/* ── COMPACT MARKET SUMMARY STRIP ── */}
+      {(() => {
+        const upCount = filteredTrends.filter(t => t.trend === 'up').length;
+        const downCount = filteredTrends.filter(t => t.trend === 'down').length;
+        const stableCount = filteredTrends.filter(t => t.trend === 'stable').length;
+
+        return (
+          <div className="bg-gradient-to-r from-[#1178ab] to-[#085078] rounded-2xl px-4 py-4 text-white flex items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <div className="min-w-0">
+                <p className="text-xs font-bold tracking-tight leading-none">Today's Market</p>
+                <p className="text-[10.5px] text-sky-100/80 font-medium mt-0.5 truncate">
+                  {filteredTrends.length} materials tracked
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1.5 shrink-0 text-[10.5px] font-bold">
+              <span className="bg-white/15 px-2 py-1 rounded-lg text-emerald-300 whitespace-nowrap">
+                ▲ {upCount} up
+              </span>
+              <span className="bg-white/15 px-2 py-1 rounded-lg text-sky-100 whitespace-nowrap">
+                • {stableCount} steady
+              </span>
+              <span className="bg-white/15 px-2 py-1 rounded-lg text-rose-300 whitespace-nowrap">
+                ▼ {downCount} down
+              </span>
             </div>
           </div>
-
-          {(() => {
-            const upCount = filteredTrends.filter(t => t.trend === 'up').length;
-            const downCount = filteredTrends.filter(t => t.trend === 'down').length;
-            const stableCount = filteredTrends.filter(t => t.trend === 'stable').length;
-            const totalMaterials = filteredTrends.length;
-            const isBullish = upCount >= downCount;
-            const sentimentScore = totalMaterials > 0 ? Math.round((upCount / totalMaterials) * 100) : 50;
-
-            return (
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[10px] font-semibold text-white/70 uppercase tracking-wider mb-1">Overall Sentiment</p>
-                    <div className="flex items-baseline gap-2">
-                      <h2 className={`text-2xl font-bold tracking-tighter ${isBullish ? 'text-emerald-400' : 'text-rose-400'}`}>
-                        {isBullish ? 'BULLISH' : 'BEARISH'}
-                      </h2>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col items-end">
-                    <div className="w-24 h-1.5 bg-amber-950/50 rounded-full overflow-hidden mt-1 flex">
-                      <div className="h-full bg-emerald-500 transition-all duration-1000" style={{ width: `${sentimentScore}%` }} />
-                      <div className="h-full bg-rose-500 transition-all duration-1000" style={{ width: `${100 - sentimentScore}%` }} />
-                    </div>
-                    <p className="text-[9px] font-bold text-white/70 mt-1.5">
-                      <span className="text-emerald-400">{upCount} Up</span> • <span className="text-rose-400">{downCount} Down</span>
-                    </p>
-                  </div>
-                </div>
-
-                {/* Additional Stats Row */}
-                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-amber-500/20">
-                  <div className="flex flex-col">
-                    <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Tracked Assets</span>
-                    <span className="text-sm font-bold text-white mt-0.5">{totalMaterials}</span>
-                  </div>
-                  <div className="flex flex-col border-l border-amber-500/20 pl-2">
-                    <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Stable</span>
-                    <span className="text-sm font-bold text-white mt-0.5">{stableCount}</span>
-                  </div>
-                  <div className="flex flex-col border-l border-amber-500/20 pl-2">
-                    <span className="text-[9px] font-bold text-white/50 uppercase tracking-wider">Update Frequency</span>
-                    <span className="text-sm font-bold text-white mt-0.5 flex items-center gap-1">Real-time</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })()}
-        </div>
-      </div>
+        );
+      })()}
 
       {/* ── PRICE GRID ── */}
       <div className="flex flex-col space-y-1 pt-1">

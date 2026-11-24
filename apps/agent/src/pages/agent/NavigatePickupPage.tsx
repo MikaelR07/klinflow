@@ -234,7 +234,7 @@ export default function NavigatePickupPage() {
           <Marker position={agentPos} icon={agentIcon}>
             <Popup className="font-sans">
               <div className="text-center px-1 py-0.5">
-                <p className="font-black text-slate-800 text-[13px]">⚡ You (Agent)</p>
+                <p className="font-bold text-slate-800 text-[13px]">⚡ You (Agent)</p>
                 <p className="text-[10px] font-medium text-slate-500 mt-0.5">{profile?.name || 'Agent'}</p>
               </div>
             </Popup>
@@ -242,7 +242,7 @@ export default function NavigatePickupPage() {
           <Marker position={clientPos} icon={clientIcon}>
             <Popup className="font-sans">
               <div className="text-center px-1 py-0.5">
-                <p className="font-black text-slate-800 text-[13px]">👤 {sellerName}</p>
+                <p className="font-bold text-slate-800 text-[13px]">👤 {sellerName}</p>
                 <p className="text-[10px] font-medium text-slate-500 mt-0.5">{location}</p>
                 {sellerPhone && <p className="text-[10px] font-bold text-blue-600 mt-0.5">{sellerPhone}</p>}
               </div>
@@ -274,7 +274,7 @@ export default function NavigatePickupPage() {
           className="w-full flex flex-col items-center pb-6 group"
         >
           <div className="w-16 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full mb-2 group-hover:bg-emerald-500 transition-colors" />
-          <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] group-hover:text-emerald-500 transition-colors">
+          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em] group-hover:text-emerald-500 transition-colors">
             {isExpanded ? 'Slide Down to Map' : 'Slide Up for Details'}
           </div>
         </button>
@@ -283,12 +283,12 @@ export default function NavigatePickupPage() {
           {/* Header row with seller and phone */}
           <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 p-3 pr-4 rounded-2xl border border-slate-100 dark:border-slate-800 mb-4 shadow-sm">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 bg-white dark:bg-slate-900 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+              <div className="w-12 h-12 bg-white dark:bg-slate-900 rounded-xl flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold text-xl shadow-sm border border-slate-100 dark:border-slate-700/50">
                 {sellerName.charAt(0)}
               </div>
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Pickup From</p>
-                <h3 className="text-sm font-black text-slate-900 dark:text-white leading-none tracking-tight">{sellerName}</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-none tracking-tight">{sellerName}</h3>
               </div>
             </div>
             <button
@@ -306,21 +306,21 @@ export default function NavigatePickupPage() {
                 <MapPin className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Location</p>
-                  <p className="text-xs font-black text-slate-900 dark:text-white capitalize leading-tight">{location}</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white capitalize leading-tight">{location}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <PackageCheck className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Material</p>
-                  <p className="text-xs font-black text-slate-900 dark:text-white capitalize leading-tight">{material}</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white capitalize leading-tight">{material}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3 col-span-2 pt-1">
                 <Clock className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Scheduled Date</p>
-                  <p className="text-xs font-black text-slate-900 dark:text-white capitalize leading-tight">{order.scheduled_date ? new Date(order.scheduled_date).toLocaleDateString() : 'ASAP'}</p>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white capitalize leading-tight">{order.scheduled_date ? new Date(order.scheduled_date).toLocaleDateString() : 'ASAP'}</p>
                 </div>
               </div>
             </div>

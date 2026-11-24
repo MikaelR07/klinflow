@@ -48,7 +48,7 @@ export default function OwnerApprovalDetail() {
         <button onClick={() => navigate(-1)} className="p-2 -ml-2 bg-slate-50 dark:bg-slate-800 rounded-full text-slate-500 active:scale-90 transition-all">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter">Request Details</h1>
+        <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter">Request Details</h1>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-24">
@@ -57,23 +57,23 @@ export default function OwnerApprovalDetail() {
           <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 ${config.bg} ${config.color}`}>
             <config.icon className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-black text-slate-900 dark:text-white mb-1">{getTitle(req)}</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-1">{getTitle(req)}</h2>
           <p className="text-sm font-bold text-slate-500">{new Date(req.created_at).toLocaleString()}</p>
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-[11px] font-black text-slate-400 capitalize tracking-widest px-2">Information</h3>
+          <h3 className="text-[11px] font-bold text-slate-400 capitalize tracking-widest px-2">Information</h3>
           
           <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-4">
             <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-4">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Agent</span>
-              <span className="text-sm font-black text-slate-900 dark:text-white">{req.agent_name || req.name || 'Unknown'}</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white">{req.agent_name || req.name || 'Unknown'}</span>
             </div>
             
             {req.reqType === 'fund' && (
               <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-4">
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</span>
-                <span className="text-sm font-black text-emerald-500">KES {Number(req.amount || 0).toLocaleString()}</span>
+                <span className="text-sm font-bold text-emerald-500">KES {Number(req.amount || 0).toLocaleString()}</span>
               </div>
             )}
             
@@ -81,24 +81,24 @@ export default function OwnerApprovalDetail() {
               <>
                 <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-4">
                   <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Original Price</span>
-                  <span className="text-sm font-black text-slate-900 dark:text-white">{req.original}</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white">{req.original}</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-4">
                   <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Requested Price</span>
-                  <span className="text-sm font-black text-rose-500">{req.amount}</span>
+                  <span className="text-sm font-bold text-rose-500">{req.amount}</span>
                 </div>
               </>
             )}
 
             <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-4">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Status</span>
-              <span className="text-sm font-black text-amber-500 uppercase">{req.status}</span>
+              <span className="text-sm font-bold text-amber-500 uppercase">{req.status}</span>
             </div>
           </div>
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-[11px] font-black text-slate-400 capitalize tracking-widest px-2">Manager Notes (Optional)</h3>
+          <h3 className="text-[11px] font-bold text-slate-400 capitalize tracking-widest px-2">Manager Notes (Optional)</h3>
           <textarea 
             className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
             rows={4}
@@ -116,13 +116,13 @@ export default function OwnerApprovalDetail() {
           <div className="flex gap-3">
             <button 
               onClick={() => handleAction('reject')}
-              className="flex-1 py-4 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-black text-sm tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+              className="flex-1 py-4 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
             >
               <X className="w-5 h-5" /> Reject
             </button>
             <button 
               onClick={() => handleAction('approve')}
-              className="flex-1 py-4 bg-emerald-500 text-white rounded-2xl font-black text-sm tracking-widest uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all"
+              className="flex-1 py-4 bg-emerald-500 text-white rounded-2xl font-bold text-sm tracking-widest uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-[0.98] transition-all"
             >
               <Check className="w-5 h-5" /> Approve
             </button>

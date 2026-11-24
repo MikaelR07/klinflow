@@ -261,7 +261,7 @@ export default function ExpectedArrivalsPage() {
             >
               <span>{tab.label}</span>
               {tab.count > 0 && (
-                <span className={`min-w-[16px] h-4 px-1 text-[9px] font-black rounded-full flex items-center justify-center ${
+                <span className={`min-w-[16px] h-4 px-1 text-[9px] font-bold rounded-full flex items-center justify-center ${
                   activeTab === tab.key ? 'bg-white/25 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
                 }`}>
                   {tab.count}
@@ -316,7 +316,7 @@ export default function ExpectedArrivalsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-bold text-slate-900 dark:text-white capitalize truncate">{order.material}</h3>
-                      <span className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-wider ${
+                      <span className={`px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider ${
                         order.status === 'pending' || order.status === 'confirmed' ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400' :
                         order.status === 'completed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400' :
                         'bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-400'
@@ -349,7 +349,7 @@ export default function ExpectedArrivalsPage() {
                     {/* Price */}
                     <div className="mt-2 flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Price</span>
-                      <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">KSh {order.total_price?.toLocaleString()}</span>
+                      <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">KSh {order.total_price?.toLocaleString()}</span>
                     </div>
                   </div>
                 </div>

@@ -26,7 +26,7 @@ export default function PendingApproval() {
           </div>
         </div>
 
-        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tighter mb-4">
           Pending Approval
         </h1>
         

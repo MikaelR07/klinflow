@@ -209,7 +209,7 @@ export default function AgentHome() {
   };
 
   return (
-    <div className="relative h-[100dvh] bg-[#e5e9ea] dark:bg-slate-950 overflow-hidden font-sans -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] -mb-[calc(env(safe-area-inset-bottom,0px)+6rem)]" style={{ width: 'calc(100% + 0.5rem)' }}>
+    <div className="relative h-[100dvh] bg-white dark:bg-slate-950 overflow-hidden font-sans -mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] -mb-[calc(env(safe-area-inset-bottom,0px)+6rem)]" style={{ width: 'calc(100% + 0.5rem)' }}>
       <PushNotificationModal
         isOpen={showPushPrompt}
         onClose={() => setShowPushPrompt(false)}

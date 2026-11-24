@@ -226,7 +226,7 @@ export default function Register() {
       <div className="flex-1 flex flex-col w-full max-w-lg mx-auto relative shadow-2xl overflow-hidden bg-white">
 
         {/* Fixed Background Image */}
-        <div className={`absolute top-0 left-0 right-0 h-[50vh] pointer-events-none z-0 ${!imageLoaded ? 'bg-emerald-900/10 animate-pulse' : ''}`}>
+        <div className={`absolute top-0 left-0 right-0 h-[50vh] pointer-events-none z-0 ${!imageLoaded ? 'bg-indigo-900/10 animate-pulse' : ''}`}>
           <img
             src="/welcome/agentRegister.webp"
             alt="Create your account"
@@ -266,7 +266,7 @@ export default function Register() {
                   }}
                   className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-[13px] font-bold transition-all ${
                     formData.agent_account_type === tab.id
-                      ? 'bg-emerald-200 text-emerald-900'
+                      ? 'bg-indigo-100 text-indigo-900'
                       : 'text-slate-400 hover:text-slate-500'
                   }`}
                 >
@@ -286,7 +286,7 @@ export default function Register() {
                   {/* Full Name */}
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <User className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                      <User className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     </div>
                     <input
                       type="text"
@@ -294,7 +294,7 @@ export default function Register() {
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="Full Legal Name"
-                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all outline-none text-[15px]"
                       required
                     />
                   </div>
@@ -302,7 +302,7 @@ export default function Register() {
                   {/* Email */}
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Mail className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                      <Mail className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     </div>
                     <input
                       type="email"
@@ -310,7 +310,7 @@ export default function Register() {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="Email Address"
-                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all outline-none text-[15px]"
                       required
                     />
                   </div>
@@ -318,7 +318,7 @@ export default function Register() {
                   {/* Phone */}
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Phone className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                      <Phone className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     </div>
                     <input
                       type="tel"
@@ -326,18 +326,18 @@ export default function Register() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="Phone Number (07XX XXX XXX)"
-                      className={`w-full pl-12 pr-12 py-[16px] bg-white border rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px] ${phoneAvailable === false ? 'border-rose-300 ring-rose-100' : 'border-slate-200'}`}
+                      className={`w-full pl-12 pr-12 py-[16px] bg-white border rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all outline-none text-[15px] ${phoneAvailable === false ? 'border-rose-300 ring-rose-100' : 'border-slate-200'}`}
                       required
                     />
                     {phoneAvailable === true && (
-                      <ShieldCheck className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-600 animate-in fade-in zoom-in" />
+                      <ShieldCheck className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-indigo-600 animate-in fade-in zoom-in" />
                     )}
                   </div>
 
                   {/* National ID */}
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Hash className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                      <Hash className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     </div>
                     <input
                       type="text"
@@ -347,7 +347,7 @@ export default function Register() {
                       placeholder="National ID Number"
                       minLength={8}
                       maxLength={8}
-                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all outline-none text-[15px]"
                       required
                     />
                   </div>
@@ -355,13 +355,13 @@ export default function Register() {
                   {/* Gender Select */}
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <User className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                      <User className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     </div>
                     <select
                       name="gender"
                       value={formData.gender}
                       onChange={handleInputChange}
-                      className="w-full pl-12 pr-10 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px] appearance-none cursor-pointer"
+                      className="w-full pl-12 pr-10 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all outline-none text-[15px] appearance-none cursor-pointer"
                       required
                     >
                       <option value="" disabled hidden>Select Gender</option>
@@ -379,7 +379,7 @@ export default function Register() {
                   <button
                     type="button"
                     onClick={handleNextStep}
-                    className="w-full py-[18px] mt-4 bg-[#064e3b] hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 active:scale-[0.98]"
+                    className="w-full py-[18px] mt-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 active:scale-[0.98]"
                   >
                     Continue <ArrowRight className="w-[18px] h-[18px]" />
                   </button>
@@ -389,7 +389,7 @@ export default function Register() {
                   {/* Passcode */}
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Lock className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                      <Lock className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     </div>
                     <input
                       type="password"
@@ -397,7 +397,7 @@ export default function Register() {
                       value={formData.pin}
                       onChange={handleInputChange}
                       placeholder="Password (Min 8 characters)"
-                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all outline-none text-[15px]"
                       required
                     />
                   </div>
@@ -405,7 +405,7 @@ export default function Register() {
                   {/* Confirm Passcode */}
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Lock className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
+                      <Lock className="h-[18px] w-[18px] text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     </div>
                     <input
                       type="password"
@@ -413,7 +413,7 @@ export default function Register() {
                       value={formData.confirmPin}
                       onChange={handleInputChange}
                       placeholder="Confirm Password"
-                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all outline-none text-[15px]"
+                      className="w-full pl-12 pr-4 py-[16px] bg-white border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-all outline-none text-[15px]"
                       required
                     />
                   </div>
@@ -423,7 +423,7 @@ export default function Register() {
                     <div className="pt-1 space-y-3">
                       <div className="relative group">
                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                          <Briefcase className="h-[18px] w-[18px] text-emerald-600" />
+                          <Briefcase className="h-[18px] w-[18px] text-indigo-600" />
                         </div>
                         <input
                           type="text"
@@ -431,26 +431,26 @@ export default function Register() {
                           value={formData.fleet_invite_code}
                           onChange={handleInputChange}
                           placeholder="Company Invite Code (e.g. CF-XXXX)"
-                          className="w-full pl-12 pr-12 py-[16px] bg-emerald-50/50 border border-emerald-200 rounded-2xl text-slate-900 font-bold placeholder:text-emerald-700/40 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none transition-all text-[15px] uppercase tracking-widest"
+                          className="w-full pl-12 pr-12 py-[16px] bg-indigo-50/50 border border-indigo-200 rounded-2xl text-slate-900 font-bold placeholder:text-indigo-700/40 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 outline-none transition-all text-[15px] uppercase tracking-widest"
                           required
                         />
-                        {isCheckingCode && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 animate-spin text-emerald-500" />}
+                        {isCheckingCode && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 animate-spin text-indigo-600" />}
                       </div>
 
                       {companyDocs.length > 0 && (
-                        <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl space-y-4">
-                          <h3 className="text-[11px] font-black text-emerald-700 uppercase tracking-widest flex items-center gap-2">
+                        <div className="p-4 bg-indigo-50/60 border border-indigo-100 rounded-2xl space-y-4">
+                          <h3 className="text-[11px] font-bold text-indigo-700 uppercase tracking-widest flex items-center gap-2">
                             <ShieldCheck className="w-4 h-4" /> Required Documents
                           </h3>
                           <div className="space-y-3">
                             {companyDocs.map(doc => (
-                              <div key={doc} className="bg-white border border-emerald-100 rounded-xl p-3">
+                              <div key={doc} className="bg-white border border-indigo-100 rounded-xl p-3">
                                 <label className="block text-[11px] font-bold text-slate-700 mb-2">{doc}</label>
                                 <input
                                   type="file"
                                   accept="image/jpeg, image/png, application/pdf"
                                   onChange={(e) => handleFileUpload(doc, e.target.files?.[0] || null)}
-                                  className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors"
+                                  className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors"
                                   required
                                 />
                               </div>
@@ -481,7 +481,7 @@ export default function Register() {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="flex-1 py-[18px] bg-[#064e3b] hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed active:scale-[0.98]"
+                      className="flex-1 py-[18px] bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed active:scale-[0.98]"
                     >
                       {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Complete Registration'}
                     </button>
@@ -492,7 +492,7 @@ export default function Register() {
 
             {/* Footer Link */}
             <p className="text-center text-[13px] font-medium text-slate-500 mt-6 mb-2">
-              Already have an account? <Link to="/login" className="text-[#064e3b] font-bold hover:underline">Sign In</Link>
+              Already have an account? <Link to="/login" className="text-indigo-600 font-bold hover:underline">Sign In</Link>
             </p>
 
 
@@ -512,7 +512,7 @@ export default function Register() {
             </button>
 
             <div className="text-center space-y-6">
-              <div className="w-20 h-20 bg-emerald-50 rounded-[1.5rem] flex items-center justify-center mx-auto mb-2 text-emerald-600">
+              <div className="w-20 h-20 bg-indigo-50 rounded-[1.5rem] flex items-center justify-center mx-auto mb-2 text-indigo-600">
                 <ShieldCheck className="w-10 h-10" />
               </div>
 
@@ -520,7 +520,7 @@ export default function Register() {
                 <h3 className="text-2xl font-bold text-slate-900">Verify Phone</h3>
                 <p className="text-sm text-slate-500 font-medium mt-2">
                   Enter the 6-digit code sent to <br />
-                  <span className="text-emerald-600 font-bold">{formData.phone}</span>
+                  <span className="text-indigo-600 font-bold">{formData.phone}</span>
                 </p>
               </div>
 
@@ -533,12 +533,12 @@ export default function Register() {
                   value={formData.otp}
                   onChange={(e) => setFormData(prev => ({ ...prev, otp: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
                   placeholder="000000"
-                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-emerald-600 outline-none transition-all placeholder:text-slate-300"
+                  className="w-full text-center text-4xl font-semibold tracking-[0.5em] py-5 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-indigo-600 outline-none transition-all placeholder:text-slate-300"
                 />
                 <div className="flex flex-col items-center mt-5 space-y-3">
                   <div className="flex items-center gap-2">
                     <p className="text-[11px] font-bold text-slate-400 capitalize tracking-[0.2em]">Expires in:</p>
-                    <span className={`text-sm font-bold tracking-widest ${timeLeft < 60 ? 'text-rose-500' : 'text-emerald-600'}`}>
+                    <span className={`text-sm font-bold tracking-widest ${timeLeft < 60 ? 'text-rose-500' : 'text-indigo-600'}`}>
                       {formatTime(timeLeft)}
                     </span>
                   </div>
@@ -549,7 +549,7 @@ export default function Register() {
                     onClick={handleResendOTP}
                     className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold capitalize tracking-widest transition-all ${timeLeft > 0
                       ? 'bg-slate-100 text-slate-400 cursor-not-allowed opacity-50'
-                      : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 cursor-pointer'
+                      : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 cursor-pointer'
                       }`}
                   >
                     Resend Code
@@ -560,7 +560,7 @@ export default function Register() {
               <button
                 onClick={handleFinalSubmit}
                 disabled={isLoading || formData.otp.length < 6}
-                className="w-full py-4 bg-[#064e3b] text-white rounded-2xl font-bold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-[#064e3b]/20 active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50"
+                className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-indigo-600/20 active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50 hover:bg-indigo-700"
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm & Register'}
               </button>

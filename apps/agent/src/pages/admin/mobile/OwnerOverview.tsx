@@ -68,11 +68,11 @@ export default function OwnerOverview() {
             
             {/* LEFT: Weight Collected */}
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-black text-blue-100/80 mb-1 tracking-widest uppercase">
+              <p className="text-[10px] font-bold text-blue-100/80 mb-1 tracking-widest uppercase">
                 Weight Collected
               </p>
               <div className="flex items-baseline gap-1 mb-1">
-                <h2 className="text-3xl font-black text-white truncate">
+                <h2 className="text-3xl font-bold text-white truncate">
                   {totalCollections.toLocaleString()}
                 </h2>
                 <span className="text-sm font-bold text-blue-300 shrink-0">
@@ -90,20 +90,20 @@ export default function OwnerOverview() {
 
             {/* RIGHT: Wallet Balance */}
             <div className="flex-1 min-w-0 flex flex-col items-end text-right">
-              <p className="text-[10px] font-black text-blue-100/80 mb-1 tracking-widest uppercase">
+              <p className="text-[10px] font-bold text-blue-100/80 mb-1 tracking-widest uppercase">
                 Wallet Balance
               </p>
               <div className="flex items-baseline justify-end gap-1 mb-4 w-full">
                 <span className="text-sm font-bold text-blue-300 shrink-0">
                   KSh
                 </span>
-                <h2 className="text-2xl font-black text-white truncate">
+                <h2 className="text-2xl font-bold text-white truncate">
                   {(profile?.walletBalance || 0).toLocaleString()}
                 </h2>
               </div>
               <button
                 onClick={() => navigate('/wallet')}
-                className="bg-white text-blue-700 hover:bg-blue-50 px-6 py-2 rounded-xl font-black text-[10px] tracking-widest flex items-center justify-center active:scale-95 transition-all whitespace-nowrap shadow-sm uppercase w-full"
+                className="bg-white text-blue-700 hover:bg-blue-50 px-6 py-2 rounded-xl font-bold text-[10px] tracking-widest flex items-center justify-center active:scale-95 transition-all whitespace-nowrap shadow-sm uppercase w-full"
               >
                 Deposit
               </button>
@@ -114,7 +114,7 @@ export default function OwnerOverview() {
 
       {/* ── QUICK ACTIONS SCROLLABLE ── */}
       <div className="space-y-2">
-        <h2 className="text-[11px] font-black text-slate-400 capitalize tracking-widest px-2">Quick Actions</h2>
+        <h2 className="text-[11px] font-bold text-slate-400 capitalize tracking-widest px-2">Quick Actions</h2>
         <div className="overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-1 px-2 -mx-2">
           <div className="flex gap-1 w-max px-2">
           {scrollableQuickActions.map((action, i) => (
@@ -131,7 +131,7 @@ export default function OwnerOverview() {
 
       {/* ── HERO KPI  SECTION ── */}
       <div className="space-y-2">
-        <h2 className="text-[11px] font-black text-slate-400 capitalize tracking-widest px-2">Today's Analytics</h2>
+        <h2 className="text-[11px] font-bold text-slate-400 capitalize tracking-widest px-2">Today's Analytics</h2>
         
         <div className="flex flex-col gap-2 px-1">
           {/* Row 1: All 3 cards visible */}
@@ -174,7 +174,7 @@ export default function OwnerOverview() {
 
       {/* ── QUICK LINKS SECTION ── */}
       <div className="space-y-3 !mt-2">
-        <h2 className="text-[11px] font-black text-slate-500 capitalize tracking-widest px-2">Management Modules</h2>
+        <h2 className="text-[11px] font-bold text-slate-500 capitalize tracking-widest px-2">Management Modules</h2>
         <div className="grid grid-cols-2 gap-3 px-1.5">
           {quickLinks.map((link, i) => {
             const isDisputes = link.title === 'Disputes';
@@ -195,7 +195,7 @@ export default function OwnerOverview() {
                   </svg>
                 )}
                 {isDisputes && (
-                  <span className="text-[9px] font-black text-white/80 bg-white/15 px-2 py-0.5 rounded-full">3 Open</span>
+                  <span className="text-[9px] font-bold text-white/80 bg-white/15 px-2 py-0.5 rounded-full">3 Open</span>
                 )}
               </div>
               <div className="text-left w-full">

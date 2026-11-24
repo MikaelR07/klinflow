@@ -115,22 +115,22 @@ export default function OwnerDisputes() {
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <p className="text-[9px] font-bold text-white uppercase tracking-widest mb-1 truncate">Total</p>
-              <p className="text-base font-black text-slate-100 truncate">{disputes.length}</p>
+              <p className="text-base font-bold text-slate-100 truncate">{disputes.length}</p>
             </div>
             <div className="w-px h-8 bg-slate-100 self-center" />
             <div className="flex-1 min-w-0 pl-2">
               <p className="text-[9px] font-bold text-white uppercase tracking-widest mb-1 truncate">Open</p>
-              <p className="text-base font-black text-slate-100 truncate">{openCount}</p>
+              <p className="text-base font-bold text-slate-100 truncate">{openCount}</p>
             </div>
             <div className="w-px h-8 bg-slate-100 self-center" />
             <div className="flex-1 min-w-0 pl-2">
               <p className="text-[9px] font-bold text-white uppercase tracking-widest mb-1 truncate">Resolved</p>
-              <p className="text-base font-black text-slate-100 truncate">{resolvedCount}</p>
+              <p className="text-base font-bold text-slate-100 truncate">{resolvedCount}</p>
             </div>
             <div className="w-px h-8 bg-slate-100 self-center" />
             <div className="flex-1 min-w-0 pl-2">
               <p className="text-[9px] font-bold text-white uppercase tracking-widest mb-1 truncate">Rejected</p>
-              <p className="text-base font-black text-slate-100 truncate">{rejectedCount}</p>
+              <p className="text-base font-bold text-slate-100 truncate">{rejectedCount}</p>
             </div>
           </div>
         </div>
@@ -203,7 +203,7 @@ export default function OwnerDisputes() {
           ) : filteredDisputes.length === 0 ? (
             <div className="text-center py-16 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
               <CheckCircle2 className="w-12 h-12 text-emerald-500 mb-4 opacity-50" />
-              <p className="text-sm font-black text-slate-900 dark:text-white mb-1">No Disputes Found</p>
+              <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">No Disputes Found</p>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">You're all clear here.</p>
             </div>
           ) : (

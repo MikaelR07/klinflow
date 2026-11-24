@@ -136,19 +136,7 @@ export default function SellerHome() {
   const [stats, setStats] = useState<SellerWalletStats | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeContractsCount, setActiveContractsCount] = useState(0);
-  const [bannerIndex, setBannerIndex] = useState(0);
   const { status, liveAddress, startTracking } = useLocationStore();
-
-  const sellerBanners = useMemo(() => [
-    { src: '/vectors/ecoBanner2.webp', alt: 'Promo', bg: 'bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 border-blue-900/50 dark:border-blue-900/50' },
-    { src: '/vectors/ecoBanner.webp', alt: 'Promo 2', bg: 'bg-slate-900 border-slate-200/50 dark:border-slate-700/50' },
-  ], []);
-
-  useEffect(() => {
-    if (sellerBanners.length <= 1) return;
-    const timer = setInterval(() => setBannerIndex(i => (i + 1) % sellerBanners.length), 4000);
-    return () => clearInterval(timer);
-  }, [sellerBanners.length]);
 
   useEffect(() => {
     startTracking();
@@ -314,55 +302,55 @@ export default function SellerHome() {
       <div className="max-w-xl mx-auto px-2.5 pt-[calc(env(safe-area-inset-top,1.5rem)+5.5rem)] pb-5 space-y-6">
 
         {/* ── ECO-REWARDS HERO CARD (MERCHANT REVENUE) ── */}
-        <div className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-emerald-700 to-emerald-800 border border-emerald-600/50 p-5 shadow-sm">
+        <div className="relative group overflow-hidden rounded-[24px] bg-gradient-to-br from-lime-400 to-lime-500 border border-lime-400/80 p-4 ">
           <div className="relative z-10 flex flex-col gap-1">
             <div className="flex justify-between items-start mb-1">
               <div>
-                <p className="text-[10px] font-bold text-emerald-100 uppercase tracking-widest mb-1 flex items-center gap-1">
-                  <Wallet className="w-4 h-4" /> Wallet Balance
+                <p className="text-[10px] font-bold text-emerald-950/80 uppercase tracking-widest mb-1 flex items-center gap-1">
+                  <Wallet className="w-4 h-4 text-emerald-950" /> Wallet Balance
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-white/90">Ksh</span>
-                  <h2 className="text-2xl font-semibold text-white tracking-tighter leading-none drop-shadow-md">
+                  <span className="text-xl font-bold text-emerald-950/80">Ksh</span>
+                  <h2 className="text-2xl font-bold text-emerald-950 tracking-tighter leading-none">
                     {Number(cashBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </h2>
                 </div>
               </div>
               <button
                 onClick={() => navigate('/withdraw')}
-                className="bg-lime-400 text-emerald-900 mt-1 px-5 py-3 rounded-2xl text-sm font-semibold capitalize tracking-widest transition-all active:scale-95 shadow-md hover:shadow-lg hover:bg-emerald-50"
+                className="bg-emerald-950 text-white hover:bg-emerald-900 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95"
               >
                 Withdraw
               </button>
             </div>
 
-            <div className="flex items-center gap-1 pt-3 border-t border-white/20">
-              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                <span className="text-base font-bold text-white">{totalDeals}</span>
-                <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3" /> Active Trades</span>
+            <div className="flex items-center gap-1 pt-2 border-t border-emerald-950/15">
+              <div className="flex-1 bg-black/10 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-black/5">
+                <span className="text-base font-bold text-emerald-950">{totalDeals}</span>
+                <span className="text-[9px] font-bold text-emerald-950/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Handshake className="w-3 h-3 text-emerald-950" /> Active Trades</span>
               </div>
-              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/10">
-                <span className="text-base font-bold text-white">{totalSoldKg}</span>
-                <span className="text-[9px] font-bold text-white/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Scale className="w-3 h-3" /> KG Sold</span>
+              <div className="flex-1 bg-black/10 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-black/5">
+                <span className="text-base font-bold text-emerald-950">{totalSoldKg}</span>
+                <span className="text-[9px] font-bold text-emerald-950/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Scale className="w-3 h-3 text-emerald-950" /> KG Sold</span>
               </div>
-              <div className="flex-1 bg-black/15 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-white/20">
-                <span className="text-base font-bold text-amber-300 drop-shadow-sm">{gfpBalance.toLocaleString()}</span>
-                <span className="text-[9px] font-bold text-amber-200 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0" /> Green Points</span>
+              <div className="flex-1 bg-black/10 backdrop-blur-md rounded-2xl p-2.5 flex flex-col items-center justify-center border border-black/5">
+                <span className="text-base font-bold text-emerald-950">{gfpBalance.toLocaleString()}</span>
+                <span className="text-[9px] font-bold text-emerald-950/80 capitalize tracking-widest mt-0.5 flex items-center gap-1 whitespace-nowrap"><Sparkles className="w-3 h-3 shrink-0 text-emerald-950" /> Green Points</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* ── QUICK ACTIONS ── */}
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className='!mt-4'>
           <div className="space-y-2">
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1">
               {[
-                { label: 'Sell', icon: <CircleFadingPlus className="w-5.5 h-5.5" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Listings', icon: <Package className="w-5.5 h-5.5" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
-                { label: 'Orders', icon: <Handshake className="w-5.5 h-5.5" />, route: '/my-trades', color: 'bg-purple-50 dark:bg-slate-800 text-slate-900 dark:text-white', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
-                { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800 text-slate-900 dark:text-white' },
+                { label: 'Sell', icon: <CircleFadingPlus className="w-5.5 h-5.5 text-emerald-950" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800' },
+                { label: 'Listings', icon: <Package className="w-5.5 h-5.5 text-emerald-950" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800' },
+                { label: 'Orders', icon: <Handshake className="w-5.5 h-5.5 text-emerald-950" />, route: '/my-trades', color: 'bg-purple-50 dark:bg-slate-800', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
+                { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5 text-emerald-950" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800' },
               ].map((service) => (
                 <button
                   key={service.label}
@@ -386,22 +374,17 @@ export default function SellerHome() {
 
         {/* ── KLINFLOW BANNERS ── */}
         <motion.div variants={itemVariants} className="!mt-2">
-          <div className="relative rounded-[16px] overflow-hidden aspect-[3/1]">
-            {sellerBanners.map((b, i) => (
-              <div
-                key={i}
-                className={`absolute inset-0 ${b.bg} border transition-opacity duration-700 ease-in-out ${i === bannerIndex ? 'opacity-100 z-[1]' : 'opacity-0 z-0'}`}
-              >
-                <img src={b.src} alt={b.alt} className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-              </div>
-            ))}
+          <div className="flex gap-2.5 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
+            {/* Banner 1 */}
+            <div className="shrink-0 w-[98%] sm:w-[96%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-blue-900/50 dark:border-blue-900/50 aspect-[3/1]">
+              <img src="/vectors/ecoBanner2.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
 
-            {/* Dots */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-              {sellerBanners.map((_, i) => (
-                <button key={i} onClick={() => setBannerIndex(i)} className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === bannerIndex ? 'bg-white w-4' : 'bg-white/50'}`} />
-              ))}
+            {/* Banner 2 */}
+            <div className="shrink-0 w-[98%] sm:w-[96%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[3/1] bg-slate-900">
+              <img src="/vectors/ecoBanner.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
           </div>
         </motion.div>
@@ -498,8 +481,7 @@ export default function SellerHome() {
               };
 
               return [...items].sort((a, b) => getSortIndex(a) - getSortIndex(b));
-            })().map((item: any, idx: number) => {
-              const palette = COLOR_PALETTES[idx % COLOR_PALETTES.length];
+            })().map((item: any) => {
               const isDB = categories.length > 0;
               const priceVal = isDB ? (item.price_per_unit || item.price_per_kg || 0) : null;
               const displayPrice = isDB
@@ -522,22 +504,32 @@ export default function SellerHome() {
                 else if (identifier.includes('bulky') || identifier.includes('sofa') || identifier.includes('furniture')) bgImage = '/material-categories/bulky-sofas.webp';
                 else if (identifier.includes('recycl')) bgImage = '/material-categories/recyclables.webp';
               }
+              const imgPath = bgImage || '/material-categories/recyclables.webp';
+              const label = item.label || item.name;
 
               return (
                 <div
                   key={item.id}
                   onClick={() => navigate(`/materials/${identifier}`)}
-                  className={`snap-start relative shrink-0 w-[120px] h-[120px] ${!bgImage ? `bg-gradient-to-br ${isDB ? palette.color : item.color}` : 'bg-slate-900'} border ${isDB ? palette.border : item.border} rounded-2xl p-3 cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-sm flex flex-col overflow-hidden`}
-                  style={bgImage ? {
-                    backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.3)), url(${bgImage})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                  } : {}}
+                  className="snap-start shrink-0 w-28 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 overflow-hidden cursor-pointer active:scale-95 transition-transform"
                 >
-                  <div className="flex-1" />
-                  <h4 className={`text-[13px] font-bold mb-1 leading-none relative z-10 ${bgImage ? 'text-white' : (isDB ? palette.text : item.text)}`}>{item.label || item.name}</h4>
-                  <div className={`rounded-lg px-2 py-1.5 relative z-10 ${bgImage ? 'bg-black/40 backdrop-blur-md border border-white/10' : 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm'}`}>
-                    <p className={`text-[10px] font-semibold text-center leading-none ${bgImage ? 'text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>{displayPrice}</p>
+                  <div className="h-16 w-full bg-slate-200/60 dark:bg-slate-800 overflow-hidden">
+                    <img
+                      src={imgPath}
+                      alt={label}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+                  <div className="p-2.5">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white capitalize truncate leading-tight">
+                      {label}
+                    </p>
+                    <p className="text-[10.5px] font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5 truncate">
+                      {displayPrice}
+                    </p>
                   </div>
                 </div>
               );

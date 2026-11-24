@@ -244,7 +244,7 @@ export default function RFQDetailsPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
 
             {rfq.images.length > 1 && (
-              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-black text-white uppercase tracking-widest flex items-center gap-1.5">
+              <div className="absolute top-4 right-4 z-10 bg-black/35 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[8px] font-bold text-white uppercase tracking-widest flex items-center gap-1.5">
                 <span>{activeImageIndex + 1} / {rfq.images.length}</span>
                 <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
               </div>
@@ -287,7 +287,7 @@ export default function RFQDetailsPage() {
               <Coins className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Target Budget</p>
-                <p className="text-xs font-black text-emerald-600 leading-none">KSh {rfq.targetPrice}/kg</p>
+                <p className="text-xs font-bold text-emerald-600 leading-none">KSh {rfq.targetPrice}/kg</p>
               </div>
             </div>
 
@@ -295,7 +295,7 @@ export default function RFQDetailsPage() {
               <Scale className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
               <div>
                 <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Volume Wanted</p>
-                <p className="text-xs font-black text-slate-900 dark:text-white capitalize">{rfq.quantity}</p>
+                <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">{rfq.quantity}</p>
               </div>
             </div>
 
@@ -357,14 +357,14 @@ export default function RFQDetailsPage() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-[10px] font-bold text-blue-200 uppercase tracking-widest mb-1">Fulfillment Progress</p>
-                    <h2 className="text-2xl font-black text-white tracking-tight">{percentage}%</h2>
+                    <h2 className="text-2xl font-bold text-white tracking-tight">{percentage}%</h2>
                   </div>
                   <div className="relative w-[72px] h-[72px] flex items-center justify-center shrink-0">
                     <svg className="w-full h-full transform -rotate-90">
                       <circle cx="36" cy="36" r="30" className="stroke-white/20" strokeWidth="5" fill="none" />
                       <circle cx="36" cy="36" r="30" className="stroke-blue-300" strokeWidth="5" fill="none" strokeDasharray="188" strokeDashoffset={188 - (188 * percentage) / 100} strokeLinecap="round" />
                     </svg>
-                    <span className="absolute text-sm font-black text-white">{rfq.bids.length}</span>
+                    <span className="absolute text-sm font-bold text-white">{rfq.bids.length}</span>
                     <span className="absolute text-[8px] font-bold text-blue-200 mt-8">sellers</span>
                   </div>
                 </div>
@@ -489,7 +489,7 @@ export default function RFQDetailsPage() {
                         <div className="flex justify-between items-start">
                           <div>
                             <div className="flex items-center gap-1.5">
-                              <h4 className="text-sm font-black text-slate-900 dark:text-white capitalize">
+                              <h4 className="text-sm font-bold text-slate-900 dark:text-white capitalize">
                                 {bid.sellerName}
                               </h4>
                               <span className="text-[9px] font-bold text-amber-500 flex items-center gap-0.5">
@@ -502,7 +502,7 @@ export default function RFQDetailsPage() {
                           </div>
                           <div className="text-right">
                             <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offered Price</p>
-                            <p className="text-base font-black text-emerald-600 leading-none">
+                            <p className="text-base font-bold text-emerald-600 leading-none">
                               KSh {bid.price}<span className="text-[9px] text-emerald-600/70">/kg</span>
                             </p>
                           </div>
@@ -525,7 +525,7 @@ export default function RFQDetailsPage() {
                         )}
 
                         {isAccepted && (
-                          <div className="flex items-center gap-2 p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-650 dark:text-emerald-450 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-[10px] font-black uppercase tracking-widest justify-center">
+                          <div className="flex items-center gap-2 p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-650 dark:text-emerald-450 border border-emerald-100 dark:border-emerald-900/30 rounded-xl text-[10px] font-bold uppercase tracking-widest justify-center">
                             <ShieldCheck className="w-4 h-4" /> Accepted Offer • Trade Initiated
                           </div>
                         )}

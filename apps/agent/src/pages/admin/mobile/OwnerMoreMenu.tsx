@@ -61,7 +61,7 @@ export default function OwnerMoreMenu() {
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <h1 className="text-lg font-black text-slate-600 dark:text-white tracking-tight">More</h1>
+            <h1 className="text-lg font-bold text-slate-600 dark:text-white tracking-tight">More</h1>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function OwnerMoreMenu() {
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <h2 className="text-base font-black text-slate-900 dark:text-white truncate">{profile?.name}</h2>
+            <h2 className="text-base font-bold text-slate-900 dark:text-white truncate">{profile?.name}</h2>
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{profile?.companyName}</p>
             <p className="text-[10px] font-medium text-emerald-500 mt-0.5 truncate">{profile?.email}</p>
           </div>
@@ -93,7 +93,7 @@ export default function OwnerMoreMenu() {
       <div className="space-y-5 px-0">
         {menuGroups.map((group, i) => (
           <div key={i} className="space-y-2">
-            <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">{group.title}</h3>
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2">{group.title}</h3>
             <div className="bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[1.5rem] overflow-hidden shadow-sm">
               {group.items.map((item, j) => (
                 <button
@@ -119,7 +119,7 @@ export default function OwnerMoreMenu() {
       <div className="px-0 pt-2">
         <button 
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 p-4 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-black text-sm tracking-widest uppercase active:scale-[0.98] transition-all"
+          className="w-full flex items-center justify-center gap-2 p-4 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 rounded-2xl font-bold text-sm tracking-widest uppercase active:scale-[0.98] transition-all"
         >
           <LogOut className="w-5 h-5" /> Log Out
         </button>

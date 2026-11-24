@@ -208,11 +208,11 @@ export default function ActivePickupsPage() {
                      <div className="grid grid-cols-2 gap-2 mb-4">
                        <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Volume</p>
-                         <p className="text-xs font-black text-slate-900 dark:text-white">{order.proposal?.offered_weight} KG</p>
+                         <p className="text-xs font-bold text-slate-900 dark:text-white">{order.proposal?.offered_weight} KG</p>
                        </div>
                        <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Price</p>
-                         <p className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {order.proposal?.offered_price}/kg</p>
+                         <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">KSh {order.proposal?.offered_price}/kg</p>
                        </div>
                      </div>
 
@@ -257,11 +257,11 @@ export default function ActivePickupsPage() {
                      <div className="grid grid-cols-2 gap-2 mb-4">
                        <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Total Volume</p>
-                         <p className="text-xs font-black text-slate-900 dark:text-white">{group.totalWeight} KG</p>
+                         <p className="text-xs font-bold text-slate-900 dark:text-white">{group.totalWeight} KG</p>
                        </div>
                        <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-100 dark:border-slate-700/50">
                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est Payout</p>
-                         <p className="text-xs font-black text-emerald-600 dark:text-emerald-400">KSh {group.totalPrice.toLocaleString()}</p>
+                         <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">KSh {group.totalPrice.toLocaleString()}</p>
                        </div>
                      </div>
                    </div>
@@ -356,7 +356,7 @@ export default function ActivePickupsPage() {
                 >
                   {/* Row 1: Material Name + Status Badge */}
                   <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-[15px] font-black text-slate-900 dark:text-white capitalize leading-none truncate max-w-[200px]">
+                    <h4 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize leading-none truncate max-w-[200px]">
                       {resolveMaterialName(order.rfq)} Pickup
                     </h4>
                     <div className="flex items-center gap-2">
@@ -398,7 +398,7 @@ export default function ActivePickupsPage() {
                     <div className="flex items-center gap-3 shrink-0">
                       <div className="text-right">
                         <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Offered Price</p>
-                        <p className="text-base font-black text-emerald-600 leading-none">
+                        <p className="text-base font-bold text-emerald-600 leading-none">
                           KSh {order.proposal?.offered_price}<span className="text-[9px] text-emerald-600/70">/kg</span>
                         </p>
                       </div>
@@ -517,7 +517,7 @@ export default function ActivePickupsPage() {
                   onClick={() => setExpandedCardId(prev => prev === group.rfq_id ? null : group.rfq_id)}
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-[15px] font-black text-slate-900 dark:text-white capitalize leading-none">
+                    <h4 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize leading-none">
                       Group Collection
                     </h4>
                     <div className="flex items-center gap-2">
@@ -544,7 +544,7 @@ export default function ActivePickupsPage() {
                     </div>
                     <div className="text-right">
                       <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Est. Payout</p>
-                      <p className="text-base font-black text-emerald-600 leading-none">
+                      <p className="text-base font-bold text-emerald-600 leading-none">
                         KSh {group.totalPrice.toLocaleString()}
                       </p>
                     </div>
@@ -565,11 +565,11 @@ export default function ActivePickupsPage() {
                         <div className="grid grid-cols-2 gap-3 mb-4 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
                           <div className="space-y-1">
                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Users className="w-3 h-3" /> Sellers</p>
-                            <p className="text-sm font-black text-slate-900 dark:text-white">{group.sellerCount} Participants</p>
+                            <p className="text-sm font-bold text-slate-900 dark:text-white">{group.sellerCount} Participants</p>
                           </div>
                           <div className="space-y-1">
                             <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1"><Scale className="w-3 h-3" /> Total Volume</p>
-                            <p className="text-sm font-black text-slate-900 dark:text-white">{group.totalWeight} kg</p>
+                            <p className="text-sm font-bold text-slate-900 dark:text-white">{group.totalWeight} kg</p>
                           </div>
                         </div>
 

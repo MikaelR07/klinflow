@@ -299,7 +299,7 @@ export default function ApprovalCategoryPage() {
         ) : (
           <div className="space-y-2 px-0.5">
             <div className="flex items-center justify-between px-1 mb-2">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {filteredItems.length} request{filteredItems.length !== 1 ? 's' : ''}
               </span>
             </div>

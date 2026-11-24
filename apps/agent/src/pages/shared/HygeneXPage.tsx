@@ -206,7 +206,7 @@ export default function HygeneXPage() {
             <ArrowLeft className="w-5 h-5 text-slate-100   transition-colors" />
           </button>
           <div>
-            <h1 className="text-xl font-black text-slate-100 capitalize tracking-tighter leading-none">HygeneX</h1>
+            <h1 className="text-xl font-bold text-slate-100 capitalize tracking-tighter leading-none">HygeneX</h1>
             <p className="text-[10px] font-bold text-emerald-100 capitalize tracking-[0.2em] mt-1">Smart Waste Intelligence</p>
           </div>
         </div>

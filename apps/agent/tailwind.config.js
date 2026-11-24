@@ -8,11 +8,11 @@ export default {
   ],
   theme: {
     fontFamily: {
-      sans: ['"Space Grotesk"', 'sans-serif'],
+      sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
     },
     extend: {
       colors: {
-        primary: "#2b9e31",
+        primary: "#4f46e5",
         secondary: "#3B82F6",
         slate: {
           50: "#ffffff",    /* Was #F3F4F6 (Whitish), now Pure White for page backgrounds */

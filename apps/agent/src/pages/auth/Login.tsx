@@ -109,47 +109,58 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col bg-gradient-to-br from-emerald-500 to-primary min-h-[100dvh] relative font-sans">
+    <div className="flex flex-col min-h-[100dvh] max-w-lg mx-auto relative font-sans overflow-hidden">
 
-      {/* ── Header Section ── */}
-      <div className="px-8 pt-[calc(env(safe-area-inset-top,1rem)+4rem)] pb-32">
-        <h1 className="text-[38px] font-bold text-white tracking-tight leading-tight">
-          Welcome back Agent!
-        </h1>
-        <p className="text-white/90 text-[15px] font-medium mt-2">
-        Ready to make an impact today?
-        </p>
+      {/* ── Background Image ── */}
+      <div className="absolute inset-0 z-0">
+        <img src="/welcome/login.webp" alt="Klinflow Agent Login" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/5 to-black/40" />
       </div>
 
-      {/* ── Login Card Area ── */}
-      <div className="flex-1 w-full bg-slate-50 rounded-t-[40px] px-8 pt-10 pb-8 shadow-[0_-8px_30px_rgba(0,0,0,0.1)] flex flex-col relative">
-        <div className="w-full max-w-md mx-auto flex-1 flex flex-col">
-          
-          <div className="mb-8 text-center">
-            {/* <h2 className="text-[26px] font-bold text-[#064e3b] tracking-tight">Welcome back</h2> */}
-            <p className="text-slate-500 text-[14px] font-medium mt-1">
-              Sign in to your account to continue
-            </p>
-          </div>
+      {/* ── Top Navigation / Back Button ── */}
+      <div className="relative z-20 px-6 pt-[calc(env(safe-area-inset-top,1rem)+1rem)]">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md border border-black/20 flex items-center justify-center hover:bg-white/30 text-white transition-all active:scale-95 shadow-sm"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+      </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+      {/* ── Login Card ── */}
+      <div className="relative z-10 flex-1 flex flex-col justify-end">
+        <div className="w-full bg-slate-50 dark:bg-slate-800 backdrop-blur-md rounded-t-[36px] px-8 pt-8 pb-8 shadow-[0_-8px_30px_rgba(0,0,0,0.2)] flex flex-col">
+          <div className="w-full max-w-md mx-auto flex-1 flex flex-col">
+
+            <div className="mb-6 text-center">
+              <h1 className="text-[28px] font-bold text-indigo-600 dark:text-white tracking-tight leading-tight">
+                Welcome back Agent!
+              </h1>
+              <p className="text-slate-500 dark:text-slate-400 text-[14px] font-medium mt-1">
+                Sign in to your account to continue
+              </p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-4">
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+                <Phone className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
               </div>
               <input
                 type="tel"
                 placeholder="07XX XXX XXX"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-[15px]"
+                className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 outline-none transition-all text-[15px]"
                 required
               />
             </div>
 
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+                <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
               </div>
               <input
                 type={showPin ? 'text' : 'password'}
@@ -157,13 +168,13 @@ export default function Login() {
                 minLength={8}
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                className="w-full pl-12 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all text-[15px]"
+                className="w-full pl-12 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 outline-none transition-all text-[15px]"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPin(!showPin)}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-emerald-500 transition-colors"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-indigo-600 transition-colors"
               >
                 {showPin ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
@@ -173,7 +184,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setRecoveryStep('phone')}
-                className="text-[13px] font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
+                className="text-[13px] font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
               >
                 Forgot password?
               </button>
@@ -182,7 +193,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-4 mt-2 bg-primary hover:bg-[#022c22] text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed active:scale-[0.98]"
+              className="w-full py-4 mt-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed active:scale-[0.98]"
             >
               {isLoading && recoveryStep === 'none' ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -192,26 +203,21 @@ export default function Login() {
             </button>
           </form>
 
-          {/* Footer Actions */}
-          <div className="mt-6 relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-200" />
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-slate-50 px-2 text-slate-400 font-medium tracking-wide">Or</span>
-            </div>
-          </div>
-          
-          <button
-            type="button"
-            onClick={() => navigate('/register')}
-            className="w-full py-4 mt-4 bg-white border border-slate-200 hover:border-emerald-500 text-slate-600 hover:text-emerald-600 rounded-2xl font-bold text-[15px] transition-all flex justify-center items-center gap-2 active:scale-[0.98] shadow-sm shadow-slate-200/50"
-          >
-            Create Account
-          </button>
+          {/* Footer Link */}
+          <p className="text-center text-[13px] font-medium text-slate-500 dark:text-slate-400 mt-6 mb-2">
+            Don't have an account?{' '}
+            <button
+              type="button"
+              onClick={() => navigate('/register')}
+              className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline transition-colors"
+            >
+              Create Account
+            </button>
+          </p>
 
         </div>
       </div>
+    </div>
 
       {/* ── RECOVERY OVERLAY: PHONE STEP ── */}
       {recoveryStep === 'phone' && (
@@ -222,7 +228,7 @@ export default function Login() {
             </button>
 
             <div className="text-center space-y-6">
-              <div className="w-16 h-16 bg-emerald-500/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-emerald-500">
+              <div className="w-16 h-16 bg-indigo-500/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-indigo-600">
                 <Lock className="w-8 h-8" />
               </div>
 
@@ -243,7 +249,7 @@ export default function Login() {
                     value={recoveryPhone}
                     onChange={(e) => setRecoveryPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                     placeholder="07XX XXX XXX"
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-semibold tracking-widest focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white font-semibold tracking-widest focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 outline-none transition-all"
                   />
                 </div>
               </div>
@@ -251,7 +257,7 @@ export default function Login() {
               <button
                 onClick={handleSendRecoveryOtp}
                 disabled={isLoading || recoveryPhone.length !== 10}
-                className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] flex justify-center items-center gap-2 disabled:opacity-50 hover:bg-emerald-500 transition-colors"
+                className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] flex justify-center items-center gap-2 disabled:opacity-50 hover:bg-indigo-500 transition-colors"
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Send Recovery Code'}
               </button>
@@ -276,14 +282,14 @@ export default function Login() {
                 <ArrowLeft className="w-5 h-5" />
               </button>
 
-              <div className="w-16 h-16 bg-emerald-500/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-emerald-500 mt-2">
+              <div className="w-16 h-16 bg-indigo-500/10 rounded-[1.5rem] flex items-center justify-center mx-auto text-indigo-600 mt-2">
                 <ShieldCheck className="w-8 h-8" />
               </div>
 
               <div>
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Secure Reset</h3>
                 <p className="text-sm text-slate-500 font-medium mt-1">
-                  Code sent to <span className="text-emerald-500 font-bold">{recoveryPhone}</span>
+                  Code sent to <span className="text-indigo-600 font-bold">{recoveryPhone}</span>
                 </p>
               </div>
 
@@ -297,36 +303,36 @@ export default function Login() {
                     value={recoveryOtp}
                     onChange={(e) => setRecoveryOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     placeholder="000000"
-                    className="w-full text-center text-3xl font-semibold tracking-[0.5em] py-3 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:border-emerald-500 outline-none transition-all placeholder:text-slate-300"
+                    className="w-full text-center text-3xl font-semibold tracking-[0.5em] py-3 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 rounded-2xl focus:border-indigo-600 outline-none transition-all placeholder:text-slate-300"
                   />
                 </div>
 
                 <div className="flex items-center justify-between px-2">
                   <p className="text-[10px] font-semibold text-slate-400 capitalize tracking-widest">Expires in:</p>
-                  <span className={`text-xs font-bold tracking-widest ${timeLeft < 60 ? 'text-rose-500' : 'text-emerald-500'}`}>
+                  <span className={`text-xs font-bold tracking-widest ${timeLeft < 60 ? 'text-rose-500' : 'text-indigo-600'}`}>
                     {formatTime(timeLeft)}
                   </span>
                 </div>
 
                 <div className="pt-2 space-y-3">
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     <input
                       type="password"
                       value={newPin}
                       onChange={(e) => setNewPin(e.target.value)}
                       placeholder="New Passcode"
-                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none transition-all"
                     />
                   </div>
                   <div className="relative group">
-                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
+                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                     <input
                       type="password"
                       value={confirmNewPin}
                       onChange={(e) => setConfirmNewPin(e.target.value)}
                       placeholder="Confirm Passcode"
-                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all"
+                      className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -336,7 +342,7 @@ export default function Login() {
                 <button
                   onClick={handleResetPin}
                   disabled={isLoading || recoveryOtp.length < 6 || newPin.length < 8}
-                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50"
+                  className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-semibold text-[13px] capitalize tracking-[0.2em] shadow-xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50"
                 >
                   {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Reset & Login'}
                 </button>
@@ -347,7 +353,7 @@ export default function Login() {
                   onClick={handleSendRecoveryOtp}
                   className={`py-2 rounded-full text-[11px] font-semibold capitalize tracking-widest transition-all ${timeLeft > 0
                       ? 'text-slate-400 cursor-not-allowed'
-                      : 'text-emerald-500 hover:bg-emerald-500/10'
+                      : 'text-indigo-600 hover:bg-indigo-500/10'
                     }`}
                 >
                   Resend Recovery Code

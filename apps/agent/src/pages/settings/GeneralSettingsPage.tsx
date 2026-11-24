@@ -30,7 +30,7 @@ export default function GeneralSettingsPage() {
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
           </button>
           <div>
-            <h1 className="text-lg font-black text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Settings</h1>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-none">Settings</h1>
             <p className="text-[10px] font-bold text-slate-400 capitalize tracking-widest mt-0.5">Manage Your Account</p>
           </div>
         </div>

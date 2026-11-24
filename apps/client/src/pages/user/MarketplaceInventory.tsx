@@ -121,82 +121,97 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-900 min-h-screen transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
-        <div className="fixed top-0 left-0 right-0 bg-white dark:bg-slate-800 pt-[calc(env(safe-area-inset-top,1rem)+1rem)]  px-4 border-b border-slate-200 dark:border-slate-600/60  z-50 transition-colors">
-          <div className="max-w-lg mx-auto space-y-1.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3.5">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
-                >
-                  <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
-                </button>
-                <div>
-                  <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">
-                    KlinMarket Listings
-                  </h1>
-                  <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-                    What You have listed for sale
-                  </p>
-                </div>
+        <div className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2.5 px-3 border-b border-slate-200/80 dark:border-slate-800 z-50 transition-colors">
+          <div className="max-w-lg mx-auto space-y-2.5">
+            <div className="relative flex items-center justify-between min-h-[40px]">
+              <button
+                onClick={() => navigate(-1)}
+                className="p-2.5 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center active:scale-90 transition-all z-10"
+              >
+                <ArrowLeft className="w-4 h-4 text-slate-800 dark:text-white" />
+              </button>
+              <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+                <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight leading-none whitespace-nowrap">
+                  KlinMarket Listings
+                </h1>
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 whitespace-nowrap">
+                  Manage your posted materials
+                </p>
               </div>
               
               {activeTab === "active" ? (
                 <button
                   onClick={() => navigate(profile?.account_type === 'seller' ? '/post-bulk-trade' : '/post-trade')}
-                  className="w-10 h-10 shrink-0 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
+                  className="w-10 h-10 shrink-0 rounded-2xl bg-emerald-950 hover:bg-emerald-900 text-white flex items-center justify-center shadow-xs active:scale-95 transition-all"
                   title="Post New Trade"
                 >
-                  <Plus className="w-5 h-5 text-emerald-600 dark:text-emerald-500 group-hover:scale-110 transition-transform" />
+                  <Plus className="w-4 h-4" />
                 </button>
               ) : (
                 <button
                   onClick={handleClearHistory}
-                  className="w-10 h-10 shrink-0 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
+                  className="text-[11px] font-bold text-rose-600 dark:text-rose-400 px-3 py-1.5 bg-rose-50 dark:bg-rose-950/50 border border-rose-200/60 dark:border-rose-800/40 rounded-xl shrink-0 active:scale-95 transition-all"
                   title="Clear History"
                 >
-                  <Trash2 className="w-4 h-4 text-rose-600 dark:text-rose-500 group-hover:scale-110 transition-transform" />
+                  Clear
                 </button>
               )}
             </div>
 
             {/* SEARCH INPUT */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search materials, price, or quantity..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:font-medium placeholder:text-slate-400"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:border-emerald-500/40 transition-all placeholder:font-medium placeholder:text-slate-400"
               />
             </div>
 
             {/* Integrated Tab Nav */}
-            <div className="flex gap-2 bg-slate-100 dark:bg-slate-800/80 p-2 rounded-xl">
-              {["active", "sold", "cancelled"].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`flex-1 py-1.5 text-[12px] font-bold capitalize tracking-widest rounded-lg transition-all flex items-center justify-center gap-1.5 ${
-                    activeTab === tab
-                      ? "bg-primary dark:bg-primary shadow-sm text-white dark:text-white font-bold"
-                      : "text-slate-500 bg-slate-300 dark:bg-slate-900 hover:text-slate-600 dark:hover:text-slate-300"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
+            <div className="flex gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+              {["active", "sold", "cancelled"].map((tab) => {
+                const count = myListings.filter((l) =>
+                  tab === "active"
+                    ? l.status === "active" || l.status === "partially_filled"
+                    : tab === "sold"
+                      ? l.status === "sold" || l.status === "completed"
+                      : l.status === "cancelled"
+                ).length;
+
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`flex-1 py-2 text-[11px] font-bold capitalize rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                      activeTab === tab
+                        ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs"
+                        : "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                    }`}
+                  >
+                    <span>{tab}</span>
+                    <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded-full ${
+                      activeTab === tab
+                        ? "bg-white/20 dark:bg-slate-900/15 text-current"
+                        : "bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                    }`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
       )}
 
       <div
-        className={`flex-1 space-y-0 pb-10 ${!selectedId ? "pt-[calc(env(safe-area-inset-top,1rem)+8.2rem)]" : "pt-0"} relative max-w-lg mx-auto w-full`}
+        className={`flex-1 space-y-0 pb-12 ${!selectedId ? "pt-[calc(env(safe-area-inset-top,1rem)+9.7rem)] px-1.5" : "pt-0"} relative max-w-lg mx-auto w-full`}
       >
         <main className="mt-0">
           {selectedId && selectedListing ? (
@@ -451,113 +466,131 @@ export default function MarketplaceInventory() {
             </motion.div>
           ) : (
             /* ── MAIN LIST VIEW ── */
-            <div className="space-y-0 pb-10">
+            <div className="pb-16 pt-1">
               {filteredListings.length === 0 ? (
-                <div className="py-20 px-4 text-center">
-                  <EmptyState
-                    icon={Package}
-                    title={
-                      activeTab === "active"
-                        ? "No Live Listings"
-                        : "No Past Listings"
-                    }
-                    subtitle={
-                      activeTab === "active"
-                        ? "Your marketplace posts will appear here."
-                        : "Your history is currently empty."
-                    }
-                  />
+                <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700/60 py-14 px-6 text-center mt-2">
+                  <div className="w-14 h-14 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto mb-3.5 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                    <Package className="w-6 h-6 text-slate-400" />
+                  </div>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">
+                    {activeTab === "active" ? "No Live Listings" : "No Past Listings"}
+                  </p>
+                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto leading-relaxed">
+                    {activeTab === "active"
+                      ? "Post recyclables to connect with verified buyers."
+                      : "Your completed or cancelled listings will appear here."}
+                  </p>
+                  {activeTab === "active" && (
+                    <button
+                      onClick={() => navigate(profile?.account_type === 'seller' ? '/post-bulk-trade' : '/post-trade')}
+                      className="mt-4 px-5 py-2.5 bg-emerald-950 hover:bg-emerald-900 text-white rounded-xl text-xs font-bold active:scale-95 transition-all shadow-xs"
+                    >
+                      Post Listing
+                    </button>
+                  )}
                 </div>
               ) : (
                 <Virtuoso
                   useWindowScroll
                   data={filteredListings}
-                  itemContent={(index, listing) => {
+                  itemContent={(_index, listing) => {
                     const itemQuantity =
                       listing.quantity > 0
                         ? listing.quantity
                         : (listing as any).moq ||
                           (listing as any).initialQuantity ||
                           500;
+                    const estValue = itemQuantity * (listing.pricePerKg || 0);
+                    const isLive = listing.status === "active" || listing.status === "partially_filled";
+                    const isDropoff = listing.pickupMode === 'dropoff' || (listing as any).pickup_mode === 'dropoff';
+
                     return (
-                      <div
-                        onClick={() => setSelectedId(listing.id)}
-                        className="bg-slate-50 dark:bg-slate-900/60 py-3 px-3.5 shadow-sm border-b border-slate-100 dark:border-slate-700 active:bg-slate-50 dark:active:bg-slate-800/50 transition-colors cursor-pointer"
-                      >
-                        <div className="flex gap-3">
-                          <div className="relative w-[72px] h-[72px] rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-2xl border border-slate-200 dark:border-slate-700">
-                            {listing.photoUrl ? (
-                              <OptimizedImage
-                                src={getThumbnailUrl(listing.photoUrl, {
-                                  width: 150,
-                                })}
-                                className="w-full h-full object-cover"
-                                wrapperClassName="w-full h-full"
-                              />
-                            ) : (
-                              <Package className="w-6 h-6 text-slate-300 dark:text-slate-600" />
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0 flex flex-col justify-center py-0.5">
-                            {/* Row 1: Material & Price */}
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-1.5 min-w-0">
-                                <h3 className="text-[15px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight">
-                                  {listing.material}
-                                </h3>
-                                <span
-                                  className={`px-1 py-0.5 rounded text-[8px] font-bold ${listing.status === "active" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400" : "bg-slate-100 text-slate-700 dark:bg-slate-500/20 dark:text-slate-400"} flex items-center gap-0.5 shrink-0`}
-                                >
-                                  {listing.status === "active"
-                                    ? "Live"
-                                    : listing.status}
-                                </span>
-                                {(listing.pickupMode === 'dropoff' || (listing as any).pickup_mode === 'dropoff') && (
-                                  <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-violet-100 text-violet-700 dark:bg-violet-500/20 dark:text-violet-400 flex items-center gap-0.5 shrink-0"><Home className="w-2.5 h-2.5" />DROP-OFF</span>
+                      <div className="pb-2.5">
+                        <div
+                          onClick={() => setSelectedId(listing.id)}
+                          className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-1.5 group"
+                        >
+                          {/* Top Row: Thumbnail, Material + ID, Price & Status */}
+                          <div className="flex items-start justify-between gap-2.5">
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                              <div className="w-16 h-16 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center shadow-2xs">
+                                {listing.photoUrl ? (
+                                  <OptimizedImage
+                                    src={getThumbnailUrl(listing.photoUrl, {
+                                      width: 150,
+                                    })}
+                                    className="w-full h-full object-cover"
+                                    wrapperClassName="w-full h-full"
+                                  />
+                                ) : (
+                                  <Package className="w-5 h-5 text-slate-400" />
                                 )}
                               </div>
-                              <div className="text-right shrink-0 ml-2 mt-1">
-                                <p className="text-base font-bold text-emerald-600 leading-none tracking-tighter">
-                                  KSh {listing.pricePerKg}<span className="text-[9px] text-emerald-600/70 font-bold">/kg</span>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-1.5">
+                                  <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                                    {listing.material}
+                                  </h3>
+                                  <span
+                                    className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold capitalize ${
+                                      isLive
+                                        ? "bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40"
+                                        : "bg-slate-200/80 text-slate-700 dark:bg-slate-700 dark:text-slate-300"
+                                    }`}
+                                  >
+                                    {isLive ? "Live" : listing.status}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-0.5">
+                                  ID: <span className="font-mono font-semibold text-slate-600 dark:text-slate-300">KF-{listing.id?.slice(0, 8)}</span>
                                 </p>
                               </div>
                             </div>
 
-                            {/* Row 2: Location -> Trade ID */}
-                            <div className="flex items-center justify-between mt-0.5">
-                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize truncate max-w-[150px]">
-                                <Tag className="w-2.5 h-2.5 text-slate-900" />{" "}
-                                KF-{listing.id?.slice(0, 8)}
-                              </p>
-                            </div>
-
-                            {/* Row 3: Timestamp & Quantity */}
-                            <div className="flex items-center justify-between pt-1 mt-1 border-t border-slate-50 dark:border-slate-800/50">
-                              <p className="text-[10px] font-bold text-slate-400 flex items-center gap-1 capitalize shrink-0">
-                                <Clock className="w-2.5 h-2.5 text-slate-900" />{" "}
-                                {listing.createdAt
-                                  ? new Date(listing.createdAt).toLocaleString(
-                                      [],
-                                      {
-                                        month: "short",
-                                        day: "numeric",
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                      },
-                                    )
-                                  : "ASAP"}
-                              </p>
-                              <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 capitalize shrink-0">
-                                <span className="text-[10px] text-slate-400 not-italic font-bold mr-1 opacity-70">
-                                  Qty:
-                                </span>
-                                <Scale className="w-2.5 h-2.5" /> {itemQuantity} KG
+                            <div className="text-right shrink-0">
+                              <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400 leading-none tabular-nums">
+                                KSh {listing.pricePerKg}
+                                <span className="text-[10px] font-semibold text-slate-400">/kg</span>
                               </p>
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-center text-slate-300">
-                            <ChevronRight className="w-4 h-4" />
+                          {/* Middle Row: Quantity, Date, Mode */}
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                            <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
+                              <Scale className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                              {itemQuantity.toLocaleString()} KG
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                              {listing.createdAt
+                                ? new Date(listing.createdAt).toLocaleString([], {
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })
+                                : "ASAP"}
+                            </span>
+                            {isDropoff && (
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-violet-100/80 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-bold">
+                                <Home className="w-2.5 h-2.5" /> Drop-off
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Footer Row */}
+                          <div className="pt-2.5 border-t border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between gap-2">
+                            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                              Est. Value:{' '}
+                              <span className="font-bold text-slate-800 dark:text-white tabular-nums">
+                                KSh {estValue.toLocaleString()}
+                              </span>
+                            </span>
+
+                            <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform">
+                              View Details <ChevronRight className="w-3.5 h-3.5" />
+                            </span>
                           </div>
                         </div>
                       </div>

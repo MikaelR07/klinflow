@@ -192,7 +192,7 @@ export default function OwnerAlerts() {
             {filteredAlerts.length === 0 ? (
               <div className="text-center py-16 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800">
                 <CheckCircle2 className="w-12 h-12 text-emerald-500 mb-4 opacity-50" />
-                <p className="text-sm font-black text-slate-900 dark:text-white mb-1">No Alerts</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-white mb-1">No Alerts</p>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Operations are running smoothly.</p>
               </div>
             ) : (
