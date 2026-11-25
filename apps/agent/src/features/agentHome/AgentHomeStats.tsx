@@ -9,7 +9,10 @@ import {
   Navigation, Radar, Moon, MapPin, CheckCircle, XCircle,
   User, Clock, Scale, Store, FileText, Users,
   Wallet,
-  UserStar
+  UserStar,
+  Warehouse,
+  ScrollText,
+  StarIcon
 } from 'lucide-react';
 import { supabase } from '@klinflow/supabase';
 import type { AgentEarningsData } from './agentHome.types';
@@ -156,7 +159,7 @@ export default function AgentHomeStats({
                       <span className="text-[10px] font-semibold text-white">{newPickupsCount > 99 ? '99+' : newPickupsCount}</span>
                     </div>
                   )}
-                  <MapPinPlus className="w-5 h-5 text-emerald-950 dark:text-white" />
+                  <Briefcase className="w-5 h-5 text-emerald-950 dark:text-white" />
                 </div>
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">{profile?.agentAccountType !== 'fleet_driver' ? 'Drop-Offs' : 'Pickups'}</span>
               </button>
@@ -170,14 +173,14 @@ export default function AgentHomeStats({
 
               <button onClick={() => navigate('/warehouse')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
                 <div className="relative w-9 h-9 shrink-0 bg-purple-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
-                  <Package className="w-5 h-5 text-emerald-950 dark:text-white" />
+                  <ScrollText className="w-5 h-5 text-emerald-950 dark:text-white" />
                 </div>
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Warehouse</span>
               </button>
 
               <button onClick={() => navigate('/reviews')} className="bg-slate-50 dark:bg-slate-700/50 border border-white dark:border-slate-700/50 rounded-2xl p-2.5 flex flex-col items-center justify-center gap-1 shadow-sm hover:shadow-md active:scale-95 transition-all group">
                 <div className="relative w-9 h-9 shrink-0 bg-emerald-50 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform">
-                  <UserStar className="w-5 h-5 text-emerald-950 dark:text-white" />
+                  <StarIcon className="w-5 h-5 text-emerald-950 dark:text-white" />
                 </div>
                 <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 capitalize tracking-wider">Reviews</span>
               </button>

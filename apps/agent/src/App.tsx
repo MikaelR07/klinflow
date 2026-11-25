@@ -92,7 +92,7 @@ function MobileLayout() {
 
   const AGENT_NAV = [
     { path: '/', icon: Home, label: 'Home' },
-    { path: '/jobs', icon: Briefcase, label: isFleetDriver ? 'Missions' : 'Jobs' },
+    { path: '/jobs', icon: Briefcase, label: isFleetDriver ? 'Pickups' : 'Jobs' },
     { path: '/sourcing', icon: Store, label: 'MarketPlace' },
     { path: '/settings', icon: MoreHorizontal, label: 'More' },
   ];

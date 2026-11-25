@@ -804,7 +804,7 @@ export default function Sourcing() {
                 <div className="px-3 pb-1">
                   <button
                     onClick={() => navigate('/trades')}
-                    className="w-full bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-3 flex items-center gap-3 active:scale-[0.98] transition-all group hover:border-emerald-500/40"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-4 flex items-center gap-3 active:scale-[0.98] transition-all group hover:border-emerald-500/40"
                   >
                     <div className="w-10 h-10 rounded-xl bg-emerald-950 text-white flex items-center justify-center shrink-0">
                       <History className="w-5 h-5" />
@@ -819,7 +819,7 @@ export default function Sourcing() {
               )}
 
               {/* ── MATERIAL CATEGORY CHIPS ── */}
-              <div className="relative pt-3 pb-2">
+              <div className="relative pt-1 pb-2">
                 <div className="flex justify-between items-center px-3 mb-2">
                   <p className="text-xs font-bold text-slate-900 dark:text-white tracking-tight">Available Materials</p>
                   <span className="text-[11px] font-semibold text-slate-400">{filteredListings.length} listings</span>

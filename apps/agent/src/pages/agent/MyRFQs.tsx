@@ -109,7 +109,7 @@ export default function MyRFQs() {
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
           </button>
           <div className="absolute left-1/2 -translate-x-1/2 text-center">
-            <h1 className="text-lg font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">My RFQ Requests</h1>
+            <h1 className="text-base font-bold text-slate-600 dark:text-white capitalize tracking-tighter leading-tight">My RFQ Requests</h1>
             <p className="text-[10px] font-bold text-slate-600 capitalize tracking-widest flex items-center justify-center gap-1.5 mt-0.5">
                Sourcing Pipeline
             </p>
@@ -119,7 +119,7 @@ export default function MyRFQs() {
             className="px-3 h-[38px] shrink-0 rounded-xl bg-emerald-600 text-white flex items-center justify-center gap-1.5 active:scale-95 transition-all hover:bg-emerald-700"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-            <span className="text-[11px] font-bold uppercase tracking-widest mt-0.5">Send RFQ</span>
+            <span className="text-[11px] font-bold uppercase tracking-widest mt-0.5">Send</span>
           </button>
         </div>
 
@@ -175,7 +175,7 @@ export default function MyRFQs() {
             </div>
               
             <div className="flex gap-2">
-              <div className="flex-1 bg-white/10 border border-white/20 rounded-xl p-3 flex items-center justify-between">
+              <div className="flex-1 bg-black/10 border border-black/10 rounded-xl p-3 flex items-center justify-between">
                 <div>
                   <p className="text-[9px] font-bold text-sky-200 uppercase tracking-widest mb-0.5">Total Requests</p>
                   <h3 className="text-2xl font-bold text-white leading-none">{rfqs.length}</h3>
@@ -184,7 +184,7 @@ export default function MyRFQs() {
                   <FileText className="w-4 h-4 text-white" />
                 </div>
               </div>
-              <div className="flex-1 bg-white/10 border border-white/20 rounded-xl p-3 flex items-center justify-between">
+              <div className="flex-1 bg-black/10 border border-black/10 rounded-xl p-3 flex items-center justify-between">
                 <div>
                   <p className="text-[9px] font-bold text-sky-200 uppercase tracking-widest mb-0.5">Active Bids</p>
                   <h3 className="text-2xl font-bold text-white leading-none">

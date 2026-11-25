@@ -1,15 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Package,
   ArrowLeft,
   Truck,
-  Scale,
-  ChevronRight,
-  Wallet,
-  Warehouse,
-  CheckCircle2,
-  Plus
+  ShieldCheck,
+  QrCode,
+  Loader2,
+  Layers,
+  Check,
+  ArrowUpRight,
+  Recycle,
+  Droplets,
+  Cog,
+  ScrollText,
+  Wine,
+  Cpu,
+  Shirt,
+  Apple
 } from 'lucide-react';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
 import { useServiceStore } from '@klinflow/core/stores/serviceStore';
@@ -17,56 +25,89 @@ import { useAgentStore } from '@klinflow/core/stores/agentStore';
 import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
 
-const CLAIM_STATUS = {
-  held_in_escrow: { label: 'In Escrow', color: 'text-indigo-600 bg-indigo-50 border-indigo-100 dark:text-indigo-400 dark:bg-indigo-500/10 dark:border-indigo-500/20' },
-  funds_released: { label: 'Paid Out', color: 'text-emerald-600 bg-emerald-50 border-emerald-100 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20' },
-  pending: { label: 'Pending', color: 'text-amber-600 bg-amber-50 border-amber-100 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20' },
-};
+const CATEGORY_COLORS = [
+  'bg-emerald-400',
+  'bg-sky-400',
+  'bg-amber-400',
+  'bg-violet-400',
+  'bg-rose-400',
+];
 
 export default function AgentWarehouse() {
   const navigate = useNavigate();
   const { profile, subscribeToProfileChanges } = useAuthStore() as any;
   const { materialPrices, fetchMaterialPrices, categories, fetchCategories, allCategories, fetchAllCategories } = useServiceStore();
   const { agentConfig, fetchAgentConfig } = useAgentStore();
-  const [realAssets, setRealAssets] = useState([]);
+  const [realAssets, setRealAssets] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [materialSales, setMaterialSales] = useState([]);
-  const [salesLoading, setSalesLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [showAllAssets, setShowAllAssets] = useState(false);
 
   const resolveMaterialName = (asset: any) => {
     const rawType = asset.material_type;
     if (!rawType) return 'Unknown Material';
-    
-    // If it's a UUID, try to resolve it from our stores
+
     if (rawType.length > 20 && rawType.includes('-')) {
       const subcat = materialPrices?.find((m: any) => m.id === rawType);
       if (subcat?.material_name) return subcat.material_name;
-      
+
       const cat = categories?.find((c: any) => c.id === rawType);
       if (cat?.label) {
-        // If material_type is exactly the category UUID, but we have a grade, the grade is probably the specific material!
         if (asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') {
           return asset.grade;
         }
-        return cat.label; // Fallback to category if no specific material
+        return cat.label;
       }
-      
+
       const allCat = allCategories?.find((c: any) => c.id === rawType);
       if (allCat?.label) return allCat.label;
-      
-      // If it's an unresolved UUID (e.g., legacy data), show a clean fallback instead of the full UUID
-      return asset.grade && asset.grade.length > 2 ? asset.grade : `Legacy Material`;
+
+      return asset.grade && asset.grade.length > 2 ? asset.grade : 'Legacy Material';
     }
-    
-    // If it's just a regular string slug (e.g., 'plastic', 'HDPE')
-    // If it's a category slug like 'plastic' but we have a specific grade, show the grade!
+
     if (['plastic', 'metal', 'paper', 'glass', 'e_waste'].includes(rawType.toLowerCase())) {
-        if (asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') {
-            return asset.grade;
-        }
+      if (asset.grade && asset.grade !== 'Standard' && asset.grade !== 'Premium' && asset.grade !== 'Low Grade') {
+        return asset.grade;
+      }
     }
 
     return rawType.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+  };
+
+  const resolveCategoryLabel = (asset: any) => {
+    const raw = asset.material_category || asset.material_type || 'Other';
+    if (raw.length > 20 && raw.includes('-')) {
+      const cat = categories?.find((c: any) => c.id === raw) || allCategories?.find((c: any) => c.id === raw);
+      if (cat?.label) return cat.label;
+      return 'Recyclables';
+    }
+    return raw.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+  };
+
+  const getCategoryStyle = (categoryLabel: string) => {
+    const key = categoryLabel.toLowerCase();
+    if (key.includes('plastic')) {
+      return { Icon: Droplets, box: 'bg-sky-100/80 dark:bg-sky-500/15 text-sky-700 dark:text-sky-400' };
+    }
+    if (key.includes('metal') || key.includes('scrap')) {
+      return { Icon: Cog, box: 'bg-amber-100/80 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400' };
+    }
+    if (key.includes('paper') || key.includes('box') || key.includes('cardboard')) {
+      return { Icon: ScrollText, box: 'bg-orange-100/80 dark:bg-orange-500/15 text-orange-700 dark:text-orange-400' };
+    }
+    if (key.includes('glass')) {
+      return { Icon: Wine, box: 'bg-teal-100/80 dark:bg-teal-500/15 text-teal-700 dark:text-teal-400' };
+    }
+    if (key.includes('waste') || key.includes('electronic')) {
+      return { Icon: Cpu, box: 'bg-violet-100/80 dark:bg-violet-500/15 text-violet-700 dark:text-violet-400' };
+    }
+    if (key.includes('textile') || key.includes('cloth')) {
+      return { Icon: Shirt, box: 'bg-pink-100/80 dark:bg-pink-500/15 text-pink-700 dark:text-pink-400' };
+    }
+    if (key.includes('organic') || key.includes('food')) {
+      return { Icon: Apple, box: 'bg-lime-100/80 dark:bg-lime-500/15 text-lime-700 dark:text-lime-400' };
+    }
+    return { Icon: Recycle, box: 'bg-emerald-100/80 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400' };
   };
 
   const fetchCargo = async () => {
@@ -129,36 +170,16 @@ export default function AgentWarehouse() {
     }
   }, [profile?.id]);
 
-  useEffect(() => {
-    if (!profile?.id) return;
-    setSalesLoading(true);
-    supabase
-      .from('marketplace_orders')
-      .select('*')
-      .eq('seller_id', profile.id)
-      .eq('order_type', 'agent_claim')
-      .order('created_at', { ascending: false })
-      .then(({ data }) => {
-        setMaterialSales(data || []);
-        setSalesLoading(false);
-      });
-  }, [profile?.id]);
-
-  // Calculate true live metrics from real assets
   const getPrice = (typeOrSlug: string) => {
-    // 1. Direct match on custom_rates (e.g. 'plastic' → 30)
     if (agentConfig?.custom_rates?.[typeOrSlug]) {
       return parseFloat(agentConfig.custom_rates[typeOrSlug]);
     }
-    // 2. If typeOrSlug is a subcategory ID, find its parent category slug in materialPrices
     const subcat = materialPrices.find((m: any) => m.id === typeOrSlug);
     if (subcat?.category) {
-      // subcat.category is the parent slug (e.g. 'plastic')
       const parentSlug = subcat.category.toLowerCase();
       if (agentConfig?.custom_rates?.[parentSlug]) {
         return parseFloat(agentConfig.custom_rates[parentSlug]);
       }
-      // Fallback to the subcategory's own DB price
       if (subcat.price_per_kg) return parseFloat(subcat.price_per_kg);
     }
     return 0;
@@ -169,13 +190,37 @@ export default function AgentWarehouse() {
 
   const totalVerifiedWeight = verifiedAssets.reduce((acc, asset: any) => acc + (parseFloat(asset.weight_kg) || 0), 0);
   const totalOfflineWeight = offlineAssets.reduce((acc, asset: any) => acc + (parseFloat(asset.weight_kg) || 0), 0);
+  const totalWeight = totalVerifiedWeight + totalOfflineWeight;
   const totalEstimatedValue = verifiedAssets.reduce((acc, asset: any) => acc + (parseFloat(asset.estimated_value) || 0), 0);
 
+  // Category composition breakdown for the manifest bar
+  const categoryBreakdown = useMemo(() => {
+    const map: Record<string, number> = {};
+    verifiedAssets.forEach((asset: any) => {
+      const cat = resolveCategoryLabel(asset);
+      map[cat] = (map[cat] || 0) + (parseFloat(asset.weight_kg) || 0);
+    });
+    return Object.entries(map)
+      .map(([name, weight], idx) => ({
+        name,
+        weight,
+        pct: totalVerifiedWeight > 0 ? Math.round((weight / totalVerifiedWeight) * 100) : 0,
+        color: CATEGORY_COLORS[idx % CATEGORY_COLORS.length],
+      }))
+      .sort((a, b) => b.weight - a.weight);
+  }, [verifiedAssets, totalVerifiedWeight, categories, allCategories]);
 
+  const filterTabs = ['All', ...categoryBreakdown.map(c => c.name)];
+
+  const filteredAssets = selectedCategory === 'All'
+    ? verifiedAssets
+    : verifiedAssets.filter(a => resolveCategoryLabel(a) === selectedCategory);
+
+  const displayedAssets = showAllAssets ? filteredAssets : filteredAssets.slice(0, 6);
 
   const handleDispatch = async () => {
     if (realAssets.length === 0) {
-      toast.error("Your truck is empty!", { description: "You need to complete some pickups first." });
+      toast.error('Your truck is empty!', { description: 'You need to complete some pickups first.' });
       return;
     }
 
@@ -195,179 +240,296 @@ export default function AgentWarehouse() {
       const { updateProfile } = useAuthStore.getState() as any;
       await updateProfile({ hubTransferPin: pin, isEnRoute: true });
 
-      /* addNotification removed for v3 migration */
-
-      toast.success("Check-In Requested! 🏢", {
-        description: "Please show your secure PIN at the gate."
+      toast.success('Check-In Requested!', {
+        description: 'Please show your secure PIN at the gate.'
       });
     } catch (err) {
-      toast.error("Failed to request check-in");
+      toast.error('Failed to request check-in');
       console.error(err);
     }
   };
 
   return (
-    <div className="-mx-1 px-1 bg-[#F8F9FF] dark:bg-slate-800 text-slate-900 dark:text-white pb-6 relative overflow-x-hidden">
+    <div className="-mx-1 bg-white dark:bg-slate-800 min-h-screen text-slate-900 dark:text-white pb-12 relative overflow-x-hidden transition-colors">
 
-      {/* ── EMERALD TOP BACKGROUND ── */}
-      <div className="absolute top-0 left-0 right-0 h-[280px] bg-emerald-600 z-0" />
-
-      {/* ── HEADER ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-emerald-600 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4">
-        <div className="max-w-lg mx-auto">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <button onClick={() => navigate(-1)} className="p-2 -ml-2 active:scale-95 transition-all">
-              <ArrowLeft className="w-5 h-5 text-white" />
-            </button>
-            <div>
-              <h1 className="text-[17px] font-bold tracking-wide text-white leading-tight">Sales Warehouse</h1>
-              <p className="text-[9px] text-emerald-100 font-medium tracking-wider capitalize mt-0.5">Manage your outbound collection.</p>
-            </div>
+      {/* ── FIXED TOP NAV ── */}
+      <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-all duration-300">
+        <div className="pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-3 px-4 flex items-center justify-between relative">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
+            aria-label="Go back"
+          >
+            <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
+          </button>
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <h1 className="text-[17px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
+              Cargo Manifest
+            </h1>
+            <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mt-0.5">
+              Truck load & hub check-in
+            </p>
           </div>
-        </div>
-
+          <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1.5 ${
+            profile?.hubTransferPin
+              ? 'bg-emerald-100/80 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+          }`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${profile?.hubTransferPin ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+            {profile?.hubTransferPin ? 'En Route' : 'Staging'}
+          </div>
         </div>
       </div>
 
       {/* ── CONTENT ── */}
-      <div className="relative z-10 px-1.5 max-w-lg mx-auto space-y-4 pt-[calc(env(safe-area-inset-top,1rem)+4.5rem)]">
-        
-        {/* ── TRUCK COLLECTION CARD ── */}
-        <div className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-3 pb-2 -mx-1.5 px-1.5">
-            <div className="snap-center shrink-0 w-full">
-              <div className="bg-indigo-600 p-5 rounded-2xl relative overflow-hidden group border border-indigo-500/30 h-full flex flex-col justify-between">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-[60px] -mr-16 -mt-16" />
-                <div className="relative z-10 flex-1 flex flex-col">
-                  {/* Top Estimated Weight */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <Warehouse className="w-4 h-4 text-white opacity-70" />
-                        <p className="text-[12px] font-bold text-white capitalize tracking-widest opacity-80">Estimated Collection</p>
-                      </div>
-                      <div className="flex items-baseline gap-1.5 text-white">
-                        <h3 className="text-3xl text-white font-bold">{(totalVerifiedWeight + totalOfflineWeight).toFixed(1)}</h3>
-                        <span className="text-xs font-bold opacity-70">KG</span>
-                      </div>
-                    </div>
-                  </div>
+      <div className="max-w-lg mx-auto px-1.5 space-y-5 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)]">
 
-                  {/* 3 Metrics Row */}
-                  <div className="grid grid-cols-3 gap-2 mb-4">
-                    <div className="p-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
-                      <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center mb-0.5">
-                        <Wallet className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <p className="text-xs font-bold text-white tracking-tight whitespace-nowrap">KSh {totalEstimatedValue.toLocaleString()}</p>
-                      <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Value</p>
-                    </div>
+        {/* ── ARCHITECTURAL MANIFEST BOARD ── */}
+        <div className="bg-[#1178ab]  text-white rounded-3xl p-4 border border-sky-400/30  relative overflow-hidden space-y-3">
+          <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[50px] -translate-y-1/2 translate-x-1/4 pointer-events-none bg-sky-400/20" />
 
-                    <div className="p-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
-                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
-                        <Scale className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <p className="text-xs font-bold text-white tracking-tight whitespace-nowrap">{totalVerifiedWeight.toFixed(1)} KG</p>
-                      <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Verified</p>
-                    </div>
-
-                    <div className="p-2 bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 flex flex-col items-center justify-center text-center gap-1">
-                      <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center mb-0.5">
-                        <Package className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <p className="text-xs font-bold text-white tracking-tight">{verifiedAssets.length}</p>
-                      <p className="text-[8px] font-bold text-indigo-200 uppercase tracking-widest">Assets</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto">
-                    <div className="mt-4">
-                      {profile?.hubTransferPin ? (
-                        <div className="p-4 bg-white/20 rounded-[1rem] text-center shadow-lg border border-white/30 backdrop-blur-sm animate-bounce-in">
-                          <p className="text-[10px] font-bold text-white uppercase tracking-widest mb-1">Gate PIN</p>
-                          <div className="text-3xl font-bold text-white tracking-widest">{profile.hubTransferPin}</div>
-                        </div>
-                      ) : (
-                        <button
-                          onClick={handleDispatch}
-                          disabled={verifiedAssets.length === 0}
-                          className="w-full py-3.5 bg-white text-indigo-600 rounded-[1rem] font-bold text-xs uppercase tracking-widest shadow-md active:scale-95 transition-all disabled:opacity-50"
-                        >
-                          Get Check-In Code
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
+          {/* Top Split: Weight vs Estimated Payout */}
+          <div className="relative z-10 flex items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-1.5 text-sky-100/80 mb-1.5">
+                <Truck className="w-3.5 h-3.5 text-sky-200" />
+                <span className="text-[10px] font-bold uppercase tracking-widest">Total Load</span>
               </div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-4xl font-bold tracking-tight tabular-nums leading-none">
+                  {totalWeight.toFixed(1)}
+                </span>
+                <span className="text-sm font-bold text-sky-100/80">kg</span>
+              </div>
+              <p className="text-[11px] text-sky-100/80 font-medium mt-1.5">
+                {verifiedAssets.length} verified {verifiedAssets.length === 1 ? 'batch' : 'batches'}
+                {offlineAssets.length > 0 ? ` · ${offlineAssets.length} pending sync` : ''}
+              </p>
+            </div>
+
+            <div className="text-right bg-black/20 border border-white/15 rounded-2xl px-3.5 py-2.5 shrink-0">
+              <p className="text-[9px] font-bold text-sky-100/80 uppercase tracking-widest mb-1">Est. Value</p>
+              <p className="text-base font-bold text-emerald-300 tabular-nums leading-none">
+                KSh {totalEstimatedValue.toLocaleString()}
+              </p>
             </div>
           </div>
 
-        {/* ── DYNAMIC INVENTORY GRID ── */}
-          <div className="space-y-6 h-fit">
-            <div className="bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-sm text-slate-900 dark:text-white tracking-wide capitalize">Material Ledger</h3>
-                <span className="text-[10px] font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-full uppercase tracking-widest hidden sm:block">Recent Pickups</span>
+          {/* Material Composition Bar */}
+          {categoryBreakdown.length > 0 && (
+            <div className="relative z-10 space-y-2.5">
+              <div className="flex items-center justify-between text-[10px] font-semibold text-sky-100/80">
+                <span className="flex items-center gap-1.5 uppercase tracking-wider">
+                  <Layers className="w-3 h-3" /> Load Composition
+                </span>
+                <span className="tabular-nums">{totalVerifiedWeight.toFixed(1)} kg verified</span>
               </div>
 
-              {verifiedAssets.length === 0 ? (
-                <div className="text-center py-10 bg-slate-50 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700">
-                  <Package className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-                  <p className="text-[10px] font-semibold text-slate-500 leading-relaxed uppercase tracking-widest">
-                    Inventory Empty.<br />No verified assets found.
+              {/* Segmented Progress Bar */}
+              <div className="w-full h-2 bg-black/25 rounded-full overflow-hidden flex gap-0.5">
+                {categoryBreakdown.map((cat) => (
+                  <div
+                    key={cat.name}
+                    className={`h-full ${cat.color} first:rounded-l-full last:rounded-r-full transition-all duration-500`}
+                    style={{ width: `${Math.max(cat.pct, 4)}%` }}
+                  />
+                ))}
+              </div>
+
+              {/* Compact Legend Pills */}
+              <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                {categoryBreakdown.slice(0, 4).map((cat) => (
+                  <div key={cat.name} className="flex items-center gap-1.5 text-[11px]">
+                    <span className={`w-2 h-2 rounded-full ${cat.color}`} />
+                    <span className="text-white/90 font-medium">{cat.name}</span>
+                    <span className="text-sky-100/80 font-bold tabular-nums">{cat.pct}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Perforated Gate Pass Divider */}
+          <div className="relative z-10 border-t border-dashed border-white/20 pt-4">
+            {profile?.hubTransferPin ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-300 uppercase tracking-widest">
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    Hub Gate Check-In Pass
+                  </div>
+                  <span className="text-[10px] font-medium text-sky-100/80">Show at gate</span>
+                </div>
+
+                {/* 6-Digit Boarding Pass PIN */}
+                <div className="grid grid-cols-6 gap-1.5">
+                  {String(profile.hubTransferPin).split('').map((digit: string, idx: number) => (
+                    <div
+                      key={idx}
+                      className="h-11 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center text-lg font-bold font-mono text-white tabular-nums"
+                    >
+                      {digit}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-xs font-bold text-white leading-tight">Ready for Hub Drop-off?</p>
+                  <p className="text-[11px] text-sky-100/80 mt-0.5 truncate">
+                    Generate your gate PIN before arrival
                   </p>
                 </div>
-              ) : (
-                <div className="space-y-2 pr-1">
-                  {verifiedAssets.slice(0, 4).map((asset: any) => {
-                    const displayName = resolveMaterialName(asset);
-                    
-                    return (
-                      <div key={asset.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-400/50 transition-all group">
-                        
-                        {/* Left: Name + Date + ID */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-col">
-                            <h4 className="font-bold text-[13px] text-slate-900 dark:text-white capitalize truncate leading-tight">
-                              {displayName}
-                            </h4>
-                            {asset.material_category && (
-                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                                {asset.material_category.replace(/_/g, ' ')}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex flex-col gap-1.5 mt-1.5">
-                            <p className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                              {new Date(asset.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                            </p>
-                            <div className="flex items-center gap-1.5 self-start px-1.5 py-0.5 bg-white dark:bg-slate-800/80 rounded border border-slate-200/60 dark:border-slate-700/60">
-                              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Tracking ID</span>
-                              <span className="text-[9px] font-mono font-bold text-slate-600 dark:text-slate-300">
-                                {asset.tracking_id || asset.origin_tracking_id || asset.id.substring(0,8).toUpperCase()}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Right: Weight & Value */}
-                        <div className="flex flex-col items-end gap-1.5 shrink-0 ml-3">
-                          <div className="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-800/50">
-                            <p className="text-sm font-bold tracking-tight whitespace-nowrap">{asset.weight_kg}<span className="text-[10px] font-bold ml-0.5">kg</span></p>
-                          </div>
-                          <p className="text-[9px] font-bold text-slate-400 tracking-wider">
-                            KSh {asset.estimated_value ? asset.estimated_value.toLocaleString() : (parseFloat(asset.weight_kg) * getPrice(asset.material_type)).toLocaleString()}
-                          </p>
-                        </div>
-
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+                <button
+                  onClick={handleDispatch}
+                  disabled={verifiedAssets.length === 0}
+                  className="px-4 py-2.5 bg-white hover:bg-sky-50 text-[#085078] rounded-xl font-bold text-xs tracking-wide active:scale-95 transition-all disabled:opacity-45 shrink-0 flex items-center gap-1.5 shadow-sm"
+                >
+                  <QrCode className="w-3.5 h-3.5" />
+                  Get Gate PIN
+                </button>
+              </div>
+            )}
           </div>
+        </div>
+
+        {/* ── COLLECTED MATERIALS ── */}
+        <section className="space-y-3">
+          <div className="flex items-center justify-between px-1.5">
+            <div>
+              <h3 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight">
+                Collected Materials
+              </h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                Verified batches ready for hub drop-off
+              </p>
+            </div>
+            {filteredAssets.length > 6 && (
+              <button
+                onClick={() => setShowAllAssets(!showAllAssets)}
+                className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-0.5"
+              >
+                {showAllAssets ? 'Show less' : `View all (${filteredAssets.length})`}
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+
+          {/* Dynamic Category Filter Pills */}
+          {filterTabs.length > 2 && (
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+              {filterTabs.map(tab => {
+                const isActive = selectedCategory === tab;
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setSelectedCategory(tab)}
+                    className={`px-3 py-1.5 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all border shrink-0 ${
+                      isActive
+                        ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-transparent'
+                        : 'bg-slate-50 dark:bg-slate-800/70 border-slate-200/80 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="py-10 text-center bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60">
+              <Loader2 className="w-5 h-5 text-slate-400 animate-spin mx-auto mb-2" />
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Loading collected materials...</p>
+            </div>
+          ) : filteredAssets.length === 0 ? (
+            <div className="py-10 px-4 text-center bg-slate-50 dark:bg-slate-900 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700">
+              <div className="w-11 h-11 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-2.5">
+                <Package className="w-5 h-5 text-slate-400" />
+              </div>
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                {selectedCategory === 'All' ? 'Truck is Empty' : `No ${selectedCategory} Materials`}
+              </p>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Verified pickups you complete will appear here.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {displayedAssets.map((asset: any) => {
+                const displayName = resolveMaterialName(asset);
+                const categoryLabel = resolveCategoryLabel(asset);
+                const { Icon: CatIcon, box: catBox } = getCategoryStyle(categoryLabel);
+                const estVal = asset.estimated_value
+                  ? Number(asset.estimated_value)
+                  : parseFloat(asset.weight_kg) * getPrice(asset.material_type);
+                const trackingRef = asset.tracking_id || asset.origin_tracking_id || asset.id.substring(0, 8).toUpperCase();
+                const photoUrl = asset.photo_url || asset.images?.[0];
+                const showGrade = asset.grade && asset.grade.toLowerCase() !== displayName.toLowerCase();
+
+                return (
+                  <div
+                    key={asset.id}
+                    className="p-3.5 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-3.5"
+                  >
+                    {/* Left Visual Holder */}
+                    <div className="relative shrink-0">
+                      {photoUrl ? (
+                        <img
+                          src={photoUrl}
+                          alt={displayName}
+                          className="w-14 h-14 rounded-xl object-cover border border-slate-200/80 dark:border-slate-700/60"
+                        />
+                      ) : (
+                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${catBox}`}>
+                          <CatIcon className="w-6 h-6" />
+                        </div>
+                      )}
+                      <span
+                        className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center border-2 border-slate-50 dark:border-slate-800"
+                        title="Verified"
+                      >
+                        <Check className="w-2.5 h-2.5 stroke-[3]" />
+                      </span>
+                    </div>
+
+                    {/* Center Details */}
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-bold text-[14px] text-slate-900 dark:text-white capitalize truncate leading-tight">
+                        {displayName}
+                      </h4>
+                      <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                        <span className="px-2 py-0.5 rounded-md bg-slate-200/70 dark:bg-slate-700/70 text-[10px] font-bold text-slate-700 dark:text-slate-200">
+                          {categoryLabel}
+                        </span>
+                        {showGrade && (
+                          <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                            {asset.grade}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[10.5px] font-medium text-slate-400 dark:text-slate-500 mt-1.5 truncate">
+                        {new Date(asset.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}, {new Date(asset.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · <span className="font-mono">#{trackingRef}</span>
+                      </p>
+                    </div>
+
+                    {/* Right Weight & Value */}
+                    <div className="text-right shrink-0">
+                      <p className="text-[15px] font-bold text-slate-900 dark:text-white tabular-nums leading-none">
+                        {asset.weight_kg} <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">kg</span>
+                      </p>
+                      <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 tabular-nums mt-1.5">
+                        KSh {estVal.toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
       </div>
     </div>
   );
