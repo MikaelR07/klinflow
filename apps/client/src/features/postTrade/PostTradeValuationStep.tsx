@@ -19,7 +19,7 @@ export default function PostTradeValuationStep({
       </div>
 
       {/* ── UNIFIED VALUATION CARD ── */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-5">
+      <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-5">
         {/* PHOTO CAPTURE */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">

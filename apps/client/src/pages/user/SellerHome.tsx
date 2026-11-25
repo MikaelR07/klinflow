@@ -347,10 +347,10 @@ export default function SellerHome() {
             <h3 className="text-[12px] font-semibold text-slate-600 dark:text-white capitalize tracking-widest px-1">Quick Actions</h3>
             <div className="grid grid-cols-4 gap-1">
               {[
-                { label: 'Sell', icon: <CircleFadingPlus className="w-5.5 h-5.5 text-emerald-950" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800' },
-                { label: 'Listings', icon: <Package className="w-5.5 h-5.5 text-emerald-950" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800' },
-                { label: 'Orders', icon: <Handshake className="w-5.5 h-5.5 text-emerald-950" />, route: '/my-trades', color: 'bg-purple-50 dark:bg-slate-800', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
-                { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5 text-emerald-950" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800' },
+                { label: 'Sell', icon: <CircleFadingPlus className="w-5.5 h-5.5 text-emerald-950 dark:text-white" />, route: '/post-trade', color: 'bg-emerald-50 dark:bg-slate-800' },
+                { label: 'Listings', icon: <Package className="w-5.5 h-5.5 text-emerald-950 dark:text-white" />, route: '/inventory', color: 'bg-blue-50 dark:bg-slate-800' },
+                { label: 'Orders', icon: <Handshake className="w-5.5 h-5.5 text-emerald-950 dark:text-white" />, route: '/my-trades', color: 'bg-purple-50 dark:bg-slate-800', badge: receivedOffers.filter((o: any) => o.status === 'pending').length },
+                { label: 'Wallet', icon: <Wallet className="w-5.5 h-5.5 text-emerald-950 dark:text-white" />, route: '/seller-wallet', color: 'bg-amber-50 dark:bg-slate-800' },
               ].map((service) => (
                 <button
                   key={service.label}
@@ -511,7 +511,7 @@ export default function SellerHome() {
                 <div
                   key={item.id}
                   onClick={() => navigate(`/materials/${identifier}`)}
-                  className="snap-start shrink-0 w-28 bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 overflow-hidden cursor-pointer active:scale-95 transition-transform"
+                  className="snap-start shrink-0 w-28 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 overflow-hidden cursor-pointer active:scale-95 transition-transform"
                 >
                   <div className="h-16 w-full bg-slate-200/60 dark:bg-slate-800 overflow-hidden">
                     <img

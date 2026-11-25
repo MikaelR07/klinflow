@@ -231,8 +231,8 @@ export default function MyTrades() {
               <ArrowLeft className="w-4 h-4 text-slate-800 dark:text-white" />
             </button>
             <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none max-w-[240px] sm:max-w-xs">
-              <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none truncate">Trades &amp; Offers</h1>
-              <p className="text-[10.5px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight leading-none truncate">Trades &amp; Offers</h1>
+              <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                 Manage your market orders
               </p>
             </div>
@@ -297,47 +297,47 @@ export default function MyTrades() {
                   <div
                     key={offer.id}
                     onClick={() => setSelectedOfferId(offer.id)}
-                    className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-1.5 group"
+                    className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-2 group"
                   >
                     {/* Top Row */}
                     <div className="flex items-start justify-between gap-2.5">
-                      <div className="flex items-center gap-3 min-w-0 flex-1">
-                        <div className="w-16 h-16 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200/80 dark:border-slate-700 shadow-2xs">
-                          {offer.photo ? <OptimizedImage src={getThumbnailUrl(offer.photo, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-5 h-5 text-slate-400" />}
+                      <div className="flex items-start gap-3 min-w-0 flex-1">
+                        <div className="w-24 h-24 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                          {offer.photo ? <OptimizedImage src={getThumbnailUrl(offer.photo, { width: 220 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-400" />}
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1.5">
-                            <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{offer.material}</h3>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100/90 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40 shrink-0">Bid</span>
-                          </div>
-                          <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 truncate">
+                        <div className="min-w-0 flex-1 space-y-1.5 pt-0.5">
+                          <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">{offer.material}</h3>
+                          <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1 truncate">
                             <User className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
                             <span className="truncate">{offer.buyerName || "Buyer"}</span>
                           </p>
+                          <div className="flex flex-col gap-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium pt-0.5">
+                            
+                            <span className="flex items-center gap-1 truncate">
+                              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                              <span className="truncate">{offer.createdAt ? new Date(offer.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}</span>
+                            </span>
+
+                            <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
+                              <Scale className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                              {offer.quantity} KG
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400 leading-none tabular-nums">
+                      <div className="flex flex-col items-end gap-2 shrink-0 pt-0.5">
+                        <div className="flex items-center gap-1">
+                          {(offer.listing?.pickupMode === 'dropoff' || offer.listing?.pickup_mode === 'dropoff') && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-100/80 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 border border-violet-200/60 dark:border-violet-800/40 text-[10px] font-bold">
+                              <Home className="w-2.5 h-2.5" /> Drop-off
+                            </span>
+                          )}
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-100/90 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/40 shrink-0">Bid</span>
+                        </div>
+                        <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400 leading-none tabular-nums mt-1">
                           KSh {offer.offeredPrice}<span className="text-[10px] font-semibold text-slate-400">/kg</span>
                         </p>
                       </div>
-                    </div>
-
-                    {/* Middle Row */}
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                      <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
-                        <Scale className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                        {offer.quantity} KG
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        {offer.createdAt ? new Date(offer.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Just now"}
-                      </span>
-                      {(offer.listing?.pickupMode === 'dropoff' || offer.listing?.pickup_mode === 'dropoff') && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-violet-100/80 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-bold">
-                          <Home className="w-2.5 h-2.5" /> Drop-off
-                        </span>
-                      )}
                     </div>
 
                     {/* Footer Row */}
@@ -465,7 +465,7 @@ export default function MyTrades() {
 
                   if (activeTab === "Counters") {
                     return (
-                      <div key={b.id} className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 overflow-hidden">
+                      <div key={b.id} className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 overflow-hidden">
                         <button onClick={() => setExpandedCounterId(isCounterOpen ? null : b.id)} className="w-full p-3.5 flex items-center gap-3 text-left transition-colors">
                           <div className="relative">
                             <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
@@ -522,50 +522,50 @@ export default function MyTrades() {
                     <div
                       key={b.id}
                       onClick={() => { if (!b.isOffer) setExpandedId(b.id); }}
-                      className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-3 group"
+                      className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-2.5 group"
                     >
                       {/* Top Row */}
                       <div className="flex items-start justify-between gap-2.5">
-                        <div className="flex items-center gap-3 min-w-0 flex-1">
-                          <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
-                            {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-5 h-5 text-slate-400" />}
+                        <div className="flex items-start gap-3 min-w-0 flex-1">
+                          <div className="w-28 h-28 rounded-xl bg-white dark:bg-slate-800 overflow-hidden flex items-center justify-center shrink-0 border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                            {b.photoUrl ? <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 220 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" /> : <Package className="w-6 h-6 text-slate-400" />}
                           </div>
-                          <div className="min-w-0 flex-1">
+                          <div className="min-w-0 flex-1 space-y-1.5 pt-0.5">
                             <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
                               {waste?.label || formatMaterial(materialVal)}
                             </h3>
-                            <p className={`text-sm font-extrabold leading-none mt-1 tabular-nums ${b.status === 'cancelled' || b.status === 'rejected' ? 'text-slate-400 line-through' : 'text-emerald-700 dark:text-emerald-400'}`}>
-                              KSh {totalPay.toLocaleString()}
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1 truncate">
+                              <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                              <span className="truncate">{b.estate || "Pickup"}</span>
                             </p>
+                            <div className="flex flex-col gap-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                              <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300 shrink-0">
+                                <Scale className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                {b.actualWeightKg || b.weightKg || 0} KG
+                              </span>
+                              <span className="flex items-center gap-1 truncate">
+                                <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                <span className="truncate">{b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+                              </span>
+                            </div>
                           </div>
                         </div>
 
-                        {b.bookingType === 'dropoff' ? (
-                          <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-100/90 text-violet-800 dark:bg-violet-950/60 dark:text-violet-300 border border-violet-200/60 dark:border-violet-800/40">
-                            <Home className="w-3 h-3" /> Drop-off
-                          </span>
-                        ) : (
-                          <span className={`shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold capitalize ${status.color}`}>
-                            <status.icon className="w-3 h-3 shrink-0" />
-                            <span>{status.label}</span>
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Middle Row */}
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                        <span className="flex items-center gap-1 truncate max-w-[160px]">
-                          <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                          <span className="truncate">{b.estate || "Pickup"}</span>
-                        </span>
-                        <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300 shrink-0">
-                          <Scale className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          {b.actualWeightKg || b.weightKg || 0} KG
-                        </span>
-                        <span className="flex items-center gap-1 shrink-0">
-                          <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                          {b.date || new Date(b.createdAt).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
-                        </span>
+                        <div className="flex flex-col items-end gap-2 shrink-0 pt-0.5">
+                          {b.bookingType === 'dropoff' ? (
+                            <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-100/90 text-violet-800 dark:bg-violet-950/60 dark:text-violet-300 border border-violet-200/60 dark:border-violet-800/40">
+                              <Home className="w-3 h-3" /> Drop-off
+                            </span>
+                          ) : (
+                            <span className={`shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold capitalize ${status.color}`}>
+                              <status.icon className="w-3 h-3 shrink-0" />
+                              <span>{status.label}</span>
+                            </span>
+                          )}
+                          <p className={`text-sm font-extrabold leading-none tabular-nums mt-1 ${b.status === 'cancelled' || b.status === 'rejected' ? 'text-slate-400 line-through' : 'text-emerald-700 dark:text-emerald-400'}`}>
+                            KSh {totalPay.toLocaleString()}
+                          </p>
+                        </div>
                       </div>
 
                       {/* Footer Row */}

@@ -89,7 +89,7 @@ export default function PostTradeCollectionStep({
       <div className="grid grid-cols-2 gap-3">
         <button
           onClick={() => setPickupMode('pickup')}
-          className={`p-2.5 rounded-xl border-2 transition-all flex items-center gap-3 ${pickupMode === 'pickup' ? 'border-primary bg-primary/10 shadow-sm' : 'border-slate-200 bg-white dark:bg-slate-800 dark:border-slate-700'}`}
+          className={`p-2.5 rounded-xl border-2 transition-all flex items-center gap-3 ${pickupMode === 'pickup' ? 'border-primary bg-primary/10 shadow-sm' : 'border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700'}`}
         >
           <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${pickupMode === 'pickup' ? 'bg-primary text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
             <Truck className="w-4 h-4" />
@@ -102,7 +102,7 @@ export default function PostTradeCollectionStep({
 
         <button
           onClick={() => setPickupMode('dropoff')}
-          className={`p-2.5 rounded-xl border-2 transition-all flex items-center gap-3 ${pickupMode === 'dropoff' ? 'border-primary bg-primary/10 shadow-sm' : 'border-slate-200 bg-white dark:bg-slate-800 dark:border-slate-700'}`}
+          className={`p-2.5 rounded-xl border-2 transition-all flex items-center gap-3 ${pickupMode === 'dropoff' ? 'border-primary bg-primary/10 shadow-sm' : 'border-slate-200 bg-white dark:bg-slate-900 dark:border-slate-700'}`}
         >
           <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${pickupMode === 'dropoff' ? 'bg-primary text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
             <Home className="w-4 h-4" />
@@ -238,7 +238,7 @@ export default function PostTradeCollectionStep({
       {pickupMode === 'dropoff' ? (
         <div className="space-y-3">
           {selectedHub ? (
-            <div className="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-3">
+            <div className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-3">
               <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center shrink-0">
                 <Home className="w-5 h-5" />
               </div>
@@ -297,7 +297,7 @@ export default function PostTradeCollectionStep({
           )}
 
           {/* Unified Search & Booking Actions Card */}
-          <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 mt-3.5 space-y-6">
+          <div className="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 mt-3.5 space-y-6">
             
             {/* Preferred Agent Search */}
             <div className="relative overflow-hidden">

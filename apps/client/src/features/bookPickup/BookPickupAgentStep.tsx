@@ -188,7 +188,7 @@ export default function BookPickupAgentStep({
 
         {/* Active Selection Cards */}
         {(selectedAgent || selectedCompanyId) && (
-          <div className="bg-slate-50 dark:bg-slate-800/70 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 mt-3 animate-slide-up">
+          <div className="bg-slate-50 dark:bg-slate-900 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 mt-3 animate-slide-up">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-lg">
@@ -254,7 +254,7 @@ export default function BookPickupAgentStep({
       </div>
 
       {/* Unified Search & Booking Actions Card */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 mt-3.5 space-y-6">
+      <div className="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 mt-3.5 space-y-6">
           
           {/* Find by Klin-ID Section */}
           <div className="relative overflow-hidden">

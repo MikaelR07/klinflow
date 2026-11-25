@@ -26,7 +26,7 @@ export default function BookPickupSummaryStep({
       <h2 className="text-lg font-semibold text-slate-900 dark:text-white tracking-tight italic px-2">KlinMarket Summary</h2>
 
       {/* ── MATERIAL PREVIEW ── */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl overflow-hidden">
+      <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl overflow-hidden">
         {photo ? (
           <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 relative">
             <img
@@ -43,7 +43,7 @@ export default function BookPickupSummaryStep({
       </div>
 
       {/* ── MERGED SUMMARY & VERIFICATION CARD ── */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 space-y-0">
+      <div className="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 space-y-0">
         <p className="text-xs font-semibold text-slate-400 capitalize tracking-widest mb-3">Pickup Breakdown</p>
 
         {/* Material Info */}

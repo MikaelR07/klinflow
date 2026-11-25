@@ -121,7 +121,7 @@ export default function MarketplaceInventory() {
   if (isLoading && myListings.length === 0) return <LoadingScreen />;
 
   return (
-    <div className="flex flex-col bg-white dark:bg-slate-900 min-h-screen transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-800 min-h-screen transition-colors">
       {/* ── TOP NAV (Edge to Edge PWA Style) ── */}
       {!selectedId && (
         <div className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2.5 px-3 border-b border-slate-200/80 dark:border-slate-800 z-50 transition-colors">
@@ -508,75 +508,75 @@ export default function MarketplaceInventory() {
                       <div className="pb-2.5">
                         <div
                           onClick={() => setSelectedId(listing.id)}
-                          className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-1.5 group"
+                          className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-2 group"
                         >
-                          {/* Top Row: Thumbnail, Material + ID, Price & Status */}
+                          {/* Top Row */}
                           <div className="flex items-start justify-between gap-2.5">
-                            <div className="flex items-center gap-3 min-w-0 flex-1">
-                              <div className="w-16 h-16 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center shadow-2xs">
+                            <div className="flex items-start gap-3 min-w-0 flex-1">
+                              <div className="w-24 h-24 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center shadow-2xs">
                                 {listing.photoUrl ? (
                                   <OptimizedImage
                                     src={getThumbnailUrl(listing.photoUrl, {
-                                      width: 150,
+                                      width: 220,
                                     })}
                                     className="w-full h-full object-cover"
                                     wrapperClassName="w-full h-full"
                                   />
                                 ) : (
-                                  <Package className="w-5 h-5 text-slate-400" />
+                                  <Package className="w-6 h-6 text-slate-400" />
                                 )}
                               </div>
-                              <div className="min-w-0 flex-1">
-                                <div className="flex items-center gap-1.5">
-                                  <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
-                                    {listing.material}
-                                  </h3>
-                                  <span
-                                    className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold capitalize ${
-                                      isLive
-                                        ? "bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40"
-                                        : "bg-slate-200/80 text-slate-700 dark:bg-slate-700 dark:text-slate-300"
-                                    }`}
-                                  >
-                                    {isLive ? "Live" : listing.status}
-                                  </span>
-                                </div>
-                                <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-0.5">
+                              <div className="min-w-0 flex-1 space-y-1.5 pt-0.5">
+                                <h3 className="text-[14px] font-bold text-slate-900 dark:text-white capitalize truncate tracking-tight leading-tight group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                                  {listing.material}
+                                </h3>
+                                <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500 truncate">
                                   ID: <span className="font-mono font-semibold text-slate-600 dark:text-slate-300">KF-{listing.id?.slice(0, 8)}</span>
                                 </p>
+                                <div className="flex flex-col gap-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium pt-0.5">
+                                  <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
+                                    <Scale className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                    {itemQuantity.toLocaleString()} KG
+                                  </span>
+                                  <span className="flex items-center gap-1 truncate">
+                                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                    <span className="truncate">
+                                      {listing.createdAt
+                                        ? new Date(listing.createdAt).toLocaleString([], {
+                                            month: "short",
+                                            day: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                          })
+                                        : "ASAP"}
+                                    </span>
+                                  </span>
+                                </div>
                               </div>
                             </div>
 
-                            <div className="text-right shrink-0">
-                              <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400 leading-none tabular-nums">
+                            <div className="flex flex-col items-end gap-2 shrink-0 pt-0.5">
+                              <div className="flex items-center gap-1">
+                                {isDropoff && (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-100/80 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 border border-violet-200/60 dark:border-violet-800/40 text-[10px] font-bold">
+                                    <Home className="w-2.5 h-2.5" /> Drop-off
+                                  </span>
+                                )}
+                                <span
+                                  className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold capitalize ${
+                                    isLive
+                                      ? "bg-emerald-100/90 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40"
+                                      : "bg-slate-200/80 text-slate-700 dark:bg-slate-700 dark:text-slate-300"
+                                  }`}
+                                >
+                                  {isLive ? "Live" : listing.status}
+                                </span>
+                              </div>
+                              <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-400 leading-none tabular-nums mt-1">
                                 KSh {listing.pricePerKg}
                                 <span className="text-[10px] font-semibold text-slate-400">/kg</span>
                               </p>
                             </div>
-                          </div>
-
-                          {/* Middle Row: Quantity, Date, Mode */}
-                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                            <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
-                              <Scale className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                              {itemQuantity.toLocaleString()} KG
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                              {listing.createdAt
-                                ? new Date(listing.createdAt).toLocaleString([], {
-                                    month: "short",
-                                    day: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })
-                                : "ASAP"}
-                            </span>
-                            {isDropoff && (
-                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-violet-100/80 dark:bg-violet-950/60 text-violet-700 dark:text-violet-300 text-[10px] font-bold">
-                                <Home className="w-2.5 h-2.5" /> Drop-off
-                              </span>
-                            )}
                           </div>
 
                           {/* Footer Row */}

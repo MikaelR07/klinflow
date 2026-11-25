@@ -69,7 +69,7 @@ export default function BookPickupMaterialStep({
                     placeholder="Search waste categories (e.g. plastic, metal)..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-800/70 p-4 pl-11 pr-10 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all"
+                    className="w-full bg-slate-50 dark:bg-slate-900 p-4 pl-11 pr-10 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 text-xs font-semibold dark:text-white outline-none focus:border-primary/50 focus:ring-2 ring-primary/20 transition-all"
                   />
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">
                     <Search className="w-4 h-4" />
@@ -134,7 +134,7 @@ export default function BookPickupMaterialStep({
                             slug: cat.slug || cat.id
                           });
                         }}
-                        className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 overflow-hidden text-left active:scale-95 transition-all hover:border-emerald-500/40"
+                        className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 overflow-hidden text-left active:scale-95 transition-all hover:border-emerald-500/40"
                       >
                         <div className="h-24 w-full bg-slate-200/60 dark:bg-slate-800 overflow-hidden">
                           <img
@@ -172,7 +172,7 @@ export default function BookPickupMaterialStep({
             )}
           </div>
         ) : (
-          <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-5">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-5">
             {/* Selected Material Header */}
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-xl text-white shrink-0">

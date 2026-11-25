@@ -93,6 +93,51 @@ const to24h = (time12: string) => {
   return `${h.toString().padStart(2, '0')}:${m}`;
 };
 
+const formatBookingSchedule = (b: any) => {
+  const rawTime = String(b.timeSlot || b.time_slot || b.time || '').trim();
+  if (rawTime.toUpperCase() === 'ASAP') return 'ASAP';
+
+  let dateStr = String(b.preferredDate || b.preferred_date || b.date || '').trim();
+  let timePart = rawTime;
+
+  // Handle combined formats like "2026-09-18 09:00 AM" or "2026-09-18 @ 09:00 AM"
+  const embeddedDateMatch = timePart.match(/(\d{4}-\d{2}-\d{2})/);
+  if (embeddedDateMatch?.[1]) {
+    if (!dateStr) dateStr = embeddedDateMatch[1];
+    timePart = timePart.replace(embeddedDateMatch[1], '').replace(/@/g, '').trim();
+  }
+
+  if (timePart.toLowerCase() === 'scheduled') timePart = '';
+
+  if (dateStr) {
+    let parsedDate: Date | null = null;
+    const ymdMatch = dateStr.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (ymdMatch) {
+      parsedDate = new Date(Number(ymdMatch[1]), Number(ymdMatch[2]) - 1, Number(ymdMatch[3]));
+    } else {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) parsedDate = d;
+    }
+
+    if (parsedDate) {
+      const now = new Date();
+      const isSameDay =
+        parsedDate.getFullYear() === now.getFullYear() &&
+        parsedDate.getMonth() === now.getMonth() &&
+        parsedDate.getDate() === now.getDate();
+
+      if (isSameDay) {
+        return timePart || 'Today';
+      }
+
+      const formattedDate = `${parsedDate.getDate()}/${parsedDate.getMonth() + 1}/${parsedDate.getFullYear()}`;
+      return timePart ? `${formattedDate} ${timePart}` : formattedDate;
+    }
+  }
+
+  return timePart || 'ASAP';
+};
+
 const BookingCounter = ({ count, active }: { count: number, active: boolean }) => (
   <span className={`ml-1.5 px-1.5 py-0.5 text-[10px] font-bold rounded-full transition-all ${active
     ? 'bg-white/20 dark:bg-slate-900/15 text-current'
@@ -232,7 +277,7 @@ export default function MyBookings() {
   };
 
   return (
-    <div className="flex flex-col bg-white dark:bg-slate-900 min-h-screen transition-colors">
+    <div className="flex flex-col bg-white dark:bg-slate-800 min-h-screen transition-colors">
       {/* ── FIXED TOP NAV ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-2.5 px-3 border-b border-slate-200/80 dark:border-slate-800">
         <div className="w-full mx-auto space-y-3">
@@ -242,8 +287,8 @@ export default function MyBookings() {
             </button>
 
             <div className="absolute left-1/2 -translate-x-1/2 text-center">
-              <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight leading-none">My Bookings</h1>
-              <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Pickups & history</p>
+              <h1 className="text-base font-bold text-slate-900 dark:text-white tracking-tight leading-none">My Bookings</h1>
+              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mt-0.5">Pickups & history</p>
             </div>
 
             {(activeTab === 'Cancelled' || activeTab === 'Completed') && filteredBookings.length > 0 ? (
@@ -335,55 +380,56 @@ export default function MyBookings() {
               const bookedTimeStr = bookedDateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
               const bookedDateStr = bookedDateObj.toLocaleDateString([], { day: 'numeric', month: 'short' });
               const trackingCode = b.trackingId || b.tracking_id || b.id.slice(0, 8).toUpperCase();
+              const scheduleLabel = formatBookingSchedule(b);
 
               return (
                 <div
                   key={b.id}
                   onClick={() => setSelectedBooking(b)}
-                  className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-2 group"
+                  className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-2.5 group"
                 >
-                  {/* Top Row: Thumbnail, Title + ID, Status Pill */}
+                  {/* Top Row: Thumbnail + (Title, ID, Location, Weight) | Top Right (Scheduled Time above Status Badge) */}
                   <div className="flex items-start justify-between gap-2.5">
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="w-14 h-14 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-2xl shadow-2xs">
+                    <div className="flex items-start gap-3 min-w-0 flex-1">
+                      <div className="w-28 h-28 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-2xl shadow-2xs">
                         {b.photoUrl ? (
                           <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
                           waste?.icon || '📦'
                         )}
                       </div>
-                      <div className="min-w-0 flex-1">
+                      <div className="min-w-0 flex-1 space-y-1">
                         <h3 className="text-[14px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight capitalize truncate group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
                           {waste?.label || wasteTypeVal}
                         </h3>
-                        <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-0.5">
+                        <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500">
                           ID: <span className="font-mono font-semibold text-slate-600 dark:text-slate-300">#{trackingCode}</span>
                         </p>
+                        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium pt-0.5">
+                          <span className="flex items-center gap-1 truncate max-w-[140px]">
+                            <MapPin className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                            <span className="truncate">{b.estate || 'Nairobi'}</span>
+                          </span>
+                          {(b.weightKg || b.actualWeightKg) > 0 && (
+                            <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300 shrink-0">
+                              <Scale className="w-3 h-3 text-slate-400 shrink-0" />
+                              {b.actualWeightKg || b.weightKg} kg
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
 
-                    <span className={`shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${status.color}`}>
-                      <StatusIcon className="w-3 h-3 shrink-0" />
-                      {status.label}
-                    </span>
-                  </div>
-
-                  {/* Middle Meta Row: Location, Time Slot, Weight */}
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                    <span className="flex items-center gap-1 truncate max-w-[180px]">
-                      <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                      <span className="truncate">{b.estate || 'Nairobi'}</span>
-                    </span>
-                    <span className="flex items-center gap-1 shrink-0">
-                      <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
-                      {b.timeSlot || b.time_slot || 'ASAP'}
-                    </span>
-                    {(b.weightKg || b.actualWeightKg) > 0 && (
-                      <span className="flex items-center gap-1 shrink-0">
-                        <Scale className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        {b.actualWeightKg || b.weightKg} kg
+                    <div className="flex flex-col items-end gap-1.5 shrink-0">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-200/70 dark:bg-slate-700/70 text-slate-700 dark:text-slate-200 text-[10px] font-bold tracking-tight">
+                        <Clock className="w-3 h-3 text-sky-600 dark:text-sky-400 shrink-0" />
+                        {scheduleLabel}
                       </span>
-                    )}
+                      <span className={`shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${status.color}`}>
+                        <StatusIcon className="w-3 h-3 shrink-0" />
+                        {status.label}
+                      </span>
+                    </div>
                   </div>
 
                   {/* Footer Row */}

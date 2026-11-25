@@ -84,7 +84,7 @@ export default function PostTradeMaterialStep({
             placeholder="Search waste categories (e.g. plastic, metal)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-50 dark:bg-slate-800/70 p-4 pl-11 pr-10 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 text-xs font-semibold dark:text-white outline-none focus:border-emerald-500/50 focus:ring-2 ring-emerald-500/20 transition-all"
+            className="w-full bg-slate-50 dark:bg-slate-900 p-4 pl-11 pr-10 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 text-xs font-semibold dark:text-white outline-none focus:border-emerald-500/50 focus:ring-2 ring-emerald-500/20 transition-all"
           />
           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors">
             <Search className="w-4 h-4" />
@@ -139,7 +139,7 @@ export default function PostTradeMaterialStep({
                     slug: cat.slug || cat.id
                   });
                 }}
-                className={`bg-slate-50 dark:bg-slate-800/70 rounded-2xl border overflow-hidden text-left active:scale-95 transition-all ${
+                className={`bg-slate-50 dark:bg-slate-900 rounded-2xl border overflow-hidden text-left active:scale-95 transition-all ${
                   isSelected
                     ? 'border-emerald-600 ring-2 ring-emerald-500/20'
                     : 'border-slate-200/70 dark:border-slate-700/60 hover:border-emerald-500/40'
@@ -178,7 +178,7 @@ export default function PostTradeMaterialStep({
       </div>
 
       {/* ── UNIFIED MATERIAL DETAILS, AI SCAN & WEIGHT CARD ── */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-5 mb-6">
+      <div className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-4 space-y-5 mb-6">
         {wasteType && (
           <>
             {/* Specific Material Type */}

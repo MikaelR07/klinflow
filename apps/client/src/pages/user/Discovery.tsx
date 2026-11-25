@@ -117,7 +117,7 @@ export default function DiscoveryHub() {
   }, [partners, searchQuery]);
 
   return (
-    <div className="bg-white dark:bg-slate-900 min-h-screen transition-colors">
+    <div className="bg-white dark:bg-slate-800 min-h-screen transition-colors">
       {/* ── FIXED HEADER ── */}
       <div className="fixed top-0 left-0 right-0 z-50 max-w-lg mx-auto bg-white dark:bg-slate-900 pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2 px-4 border-b border-slate-200 dark:border-slate-700/50">
         <div className="w-full mx-auto">
@@ -311,13 +311,13 @@ export default function DiscoveryHub() {
               return (
                 <div
                   key={partner.id}
-                  className="w-full bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 hover:border-emerald-500/40 dark:hover:border-emerald-500/40 hover:shadow-xs active:scale-[0.99] transition-all text-left block cursor-pointer group"
+                  className="w-full bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 hover:border-emerald-500/40 dark:hover:border-emerald-500/40 hover:shadow-xs active:scale-[0.99] transition-all text-left block cursor-pointer group"
                   onClick={() => navigate(`/company/${partner.id}`)}
                 >
                   <div className="flex items-start gap-3">
                     {/* Avatar */}
                     <div className="relative shrink-0">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-base shadow-xs overflow-hidden ${
+                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center font-bold text-base shadow-xs overflow-hidden ${
                         isCompany 
                           ? 'bg-gradient-to-br from-indigo-500 to-indigo-700 text-white' 
                           : 'bg-gradient-to-br from-emerald-600 to-emerald-800 text-white'
@@ -440,7 +440,7 @@ export default function DiscoveryHub() {
 
         {/* ── INFO BOX: SCALE GUIDE ── */}
         <div className="pt-2">
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 flex items-start gap-3.5 shadow-2xs">
+          <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 flex items-start gap-3.5 shadow-2xs">
             <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center shrink-0 border border-emerald-200/60 dark:border-emerald-800/40">
               <Info className="w-4.5 h-4.5" />
             </div>

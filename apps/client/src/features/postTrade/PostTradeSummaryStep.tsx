@@ -27,9 +27,9 @@ export default function PostTradeSummaryStep({
       </div>
 
       {/* ── MATERIAL PREVIEW & TARGET ── */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl overflow-hidden">
+      <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl overflow-hidden">
         {photos && photos.length > 0 ? (
-          <div className="w-full aspect-video bg-slate-100 dark:bg-slate-800 relative">
+          <div className="w-full aspect-video bg-slate-100 dark:bg-slate-900 relative">
             <div className={`flex ${photos.length > 1 ? 'overflow-x-auto snap-x snap-mandatory' : ''} hide-scrollbar w-full h-full`}>
               {photos.map((p: any, idx: number) => (
                 <div key={idx} className="min-w-full h-full shrink-0 snap-center relative">
@@ -84,7 +84,7 @@ export default function PostTradeSummaryStep({
       </div>
 
       {/* ── UNIFIED COLLECTION & FINANCIAL BREAKDOWN CARD ── */}
-      <div className="bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-4 space-y-4">
+      <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-4 space-y-4">
         {/* Collection Method */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
