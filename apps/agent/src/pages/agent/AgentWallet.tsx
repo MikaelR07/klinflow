@@ -360,7 +360,7 @@ export default function AgentWallet() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 font-sans pb-6">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-lime-600 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-br from-[#1178ab] to-[#085078] backdrop-blur-md shadow-sm">
         <div className="max-w-lg mx-auto px-4 flex items-center justify-between relative">
           {/* Left: Back Arrow */}
           <button
@@ -391,11 +391,11 @@ export default function AgentWallet() {
         </div>
       </div>
 
-      {/* ── TOP SECTION WITH LIME GRADIENT ── */}
-      <div className="bg-gradient-to-br from-emerald-700 via-emerald-600 to-lime-600 text-white relative overflow-hidden rounded-b-[1.25rem] pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+6.5rem)] shadow-sm">
+      {/* ── TOP SECTION WITH BLUE GRADIENT ── */}
+      <div className="bg-gradient-to-br from-[#1178ab] to-[#085078] text-white relative overflow-hidden rounded-b-[1.25rem] pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+6.5rem)] shadow-sm">
         {/* Decorative background orbs */}
         <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.12] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-56 h-56 bg-lime-300/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-56 h-56 bg-sky-300/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
         <div className="relative z-10 max-w-lg mx-auto px-4">
           {/* Total Balance */}
@@ -420,7 +420,7 @@ export default function AgentWallet() {
             <div className="w-[195px] shrink-0 bg-white/15 backdrop-blur-sm rounded-2xl p-3.5 border border-white/20 snap-center shadow-sm">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-white/80 text-[10px] font-bold uppercase tracking-wider">Trading Balance</p>
-                <span className="w-2 h-2 rounded-full bg-lime-300 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <div className="flex items-baseline gap-1 my-0.5">
                 <span className="text-xs font-bold text-white/90">KSh</span>
@@ -437,7 +437,7 @@ export default function AgentWallet() {
             <div className="w-[195px] shrink-0 bg-white/15 backdrop-blur-sm rounded-2xl p-3.5 border border-white/20 snap-center shadow-sm">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-white/80 text-[10px] font-bold uppercase tracking-wider">Payout Balance</p>
-                <ArrowUpCircle className="w-3.5 h-3.5 text-lime-300" />
+                <ArrowUpCircle className="w-3.5 h-3.5 text-sky-200" />
               </div>
               <div className="flex items-baseline gap-1 my-0.5">
                 <span className="text-xs font-bold text-white/90">KSh</span>

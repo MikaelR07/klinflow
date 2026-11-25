@@ -928,7 +928,7 @@ export default function Sourcing() {
                         {/* Top Row: Thumbnail, Material + Badges + Meta, Price */}
                         <div className="flex items-start justify-between gap-2.5">
                           <div className="flex items-start gap-3 min-w-0 flex-1">
-                            <div className="w-24 h-24 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200/80 dark:border-slate-700 shadow-2xs">
+                            <div className="w-20 h-20 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center border border-slate-200/80 dark:border-slate-700 shadow-2xs">
                               {(listing.photoUrl || listing.photo) ? (
                                 <OptimizedImage src={getThumbnailUrl(listing.photoUrl || listing.photo, { width: 150 })} alt={listing.material} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                               ) : (

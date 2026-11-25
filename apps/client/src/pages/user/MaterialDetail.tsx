@@ -454,102 +454,120 @@ export default function MaterialDetail() {
   const isSeller = role === 'seller';
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-800 pb-10">
+    <div className="min-h-screen bg-white dark:bg-slate-900 pb-36 lg:pb-24 transition-colors">
 
       {/* ═══════════ FIXED TOP NAV ═══════════ */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-800 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 pt-[calc(env(safe-area-inset-top,1rem)+1.5rem)] pb-3 flex items-center justify-between">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-all duration-300">
+        <div className="max-w-5xl mx-auto px-4 pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3 flex items-center justify-between relative">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 shrink-0 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group"
           >
             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-emerald-600 transition-colors" />
           </button>
-          <div className="absolute left-1/2 -translate-x-1/2 flex flex-col">
-            <span className="text-lg font-bold text-slate-900 dark:text-white capitalize tracking-tighter leading-tight">Material Details</span>
-            <p className="text-[10px] font-bold text-emerald-600 capitalize tracking-widest flex items-center gap-1.5 mt-0.5">
-             Know what buyers want
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <h1 className="text-[16px] font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
+              Material Details
+            </h1>
+            <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide mt-0.5">
+              Know what buyers want
             </p>
           </div>
           <div className="w-10 h-10" />
         </div>
       </div>
 
-      {/* Spacer for fixed nav */}
-      <div className="h-[calc(env(safe-area-inset-top)+56px)]" />
-
       {/* ═══════════ HERO SECTION ═══════════ */}
-      <div className="max-w-7xl mx-auto px-1.5 pt-4 md:pt-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto px-3 pt-[calc(env(safe-area-inset-top,1rem)+4.75rem)]">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-stretch">
 
-          {/* Image Card */}
-          <div className="relative h-[220px] md:h-full w-full overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-sm min-h-[220px]">
+          {/* Hero Image Card */}
+          <div className="md:col-span-5 relative h-[210px] md:h-auto md:min-h-[240px] w-full overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800">
             <div
-              className="absolute inset-0 bg-cover bg-center"
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-500"
               style={{ backgroundImage: `url(${mat.heroImage})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/10 to-transparent pointer-events-none" />
 
-            {/* Category tag overlaid on image */}
+            {/* Floating Category Tag */}
             <div className="absolute top-3 left-3">
-              <div className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-white backdrop-blur-md shadow-sm flex items-center gap-1.5 border border-white/20 dark:border-slate-700/50">
-                <span>{mat.icon}</span> {mat.title.split(' ')[0]}
+              <div className="px-2.5 py-1 rounded-xl text-[10px] font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/90 text-slate-800 dark:text-white backdrop-blur-md flex items-center gap-1.5 border border-white/30 dark:border-slate-700/60">
+                <span>{mat.icon}</span>
+                <span>{mat.title.split(' ')[0]}</span>
               </div>
             </div>
-          </div>
 
-          {/* Material Name, Subtitle & Demand Badge */}
-          <div className="flex flex-col justify-center space-y-3 px-3">
-            <div className="flex items-start justify-between gap-3">
-              <h1 className="text-[18px] md:text-2xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
-                {title}
-              </h1>
-              <div className={`px-2.5 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border shrink-0 flex items-center gap-1 ${
+            {/* Floating Demand Pill */}
+            <div className="absolute top-3 right-3">
+              <div className={`px-2.5 py-1 rounded-xl text-[10px] font-bold uppercase tracking-wider backdrop-blur-md border flex items-center gap-1.5 ${
                 displayDemand === 'Critical' || displayDemand === 'High'
-                ? 'text-emerald-600 bg-emerald-50 border-emerald-200 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20'
-                : displayDemand === 'Calculating...'
-                ? 'text-slate-600 bg-slate-50 border-slate-200 dark:text-slate-400 dark:bg-slate-800 dark:border-slate-700'
-                : 'text-amber-600 bg-amber-50 border-amber-200 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20'
+                  ? 'bg-emerald-950/80 text-emerald-300 border-emerald-400/30'
+                  : displayDemand === 'Calculating...'
+                  ? 'bg-slate-900/80 text-slate-300 border-slate-600/40'
+                  : 'bg-amber-950/80 text-amber-300 border-amber-400/30'
               }`}>
-                {displayDemand !== 'Calculating...' && <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse"></span>}
-                {displayDemand} {displayDemand !== 'Calculating...' ? 'Market Demand' : ''}
+                {displayDemand !== 'Calculating...' && <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />}
+                {displayDemand} {displayDemand !== 'Calculating...' ? 'Demand' : ''}
               </div>
             </div>
-            <p className="text-[12px] md:text-[13px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed">
-              {mat.subtitle}
-            </p>
           </div>
 
-          {/* Market Snapshot Card */}
-          <div className="bg-gradient-to-tr from-primary to-emerald-600 dark:bg-[#12141c] rounded-xl border border-slate-200 dark:border-slate-800/80 shadow-sm p-4">
-            <div className="flex items-center gap-4">
-              {/* Left: Price + Price Movement */}
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/80">Average Price</p>
+          {/* Right Hero Column: Title + Market Snapshot */}
+          <div className="md:col-span-7 flex flex-col justify-between gap-4">
+            <div className="px-1 space-y-1.5">
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
+                {title}
+              </h2>
+              <p className="text-xs md:text-[13px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
+                {mat.subtitle}
+              </p>
+            </div>
+
+            {/* Market Snapshot Card */}
+            <div className="bg-gradient-to-br from-[#1178ab] to-[#085078] rounded-2xl p-4 md:p-5 text-white shadow-xs">
+              <div className="flex items-center justify-between gap-4">
+                {/* Left: Price & Trend */}
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-sky-100/80 mb-1">
+                    Average Market Rate
+                  </p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl md:text-3xl font-bold tracking-tight tabular-nums leading-none">
+                      {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'}
+                    </span>
+                    {displayPrice > 0 && (
+                      <span className="text-xs font-semibold text-sky-100/80">/kg</span>
+                    )}
+                  </div>
+                  <div className="mt-2 inline-flex items-center gap-1.5 bg-white/15 px-2.5 py-1 rounded-lg text-[10.5px] font-bold">
+                    {isTrendUp ? (
+                      <TrendingUp className="w-3.5 h-3.5 text-emerald-300" />
+                    ) : isTrendDown ? (
+                      <TrendingDown className="w-3.5 h-3.5 text-rose-300" />
+                    ) : (
+                      <Activity className="w-3.5 h-3.5 text-sky-100" />
+                    )}
+                    <span className={isTrendUp ? 'text-emerald-300' : isTrendDown ? 'text-rose-300' : 'text-sky-100'}>
+                      {isTrendUp ? 'Up' : isTrendDown ? 'Down' : 'Steady'} {displayTrend} (30d)
+                    </span>
+                  </div>
                 </div>
-                <p className="text-[18px] md:text-[24px] font-bold text-white leading-none mb-1">
-                  {displayPrice > 0 ? `KSh ${displayPrice}` : 'Varies'} per kg
-                </p>
-                <div className="flex items-center gap-1.5">
-                  {isTrendUp ? <TrendingUp className="w-3 h-3 text-emerald-200" /> : isTrendDown ? <TrendingDown className="w-3 h-3 text-rose-200" /> : <Activity className="w-3 h-3 text-white/60" />}
-                  <p className={`text-[11px] font-medium ${isTrendUp ? 'text-emerald-200' : isTrendDown ? 'text-rose-200' : 'text-white/60'}`}>
-                    {isTrendUp ? 'Going Up' : isTrendDown ? 'Going Down' : 'Stable'} {displayTrend}
+
+                {/* Vertical Divider */}
+                <div className="w-px h-14 bg-white/15 shrink-0" />
+
+                {/* Right: Demand */}
+                <div className="text-right shrink-0">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-sky-100/80 mb-1">
+                    Demand
+                  </p>
+                  <p className="text-base md:text-lg font-bold text-white leading-tight">
+                    {displayDemand}
+                  </p>
+                  <p className="text-[10px] text-sky-100/75 font-medium mt-0.5">
+                    Live hub index
                   </p>
                 </div>
-              </div>
-
-              {/* Vertical Divider */}
-              <div className="w-px h-12 bg-white/20" />
-
-              {/* Right: Market Demand */}
-              <div className="flex flex-col items-center justify-center">
-                <div className="flex items-center gap-2 mb-1">
-                  
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/80">Market Demand</p>
-                </div>
-                <p className="text-[16px] md:text-[18px] font-bold text-white leading-none">{displayDemand}</p>
               </div>
             </div>
           </div>
@@ -558,163 +576,207 @@ export default function MaterialDetail() {
       </div>
 
       {/* ═══════════ BODY CONTENT ═══════════ */}
-      <div className="max-w-7xl mx-auto px-1.5 pt-6 md:pt-10 space-y-12">
-        
-        {/* Main Grid Layout for Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-          
+      <div className="max-w-5xl mx-auto px-3 pt-6 md:pt-8 space-y-6">
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+
           {/* LEFT COLUMN (7 cols) */}
-          <div className="lg:col-span-7 space-y-4">
-            
+          <div className="lg:col-span-7 space-y-6">
+
             {/* ── WHY IT'S WORTH COLLECTING ── */}
-            <div className="mb-8 px-5">
-              <h2 className="text-base font-bold text-slate-900 dark:text-white tracking-tight mb-3">
-                Why it's worth collecting
-              </h2>
-              <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
-                {mat.whyCollectorsBuy}
-              </p>
+            <section className="space-y-3">
+              <div className="px-0.5">
+                <h3 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight">
+                  Why it's worth collecting
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mt-1.5">
+                  {mat.whyCollectorsBuy}
+                </p>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {mat.valueProps.map((vp, i) => (
-                  <div key={i} className="flex items-start gap-3 bg-white dark:bg-[#12141c] border border-slate-100 dark:border-slate-700/50 rounded-xl p-3 shadow-sm">
-                    <div className="w-6 h-6 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center shrink-0">
-                      <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-3.5"
+                  >
+                    <div className="w-7 h-7 rounded-xl bg-emerald-100/80 dark:bg-emerald-500/15 flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
                     </div>
-                    <div className="pt-0.5">
-                      <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">{vp}</p>
-                    </div>
+                    <p className="text-xs font-semibold text-slate-800 dark:text-slate-100 leading-snug">
+                      {vp}
+                    </p>
                   </div>
                 ))}
               </div>
-            </div>
-            {/* ── MATERIAL QUALITY (Horizontal) ── */}
-            <div className='pl-3'>
-              <h2 className="text-sm md:text-base font-bold text-slate-900 dark:text-white tracking-tight mb-2">
-                What are the grades?
-              </h2>
-              <p className="text-[13px] text-slate-500 dark:text-slate-400 mb-5">
-                How you prepare materials affects what buyers may offer you.
-              </p>
-              
-              <div className="w-full overflow-x-auto pb-6 no-scrollbar">
-                <div className="flex gap-4 min-w-max pr-4">
-                  {GRADES.map((g, i) => (
-                    <div key={g.key} className="flex flex-col items-center w-[120px] shrink-0">
-                      <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-2  border border-slate-600 dark:border-slate-800 ${
-                        i === 0 ? 'bg-primary' : i === 1 ? 'bg-emerald-500' : i === 2 ? 'bg-amber-400' : 'bg-red-500'
-                      }`}>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-white text-center px-2 leading-tight">
-                          {g.label}
-                        </span>
-                      </div>
-                      <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 text-center leading-tight">
-                        {g.desc}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+            </section>
+
+            {/* ── MATERIAL GRADES ── */}
+            <section className="space-y-2.5">
+              <div className="px-0.5">
+                <h3 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight">
+                  Quality grades
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                  How you sort and prepare materials directly impacts buyer offers.
+                </p>
               </div>
-            </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {GRADES.map((g, i) => {
+                  const badgeStyle =
+                    i === 0
+                      ? 'bg-emerald-100/80 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
+                      : i === 1
+                      ? 'bg-sky-100/80 dark:bg-sky-500/15 text-sky-700 dark:text-sky-400'
+                      : i === 2
+                      ? 'bg-amber-100/80 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400'
+                      : 'bg-rose-100/80 dark:bg-rose-500/15 text-rose-700 dark:text-rose-400';
+
+                  const dotColor =
+                    i === 0
+                      ? 'bg-emerald-500'
+                      : i === 1
+                      ? 'bg-sky-500'
+                      : i === 2
+                      ? 'bg-amber-500'
+                      : 'bg-rose-500';
+
+                  return (
+                    <div
+                      key={g.key}
+                      className="bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-3.5 space-y-1.5"
+                    >
+                      <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider ${badgeStyle}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${dotColor}`} />
+                        {g.label}
+                      </span>
+                      <p className="text-[11.5px] font-medium text-slate-600 dark:text-slate-300 leading-snug">
+                        {g.desc}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
 
           </div>
 
           {/* RIGHT COLUMN (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
-            
-            {/* ── PREPARE YOUR MATERIAL ── */}
-            <div className="pl-3">
-              <h2 className="text-sm md:text-base font-bold text-slate-900 dark:text-white tracking-tight mb-4">
-                How to prepare your material
-              </h2>
-              
-              <div className="w-full overflow-x-auto pb-6 no-scrollbar">
-                <div className="flex gap-4 min-w-max pr-4 snap-x snap-mandatory">
-                  {/* DO Box */}
-                  <div className="w-[280px] md:w-[320px] shrink-0 snap-start bg-gradient-to-tr from-primary to-emerald-600 dark:bg-[#12141c] border border-emerald-100 dark:border-emerald-900/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-4 opacity-10">
-                      <Check className="w-24 h-24 text-white" />
-                    </div>
-                    <h3 className="text-[11px] text-white text-emerald-800 dark:text-emerald-500 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
-                      Do
-                    </h3>
-                    <ul className="space-y-3 relative z-10">
-                      {mat.doList.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 w-full">
-                          <Check className="w-4 h-4 text-emerald-200 dark:text-emerald-500 shrink-0 mt-0.5" />
-                          <span className="text-[13px] font-medium text-white dark:text-slate-300 leading-snug whitespace-normal">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
 
-                  {/* AVOID Box */}
-                  <div className="w-[280px] md:w-[320px] shrink-0 snap-start bg-gradient-to-br from-amber-500 to-amber-600 dark:bg-[#12141c] border border-rose-100 dark:border-rose-900/30 rounded-xl p-5 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-4 opacity-20">
-                      <X className="w-24 h-24 text-rose-500" />
+            {/* ── PREPARE YOUR MATERIAL ── */}
+            <section className="space-y-2.5">
+              <div className="px-0.5">
+                <h3 className="text-[15px] font-bold text-slate-900 dark:text-white tracking-tight">
+                  How to prepare your material
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                  Follow these guidelines for faster pickups and top rates.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                {/* DO Box */}
+                <div className="bg-emerald-50/70 dark:bg-emerald-500/10 border border-emerald-200/70 dark:border-emerald-500/20 rounded-2xl p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-lg bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center">
+                      <Check className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
                     </div>
-                    <h3 className="text-[11px] font-bold text-rose-800 dark:text-rose-600 uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
-                      Avoid
-                    </h3>
-                    <ul className="space-y-3 relative z-10">
-                      {mat.dontList.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 w-full">
-                          <X className="w-4 h-4 text-rose-600 dark:text-rose-500 shrink-0 mt-0.5" />
-                          <span className="text-[13px] font-medium text-slate-800 dark:text-slate-100 leading-snug whitespace-normal">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <h4 className="text-xs font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
+                      Do
+                    </h4>
                   </div>
+                  <ul className="space-y-2">
+                    {mat.doList.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2.5">
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                        <span className="text-xs font-medium text-slate-700 dark:text-slate-200 leading-snug">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* AVOID Box */}
+                <div className="bg-rose-50/70 dark:bg-rose-500/10 border border-rose-200/70 dark:border-rose-500/20 rounded-2xl p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-lg bg-rose-100 dark:bg-rose-500/20 flex items-center justify-center">
+                      <X className="w-3.5 h-3.5 text-rose-700 dark:text-rose-400" />
+                    </div>
+                    <h4 className="text-xs font-bold text-rose-800 dark:text-rose-300 uppercase tracking-wider">
+                      Avoid
+                    </h4>
+                  </div>
+                  <ul className="space-y-2">
+                    {mat.dontList.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2.5">
+                        <X className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+                        <span className="text-xs font-medium text-slate-700 dark:text-slate-200 leading-snug">
+                          {item}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
+            </section>
 
             {/* ── COLLECTOR TIP ── */}
-            <div className='!mt-1'>
-              <div className="bg-slate-50 dark:bg-[#12141c] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 md:p-6">
-                <h3 className="text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-widest mb-3 flex items-center gap-2">
-                  <span className="text-amber-500 text-base">💡</span> Collector tip
-                </h3>
-                <p className="text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+            <section>
+              <div className="bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/60 rounded-2xl p-4 space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-xl bg-amber-100/80 dark:bg-amber-500/15 flex items-center justify-center shrink-0">
+                    <Lightbulb className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                    Collector Tip
+                  </h4>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {mat.proTip}
                 </p>
               </div>
-            </div>
+            </section>
 
           </div>
         </div>
       </div>
 
       {/* ═══════════ STICKY BOTTOM CTA ═══════════ */}
-      <div className="fixed bottom-[calc(64px+env(safe-area-inset-bottom,0px))] lg:bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-800 backdrop-blur-xl border-t border-slate-200/60 dark:border-slate-800/80 pb-[env(safe-area-inset-bottom,0px)]">
-        <div className="max-w-7xl mx-auto px-1.5 py-3 md:py-4 flex items-center justify-between gap-2">
-          
+      <div className="fixed bottom-[calc(64px+env(safe-area-inset-bottom,0px))] lg:bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800 pb-[env(safe-area-inset-bottom,0px)]">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+
           {/* Material Thumbnail + Info */}
           <div className="flex items-center gap-3 min-w-0">
-            <div 
-              className="w-10 h-10 md:w-12 md:h-12 rounded-lg bg-cover bg-center shrink-0 border border-slate-200 dark:border-slate-700"
+            <div
+              className="w-11 h-11 rounded-xl bg-cover bg-center shrink-0 border border-slate-200/80 dark:border-slate-700/60"
               style={{ backgroundImage: `url(${mat.heroImage})` }}
             />
             <div className="flex flex-col min-w-0">
-              <p className="text-[12px] md:text-[14px] font-bold text-slate-900 dark:text-white truncate">
+              <p className="text-[13px] font-bold text-slate-900 dark:text-white truncate">
                 {title}
               </p>
-              <div className="flex items-center gap-2">
-                <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300">
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300 tabular-nums">
                   {displayPrice > 0 ? `KSh ${displayPrice}/kg` : 'Price varies'}
                 </span>
-                <span className={`text-[10px] font-bold hidden sm:inline-block ${isTrendUp ? 'text-emerald-600' : isTrendDown ? 'text-rose-600' : 'text-slate-500'}`}>
-                  {isTrendUp ? '▲' : isTrendDown ? '▼' : ''} {displayTrend}
-                </span>
+                {displayTrend !== '--%' && (
+                  <span className={`text-[10px] font-bold ${isTrendUp ? 'text-emerald-600 dark:text-emerald-400' : isTrendDown ? 'text-rose-600 dark:text-rose-400' : 'text-slate-500'}`}>
+                    {isTrendUp ? '▲' : isTrendDown ? '▼' : '•'} {displayTrend}
+                  </span>
+                )}
               </div>
             </div>
           </div>
-          
+
           {/* CTA Button */}
           <button
             onClick={() => navigate(isSeller ? `/post-trade?material=${slug}` : '/book-pickup')}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 md:px-8 py-3.5 md:py-4 rounded-xl text-[12px] md:text-[13px] font-bold tracking-widest active:scale-95 transition-all flex items-center gap-2 shrink-0 shadow-lg shadow-emerald-600/20"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-xl text-xs font-bold tracking-wide active:scale-95 transition-all flex items-center gap-2 shrink-0"
           >
-            {isSeller ? 'Sell this material' : 'Book a Pickup'} <ArrowRight className="w-4 h-4" />
+            {isSeller ? 'Sell this material' : 'Book a Pickup'}
+            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

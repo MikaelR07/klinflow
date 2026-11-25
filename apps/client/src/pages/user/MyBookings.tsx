@@ -391,7 +391,7 @@ export default function MyBookings() {
                   {/* Top Row: Thumbnail + (Title, ID, Location, Weight) | Top Right (Scheduled Time above Status Badge) */}
                   <div className="flex items-start justify-between gap-2.5">
                     <div className="flex items-start gap-3 min-w-0 flex-1">
-                      <div className="w-28 h-28 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-2xl shadow-2xs">
+                      <div className="w-20 h-20 rounded-xl bg-white dark:bg-slate-800 overflow-hidden shrink-0 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-2xl shadow-2xs">
                         {b.photoUrl ? (
                           <OptimizedImage src={getThumbnailUrl(b.photoUrl, { width: 150 })} className="w-full h-full object-cover" wrapperClassName="w-full h-full" />
                         ) : (
