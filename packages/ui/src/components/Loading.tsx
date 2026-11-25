@@ -35,27 +35,28 @@ export const LoadingScreen = ({
         }}
       />
 
-      {/* Fixed Center Animated Cog-Line Spinner */}
+      {/* Fixed Center Dual-Arc Orbital Spinner */}
       <div
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-11 h-11"
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-12 h-12 flex items-center justify-center"
         aria-label="Loading"
       >
-        <div className="relative w-full h-full animate-[spin_6s_linear_infinite]">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <span
-              key={i}
-              className="absolute top-0 left-1/2 w-[3px] -ml-[1.5px] rounded-full bg-white"
-              style={{
-                height: '11px',
-                transform: `rotate(${i * 30}deg)`,
-                transformOrigin: '1.5px 22px',
-                animation: `cog-fade 1.2s linear infinite`,
-                animationDelay: `${-1.1 + i * 0.1}s`,
-              }}
-            />
-          ))}
-        </div>
-        <style>{`@keyframes cog-fade { 0%, 100% { opacity: 1; height: 12px; } 50% { opacity: 0.2; height: 8px; } }`}</style>
+        <div
+          className="absolute inset-0 rounded-full border-[2.5px] border-white/15 border-t-white border-r-white/70"
+          style={{ animation: 'orbit-spin 0.95s cubic-bezier(0.55, 0.2, 0.35, 0.85) infinite' }}
+        />
+        <div
+          className="absolute inset-[9px] rounded-full border-2 border-transparent border-b-emerald-300 border-l-emerald-300/50"
+          style={{ animation: 'orbit-spin-reverse 1.35s linear infinite' }}
+        />
+        <div
+          className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_rgba(110,231,183,0.9)]"
+          style={{ animation: 'core-pulse 1.5s ease-in-out infinite' }}
+        />
+        <style>{`
+          @keyframes orbit-spin { to { transform: rotate(360deg); } }
+          @keyframes orbit-spin-reverse { to { transform: rotate(-360deg); } }
+          @keyframes core-pulse { 0%, 100% { transform: scale(0.85); opacity: 0.7; } 50% { transform: scale(1.25); opacity: 1; } }
+        `}</style>
       </div>
 
       {/* Bottom Status & Tagline (No Klinflow text, already in image) */}

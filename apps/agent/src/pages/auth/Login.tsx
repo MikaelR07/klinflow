@@ -130,7 +130,7 @@ export default function Login() {
 
       {/* ── Login Card ── */}
       <div className="relative z-10 flex-1 flex flex-col justify-end">
-        <div className="w-full bg-white/95 dark:bg-slate-800 backdrop-blur-xl rounded-t-[88px] border-t border-white/60 dark:border-slate-700/70 px-6 pt-3 pb-8 flex flex-col">
+        <div className="w-full bg-white/95 dark:bg-slate-800 backdrop-blur-xl rounded-t-[26px] border-t border-white/60 dark:border-slate-700/70 px-6 pt-3 pb-8 flex flex-col">
           <div className="w-10 h-1 rounded-full bg-slate-300/80 dark:bg-slate-600 mx-auto mb-5" />
           <div className="w-full max-w-md mx-auto flex-1 flex flex-col">
 
