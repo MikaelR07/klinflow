@@ -314,7 +314,7 @@ export default function AvailableJobs() {
   }, [isFleetDriver, activeTab]);
 
   return (
-    <div className="flex flex-col bg-white dark:bg-slate-900 transition-colors min-h-screen">
+    <div className="flex flex-col bg-white dark:bg-slate-800 transition-colors min-h-screen">
       {/* ── TOP NAV (Fixed PWA Style) ── */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-[calc(env(safe-area-inset-top,1rem)+1rem)] pb-2.5 px-3 border-b border-slate-200/80 dark:border-slate-800 max-w-lg mx-auto">
         <div className="space-y-2.5">
@@ -526,7 +526,7 @@ export default function AvailableJobs() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-800 overflow-y-auto no-scrollbar pb-6"
+                className="fixed inset-0 z-[9999] bg-slate-50 dark:bg-slate-900 overflow-y-auto no-scrollbar pb-6"
               >
                 {(() => {
                   const job = currentJobs.find(j => j.id === expandedId);
@@ -541,7 +541,7 @@ export default function AvailableJobs() {
                   return (
                     <div className="max-w-lg mx-auto">
                       {/* ── FIXED TOP NAV ── */}
-                      <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-slate-50/95 dark:bg-slate-800/90 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+                      <div className="fixed top-0 left-0 right-0 z-50 w-full max-w-lg mx-auto bg-slate-50/95 dark:bg-slate-800 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
                         <div className="pt-[calc(env(safe-area-inset-top,1rem)+0.75rem)] pb-3.5 px-4 flex items-center justify-between relative">
                           <button onClick={() => setExpandedId(null)} className="w-10 h-10 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shadow-sm active:scale-95 transition-all group shrink-0 z-10">
                             <ArrowLeft className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
@@ -809,7 +809,7 @@ export default function AvailableJobs() {
                     <div
                       key={job.id}
                       onClick={() => navigate(navRoute)}
-                      className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-1.5 group"
+                      className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 p-3.5 cursor-pointer select-none hover:border-emerald-500/40 active:scale-[0.99] transition-all space-y-1.5 group"
                     >
                       {/* Top Row: Thumbnail, Material + Customer + Location/Weight, Origin Pill + Time */}
                       <div className="flex items-start justify-between gap-2.5">

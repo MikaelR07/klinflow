@@ -19,7 +19,7 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.js',
       registerType: 'autoUpdate',
-      includeAssets: ['logo.png', 'icons/*.png', 'resident-new.webp', 'vectors/*.webp', 'material-categories/*.webp'],
+      includeAssets: ['logo.png', 'icons/*.png', 'resident-new.webp', 'welcome/loading.webp', 'vectors/*.webp', 'material-categories/*.webp'],
       manifest: {
         name: 'Klinflow Client',
         short_name: 'Klinflow',

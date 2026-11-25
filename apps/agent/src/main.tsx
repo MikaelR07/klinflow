@@ -25,7 +25,9 @@ requestAnimationFrame(() => {
   requestAnimationFrame(() => {
     const loader = document.getElementById("initial-loader");
     if (loader) {
-      loader.remove();
+      loader.style.opacity = '0';
+      loader.style.pointerEvents = 'none';
+      setTimeout(() => loader.remove(), 350);
     }
   });
 });
