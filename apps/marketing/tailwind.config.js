@@ -5,7 +5,6 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     "../../packages/ui/src/**/*.{js,ts,jsx,tsx}"
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -31,8 +30,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Space Grotesk"', 'sans-serif'],
-        mono: ['"Space Mono"', 'monospace'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       animation: {
         'gradient': 'gradient 8s linear infinite',

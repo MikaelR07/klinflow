@@ -3,9 +3,6 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Truck,
-  Navigation,
-  Zap,
-  Brain,
   ArrowRight,
   CheckCircle2,
   TrendingUp,
@@ -17,22 +14,25 @@ import {
   Clock,
   Target,
   Route,
-  Gauge,
   Users,
   Package,
   ChevronRight,
-  Play,
-  Pause,
-  Star,
-  Briefcase,
+  Zap,
+  ShieldCheck,
+  Navigation,
+  ClipboardList,
+  Handshake,
+  Eye,
+  Timer,
+  CircleDollarSign,
+  FileSearch,
 } from "lucide-react";
-import { useThemeStore } from "@klinflow/core/stores/themeStore";
 import Layout from "../layouts/Layout";
 
 export default function ProductAgent() {
-  const { isDarkMode } = useThemeStore();
+  const isDarkMode = false;
   const [activeFeature, setActiveFeature] = useState(0);
-  const [activeDeepDive, setActiveDeepDive] = useState(0);
+  const [activeIssue, setActiveIssue] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -50,243 +50,807 @@ export default function ProductAgent() {
     "/products/agent/agent-wallet.webp",
     "/products/agent/agent-notifications.webp",
     "/products/agent/agent-dashboard.webp",
+    "/products/agent/agent-rfq.webp",
+    "/products/agent/agent-bidHistory.webp",
+    "/products/agent/market-price.webp",
   ];
 
-  const agentDeepDiveFeatures = [
-    {
-      subtitle: "Mission Control",
-      subtitleColor: "text-blue-500",
-      title: "Your command center for collection operations.",
-      description:
-        "The Agent Dashboard gives you a real-time tactical overview of your active missions, pending pickups, earnings summary, and performance metrics. See everything at a glance — available jobs in your zone, your daily route, current wallet balance, and live notifications from the network. It's mission control, built for speed.",
-      features: [
-        "Live Job Feed",
-        "Daily Earnings Tracker",
-        "Zone-Based Dispatch",
-      ],
-      featureColor: "text-blue-500",
-      bgFeatureColor: "bg-blue-500/20",
-      image: agentImages[0],
-      icon: Target,
-    },
-    {
-      subtitle: "Smart Routing",
-      subtitleColor: "text-cyan-500",
-      title: "AI-optimized routes. Maximum yield.",
-      description:
-        "Stop wasting fuel and time on inefficient routes. Klinflow's Route Optimizer analyzes pickup density, traffic patterns, material volumes, and hub proximity to generate the most profitable multi-stop route for your shift. Accept jobs along optimized corridors and watch your per-hour earnings climb.",
-      features: [
-        "Multi-stop Optimization",
-        "Fuel Cost Estimator",
-        "Live Traffic Integration",
-      ],
-      featureColor: "text-cyan-500",
-      bgFeatureColor: "bg-cyan-500/20",
-      image: agentImages[1],
-      icon: Route,
-    },
-    {
-      subtitle: "Market Intelligence",
-      subtitleColor: "text-indigo-500",
-      title: "Know what every kilogram is worth.",
-      description:
-        "Access real-time market prices for every recyclable category before you even start collecting. The Agent Market view shows live buy/sell rates, trending materials, and price alerts so you can prioritize high-value collections and negotiate confidently with clients on the ground.",
-      features: [
-        "Real-time Price Feeds",
-        "Material Trend Alerts",
-        "Category Breakdown",
-      ],
-      featureColor: "text-indigo-500",
-      bgFeatureColor: "bg-indigo-500/20",
-      image: agentImages[2],
-      icon: TrendingUp,
-    },
-    {
-      subtitle: "Verification Engine",
-      subtitleColor: "text-violet-500",
-      title: "Grade, weigh, verify. Cryptographically.",
-      description:
-        "Every collection you process is verified on-site using Klinflow's HygeneX grading engine. Photograph materials, log weights with calibrated digital scales, and generate a cryptographic proof-of-quality that locks in the transaction. No disputes, no chargebacks — just verified, transparent handshakes.",
-      features: [
-        "AI Material Grading",
-        "Digital Scale Integration",
-        "QR Cryptographic Seal",
-      ],
-      featureColor: "text-violet-500",
-      bgFeatureColor: "bg-violet-500/20",
-      image: agentImages[3],
-      icon: Shield,
-    },
-    {
-      subtitle: "Agent Wallet",
-      subtitleColor: "text-emerald-500",
-      title: "Instant payouts. Zero waiting.",
-      description:
-        "The moment a Hub confirms your delivery, your commission hits your Klinflow Wallet instantly. Withdraw to M-Pesa or bank in seconds. Track every transaction, view detailed commission breakdowns per job, and access micro-loans backed by your collection history and performance score.",
-      features: [
-        "Instant M-Pesa Withdrawal",
-        "Commission Breakdown",
-        "Performance-backed Loans",
-      ],
-      featureColor: "text-emerald-500",
-      bgFeatureColor: "bg-emerald-500/20",
-      image: agentImages[4],
-      icon: Wallet,
-    },
-  ];
-
+  // ── PROBLEM / SOLUTION PAIRS ─────────────────────────────────
   const agentChallenges = [
     {
       id: "inconsistent-jobs",
       problem: {
-        title: "Inconsistent Job Flow",
-        desc: "Agents waste hours waiting for collection requests. Without a centralized dispatch, finding profitable jobs is a daily gamble.",
+        title: "Inconsistent Work",
+        desc: "Agents spend hours looking for collection jobs. Without a centralized system, finding reliable work each day is unpredictable.",
         icon: Clock,
       },
       solution: {
-        label: "AI Mission Dispatch",
-        desc: "Smart job matching based on your location, vehicle capacity, and material specialization. Never idle — jobs come to you.",
+        label: "Live Job Board",
+        desc: "Browse available pickup requests in your area in real time. Accept jobs that match your route, capacity, and material specialization.",
         icon: Target,
       },
     },
     {
-      id: "manual-routing",
+      id: "no-market-info",
       problem: {
-        title: "Manual Route Planning",
-        desc: "Plotting collection routes by hand leads to wasted fuel, missed time windows, and suboptimal earnings per shift.",
-        icon: Route,
+        title: "No Price Visibility",
+        desc: "Agents often don't know what materials are worth, making it hard to negotiate fairly or decide which collections are most profitable.",
+        icon: Eye,
       },
       solution: {
-        label: "Route Optimizer Engine",
-        desc: "AI-driven multi-stop route planning that minimizes fuel cost and maximizes collections per hour across your zone.",
-        icon: Navigation,
+        label: "Live Market Prices",
+        desc: "See real-time buying and selling prices for every material category. Know exactly what each kilogram is worth before you collect.",
+        icon: TrendingUp,
       },
     },
     {
       id: "delayed-payments",
       problem: {
         title: "Delayed Payments",
-        desc: "Traditional collection work means waiting days or weeks for payment. Cash flow uncertainty kills agent retention.",
-        icon: Wallet,
+        desc: "Traditional collection work means waiting days or weeks for payment. Unpredictable cash flow makes it hard to plan and stay motivated.",
+        icon: Timer,
       },
       solution: {
-        label: "Instant Escrow Settlement",
-        desc: "Commission is triggered the moment the Hub accepts your intake. Withdraw instantly to M-Pesa or bank.",
+        label: "Instant Payouts",
+        desc: "Earn directly into your Klinflow wallet after every verified delivery. Withdraw to M-Pesa or your bank account instantly.",
         icon: Zap,
       },
     },
     {
-      id: "no-insights",
+      id: "no-transparency",
       problem: {
-        title: "No Performance Insights",
-        desc: "Without data, agents can't improve. There's no visibility into which zones, materials, or times yield the best returns.",
-        icon: BarChart3,
+        title: "No Transaction Records",
+        desc: "Without digital records, disputes about weight, quality, and payment are common. There's no way to prove what was collected or agreed.",
+        icon: FileSearch,
       },
       solution: {
-        label: "HygeneX AI Coach",
-        desc: "Real-time earning optimization tips based on material hotspots, market prices, and your historical performance data.",
-        icon: Brain,
+        label: "Digital Verification",
+        desc: "Every collection is logged with photos, weights, and digital receipts. Both you and the client have a clear, undeniable record.",
+        icon: ShieldCheck,
       },
     },
   ];
 
+  // ── DEEP DIVE FEATURES ───────────────────────────────────────
+  const deepDiveFeatures = [
+    {
+      subtitle: "Home Dashboard",
+      title: "Your daily command center.",
+      description:
+        "See everything at a glance — available jobs nearby, your collections for the day, active pickups, wallet balance, and live notifications. The dashboard adapts to your service zone so you always see what's relevant to your area.",
+      features: [
+        "Live job feed in your zone",
+        "Daily collection overview",
+        "Active pickup status",
+      ],
+      accentColor: "blue",
+      image: agentImages[0],
+      icon: Target,
+    },
+    {
+      subtitle: "Available Jobs",
+      title: "Find and accept pickups near you.",
+      description:
+        "Browse all available collection requests from residents and sellers in your area. Filter by material type, distance, or estimated value. Accept jobs with one tap and get navigation to the pickup location.",
+      features: [
+        "Location-based job matching",
+        "Material type filters",
+        "One-tap job acceptance",
+      ],
+      accentColor: "indigo",
+      image: agentImages[1],
+      icon: MapPin,
+    },
+    {
+      subtitle: "Market Prices",
+      title: "Know what every material is worth.",
+      description:
+        "Access real-time market prices across all recyclable categories. Check what PET, HDPE, metals, cardboard, and more are trading at before you start collecting. Use pricing data to prioritize high-value materials.",
+      features: [
+        "Live price tickers",
+        "Material category breakdown",
+        "Price trend indicators",
+      ],
+      accentColor: "emerald",
+      image: agentImages[9],
+      icon: TrendingUp,
+    },
+    {
+      subtitle: "RFQ & Sourcing",
+      title: "Source materials directly from sellers.",
+      description:
+        "Create Requests for Quotation (RFQs) to source specific materials from sellers in your network. Set your price, quantity requirements, and pickup terms. Manage incoming offers and close deals — all from the app.",
+      features: [
+        "Create and broadcast RFQs",
+        "Review seller offers",
+        "Track sourcing orders",
+      ],
+      accentColor: "violet",
+      image: agentImages[7],
+      icon: Handshake,
+    },
+    {
+      subtitle: "Agent Wallet",
+      title: "Your earnings, always accessible.",
+      description:
+        "Every verified collection earns directly into your Klinflow Wallet. View your balance, track commission breakdowns per job, and withdraw to M-Pesa or bank whenever you want. Full transaction history included.",
+      features: [
+        "Instant payout after delivery",
+        "M-Pesa & bank withdrawals",
+        "Per-job commission breakdown",
+      ],
+      accentColor: "emerald",
+      image: agentImages[4],
+      icon: Wallet,
+    },
+    {
+      subtitle: "Bid History",
+      title: "Track every bid you've made.",
+      description:
+        "Monitor all your active and past bids in one place. See which offers have been accepted, which are pending, and which were declined. The bid history gives you full visibility into your sourcing activity so you can follow up and close deals faster.",
+      features: [
+        "View active and past bids",
+        "Track bid acceptance status",
+        "Quick follow-up actions",
+      ],
+      accentColor: "amber",
+      image: agentImages[8],
+      icon: ClipboardList,
+    },
+    {
+      subtitle: "Notifications",
+      title: "Never miss an update.",
+      description:
+        "Stay on top of everything — new job alerts, bid responses, pickup confirmations, payment receipts, and system updates. All your notifications are organized in one feed so you can act on what matters without missing a thing.",
+      features: [
+        "Real-time job alerts",
+        "Bid and order updates",
+        "Payment confirmations",
+      ],
+      accentColor: "teal",
+      image: agentImages[5],
+      icon: Bell,
+    },
+  ];
 
+  // ── COLOR UTILITY ────────────────────────────────────────────
+  const accent = (color: string, type: "text" | "bg" | "border") => {
+    const map: Record<string, Record<string, string>> = {
+      blue: { text: "text-blue-500", bg: "bg-blue-500", border: "border-blue-500/20" },
+      indigo: { text: "text-indigo-500", bg: "bg-indigo-500", border: "border-indigo-500/20" },
+      violet: { text: "text-violet-500", bg: "bg-violet-500", border: "border-violet-500/20" },
+      emerald: { text: "text-emerald-500", bg: "bg-emerald-500", border: "border-emerald-500/20" },
+      amber: { text: "text-amber-500", bg: "bg-amber-500", border: "border-amber-500/20" },
+      teal: { text: "text-teal-500", bg: "bg-teal-500", border: "border-teal-500/20" },
+    };
+    return map[color]?.[type] || "";
+  };
 
   return (
     <Layout>
-      {/* ═══════════════════════════════════════════════════════════════════
-          1. HERO SECTION
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative pt-24 pb-16 md:pt-40 md:pb-32 min-h-[100vh] flex items-center overflow-hidden">
-        {/* Background */}
+      {/* ═══════════════════════════════════════════════════════════
+          1. HERO
+      ═══════════════════════════════════════════════════════════ */}
+      <section className="relative pt-36 pb-32 md:pt-40 md:pb-44 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-700 to-indigo-600" />
+          <div className="absolute inset-0 bg-[#EDF8FE]" />
           <div
-            className="absolute inset-0 opacity-[0.15] text-white"
+            className="absolute inset-0 opacity-[0.035]"
             style={{
-              backgroundImage: "radial-gradient(circle, currentColor 1px, transparent 1px)",
+              backgroundImage:
+                "radial-gradient(circle, currentColor 1px, transparent 1px)",
               backgroundSize: "32px 32px",
             }}
           />
-          <div className="absolute top-20 right-20 w-[500px] h-[500px] bg-white/10 blur-[150px] rounded-full pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
         </div>
 
-        <div className="max-w-[90rem] mx-auto px-6 md:px-12 lg:px-16 relative z-10 w-full mt-4 lg:-mt-40">
+        <div className="max-w-[90rem] mx-auto px-6 md:px-12 lg:px-16 relative z-10 w-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Left: Text */}
+            {/* Left — Copy */}
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-8 bg-white/10 backdrop-blur-md text-white border border-white/20">
-                <Truck className="w-4 h-4" />
-                Agent Mission Control
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-base font-medium mb-8 bg-blue-500/10 backdrop-blur-md text-blue-600 border border-blue-500/20">
+                For Collection Agents
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-[1.1] text-white">
-                Collect and
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 leading-[1.08] text-slate-900">
+                Everything you need
                 <br />
-                Earn More.
-                <br />
-                <span className="text-cyan-400">with Klinflow.</span>
+                <span className="bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
+                  to run your collection business.
+                </span>
               </h1>
 
-              <p className="text-base md:text-lg font-medium leading-relaxed mb-10 max-w-xl text-blue-50">
-                Whether you're an independent agent, a fleet driver, or managing an entire fleet force, our app equips you with the tools and insights to streamline your operations, boost your income, and unlock the full potential of the circular economy. Klinflow streamlines dispatch, pickup verification, route optimization, and payouts through one intelligent platform built for circular logistics.
+              <p className="text-base md:text-lg font-medium leading-relaxed mb-10 max-w-xl text-slate-600">
+                Whether you are an independent collector or fleet agent, the Klinflow Agent App gives you everything you need to run
+                efficient collection operations — find jobs, verify
+                materials, track payouts, manage your inventory, source from sellers,
+                and get paid the moment you deliver.
               </p>
 
               <div className="flex flex-row flex-wrap gap-3 sm:gap-4">
-                <Link to="/contact" className="flex-1 sm:flex-none px-4 py-3 sm:px-8 sm:py-4 bg-white text-blue-600 hover:bg-slate-50 font-bold rounded-full active:scale-95 transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap shadow-xl shadow-black/10">
-                  Apply to Join Fleet{" "}
+                <Link
+                  to="/contact"
+                  className="flex-1 sm:flex-none px-6 py-3.5 sm:px-8 sm:py-4 bg-blue-600 text-white hover:bg-blue-700 font-bold rounded-full active:scale-95 transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap shadow-xl shadow-blue-600/20"
+                >
+                  Become an Agent{" "}
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Link>
-                <Link to="/contact" className="flex-1 sm:flex-none px-4 py-3 sm:px-8 sm:py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap bg-white/10 text-white hover:bg-white/20 border border-white/20">
-                  Earning Calculator(coming soon) 
+                <Link
+                  to="/products/client"
+                  className="flex-1 sm:flex-none px-6 py-3.5 sm:px-8 sm:py-4 rounded-full font-semibold transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-sm"
+                >
+                  I'm a Seller{" "}
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </Link>
               </div>
             </div>
 
-            {/* Right: Two static images */}
-            <div className="relative flex justify-center lg:justify-end mt-16 lg:mt-0 perspective-[1000px] h-[500px] sm:h-[600px] md:h-[700px] items-center">
+            {/* Right — Phone mockups */}
+            <div className="relative flex justify-center lg:justify-end mt-16 lg:mt-0 h-[420px] sm:h-[480px] md:h-[560px] items-center">
               <motion.div
-                initial={{ opacity: 0, x: isMobile ? -15 : -30, rotate: 0, y: 0 }}
-                animate={{ opacity: 1, x: isMobile ? "-25%" : "-45%", rotate: 0, y: isMobile ? -15 : -30 }}
-                transition={{ duration: 0.8, type: "spring", bounce: 0.3, delay: 0.2 }}
-                className="absolute w-[220px] sm:w-[260px] md:w-[320px] aspect-[1/2] rounded-[2rem] overflow-hidden border shadow-2xl z-10 border-white/20 bg-black/20 backdrop-blur-md"
+                initial={{ opacity: 0, x: -20, y: 0 }}
+                animate={{
+                  opacity: 1,
+                  x: isMobile ? "-30%" : "-55%",
+                  y: isMobile ? -20 : -20,
+                }}
+                transition={{
+                  duration: 0.8,
+                  type: "spring",
+                  bounce: 0.3,
+                  delay: 0.2,
+                }}
+                className="absolute w-[200px] sm:w-[240px] md:w-[290px] aspect-[1/2] rounded-[2rem] overflow-hidden shadow-2xl z-10 border-2 border-white/60 bg-white/20 backdrop-blur-sm"
               >
                 <img
                   src={agentImages[0]}
-                  alt="Agent App Home"
+                  alt="Agent Home"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/5" />
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: isMobile ? 15 : 30, rotate: 0, y: 20 }}
-                animate={{ opacity: 1, x: isMobile ? "25%" : "45%", rotate: 0, y: isMobile ? 15 : 30 }}
-                transition={{ duration: 0.8, type: "spring", bounce: 0.3, delay: 0.4 }}
-                className="absolute w-[220px] sm:w-[260px] md:w-[320px] aspect-[1/2] rounded-[2rem] overflow-hidden border z-20 border-white/20 bg-black/20 backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+                initial={{ opacity: 0, x: 20, y: 20 }}
+                animate={{
+                  opacity: 1,
+                  x: isMobile ? "30%" : "55%",
+                  y: isMobile ? 10 : 20,
+                }}
+                transition={{
+                  duration: 0.8,
+                  type: "spring",
+                  bounce: 0.3,
+                  delay: 0.4,
+                }}
+                className="absolute w-[200px] sm:w-[240px] md:w-[290px] aspect-[1/2] rounded-[2rem] overflow-hidden z-20 border-2 border-white/60 bg-white/20 backdrop-blur-sm shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
               >
                 <img
                   src={agentImages[1]}
-                  alt="Agent Jobs View"
+                  alt="Agent Jobs"
                   className="w-full h-full object-cover"
                 />
               </motion.div>
             </div>
           </div>
         </div>
+
+        {/* Curved Bottom Wave */}
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <svg
+            className="w-full h-32 md:h-40 lg:h-50"
+            viewBox="0 0 1440 120"
+            preserveAspectRatio="none"
+            fill="none"
+          >
+            <path
+              d="M0,20 Q720,120 1440,20 L1440,120 L0,120 Z"
+              fill={isDarkMode ? "#0B0F1A" : "#1e3a8a"}
+            />
+          </svg>
+        </div>
       </section>
 
-      
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          3. WHY AGENTS CHOOSE KLINFLOW — Interactive Bento + Flip Card
-      ═══════════════════════════════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════════════
+          2. WHY AGENTS CHOOSE KLINFLOW — Interactive Split Spotlight
+      ═══════════════════════════════════════════════════════════ */}
       <section
-        className={`py-20 md:py-32 px-6 relative overflow-hidden ${isDarkMode ? "bg-surface-950" : "bg-slate-50"}`}
+        className={`py-20 md:py-28 px-6 relative overflow-hidden ${
+          isDarkMode
+            ? "bg-[#0B0F1A]"
+            : "bg-gradient-to-b from-[#edf3f9] to-[#e4edf7]"
+        }`}
       >
         <div
-          className={`absolute inset-0 ${isDarkMode ? "opacity-[0.04]" : "opacity-[0.03]"}`}
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: isDarkMode
+              ? "radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)"
+              : "radial-gradient(circle, rgba(17,120,171,0.14) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="max-w-3xl mx-auto mb-14 md:mb-16 text-center">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className={`text-xs font-bold uppercase tracking-[0.25em] mb-4 ${
+                isDarkMode ? "text-sky-300/80" : "text-[#1178ab]"
+              }`}
+            >
+              Why Klinflow
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.05 }}
+              className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-5 ${
+                isDarkMode ? "text-white" : "text-slate-900"
+              }`}
+            >
+              Collection work,{" "}
+              <span className={isDarkMode ? "text-sky-300" : "text-[#1178ab]"}>
+                done right.
+              </span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className={`text-base md:text-lg leading-relaxed max-w-2xl mx-auto ${
+                isDarkMode ? "text-slate-300/90" : "text-slate-600"
+              }`}
+            >
+              Traditional collection is unpredictable, underpaid, and
+              unstructured. Klinflow replaces guesswork with a professional
+              platform built for agents.
+            </motion.p>
+          </div>
+
+          {/* Interactive Split Spotlight */}
+          {(() => {
+            const currentIssue =
+              agentChallenges.find((p) => p.id === activeIssue) ||
+              agentChallenges[0];
+            if (!currentIssue) return null;
+            const ProblemIcon = currentIssue.problem.icon;
+            const SolutionIcon = currentIssue.solution.icon;
+            const currentIndex = agentChallenges.findIndex(
+              (p) => p.id === currentIssue.id
+            );
+
+            return (
+              <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                {/* LEFT: Numbered Pain Points List */}
+                <div
+                  className={`lg:col-span-5 divide-y border-y ${
+                    isDarkMode
+                      ? "divide-white/10 border-white/10"
+                      : "divide-slate-200/80 border-slate-200/80"
+                  }`}
+                >
+                  {agentChallenges.map((item, idx) => {
+                    const isSelected = item.id === currentIssue.id;
+                    const RowIcon = item.problem.icon;
+                    const num = `0${idx + 1}`;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => setActiveIssue(item.id)}
+                        className={`w-full text-left px-4 py-4 sm:py-5 flex items-center gap-4 transition-all duration-200 cursor-pointer border-l-2 ${
+                          isSelected
+                            ? isDarkMode
+                              ? "border-lime-400 bg-white/[0.08]"
+                              : "border-[#1178ab] bg-white shadow-sm"
+                            : isDarkMode
+                              ? "border-transparent hover:bg-white/[0.03]"
+                              : "border-transparent hover:bg-white/60"
+                        }`}
+                      >
+                        <span
+                          className={`text-xs font-mono font-bold tabular-nums shrink-0 ${
+                            isSelected
+                              ? isDarkMode
+                                ? "text-lime-400"
+                                : "text-[#1178ab]"
+                              : "text-slate-400"
+                          }`}
+                        >
+                          {num}
+                        </span>
+                        <div
+                          className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                            isSelected
+                              ? isDarkMode
+                                ? "bg-rose-500/20 text-rose-300"
+                                : "bg-rose-50 text-rose-500 border border-rose-200/60"
+                              : isDarkMode
+                                ? "bg-white/[0.05] text-slate-400"
+                                : "bg-white/80 text-slate-400 border border-slate-200/60"
+                          }`}
+                        >
+                          <RowIcon className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p
+                            className={`text-sm sm:text-base font-semibold truncate transition-colors ${
+                              isSelected
+                                ? isDarkMode
+                                  ? "text-white"
+                                  : "text-slate-900"
+                                : isDarkMode
+                                  ? "text-slate-300"
+                                  : "text-slate-700"
+                            }`}
+                          >
+                            {item.problem.title}
+                          </p>
+                          <p
+                            className={`text-xs truncate mt-0.5 ${
+                              isDarkMode ? "text-slate-400" : "text-slate-500"
+                            }`}
+                          >
+                            {item.solution.label}
+                          </p>
+                        </div>
+                        <ChevronRight
+                          className={`w-4 h-4 shrink-0 transition-transform duration-200 ${
+                            isSelected
+                              ? isDarkMode
+                                ? "text-lime-400 translate-x-0.5"
+                                : "text-[#1178ab] translate-x-0.5"
+                              : "text-slate-400"
+                          }`}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* RIGHT: Spotlight Detail Panel */}
+                <div className="lg:col-span-7 lg:sticky lg:top-28">
+                  <div
+                    className={`rounded-2xl p-6 sm:p-8 lg:p-9 border ${
+                      isDarkMode
+                        ? "bg-white/[0.06] backdrop-blur-md border-white/15 shadow-2xl shadow-black/25"
+                        : "bg-white border-slate-200/80 shadow-xl shadow-slate-900/5"
+                    }`}
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentIssue.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        {/* Top Meta */}
+                        <div
+                          className={`flex items-center justify-between gap-4 pb-5 border-b ${
+                            isDarkMode ? "border-white/10" : "border-slate-100"
+                          }`}
+                        >
+                          <span
+                            className={`inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider ${
+                              isDarkMode ? "text-slate-300" : "text-slate-500"
+                            }`}
+                          >
+                            <span className="w-2 h-2 rounded-full bg-rose-500" />
+                            Challenge &amp; Solution
+                          </span>
+                          <span className="text-xs font-mono font-semibold tabular-nums text-slate-400">
+                            0{currentIndex + 1} / 0{agentChallenges.length}
+                          </span>
+                        </div>
+
+                        {/* The Problem */}
+                        <div className="mt-6">
+                          <div className="flex items-center gap-3 mb-3">
+                            <div
+                              className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                                isDarkMode
+                                  ? "bg-rose-500/15 border border-rose-400/20 text-rose-300"
+                                  : "bg-rose-50 border border-rose-200/70 text-rose-600"
+                              }`}
+                            >
+                              <ProblemIcon className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p
+                                className={`text-[11px] font-bold uppercase tracking-wider ${
+                                  isDarkMode
+                                    ? "text-rose-300/90"
+                                    : "text-rose-600"
+                                }`}
+                              >
+                                The Traditional Problem
+                              </p>
+                              <h3
+                                className={`text-lg sm:text-xl font-bold leading-snug ${
+                                  isDarkMode ? "text-white" : "text-slate-900"
+                                }`}
+                              >
+                                {currentIssue.problem.title}
+                              </h3>
+                            </div>
+                          </div>
+                          <p
+                            className={`text-sm sm:text-base leading-relaxed pl-[52px] ${
+                              isDarkMode ? "text-slate-300" : "text-slate-600"
+                            }`}
+                          >
+                            {currentIssue.problem.desc}
+                          </p>
+                        </div>
+
+                        {/* The Klinflow Solution */}
+                        <div
+                          className={`mt-7 rounded-xl p-5 sm:p-6 border ${
+                            isDarkMode
+                              ? "bg-[#0b4f75]/60 border-sky-400/25"
+                              : "bg-[#f0f7fc] border-[#1178ab]/20"
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 mb-3">
+                            <div
+                              className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-md ${
+                                isDarkMode
+                                  ? "bg-lime-400 text-slate-950 shadow-lime-400/20"
+                                  : "bg-[#1178ab] text-white shadow-[#1178ab]/20"
+                              }`}
+                            >
+                              <SolutionIcon className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p
+                                className={`text-[11px] font-bold uppercase tracking-wider ${
+                                  isDarkMode
+                                    ? "text-lime-300"
+                                    : "text-[#085078]"
+                                }`}
+                              >
+                                The Klinflow Way
+                              </p>
+                              <h4
+                                className={`text-lg sm:text-xl font-bold leading-snug ${
+                                  isDarkMode ? "text-white" : "text-slate-900"
+                                }`}
+                              >
+                                {currentIssue.solution.label}
+                              </h4>
+                            </div>
+                          </div>
+                          <p
+                            className={`text-sm sm:text-base leading-relaxed pl-[52px] ${
+                              isDarkMode ? "text-slate-200" : "text-slate-700"
+                            }`}
+                          >
+                            {currentIssue.solution.desc}
+                          </p>
+                        </div>
+
+                        {/* Footer Stepper */}
+                        <div
+                          className={`mt-6 pt-5 border-t flex items-center justify-between gap-4 ${
+                            isDarkMode ? "border-white/10" : "border-slate-100"
+                          }`}
+                        >
+                          <div className="flex items-center gap-1.5">
+                            {agentChallenges.map((p) => (
+                              <button
+                                key={p.id}
+                                type="button"
+                                aria-label={`Select ${p.problem.title}`}
+                                onClick={() => setActiveIssue(p.id)}
+                                className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                                  p.id === currentIssue.id
+                                    ? isDarkMode
+                                      ? "w-6 bg-lime-400"
+                                      : "w-6 bg-[#1178ab]"
+                                    : isDarkMode
+                                      ? "w-1.5 bg-white/25 hover:bg-white/45"
+                                      : "w-1.5 bg-slate-200 hover:bg-slate-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const next =
+                                agentChallenges[
+                                  (currentIndex + 1) % agentChallenges.length
+                                ];
+                              if (next) setActiveIssue(next.id);
+                            }}
+                            className={`inline-flex items-center gap-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                              isDarkMode
+                                ? "text-sky-300 hover:text-white"
+                                : "text-[#1178ab] hover:text-[#085078]"
+                            }`}
+                          >
+                            <span>Next Challenge</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          3. FEATURES — Horizontal tabs + stage card
+      ═══════════════════════════════════════════════════════════ */}
+      <section
+        className={`py-20 md:py-20 px-6 overflow-hidden relative ${
+          isDarkMode ? "bg-surface-900" : "bg-blue-500/20"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Header */}
+          <div className="text-center mb-10 md:mb-14">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className={`text-xs font-bold uppercase tracking-[0.25em] mb-4 ${
+                isDarkMode ? "text-slate-500" : "text-slate-400"
+              }`}
+            >
+              Features
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.05 }}
+              className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 ${
+                isDarkMode ? "text-white" : "text-slate-900"
+              }`}
+            >
+              <span className="text-primary"> Built for how agents</span> actually work.
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className={`text-lg max-w-2xl mx-auto ${
+                isDarkMode ? "text-slate-400" : "text-slate-600"
+              }`}
+            >
+              From finding your first job to managing your warehouse —
+              everything is in one app.
+            </motion.p>
+          </div>
+
+          {/* Horizontal Tabs */}
+          <div className="flex flex-wrap justify-center gap-2 mb-10 md:mb-14">
+            {deepDiveFeatures.map((item, i) => {
+              const isActive = activeFeature === i;
+              const Icon = item.icon;
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveFeature(i)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border whitespace-nowrap ${
+                    isActive
+                      ? `${accent(item.accentColor, "bg")} text-white border-transparent shadow-lg`
+                      : isDarkMode
+                        ? "bg-white/[0.04] border-slate-700 text-slate-400 hover:bg-white/[0.08] hover:text-slate-300"
+                        : "bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:shadow-sm"
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {item.subtitle}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Stage Card */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeFeature}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.35 }}
+              className={`max-w-6xl mx-auto p-8 sm:p-10 lg:p-14 rounded-3xl border flex flex-col lg:flex-row items-center gap-10 lg:gap-16 ${
+                isDarkMode
+                  ? "bg-white/[0.02] border-slate-800"
+                  : "bg-white border-slate-200 shadow-sm"
+              }`}
+            >
+              {/* Left — Text */}
+              <div className="flex-1 min-w-0">
+                <p
+                  className={`text-xs font-bold uppercase tracking-[0.2em] mb-3 ${accent(deepDiveFeatures[activeFeature].accentColor, "text")}`}
+                >
+                  {deepDiveFeatures[activeFeature].subtitle}
+                </p>
+                <h3
+                  className={`text-2xl sm:text-3xl font-bold mb-4 tracking-tight ${
+                    isDarkMode ? "text-white" : "text-slate-900"
+                  }`}
+                >
+                  {deepDiveFeatures[activeFeature].title}
+                </h3>
+                <p
+                  className={`text-sm sm:text-base mb-8 leading-relaxed ${
+                    isDarkMode ? "text-slate-400" : "text-slate-600"
+                  }`}
+                >
+                  {deepDiveFeatures[activeFeature].description}
+                </p>
+                <ul className="space-y-3">
+                  {deepDiveFeatures[activeFeature].features.map(
+                    (feat, i) => (
+                      <li key={i} className="flex items-center gap-3">
+                        <CheckCircle2
+                          className={`w-4 h-4 shrink-0 ${accent(deepDiveFeatures[activeFeature].accentColor, "text")}`}
+                        />
+                        <span
+                          className={`text-sm font-medium ${
+                            isDarkMode
+                              ? "text-slate-300"
+                              : "text-slate-700"
+                          }`}
+                        >
+                          {feat}
+                        </span>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+
+              {/* Right — Phone Image */}
+              <div className="w-[260px] sm:w-[300px] md:w-[360px] shrink-0">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1, duration: 0.4 }}
+                  className={`rounded-[2.5rem] overflow-hidden border-2 shadow-2xl ${
+                    isDarkMode
+                      ? "border-slate-700 bg-slate-900"
+                      : "border-slate-200 bg-white"
+                  }`}
+                >
+                  <img
+                    src={deepDiveFeatures[activeFeature].image}
+                    alt={deepDiveFeatures[activeFeature].subtitle}
+                    className="w-full h-auto object-cover"
+                  />
+                </motion.div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          4. HOW IT WORKS — Per agent type
+      ═══════════════════════════════════════════════════════════ */}
+      <section
+        className={`py-20 md:py-28 px-6 relative overflow-hidden ${
+          isDarkMode ? "bg-surface-950" : "bg-blue-500/20"
+        }`}
+      >
+        <div
+          className={`absolute inset-0 ${
+            isDarkMode ? "opacity-[0.03]" : "opacity-[0.025]"
+          }`}
           style={{
             backgroundImage:
               "radial-gradient(circle, currentColor 1px, transparent 1px)",
@@ -295,460 +859,208 @@ export default function ProductAgent() {
         />
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="max-w-3xl mx-auto mb-16 md:mb-20 text-center">
-            <div className="inline-flex items-center justify-center rounded-full border border-blue-500/20 bg-blue-500/5 px-4 py-1.5 text-sm font-medium text-blue-500 mb-6">
-              Why Agents Choose Klinflow
-            </div>
-            <h2
-              className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-6 ${isDarkMode ? "text-white" : "text-slate-900"}`}
-            >
-              Built for the agents who move the circular economy forward.
-            </h2>
-            <p
-              className={`text-base md:text-lg leading-relaxed max-w-2xl mx-auto ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}
-            >
-              Traditional collection work is unpredictable, underpaid, and
-              unsupported. Klinflow gives agents the professional tools,
-              guaranteed income, and real-time intelligence to build a
-              sustainable career.
-            </p>
-          </div>
-
-          {/* Interactive Grid */}
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative">
-            {/* LEFT: Bento Grid of Problems */}
-            <div className="lg:col-span-8 grid grid-cols-2 gap-3 sm:gap-4 relative z-10">
-              {agentChallenges.map((item, i) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveFeature(i)}
-                  className={`text-left p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl border transition-all duration-300 flex flex-col ${activeFeature === i ? (isDarkMode ? "bg-surface-950 border-blue-500" : "bg-white border-blue-500 shadow-lg shadow-blue-500/10 scale-[1.02]") : isDarkMode ? "bg-surface-900/50 border-surface-900" : "bg-white/60 border-slate-200 hover:border-slate-300 hover:bg-white"}`}
-                >
-                  <div
-                    className={`w-8 h-8 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex items-center justify-center mb-3 sm:mb-4 transition-colors duration-300 ${activeFeature === i ? "bg-blue-500 text-white shadow-lg shadow-blue-500/30" : isDarkMode ? "bg-rose-500/10 text-rose-400" : "bg-rose-100 text-rose-600"}`}
-                  >
-                    <item.problem.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                  <h4
-                    className={`text-sm sm:text-base font-bold mb-1.5 sm:mb-2 ${isDarkMode ? "text-white" : "text-slate-900"}`}
-                  >
-                    {item.problem.title}
-                  </h4>
-                  <p
-                    className={`text-[10px] sm:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
-                  >
-                    {item.problem.desc}
-                  </p>
-                </button>
-              ))}
-            </div>
-
-            {/* RIGHT: Flipping Solution Card */}
-            <div className="lg:col-span-4 relative z-10 perspective-[1000px] mt-6 lg:mt-0 h-full flex flex-col justify-center min-h-[250px] lg:min-h-[280px]">
-              <AnimatePresence mode="wait">
-                {(() => {
-                  const activeItem = agentChallenges[activeFeature];
-                  const SolutionIcon = activeItem.solution.icon;
-                  return (
-                    <motion.div
-                      key={activeFeature}
-                      initial={{ rotateY: -90, opacity: 0, scale: 0.9 }}
-                      animate={{ rotateY: 0, opacity: 1, scale: 1 }}
-                      exit={{ rotateY: 90, opacity: 0, scale: 0.9 }}
-                      transition={{
-                        duration: 0.5,
-                        type: "spring",
-                        bounce: 0.3,
-                      }}
-                      className={`absolute inset-0 w-full p-6 lg:p-8 rounded-2xl sm:rounded-3xl border shadow-xl flex flex-col justify-center ${isDarkMode ? "bg-blue-900/20 border-blue-500/30" : "bg-blue-50 border-blue-200"}`}
-                    >
-                      <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center mb-4 lg:mb-6 shadow-lg shadow-blue-500/30">
-                        <SolutionIcon className="w-5 h-5 lg:w-6 lg:h-6" />
-                      </div>
-                      <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-500 mb-2 lg:mb-3">
-                        The Klinflow Solution
-                      </div>
-                      <h3
-                        className={`text-lg lg:text-xl font-bold mb-2 lg:mb-3 ${isDarkMode ? "text-white" : "text-slate-900"}`}
-                      >
-                        {activeItem.solution.label}
-                      </h3>
-                      <p
-                        className={`text-xs sm:text-sm leading-relaxed ${isDarkMode ? "text-blue-100/70" : "text-blue-900/70"}`}
-                      >
-                        {activeItem.solution.desc}
-                      </p>
-                    </motion.div>
-                  );
-                })()}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          4. DEEP DIVE FEATURE SHOWCASE (INTERACTIVE SIDEBAR)
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-20 md:py-24 px-6 overflow-hidden relative bg-gradient-to-br from-blue-700 to-indigo-600">
-        {/* LINE GRID background */}
-        <div
-          className="absolute inset-0 opacity-[0.15]"
-          style={{
-            backgroundImage: "linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white">
-              Every screen, purpose-built for agents.
-            </h2>
-            <p className="text-lg max-w-2xl mx-auto text-blue-50">
-              Explore the powerful features built into the Klinflow Agent App.
-            </p>
-          </div>
-
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
-            {/* Left Main Stage */}
-            <div className="w-full lg:w-2/3 order-1 lg:order-1">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeDeepDive}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.4 }}
-                  className="p-8 lg:p-12 rounded-[2.5rem] border shadow-2xl flex flex-col lg:flex-row items-center gap-10 lg:gap-16 bg-blue-800 backdrop-blur-md border-white/20 "
-                >
-                  {/* Stage Text */}
-                  <div className="flex-1 order-2 lg:order-1">
-                    <div className="text-cyan-400 font-bold tracking-widest text-sm uppercase mb-3">
-                      {agentDeepDiveFeatures[activeDeepDive].subtitle}
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold mb-4 tracking-tight text-white">
-                      {agentDeepDiveFeatures[activeDeepDive].title}
-                    </h2>
-                    <p className="text-base mb-8 leading-relaxed text-blue-50/90">
-                      {agentDeepDiveFeatures[activeDeepDive].description}
-                    </p>
-                    <ul className="space-y-4">
-                      {agentDeepDiveFeatures[activeDeepDive].features.map((feat, i) => (
-                        <li key={i} className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white shrink-0">
-                            <CheckCircle2 className="w-4 h-4" />
-                          </div>
-                          <span className="font-medium text-blue-50">{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Stage Image */}
-                  <div className="w-[220px] sm:w-[280px] md:w-[300px] shrink-0 perspective-[1000px] order-1 lg:order-2">
-                    <motion.div 
-                      initial={{ rotateY: 15 }}
-                      animate={{ rotateY: 0 }}
-                      className="rounded-[2rem] overflow-hidden border border-white/20 shadow-2xl bg-white/5"
-                    >
-                      <img 
-                        src={agentDeepDiveFeatures[activeDeepDive].image} 
-                        alt={agentDeepDiveFeatures[activeDeepDive].subtitle} 
-                        className="w-full h-auto object-cover" 
-                      />
-                    </motion.div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            
-            {/* Right Sidebar (Tabs) */}
-            <div className="w-full lg:w-1/3 flex flex-col gap-2 order-2 lg:order-2">
-              {agentDeepDiveFeatures.map((item, i) => {
-                const isActive = activeDeepDive === i;
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setActiveDeepDive(i)}
-                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 text-left border ${
-                      isActive 
-                        ? "bg-blue-800 border-white/20 shadow-lg backdrop-blur-md" 
-                        : "bg-transparent border-transparent hover:bg-white/5"
-                    }`}
-                  >
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-                      isActive ? "bg-white text-blue-600 shadow-md" : "bg-white/10 text-blue-100"
-                    }`}>
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className={`text-xs font-bold uppercase tracking-wider ${isActive ? "text-cyan-400" : "text-blue-200/60"}`}>
-                        {item.subtitle}
-                      </span>
-                      <span className={`font-semibold ${isActive ? "text-white" : "text-blue-100/70"}`}>
-                        {item.title.split('.')[0]}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          5. AGENT PERFORMANCE DASHBOARD — Unique to Agent page
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section
-        className={`py-20 md:py-32 px-6 relative overflow-hidden ${isDarkMode ? "bg-surface-900" : "bg-slate-50"}`}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left: Dashboard Visual */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+          <div className="text-center mb-14 md:mb-20">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className={`p-8 sm:p-12 rounded-3xl border relative overflow-hidden ${isDarkMode ? "bg-surface-950 border-white/5" : "bg-white border-slate-200 shadow-xl"}`}
+              className={`text-xs font-bold uppercase tracking-[0.25em] mb-4 ${
+                isDarkMode ? "text-slate-500" : "text-slate-400"
+              }`}
             >
-              <div className="absolute top-0 right-0 p-12 opacity-[0.03]">
-                <Gauge className="w-64 h-64 text-blue-500" />
-              </div>
-              <div className="relative z-10 space-y-8">
-                {/* Stats Row */}
-                <div className="grid grid-cols-2 gap-6">
-                  {[
-                    {
-                      label: "Efficiency Rating",
-                      value: "98.4%",
-                      color: "text-blue-500",
-                    },
-                    {
-                      label: "Avg. Payout Time",
-                      value: "Instant",
-                      color: "text-emerald-500",
-                    },
-                    {
-                      label: "Jobs This Week",
-                      value: "47",
-                      color: "text-indigo-500",
-                    },
-                    {
-                      label: "Client Rating",
-                      value: "4.92★",
-                      color: "text-amber-500",
-                    },
-                  ].map((s, i) => (
-                    <div key={i}>
-                      <p
-                        className={`text-[10px] sm:text-xs font-bold ${s.color} uppercase tracking-widest mb-1.5`}
-                      >
-                        {s.label}
-                      </p>
-                      <p
-                        className={`text-2xl sm:text-3xl font-bold ${isDarkMode ? "text-white" : "text-slate-900"}`}
-                      >
-                        {s.value}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Activity bars */}
-                <div className="space-y-3">
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-                    This Week's Activity
-                  </p>
-                  <div className="flex gap-2">
-                    {[40, 70, 45, 90, 65, 80, 55].map((h, i) => (
-                      <div
-                        key={i}
-                        className={`flex-1 h-16 rounded-lg overflow-hidden flex flex-col justify-end ${isDarkMode ? "bg-white/5" : "bg-slate-100"}`}
-                      >
-                        <motion.div
-                          initial={{ height: 0 }}
-                          whileInView={{ height: `${h}%` }}
-                          viewport={{ once: true }}
-                          transition={{ delay: i * 0.1, duration: 0.6 }}
-                          className="w-full rounded-t-md bg-gradient-to-t from-blue-600 to-blue-400"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase">
-                    <span>Mon</span>
-                    <span>Tue</span>
-                    <span>Wed</span>
-                    <span>Thu</span>
-                    <span>Fri</span>
-                    <span>Sat</span>
-                    <span>Sun</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right: Text */}
-            <div>
-              <div className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/5 px-4 py-1.5 text-sm font-medium text-blue-500 mb-6">
-                Performance Dashboard
-              </div>
-              <h2
-                className={`text-3xl sm:text-4xl font-bold tracking-tight leading-[1.1] mb-6 ${isDarkMode ? "text-white" : "text-slate-900"}`}
-              >
-                Your career stats, always at your fingertips.
-              </h2>
-              <p
-                className={`text-base md:text-lg leading-relaxed mb-10 ${isDarkMode ? "text-slate-400" : "text-slate-600"}`}
-              >
-                Track everything that matters — efficiency ratings, earnings
-                trends, job completion rates, and client feedback. Klinflow
-                turns raw data into actionable insights so you can optimize
-                every shift.
-              </p>
-              <ul className="space-y-4">
-                {[
-                  "GPS Mission Dispatch System",
-                  "Built-in HygeneX Grading Engine",
-                  "Automated Fuel & Cost Tracking",
-                  "Instant Reward Points Redemption",
-                  "Weekly Performance Reports",
-                ].map((item, i) => (
-                  <motion.li
-                    key={i}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className={`flex items-center gap-3 text-sm font-bold ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}
-                  >
-                    <CheckCircle2 className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                    {item}
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          6. AGENT TOOLKIT — Feature Grid (unique layout)
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section
-        className={`py-20 md:py-32 px-6 ${isDarkMode ? "bg-surface-950" : "bg-white"}`}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-flex items-center justify-center rounded-full border border-blue-500/20 bg-blue-500/5 px-4 py-1.5 text-sm font-medium text-blue-500 mb-6">
-              Agent Toolkit
-            </div>
-            <h2
-              className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-6 ${isDarkMode ? "text-white" : "text-slate-900"}`}
+              How It Works
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.05 }}
+              className={`text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-6 ${
+                isDarkMode ? "text-white" : "text-blue-500"
+              }`}
             >
-              Everything you need. Nothing you don't.
-            </h2>
+              One app, unlimited potential.
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className={`text-base md:text-lg leading-relaxed max-w-2xl mx-auto ${
+                isDarkMode ? "text-slate-400" : "text-slate-600"
+              }`}
+            >
+              Whether you work solo, drive for a company, or manage your own
+              fleet — the Klinflow Agent App adapts to how you operate.
+            </motion.p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid md:grid-cols-3 gap-4">
             {[
               {
-                icon: Navigation,
-                title: "Route Optimizer",
-                desc: "AI-driven multi-stop route planning. Minimize fuel, maximize collections per shift.",
+                type: "Independent Agent",
+                tagline: "Work on your own terms",
+                desc: "You're a solo operator. Set your own service zone, find and accept pickup jobs, source materials through RFQs, manage your own warehouse, and sell directly to buyers or hubs. Full control over your schedule and earnings.",
+                steps: [
+                  "Set your service zone and go online",
+                  "Accept jobs or create RFQs to source materials",
+                  "Collect, verify, and log every pickup",
+                  "Deliver and get paid instantly into your wallet",
+                ],
+                icon: Users,
                 color: "blue",
               },
               {
-                icon: Zap,
-                title: "Instant Settlement",
-                desc: "Commission triggered the moment the Hub accepts your intake. Zero waiting.",
-                color: "amber",
-              },
-              {
-                icon: Brain,
-                title: "HygeneX AI Coach",
-                desc: "Real-time earning optimization based on hotspots, market trends, and fleet data.",
+                type: "Fleet Driver",
+                tagline: "Collect for your company",
+                desc: "You're part of a collection company. Your company assigns you jobs and routes. Pick up materials, verify and log weights, and deliver to your company's warehouse. Your earnings are tracked and paid out through the company.",
+                steps: [
+                  "Receive assigned jobs from your company",
+                  "Navigate to pickup locations",
+                  "Verify materials and log weights on-site",
+                  "Deliver to the company warehouse",
+                ],
+                icon: Truck,
                 color: "indigo",
               },
               {
-                icon: Shield,
-                title: "Verified Identity",
-                desc: "KYC-verified agent profiles with trust scores. Build reputation, unlock premium jobs.",
-                color: "emerald",
-              },
-              {
-                icon: Bell,
-                title: "Smart Alerts",
-                desc: "Get notified about high-value pickups, surge pricing zones, and urgent collection requests.",
+                type: "Company Owner",
+                tagline: "Manage your collection fleet",
+                desc: "You run a collection company. Onboard and manage your fleet drivers, assign jobs, monitor pickups in real time, oversee your company warehouse, and track all payouts. Run your entire operation from one dashboard.",
+                steps: [
+                  "Register your company and onboard drivers",
+                  "Assign jobs and manage fleet operations",
+                  "Monitor collections and warehouse inventory",
+                  "Track company earnings and driver payouts",
+                ],
+                icon: BarChart3,
                 color: "violet",
               },
-              {
-                icon: Briefcase,
-                title: "Career Growth",
-                desc: "Level up from Rookie to Elite Agent. Higher tiers unlock better commissions and priority dispatch.",
-                color: "cyan",
-              },
-            ].map((f, i) => (
+            ].map((card, i) => (
               <motion.div
-                key={f.title}
-                initial={{ opacity: 0, y: 20 }}
+                key={i}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.5 }}
-                className={`group p-5 sm:p-8 rounded-2xl sm:rounded-3xl border transition-all duration-300 hover:shadow-xl ${isDarkMode ? "bg-surface-900 border-surface-900" : "bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-white"}`}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className={`relative rounded-2xl border p-7 sm:p-8 flex flex-col group transition-all duration-300 ${
+                  isDarkMode
+                    ? "bg-white/[0.02] border-slate-800 hover:border-slate-600"
+                    : "bg-slate-50 border-slate-200 hover:border-slate-300 hover:shadow-lg"
+                }`}
               >
-                <div
-                  className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-${f.color}-500/10 text-${f.color}-500 flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform`}
-                >
-                  <f.icon className="w-5 h-5 sm:w-7 sm:h-7" />
+                {/* Icon + Type */}
+                <div className="flex items-center gap-3.5 mb-5">
+                  <div
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center ${accent(card.color, "bg")}/10 ${accent(card.color, "text")} group-hover:scale-110 transition-transform`}
+                  >
+                    <card.icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3
+                      className={`text-lg font-bold ${
+                        isDarkMode ? "text-white" : "text-slate-900"
+                      }`}
+                    >
+                      {card.type}
+                    </h3>
+                    <p
+                      className={`text-xs font-semibold uppercase tracking-wider ${accent(card.color, "text")}`}
+                    >
+                      {card.tagline}
+                    </p>
+                  </div>
                 </div>
-                <h3
-                  className={`text-sm sm:text-xl font-bold mb-2 sm:mb-3 ${isDarkMode ? "text-white" : "text-slate-900"}`}
-                >
-                  {f.title}
-                </h3>
+
+                {/* Description */}
                 <p
-                  className={`text-[10px] sm:text-sm leading-relaxed ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                  className={`text-sm leading-relaxed mb-6 ${
+                    isDarkMode ? "text-slate-400" : "text-slate-600"
+                  }`}
                 >
-                  {f.desc}
+                  {card.desc}
                 </p>
+
+                {/* Steps */}
+                <div className="mt-auto space-y-3">
+                  {card.steps.map((step, j) => (
+                    <div key={j} className="flex items-start gap-3">
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[10px] font-black mt-0.5 ${
+                          isDarkMode
+                            ? "bg-white/[0.06] text-slate-400"
+                            : "bg-slate-200/80 text-slate-500"
+                        }`}
+                      >
+                        {j + 1}
+                      </div>
+                      <span
+                        className={`text-sm ${
+                          isDarkMode ? "text-slate-300" : "text-slate-700"
+                        }`}
+                      >
+                        {step}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          7. FINAL CTA
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-blue-600" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30" />
+      {/* ═══════════════════════════════════════════════════════════
+          5. FINAL CTA
+      ═══════════════════════════════════════════════════════════ */}
+      <section className="py-24 md:py-32 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 bg-blue-950" />
         <div
-          className="absolute inset-0 opacity-10"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
-              "radial-gradient(circle, white 1px, transparent 1px)",
-            backgroundSize: "30px 30px",
+              "linear-gradient(rgba(83, 176, 227, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(4, 74, 139, 0.06) 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
           }}
         />
+
         <div className="max-w-4xl mx-auto relative z-10 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
-            Ready to join the fleet?
-          </h2>
-          <p className="text-lg sm:text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-            Whether you're an independent collector or managing a fleet,
-            Klinflow gives you the platform to scale your collection operations
-            into a professional career.
-          </p>
-          <div className="flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
-            <Link to="/contact" className="flex-1 sm:flex-none sm:w-auto px-6 py-4 sm:px-10 sm:py-5 bg-white text-blue-600 font-bold rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap">
-              Contact Fleet Sales <ArrowRight className="w-5 h-5" />
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-6"
+          >
+            Ready to start collecting
+            <br />
+            and earning?
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-lg text-slate-400 mb-10 max-w-2xl mx-auto"
+          >
+            Join the growing network of Klinflow agents across Kenya.
+            Flexible hours, instant pay, and real career growth in
+            the circular economy.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+            className="flex flex-row flex-wrap items-center justify-center gap-3 sm:gap-4"
+          >
+            <Link
+              to="/contact"
+              className="flex-1 sm:flex-none sm:w-auto px-8 py-4 sm:px-10 sm:py-5 bg-white text-slate-900 font-bold rounded-full shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap"
+            >
+              Apply to Join{" "}
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>
-            
-          </div>
+          </motion.div>
         </div>
       </section>
     </Layout>

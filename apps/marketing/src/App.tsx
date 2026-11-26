@@ -1,20 +1,17 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
-// Lazy loading all pages to dramatically reduce initial JavaScript bundle size
-const Home = lazy(() => import('./pages/Home'));
+import Home from './pages/Home';
+
+// Lazy loading secondary pages to reduce initial JavaScript bundle size
 const Contact = lazy(() => import('./pages/Contact'));
 const ProductClient = lazy(() => import('./pages/ProductClient'));
 const ProductAgent = lazy(() => import('./pages/ProductAgent'));
-const ProductFleet = lazy(() => import('./pages/ProductFleet'));
+const ProductB2B = lazy(() => import('./pages/ProductB2B'));
 const ProductHub = lazy(() => import('./pages/ProductHub'));
-const Marketplace = lazy(() => import('./pages/Marketplace'));
-const Ecosystem = lazy(() => import('./pages/Ecosystem'));
-const EcosystemGallery = lazy(() => import('./pages/EcosystemGallery'));
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 const FAQ = lazy(() => import('./pages/FAQ'));
-const Pricing = lazy(() => import('./pages/Pricing'));
 
 const Loader = () => (
   <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center">
@@ -44,14 +41,12 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/products/client" element={<ProductClient />} />
             <Route path="/products/agent" element={<ProductAgent />} />
-            <Route path="/products/fleet" element={<ProductFleet />} />
+            <Route path="/products/B2B" element={<ProductB2B />} />
+            <Route path="/products/fleet" element={<Navigate to="/products/B2B" replace />} />
             <Route path="/products/hub" element={<ProductHub />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/ecosystem" element={<Ecosystem />} />
-            <Route path="/gallery" element={<EcosystemGallery />} />
+            <Route path="/marketplace" element={<ProductB2B />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/pricing" element={<Pricing />} />
           </Routes>
         </Suspense>
       </div>

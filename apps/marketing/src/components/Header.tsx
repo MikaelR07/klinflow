@@ -2,18 +2,13 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Menu, X, ChevronDown, ChevronRight,
-  User, Truck, Building2, Warehouse, Sun, Moon,
-  Code
+  Menu, X, ChevronRight,
+  User, Truck, Building2, Warehouse,
 } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core/stores/themeStore';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [productsOpen, setProductsOpen] = useState(false);
-  const [developersOpen, setDevelopersOpen] = useState(false);
-  const { isDarkMode, toggleTheme } = useThemeStore();
   const location = useLocation();
 
   useEffect(() => {
@@ -38,7 +33,7 @@ export default function Header() {
   const productLinks = [
     { name: 'Resident / Seller App', desc: 'Post and sell your waste materials', path: '/products/client', icon: User, color: 'text-primary' },
     { name: 'Agent/Fleet App', desc: 'Locate and buy Materials', path: '/products/agent', icon: Truck, color: 'text-blue-500' },
-    { name: 'Fleet Manager', desc: 'Admin dashboard for company owners', path: '/products/fleet', icon: Building2, color: 'text-indigo-500' },
+    { name: 'Business App', desc: 'B2B marketplace for recyclers', path: '/products/B2B', icon: Building2, color: 'text-indigo-500' },
     { name: 'MOS Software', desc: 'Intake and processing system', path: '/products/hub', icon: Warehouse, color: 'text-rose-500' },
   ];
 
@@ -51,129 +46,58 @@ export default function Header() {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${scrolled || mobileMenuOpen ? (isDarkMode ? 'bg-surface-950 border-white/5 shadow-sm py-4' : 'bg-surface-50 border-slate-200 shadow-sm py-4') : 'bg-transparent border-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-50 pointer-events-none px-4 pt-4 flex flex-col items-center">
+      {/* Top bar */}
+      <div
+        className={`pointer-events-auto transition-all duration-500 w-full lg:w-auto px-5 md:px-6 py-3 flex items-center justify-between gap-4 lg:gap-6 rounded-2xl ${
+          scrolled || mobileMenuOpen
+            ? 'bg-white/90 backdrop-blur-xl shadow-lg shadow-black/5 border border-slate-200/60'
+            : 'bg-[#0a5d8f] backdrop-blur-md border border-white/10'
+        }`}
+      >
         {/* Left: Logo */}
-        <div className="flex items-center flex-1">
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="flex items-center justify-center group-hover:scale-110 transition-transform">
-              <img src="/landing-page/app-logo.webp" alt="Klinflow Logo" fetchPriority="high" className="h-14 w-auto object-contain -my-2" />
-            </div>
-            <span className={`text-2xl font-bold tracking-tighter ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Klinflow</span>
-          </Link>
-        </div>
+        <Link to="/" className="flex items-center gap-2 group shrink-0">
+          <img src="/landing-page/app-logo.webp" alt="Klinflow Logo" fetchPriority="high" className="h-10 md:h-12 w-auto object-contain" />
+          <span className="text-xl md:text-2xl font-bold tracking-wide text-lime-500">Klinflow</span>
+        </Link>
         
         {/* Center: Desktop Navigation */}
-        <div className="hidden md:flex items-center justify-center gap-8">
-          <div className="relative group">
-            <button 
-              onMouseEnter={() => setProductsOpen(true)}
-              onMouseLeave={() => setProductsOpen(false)}
-              className={`flex items-center gap-1 text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}
-            >
-              Products <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${productsOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            <AnimatePresence>
-              {productsOpen && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  onMouseEnter={() => setProductsOpen(true)}
-                  onMouseLeave={() => setProductsOpen(false)}
-                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[480px] p-4 rounded-md border shadow-xl ${isDarkMode ? 'bg-surface-900 border-white/5' : 'bg-white border-slate-100'}`}
-                >
-                  <div className="grid grid-cols-2 gap-2">
-                    {productLinks.map((link) => (
-                      <Link 
-                        key={link.path} 
-                        to={link.path}
-                        className={`p-4 rounded-md transition-all ${isDarkMode ? 'hover:bg-white/5' : 'hover:bg-slate-50'}`}
-                      >
-                        <div className="flex items-center gap-3 mb-1">
-                          <link.icon className={`w-5 h-5 ${link.color}`} />
-                          <span className={`font-semibold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{link.name}</span>
-                        </div>
-                        <p className="text-xs text-slate-500 font-medium">{link.desc}</p>
-                      </Link>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <Link to="/about" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>About Us</Link>
-          <Link to="/faq" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>FAQ</Link>
-          <Link to="/pricing" className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Pricing</Link>
-          {/* Developers Dropdown */}
-          <div className="relative group">
-            <button 
-              onMouseEnter={() => setDevelopersOpen(true)}
-              onMouseLeave={() => setDevelopersOpen(false)}
-              className={`flex items-center gap-1 text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}
-            >
-              Developers <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${developersOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            <AnimatePresence>
-              {developersOpen && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  onMouseEnter={() => setDevelopersOpen(true)}
-                  onMouseLeave={() => setDevelopersOpen(false)}
-                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[280px] p-2 rounded-md border shadow-xl ${isDarkMode ? 'bg-surface-900 border-white/5' : 'bg-white border-slate-100'}`}
-                >
-                  <div className="flex flex-col gap-1">
-                    <Link 
-                      to="/ecosystem"
-                      className={`p-3 rounded-md transition-all ${isDarkMode ? 'hover:bg-white/5' : 'hover:bg-slate-50'}`}
-                    >
-                      <div className="flex items-center gap-3 mb-1">
-                        <Code className="w-5 h-5 text-emerald-500" />
-                        <span className={`font-semibold text-sm ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>API Documentation</span>
-                      </div>
-                      <p className="text-xs text-slate-500 font-medium">Integrate with Klinflow natively</p>
-                    </Link>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+        <div className="hidden lg:flex items-center gap-5 xl:gap-6">
+          <Link to="/products/client" className={`text-sm font-semibold transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white'}`}>Client App</Link>
+          <Link to="/products/agent" className={`text-sm font-semibold transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white'}`}>Agent App</Link>
+          <Link to="/products/B2B" className={`text-sm font-semibold transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white'}`}>B2B marketplace</Link>
+          <Link to="/products/hub" className={`text-sm font-semibold transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white'}`}>MOS Hub</Link>
+          <div className={`w-px h-4 ${scrolled ? 'bg-slate-200' : 'bg-white/20'}`} />
+          <Link to="/about" className={`text-sm font-semibold transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white'}`}>About Us</Link>
+          <Link to="/faq" className={`text-sm font-semibold transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white'}`}>FAQ</Link>
+          <Link to="/contact" className={`text-sm font-semibold transition-colors ${scrolled ? 'text-slate-600 hover:text-slate-900' : 'text-white/80 hover:text-white'}`}>Contact Us</Link>
         </div>
 
         {/* Right: Actions */}
-        <div className="hidden md:flex items-center justify-end flex-1 gap-4">
-          <button onClick={(e) => e.preventDefault()} className={`text-sm font-semibold transition-colors ${isDarkMode ? 'text-slate-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>
+        <div className="hidden lg:flex items-center gap-2.5 shrink-0">
+          <button
+            type="button"
+            className={`px-4 py-1.5 rounded-full text-[13px] font-bold transition-all border shadow-sm cursor-pointer ${
+              scrolled
+                ? 'border-slate-200 text-slate-900 hover:bg-slate-50 hover:border-slate-300'
+                : 'border-white/25 text-white hover:bg-white/10 hover:border-white/40'
+            }`}
+          >
             Log In
           </button>
-          <Link to="/contact" className="px-5 py-2.5 rounded-full text-sm font-bold bg-primary hover:bg-primary-dark text-white transition-all shadow-sm shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5">
-            Book a Demo
-          </Link>
-          <div className={`w-px h-5 mx-1 ${isDarkMode ? 'bg-white/10' : 'bg-slate-200'}`} />
-          <button
-            onClick={toggleTheme}
-            className={`p-2 rounded-full border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`}
-            aria-label="Toggle theme"
-          >
-            {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
+          <a className={`px-4 py-1.5 rounded-full text-[13px] font-bold transition-all shadow-sm hover:-translate-y-0.5 ${
+            scrolled
+              ? 'bg-primary hover:bg-primary-dark text-white shadow-primary/20 hover:shadow-primary/40'
+              : 'bg-white text-[#085078] hover:bg-white/90 shadow-black/10'
+          }`}>
+            Register
+          </a>
         </div>
           
         {/* Mobile Buttons */}
-        <div className="flex md:hidden items-center gap-4">
-          <button
-            onClick={toggleTheme}
-            className={`p-2 rounded-full border transition-all ${isDarkMode ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-slate-900 hover:bg-slate-100'}`}
-            aria-label="Toggle theme"
-          >
-            {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={isDarkMode ? 'text-white' : 'text-slate-900'}>
-            {mobileMenuOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
+        <div className="flex lg:hidden items-center">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={`transition-colors ${scrolled || mobileMenuOpen ? 'text-slate-900' : 'text-white'}`}>
+            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
           </button>
         </div>
       </div>
@@ -182,50 +106,45 @@ export default function Header() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className={`md:hidden overflow-hidden border-b ${isDarkMode ? 'bg-surface-950 border-white/5' : 'bg-white border-slate-200'}`}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+            className="lg:hidden pointer-events-auto w-full mt-2 rounded-2xl overflow-hidden border bg-white/95 backdrop-blur-xl border-slate-200/60 shadow-xl shadow-black/10"
           >
             <div className="p-6 space-y-8">
               <div className="flex gap-3">
-                <button onClick={(e) => e.preventDefault()} className={`flex-1 text-center px-4 py-3 rounded-xl border text-sm font-bold transition-colors ${isDarkMode ? 'bg-surface-900 border-white/10 text-white' : 'bg-white border-slate-200 text-slate-900'}`}>
+                <button type="button" className="flex-1 text-center px-4 py-3 rounded-xl border text-sm font-bold transition-colors block bg-white border-slate-200 text-slate-900 hover:bg-slate-50 cursor-pointer">
                   Log In
                 </button>
-                <Link to="/contact" className="flex-1 text-center px-4 py-3 rounded-xl text-sm font-bold bg-primary text-white shadow-sm">
-                  Book a Demo
-                </Link>
+                <a  className="flex-1 text-center px-4 py-3 rounded-xl text-sm font-bold bg-primary text-white shadow-sm">
+                  Register
+                </a>
               </div>
 
               <div className="grid gap-6">
                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 mb-2">Our Products</p>
                 {productLinks.map((link) => (
                   <Link key={link.path} to={link.path} className="flex items-center gap-3 sm:gap-4">
-                    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-md flex items-center justify-center shrink-0 ${isDarkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-md flex items-center justify-center shrink-0 bg-slate-100">
                       <link.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${link.color}`} />
                     </div>
                     <div>
-                      <p className={`text-sm sm:text-base font-semibold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{link.name}</p>
+                      <p className="text-sm sm:text-base font-semibold text-slate-900">{link.name}</p>
                       <p className="text-[10px] sm:text-xs text-slate-500 font-medium leading-tight">{link.desc}</p>
                     </div>
                   </Link>
                 ))}
               </div>
               
-              <div className={`grid grid-cols-2 gap-2 pt-6 border-t ${isDarkMode ? 'border-white/5' : 'border-slate-100'}`}>
-                <Link to="/ecosystem" className={`px-3 py-3 rounded-md border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/5 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
-                  <span>API Docs</span> <ChevronRight className="w-4 h-4 text-primary" />
-                </Link>
-                <Link to="/about" className={`px-3 py-3 rounded-md border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/5 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+              <div className="grid grid-cols-2 gap-2 pt-6 border-t border-slate-100">
+                <Link to="/about" className="px-3 py-3 rounded-md border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100">
                   <span>About Us</span> <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
-                <Link to="/faq" className={`px-3 py-3 rounded-md border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/5 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                <Link to="/faq" className="px-3 py-3 rounded-md border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100">
                   <span>FAQ</span> <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
-                <Link to="/pricing" className={`px-3 py-3 rounded-md border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/5 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
-                  <span>Pricing</span> <ChevronRight className="w-4 h-4 text-primary" />
-                </Link>
-                <Link to="/contact" className={`px-3 py-3 rounded-md border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all ${isDarkMode ? 'bg-white/5 border-white/5 text-white hover:bg-white/10' : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'}`}>
+                <Link to="/contact" className="col-span-2 px-3 py-3 rounded-md border text-[11px] sm:text-sm font-bold flex items-center justify-between transition-all bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100">
                   <span>Contact Us</span> <ChevronRight className="w-4 h-4 text-primary" />
                 </Link>
               </div>

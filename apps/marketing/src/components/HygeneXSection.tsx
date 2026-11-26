@@ -6,7 +6,6 @@ import {
   Database, CheckCircle, TrendingUp, ShieldCheck, Activity,
   Signal, Wifi, Battery, Map
 } from "lucide-react";
-import { useThemeStore } from "@klinflow/core/stores/themeStore";
 
 // Reusable components
 
@@ -158,7 +157,7 @@ const SVGConnectors = ({ isDarkMode }: { isDarkMode: boolean }) => {
 };
 
 export default function HygeneXSection() {
-  const { isDarkMode } = useThemeStore();
+  const isDarkMode = false;
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,

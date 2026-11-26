@@ -5,7 +5,6 @@ import {
   Code, Blocks, Link as LinkIcon
 } from 'lucide-react';
 import Layout from '../layouts/Layout';
-import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import { Link } from 'react-router-dom';
 
 // Upcoming API Features Overview
@@ -83,7 +82,7 @@ const faqs = [
 ];
 
 export default function Ecosystem() {
-  const { isDarkMode } = useThemeStore();
+  const isDarkMode = false;
 
   const getFeatureColor = (color: string) => {
     const map: Record<string, { bg: string, text: string, border: string }> = {

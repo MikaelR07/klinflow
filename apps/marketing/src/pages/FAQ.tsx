@@ -1,215 +1,569 @@
 import React, { useState } from 'react';
-import { ChevronDown, MessageCircle, HelpCircle, Search } from 'lucide-react';
-import { useThemeStore } from '@klinflow/core/stores/themeStore';
+import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Plus,
+  Minus,
+  Search,
+  MessageSquare,
+  Phone,
+  Mail,
+  ArrowRight,
+  Sparkles,
+  Package,
+  Truck,
+  Warehouse,
+  ShoppingCart,
+  Wallet,
+} from 'lucide-react';
 import Layout from '../layouts/Layout';
 
-const faqs = [
+interface FAQItem {
+  q: string;
+  a: string;
+}
+
+interface FAQCategory {
+  category: string;
+  icon: React.ElementType;
+  description: string;
+  questions: FAQItem[];
+}
+
+const faqs: FAQCategory[] = [
   {
-    category: "Getting Started",
+    category: 'Platform Overview',
+    icon: Sparkles,
+    description: 'How Klinflow connects households, collectors, recovery hubs, and industrial buyers.',
     questions: [
-      { q: "What is Klinflow?", a: "Klinflow is an end-to-end industrial waste management and recycling operating system. It connects households, independent collection agents, fleet logistics managers, and large-scale material processing hubs into a single unified digital ecosystem — streamlining the entire lifecycle of recyclable materials from source to sale." },
-      { q: "Who is Klinflow designed for?", a: "Klinflow serves four distinct user groups: (1) Residents & Sellers who want to sell waste materials from their homes or businesses, (2) Collection Agents who pick up and transport materials, (3) Fleet Managers who oversee agent operations, dispatching, and vehicles, and (4) Hub Operators who manage industrial-scale material intake, sorting, processing, and resale." },
-      { q: "Is Klinflow available in my country?", a: "Klinflow is currently operational across multiple African markets including Kenya, Nigeria, Ghana, and South Africa. We are actively expanding into Southeast Asia and Latin America. Contact our partnerships team to discuss availability in your region." },
-      { q: "How much does Klinflow cost?", a: "Klinflow offers tiered pricing. The Client App (for sellers) and Agent App (for collectors) are completely free to download and use. The Hub MOS (Material Operating System) is licensed on a per-facility basis with volume-based pricing. Contact sales for a custom quote tailored to your operation's scale." },
-    ]
+      {
+        q: 'What is Klinflow and how do the apps fit together?',
+        a: 'Klinflow is a connected operating platform for the recycling value chain. Residents and sellers list recyclables on the Client App; verified collectors and fleet drivers fulfill pickups on the Agent App; recovery hubs verify weights, manage inventory, and disburse payouts on the Hub MOS; and processors source bulk lots on the B2B Marketplace.',
+      },
+      {
+        q: 'Where does Klinflow currently operate?',
+        a: 'Klinflow is built for recycling operations in Kenya, with active workflows supporting Nairobi recovery hubs, local collection agents, and regional B2B aggregators. If you operate a collection yard or processing facility elsewhere in East Africa, reach out to our team to discuss onboarding.',
+      },
+      {
+        q: 'How much does it cost to use Klinflow?',
+        a: 'The Client App for residents and sellers and the Agent App for collectors are free to use. Recovery hubs and B2B businesses license the Hub MOS and B2B Marketplace on plans tailored to facility volume and team size.',
+      },
+      {
+        q: 'Can one organization operate both a Recovery Hub and buy on the B2B Market?',
+        a: 'Yes. The Hub MOS is directly integrated with the Klinflow B2B Marketplace, which supports both buying and selling in one platform. From your MOS workspace, your hub can list or auction off verified, sorted inventory directly to bulk buyers — and just as easily browse supplier listings or post Sourcing RFQs to buy extra materials and increase your hub stock.',
+      },
+    ],
   },
   {
-    category: "Client / Seller App",
+    category: 'Residents & Sellers',
+    icon: Package,
+    description: 'Listing recyclables, community collection drives, weighing, and payouts.',
     questions: [
-      { q: "How do I sell my recyclable waste?", a: "Download the Klinflow Client App, create an account, and post a listing for your materials. Specify the type (PET, HDPE, cardboard, metals, etc.), estimated weight, and your preferred pickup time. An available agent in your area will accept the job and come collect the materials directly from your location." },
-      { q: "How do I get paid as a seller?", a: "Once an agent picks up your materials and they are verified at the processing hub, payment is instantly credited to your in-app wallet. You can withdraw funds to your bank account, mobile money (M-Pesa, MTN MoMo), or keep a balance for future transactions." },
-      { q: "What types of materials can I sell?", a: "Klinflow supports a wide range of recyclable materials including PET bottles, HDPE containers, PP plastics, aluminum cans, cardboard, paper, glass, e-waste, copper, and ferrous/non-ferrous metals. The specific materials accepted depend on hub capabilities in your area." },
-      { q: "Is there a minimum quantity to sell?", a: "There is no strict minimum for posting a listing, but agents are more likely to accept jobs with a reasonable volume. We recommend a minimum of 5kg for plastics and 10kg for paper/cardboard to make the pickup worthwhile for both parties." },
-      { q: "Can I track my pickup in real-time?", a: "Yes. Once an agent accepts your pickup request, you can track their location in real-time on the map, receive ETA updates, and get instant notifications when they arrive at your location." },
-    ]
+      {
+        q: 'How do I sell my recyclables through the Client App?',
+        a: 'Create a listing in the Client App by selecting your material category, entering the estimated weight or bag count, adding a photo, and confirming your pickup location. Nearby collectors or hub-dispatched fleet drivers can accept the request and collect directly from your doorstep.',
+      },
+      {
+        q: 'What materials are accepted on Klinflow?',
+        a: 'Accepted categories depend on local hub demand and commonly include PET bottles, HDPE containers, LDPE film, PP plastics, OCC cardboard, mixed paper, glass bottles, aluminum UBC cans, and sorted scrap metals. Clean, dry, and separated materials earn the best rates.',
+      },
+      {
+        q: 'What are Community Collections?',
+        a: 'Community Collections are scheduled neighborhood collection drives organized by local recovery hubs. Residents can sign up ahead of time, enter the estimated amount of recyclables they plan to bring, and either drop them off at a set collection point or meet an assigned pickup team during the scheduled hours.',
+      },
+      {
+        q: 'How are final weights and payouts calculated?',
+        a: 'When your materials are collected or dropped off, the weight is measured on a scale and logged digitally at the current KES/kg rate. Once verified, your payout is credited to your in-app wallet for withdrawal via M-Pesa or bank transfer.',
+      },
+    ],
   },
   {
-    category: "Agent / Collector App",
+    category: 'Agents & Fleet Drivers',
+    icon: Truck,
+    description: 'Onboarding, pickup dispatch, manifest PINs, and hub gate verification.',
     questions: [
-      { q: "How do I become a Klinflow agent?", a: "Download the Klinflow Agent App and complete the onboarding process which includes identity verification (KYC), a brief training module on material identification, and linking your payment method. Once approved, you can immediately start accepting pickup requests in your service area." },
-      { q: "How are agent payments processed?", a: "Agents earn based on the materials they collect. When materials are delivered to a processing hub and pass quality verification (weight, contamination check), the corresponding payment is instantly deposited into your in-app digital wallet. Withdrawals to bank accounts and mobile money are processed within 24 hours." },
-      { q: "Can I choose which pickups to accept?", a: "Absolutely. The app shows you available pickup requests with material type, estimated weight, distance, and estimated earnings. You can accept or decline any job based on your preferences, schedule, and current location." },
-      { q: "What happens if materials fail quality checks?", a: "If materials are rejected or downgraded at the hub due to contamination or misclassification, the payout is adjusted accordingly. The app provides detailed feedback on rejections so you can improve future collections. Persistent quality issues may trigger additional training modules." },
-      { q: "Is there a rating system?", a: "Yes. Both sellers and hub operators rate agents after each transaction. Your rating affects your visibility in the job queue — higher-rated agents get priority access to premium pickup requests." },
-    ]
+      {
+        q: 'How do I become a verified Klinflow collection agent?',
+        a: 'Download the Agent App and complete registration with your national ID details, phone number, and payout account. Once verified by your local hub or operations team, you receive a Klin-ID and can start accepting pickup jobs or hub dispatches.',
+      },
+      {
+        q: 'How does fleet manifest verification work at the hub gate?',
+        a: 'Fleet drivers arriving with collected stops present their trip manifest or 6-digit verification PIN at the hub gate. The intake operator pulls up the manifest in the Hub MOS, weighs each material line on the floor scale, and issues a digital waybill.',
+      },
+      {
+        q: 'Why might a hub apply a weight deduction during intake?',
+        a: 'If a delivery contains excess moisture, dirt, or non-recyclable contamination, the intake operator can record a transparent moisture or dirt deduction percentage alongside the gross and tare weights. You can see the exact net accepted kilograms on your digital receipt.',
+      },
+      {
+        q: 'When do agents get paid after delivering to a hub?',
+        a: 'As soon as the intake operator confirms the scale verification and generates the waybill in the Hub MOS, the payout is queued for instant disbursement to your agent wallet or M-Pesa.',
+      },
+    ],
   },
   {
-    category: "Hub / MOS Software",
+    category: 'Hub MOS Software',
+    icon: Warehouse,
+    description: 'Gate intake, scale verification, inventory ledger, and price intelligence.',
     questions: [
-      { q: "What is the Hub MOS?", a: "The Hub Material Operating System (MOS) is Klinflow's enterprise-grade web dashboard for processing facility operators. It provides comprehensive tools for intake management, material verification, fleet coordination, automated financial disbursements, inventory tracking, batch processing, dispute resolution, and operational analytics." },
-      { q: "Can I manage multiple hub locations?", a: "Yes. The Hub MOS supports multi-site operations with centralized reporting. Each facility can have its own team, inventory, and operational configuration while rolling up into a single executive dashboard for company-wide visibility." },
-      { q: "How does the intake process work?", a: "Materials arriving at the hub go through a digital intake flow: agent check-in, material identification and weighing, quality grading (with optional AI-assisted contamination detection), photo documentation, and automated payout calculation. The entire process is paperless and produces an immutable audit trail." },
-      { q: "What financial tools are included?", a: "The Hub MOS includes agent disbursement management, seller payouts, automated payment approvals, accounts receivable/payable tracking, expense management, procurement and purchase orders, invoice generation, and comprehensive financial reporting with export capabilities." },
-      { q: "Is the data secure?", a: "Klinflow employs enterprise-grade security: AES-256 encryption at rest, TLS 1.3 in transit, Role-Based Access Control (RBAC), multi-factor authentication, immutable transaction ledgers, and SOC 2 Type II compliance. All financial data is processed through PCI DSS-compliant infrastructure." },
-    ]
+      {
+        q: 'What does the Hub MOS manage?',
+        a: 'The Hub Material Operating System (MOS) gives recovery hub teams one workspace for gate intake management, scale verification with gross/tare/deduction tracking, resident pickup dispatch, community collection drives, inventory ledgers, agent disbursements, and B2B sales.',
+      },
+      {
+        q: 'Can we handle walk-in sellers alongside fleet drivers?',
+        a: 'Yes. The Intake Terminal supports three dedicated workflows: Fleet Delivery Receiving with manifest verification, Registered Agent Intake via Klin-ID or phone lookup, and Walk-in & Drop-off Intake for ad-hoc residents and scrap sellers.',
+      },
+      {
+        q: 'How does Price Intelligence help our hub set buying rates?',
+        a: 'Price Intelligence tracks live KES/kg commodity benchmarks, 7-day and 30-day price changes, supply/demand signals, and top market movers across plastics, paper, glass, and metals so you can adjust facility buying prices without guessing.',
+      },
+      {
+        q: 'Can we manage multiple recovery hubs under one organization?',
+        a: 'Yes. Organizations can operate multiple hub locations with role-based access for gate operators, dispatchers, and finance leads while keeping inventory and financial records cleanly separated per facility.',
+      },
+    ],
   },
   {
-    category: "Fleet Management",
+    category: 'B2B Marketplace',
+    icon: ShoppingCart,
+    description: 'Verified material lots, Sourcing RFQs, bidding, and bulk procurement.',
     questions: [
-      { q: "What fleet management capabilities does Klinflow offer?", a: "Klinflow's Fleet Manager provides real-time GPS tracking of all agents and vehicles, intelligent route optimization, automated dispatch assignments, vehicle maintenance scheduling, fuel tracking, driver performance analytics, and comprehensive fleet reporting dashboards." },
-      { q: "Can I set custom service zones?", a: "Yes. You can define geographic service boundaries (geofences) for your fleet operations. Agents are automatically assigned pickups within their designated zones, and alerts are triggered if vehicles leave their approved areas." },
-      { q: "How does route optimization work?", a: "Our routing engine uses machine learning to optimize pickup sequences based on real-time traffic data, material volumes, vehicle capacity, driver availability, and time windows. This typically reduces fuel costs by 15-30% and increases daily pickup volumes by up to 40%." },
-    ]
+      {
+        q: 'How do recyclers and manufacturers source bulk materials?',
+        a: 'Buyers can either browse verified material lots directly on the Market Board (filtering by material category, location radius, and available kilograms) or broadcast a Sourcing RFQ specifying target weight, grade, target price, and delivery method.',
+      },
+      {
+        q: 'How do Sourcing RFQs work?',
+        a: 'Create an RFQ with your required material, grade, target weight, KES/kg target price, and deadline. Verified aggregators and hubs submit competing quotes, which you can review side by side along with supplier ratings before awarding.',
+      },
+      {
+        q: 'Can hubs sell processed stock directly on the B2B Market?',
+        a: 'Yes. Once materials are verified and recorded in your hub inventory, you can list baled cardboard, PET flakes, HDPE regrind, or aluminum bales on the marketplace and manage incoming bids directly.',
+      },
+    ],
   },
   {
-    category: "Technical & Integration",
+    category: 'Payments & Support',
+    icon: Wallet,
+    description: 'Disbursements, dispute resolution, and reaching our operations team.',
     questions: [
-      { q: "Does Klinflow integrate with existing ERP systems?", a: "Yes. The Klin API provides RESTful endpoints for integrating with SAP, Oracle, Microsoft Dynamics, and other ERP platforms. We also support webhook-based event streaming for real-time data synchronization with your existing business systems." },
-      { q: "What is the Klin API?", a: "The Klin API is our developer platform that exposes programmatic access to material tracking, pricing intelligence, transaction data, fleet telemetry, and reporting endpoints. It enables third-party integrations, custom dashboards, and automated workflows." },
-      { q: "What are the platform uptime guarantees?", a: "Klinflow maintains a 99.95% uptime SLA for enterprise customers. Our infrastructure is deployed across multiple availability zones with automatic failover, and we provide a public status page for real-time system health monitoring." },
-    ]
-  }
+      {
+        q: 'What payout methods are supported?',
+        a: 'Klinflow supports digital wallet settlements with withdrawals to M-Pesa mobile money and Kenyan bank accounts. Every payout is tied to a verified intake receipt or completed B2B order for clear reconciliation.',
+      },
+      {
+        q: 'What happens if there is a weight or quality disagreement?',
+        a: 'Every intake records claimed weight, gross scale weight, tare weight, deductions, and operator notes on a digital waybill. If a dispute is raised, support and hub managers can review the exact intake log and resolve adjustments transparently.',
+      },
+      {
+        q: 'How can I request a demo or get help with an active pickup?',
+        a: 'For Hub MOS or B2B onboarding demos, submit a request through our Contact page or email support@klinflow.com. For live pickup or dispatch assistance, contact our operations desk via phone or WhatsApp at +254 113 787 588.',
+      },
+    ],
+  },
 ];
 
 export default function FAQ() {
-  const { isDarkMode } = useThemeStore();
-  const [openIndex, setOpenIndex] = useState<string | null>("Getting Started-0");
+  const [openIndex, setOpenIndex] = useState<string | null>('Platform Overview-0');
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   const toggleFAQ = (id: string) => {
     setOpenIndex(openIndex === id ? null : id);
   };
 
-  const filteredFaqs = faqs.map(section => ({
-    ...section,
-    questions: section.questions.filter(faq => {
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        return faq.q.toLowerCase().includes(q) || faq.a.toLowerCase().includes(q);
+  const filteredCategories = faqs
+    .map((cat) => ({
+      ...cat,
+      questions: cat.questions.filter((q) => {
+        if (!searchQuery) return true;
+        const query = searchQuery.toLowerCase();
+        return (
+          q.q.toLowerCase().includes(query) ||
+          q.a.toLowerCase().includes(query) ||
+          cat.category.toLowerCase().includes(query)
+        );
+      }),
+    }))
+    .filter((cat) => {
+      if (selectedCategory !== 'all' && cat.category !== selectedCategory) {
+        return false;
       }
-      return true;
-    })
-  })).filter(section => {
-    if (activeCategory && section.category !== activeCategory) return false;
-    return section.questions.length > 0;
-  });
+      return cat.questions.length > 0;
+    });
 
-  const categories = faqs.map(s => s.category);
-  const totalQuestions = faqs.reduce((sum, s) => sum + s.questions.length, 0);
+  const totalQuestions = faqs.reduce((acc, cat) => acc + cat.questions.length, 0);
+  const matchingCount = filteredCategories.reduce(
+    (acc, cat) => acc + cat.questions.length,
+    0
+  );
 
   return (
     <Layout>
-      <div className="pb-20">
-        
-        {/* Hero */}
-        <div className="max-w-5xl mx-auto px-6 pt-16 pb-12">
-          <div className="text-center">
-            
-            <h1 className={`text-4xl md:text-6xl font-black tracking-tighter mb-5 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-              Frequently Asked Questions
-            </h1>
-            <p className={`text-lg max-w-2xl mx-auto leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-              {totalQuestions} answers covering every aspect of the Klinflow ecosystem — from selling your first kilo of waste to managing industrial-scale processing operations.
-            </p>
-          </div>
-        </div>
+      <div className="w-full bg-white">
+        {/* ── 1. CLEAN LIGHT HELP-CENTER HEADER ── */}
+        <section className="pt-36 pb-14 md:pt-44 md:pb-16 px-6 bg-gradient-to-b from-[#edf3f9] via-[#f5f8fc] to-white border-b border-slate-200/80">
+          <div className="max-w-5xl mx-auto text-center">
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#085078]/10 text-[#085078] border border-[#085078]/15 mb-5"
+            >
+              Help Desk &amp; Documentation
+            </motion.span>
 
-        <div className="max-w-5xl mx-auto px-6">
+            <motion.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.05 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-900 mb-5 leading-[1.08]"
+            >
+              How can we <span className="text-[#1178ab]">help you?</span>
+            </motion.h1>
 
-          {/* Search & Category Filters */}
-          <div className={`p-6 rounded-2xl border mb-10 ${isDarkMode ? 'bg-surface-900 border-white/5' : 'bg-white border-slate-200 shadow-sm'}`}>
-            <div className="relative mb-5">
-              <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.1 }}
+              className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed"
+            >
+              Clear answers on selling recyclables, field collection, Hub MOS
+              operations, and trading on the Klinflow B2B Marketplace.
+            </motion.p>
+
+            {/* Search Input */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.15 }}
+              className="relative max-w-2xl mx-auto"
+            >
+              <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search questions... e.g. 'how do I get paid'"
-                className={`w-full pl-12 pr-4 py-3.5 rounded-xl border text-sm font-medium outline-none transition-colors ${isDarkMode ? 'bg-surface-950 border-white/10 text-white placeholder:text-slate-500 focus:border-emerald-500/50' : 'bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-emerald-500/50'}`}
+                placeholder="Search topics — e.g. M-Pesa payouts, waybills, RFQs, PET bottles..."
+                className="w-full pl-12 pr-24 py-4 rounded-xl bg-white text-slate-900 placeholder:text-slate-400 border border-slate-200/90 shadow-lg shadow-slate-900/5 outline-none text-sm sm:text-base focus:border-[#1178ab] focus:ring-2 focus:ring-[#1178ab]/15 transition-all"
               />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => setActiveCategory(null)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${!activeCategory ? (isDarkMode ? 'bg-emerald-500 text-white' : 'bg-emerald-500 text-white') : (isDarkMode ? 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10' : 'bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200')}`}
-              >
-                All
-              </button>
-              {categories.map((cat) => (
+              {searchQuery ? (
                 <button
-                  key={cat}
-                  onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${activeCategory === cat ? (isDarkMode ? 'bg-emerald-500 text-white' : 'bg-emerald-500 text-white') : (isDarkMode ? 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10' : 'bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200')}`}
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-500 hover:text-slate-900 px-2.5 py-1 rounded-md bg-slate-100 cursor-pointer"
                 >
-                  {cat}
+                  Clear
+                </button>
+              ) : (
+                <span className="hidden sm:inline-block absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-slate-400">
+                  {totalQuestions} articles
+                </span>
+              )}
+            </motion.div>
+
+            {/* Quick Horizontal Category Filter Pills (Mobile & Quick Jump) */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-7 lg:hidden">
+              <button
+                type="button"
+                onClick={() => setSelectedCategory('all')}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
+                  selectedCategory === 'all'
+                    ? 'bg-[#085078] text-white border-[#085078]'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                }`}
+              >
+                All ({totalQuestions})
+              </button>
+              {faqs.map((cat) => (
+                <button
+                  key={cat.category}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat.category)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer border ${
+                    selectedCategory === cat.category
+                      ? 'bg-[#085078] text-white border-[#085078]'
+                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  {cat.category}
                 </button>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* FAQ Sections */}
-          {filteredFaqs.length === 0 ? (
-            <div className="py-20 text-center">
-              <Search className={`w-12 h-12 mx-auto mb-4 ${isDarkMode ? 'text-slate-600' : 'text-slate-300'}`} />
-              <h3 className={`text-lg font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>No results found</h3>
-              <p className={`text-sm ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`}>Try a different search term or browse all categories.</p>
-            </div>
-          ) : (
-            <div className="space-y-12">
-              {filteredFaqs.map((section, sIdx) => (
-                <div key={sIdx}>
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-1.5 h-7 bg-emerald-500 rounded-full" />
-                    <h2 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{section.category}</h2>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${isDarkMode ? 'bg-white/5 text-slate-400' : 'bg-slate-100 text-slate-500'}`}>{section.questions.length}</span>
-                  </div>
-                  <div className="space-y-3">
-                    {section.questions.map((faq, qIdx) => {
-                      const id = `${section.category}-${qIdx}`;
-                      const isOpen = openIndex === id;
+        {/* ── 2. KNOWLEDGE BASE CONTENT (SIDEBAR INDEX + HAIRLINE ACCORDION) ── */}
+        <section className="py-16 md:py-20 px-6 bg-white">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+              {/* Left Column: Clean Borderless Category Index */}
+              <aside className="hidden lg:block lg:col-span-4 lg:sticky lg:top-28 space-y-8">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-3 px-3">
+                    Topics
+                  </p>
+                  <nav className="space-y-0.5">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategory('all')}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold transition-all cursor-pointer border-l-2 ${
+                        selectedCategory === 'all'
+                          ? 'border-[#1178ab] text-[#085078] bg-[#f0f7fc]'
+                          : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                      }`}
+                    >
+                      <span>All Topics</span>
+                      <span className="text-xs font-mono text-slate-400 tabular-nums">
+                        {totalQuestions}
+                      </span>
+                    </button>
+
+                    {faqs.map((cat) => {
+                      const Icon = cat.icon;
+                      const isActive = selectedCategory === cat.category;
                       return (
-                        <div 
-                          key={qIdx} 
-                          className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
-                            isDarkMode 
-                              ? isOpen ? 'bg-surface-900 border-emerald-500/30 shadow-lg shadow-emerald-500/5' : 'bg-surface-900 border-white/5 hover:border-white/10'
-                              : isOpen ? 'bg-white border-emerald-200 shadow-lg shadow-emerald-500/5' : 'bg-white border-slate-200 hover:border-slate-300 shadow-sm'
+                        <button
+                          key={cat.category}
+                          type="button"
+                          onClick={() => setSelectedCategory(cat.category)}
+                          className={`w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold transition-all cursor-pointer border-l-2 ${
+                            isActive
+                              ? 'border-[#1178ab] text-[#085078] bg-[#f0f7fc]'
+                              : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                           }`}
                         >
-                          <button
-                            onClick={() => toggleFAQ(id)}
-                            className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none group"
-                          >
-                            <span className={`font-semibold pr-4 transition-colors ${isOpen ? 'text-emerald-500' : (isDarkMode ? 'text-slate-200 group-hover:text-white' : 'text-slate-800 group-hover:text-slate-900')}`}>
-                              {faq.q}
+                          <span className="flex items-center gap-2.5 truncate pr-2">
+                            <Icon
+                              className={`w-4 h-4 shrink-0 ${
+                                isActive ? 'text-[#1178ab]' : 'text-slate-400'
+                              }`}
+                            />
+                            <span className="truncate">{cat.category}</span>
+                          </span>
+                          <span className="text-xs font-mono text-slate-400 tabular-nums">
+                            {cat.questions.length}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </nav>
+                </div>
+
+                {/* Understated Direct Help Note */}
+                <div className="pt-6 border-t border-slate-200/80 px-3">
+                  <p className="text-sm font-bold text-slate-900 mb-1.5">
+                    Need hands-on assistance?
+                  </p>
+                  <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                    Our operations team can walk you through Hub MOS setup or
+                    resolve an active pickup issue.
+                  </p>
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1178ab] hover:text-[#085078] transition-colors"
+                  >
+                    <span>Contact our team</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </aside>
+
+              {/* Right Column: Hairline-Divided FAQ Accordions */}
+              <div className="lg:col-span-8">
+                {searchQuery && (
+                  <p className="text-xs font-medium text-slate-500 mb-6">
+                    Showing <span className="font-bold text-slate-900">{matchingCount}</span>{' '}
+                    {matchingCount === 1 ? 'result' : 'results'} for &ldquo;{searchQuery}&rdquo;
+                  </p>
+                )}
+
+                {filteredCategories.length === 0 ? (
+                  <div className="py-16 px-6 rounded-2xl border border-slate-200/80 bg-slate-50/70 text-center">
+                    <Search className="w-10 h-10 mx-auto text-slate-400 mb-4" />
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">
+                      No matching questions found
+                    </h3>
+                    <p className="text-sm text-slate-600 max-w-md mx-auto mb-6">
+                      We couldn&apos;t find any answers matching &ldquo;{searchQuery}&rdquo;. Try a broader keyword or reset your filters.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery('');
+                        setSelectedCategory('all');
+                      }}
+                      className="px-5 py-2.5 rounded-full text-xs font-bold bg-[#085078] text-white hover:bg-[#0a6191] transition-colors cursor-pointer"
+                    >
+                      Reset Filters
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-14">
+                    {filteredCategories.map((category) => {
+                      const Icon = category.icon;
+                      return (
+                        <div key={category.category}>
+                          {/* Category Header */}
+                          <div className="flex items-start justify-between gap-4 pb-4 border-b border-slate-200">
+                            <div className="flex items-start gap-3">
+                              <div className="w-9 h-9 rounded-lg bg-[#f0f7fc] border border-[#1178ab]/15 text-[#085078] flex items-center justify-center shrink-0 mt-0.5">
+                                <Icon className="w-4 h-4" />
+                              </div>
+                              <div>
+                                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+                                  {category.category}
+                                </h2>
+                                <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+                                  {category.description}
+                                </p>
+                              </div>
+                            </div>
+                            <span className="text-xs font-mono font-semibold text-slate-400 shrink-0 pt-1">
+                              {category.questions.length} Qs
                             </span>
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-all ${isOpen ? 'bg-emerald-500/10 rotate-180' : (isDarkMode ? 'bg-white/5' : 'bg-slate-100')}`}>
-                              <ChevronDown className={`w-4 h-4 transition-colors ${isOpen ? 'text-emerald-500' : 'text-slate-400'}`} />
-                            </div>
-                          </button>
-                          {isOpen && (
-                            <div className={`px-6 pb-6 text-sm leading-[1.8] ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                              {faq.a}
-                            </div>
-                          )}
+                          </div>
+
+                          {/* Minimalist Hairline Accordion Rows */}
+                          <div className="divide-y divide-slate-200/80 border-b border-slate-200/80">
+                            {category.questions.map((faq, qIdx) => {
+                              const id = `${category.category}-${qIdx}`;
+                              const isOpen = openIndex === id;
+                              return (
+                                <div key={qIdx} className="group">
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleFAQ(id)}
+                                    className="w-full py-5 flex items-start justify-between text-left gap-4 cursor-pointer focus:outline-none"
+                                  >
+                                    <span
+                                      className={`text-base sm:text-[17px] font-semibold tracking-tight transition-colors ${
+                                        isOpen
+                                          ? 'text-[#085078]'
+                                          : 'text-slate-900 group-hover:text-[#1178ab]'
+                                      }`}
+                                    >
+                                      {faq.q}
+                                    </span>
+                                    <span
+                                      className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors mt-0.5 ${
+                                        isOpen
+                                          ? 'bg-[#085078] text-white'
+                                          : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'
+                                      }`}
+                                    >
+                                      {isOpen ? (
+                                        <Minus className="w-3.5 h-3.5" />
+                                      ) : (
+                                        <Plus className="w-3.5 h-3.5" />
+                                      )}
+                                    </span>
+                                  </button>
+
+                                  <AnimatePresence initial={false}>
+                                    {isOpen && (
+                                      <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.25, ease: 'easeInOut' }}
+                                        className="overflow-hidden"
+                                      >
+                                        <p className="pb-6 pr-10 text-sm sm:text-base leading-relaxed text-slate-600">
+                                          {faq.a}
+                                        </p>
+                                      </motion.div>
+                                    )}
+                                  </AnimatePresence>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
                       );
                     })}
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Still have questions CTA */}
-          <div className={`mt-20 p-10 sm:p-14 rounded-3xl text-center border relative overflow-hidden ${isDarkMode ? 'bg-surface-900 border-white/5' : 'bg-white border-slate-200 shadow-xl shadow-slate-200/20'}`}>
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 bg-emerald-500/10 rounded-full blur-[80px]"></div>
-            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-blue-500/10 rounded-full blur-[80px]"></div>
-            
-            <div className="relative z-10">
-              <MessageCircle className={`w-10 h-10 mx-auto mb-5 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
-              <h3 className={`text-2xl font-bold mb-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Still have questions?</h3>
-              <p className={`mb-8 max-w-md mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-                Can't find the answer you're looking for? Our support team is available 24/7 to help.
-              </p>
-              <a href="/contact" className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl text-sm font-bold bg-emerald-500 text-white hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/25">
-                Contact Support
-              </a>
+                )}
+              </div>
             </div>
           </div>
+        </section>
 
-        </div>
+        {/* ── 3. HAIRLINE-DIVIDED SUPPORT BAR ── */}
+        <section className="py-16 md:py-20 px-6 bg-[#edf3f9] border-t border-slate-200/80">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-slate-300/70">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1178ab] block mb-2">
+                  Support Channels
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+                  Still have questions?
+                </h3>
+              </div>
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-bold bg-[#085078] text-white hover:bg-[#0a6191] transition-all shadow-md shadow-[#085078]/15 self-start md:self-auto"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>Open Contact Desk</span>
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-300/70">
+              <div className="py-5 md:py-0 md:pr-8 first:pt-0">
+                <div className="flex items-center gap-2.5 text-slate-900 font-bold text-base mb-1.5">
+                  <Mail className="w-4 h-4 text-[#1178ab]" />
+                  <span>Email Support</span>
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                  For account help, wallet payouts, and general platform questions.
+                </p>
+                <a
+                  href="mailto:support@klinflow.com"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#085078] hover:underline"
+                >
+                  <span>support@klinflow.com</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+
+              <div className="py-5 md:py-0 md:px-8">
+                <div className="flex items-center gap-2.5 text-slate-900 font-bold text-base mb-1.5">
+                  <Phone className="w-4 h-4 text-[#1178ab]" />
+                  <span>Hotline &amp; WhatsApp</span>
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                  Live pickup and dispatch support, Monday to Friday, 8am – 6pm EAT.
+                </p>
+                <a
+                  href="tel:+254113787588"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#085078] hover:underline"
+                >
+                  <span>+254 (0) 113 787 588</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+
+              <div className="py-5 md:py-0 md:pl-8 last:pb-0">
+                <div className="flex items-center gap-2.5 text-slate-900 font-bold text-base mb-1.5">
+                  <Warehouse className="w-4 h-4 text-[#1178ab]" />
+                  <span>Hub MOS &amp; B2B Demos</span>
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                  Schedule a walkthrough for your recovery facility or trading team.
+                </p>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#085078] hover:underline"
+                >
+                  <span>Request a Demo</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </Layout>
   );

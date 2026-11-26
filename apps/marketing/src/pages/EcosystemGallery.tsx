@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, Search, Maximize2, X, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useThemeStore } from '@klinflow/core/stores/themeStore';
 import Layout from '../layouts/Layout';
 
 const allImages = [
@@ -33,7 +32,7 @@ const formatTitle = (filename: string) => {
 };
 
 export default function EcosystemGallery() {
-  const { isDarkMode } = useThemeStore();
+  const isDarkMode = false;
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   return (
