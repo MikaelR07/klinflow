@@ -64,186 +64,186 @@ const ecosystemNodes = [
   {
     id: "communities",
     label: "Residents",
-    badge: "Consumer & Producer",
+    badge: "Homes & Shops",
     icon: Users,
     image: "/landing-page/interconnected/Residents_ Turn Waste Into Value.webp",
     gradient: "from-emerald-500 via-teal-600 to-cyan-700",
     glowColor: "rgba(16, 185, 129, 0.4)",
-    tagline: "Household & Local Waste Generation",
-    title: "Residents & Small Producers",
+    tagline: "Homes & Small Shops",
+    title: "Homes & Small Shops",
     description:
-      "Homes, estates, cafeterias, and small businesses that produce waste and want to seamlessly dispose of it while earning money.",
+      "Families, estates, kiosks, and small shops that want to clear their plastic, paper, or scrap and earn extra cash.",
     features: [
       {
-        title: "On-Demand Disposal",
-        desc: "Easily schedule pickups for accumulated waste directly from your location.",
+        title: "Request a Pickup",
+        desc: "Call a collector to your gate or shop right from your phone.",
       },
       {
-        title: "Earn Money",
-        desc: "Get paid instantly for disposing of your recyclable materials.",
+        title: "Get Paid via M-Pesa",
+        desc: "Receive your money fast as soon as your items are weighed.",
       },
       {
-        title: "Broad Coverage",
-        desc: "Suitable for individual households, small businesses, and cafeterias.",
+        title: "Clean & Simple",
+        desc: "Works easily for families, apartments, kiosks, and cafes.",
       },
       {
-        title: "Eco-Friendly",
-        desc: "Contribute to a cleaner environment while earning rewards.",
+        title: "Keep Your Estate Clean",
+        desc: "Turn everyday trash into cash while keeping your area tidy.",
       },
     ],
   },
   {
     id: "collectors",
     label: "Agents",
-    badge: "Field Logistics",
+    badge: "Collectors & Drivers",
     icon: Truck,
     image: "/landing-page/interconnected/agents.webp",
     gradient: "from-blue-600 via-cyan-600 to-teal-700",
     glowColor: "rgba(59, 130, 246, 0.4)",
-    tagline: "Mobile Collection & Verification",
-    title: "Field Agents",
+    tagline: "Field Pickups",
+    title: "Field Collectors",
     description:
-      "The active workforce collecting materials in the field, divided into organized fleet agents and independent individual agents.",
+      "People with handcarts, tuk-tuks, or trucks who pick up recyclables from homes and deliver them to recycling yards.",
     features: [
       {
-        title: "Unlimited Collection Opportunities",
-        desc: "Collect as much as you can and earn as much as you want.",
+        title: "Find More Work",
+        desc: "See people near you who have recyclables ready to sell.",
       },
       {
-        title: "Choose Your Role",
-        desc: "Operate flexibly as an individual agent or as part of a managed fleet.",
+        title: "Work Your Way",
+        desc: "Work for yourself or drive for a recycling yard.",
       },
       {
-        title: "Smart Routing",
-        desc: "Use intelligent mapping to navigate efficiently to collection points.",
+        title: "Easy Directions",
+        desc: "Follow simple maps straight to the pickup gate.",
       },
       {
-        title: "Resale at your Convinience",
-        desc: "Sell your materials to buyers of your choice through the market place.",
+        title: "Quick Cash",
+        desc: "Drop off at a yard and get paid immediately.",
       },
     ],
   },
   {
     id: "recyclers",
     label: "Recyclers",
-    badge: "Industrial Sourcing",
+    badge: "Factories",
     icon: Factory,
     image: "/landing-page/interconnected/large-recyler.webp",
     gradient: "from-amber-500 via-orange-600 to-amber-800",
     glowColor: "rgba(245, 158, 11, 0.4)",
-    tagline: "High-Volume Intake & Processing",
-    title: "Large-Scale Recyclers",
+    tagline: "Factory Supply",
+    title: "Factories & Big Buyers",
     description:
-      "The big players and industrial buyers dealing with massive material volumes, purchasing directly from hubs and major collectors.",
+      "Recycling factories that need steady supplies of clean plastic, cardboard, glass, and metal to make new products.",
     features: [
       {
-        title: "High-Volume Purchasing",
-        desc: "Source and buy massive quantities of sorted, high-quality materials.",
+        title: "Buy Large Loads",
+        desc: "Order full truckloads of sorted plastics, paper, or metal.",
       },
       {
-        title: "Direct Hub Access",
-        desc: "Procure materials seamlessly from established hubs across the network.",
+        title: "Straight from Yards",
+        desc: "Buy directly from trusted yards without middlemen.",
       },
       {
-        title: "Scalable Operations",
-        desc: "Manage and process huge influxes of recyclables efficiently.",
+        title: "Steady Supply",
+        desc: "Always have enough materials to keep your machines running.",
       },
       {
-        title: "Reliable Supply",
-        desc: "Maintain a steady, dependable flow of essential raw materials.",
+        title: "Clean & Sorted",
+        desc: "Every load is weighed and checked before it arrives.",
       },
     ],
   },
   {
     id: "enterprises",
     label: "Businesses",
-    badge: "Corporate ESG",
+    badge: "Offices & Hotels",
     icon: Building2,
     image: "/landing-page/interconnected/business.webp",
     gradient: "from-purple-600 via-indigo-600 to-blue-800",
     glowColor: "rgba(147, 51, 234, 0.4)",
-    tagline: "ESG Compliance & Zero-Waste Ops",
-    title: "Corporate Businesses",
+    tagline: "Workplace Recycling",
+    title: "Offices, Schools & Hotels",
     description:
-      "Corporate entities and enterprises that integrate recycling seamlessly into their operations via the Klinflow ecosystem.",
+      "Offices, hotels, supermarkets, and schools that produce lots of cartons, bottles, and cans every week.",
     features: [
       {
-        title: "Corporate Recycling",
-        desc: "Seamlessly integrate end-to-end waste management into daily operations.",
+        title: "Regular Pickups",
+        desc: "Set up weekly pickups that don't disturb your work.",
       },
       {
-        title: "ESG Compliance",
-        desc: "Easily meet and report on environmental and sustainability goals.",
+        title: "Earn from Waste",
+        desc: "Sell your clean cartons and bottles instead of paying to dump them.",
       },
       {
-        title: "Impact Tracking",
-        desc: "Monitor and report on corporate recycling achievements transparently.",
+        title: "Simple Records",
+        desc: "See how many kilos your business has recycled.",
       },
       {
-        title: "Sustainable Partnerships",
-        desc: "Connect with a reliable green ecosystem for responsible disposal.",
+        title: "Trusted Collectors",
+        desc: "Only verified drivers and yards handle your waste.",
       },
     ],
   },
   {
     id: "buyers",
     label: "Sellers",
-    badge: "Scrap & Collection",
+    badge: "Scrap Pickers",
     icon: ShoppingCart,
     image: "/landing-page/interconnected/seller.webp",
     gradient: "from-teal-500 via-emerald-600 to-green-700",
     glowColor: "rgba(20, 184, 166, 0.4)",
-    tagline: "Scrappers & Waste Aggregators",
-    title: "Small Collectors & Sellers",
+    tagline: "Everyday Scrap Sellers",
+    title: "Scrap Collectors & Dealers",
     description:
-      "Small collectors, independent pickers, and informal scrappers who gather and sell recyclable materials for a living.",
+      "Hardworking pickers and small scrap dealers who collect and sort recyclables every day to feed their families.",
     features: [
       {
-        title: "Earn a Living",
-        desc: "Turn daily waste picking into a reliable and sustainable income stream.",
+        title: "Daily Income",
+        desc: "Turn every kilo you collect into reliable money.",
       },
       {
-        title: "Easy Selling",
-        desc: "Quickly connect with agents and hubs to sell your gathered materials.",
+        title: "Easy to Sell",
+        desc: "Find nearby yards and buyers ready to take your load.",
       },
       {
-        title: "Fair Pricing",
-        desc: "Access transparent, competitive, and guaranteed market rates.",
+        title: "Honest Weights",
+        desc: "Your load is weighed fairly with clear prices per kilo.",
       },
       {
-        title: "Direct Trade",
-        desc: "Sell sorted recyclables easily and securely within the ecosystem.",
+        title: "Fast Payment",
+        desc: "No waiting weeks — get paid as soon as you sell.",
       },
     ],
   },
   {
     id: "circular",
     label: "Hub Owners",
-    badge: "Hub & Fleet Management",
+    badge: "Yard Owners",
     icon: Recycle,
     image: "/landing-page/interconnected/hubs.webp",
     gradient: "from-slate-700 via-emerald-700 to-slate-900",
     glowColor: "rgba(16, 185, 129, 0.4)",
-    tagline: "MOS Software & Fleet Command",
-    title: "Hub Owners",
+    tagline: "Yard Management",
+    title: "Recycling Yard Owners",
     description:
-      "Operators equipped with the MOS software to effectively manage their hubs and coordinate their fleet operations.",
+      "Yard owners who buy from collectors, sort materials, and sell to big factories.",
     features: [
       {
-        title: "Hub Management (MOS)",
-        desc: "Full operational control over your hubs via the advanced MOS software.",
+        title: "Ditch Paper Books",
+        desc: "Record every kilo bought and sold neatly on your phone or computer.",
       },
       {
-        title: "Fleet Coordination",
-        desc: "Seamlessly manage, track, and dispatch your associated fleet agents.",
+        title: "Track Your Drivers",
+        desc: "See where your drivers are and what they have collected.",
       },
       {
-        title: "Inventory Control",
-        desc: "Track material intake, processing, and outbound sales with precision.",
+        title: "Know Your Stock",
+        desc: "Always know how many kilos of plastic or carton are in your yard.",
       },
       {
-        title: "Operational Analytics",
-        desc: "Monitor the entire flow of your business operations in real-time.",
+        title: "Pay Fast",
+        desc: "Send M-Pesa payouts to collectors with one click.",
       },
     ],
   },
@@ -484,20 +484,15 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="lg:col-span-5 max-w-xl lg:max-w-2xl -translate-y-4 lg:-translate-y-8"
             >
-              <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 mb-4 rounded-full">
-                <span className="text-[10px] sm:text-xs font-semibold capitalize  tracking-[0.3em] text-blue-50">
-                  Simplifying Material Recovery For EveryOne
-                </span>
-              </div>
+              
 
               <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-5xl font-bold tracking-wider mb-6 leading-[1.1] text-white">
-                THE PLATFORM TO TRADE<span className="text-lime-400"> RECYCLABLE MATERIALS.</span>
+                THE PLATFORM TO TRADE <span className="text-lime-400"> RECYCLABLE MATERIALS.</span>
               </h1>
 
               <p className="text-sm sm:text-base md:text-lg font-normal leading-relaxed mb-10 text-blue-50">
-             KlinFlow is a digital operating and trading platform that helps waste recovery businesses manage operations, track recyclable materials and connect with commercial buyers, redefining how recyclable materials are collected, traded, and monetized. we empower our partners to participate in a transparent, efficient and data-driven circular economy.
+                Klinflow is Kenya's most trusted recyclables marketplace where collectors, recyclers, and manufacturers come together to buy and sell recyclable materials.
               </p>
-
               <div className="flex flex-row items-stretch gap-4 w-full">
                 <Link
                   to="/contact"
@@ -646,8 +641,7 @@ export default function Home() {
             <p
               className={`text-sm sm:text-base md:text-lg mx-auto font-normal leading-relaxed ${isDarkMode ? "text-slate-300" : "text-slate-700"}`}
             >
-              Every participant in the recycling value chain achieves more when operating as part of a connected network.
-              We bring every actor in the value chain together through one intelligent platform that streamlines material collection & logistics coordination, inventory management, marketplace operations, transactions, and payments across the entire ecosystem.
+              Recycling works better when we all work together. Klinflow connects people at home, local collectors, recycling yards, and factories so everyone can buy, sell, and get paid easily.
             </p>
           </motion.header>
 
@@ -1008,21 +1002,22 @@ export default function Home() {
                 </span>
               </h3>
               <p className={`text-sm sm:text-base md:text-base font-normal leading-relaxed mb-10 ${isDarkMode ? "text-slate-300" : "text-slate-700"}`}>
-               Our Platform exists to modernize the recycling industry by implementing an intelligent digital infrastructure. Our ecosystem unifies material collection, recovery, logistics, processing, and marketplace trading into a single connected ecosystem. By seamlessly connecting every participant in the value chain, Klinflow transforms recyclable materials from an overlooked liability into a traceable, valuable, and monetizable resource accelerating the transition to a smarter, digitalized, and sustainable circular economy.
+                Too much good plastic, glass, paper and metal ends up in dumpsites just because people don&apos;t know who will buy it. We built Klinflow so anyone in Kenya — from a family at home to a collector on the street — can sell recyclables easily, and be paid right away.
+                We're creating a platform which connects everyone and transforms recyclable materials from an environmental liability into monetizable resource.
               </p>
 
               <div className="grid grid-cols-3 gap-2 sm:gap-6">
                 {[
                   {
-                    label: "Traceability",
+                    label: "Honest",
                     val: "100%",
-                    sub: "Source to Recycler",
+                    sub: "Fair scale weights",
                   },
-                  { label: "Payouts", val: "Instant", sub: "Digital Wallet & Cash" },
+                  { label: "M-Pesa", val: "Instant", sub: "Fast payouts" },
                   {
-                    label: "Marketplace",
+                    label: "Open",
                     val: "24/7",
-                    sub: "Sell at your price",
+                    sub: "Buy & sell anytime",
                   },
                 ].map((stat, i) => (
                   <div
@@ -1138,19 +1133,18 @@ export default function Home() {
               >
                 <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-emerald-800 mb-4">
                   <span className="w-2 h-2 rounded-full bg-emerald-600" />
-                  B2B Digital Marketplace
+                  B2B Marketplace
                 </span>
 
                 <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-slate-900 mb-5 leading-[1.12]">
-                  Direct B2B Trading for{" "}
-                  <span className="text-emerald-700">Recycled Commodities.</span>
+                  Buy &amp; Sell Sorted{" "}
+                  <span className="text-emerald-700">Recyclables in Bulk.</span>
                 </h2>
 
                 <p className="text-base leading-relaxed text-slate-700 mb-8">
-                  Klinflow connects verified recovery hubs and aggregators
-                  directly with recyclers and manufacturers. Browse verified
-                  lots, broadcast bulk Sourcing RFQs, and settle every trade
-                  with full weight and price transparency.
+                  Klinflow connects recycling yards directly with factories and
+                  big buyers. Post what you have in your yard, ask for price
+                  offers from sellers, and get paid fairly without middlemen.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3">
@@ -1182,23 +1176,23 @@ export default function Home() {
                   {
                     num: "01",
                     icon: Factory,
-                    tag: "For Industrial Buyers",
-                    title: "Structured Bulk Sourcing & RFQs",
-                    desc: "Browse verified plastic, paper, glass, and metal lots by grade and location, or broadcast Sourcing RFQs to compare supplier quotes side by side.",
+                    tag: "For Factories & Big Buyers",
+                    title: "Order What You Need Easily",
+                    desc: "Look through ready plastic, carton, glass, and metal loads near you, or post what you want to buy so verified yards can send you their best prices.",
                   },
                   {
                     num: "02",
                     icon: Warehouse,
-                    tag: "For Recovery Hubs",
-                    title: "Direct Sales Straight from Inventory",
-                    desc: "List processed bales and regrind directly from your Hub MOS inventory to reach verified buyers without middlemen cutting into your margins.",
+                    tag: "For Recycling Yards",
+                    title: "Sell Your Stock Directly",
+                    desc: "Put your sorted bales and plastics up for sale straight from your yard. Reach serious buyers ready to pay fair market prices without broker cuts.",
                   },
                   {
                     num: "03",
                     icon: ShieldCheck,
-                    tag: "Verified Settlement",
-                    title: "Digital Waybills & Direct Payouts",
-                    desc: "Every transaction is backed by verified scale weights, clear KES/kg pricing, and integrated wallet settlements via M-Pesa or bank transfer.",
+                    tag: "Safe & Clear Payments",
+                    title: "Honest Weights & Fast Pay",
+                    desc: "Every load is weighed on a real scale with clear prices per kilo, and payments go straight to your account via M-Pesa or bank transfer.",
                   },
                 ].map((row) => {
                   const RowIcon = row.icon;
