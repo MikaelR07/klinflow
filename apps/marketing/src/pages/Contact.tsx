@@ -68,7 +68,7 @@ export default function Contact() {
       <div className="w-full">
         {/* ── TOP SECTION: COLORED HERO BANNER (MONIEPOINT STYLE) ── */}
         <section
-          className={`w-full pt-16 pb-28 md:pt-24 md:pb-40 relative overflow-hidden transition-colors duration-300 ${
+          className={`w-full pt-36 pb-28 md:pt-44 md:pb-40 relative overflow-hidden transition-colors duration-300 ${
             isDarkMode
               ? 'bg-gradient-to-br from-slate-950 via-surface-950 to-slate-950 border-b border-white/10'
               : 'bg-gradient-to-br from-teal-800 via-emerald-700 to-primary text-white'
