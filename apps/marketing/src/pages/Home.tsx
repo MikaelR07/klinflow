@@ -491,7 +491,7 @@ export default function Home() {
               </h1>
 
               <p className="text-sm sm:text-base md:text-lg font-normal leading-relaxed mb-10 text-blue-50">
-                Klinflow is Kenya's most trusted recyclables marketplace where collectors, recyclers, and manufacturers come together to buy and sell recyclable materials.
+                From doorstep collection to large-scale trading — Klinflow brings together sellers, collectors, recycling yards, and manufacturers on one platform. Sell your recyclables easily or Buy materials in bulk through our marketplace.
               </p>
               <div className="flex flex-row items-stretch gap-4 w-full">
                 <Link

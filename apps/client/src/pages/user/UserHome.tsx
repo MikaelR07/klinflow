@@ -239,12 +239,26 @@ export default function UserHome() {
           </div>
         </div>
 
-    
-       
 
+         {/* ── KLINFLOW BANNERS ── */}
+        <motion.div variants={itemVariants} className="!mt-4">
+          <div className="flex gap-2.5 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
+            {/* Banner 1 */}
+            <div className="shrink-0 w-[98%] sm:w-[96%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[3/1]">
+              <img src="/vectors/ecoBanner3.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
+
+            {/* Banner 2 */}
+            <div className="shrink-0 w-[98%] sm:w-[96%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[3/1] bg-slate-900">
+              <img src="/vectors/eco.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
+          </div>
+        </motion.div>
 
         {/* ── DISCOVER HORIZONTAL CARD ── */}
-        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="!mt-4" >
+        <motion.div variants={itemVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }} className="!mt-3" >
           <button
             onClick={() => navigate("/discovery")}
             className="w-full text-left bg-gradient-to-r from-emerald-700 to-emerald-600 border border-emerald-500/50 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all active:scale-[0.99] group relative overflow-hidden"
@@ -270,25 +284,7 @@ export default function UserHome() {
           </button>
         </motion.div>
 
-         {/* ── KLINFLOW BANNERS ── */}
-        <motion.div variants={itemVariants} className="!mt-3">
-          <div className="flex gap-2.5 overflow-x-auto pb-3 custom-scrollbar snap-x snap-mandatory pr-6">
-            {/* Banner 1 */}
-            <div className="shrink-0 w-[98%] sm:w-[96%] snap-center relative bg-gradient-to-r from-[#e7f5ed] to-[#c6eed5] dark:from-emerald-900/50 dark:to-emerald-800/50 rounded-[16px] overflow-hidden shadow-sm border border-emerald-200/50 dark:border-emerald-700/50 aspect-[3/1]">
-              <img src="/vectors/ecoBanner3.webp" alt="Promo" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-            </div>
-
-            {/* Banner 2 */}
-            <div className="shrink-0 w-[98%] sm:w-[96%] snap-center relative rounded-[16px] overflow-hidden shadow-sm border border-slate-200/50 dark:border-slate-700/50 aspect-[3/1] bg-slate-900">
-              <img src="/vectors/eco.webp" alt="Promo 2" className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-            </div>
-          </div>
-        </motion.div>
-
-        
-        
+      
          {/* ── COMMUNITY TOOLS ── */}
         <motion.div variants={itemVariants} className="!mt-4">
           <div className="flex items-center justify-between px-1.5 mb-2">

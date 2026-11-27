@@ -399,13 +399,13 @@ export default function DiscoveryHub() {
                         .map((m: any) => (
                           <span
                             key={m}
-                            className="px-2 py-0.5 bg-white dark:bg-slate-900 rounded-md text-[10px] font-semibold text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs"
+                            className="px-2 py-0.5 bg-slate-50 dark:bg-slate-900 rounded-md text-[10px] font-semibold text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-slate-700/80 shadow-2xs"
                           >
                             {(MATERIAL_LABELS as any)[m]}
                           </span>
                         ))}
                       {acceptedMaterials.filter((m: any) => !!(MATERIAL_LABELS as any)[m]).length > 3 && (
-                        <span className="px-1.5 py-0.5 bg-white dark:bg-slate-900 rounded-md text-[9px] font-bold text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-slate-700/80">
+                        <span className="px-1.5 py-0.5 bg-slate-50 dark:bg-slate-900 rounded-md text-[9px] font-bold text-slate-500 dark:text-slate-400 border border-slate-200/80 dark:border-slate-700/80">
                           +{acceptedMaterials.length - 3}
                         </span>
                       )}

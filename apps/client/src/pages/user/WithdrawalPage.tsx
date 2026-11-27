@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import {
-  ArrowLeft, Wallet, Smartphone, Building2,
-  ChevronRight, CheckCircle2, ShieldCheck,
-  Smartphone as PhoneIcon, Landmark, CreditCard, Loader2
+  ArrowLeft, ChevronDown, CheckCircle2, ShieldCheck,
+  Smartphone as PhoneIcon, Loader2, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@klinflow/core/stores/authStore';
@@ -29,6 +28,7 @@ export default function WithdrawalPage() {
   const { profile, userId, withdrawRewards } = useAuthStore();
   const [step, setStep] = useState(1); // 1: Form, 2: Success
   const [method, setMethod] = useState<Method>(METHODS[0]);
+  const [showMethodSheet, setShowMethodSheet] = useState(false);
   const [cashBalance, setCashBalance] = useState(0);
   const [amount, setAmount] = useState<number | ''>('');
   const [details, setDetails] = useState(profile?.phone || '');
@@ -88,7 +88,7 @@ export default function WithdrawalPage() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-white dark:bg-slate-900 min-h-screen relative overflow-x-hidden transition-colors">
       
       {/* ── FIXED TOP NAV ── */}
-      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 transition-all duration-300 bg-gradient-to-br from-[#1178ab] to-[#085078] backdrop-blur-md `}>
+      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+0.75rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-[#1178ab] to-[#085078] backdrop-blur-md `}>
         <div className="max-w-lg mx-auto px-5 flex items-center justify-between relative">
           <button
             onClick={() => navigate(-1)}
@@ -105,8 +105,8 @@ export default function WithdrawalPage() {
       </div>
 
       {/* ── TOP SECTION: PRIMARY WITH ROUNDED BOTTOM ── */}
-      <div className="bg-gradient-to-br from-[#1178ab] to-[#085078] pt-[calc(env(safe-area-inset-top,1.5rem)+7rem)] pb-6 rounded-b-[1.5rem] relative z-20 overflow-hidden">
-        <div className="text-center px-4 mb-4">
+      <div className="bg-gradient-to-br from-[#1178ab] to-[#085078] pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)] pb-7 rounded-b-[1.5rem] relative z-20 overflow-hidden">
+        <div className="text-center px-4">
           <p className="text-[11px] font-bold text-white/70 uppercase tracking-widest mb-1.5">Total Balance</p>
           <div className="flex items-baseline justify-center gap-1 text-white">
             <span className="text-xl font-bold">KSh</span>
@@ -120,40 +120,60 @@ export default function WithdrawalPage() {
             </div>
           </div>
         </div>
-
-        {/* Withdrawal Method Buttons */}
-        <div className="flex items-center justify-center gap-3 px-4 mt-2">
-          {METHODS.map(m => {
-            const isSelected = method.id === m.id;
-            const selectedBg = m.id === 'mpesa' ? 'bg-green-600' : 'bg-red-600';
-            return (
-              <button
-                key={m.id}
-                onClick={() => setMethod(m)}
-                className={`flex-1 py-3 rounded-xl flex items-center justify-center gap-2 text-left transition-all active:scale-95 border-[1.5px] ${isSelected 
-                  ? `${selectedBg} border-white shadow-md scale-[1.02]` 
-                  : 'bg-white/20 border-white/30 opacity-90 hover:opacity-100'}`}
-              >
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${isSelected ? 'bg-white/20' : 'bg-white/10'}`}>
-                  <m.icon className="w-3.5 h-3.5 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[11px] font-bold text-white leading-tight truncate">{m.name}</p>
-                  <p className="text-[9px] font-medium text-white/90 leading-tight line-clamp-1">{m.description}</p>
-                </div>
-              </button>
-            )
-          })}
-        </div>
       </div>
 
       <div className="px-3 mt-4 pb-10 space-y-4 relative z-10 max-w-lg mx-auto">
         {/* AMOUNT AND DETAILS CARD */}
         <div className="bg-slate-50 dark:bg-slate-800/70 rounded-2xl p-4 border border-slate-200/80 dark:border-slate-700/60 space-y-4">
+          {/* WITHDRAW TO SELECTOR */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 px-0.5 block">
+              Withdraw To
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowMethodSheet(true)}
+              className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 rounded-xl p-3 flex items-center justify-between gap-3 transition-all active:scale-[0.99] text-left"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                    method.id === 'mpesa'
+                      ? 'bg-emerald-600 text-emerald-100 dark:bg-emerald-500/15 dark:text-emerald-400'
+                      : 'bg-rose-600 text-rose-100 dark:bg-rose-500/15 dark:text-rose-400'
+                  }`}
+                >
+                  <method.icon className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold text-slate-600 dark:text-white leading-tight truncate">
+                      {method.name}
+                    </p>
+                    <span
+                      className={`w-2 h-2 rounded-full shrink-0 ${
+                        method.id === 'mpesa' ? 'bg-emerald-600' : 'bg-rose-600'
+                      }`}
+                    />
+                  </div>
+                  <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-tight mt-0.5 truncate">
+                    {method.description}
+                  </p>
+                </div>
+              </div>
+
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#085078] dark:text-sky-400 bg-sky-50 dark:bg-sky-500/10 px-2.5 py-1.5 rounded-lg shrink-0">
+                Change
+                <ChevronDown className="w-3.5 h-3.5" />
+              </span>
+            </button>
+          </div>
+
+          <div className="h-px bg-slate-200/70 dark:bg-slate-700/60" />
           {/* AMOUNT INPUT */}
           <div className="space-y-2">
             <div className="flex items-center justify-between px-0.5">
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Amount to Withdraw</label>
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Amount to Withdraw</label>
               <span className="text-[11px] font-semibold text-slate-400">Min. KSh 100</span>
             </div>
 
@@ -167,7 +187,7 @@ export default function WithdrawalPage() {
                   const val = e.target.value;
                   setAmount(val === '' ? '' : Number(val));
                 }}
-                className="w-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 rounded-xl py-3.5 pl-14 pr-4 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-600 transition-colors placeholder:text-slate-300 tabular-nums"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 rounded-xl py-3.5 pl-14 pr-4 text-xl font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-600 transition-colors placeholder:text-slate-300 tabular-nums"
                 placeholder="0"
               />
             </div>
@@ -182,7 +202,7 @@ export default function WithdrawalPage() {
                   className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold border transition-all active:scale-95 ${
                     Number(amount) === preset
                       ? 'bg-emerald-950 text-white border-emerald-950'
-                      : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-slate-700'
+                      : 'bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-slate-700'
                   }`}
                 >
                   KSh {preset.toLocaleString()}
@@ -194,7 +214,7 @@ export default function WithdrawalPage() {
                 className={`flex-1 py-1.5 rounded-lg text-[11px] font-bold border transition-all active:scale-95 ${
                   cashBalance > 0 && Number(amount) === cashBalance
                     ? 'bg-emerald-950 text-white border-emerald-950'
-                    : 'bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 border-slate-200/80 dark:border-slate-700'
+                    : 'bg-slate-50 dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 border-slate-200/80 dark:border-slate-700'
                 }`}
               >
                 Max
@@ -206,7 +226,7 @@ export default function WithdrawalPage() {
 
           {/* DETAILS INPUT */}
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 px-0.5 block">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 px-0.5 block">
               {method.id === 'bank' ? 'Account Number' : `${method.name} Phone Number`}
             </label>
             <div className="relative flex items-center">
@@ -217,14 +237,14 @@ export default function WithdrawalPage() {
                 type="text"
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                className="w-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 rounded-xl py-3 pl-10 pr-4 text-sm font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-600 transition-colors placeholder:text-slate-400"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 rounded-xl py-3 pl-10 pr-4 text-sm font-semibold text-slate-900 dark:text-white outline-none focus:border-emerald-600 transition-colors placeholder:text-slate-400"
                 placeholder={method.id === 'bank' ? 'Enter Account No' : '07XXXXXXXX'}
               />
             </div>
           </div>
 
           {/* LIVE SETTLEMENT SUMMARY */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
+          <div className="bg-slate-50 dark:bg-slate-900 rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-700 space-y-2 text-xs">
             <div className="flex items-center justify-between">
               <span className="text-slate-500 dark:text-slate-400 font-medium">Destination</span>
               <span className="font-bold text-slate-800 dark:text-white truncate max-w-[180px]">
@@ -258,6 +278,79 @@ export default function WithdrawalPage() {
           </p>
         </div>
       </div>
+
+      {/* METHOD PICKER MODAL */}
+      {showMethodSheet && typeof document !== 'undefined' && createPortal(
+        <div
+          onClick={() => setShowMethodSheet(false)}
+          className="fixed inset-0 z-[105] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl p-5 shadow-2xl border border-slate-100 dark:border-slate-800 animate-in zoom-in-95 duration-200"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Select Withdrawal Method</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Choose where to receive your funds</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowMethodSheet(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-400 transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-2.5">
+              {METHODS.map((m) => {
+                const isSelected = method.id === m.id;
+                const isMpesa = m.id === 'mpesa';
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => {
+                      setMethod(m);
+                      setShowMethodSheet(false);
+                    }}
+                    className={`w-full p-3.5 rounded-2xl border flex items-center justify-between gap-3 transition-all active:scale-[0.99] text-left ${
+                      isSelected
+                        ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-600/60 dark:border-emerald-500/50'
+                        : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-700/60 hover:bg-slate-100/70 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                          isMpesa
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
+                            : 'bg-rose-100 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400'
+                        }`}
+                      >
+                        <m.icon className="w-5 h-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{m.name}</p>
+                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">{m.description}</p>
+                      </div>
+                    </div>
+
+                    {isSelected ? (
+                      <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    ) : (
+                      <span className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 shrink-0" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
 
         {/* STEP 2: SUCCESS MODAL */}
       {step === 2 && typeof document !== 'undefined' && createPortal(

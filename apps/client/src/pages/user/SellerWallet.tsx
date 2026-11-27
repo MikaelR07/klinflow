@@ -21,6 +21,7 @@ import { walletService } from '@klinflow/core';
 import { SellerWalletStats } from '@klinflow/core/services/walletService';
 import { supabase } from '@klinflow/supabase';
 import { toast } from 'sonner';
+import WithdrawModal from '../../components/user/WithdrawModal';
 
 export default function SellerWallet() {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ export default function SellerWallet() {
   const fetchNotifications = useNotificationStore(s => s.fetchNotifications);
   const unreadCount = getUnreadCount();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -109,7 +111,7 @@ export default function SellerWallet() {
     <div className="-mx-1 -mt-[calc(env(safe-area-inset-top,1.5rem)+1.5rem)] bg-[#f8fafc] dark:bg-slate-800 font-sans pb-6">
 
       {/* ── FIXED TOP NAV ── */}
-      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-emerald-700 via-emerald-600 to-lime-600 `}>
+      <div className={`fixed top-0 left-0 right-0 z-50 pt-[calc(env(safe-area-inset-top,1.5rem)+1rem)] pb-2.5 transition-all duration-300 bg-gradient-to-tr from-[#1178ab] to-[#085078]`}>
         <div className="max-w-lg mx-auto px-4 flex items-center justify-between relative">
           {/* Left: Back Arrow */}
           <button
@@ -140,11 +142,8 @@ export default function SellerWallet() {
       </div>
 
       {/* ── TOP SECTION WITH BACKGROUND COLOR ── */}
-      <div className="bg-gradient-to-br from-emerald-700 via-emerald-600 to-lime-600 text-white relative overflow-hidden rounded-b-[1.25rem] pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)] shadow-sm">
-        {/* Decorative background orbs */}
-        <div className="absolute top-0 right-0 w-72 h-72 bg-white/[0.12] rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-56 h-56 bg-lime-300/20 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
-
+      <div className="bg-gradient-to-br from-[#1178ab] to-[#085078] text-white relative overflow-hidden rounded-b-[1.25rem] pb-6 pt-[calc(env(safe-area-inset-top,1.5rem)+7.5rem)] shadow-sm">
+      
         <div className="relative z-10 max-w-lg mx-auto px-4">
 
           {/* Balance */}
@@ -172,7 +171,7 @@ export default function SellerWallet() {
           <div className="grid grid-cols-4 gap-2 pt-4 border-t border-white/15">
             {/* Withdraw */}
             <button
-              onClick={() => navigate('/withdraw')}
+              onClick={() => setShowWithdrawModal(true)}
               className="bg-white/15 backdrop-blur-sm border border-white/15 rounded-xl p-2.5 flex flex-col items-center gap-1.5 active:scale-[0.97] transition-all group hover:bg-white/25 shadow-sm"
             >
               <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -312,6 +311,12 @@ export default function SellerWallet() {
           </p>
         </div>
       </div>
+
+      <WithdrawModal
+        isOpen={showWithdrawModal}
+        onClose={() => setShowWithdrawModal(false)}
+        initialBalance={cashBalance}
+      />
     </div>
   );
 }

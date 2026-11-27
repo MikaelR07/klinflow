@@ -65,6 +65,7 @@ import { SkeletonCard } from '@klinflow/ui/components/Skeletons';
 import PushNotificationModal from '@klinflow/ui/components/PushNotificationModal';
 import { LoadingScreen } from '@klinflow/ui/components/Loading';
 import { toast } from 'sonner';
+import WithdrawModal from '../../components/user/WithdrawModal';
 
 const catalogItems = [
   { id: 'plastic', name: 'Plastics', desc: 'PET Bottles, HDPE', price: '25/KG', icon: '🥤', color: 'from-blue-500/10 to-blue-500/5', border: 'border-blue-500/20', text: 'text-blue-600 dark:text-blue-400' },
@@ -90,6 +91,7 @@ export default function SellerHome() {
   const withdrawRewards = useAuthStore(s => (s as any).withdrawRewards);
   const subscribeToProfileChanges = useAuthStore(s => (s as any).subscribeToProfileChanges);
   const isInitializing = useAuthStore(s => (s as any).isInitializing);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
 
   const bookings = useBookingStore(s => s.bookings);
   const fetchBookings = useBookingStore(s => s.fetchBookings);
@@ -317,7 +319,7 @@ export default function SellerHome() {
                 </div>
               </div>
               <button
-                onClick={() => navigate('/withdraw')}
+                onClick={() => setShowWithdrawModal(true)}
                 className="bg-emerald-950 text-white hover:bg-emerald-900 mt-1 px-5 py-3 rounded-2xl text-sm font-bold capitalize tracking-widest transition-all active:scale-95"
               >
                 Withdraw
@@ -549,6 +551,12 @@ export default function SellerHome() {
         <div className="absolute inset-0 rounded-full bg-emerald-500 opacity-20" />
         <BrainCircuit className="w-6 h-6 text-white" />
       </motion.button> */}
+
+      <WithdrawModal
+        isOpen={showWithdrawModal}
+        onClose={() => setShowWithdrawModal(false)}
+        initialBalance={Number(cashBalance || 0)}
+      />
     </div>
   );
 }
